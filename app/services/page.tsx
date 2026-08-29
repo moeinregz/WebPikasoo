@@ -19,12 +19,6 @@ export default async function ServicesPage() {
     <>
       <Nav isLoggedIn={isLoggedIn} />
 
-      <PageHero
-        eyebrow="Services"
-        title="خدماتی که وب پیکاسو ارائه می‌ده"
-        desc="از پنل مدیریت و فروشگاه آنلاین گرفته تا سایت شرکتی، هوش مصنوعی و سئو — همه‌چیز زیر یه سقف، با یه تیم کوچیک و متخصص."
-      />
-
       <Services />
 
       <section className="relative overflow-hidden border-t border-ink/10 py-16 sm:py-20">
