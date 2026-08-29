@@ -118,7 +118,7 @@ export default function Process() {
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-16 flex items-baseline gap-4">
           <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
-            نقشه‌ی راه
+            نقشه‌ی
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">فرایند همکاری</h2>
