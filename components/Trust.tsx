@@ -84,7 +84,7 @@ export default function Trust() {
             </div>
             <div>
               <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
-                <StatCounter to={`${categories.length} محیط`} />
+                <StatCounter to={categories.length} />
               </div>
               <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
                 صنف و حوزه‌ی کاری مختلف
