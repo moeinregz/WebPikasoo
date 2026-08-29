@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>زبانکده | آموزشگاه زبان‌های زنده دنیا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1B2A4A;
+      --ink-soft: #2E4066;
+      --paper: #F7F3E8;
+      --paper-deep: #EEE5CE;
+      --cream: #FFFDF8;
+      --saffron: #E8A33D;
+      --saffron-deep: #C77F1F;
+      --postal: #C1443C;
+      --sage: #3F6E5E;
+      --charcoal: #28241D;
+      --line: rgba(27, 42, 74, 0.16);
+      --shadow: 0 18px 40px -18px rgba(27, 42, 74, 0.35);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--charcoal);
+      font-family: 'Vazirmatn', sans-serif;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ===== Airmail stripe divider ===== */
+    .airmail {
+      height: 10px;
+      background: repeating-linear-gradient(-45deg,
+          var(--postal) 0 26px, var(--cream) 26px 40px,
+          var(--ink) 40px 66px, var(--cream) 66px 80px);
+      background-size: 200% 100%;
+      opacity: .9;
+    }
+
+    @media (prefers-reduced-motion:no-preference) {
+      .airmail {
+        animation: driftStripe 26s linear infinite;
+      }
+    }
+
+    @keyframes driftStripe {
+      to {
+        background-position: 200% 0;
+      }
+    }
+
+    /* ===== Reveal on scroll ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-stagger>* {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal-stagger.in>* {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-stagger.in>*:nth-child(1) {
+      transition-delay: .02s;
+    }
+
+    .reveal-stagger.in>*:nth-child(2) {
+      transition-delay: .10s;
+    }
+
+    .reveal-stagger.in>*:nth-child(3) {
+      transition-delay: .18s;
+    }
+
+    .reveal-stagger.in>*:nth-child(4) {
+      transition-delay: .26s;
+    }
+
+    .reveal-stagger.in>*:nth-child(5) {
+      transition-delay: .34s;
+    }
+
+    .reveal-stagger.in>*:nth-child(6) {
+      transition-delay: .42s;
+    }
+
+    /* ===== Header ===== */
+    .zk-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(247, 243, 232, 0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .zk-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
+
+    .zk-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--ink);
+    }
+
+    .zk-logo .stamp-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2.5px dashed var(--postal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--postal);
+      transform: rotate(-8deg);
+    }
+
+    .zk-navlinks {
+      display: flex;
+      gap: 32px;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .zk-navlinks a {
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .zk-navlinks a::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--saffron-deep);
+      transition: width .3s ease;
+    }
+
+    .zk-navlinks a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .95rem;
+      border: 2px solid var(--ink);
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+    }
+
+    .btn-solid {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .btn-solid:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      background: var(--postal);
+      border-color: var(--postal);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .btn-ghost:hover {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .zk-burger {
+      display: none;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: relative;
+      padding: 88px 0 60px;
+      overflow: hidden;
+    }
+
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      direction: ltr;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      color: var(--postal);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 26px;
+      height: 1.5px;
+      background: var(--postal);
+    }
+
+    .hero h1 {
+      font-size: 3.35rem;
+      line-height: 1.18;
+      color: var(--ink);
+      letter-spacing: -.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--saffron-deep);
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .greeting-swap {
+      display: inline-block;
+      min-width: 1ch;
+      color: var(--postal);
+    }
+
+    .hero p.lead {
+      margin-top: 22px;
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      max-width: 46ch;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      margin-top: 34px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 28px;
+      margin-top: 42px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta div {
+      border-right: 2px solid var(--line);
+      padding-right: 16px;
+    }
+
+    .hero-meta strong {
+      display: block;
+      font-size: 1.5rem;
+      color: var(--ink);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .hero-meta span {
+      font-size: .85rem;
+      color: var(--ink-soft);
+    }
+
+    /* Postcard visual */
+    .postcard {
+      position: relative;
+      background: var(--cream);
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      transform: rotate(2.5deg);
+    }
+
+    .postcard::before {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border: 1.5px dashed rgba(27, 42, 74, .28);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .postcard-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .postcard-title {
+      font-family: 'JetBrains Mono', monospace;
+      direction: ltr;
+      font-size: .75rem;
+      color: var(--ink-soft);
+      letter-spacing: .08em;
+    }
+
+    .postcard-stamps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .mini-stamp {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2.5px dashed var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--ink);
+      transform: rotate(var(--r, 0deg));
+      opacity: 0;
+      scale: .4;
+      background: var(--paper);
+    }
+
+    .mini-stamp span {
+      font-size: 1.05rem;
+    }
+
+    .mini-stamp small {
+      font-size: .55rem;
+      letter-spacing: .06em;
+      margin-top: 2px;
+      color: var(--ink-soft);
+    }
+
+    @keyframes stampIn {
+      0% {
+        opacity: 0;
+        scale: 2.2;
+        rotate: 0deg;
+      }
+
+      60% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 1;
+        scale: 1;
+        rotate: var(--r, 0deg);
+      }
+    }
+
+    .mini-stamp.play {
+      animation: stampIn .5s cubic-bezier(.2, 1.4, .4, 1) forwards;
+    }
+
+    .postcard-note {
+      margin-top: 18px;
+      font-size: .92rem;
+      color: var(--ink-soft);
+      border-top: 1px dashed var(--line);
+      padding-top: 14px;
+    }
+
+    .postcard-note b {
+      color: var(--ink);
+    }
+
+    .postcard-tape {
+      position: absolute;
+      top: -16px;
+      right: 36px;
+      width: 78px;
+      height: 30px;
+      background: rgba(232, 163, 61, .55);
+      border: 1px solid rgba(199, 127, 31, .5);
+      transform: rotate(-6deg);
+    }
+
+    /* ===== Section shell ===== */
+    .section {
+      padding: 96px 0;
+    }
+
+    .section-alt {
+      background: var(--paper-deep);
+    }
+
+    .section-dark {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      direction: ltr;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      color: var(--postal);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .section-dark .kicker {
+      color: var(--saffron);
+    }
+
+    .section h2 {
+      font-size: 2.35rem;
+      color: var(--ink);
+      max-width: 20ch;
+    }
+
+    .section-dark h2 {
+      color: var(--cream);
+    }
+
+    .section-sub {
+      margin-top: 16px;
+      color: var(--ink-soft);
+      max-width: 58ch;
+      font-size: 1.06rem;
+    }
+
+    .section-dark .section-sub {
+      color: rgba(247, 243, 232, .75);
+    }
+
+    .section-head {
+      margin-bottom: 52px;
+    }
+
+    /* ===== Languages grid (stamps) ===== */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .lang-card {
+      background: var(--cream);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 30px 26px;
+      position: relative;
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .lang-card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      box-shadow: var(--shadow);
+    }
+
+    .lang-stamp-ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2.5px dashed var(--postal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--postal);
+      font-size: 1rem;
+    }
+
+    .lang-card h3 {
+      font-size: 1.3rem;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .lang-card p {
+      color: var(--ink-soft);
+      font-size: .96rem;
+    }
+
+    .lang-level {
+      margin-top: 16px;
+      display: inline-flex;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      direction: ltr;
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--sage);
+      border: 1px solid var(--sage);
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+
+    /* ===== Why us ===== */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .why-card {
+      padding: 6px;
+    }
+
+    .why-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      color: var(--saffron);
+      font-weight: 700;
+      border: 1.5px solid var(--saffron);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .why-card h3 {
+      color: var(--cream);
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .why-card p {
+      color: rgba(247, 243, 232, .72);
+      font-size: .96rem;
+    }
+
+    /* ===== CEFR roadmap ===== */
+    .roadmap {
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: var(--line);
+      overflow: hidden;
+    }
+
+    .roadmap-line::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--saffron-deep);
+      width: 0%;
+      transition: width 1.4s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .roadmap.in .roadmap-line::after {
+      width: 100%;
+    }
+
+    .roadmap-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      position: relative;
+    }
+
+    .roadmap-step {
+      text-align: center;
+    }
+
+    .roadmap-dot {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 3px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--ink);
+      position: relative;
+      z-index: 2;
+    }
+
+    .roadmap-step h4 {
+      font-size: .98rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .roadmap-step p {
+      font-size: .82rem;
+      color: var(--ink-soft);
+    }
+
+    /* ===== Teachers ===== */
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .teacher-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px;
+      text-align: center;
+      transition: transform .3s ease;
+    }
+
+    .teacher-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--cream);
+    }
+
+    .teacher-card h3 {
+      font-size: 1.12rem;
+      color: var(--ink);
+    }
+
+    .teacher-role {
+      color: var(--postal);
+      font-size: .85rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .teacher-card p.bio {
+      margin-top: 12px;
+      font-size: .92rem;
+      color: var(--ink-soft);
+    }
+
+    /* ===== Testimonial postcards ===== */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .testi-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 26px;
+      position: relative;
+      transform: rotate(var(--tr, 0deg));
+      transition: transform .3s ease;
+    }
+
+    .testi-card:hover {
+      transform: rotate(0deg) translateY(-4px);
+    }
+
+    .testi-card::before {
+      content: '"';
+      position: absolute;
+      top: 6px;
+      right: 18px;
+      font-size: 3.4rem;
+      color: var(--saffron);
+      opacity: .35;
+      font-family: Georgia, serif;
+    }
+
+    .testi-stars {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--saffron-deep);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      direction: ltr;
+    }
+
+    .testi-name {
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .testi-lang {
+      font-size: .82rem;
+      color: var(--ink-soft);
+    }
+
+    /* ===== Pricing ===== */
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .price-card {
+      background: var(--cream);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 34px 28px;
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+
+    .price-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .price-card.featured {
+      border-color: var(--saffron-deep);
+      position: relative;
+      background: linear-gradient(180deg, var(--cream), #FFF7E8);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: -14px;
+      left: 28px;
+      background: var(--saffron-deep);
+      color: var(--cream);
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    .price-card h3 {
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+
+    .price-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.9rem;
+      color: var(--ink);
+      margin: 14px 0 4px;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .price-amount span {
+      font-size: .85rem;
+      color: var(--ink-soft);
+      font-family: 'Vazirmatn';
+    }
+
+    .price-list {
+      margin: 20px 0 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .price-list li {
+      font-size: .92rem;
+      color: var(--ink-soft);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .price-list li::before {
+      content: '✓';
+      color: var(--sage);
+      font-weight: 700;
+    }
+
+    .price-card .btn {
+      margin-top: auto;
+      justify-content: center;
+    }
+
+    /* ===== CTA / footer ===== */
+    .cta-band {
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 28px;
+      padding: 64px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-band h2 {
+      color: var(--cream);
+      font-size: 2rem;
+      max-width: 16ch;
+    }
+
+    .cta-band p {
+      color: rgba(247, 243, 232, .72);
+      margin-top: 10px;
+      max-width: 40ch;
+    }
+
+    footer {
+      padding: 70px 0 40px;
+      background: var(--paper-deep);
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    .foot-logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .foot-grid p {
+      color: var(--ink-soft);
+      font-size: .92rem;
+    }
+
+    .foot-col h4 {
+      font-size: .92rem;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .foot-col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .foot-col a {
+      color: var(--ink-soft);
+      font-size: .92rem;
+      transition: color .2s ease;
+    }
+
+    .foot-col a:hover {
+      color: var(--postal);
+    }
+
+    .foot-bottom {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+      font-size: .82rem;
+      color: var(--ink-soft);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width:980px) {
+      .hero .wrap {
+        grid-template-columns: 1fr;
+        gap: 44px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .lang-grid,
+      .why-grid,
+      .teacher-grid,
+      .testi-grid,
+      .price-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .roadmap-row {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 34px;
+      }
+
+      .roadmap-line {
+        display: none;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .zk-navlinks {
+        display: none;
+      }
+    }
+
+    @media (max-width:640px) {
+      .wrap {
+        padding: 0 20px;
+      }
+
+      .section {
+        padding: 64px 0;
+      }
+
+      .hero {
+        padding: 56px 0 40px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .lang-grid,
+      .why-grid,
+      .teacher-grid,
+      .testi-grid,
+      .price-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .roadmap-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta-band {
+        flex-direction: column;
+        text-align: center;
+        padding: 44px 26px;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-meta div {
+        padding-right: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001s !important;
+        transition-duration: .001s !important;
+      }
+    }
+
+    :focus-visible {
+      outline: 2.5px solid var(--postal);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="zk-header">
+    <div class="wrap zk-nav">
+      <div class="zk-logo"><span class="stamp-dot">ز</span> زبانکده</div>
+      <nav class="zk-navlinks">
+        <a href="#languages">دوره‌ها</a>
+        <a href="#roadmap">مسیر یادگیری</a>
+        <a href="#teachers">اساتید</a>
+        <a href="#pricing">تعرفه‌ها</a>
+        <a href="#contact">تماس</a>
+      </nav>
+      <a href="#contact" class="btn btn-solid">مشاوره رایگان</a>
+    </div>
+  </header>
+
+  <div class="airmail"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">ZABANKADEH · SINCE 2016</span>
+        <h1>
+          یاد گرفتن یک زبان یعنی گفتن
+          <br>
+          <em><span class="greeting-swap mono" id="greetingWord">Hello</span></em>
+          <br>
+          به یک دنیای تازه
+        </h1>
+        <p class="lead">زبانکده جایی‌ست که زبان را از دل مکالمهٔ واقعی یاد می‌گیرید، نه از حفظ‌کردن قاعده. با کلاس‌های
+          کوچک، اساتید بومی و مسیر پیشرفت شفاف، از اولین «سلام» تا تسلط کامل همراه شما هستیم.</p>
+        <div class="hero-cta">
+          <a href="#languages" class="btn btn-solid">شروع مسیر یادگیری</a>
+          <a href="#roadmap" class="btn btn-ghost">مسیر پیشرفت را ببینید</a>
+        </div>
+        <div class="hero-meta">
+          <div><strong class="mono">6</strong><span>زبان زنده دنیا</span></div>
+          <div><strong class="mono">42</strong><span>مدرس بومی و دوزبانه</span></div>
+          <div><strong class="mono">8</strong><span>نفر، حداکثر ظرفیت هر کلاس</span></div>
+        </div>
+      </div>
+
+      <div class="postcard reveal">
+        <div class="postcard-tape"></div>
+        <div class="postcard-top">
+          <span class="postcard-title">POSTCARD FROM<br>ZABANKADEH ACADEMY</span>
+          <span class="postcard-title">۱۴۰۴</span>
+        </div>
+        <div class="postcard-stamps" id="stampRow">
+          <div class="mini-stamp" style="--r:-8deg"><span>EN</span><small>A1–C2</small></div>
+          <div class="mini-stamp" style="--r:6deg"><span>DE</span><small>A1–C2</small></div>
+          <div class="mini-stamp" style="--r:-4deg"><span>FR</span><small>A1–C2</small></div>
+          <div class="mini-stamp" style="--r:10deg"><span>ES</span><small>A1–B2</small></div>
+          <div class="mini-stamp" style="--r:-6deg"><span>TR</span><small>A1–B2</small></div>
+          <div class="mini-stamp" style="--r:5deg"><span>IT</span><small>A1–B2</small></div>
+        </div>
+        <p class="postcard-note"><b>یادداشت مدرس:</b> «امروز اولین جمله‌ی کامل رو به آلمانی ساختی. همین‌طور ادامه بده!»
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="airmail"></div>
+
+  <!-- LANGUAGES -->
+  <section class="section" id="languages">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Our Languages</span>
+        <h2>هر زبان، یک دروازه به یک فرهنگ</h2>
+        <p class="section-sub">دوره‌های ما بر پایهٔ مکالمهٔ واقعی طراحی شده‌اند؛ در هر دوره علاوه بر گرامر و واژگان، با
+          موسیقی، سینما و آداب هر زبان هم آشنا می‌شوید.</p>
+      </div>
+      <div class="lang-grid reveal-stagger">
+        <div class="lang-card">
+          <div class="lang-stamp-ring">EN</div>
+          <h3>انگلیسی</h3>
+          <p>از مکالمهٔ روزمره تا آمادگی آزمون‌های آیلتس و تافل.</p>
+          <span class="lang-level">A1 → C2</span>
+        </div>
+        <div class="lang-card">
+          <div class="lang-stamp-ring">DE</div>
+          <h3>آلمانی</h3>
+          <p>مسیر ویژهٔ آماده‌سازی برای مهاجرت تحصیلی و کاری.</p>
+          <span class="lang-level">A1 → C2</span>
+        </div>
+        <div class="lang-card">
+          <div class="lang-stamp-ring">FR</div>
+          <h3>فرانسوی</h3>
+          <p>مکالمه‌محور، با تمرکز بر لهجهٔ استاندارد پاریسی.</p>
+          <span class="lang-level">A1 → C2</span>
+        </div>
+        <div class="lang-card">
+          <div class="lang-stamp-ring">ES</div>
+          <h3>اسپانیایی</h3>
+          <p>یادگیری از دل موسیقی و سینمای اسپانیا و آمریکای لاتین.</p>
+          <span class="lang-level">A1 → B2</span>
+        </div>
+        <div class="lang-card">
+          <div class="lang-stamp-ring">TR</div>
+          <h3>ترکی استانبولی</h3>
+          <p>مناسب سفر، تجارت و زندگی روزمره در ترکیه.</p>
+          <span class="lang-level">A1 → B2</span>
+        </div>
+        <div class="lang-card">
+          <div class="lang-stamp-ring">IT</div>
+          <h3>ایتالیایی</h3>
+          <p>آواشناسی، هنر گفتگو و فرهنگ غذای ایتالیایی.</p>
+          <span class="lang-level">A1 → B2</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="section section-dark">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Why Zabankadeh</span>
+        <h2>تفاوت ما در کلاس درس دیده می‌شود</h2>
+        <p class="section-sub">به جای شعار، سه اصلی که واقعاً روی نتیجهٔ یادگیری شما اثر می‌گذارد.</p>
+      </div>
+      <div class="why-grid reveal-stagger">
+        <div class="why-card">
+          <div class="why-num mono">01</div>
+          <h3>کلاس‌های کوچک، حداکثر ۸ نفر</h3>
+          <p>یعنی هر جلسه واقعاً صحبت می‌کنید، نه فقط گوش می‌دهید. هر زبان‌آموز در هر جلسه حداقل چند دقیقه مکالمهٔ
+            مستقیم با مدرس دارد.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-num mono">02</div>
+          <h3>اساتید بومی و دوزبانه</h3>
+          <p>لهجه، اصطلاحات کوچه‌بازاری و فرهنگ زنده‌ای که فقط در کتاب پیدا نمی‌شود، مستقیم از زبان کسی که با آن زبان
+            بزرگ شده.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-num mono">03</div>
+          <h3>مسیر پیشرفت شفاف بر پایهٔ CEFR</h3>
+          <p>همیشه دقیقاً می‌دانید در کدام سطح هستید و برای رسیدن به سطح بعدی چه چیزی لازم دارید؛ بدون ابهام.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="section section-alt" id="roadmap">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Learning Path · CEFR</span>
+        <h2>مسیر شفاف، از اولین کلمه تا تسلط کامل</h2>
+        <p class="section-sub">دوره‌های زبانکده بر اساس چارچوب اروپایی زبان (CEFR) طراحی شده تا سطح شما همیشه قابل
+          اندازه‌گیری و قابل مقایسه باشد.</p>
+      </div>
+      <div class="roadmap reveal" id="roadmapBlock">
+        <div class="roadmap-line"></div>
+        <div class="roadmap-row">
+          <div class="roadmap-step">
+            <div class="roadmap-dot mono">A1</div>
+            <h4>مبتدی</h4>
+            <p>اولین جمله‌ها</p>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-dot mono">A2</div>
+            <h4>مقدماتی</h4>
+            <p>مکالمهٔ ساده</p>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-dot mono">B1</div>
+            <h4>متوسط</h4>
+            <p>بیان نظر و تجربه</p>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-dot mono">B2</div>
+            <h4>فوق‌متوسط</h4>
+            <p>بحث و استدلال</p>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-dot mono">C1</div>
+            <h4>پیشرفته</h4>
+            <p>روانی در گفتار</p>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-dot mono">C2</div>
+            <h4>تسلط کامل</h4>
+            <p>مثل زبان مادری</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEACHERS -->
+  <section class="section" id="teachers">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Our Teachers</span>
+        <h2>اساتیدی که خودشان با این زبان‌ها زندگی کرده‌اند</h2>
+      </div>
+      <div class="teacher-grid reveal-stagger">
+        <div class="teacher-card">
+          <div class="avatar" style="background:var(--postal)">S.K</div>
+          <h3>سارا کریمی</h3>
+          <div class="teacher-role">انگلیسی · آماده‌سازی آیلتس</div>
+          <p class="bio">۹ سال تدریس، فارغ‌التحصیل زبان‌شناسی از لندن.</p>
+        </div>
+        <div class="teacher-card">
+          <div class="avatar" style="background:var(--sage)">L.M</div>
+          <h3>لوکاس مولر</h3>
+          <div class="teacher-role">آلمانی · مهاجرت تحصیلی</div>
+          <p class="bio">مدرس بومی اهل مونیخ، ساکن ایران از ۲۰۱۸.</p>
+        </div>
+        <div class="teacher-card">
+          <div class="avatar" style="background:var(--saffron-deep)">C.D</div>
+          <h3>کامیل دوبوا</h3>
+          <div class="teacher-role">فرانسوی · مکالمه و ادبیات</div>
+          <p class="bio">۱۲ سال سابقهٔ تدریس در پاریس و تهران.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Postcards From Students</span>
+        <h2>حرف‌های واقعی زبان‌آموزان زبانکده</h2>
+      </div>
+      <div class="testi-grid reveal-stagger">
+        <div class="testi-card" style="--tr:-2deg">
+          <div class="testi-stars">★★★★★</div>
+          <p>بعد از ۸ ماه کلاس آلمانی، الان توی مصاحبهٔ دانشگاه بدون استرس صحبت می‌کنم.</p>
+          <div class="testi-name">نیما رضایی</div>
+          <div class="testi-lang">دورهٔ آلمانی · سطح B2</div>
+        </div>
+        <div class="testi-card" style="--tr:1.5deg">
+          <div class="testi-stars">★★★★★</div>
+          <p>کلاس‌های کوچیک واقعاً فرق داره؛ هر جلسه حس می‌کنم واقعاً صحبت کردم نه فقط گوش دادم.</p>
+          <div class="testi-name">مریم احمدی</div>
+          <div class="testi-lang">دورهٔ انگلیسی · سطح C1</div>
+        </div>
+        <div class="testi-card" style="--tr:-1deg">
+          <div class="testi-stars">★★★★★</div>
+          <p>مدرس فرانسویم بومیه و همین باعث شد لهجه‌م خیلی سریع‌تر درست بشه.</p>
+          <div class="testi-name">آرش توکلی</div>
+          <div class="testi-lang">دورهٔ فرانسوی · سطح B1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Courses & Pricing</span>
+        <h2>دوره‌ای متناسب با هدف و زمان شما</h2>
+        <p class="section-sub">همهٔ دوره‌ها شامل جزوهٔ اختصاصی، پیگیری پیشرفت و جلسهٔ رایگان تعیین سطح است.</p>
+      </div>
+      <div class="price-grid reveal-stagger">
+        <div class="price-card">
+          <h3>گروهی</h3>
+          <div class="price-amount">۲٬۵۰۰٬۰۰۰ <span>تومان / ماه</span></div>
+          <ul class="price-list">
+            <li>کلاس ۶ تا ۸ نفره</li>
+            <li>۸ جلسه در ماه</li>
+            <li>جزوه و تمرین هفتگی</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost">انتخاب این دوره</a>
+        </div>
+        <div class="price-card featured">
+          <span class="price-badge">پیشنهاد ما</span>
+          <h3>نیمه‌خصوصی</h3>
+          <div class="price-amount">۴٬۲۰۰٬۰۰۰ <span>تومان / ماه</span></div>
+          <ul class="price-list">
+            <li>کلاس ۲ تا ۳ نفره</li>
+            <li>۱۰ جلسه در ماه</li>
+            <li>تعیین اهداف شخصی‌سازی‌شده</li>
+            <li>پشتیبانی بین جلسات</li>
+          </ul>
+          <a href="#contact" class="btn btn-solid">انتخاب این دوره</a>
+        </div>
+        <div class="price-card">
+          <h3>خصوصی</h3>
+          <div class="price-amount">۷٬۸۰۰٬۰۰۰ <span>تومان / ماه</span></div>
+          <ul class="price-list">
+            <li>یک‌به‌یک با مدرس</li>
+            <li>زمان‌بندی کاملاً منعطف</li>
+            <li>مسیر ویژهٔ آزمون یا مهاجرت</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost">انتخاب این دوره</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <div>
+          <h2>اولین قدم را همین امروز بردارید</h2>
+          <p>در یک جلسهٔ رایگان ۲۰ دقیقه‌ای، سطح فعلی‌تان را می‌سنجیم و بهترین مسیر یادگیری را پیشنهاد می‌دهیم.</p>
+        </div>
+        <a href="#" class="btn btn-solid"
+          style="background:var(--saffron); border-color:var(--saffron); color:var(--ink);">رزرو جلسهٔ رایگان</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="airmail"></div>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div class="foot-logo">زبانکده</div>
+          <p>آموزشگاه زبان‌های زنده دنیا؛ جایی برای یادگیری از دل مکالمهٔ واقعی.</p>
+        </div>
+        <div class="foot-col">
+          <h4>دوره‌ها</h4>
+          <ul>
+            <li><a href="#languages">انگلیسی</a></li>
+            <li><a href="#languages">آلمانی</a></li>
+            <li><a href="#languages">فرانسوی</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>آموزشگاه</h4>
+          <ul>
+            <li><a href="#teachers">اساتید</a></li>
+            <li><a href="#roadmap">مسیر یادگیری</a></li>
+            <li><a href="#pricing">تعرفه‌ها</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>ارتباط با ما</h4>
+          <ul>
+            <li><a href="#">تهران، خیابان ولیعصر</a></li>
+            <li><a href="#">۰۲۱-۱۲۳۴۵۶۷۸</a></li>
+            <li><a href="#">info@zabankadeh.ir</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© ۱۴۰۴ زبانکده. تمامی حقوق محفوظ است.</span>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Greeting word cycle in the hero
+    const greetings = ["Hello", "Bonjour", "Hola", "Guten Tag", "Merhaba", "Ciao", "سلام"];
+    let gi = 0;
+    const greetEl = document.getElementById('greetingWord');
+    function cycleGreeting() {
+      greetEl.style.opacity = 0;
+      greetEl.style.transform = 'translateY(6px)';
+      setTimeout(() => {
+        gi = (gi + 1) % greetings.length;
+        greetEl.textContent = greetings[gi];
+        greetEl.style.transition = 'opacity .35s ease, transform .35s ease';
+        greetEl.style.opacity = 1;
+        greetEl.style.transform = 'translateY(0)';
+      }, 250);
+    }
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(cycleGreeting, 1900);
+    }
+
+    // Stamp-in animation for postcard, staggered
+    const stamps = document.querySelectorAll('#stampRow .mini-stamp');
+    stamps.forEach((el, i) => {
+      setTimeout(() => el.classList.add('play'), 300 + i * 160);
+    });
+
+    // Scroll reveal via IntersectionObserver
+    const revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .roadmap');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+
+</html>

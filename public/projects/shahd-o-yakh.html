@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شهد و یخ | آبمیوه و بستنی‌فروشی</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FFF6E8;
+      --cream-2: #FFEFD6;
+      --plum: #3A1730;
+      --watermelon: #FF4D6D;
+      --mango: #FF8A3D;
+      --pistachio: #6FA26A;
+      --lemon: #FFCB3C;
+      --white: #FFFDF9;
+      --shadow: 0 14px 30px -12px rgba(58, 23, 48, .25);
+      --radius-lg: 40px;
+      --radius-md: 24px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: var(--cream);
+      color: var(--plum);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      background: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- Utility text ---------- */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: .02em;
+      color: var(--watermelon);
+      background: rgba(255, 77, 109, .1);
+      padding: 8px 18px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--watermelon);
+      animation: pulseDot 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.5);
+        opacity: .5;
+      }
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 4.4vw, 46px);
+      margin-bottom: 14px;
+    }
+
+    .section-title span {
+      color: var(--watermelon);
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: #6b4a5e;
+      max-width: 520px;
+      line-height: 1.9;
+      font-weight: 400;
+    }
+
+    .section-head {
+      margin-bottom: 52px;
+    }
+
+    .section-head.center {
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    .section-head.center .section-sub {
+      margin-inline: auto;
+    }
+
+    /* ---------- Reveal on scroll ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 100;
+      padding: 16px 0;
+      transition: background .35s ease, box-shadow .35s ease, padding .35s ease;
+    }
+
+    header.scrolled {
+      background: rgba(255, 246, 232, .88);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px -14px rgba(58, 23, 48, .35);
+      padding: 10px 0;
+    }
+
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 22px;
+      color: var(--plum);
+    }
+
+    .logo-scoop {
+      width: 34px;
+      height: 34px;
+      border-radius: 50% 50% 50% 6px;
+      background: linear-gradient(160deg, var(--lemon), var(--mango));
+      box-shadow: inset -4px -4px 0 rgba(0, 0, 0, .08);
+      transform: rotate(-8deg);
+    }
+
+    nav ul {
+      display: flex;
+      gap: 34px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    nav a {
+      position: relative;
+      padding: 4px 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      right: 0;
+      width: 0;
+      height: 2.5px;
+      background: var(--watermelon);
+      border-radius: 2px;
+      transition: width .3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--watermelon), #ff6b5c);
+      color: var(--white);
+      box-shadow: 0 12px 24px -10px rgba(255, 77, 109, .65);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px -10px rgba(255, 77, 109, .75);
+    }
+
+    .btn-ghost {
+      background: var(--white);
+      color: var(--plum);
+      border: 2px solid var(--cream-2);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--watermelon);
+      color: var(--watermelon);
+      transform: translateY(-3px);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .burger {
+      display: none;
+      width: 26px;
+      height: 20px;
+      position: relative;
+    }
+
+    .burger span {
+      position: absolute;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      border-radius: 3px;
+      background: var(--plum);
+      transition: .3s;
+    }
+
+    .burger span:nth-child(1) {
+      top: 0;
+    }
+
+    .burger span:nth-child(2) {
+      top: 8px;
+    }
+
+    .burger span:nth-child(3) {
+      top: 16px;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      padding: 170px 0 40px;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(46px, 7vw, 80px);
+      letter-spacing: -.01em;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(120deg, var(--watermelon), var(--mango));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin-top: 22px;
+      font-size: 18px;
+      color: #6b4a5e;
+      max-width: 460px;
+      line-height: 1.9;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 34px;
+      margin-top: 52px;
+    }
+
+    .hero-stats div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-stats b {
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .hero-stats span {
+      font-size: 13px;
+      color: #8a6a7c;
+      font-weight: 600;
+    }
+
+    /* floating fruit blobs */
+    .float-fruit {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(0px);
+      animation: floaty 7s ease-in-out infinite;
+      box-shadow: var(--shadow);
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-18px) rotate(6deg);
+      }
+    }
+
+    /* ---------- Hero illustration: cone ---------- */
+    .cone-wrap {
+      position: relative;
+      height: 520px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .cone-stage {
+      position: relative;
+      width: 280px;
+    }
+
+    .scoop {
+      position: relative;
+      width: 220px;
+      height: 150px;
+      border-radius: 50% 50% 45% 45%;
+      margin: 0 auto -58px;
+      box-shadow: inset -10px -14px 0 rgba(0, 0, 0, .09), var(--shadow);
+      animation: bob 4.2s ease-in-out infinite;
+    }
+
+    .scoop::after {
+      content: '';
+      position: absolute;
+      top: 16%;
+      right: 18%;
+      width: 26px;
+      height: 16px;
+      background: rgba(255, 255, 255, .55);
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+
+    .scoop.s1 {
+      background: radial-gradient(circle at 35% 30%, #fff2c4, var(--lemon));
+      z-index: 3;
+      animation-delay: 0s;
+    }
+
+    .scoop.s2 {
+      background: radial-gradient(circle at 35% 30%, #ffd7a8, var(--mango));
+      z-index: 2;
+      width: 236px;
+      height: 160px;
+      animation-delay: .15s;
+    }
+
+    .scoop.s3 {
+      background: radial-gradient(circle at 35% 30%, #ffb3c2, var(--watermelon));
+      z-index: 1;
+      width: 250px;
+      height: 168px;
+      animation-delay: .3s;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-9px);
+      }
+    }
+
+    .cone {
+      width: 0;
+      height: 0;
+      margin: 0 auto;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-top: 190px solid #E8A24C;
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+      position: relative;
+      z-index: 0;
+      background-image:
+        repeating-linear-gradient(115deg, rgba(0, 0, 0, .06) 0 2px, transparent 2px 14px),
+        repeating-linear-gradient(65deg, rgba(0, 0, 0, .06) 0 2px, transparent 2px 14px);
+    }
+
+    .drip {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--watermelon);
+      animation: drip 3.4s ease-in infinite;
+      opacity: 0;
+    }
+
+    @keyframes drip {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+
+      8% {
+        opacity: 1;
+      }
+
+      70% {
+        transform: translateY(90px) scale(.85);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(120px) scale(.5);
+        opacity: 0;
+      }
+    }
+
+    .wave-divider {
+      display: block;
+      width: 100%;
+      line-height: 0;
+    }
+
+    .wave-divider svg {
+      width: 100%;
+      height: auto;
+    }
+
+    /* ---------- Section base ---------- */
+    section {
+      position: relative;
+      padding: 100px 0;
+    }
+
+    .bg-cream2 {
+      background: var(--cream-2);
+    }
+
+    .bg-plum {
+      background: var(--plum);
+      color: var(--cream);
+    }
+
+    .bg-plum .section-sub {
+      color: #d9c2cf;
+    }
+
+    /* ---------- Menu ---------- */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 46px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      background: var(--white);
+      border: 2px solid var(--cream-2);
+      transition: .25s;
+    }
+
+    .tab-btn.active {
+      background: var(--plum);
+      color: var(--cream);
+      border-color: var(--plum);
+    }
+
+    .tab-btn:not(.active):hover {
+      border-color: var(--watermelon);
+      color: var(--watermelon);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .menu-panel {
+      display: none;
+    }
+
+    .menu-panel.active {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      animation: fadeIn .5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      transition: transform .35s cubic-bezier(.2, .8, .3, 1.3), box-shadow .35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) rotate(-.6deg);
+      box-shadow: 0 22px 40px -14px rgba(58, 23, 48, .35);
+    }
+
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      transition: transform .4s ease;
+    }
+
+    .card:hover .card-icon {
+      transform: scale(1.12) rotate(-10deg);
+    }
+
+    .card h3 {
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #7c5c6e;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price {
+      font-weight: 800;
+      color: var(--watermelon);
+      font-size: 16px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8a6a7c;
+      background: var(--cream);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* ---------- Flavors ---------- */
+    .flavor-strip {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      scrollbar-width: none;
+    }
+
+    .flavor-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .flavor-chip {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 20px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .06);
+      min-width: 130px;
+      transition: transform .3s ease, background .3s ease;
+    }
+
+    .flavor-chip:hover {
+      transform: translateY(-6px);
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .flavor-ball {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      box-shadow: inset -6px -6px 0 rgba(0, 0, 0, .12);
+    }
+
+    .flavor-chip span {
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* ---------- About ---------- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(155deg, var(--lemon), var(--mango) 55%, var(--watermelon));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .about-visual .blob {
+      position: absolute;
+      width: 130%;
+      height: 130%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .35), transparent 60%);
+      animation: spin 18s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .about-visual .center-mark {
+      position: relative;
+      z-index: 2;
+      font-size: 96px;
+    }
+
+    .about-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .about-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 15.5px;
+      line-height: 1.8;
+      color: #5b3d4d;
+    }
+
+    .about-list .check {
+      flex: 0 0 26px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--pistachio);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    /* ---------- CTA banner ---------- */
+    .cta-banner {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(120deg, var(--watermelon), var(--mango));
+      padding: 64px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 85% 20%, rgba(255, 255, 255, .25), transparent 55%);
+    }
+
+    .cta-banner h2 {
+      font-size: clamp(26px, 3.4vw, 36px);
+      position: relative;
+    }
+
+    .cta-banner p {
+      position: relative;
+      opacity: .92;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    .cta-banner .btn {
+      position: relative;
+    }
+
+    .btn-white {
+      background: #fff;
+      color: var(--watermelon);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, .25);
+    }
+
+    .btn-white:hover {
+      transform: translateY(-3px);
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--plum);
+      color: #e9d6e0;
+      padding: 70px 0 26px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    footer p {
+      font-size: 14px;
+      line-height: 1.9;
+      color: #c8a9ba;
+      max-width: 280px;
+    }
+
+    footer h4 {
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    footer ul li {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #c8a9ba;
+    }
+
+    footer ul li a:hover {
+      color: var(--lemon);
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .socials a {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: .3s;
+    }
+
+    .socials a:hover {
+      background: var(--watermelon);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, .12);
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #a889a0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cone-wrap {
+        height: 380px;
+        order: -1;
+      }
+
+      .menu-grid,
+      .menu-panel.active {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .burger {
+        display: block;
+      }
+    }
+
+    @media (max-width:560px) {
+
+      .menu-grid,
+      .menu-panel.active {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        flex-wrap: wrap;
+        row-gap: 16px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-banner {
+        padding: 40px 26px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      section {
+        padding: 70px 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--plum);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="siteHeader">
+    <div class="container nav-wrap">
+      <a href="#" class="logo"><span class="logo-scoop"></span> شهد و یخ</a>
+      <nav>
+        <ul>
+          <li><a href="#home">خانه</a></li>
+          <li><a href="#menu">منو</a></li>
+          <li><a href="#flavors">طعم‌ها</a></li>
+          <li><a href="#about">درباره ما</a></li>
+          <li><a href="#contact">تماس</a></li>
+        </ul>
+      </nav>
+      <div class="nav-cta">
+        <a href="#contact" class="btn btn-primary">سفارش آنلاین</a>
+        <div class="burger" id="burger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="float-fruit"
+      style="width:70px;height:70px;background:var(--lemon);top:130px;left:6%;animation-duration:6.5s;"></div>
+    <div class="float-fruit"
+      style="width:46px;height:46px;background:var(--pistachio);top:280px;left:16%;animation-duration:8s;animation-delay:1s;">
+    </div>
+    <div class="float-fruit"
+      style="width:34px;height:34px;background:var(--watermelon);top:460px;left:4%;animation-duration:5.5s;animation-delay:.4s;">
+    </div>
+
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow reveal in"><span class="dot"></span> تازه گرفته می‌شه، جلوی چشم شما</div>
+        <h1>عصر تابستون با<br><em>شهد و یخ</em></h1>
+        <p>آبمیوه‌های تازه از میوه‌ی همون‌روز و بستنی‌های سنتی با شیر و خامه‌ی محلی. بدون رنگ، بدون اسانس، فقط طعم
+          واقعی.</p>
+        <div class="hero-cta">
+          <a href="#menu" class="btn btn-primary">دیدن منو 🍧</a>
+          <a href="#contact" class="btn btn-ghost">آدرس و ساعت کاری</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>+18</b><span>طعم بستنی سنتی</span></div>
+          <div><b>+12</b><span>آبمیوه‌ی تازه</span></div>
+          <div><b>هر روز</b><span>میوه‌چینی صبحگاهی</span></div>
+        </div>
+      </div>
+
+      <div class="cone-wrap">
+        <div class="cone-stage">
+          <div class="drip" style="width:14px;height:14px;top:60px;right:70px;animation-delay:.2s;"></div>
+          <div class="drip"
+            style="width:10px;height:10px;top:70px;right:130px;animation-delay:1.4s;background:var(--mango);"></div>
+          <div class="drip"
+            style="width:12px;height:12px;top:55px;right:40px;animation-delay:2.3s;background:var(--lemon);"></div>
+          <div class="scoop s1"></div>
+          <div class="scoop s2"></div>
+          <div class="scoop s3"></div>
+          <div class="cone"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave-divider">
+      <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+        <path fill="#FFEFD6" d="M0,40 C240,90 480,0 720,30 C960,60 1200,10 1440,45 L1440,90 L0,90 Z"></path>
+      </svg>
+    </div>
+  </section>
+
+  <section class="bg-cream2" id="menu">
+    <div class="container">
+      <div class="section-head center reveal">
+        <div class="eyebrow">منوی ما</div>
+        <h2 class="section-title">هرچی می‌خوای، <span>یه‌جا</span></h2>
+        <p class="section-sub">از آبمیوه‌ی خنکِ صبحونه تا بستنی سنتیِ بعدازظهر — همه‌چی از میوه و شیرِ واقعی درست می‌شه.
+        </p>
+      </div>
+
+      <div class="tabs reveal">
+        <button class="tab-btn active" data-tab="juice">آبمیوه‌های تازه</button>
+        <button class="tab-btn" data-tab="icecream">بستنی سنتی</button>
+        <button class="tab-btn" data-tab="shake">میلک‌شیک</button>
+      </div>
+
+      <div class="menu-panel active reveal" id="panel-juice">
+        <div class="card">
+          <div class="card-icon" style="background:#FFE1E9;">🍉</div>
+          <h3>آب‌هندوانه‌ی خنک</h3>
+          <p>هندوانه‌ی تازه، بدون شکر اضافه، خنک‌شده با یخِ طبیعی.</p>
+          <div class="card-row"><span class="tag">بدون شکر</span><span class="price">۴۵ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#FFE4CC;">🍊</div>
+          <h3>آب‌پرتقال تازه</h3>
+          <p>گرفته‌شده از پرتقال‌های آبدارِ همون‌روز، بدون آب اضافه.</p>
+          <div class="card-row"><span class="tag">پرطرفدار</span><span class="price">۵۰ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#E4F3E1;">🍍</div>
+          <h3>آناناس و نعنا</h3>
+          <p>ترکیب آناناسِ ترش‌وشیرین با برگ نعنای تازه‌چیده.</p>
+          <div class="card-row"><span class="tag">تازگی</span><span class="price">۵۵ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#FBE1E7;">🍓</div>
+          <h3>توت‌فرنگی و موز</h3>
+          <p>اسموتی غلیظ از توت‌فرنگی و موز، بدون هیچ افزودنی.</p>
+          <div class="card-row"><span class="tag">غلیظ</span><span class="price">۵۸ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#F3E2EE;">🍇</div>
+          <h3>انار و سیب</h3>
+          <p>ترکیبِ ترش‌شیرینِ انارِ پاییزی و سیبِ باغیِ خوش‌رنگ.</p>
+          <div class="card-row"><span class="tag">فصلی</span><span class="price">۵۲ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#FFF3CC;">🥭</div>
+          <h3>آب‌انبه‌ی تروپیکال</h3>
+          <p>انبه‌ی رسیده، خوش‌عطر، با ته‌مزه‌ی لیمو.</p>
+          <div class="card-row"><span class="tag">جدید</span><span class="price">۶۰ هزار تومان</span></div>
+        </div>
+      </div>
+
+      <div class="menu-panel" id="panel-icecream">
+        <div class="card">
+          <div class="card-icon" style="background:#FFF3CC;">🌟</div>
+          <h3>بستنی زعفرانی سنتی</h3>
+          <p>با زعفرانِ اصل، خامه‌ی محلی و تکه‌های پسته.</p>
+          <div class="card-row"><span class="tag">امضای ما</span><span class="price">۶۵ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#E3F0DE;">🌰</div>
+          <h3>بستنی پسته</h3>
+          <p>پسته‌ی تازه‌آسیاب‌شده، طعمی غلیظ و اصیل.</p>
+          <div class="card-row"><span class="tag">پرطرفدار</span><span class="price">۶۲ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#FBE1E7;">🍓</div>
+          <h3>بستنی توت‌فرنگی</h3>
+          <p>با تکه‌های واقعی توت‌فرنگی داخل بستنی.</p>
+          <div class="card-row"><span class="tag">میوه‌ای</span><span class="price">۵۸ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#E9DCCB;">🍫</div>
+          <h3>بستنی شکلاتیِ تلخ</h3>
+          <p>شکلات تلخِ بلژیکی، برای عاشقانِ طعمِ غلیظ.</p>
+          <div class="card-row"><span class="tag">غلیظ</span><span class="price">۶۰ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#F4F4F4;">🥥</div>
+          <h3>بستنی نارگیلی</h3>
+          <p>خامه‌ی نارگیل و تکه‌های برشته‌ی نارگیل روی آن.</p>
+          <div class="card-row"><span class="tag">تروپیکال</span><span class="price">۵۹ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#F6DCE3;">🍒</div>
+          <h3>بستنی آلبالو</h3>
+          <p>آلبالوی ترش با رگه‌های خامه‌ی شیرین.</p>
+          <div class="card-row"><span class="tag">ترش‌وشیرین</span><span class="price">۵۹ هزار تومان</span></div>
+        </div>
+      </div>
+
+      <div class="menu-panel" id="panel-shake">
+        <div class="card">
+          <div class="card-icon" style="background:#E9DCCB;">🍫</div>
+          <h3>میلک‌شیک شکلاتی</h3>
+          <p>بستنی شکلاتیِ خودمان، مخلوط با شیر سرد.</p>
+          <div class="card-row"><span class="tag">پرحجم</span><span class="price">۷۰ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#FBE1E7;">🍓</div>
+          <h3>میلک‌شیک توت‌فرنگی</h3>
+          <p>ترکیب بستنی توت‌فرنگی با توت‌فرنگی تازه.</p>
+          <div class="card-row"><span class="tag">میوه‌ای</span><span class="price">۷۲ هزار تومان</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:#E3F0DE;">🌰</div>
+          <h3>میلک‌شیک پسته</h3>
+          <p>غلیظ، خنک، با روکش خامه و پسته‌ی خرد‌شده.</p>
+          <div class="card-row"><span class="tag">امضای ما</span><span class="price">۷۵ هزار تومان</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-plum" id="flavors">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow" style="background:rgba(255,255,255,.1);color:var(--lemon);">طعم‌های محبوب</div>
+        <h2 class="section-title" style="color:#fff;">رنگین‌کمونِ <span style="color:var(--lemon);">طعم‌ها</span></h2>
+        <p class="section-sub">هر رنگ، یه خاطره‌ست. یکی رو انتخاب کن و امتحانش کن.</p>
+      </div>
+      <div class="flavor-strip reveal">
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:var(--lemon);"></div><span>زعفرانی</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:#8FBF7F;"></div><span>پسته</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:var(--watermelon);"></div><span>توت‌فرنگی</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:#7a4b32;"></div><span>شکلاتی</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:#F6EFE2;"></div><span>نارگیل</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:#B23A48;"></div><span>آلبالو</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:var(--mango);"></div><span>انبه</span>
+        </div>
+        <div class="flavor-chip">
+          <div class="flavor-ball" style="background:#E7B8CE;"></div><span>گلاب</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container about-grid">
+      <div class="about-visual reveal">
+        <div class="blob"></div>
+        <div class="center-mark">🍨</div>
+      </div>
+      <div class="reveal">
+        <div class="eyebrow">داستان ما</div>
+        <h2 class="section-title">از یه بساط کوچیک تا <span>خانواده‌ی شهد و یخ</span></h2>
+        <p class="section-sub" style="max-width:100%;">سال ۱۳۹۸ با یه دستگاه آبمیوه‌گیری و یه بستنی‌ساز کوچیک شروع
+          کردیم. امروز هر روز صبح میوه می‌چینیم و بستنی‌ها رو با دستور همون روز اول، دستی می‌زنیم.</p>
+        <ul class="about-list">
+          <li><span class="check">✓</span> میوه‌های تازه، خریداری‌شده از باغِ همون منطقه</li>
+          <li><span class="check">✓</span> بدون رنگ، اسانس یا نگه‌دارنده‌ی مصنوعی</li>
+          <li><span class="check">✓</span> بستنی‌ها روزانه و به‌صورت دستی تهیه می‌شن</li>
+          <li><span class="check">✓</span> شیر و خامه از دامداری‌های محلی</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cream2">
+    <div class="container">
+      <div class="cta-banner reveal">
+        <div>
+          <h2>امروز رو با یه لیوان خنکی شروع کن</h2>
+          <p>هر روز از ساعت ۹ صبح تا ۱۲ شب، منتظرتیم.</p>
+        </div>
+        <a href="#contact" class="btn btn-white">سفارش بده</a>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo"><span class="logo-scoop"></span> شهد و یخ</div>
+          <p>آبمیوه‌ی تازه و بستنی سنتی، از میوه‌ی همون‌روز تا لیوان و قاشقِ شما.</p>
+          <div class="socials">
+            <a href="#" aria-label="اینستاگرام">📷</a>
+            <a href="#" aria-label="تلگرام">✈️</a>
+            <a href="#" aria-label="واتساپ">💬</a>
+          </div>
+        </div>
+        <div>
+          <h4>دسترسی سریع</h4>
+          <ul>
+            <li><a href="#home">خانه</a></li>
+            <li><a href="#menu">منو</a></li>
+            <li><a href="#flavors">طعم‌ها</a></li>
+            <li><a href="#about">درباره ما</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>ساعت کاری</h4>
+          <ul>
+            <li>شنبه تا پنج‌شنبه: ۹ صبح تا ۱۲ شب</li>
+            <li>جمعه‌ها: ۱۰ صبح تا ۱ بامداد</li>
+          </ul>
+        </div>
+        <div>
+          <h4>تماس با ما</h4>
+          <ul>
+            <li>📍 تهران، خیابان ولیعصر، نبش کوچه‌ی بهار</li>
+            <li>📞 ۰۲۱-۱۲۳۴۵۶۷۸</li>
+            <li>✉️ hello@shahdoyakh.ir</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© ۱۴۰۴ شهد و یخ. همه‌ی حقوق محفوظ است.</span>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll state
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile nav toggle
+    const burger = document.getElementById('burger');
+    const nav = document.querySelector('nav');
+    burger.addEventListener('click', () => {
+      const open = nav.style.display === 'block';
+      nav.style.display = open ? 'none' : 'block';
+      if (!open) {
+        nav.style.position = 'absolute';
+        nav.style.top = '64px';
+        nav.style.right = '24px';
+        nav.style.left = '24px';
+        nav.style.background = '#fff';
+        nav.style.borderRadius = '20px';
+        nav.style.padding = '18px';
+        nav.style.boxShadow = 'var(--shadow)';
+        nav.querySelector('ul').style.flexDirection = 'column';
+        nav.querySelector('ul').style.gap = '16px';
+      }
+    });
+
+    // Menu tabs
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panels = {
+      juice: document.getElementById('panel-juice'),
+      icecream: document.getElementById('panel-icecream'),
+      shake: document.getElementById('panel-shake'),
+    };
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        Object.values(panels).forEach(p => p.classList.remove('active'));
+        panels[btn.dataset.tab].classList.add('active');
+      });
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: .15 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+
+</html>

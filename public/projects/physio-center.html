@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تعادل | مرکز فیزیوتراپی و توانبخشی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F1ECE1;
+    --bg-alt: #E7DFCd;
+    --card: #FBF8F1;
+    --ink: #16302B;
+    --ink-soft: #4B655D;
+    --primary: #1F4A43;
+    --primary-deep: #0E211D;
+    --accent: #DE9F3B;
+    --accent-soft: #F0CE8E;
+    --clay: #A85A3D;
+    --line: rgba(22,48,43,0.14);
+    --line-strong: rgba(22,48,43,0.28);
+    --shadow: 0 20px 40px -20px rgba(15,38,34,0.35);
+    --radius: 18px;
+    --ff-display: 'Vazirmatn', sans-serif;
+    --ff-body: 'Vazirmatn', sans-serif;
+    --ff-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family: var(--ff-body);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  button{ font-family: inherit; cursor:pointer; border:none; background:none; }
+  input, textarea, select{ font-family: inherit; }
+
+  :focus-visible{
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .eyebrow{
+    font-family: var(--ff-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    color: var(--clay);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width: 26px;
+    height: 1px;
+    background: var(--clay);
+    display:inline-block;
+  }
+
+  h1,h2,h3,h4{
+    font-family: var(--ff-display);
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .section-head{ max-width: 640px; margin-bottom: 56px; }
+  .section-head h2{ font-size: clamp(28px, 4vw, 42px); line-height:1.25; margin-bottom: 14px; }
+  .section-head p{ color: var(--ink-soft); font-size: 16.5px; max-width: 520px; }
+
+  section{ padding: 108px 0; position: relative; }
+
+  /* reveal on scroll */
+  .reveal{ opacity:0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+  .reveal-delay-1{ transition-delay: .08s; }
+  .reveal-delay-2{ transition-delay: .16s; }
+  .reveal-delay-3{ transition-delay: .24s; }
+  .reveal-delay-4{ transition-delay: .32s; }
+  .reveal-delay-5{ transition-delay: .40s; }
+
+  /* ===== BUTTONS ===== */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding: 15px 28px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, background .3s ease;
+    white-space: nowrap;
+  }
+  .btn-primary{
+    background: var(--primary);
+    color: #F6F1E4;
+    box-shadow: 0 10px 24px -10px rgba(15,38,34,0.55);
+  }
+  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 16px 30px -12px rgba(15,38,34,0.6); }
+  .btn-primary svg{ transition: transform .3s ease; }
+  .btn-primary:hover svg{ transform: translateX(-4px); }
+
+  .btn-ghost{
+    border: 1.5px solid var(--line-strong);
+    color: var(--ink);
+  }
+  .btn-ghost:hover{ background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .btn-accent{
+    background: var(--accent);
+    color: var(--primary-deep);
+    box-shadow: 0 10px 24px -10px rgba(222,159,59,0.6);
+  }
+  .btn-accent:hover{ transform: translateY(-3px); }
+
+  /* ===== HEADER ===== */
+  header{
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 200;
+    padding: 18px 0;
+    transition: background .4s ease, padding .4s ease, box-shadow .4s ease;
+  }
+  header.scrolled{
+    background: rgba(241,236,225,0.86);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 12px 0;
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family: var(--ff-display);
+    font-weight: 800;
+    font-size: 21px;
+    color: var(--ink);
+  }
+  .logo .mark{
+    width: 34px; height:34px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    position: relative;
+    flex-shrink:0;
+  }
+  .logo .mark::before{
+    content:"";
+    position:absolute;
+    inset: 6px;
+    border-top: 2px solid var(--accent);
+    border-radius: 50%;
+    clip-path: polygon(50% 50%, 0 0, 100% 0);
+    transform: rotate(35deg);
+  }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap: 34px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .nav-links a{
+    position:relative;
+    padding: 4px 0;
+    color: var(--ink-soft);
+    transition: color .25s ease;
+  }
+  .nav-links a::after{
+    content:"";
+    position:absolute; right:0; bottom:-2px;
+    width:0; height:2px;
+    background: var(--accent);
+    transition: width .3s ease;
+  }
+  .nav-links a:hover{ color: var(--ink); }
+  .nav-links a:hover::after{ width:100%; }
+
+  .nav-right{ display:flex; align-items:center; gap:18px; }
+  .nav-phone{
+    display:flex; align-items:center; gap:8px;
+    font-family: var(--ff-mono);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .nav-phone svg{ color: var(--clay); }
+
+  .burger{
+    display:none;
+    width: 42px; height:42px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    align-items:center; justify-content:center;
+    flex-direction:column;
+    gap: 5px;
+  }
+  .burger span{ width:18px; height:2px; background: var(--ink); border-radius:2px; transition: all .3s ease; }
+  .burger.open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+  /* ===== HERO ===== */
+  .hero{
+    padding: 168px 0 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 40px;
+    align-items:center;
+  }
+  .hero-text h1{
+    font-size: clamp(38px, 5.4vw, 66px);
+    line-height: 1.14;
+    margin-bottom: 22px;
+  }
+  .hero-text h1 span{ display:block; overflow:hidden; }
+  .hero-text h1 .line-inner{ display:block; transform: translateY(110%); transition: transform 1s cubic-bezier(.2,.8,.2,1); }
+  .hero-text h1 span:nth-child(2) .line-inner{ transition-delay: .12s; color: var(--clay); }
+  .hero.loaded .hero-text h1 .line-inner{ transform: translateY(0); }
+
+  .hero-text p.lead{
+    font-size: 17.5px;
+    color: var(--ink-soft);
+    max-width: 480px;
+    margin-bottom: 36px;
+  }
+  .hero-ctas{ display:flex; gap: 16px; flex-wrap:wrap; margin-bottom: 52px; }
+
+  .stat-row{ display:flex; gap: 34px; flex-wrap:wrap; }
+  .stat-chip{ display:flex; flex-direction:column; gap:4px; }
+  .stat-chip .num{
+    font-family: var(--ff-mono);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .stat-chip .lbl{ font-size: 13px; color: var(--ink-soft); }
+
+  /* Goniometer visual */
+  .goniometer-wrap{
+    position: relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .goniometer-card{
+    background: var(--card);
+    border-radius: 28px;
+    padding: 38px 30px 30px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+  }
+  .gon-caption{ text-align:center; margin-bottom: 6px; }
+  .gon-caption .title{ font-weight:700; font-size:15px; }
+  .gon-caption .sub{ font-family: var(--ff-mono); font-size:11.5px; color: var(--ink-soft); letter-spacing:.04em; }
+
+  .gon-svg{ width:100%; height:auto; }
+  .gon-arc-bg{ fill:none; stroke: var(--line-strong); stroke-width: 2; }
+  .gon-arc-fill{ fill:none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+  .gon-tick{ stroke: var(--ink-soft); stroke-width: 1.5; opacity:.5; }
+  .gon-needle{ transform-origin: 210px 195px; transition: transform 1.6s cubic-bezier(.16,.8,.2,1); }
+  .hero.loaded .gon-needle{ transform: rotate(0deg); }
+  .gon-needle-line{ stroke: var(--primary); stroke-width: 4; stroke-linecap: round; }
+  .gon-pivot{ fill: var(--primary); }
+
+  .gon-readout{ display:flex; align-items:baseline; justify-content:center; gap:8px; margin-top: 4px; }
+  .gon-readout .deg{ font-family: var(--ff-mono); font-size: 40px; font-weight:700; color: var(--primary); }
+  .gon-readout .deg::after{ content:"\00b0"; }
+  .gon-readout .from{ font-family: var(--ff-mono); font-size: 12.5px; color: var(--ink-soft); }
+
+  .floating-tag{
+    position:absolute;
+    background: var(--primary);
+    color: #F6F1E4;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    padding: 9px 14px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    animation: floaty 5s ease-in-out infinite;
+  }
+  .floating-tag.tag-1{ top: -6px; left: -14px; animation-delay: .3s; }
+  .floating-tag.tag-2{ bottom: 10px; right: -18px; background: var(--accent); color: var(--primary-deep); animation-delay: 1s; }
+  @keyframes floaty{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
+
+  .motion-trail{ position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.5; }
+  .motion-trail path{ fill:none; stroke: var(--line-strong); stroke-width:1.5; stroke-dasharray: 6 8; animation: dash 40s linear infinite; }
+  @keyframes dash{ to{ stroke-dashoffset: -1000; } }
+
+  /* ===== SERVICES ===== */
+  .services-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .service-card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px 26px;
+    transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, border-color .4s ease;
+  }
+  .service-card:hover{ transform: translateY(-8px); box-shadow: var(--shadow); border-color: transparent; }
+  .service-card.featured{
+    background: var(--primary);
+    color: #F3EEE1;
+    grid-row: span 2;
+  }
+  .service-card.featured .svc-title{ color:#fff; }
+  .service-card.featured .svc-desc{ color: rgba(243,238,225,0.78); }
+  .service-card.featured .icon-ring{ border-color: rgba(255,255,255,0.3); }
+  .service-card.featured .icon-ring svg{ color: var(--accent-soft); }
+
+  .icon-ring{
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom: 22px;
+    color: var(--primary);
+  }
+  .svc-title{ font-size: 18px; font-weight:700; margin-bottom: 10px; }
+  .svc-desc{ font-size: 14.5px; color: var(--ink-soft); }
+
+  /* ===== PROCESS ===== */
+  .process{
+    background: var(--primary-deep);
+    color: #EFE8D6;
+    padding: 120px 0;
+  }
+  .process .section-head h2{ color: #F6F1E4; }
+  .process .section-head p{ color: rgba(239,232,214,0.65); }
+  .process .eyebrow{ color: var(--accent-soft); }
+  .process .eyebrow::before{ background: var(--accent-soft); }
+
+  .process-path{ position: relative; }
+  .process-arc-svg{ position:absolute; top: 44px; right:0; width:100%; height:60px; z-index:0; }
+  .process-arc-svg path{
+    fill:none; stroke: rgba(222,159,59,0.5); stroke-width: 2; stroke-dasharray: 900;
+    stroke-dashoffset: 900;
+    transition: stroke-dashoffset 1.6s ease;
+  }
+  .process.in-view .process-arc-svg path{ stroke-dashoffset: 0; }
+
+  .process-steps{
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .step{ text-align: center; }
+  .step-num{
+    width: 88px; height:88px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    background: var(--primary-deep);
+    border: 2px solid rgba(222,159,59,0.5);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--ff-mono);
+    font-size: 22px;
+    color: var(--accent-soft);
+    transition: border-color .4s ease, background .4s ease, transform .4s ease;
+  }
+  .step:hover .step-num{ background: var(--accent); color: var(--primary-deep); border-color: var(--accent); transform: scale(1.06); }
+  .step-title{ font-weight: 700; font-size: 16px; margin-bottom: 8px; color:#fff; }
+  .step-desc{ font-size: 13.5px; color: rgba(239,232,214,0.62); line-height:1.6; }
+
+  /* ===== TEAM ===== */
+  .team-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
+  .team-card{ text-align:center; }
+  .avatar{
+    width: 128px; height:128px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    position: relative;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--ff-display); font-weight:800; font-size: 30px;
+    color: #fff;
+  }
+  .avatar-ring{
+    position:absolute; inset:-8px;
+    border-radius:50%;
+    border: 1.5px dashed var(--line-strong);
+  }
+  .avatar.a1{ background: linear-gradient(150deg, #1F4A43, #2E6B60); }
+  .avatar.a2{ background: linear-gradient(150deg, #A85A3D, #C97A55); }
+  .avatar.a3{ background: linear-gradient(150deg, #16302B, #1F4A43); }
+  .team-name{ font-weight:700; font-size:17px; margin-bottom: 4px; }
+  .team-role{ color: var(--clay); font-size: 13.5px; font-weight:600; margin-bottom: 10px; }
+  .team-bio{ font-size: 13.5px; color: var(--ink-soft); max-width: 240px; margin: 0 auto; }
+
+  /* ===== TESTIMONIALS ===== */
+  .testi-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .testi-card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 30px 26px;
+    position: relative;
+  }
+  .testi-quote-mark{ font-family: var(--ff-display); font-size: 46px; color: var(--accent-soft); line-height:1; margin-bottom: 10px; display:block; }
+  .testi-text{ font-size: 15px; color: var(--ink); margin-bottom: 20px; }
+  .testi-name{ font-weight:700; font-size: 14px; }
+  .testi-meta{ font-size:12.5px; color: var(--ink-soft); font-family: var(--ff-mono); }
+
+  /* ===== FACILITY ===== */
+  .facility{ background: var(--bg-alt); }
+  .facility-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
+  .facility-item{ display:flex; gap: 18px; align-items:flex-start; }
+  .facility-item .icon-ring{ background: var(--card); flex-shrink:0; margin-bottom:0; }
+  .facility-item h4{ font-size: 16px; margin-bottom: 6px; }
+  .facility-item p{ font-size: 14px; color: var(--ink-soft); }
+
+  /* ===== BOOKING ===== */
+  .booking-grid{
+    display:grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    align-items:start;
+  }
+  .booking-form{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 38px;
+  }
+  .form-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .field{ display:flex; flex-direction:column; gap:8px; }
+  .field.full{ grid-column: 1 / -1; }
+  .field label{ font-size: 13.5px; font-weight:600; color: var(--ink-soft); }
+  .field input, .field select, .field textarea{
+    border: 1.5px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-size: 14.5px;
+    background: #fff;
+    color: var(--ink);
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .field textarea{ resize: vertical; min-height: 90px; }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(31,74,67,0.1);
+    outline:none;
+  }
+  .form-note{ font-size: 12.5px; color: var(--ink-soft); margin-top: 14px; }
+  .form-success{
+    display:none;
+    background: rgba(31,74,67,0.08);
+    border: 1px solid rgba(31,74,67,0.25);
+    color: var(--primary);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight:600;
+    margin-top: 18px;
+  }
+  .form-success.show{ display:block; }
+
+  .info-card{
+    background: var(--primary);
+    color: #F3EEE1;
+    border-radius: 24px;
+    padding: 34px;
+  }
+  .info-card h3{ color:#fff; font-size: 19px; margin-bottom: 22px; }
+  .info-row{ display:flex; gap:14px; align-items:flex-start; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.14); }
+  .info-row:first-of-type{ border-top:none; padding-top:0; }
+  .info-row svg{ color: var(--accent-soft); flex-shrink:0; margin-top:2px; }
+  .info-row .lbl{ font-size: 12px; color: rgba(243,238,225,0.6); margin-bottom: 3px; font-family: var(--ff-mono); }
+  .info-row .val{ font-size: 14.5px; font-weight:600; }
+  .hours-table{ margin-top: 6px; }
+  .hours-table div{ display:flex; justify-content:space-between; font-size: 13.5px; padding: 5px 0; color: rgba(243,238,225,0.85); }
+
+  /* ===== FOOTER ===== */
+  footer{
+    background: var(--primary-deep);
+    color: rgba(239,232,214,0.75);
+    padding: 70px 0 26px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba(239,232,214,0.12);
+  }
+  footer .logo{ color:#fff; margin-bottom: 16px; }
+  footer .logo .mark{ border-color: var(--accent-soft); }
+  .footer-about p{ font-size: 13.5px; max-width: 280px; line-height:1.8; }
+  .footer-col h5{ color:#fff; font-size: 14px; margin-bottom: 18px; }
+  .footer-col ul li{ margin-bottom: 11px; font-size: 13.5px; }
+  .footer-col ul li a:hover{ color: var(--accent-soft); }
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top: 24px; font-size: 12.5px; flex-wrap:wrap; gap:10px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 980px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .goniometer-wrap{ order:-1; max-width: 360px; margin: 0 auto 20px; }
+    .services-grid{ grid-template-columns: repeat(2,1fr); }
+    .service-card.featured{ grid-row: auto; }
+    .process-steps{ grid-template-columns: repeat(5,1fr); }
+    .team-grid, .testi-grid, .facility-grid{ grid-template-columns: repeat(2,1fr); }
+    .booking-grid{ grid-template-columns: 1fr; }
+    .footer-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px){
+    .nav-links, .nav-phone{ display:none; }
+    .burger{ display:flex; }
+    .mobile-menu{
+      position: fixed; inset: 0; top: 66px;
+      background: var(--bg);
+      z-index: 190;
+      transform: translateY(-110%);
+      transition: transform .4s cubic-bezier(.2,.8,.2,1);
+      padding: 30px 32px;
+      display:flex; flex-direction:column; gap: 22px;
+      font-size: 20px; font-weight:700;
+    }
+    .mobile-menu.open{ transform: translateY(0); }
+    section{ padding: 76px 0; }
+    .hero{ padding-top: 128px; }
+    .services-grid, .process-steps, .team-grid, .testi-grid, .facility-grid{ grid-template-columns: 1fr; }
+    .process-arc-svg{ display:none; }
+    .form-row{ grid-template-columns: 1fr; }
+    .footer-grid{ grid-template-columns: 1fr; gap: 30px; }
+    .hero-ctas{ flex-direction:column; align-items: stretch; }
+    .stat-row{ gap: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap nav-inner">
+    <a href="#home" class="logo"><span class="mark"></span> تعادل</a>
+    <nav class="nav-links">
+      <a href="#home">خانه</a>
+      <a href="#services">خدمات</a>
+      <a href="#process">مسیر درمان</a>
+      <a href="#team">متخصصان</a>
+      <a href="#testimonials">نظرات</a>
+    </nav>
+    <div class="nav-right">
+      <div class="nav-phone">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        ۰۲۱-۸۸۷۷۶۶۵۵
+      </div>
+      <a href="#booking" class="btn btn-primary">رزرو نوبت</a>
+      <button class="burger" id="burger" aria-label="باز کردن منو"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home">خانه</a>
+    <a href="#services">خدمات</a>
+    <a href="#process">مسیر درمان</a>
+    <a href="#team">متخصصان</a>
+    <a href="#testimonials">نظرات</a>
+    <a href="#booking">رزرو نوبت</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <svg class="motion-trail" viewBox="0 0 1200 700" preserveAspectRatio="none">
+      <path d="M -50 550 C 200 500, 300 620, 550 560 S 900 460, 1250 520" />
+      <path d="M -50 150 C 250 220, 400 80, 700 160 S 1000 260, 1250 180" />
+    </svg>
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow">کلینیک تخصصی فیزیوتراپی و توانبخشی</p>
+        <h1>
+          <span><span class="line-inner">درمان با دقت،</span></span>
+          <span><span class="line-inner">حرکت با اطمینان</span></span>
+        </h1>
+        <p class="lead">ارزیابی حرکتی دقیق، درمان دستی تخصصی و برنامه بازتوانی شخصی‌سازی‌شده؛ در تعادل قدم‌به‌قدم تا بازگشت کامل به زندگی روزمره و ورزش همراه شما هستیم.</p>
+        <div class="hero-ctas">
+          <a href="#booking" class="btn btn-primary">
+            رزرو نوبت ارزیابی
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#services" class="btn btn-ghost">مشاهده خدمات درمانی</a>
+        </div>
+        <div class="stat-row">
+          <div class="stat-chip"><span class="num" data-count="12" data-suffix="+">۰</span><span class="lbl">سال سابقه بالینی</span></div>
+          <div class="stat-chip"><span class="num" data-count="4800" data-suffix="+">۰</span><span class="lbl">بیمار توانبخشی‌شده</span></div>
+          <div class="stat-chip"><span class="num" data-count="96" data-suffix="٪">۰</span><span class="lbl">رضایت بیماران</span></div>
+        </div>
+      </div>
+
+      <div class="goniometer-wrap">
+        <span class="floating-tag tag-1">ارزیابی هفتگی</span>
+        <span class="floating-tag tag-2">پیشرفت پایدار</span>
+        <div class="goniometer-card">
+          <div class="gon-caption">
+            <div class="title">دامنه حرکتی زانو</div>
+            <div class="sub">۶ هفته پس از شروع درمان</div>
+          </div>
+          <svg class="gon-svg" viewBox="0 0 420 230" aria-hidden="true">
+            <path class="gon-arc-bg" d="M 60 195 A 150 150 0 0 1 360 195"/>
+            <path class="gon-arc-fill" d="M 60 195 A 150 150 0 0 1 300 68" stroke-dasharray="340" stroke-dashoffset="340" id="gonFill"/>
+            <g class="gon-tick">
+              <line x1="60" y1="195" x2="75" y2="195"/>
+              <line x1="103" y1="93" x2="115" y2="100"/>
+              <line x1="210" y1="45" x2="210" y2="60"/>
+              <line x1="317" y1="93" x2="305" y2="100"/>
+              <line x1="360" y1="195" x2="345" y2="195"/>
+            </g>
+            <g class="gon-needle" id="gonNeedle" style="transform: rotate(127deg);">
+              <line class="gon-needle-line" x1="210" y1="195" x2="210" y2="70"/>
+            </g>
+            <circle class="gon-pivot" cx="210" cy="195" r="7"/>
+          </svg>
+          <div class="gon-readout">
+            <span class="deg" data-count="130" data-suffix="">۰</span>
+            <span class="from">شروع از ۴۵ درجه</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">حوزه‌های تخصصی درمان</p>
+        <h2>برای هر نوع حرکت، یک مسیر درمانی</h2>
+        <p>تیم فیزیوتراپی تعادل بر پایه ارزیابی دقیق و شواهد بالینی، برنامه‌ای مختص وضعیت شما طراحی می‌کند.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card featured reveal">
+          <div class="icon-ring">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4v16M6 4a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4M18 20V4M18 20a4 4 0 0 0-4-4v0a4 4 0 0 0-4 4"/></svg>
+          </div>
+          <div class="svc-title">توانبخشی ارتوپدی و پس از جراحی</div>
+          <div class="svc-desc">بازیابی دامنه حرکتی، قدرت و عملکرد مفاصل پس از جراحی زانو، لگن، شانه و ستون فقرات؛ با برنامه مرحله‌به‌مرحله و پایش دقیق پیشرفت.</div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-1">
+          <div class="icon-ring">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          </div>
+          <div class="svc-title">آسیب‌های ورزشی</div>
+          <div class="svc-desc">ارزیابی تخصصی و بازگشت ایمن به تمرین برای ورزشکاران حرفه‌ای و آماتور.</div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-2">
+          <div class="icon-ring">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v6M12 16v6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M2 12h6M16 12h6M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2"/></svg>
+          </div>
+          <div class="svc-title">کمردرد و ستون فقرات</div>
+          <div class="svc-desc">درمان دیسک، تنگی کانال نخاعی و دردهای مزمن کمر با ترکیب درمان دستی و تمرین‌درمانی.</div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-3">
+          <div class="icon-ring">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12a3 3 0 1 1 3 3"/></svg>
+          </div>
+          <div class="svc-title">توانبخشی عصبی</div>
+          <div class="svc-desc">برنامه‌های تخصصی برای بیماران سکته مغزی، پارکینسون و ام‌اس با هدف بازگشت استقلال حرکتی.</div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-4">
+          <div class="icon-ring">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="6" r="3"/><path d="M6 21v-4a6 6 0 0 1 12 0v4"/></svg>
+          </div>
+          <div class="svc-title">فیزیوتراپی اطفال</div>
+          <div class="svc-desc">ارزیابی و درمان تأخیر رشد حرکتی، فلج مغزی و ناهنجاری‌های اسکلتی در کودکان.</div>
+        </div>
+
+        <div class="service-card reveal reveal-delay-5">
+          <div class="icon-ring">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-7 4 14 2-7h4"/></svg>
+          </div>
+          <div class="svc-title">درمان دستی و کاهش درد مزمن</div>
+          <div class="svc-desc">تکنیک‌های تخصصی ماساژ درمانی، رهاسازی میوفاشیال و کاهش دردهای اسکلتی-عضلانی.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">مسیر درمان در تعادل</p>
+        <h2>پنج مرحله تا بازگشت به حرکت</h2>
+        <p>یک مسیر شفاف و قابل پیگیری، از اولین جلسه ارزیابی تا بازگشت کامل به فعالیت‌های روزمره.</p>
+      </div>
+
+      <div class="process-path">
+        <svg class="process-arc-svg" viewBox="0 0 1120 60" preserveAspectRatio="none">
+          <path d="M 40 44 C 300 -10, 820 -10, 1080 44"/>
+        </svg>
+        <div class="process-steps">
+          <div class="step reveal"><div class="step-num">۰۱</div><div class="step-title">ارزیابی اولیه</div><div class="step-desc">معاینه بالینی و سنجش دامنه حرکتی برای شناسایی علت اصلی مشکل</div></div>
+          <div class="step reveal reveal-delay-1"><div class="step-num">۰۲</div><div class="step-title">تشخیص و هدف‌گذاری</div><div class="step-desc">تعیین تشخیص دقیق و اهداف درمانی واقع‌بینانه با مشورت بیمار</div></div>
+          <div class="step reveal reveal-delay-2"><div class="step-num">۰۳</div><div class="step-title">طراحی برنامه</div><div class="step-desc">تدوین برنامه اختصاصی متناسب با شرایط جسمی و سبک زندگی</div></div>
+          <div class="step reveal reveal-delay-3"><div class="step-num">۰۴</div><div class="step-title">اجرا و پایش</div><div class="step-desc">درمان دستی، تمرین‌درمانی و ثبت منظم پیشرفت در هر جلسه</div></div>
+          <div class="step reveal reveal-delay-4"><div class="step-num">۰۵</div><div class="step-title">بازگشت به عملکرد</div><div class="step-desc">بازگشت ایمن به فعالیت روزمره، کار یا ورزش با برنامه نگهدارنده</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">تیم درمانی</p>
+        <h2>فیزیوتراپیست‌هایی که همراه شما می‌مانند</h2>
+        <p>هر بیمار، یک متخصص ثابت دارد؛ از اولین ارزیابی تا آخرین جلسه.</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div class="avatar a1"><div class="avatar-ring"></div>آ.ص</div>
+          <div class="team-name">دکتر آرمان صادقی</div>
+          <div class="team-role">متخصص فیزیوتراپی ورزشی</div>
+          <div class="team-bio">۱۴ سال سابقه بالینی، همکاری با تیم‌های ملی دو و میدانی</div>
+        </div>
+        <div class="team-card reveal reveal-delay-1">
+          <div class="avatar a2"><div class="avatar-ring"></div>ن.م</div>
+          <div class="team-name">دکتر نگار محمودی</div>
+          <div class="team-role">متخصص توانبخشی عصبی</div>
+          <div class="team-bio">فوق‌تخصص بازتوانی سکته مغزی، ۹ سال سابقه بالینی</div>
+        </div>
+        <div class="team-card reveal reveal-delay-2">
+          <div class="avatar a3"><div class="avatar-ring"></div>ب.ک</div>
+          <div class="team-name">دکتر بهراد کریمی</div>
+          <div class="team-role">متخصص فیزیوتراپی ستون فقرات</div>
+          <div class="team-bio">دوره تکمیلی درمان دستی، ۱۱ سال سابقه بالینی</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">نظرات بیماران</p>
+        <h2>حرف‌های کسانی که برگشتند</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <span class="testi-quote-mark">”</span>
+          <p class="testi-text">بعد از جراحی زانو فکر نمی‌کردم بتونم دوباره بدوم. تیم تعادل قدم‌به‌قدم کنارم بود و هر هفته پیشرفتم رو نشونم می‌دادن.</p>
+          <div class="testi-name">سارا رضایی</div>
+          <div class="testi-meta">بیمار، ۳۴ ساله</div>
+        </div>
+        <div class="testi-card reveal reveal-delay-1">
+          <span class="testi-quote-mark">”</span>
+          <p class="testi-text">برنامه توانبخشی بعد از سکته، زندگیم رو تغییر داد. پیشرفتم رو با اعداد واقعی می‌دیدم، نه فقط حس می‌کردم.</p>
+          <div class="testi-name">حمید احمدی</div>
+          <div class="testi-meta">بیمار، ۵۸ ساله</div>
+        </div>
+        <div class="testi-card reveal reveal-delay-2">
+          <span class="testi-quote-mark">”</span>
+          <p class="testi-text">کمردردی که پنج سال باهاش کنار اومده بودم، بالاخره با درمان دستی و برنامه تمرینی درست جواب داد.</p>
+          <div class="testi-name">مهسا کاظمی</div>
+          <div class="testi-meta">بیمار، ۴۱ ساله</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILITY -->
+  <section class="facility">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">فضای درمانی</p>
+        <h2>فضایی طراحی‌شده برای بازتوانی</h2>
+      </div>
+      <div class="facility-grid">
+        <div class="facility-item reveal">
+          <div class="icon-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6v6H9z"/></svg></div>
+          <div><h4>تجهیزات به‌روز ارزیابی حرکتی</h4><p>دستگاه‌های سنجش دامنه حرکتی و آنالیز راه رفتن</p></div>
+        </div>
+        <div class="facility-item reveal reveal-delay-1">
+          <div class="icon-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg></div>
+          <div><h4>سالن تمرین‌درمانی اختصاصی</h4><p>فضایی مجزا برای تمرین‌های عملکردی و بازتوانی گروهی</p></div>
+        </div>
+        <div class="facility-item reveal reveal-delay-2">
+          <div class="icon-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="M4 10h16"/></svg></div>
+          <div><h4>اتاق‌های درمان دستی خصوصی</h4><p>محیطی آرام برای جلسات درمان دستی و فیزیوتراپی فردی</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">شروع مسیر درمان</p>
+        <h2>نوبت ارزیابی خود را رزرو کنید</h2>
+        <p>فرم زیر را پر کنید، تیم تعادل حداکثر ظرف یک روز کاری با شما تماس می‌گیرد.</p>
+      </div>
+
+      <div class="booking-grid">
+        <form class="booking-form reveal" id="bookingForm">
+          <div class="form-row">
+            <div class="field"><label for="fname">نام و نام‌خانوادگی</label><input id="fname" type="text" required placeholder="مثلاً سارا رضایی"></div>
+            <div class="field"><label for="fphone">شماره تماس</label><input id="fphone" type="tel" required placeholder="۰۹1۲..."></div>
+          </div>
+          <div class="form-row">
+            <div class="field full">
+              <label for="fservice">نوع خدمت</label>
+              <select id="fservice">
+                <option>توانبخشی ارتوپدی و پس از جراحی</option>
+                <option>آسیب‌های ورزشی</option>
+                <option>کمردرد و ستون فقرات</option>
+                <option>توانبخشی عصبی</option>
+                <option>فیزیوتراپی اطفال</option>
+                <option>درمان دستی و کاهش درد مزمن</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field full"><label for="fnote">توضیح کوتاه از مشکل</label><textarea id="fnote" placeholder="توضیح دهید مشکل شما از چه زمانی شروع شده و در چه شرایطی تشدید می‌شود"></textarea></div>
+          </div>
+          <button type="submit" class="btn btn-accent">درخواست نوبت</button>
+          <p class="form-note">با ارسال فرم، اطلاعات شما فقط برای هماهنگی نوبت استفاده می‌شود.</p>
+          <div class="form-success" id="formSuccess">درخواست شما ثبت شد. تیم تعادل به‌زودی با شما تماس می‌گیرد.</div>
+        </form>
+
+        <div class="info-card reveal reveal-delay-1">
+          <h3>اطلاعات تماس و آدرس</h3>
+          <div class="info-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div><div class="lbl">آدرس</div><div class="val">تهران، خیابان ولیعصر، بالاتر از پارک ملت، پلاک ۱۴۰</div></div>
+          </div>
+          <div class="info-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div><div class="lbl">تلفن</div><div class="val">۰۲۱-۸۸۷۷۶۶۵۵</div></div>
+          </div>
+          <div class="info-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <div>
+              <div class="lbl">ساعات کاری</div>
+              <div class="hours-table">
+                <div><span>شنبه تا چهارشنبه</span><span>۹ - ۲۰</span></div>
+                <div><span>پنجشنبه</span><span>۹ - ۱۵</span></div>
+                <div><span>جمعه</span><span>تعطیل</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="#home" class="logo"><span class="mark"></span> تعادل</a>
+        <p>مرکز فیزیوتراپی و توانبخشی تعادل، با تکیه بر ارزیابی دقیق و درمان مبتنی بر شواهد، همراه شما در مسیر بازگشت به حرکت است.</p>
+      </div>
+      <div class="footer-col">
+        <h5>لینک‌های سریع</h5>
+        <ul>
+          <li><a href="#services">خدمات</a></li>
+          <li><a href="#process">مسیر درمان</a></li>
+          <li><a href="#team">متخصصان</a></li>
+          <li><a href="#booking">رزرو نوبت</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>خدمات درمانی</h5>
+        <ul>
+          <li><a href="#services">آسیب‌های ورزشی</a></li>
+          <li><a href="#services">کمردرد و ستون فقرات</a></li>
+          <li><a href="#services">توانبخشی عصبی</a></li>
+          <li><a href="#services">فیزیوتراپی اطفال</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>تماس</h5>
+        <ul>
+          <li>۰۲۱-۸۸۷۷۶۶۵۵</li>
+          <li>info@taadol-clinic.ir</li>
+          <li>تهران، خیابان ولیعصر</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© ۱۴۰۴ کلینیک تعادل. تمامی حقوق محفوظ است.</span>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header scroll state
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  // Mobile menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  }));
+
+  // Hero load animation
+  const hero = document.querySelector('.hero');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  window.addEventListener('load', () => {
+    requestAnimationFrame(() => {
+      hero.classList.add('loaded');
+      document.getElementById('gonFill').style.strokeDashoffset = 60;
+      animateCounters(hero);
+    });
+  });
+
+  // Generic counter animation
+  function animateCounters(scope){
+    scope.querySelectorAll('.num, .deg').forEach(el => {
+      if(el.dataset.done) return;
+      el.dataset.done = "1";
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      const toPersian = n => String(n).split('').map(d => persianDigits[d] !== undefined ? persianDigits[d] : d).join('');
+      if(reduceMotion){ el.textContent = toPersian(target) + suffix; return; }
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = Math.floor(eased * target);
+        el.textContent = toPersian(val) + suffix;
+        if(p < 1) requestAnimationFrame(tick);
+        else el.textContent = toPersian(target) + suffix;
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // Process section arc + in-view class
+  const processSection = document.querySelector('.process');
+  const processObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        processSection.classList.add('in-view');
+        processObserver.unobserve(processSection);
+      }
+    });
+  }, { threshold: 0.25 });
+  if(processSection) processObserver.observe(processSection);
+
+  // Stat counters elsewhere (in case hero missed, and any future .num outside hero)
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        animateCounters(entry.target);
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.stat-row').forEach(el => statObserver.observe(el));
+
+  // Booking form
+  const bookingForm = document.getElementById('bookingForm');
+  const formSuccess = document.getElementById('formSuccess');
+  bookingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    formSuccess.classList.add('show');
+    bookingForm.reset();
+  });
+</script>
+
+</body>
+</html>

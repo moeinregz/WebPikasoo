@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کاروان‌بار | حمل و نقل و باربری سراسری</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1ECDF;
+    --paper-2:#E7DFCB;
+    --ink:#1B1811;
+    --ink-soft:#4A4438;
+    --asphalt:#16181A;
+    --asphalt-2:#212427;
+    --hazard:#FFC530;
+    --cargo:#FF5A2A;
+    --steel:#57666F;
+    --ok:#2F7D5C;
+    --radius-sm:3px;
+    --radius-md:6px;
+    --maxw:1200px;
+    --ease:cubic-bezier(.22,.8,.28,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  .ltr{direction:ltr; unicode-bidi:isolate; font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  img,svg{display:block; max-width:100%;}
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  section{position:relative;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--cargo);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:''; width:18px; height:2px; background:var(--cargo); display:inline-block;
+  }
+  h1,h2,h3{font-weight:800; line-height:1.15;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:15px 26px;
+    font-family:'Vazirmatn';
+    font-weight:700; font-size:15.5px;
+    border-radius:var(--radius-sm);
+    border:2px solid transparent;
+    cursor:pointer;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .2s;
+    white-space:nowrap;
+  }
+  .btn:active{transform:translateY(1px) scale(.98);}
+  .btn-primary{
+    background:var(--hazard); color:var(--ink); border-color:var(--hazard);
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  .btn-primary:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink);}
+  .btn-ghost{
+    background:transparent; color:var(--paper); border-color:rgba(241,236,223,.35);
+  }
+  .btn-ghost:hover{border-color:var(--paper); background:rgba(241,236,223,.08);}
+  .btn-dark{
+    background:var(--ink); color:var(--paper); border-color:var(--ink);
+    box-shadow:4px 4px 0 var(--cargo);
+  }
+  .btn-dark:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--cargo);}
+  .btn svg{width:18px; height:18px;}
+
+  /* ===== reveal ===== */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ===== nav ===== */
+  .nav{
+    position:fixed; top:0; right:0; left:0; z-index:100;
+    background:rgba(22,24,26,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    color:var(--paper); font-weight:800; font-size:19px;
+  }
+  .brand-mark{
+    width:34px; height:34px; background:var(--hazard); border-radius:var(--radius-sm);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-mark svg{width:20px; height:20px; fill:var(--ink);}
+  .nav-links{
+    display:flex; align-items:center; gap:30px;
+    font-size:14.5px; font-weight:600; color:rgba(241,236,223,.8);
+  }
+  .nav-links a{position:relative; padding:4px 0; transition:color .2s;}
+  .nav-links a:hover{color:var(--paper);}
+  .nav-links a::after{
+    content:''; position:absolute; bottom:0; right:0; width:0; height:2px; background:var(--hazard);
+    transition:width .25s var(--ease);
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{display:none;}
+  @media(min-width:860px){.nav-cta{display:inline-flex; padding:10px 18px; font-size:13.5px;}}
+  .burger{display:none; width:24px; height:18px; position:relative; cursor:pointer;}
+  @media(max-width:859px){.nav-links{display:none;} .burger{display:block;}}
+  .burger span{position:absolute; right:0; width:100%; height:2px; background:var(--paper);}
+  .burger span:nth-child(1){top:0;} .burger span:nth-child(2){top:8px;} .burger span:nth-child(3){top:16px;}
+
+  /* ===== road stripe divider ===== */
+  .road-stripe{
+    height:14px;
+    background:repeating-linear-gradient(90deg, var(--hazard) 0 26px, transparent 26px 44px);
+    background-color:var(--asphalt);
+  }
+
+  /* ===== hero ===== */
+  .hero{
+    background:
+      radial-gradient(circle at 85% 15%, rgba(255,197,48,.10), transparent 45%),
+      var(--asphalt);
+    color:var(--paper);
+    padding:150px 0 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size:44px 44px;
+    pointer-events:none;
+  }
+  .hero-inner{
+    max-width:var(--maxw); margin:0 auto; padding:0 28px 90px;
+    display:grid; grid-template-columns:1.15fr .95fr; gap:50px; align-items:center;
+    position:relative; z-index:2;
+  }
+  @media(max-width:920px){.hero-inner{grid-template-columns:1fr; padding-bottom:60px;}}
+  .hero h1{
+    font-size:clamp(38px, 5.2vw, 66px);
+    letter-spacing:-.01em;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--hazard);
+    display:block;
+  }
+  .hero p.lead{
+    margin-top:22px; font-size:17.5px; color:rgba(241,236,223,.72);
+    max-width:480px;
+  }
+  .hero-actions{display:flex; gap:16px; margin-top:34px; flex-wrap:wrap;}
+
+  .hero-stats{
+    display:flex; gap:28px; margin-top:50px; flex-wrap:wrap;
+  }
+  .hero-stat b{
+    display:block; font-family:'IBM Plex Mono'; font-size:24px; color:var(--hazard); font-weight:700;
+  }
+  .hero-stat span{font-size:12.5px; color:rgba(241,236,223,.55);}
+
+  /* waybill card */
+  .waybill{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:var(--radius-md);
+    padding:26px 26px 22px;
+    position:relative;
+    box-shadow:0 30px 60px rgba(0,0,0,.45);
+    transform:rotate(1.3deg);
+  }
+  .waybill::after{
+    content:'';
+    position:absolute; left:-9px; top:50%; transform:translateY(-50%);
+    width:18px; height:18px; border-radius:50%; background:var(--asphalt);
+  }
+  .waybill::before{
+    content:'';
+    position:absolute; right:-9px; top:50%; transform:translateY(-50%);
+    width:18px; height:18px; border-radius:50%; background:var(--asphalt);
+  }
+  .waybill-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    border-bottom:2px dashed var(--paper-2); padding-bottom:16px; margin-bottom:16px;
+  }
+  .waybill-top b{font-size:14px; letter-spacing:.02em;}
+  .waybill-code{font-family:'IBM Plex Mono'; font-size:12.5px; color:var(--ink-soft);}
+  .waybill-status{
+    display:inline-flex; align-items:center; gap:7px;
+    background:rgba(47,125,92,.12); color:var(--ok);
+    font-family:'IBM Plex Mono'; font-size:11.5px; font-weight:600;
+    padding:5px 10px; border-radius:20px;
+  }
+  .waybill-status i{width:7px; height:7px; border-radius:50%; background:var(--ok); display:inline-block;}
+  @media (prefers-reduced-motion: no-preference){
+    .waybill-status i{animation:pulse-dot 1.6s infinite;}
+  }
+  @keyframes pulse-dot{0%,100%{opacity:1;} 50%{opacity:.35;}}
+
+  .route-line{
+    position:relative; margin:22px 0 20px; height:46px;
+  }
+  .route-line .track{
+    position:absolute; top:50%; right:0; left:0; height:0;
+    border-top:2px dashed var(--steel); opacity:.5;
+  }
+  .route-line .pin{
+    position:absolute; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    font-family:'IBM Plex Mono'; font-size:11px; color:var(--ink-soft);
+  }
+  .route-line .pin i{width:9px; height:9px; border-radius:50%; background:var(--ink); display:block;}
+  .route-line .pin.start{right:0;}
+  .route-line .pin.end{left:0;}
+  .route-line .pin.end i{background:var(--cargo);}
+  .route-truck{
+    position:absolute; top:50%; right:6%;
+    width:30px; height:30px; transform:translateY(-50%);
+    color:var(--ink);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .route-truck{animation:drive 3.6s ease-in-out infinite;}
+  }
+  @keyframes drive{
+    0%{right:6%;} 50%{right:78%;} 50.01%{right:78%;} 100%{right:6%;}
+  }
+  .waybill-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    border-top:2px dashed var(--paper-2); padding-top:16px;
+  }
+  .waybill-grid div span{display:block; font-size:11px; color:var(--ink-soft); margin-bottom:3px;}
+  .waybill-grid div b{font-family:'IBM Plex Mono'; font-size:13.5px;}
+
+  /* ===== section heading ===== */
+  .sec-head{
+    max-width:640px; margin-bottom:52px;
+  }
+  .sec-head h2{font-size:clamp(28px,3.4vw,40px);}
+  .sec-head p{margin-top:14px; color:var(--ink-soft); font-size:16px;}
+  .sec-head.on-dark p{color:rgba(241,236,223,.65);}
+  .sec-head.on-dark h2{color:var(--paper);}
+
+  /* ===== services ===== */
+  .services{padding:110px 0;}
+  .service-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+  }
+  @media(max-width:920px){.service-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:600px){.service-grid{grid-template-columns:1fr;}}
+  .service-card{
+    background:var(--paper);
+    border:1.5px solid var(--paper-2);
+    border-radius:var(--radius-md);
+    padding:26px;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
+    position:relative;
+    overflow:hidden;
+  }
+  .service-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 34px rgba(27,24,17,.1);
+    border-color:transparent;
+  }
+  .service-code{
+    position:absolute; top:18px; left:18px;
+    font-family:'IBM Plex Mono'; font-size:11px; font-weight:600;
+    color:var(--ink-soft); letter-spacing:.06em;
+  }
+  .service-icon{
+    width:46px; height:46px; border-radius:var(--radius-sm);
+    background:var(--ink); color:var(--hazard);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+  }
+  .service-icon svg{width:24px; height:24px;}
+  .service-card h3{font-size:18px; margin-bottom:8px;}
+  .service-card p{font-size:14.5px; color:var(--ink-soft);}
+
+  /* ===== route map ===== */
+  .map-sec{
+    background:var(--asphalt); color:var(--paper);
+    padding:110px 0;
+  }
+  .map-wrap{
+    display:grid; grid-template-columns:1fr 1.1fr; gap:40px; align-items:center;
+  }
+  @media(max-width:920px){.map-wrap{grid-template-columns:1fr;}}
+  .map-legend{display:flex; flex-direction:column; gap:16px; margin-top:26px;}
+  .map-legend div{display:flex; align-items:center; gap:12px; font-size:14.5px; color:rgba(241,236,223,.75);}
+  .map-legend i{width:10px; height:10px; border-radius:50%; flex:none;}
+  .map-svg-box{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--radius-md);
+    padding:20px;
+  }
+  .city-dot{fill:var(--hazard);}
+  .hub-dot{fill:var(--cargo);}
+  .map-route{
+    fill:none; stroke:rgba(255,197,48,.55); stroke-width:1.6; stroke-dasharray:5 6;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .map-route{animation:dash-move 22s linear infinite;}
+  }
+  @keyframes dash-move{to{stroke-dashoffset:-400;}}
+  .map-label{
+    font-family:'IBM Plex Mono'; font-size:10.5px; fill:rgba(241,236,223,.65);
+  }
+
+  /* ===== process (spine) ===== */
+  .process{padding:110px 0;}
+  .spine-wrap{position:relative; padding-inline-start:0;}
+  .spine{
+    position:relative; margin-top:20px;
+  }
+  .spine-line{
+    position:absolute; top:0; bottom:0; right:23px;
+    width:2px; background-image:linear-gradient(var(--paper-2) 60%, transparent 0);
+    background-size:2px 14px; background-repeat:repeat-y;
+  }
+  .spine-progress{
+    position:absolute; top:0; right:23px; width:2px; height:0%;
+    background:var(--cargo);
+    transition:height .1s linear;
+  }
+  .spine-truck{
+    position:absolute; right:9px; top:0;
+    width:30px; height:30px; color:var(--cargo);
+    transition:top .1s linear;
+  }
+  .stop{
+    position:relative; display:grid; grid-template-columns:48px 1fr; gap:22px;
+    padding:0 0 60px 0;
+  }
+  .stop:last-child{padding-bottom:6px;}
+  .stop-marker{
+    width:48px; height:48px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--paper-2);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono'; font-weight:700; font-size:14px; color:var(--ink-soft);
+    transition:all .35s var(--ease);
+    z-index:2;
+  }
+  .stop.active .stop-marker{
+    background:var(--ink); border-color:var(--ink); color:var(--hazard);
+    transform:scale(1.08);
+  }
+  .stop-body h3{font-size:19px; margin-bottom:6px;}
+  .stop-body p{color:var(--ink-soft); font-size:15px; max-width:480px;}
+  .stop-time{
+    font-family:'IBM Plex Mono'; font-size:11.5px; color:var(--cargo); margin-top:8px; display:block;
+  }
+
+  /* ===== stats ===== */
+  .stats{
+    background:var(--ink); color:var(--paper);
+    padding:90px 0;
+  }
+  .stats-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+  }
+  @media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .stat-item{
+    border-inline-start:2px solid rgba(255,197,48,.35); padding-inline-start:18px;
+  }
+  .stat-item b{
+    font-family:'IBM Plex Mono'; font-size:clamp(30px,4vw,46px); color:var(--hazard);
+    display:block; font-weight:700;
+  }
+  .stat-item span{font-size:13.5px; color:rgba(241,236,223,.6); margin-top:6px; display:block;}
+
+  /* ===== tracking ===== */
+  .tracking{padding:110px 0;}
+  .track-card{
+    background:var(--ink); color:var(--paper);
+    border-radius:var(--radius-md);
+    padding:50px 44px;
+    display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+  @media(max-width:760px){.track-card{grid-template-columns:1fr; text-align:center;}}
+  .track-card::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(255,255,255,.06) 1.4px, transparent 1.4px);
+    background-size:16px 16px;
+    -webkit-mask-image:linear-gradient(90deg, transparent, black 45%);
+            mask-image:linear-gradient(90deg, transparent, black 45%);
+  }
+  .track-card h2{font-size:clamp(24px,3vw,32px); position:relative;}
+  .track-card p{color:rgba(241,236,223,.6); margin-top:10px; max-width:420px; position:relative;}
+  .track-form{
+    display:flex; gap:0; position:relative;
+    border:2px solid rgba(241,236,223,.25);
+    border-radius:var(--radius-sm);
+    overflow:hidden;
+    background:rgba(255,255,255,.04);
+  }
+  .track-form input{
+    background:transparent; border:none; outline:none;
+    padding:16px 18px; color:var(--paper);
+    font-family:'IBM Plex Mono'; font-size:14px; width:220px;
+  }
+  .track-form input::placeholder{color:rgba(241,236,223,.4);}
+  .track-form button{
+    border:none; background:var(--hazard); color:var(--ink);
+    font-weight:700; font-family:'Vazirmatn'; padding:0 22px; cursor:pointer;
+    transition:background .2s;
+  }
+  .track-form button:hover{background:#ffd35c;}
+  .track-note{font-family:'IBM Plex Mono'; font-size:11.5px; color:rgba(241,236,223,.4); margin-top:12px; position:relative;}
+
+  /* ===== testimonials ===== */
+  .testimonials{padding:0 0 110px;}
+  .test-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+  }
+  @media(max-width:920px){.test-grid{grid-template-columns:1fr;}}
+  .test-card{
+    background:var(--paper);
+    border:1.5px dashed var(--paper-2);
+    border-radius:var(--radius-md);
+    padding:26px;
+  }
+  .test-card p{font-size:15px; color:var(--ink); margin-bottom:18px;}
+  .test-who{display:flex; align-items:center; gap:12px;}
+  .test-avatar{
+    width:38px; height:38px; border-radius:50%; background:var(--ink); color:var(--hazard);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;
+    flex:none;
+  }
+  .test-who b{font-size:14px; display:block;}
+  .test-who span{font-size:12.5px; color:var(--ink-soft);}
+
+  /* ===== cta banner ===== */
+  .cta-banner{
+    background:var(--hazard);
+    padding:60px 0;
+  }
+  .cta-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+  }
+  .cta-inner h2{font-size:clamp(22px,3vw,30px); max-width:520px;}
+  .cta-phone{
+    display:flex; align-items:center; gap:12px;
+    font-family:'IBM Plex Mono'; font-size:22px; font-weight:700;
+  }
+  .cta-phone svg{width:22px; height:22px;}
+
+  /* ===== footer ===== */
+  footer{
+    background:var(--asphalt); color:rgba(241,236,223,.65);
+    padding:70px 0 0;
+  }
+  .foot-grid{
+    display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px;
+    padding-bottom:50px;
+    border-bottom:2px dashed rgba(241,236,223,.15);
+  }
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr;}}
+  .foot-brand p{margin-top:14px; font-size:14px; max-width:280px; line-height:1.8;}
+  .foot-col h4{color:var(--paper); font-size:14px; margin-bottom:16px;}
+  .foot-col ul{list-style:none; display:flex; flex-direction:column; gap:10px;}
+  .foot-col a{font-size:14px; transition:color .2s;}
+  .foot-col a:hover{color:var(--hazard);}
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+    padding:26px 0;
+    font-family:'IBM Plex Mono'; font-size:12px; color:rgba(241,236,223,.4);
+  }
+  .barcode{display:flex; gap:2px; align-items:flex-end; height:26px;}
+  .barcode i{display:block; width:2px; background:rgba(241,236,223,.4);}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v3h3.5a1 1 0 0 1 .86.49l2.5 4.2a1 1 0 0 1 .14.51V17a1 1 0 0 1-1 1h-1.17a2.5 2.5 0 0 1-4.66 0H9.83a2.5 2.5 0 0 1-4.66 0H4a1 1 0 0 1-1-1V6Zm14 4v3h3.32l-1.79-3H17ZM7.5 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+      </span>
+      کاروان‌بار
+    </div>
+    <nav class="nav-links">
+      <a href="#khadamat">خدمات</a>
+      <a href="#masirha">مسیرها</a>
+      <a href="#marahel">روند کار</a>
+      <a href="#rahgiri">رهگیری</a>
+      <a href="#tamas">تماس</a>
+    </nav>
+    <a href="#tamas" class="btn btn-primary nav-cta">ثبت سفارش حمل</a>
+    <div class="burger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">حمل و نقل و باربری سراسری</div>
+      <h1>بار شما را<br><em>بی‌وقفه</em> می‌رسانیم</h1>
+      <p class="lead">از تهران تا دورترین شهر، با ناوگان کاروان‌بار؛ حمل جاده‌ای، اسباب‌کشی، بار سنگین و سردخانه‌ای، با رهگیری زنده تا لحظه تحویل.</p>
+      <div class="hero-actions">
+        <a href="#tamas" class="btn btn-primary">
+          ثبت سفارش حمل
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#rahgiri" class="btn btn-ghost">رهگیری مرسوله</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>۴۰۰+</b><span>کامیون فعال</span></div>
+        <div class="hero-stat"><b>۳۱</b><span>استان تحت پوشش</span></div>
+        <div class="hero-stat"><b>۹۸٪</b><span>تحویل به‌موقع</span></div>
+      </div>
+    </div>
+
+    <div class="waybill reveal">
+      <div class="waybill-top">
+        <div>
+          <b>برگه بارنامه</b><br>
+          <span class="waybill-code ltr">KB-284193</span>
+        </div>
+        <div class="waybill-status"><i></i>در حال حمل</div>
+      </div>
+      <div class="route-line">
+        <div class="track"></div>
+        <div class="pin start"><i></i>تهران</div>
+        <svg class="route-truck" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v3h3.5a1 1 0 0 1 .86.49l2.5 4.2a1 1 0 0 1 .14.51V17a1 1 0 0 1-1 1h-1.17a2.5 2.5 0 0 1-4.66 0H9.83a2.5 2.5 0 0 1-4.66 0H4a1 1 0 0 1-1-1V6Zm14 4v3h3.32l-1.79-3H17ZM7.5 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+        <div class="pin end"><i></i>مشهد</div>
+      </div>
+      <div class="waybill-grid">
+        <div><span>وزن</span><b class="ltr">1,200 kg</b></div>
+        <div><span>نوع بار</span><b>عمومی</b></div>
+        <div><span>برآورد تحویل</span><b>۱۸ ساعت</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="road-stripe"></div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="services" id="khadamat">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">آنچه حمل می‌کنیم</div>
+      <h2>خدمات باربری، متناسب با نوع بار شما</h2>
+      <p>از یک بسته سبک تا یک خط تولید کامل؛ برای هر نوع بار، سرویس و ناوگان مخصوص خودش را داریم.</p>
+    </div>
+    <div class="service-grid">
+
+      <div class="service-card reveal">
+        <span class="service-code ltr">RD·01</span>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v3h3.5a1 1 0 0 1 .86.49l2.5 4.2a1 1 0 0 1 .14.51V17a1 1 0 0 1-1 1h-1.17a2.5 2.5 0 0 1-4.66 0H9.83a2.5 2.5 0 0 1-4.66 0H4a1 1 0 0 1-1-1V6Z" fill="currentColor"/></svg>
+        </div>
+        <h3>حمل جاده‌ای بین‌شهری</h3>
+        <p>ناوگان کامیون و تریلی برای جابجایی بار بین شهرها، با انتخاب سریع‌ترین مسیر.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <span class="service-code ltr">HM·02</span>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 10 12 4l8 6v9a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1v-9Z" fill="currentColor"/></svg>
+        </div>
+        <h3>باربری و اسباب‌کشی</h3>
+        <p>جابجایی اثاثیه منزل و اداری همراه با بسته‌بندی استاندارد و نصب مجدد.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <span class="service-code ltr">CC·03</span>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M4.5 6l15 12M19.5 6l-15 12M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>حمل سردخانه‌ای</h3>
+        <p>انتقال بار فسادپذیر با کنترل دمای پیوسته، مخصوص محصولات غذایی و دارویی.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <span class="service-code ltr">HV·04</span>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10l8-6 8 6v10M9 20v-6h6v6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>حمل بار سنگین و پروژه‌ای</h3>
+        <p>جابجایی تجهیزات صنعتی و بار فوق‌سنگین با تریلی کفی و کمرشکن.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <span class="service-code ltr">UR·05</span>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" fill="currentColor"/></svg>
+        </div>
+        <h3>حمل درون‌شهری</h3>
+        <p>تحویل سریع و همان‌روز داخل شهر، برای فروشگاه‌ها و کسب‌وکارهای آنلاین.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <span class="service-code ltr">WH·06</span>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M4 21V9l8-5 8 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>انبارداری و لجستیک</h3>
+        <p>نگهداری، چیدمان و مدیریت موجودی کالا در انبارهای مجهز کاروان‌بار.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROUTE MAP ============ -->
+<section class="map-sec" id="masirha">
+  <div class="container">
+    <div class="map-wrap">
+      <div>
+        <div class="sec-head on-dark reveal" style="margin-bottom:0;">
+          <div class="eyebrow">پوشش سراسری</div>
+          <h2>یک شبکه، از تهران تا هر مقصد</h2>
+          <p>ناوگان کاروان‌بار روزانه بین مراکز استان‌ها در حال تردد است؛ مبدا هر مسیر، پایانه مرکزی تهران است.</p>
+        </div>
+        <div class="map-legend reveal">
+          <div><i style="background:var(--cargo)"></i> پایانه مرکزی</div>
+          <div><i style="background:var(--hazard)"></i> شهرهای تحت پوشش</div>
+        </div>
+      </div>
+      <div class="map-svg-box reveal">
+        <svg viewBox="0 0 560 520" style="width:100%; height:auto;">
+          <!-- connecting routes from Tehran hub -->
+          <g class="map-route">
+            <path d="M280,230 L230,120"/>
+            <path d="M280,230 L150,110"/>
+            <path d="M280,230 L440,180"/>
+            <path d="M280,230 L280,340"/>
+            <path d="M280,230 L260,410"/>
+            <path d="M280,230 L140,360"/>
+            <path d="M280,230 L360,430"/>
+            <path d="M280,230 L400,400"/>
+          </g>
+          <!-- city dots -->
+          <circle class="hub-dot" cx="280" cy="230" r="7"/>
+          <text class="map-label" x="292" y="226">تهران</text>
+
+          <circle class="city-dot" cx="230" cy="120" r="5"/>
+          <text class="map-label" x="240" y="116">رشت</text>
+
+          <circle class="city-dot" cx="150" cy="110" r="5"/>
+          <text class="map-label" x="118" y="98">تبریز</text>
+
+          <circle class="city-dot" cx="440" cy="180" r="5"/>
+          <text class="map-label" x="450" y="176">مشهد</text>
+
+          <circle class="city-dot" cx="280" cy="340" r="5"/>
+          <text class="map-label" x="292" y="336">اصفهان</text>
+
+          <circle class="city-dot" cx="260" cy="410" r="5"/>
+          <text class="map-label" x="270" y="440">شیراز</text>
+
+          <circle class="city-dot" cx="140" cy="360" r="5"/>
+          <text class="map-label" x="70" y="356">اهواز</text>
+
+          <circle class="city-dot" cx="360" cy="430" r="5"/>
+          <text class="map-label" x="372" y="426">کرمان</text>
+
+          <circle class="city-dot" cx="400" cy="400" r="5"/>
+          <text class="map-label" x="412" y="470">بندرعباس</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS (spine) ============ -->
+<section class="process" id="marahel">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">مسیر یک محموله</div>
+      <h2>از ثبت سفارش تا رسید تحویل</h2>
+      <p>هر بار، همین چهار توقف را طی می‌کند؛ شفاف و قابل‌پیگیری، از اول تا آخر.</p>
+    </div>
+    <div class="spine-wrap">
+      <div class="spine">
+        <div class="spine-line"></div>
+        <div class="spine-progress" id="spineProgress"></div>
+        <svg class="spine-truck" id="spineTruck" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v3h3.5a1 1 0 0 1 .86.49l2.5 4.2a1 1 0 0 1 .14.51V17a1 1 0 0 1-1 1h-1.17a2.5 2.5 0 0 1-4.66 0H9.83a2.5 2.5 0 0 1-4.66 0H4a1 1 0 0 1-1-1V6Zm14 4v3h3.32l-1.79-3H17ZM7.5 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+
+        <div class="stop reveal" data-stop>
+          <div class="stop-marker">۱</div>
+          <div class="stop-body">
+            <h3>ثبت سفارش</h3>
+            <p>مبدا، مقصد و مشخصات بار را ثبت می‌کنید؛ کارشناس ما در کمتر از ۳۰ دقیقه هزینه و زمان تحویل را اعلام می‌کند.</p>
+            <span class="stop-time">۰ تا ۳۰ دقیقه</span>
+          </div>
+        </div>
+
+        <div class="stop reveal" data-stop>
+          <div class="stop-marker">۲</div>
+          <div class="stop-body">
+            <h3>بارگیری</h3>
+            <p>راننده در بازه زمانی توافق‌شده در محل حاضر می‌شود؛ بار بازرسی، بسته‌بندی و در بارنامه ثبت می‌شود.</p>
+            <span class="stop-time">همان روز</span>
+          </div>
+        </div>
+
+        <div class="stop reveal" data-stop>
+          <div class="stop-marker">۳</div>
+          <div class="stop-body">
+            <h3>در مسیر</h3>
+            <p>موقعیت محموله از طریق کد رهگیری، لحظه‌به‌لحظه در دسترس شماست.</p>
+            <span class="stop-time">تا مقصد</span>
+          </div>
+        </div>
+
+        <div class="stop reveal" data-stop>
+          <div class="stop-marker">۴</div>
+          <div class="stop-body">
+            <h3>تحویل و رسید</h3>
+            <p>بار تحویل گیرنده می‌شود و رسید دیجیتال بارنامه برای شما ارسال می‌شود.</p>
+            <span class="stop-time">پایان مسیر</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal"><b data-count="12" data-suffix="+">۰</b><span>سال تجربه در حمل و نقل</span></div>
+      <div class="stat-item reveal"><b data-count="400" data-suffix="+">۰</b><span>کامیون و تریلی فعال</span></div>
+      <div class="stat-item reveal"><b data-count="31" data-suffix="">۰</b><span>استان تحت پوشش</span></div>
+      <div class="stat-item reveal"><b data-count="98" data-suffix="٪">۰</b><span>نرخ تحویل به‌موقع</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACKING ============ -->
+<section class="tracking" id="rahgiri">
+  <div class="container">
+    <div class="track-card reveal">
+      <div>
+        <h2>مرسوله‌تان کجاست؟</h2>
+        <p>کد بارنامه را وارد کنید تا وضعیت لحظه‌ای بار خود را ببینید.</p>
+      </div>
+      <div>
+        <form class="track-form" onsubmit="return false;">
+          <input class="ltr" type="text" placeholder="مثلاً KB-284193">
+          <button type="submit">رهگیری</button>
+        </form>
+        <div class="track-note">کد بارنامه هنگام ثبت سفارش برای شما پیامک می‌شود</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="eyebrow">تجربه مشتریان</div>
+      <h2>حرف کسب‌وکارهایی که هر هفته بار می‌فرستند</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <p>«برای فروشگاه آنلاینمان روزانه چند مرسوله داریم؛ از وقتی با کاروان‌بار کار می‌کنیم، دیگر نگران تأخیر نیستیم.»</p>
+        <div class="test-who">
+          <div class="test-avatar">آ.ر</div>
+          <div><b>آرش رستمی</b><span>فروشگاه لوازم خانگی</span></div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <p>«حمل سردخانه‌ای برای ما حیاتی است. کنترل دما دقیق بود و بار سالم به دستمان رسید.»</p>
+        <div class="test-who">
+          <div class="test-avatar">م.ک</div>
+          <div><b>مریم کاظمی</b><span>پخش مواد غذایی</span></div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <p>«اسباب‌کشی منزل با استرس زیادی همراه است، اما تیم کاروان‌بار خیلی حرفه‌ای و منظم کار کرد.»</p>
+        <div class="test-who">
+          <div class="test-avatar">ح.ن</div>
+          <div><b>حسین نجفی</b><span>مشتری خانگی</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BANNER ============ -->
+<section class="cta-banner" id="tamas">
+  <div class="container cta-inner">
+    <h2>همین حالا بار خود را به کاروان‌بار بسپارید</h2>
+    <a href="tel:02191234567" class="cta-phone ltr">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 5c0-1 1-2 2-2h2l2 5-2 1a11 11 0 0 0 6 6l1-2 5 2v2c0 1-1 2-2 2C10 19 4 13 4 5Z" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/></svg>
+      021-9123-4567
+    </a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v3h3.5a1 1 0 0 1 .86.49l2.5 4.2a1 1 0 0 1 .14.51V17a1 1 0 0 1-1 1h-1.17a2.5 2.5 0 0 1-4.66 0H9.83a2.5 2.5 0 0 1-4.66 0H4a1 1 0 0 1-1-1V6Zm14 4v3h3.32l-1.79-3H17ZM7.5 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+          </span>
+          کاروان‌بار
+        </div>
+        <p>حمل و نقل و باربری سراسری، برای کسب‌وکارها و خانواده‌ها؛ از سال ۱۳۹۲ در جاده‌های ایران.</p>
+      </div>
+      <div class="foot-col">
+        <h4>خدمات</h4>
+        <ul>
+          <li><a href="#khadamat">حمل جاده‌ای</a></li>
+          <li><a href="#khadamat">اسباب‌کشی</a></li>
+          <li><a href="#khadamat">حمل سردخانه‌ای</a></li>
+          <li><a href="#khadamat">انبارداری</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>شرکت</h4>
+        <ul>
+          <li><a href="#masirha">مسیرها</a></li>
+          <li><a href="#marahel">روند کار</a></li>
+          <li><a href="#rahgiri">رهگیری مرسوله</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>تماس</h4>
+        <ul>
+          <li class="ltr" style="text-align:right;">021-9123-4567</li>
+          <li>تهران، بزرگراه آزادگان، پایانه باری</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© ۱۴۰۴ کاروان‌بار — تمام حقوق محفوظ است</span>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ en.target.classList.add('in-view'); io.unobserve(en.target); }
+    });
+  }, {threshold:.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // count-up stats
+  const counters = document.querySelectorAll('[data-count]');
+  const countIO = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        const el = en.target;
+        const target = parseInt(el.getAttribute('data-count'),10);
+        const suffix = el.getAttribute('data-suffix')||'';
+        const faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+        const toFa = n => String(n).split('').map(d=> faDigits[d] ?? d).join('');
+        let start = 0;
+        const dur = 1400;
+        const t0 = performance.now();
+        function step(t){
+          const p = Math.min((t-t0)/dur, 1);
+          const eased = 1 - Math.pow(1-p, 3);
+          const val = Math.round(target*eased);
+          el.textContent = toFa(val) + suffix;
+          if(p<1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        countIO.unobserve(el);
+      }
+    });
+  }, {threshold:.5});
+  counters.forEach(c=>countIO.observe(c));
+
+  // process spine progress + active stop + truck marker
+  const spineWrap = document.querySelector('.spine');
+  const spineProgress = document.getElementById('spineProgress');
+  const spineTruck = document.getElementById('spineTruck');
+  const stops = document.querySelectorAll('.stop');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function updateSpine(){
+    if(!spineWrap) return;
+    const rect = spineWrap.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = rect.height;
+    let progressed = (vh*0.75 - rect.top);
+    progressed = Math.max(0, Math.min(progressed, total));
+    const pct = total>0 ? (progressed/total)*100 : 0;
+    spineProgress.style.height = pct+'%';
+    spineTruck.style.top = 'calc(' + pct + '% - 15px)';
+    stops.forEach((s)=>{
+      const sRect = s.getBoundingClientRect();
+      const sMid = sRect.top + sRect.height*0.25;
+      if(sMid < vh*0.78){ s.classList.add('active'); }
+    });
+  }
+  let ticking = false;
+  function onScroll(){
+    if(!ticking){
+      requestAnimationFrame(()=>{ updateSpine(); ticking=false; });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', onScroll);
+  updateSpine();
+
+  // barcode generator
+  const barcode = document.getElementById('barcode');
+  if(barcode){
+    for(let i=0;i<38;i++){
+      const bar = document.createElement('i');
+      const w = Math.random()>.7 ? 2 : 1;
+      const h = 10 + Math.random()*16;
+      bar.style.width = w+'px';
+      bar.style.height = h+'px';
+      barcode.appendChild(bar);
+    }
+  }
+
+  // mobile burger -> smooth scroll to contact as simple fallback
+  document.querySelector('.burger')?.addEventListener('click', ()=>{
+    document.getElementById('tamas').scrollIntoView({behavior:'smooth'});
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دیوان عطر — رایحه‌هایی به سیاقِ شعر</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1b0f14;
+      --oud: #2f1d16;
+      --gold: #c9a253;
+      --gold-soft: #e8d6a8;
+      --rose: #b8768a;
+      --parchment: #f3e9d8;
+      --garnet: #8f2d3c;
+      --line: rgba(201, 162, 83, 0.28);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--ink);
+      color: var(--parchment);
+      font-family: 'Vazirmatn', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    .verse {
+      font-family: 'Aref Ruqaa', serif;
+      font-weight: 700;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* texture + vignette */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(201, 162, 83, 0.08), transparent 45%),
+        radial-gradient(ellipse at 85% 60%, rgba(143, 45, 60, 0.10), transparent 50%),
+        radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.55), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+
+    /* ---------- scroll progress scent trail ---------- */
+    #trail-wrap {
+      position: fixed;
+      top: 0;
+      right: 18px;
+      height: 100vh;
+      width: 26px;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    #trail-wrap svg {
+      height: 78vh;
+      width: 26px;
+      overflow: visible;
+    }
+
+    #trail-path {
+      fill: none;
+      stroke: var(--line);
+      stroke-width: 1.4;
+    }
+
+    #trail-progress {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 4px rgba(201, 162, 83, 0.7));
+    }
+
+    @media (max-width: 780px) {
+      #trail-wrap {
+        display: none;
+      }
+    }
+
+    /* ---------- floating particles ---------- */
+    .motes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .mote {
+      position: absolute;
+      bottom: -10px;
+      width: var(--s, 3px);
+      height: var(--s, 3px);
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold-soft), transparent 70%);
+      opacity: 0;
+      animation: rise var(--dur, 14s) linear infinite;
+      animation-delay: var(--del, 0s);
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translate(0, 0) scale(0.6);
+        opacity: 0;
+      }
+
+      8% {
+        opacity: 0.85;
+      }
+
+      50% {
+        transform: translate(var(--dx, 20px), -50vh) scale(1);
+      }
+
+      92% {
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: translate(calc(var(--dx, 20px) * 2), -105vh) scale(0.4);
+        opacity: 0;
+      }
+    }
+
+    /* ---------- nav ---------- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 6%;
+      background: linear-gradient(to bottom, rgba(27, 15, 20, 0.92), transparent);
+      backdrop-filter: blur(2px);
+    }
+
+    .brand-mark {
+      font-family: 'Aref Ruqaa', serif;
+      font-size: 1.5rem;
+      color: var(--gold-soft);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 34px;
+      font-size: 0.92rem;
+      color: var(--parchment);
+      opacity: 0.85;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 4px;
+      transition: opacity .3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      color: var(--gold-soft);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      width: 0;
+      background: var(--gold);
+      transition: width .35s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    @media (max-width:780px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    /* ---------- hero ---------- */
+    header.hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 6%;
+      z-index: 3;
+    }
+
+    .hero-inner {
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 1s ease .2s forwards;
+    }
+
+    .eyebrow .rule {
+      width: 38px;
+      height: 1px;
+      background: var(--gold);
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5.6rem);
+      line-height: 1.25;
+      color: var(--parchment);
+      opacity: 0;
+      animation: fadeUp 1.1s ease .4s forwards;
+    }
+
+    .hero h1 span {
+      color: var(--gold-soft);
+    }
+
+    .hero .verse {
+      margin-top: 26px;
+      font-size: 1.35rem;
+      color: var(--rose);
+      line-height: 2.1;
+      opacity: 0;
+      animation: fadeUp 1.1s ease .7s forwards;
+    }
+
+    .hero p.desc {
+      margin-top: 22px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      color: rgba(243, 233, 216, 0.65);
+      line-height: 2;
+      font-size: 0.98rem;
+      opacity: 0;
+      animation: fadeUp 1.1s ease .95s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 40px;
+      display: inline-flex;
+      gap: 18px;
+      opacity: 0;
+      animation: fadeUp 1.1s ease 1.15s forwards;
+    }
+
+    .btn {
+      padding: 15px 34px;
+      border-radius: 2px;
+      font-size: 0.92rem;
+      border: 1px solid var(--gold);
+      transition: all .4s ease;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .btn.solid {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .btn.solid:hover {
+      background: var(--gold-soft);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201, 162, 83, 0.25);
+    }
+
+    .btn.ghost {
+      color: var(--gold-soft);
+    }
+
+    .btn.ghost:hover {
+      background: rgba(201, 162, 83, 0.1);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* hero bottle */
+    .bottle-wrap {
+      position: absolute;
+      bottom: -4vh;
+      right: 50%;
+      transform: translateX(50%);
+      width: min(420px, 60vw);
+      opacity: 0.9;
+      z-index: -1;
+      animation: hover 6s ease-in-out infinite;
+    }
+
+    @keyframes hover {
+
+      0%,
+      100% {
+        transform: translateX(50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(50%) translateY(-14px);
+      }
+    }
+
+    .bottle-glow {
+      position: absolute;
+      left: 50%;
+      top: 35%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 83, 0.35), transparent 70%);
+      filter: blur(18px);
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 0.55;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 38px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      color: rgba(243, 233, 216, 0.5);
+      opacity: 0;
+      animation: fadeUp 1s ease 1.4s forwards;
+    }
+
+    .scroll-cue .line {
+      width: 1px;
+      height: 38px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: extend 2.4s ease-in-out infinite;
+    }
+
+    @keyframes extend {
+
+      0%,
+      100% {
+        transform: scaleY(0.6);
+        opacity: 0.4;
+      }
+
+      50% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+    }
+
+    /* ---------- section shell ---------- */
+    section {
+      position: relative;
+      z-index: 3;
+      padding: 150px 6%;
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 90px;
+    }
+
+    .section-head .eyebrow {
+      justify-content: center;
+      animation: none;
+      opacity: 1;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      margin-top: 18px;
+      color: var(--parchment);
+    }
+
+    .section-head p {
+      margin-top: 20px;
+      color: rgba(243, 233, 216, 0.6);
+      line-height: 1.9;
+      font-size: 0.98rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* divider flourish */
+    .flourish {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      opacity: 0.7;
+    }
+
+    /* ---------- notes pyramid ---------- */
+    .pyramid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .note-card {
+      text-align: center;
+      padding: 46px 26px;
+      border: 1px solid var(--line);
+      position: relative;
+      transition: transform .5s ease, border-color .5s ease, box-shadow .5s ease;
+    }
+
+    .note-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .note-index {
+      font-family: 'Aref Ruqaa', serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 22px;
+    }
+
+    .note-card svg {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 22px;
+    }
+
+    .note-card h3 {
+      font-size: 1.5rem;
+      color: var(--gold-soft);
+      margin-bottom: 12px;
+    }
+
+    .note-card .sub {
+      font-size: 0.82rem;
+      color: var(--rose);
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .note-card p {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: rgba(243, 233, 216, 0.65);
+    }
+
+    @media (max-width:860px) {
+      .pyramid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- collection ---------- */
+    .collection {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 130px;
+    }
+
+    .perfume {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .perfume:nth-child(even) {
+      direction: ltr;
+    }
+
+    .perfume:nth-child(even) .perfume-text {
+      direction: rtl;
+    }
+
+    .perfume-art {
+      aspect-ratio: 3/4;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, rgba(201, 162, 83, 0.08), transparent 70%);
+    }
+
+    .perfume-art svg {
+      width: 60%;
+      filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.5));
+      transition: transform .6s ease;
+    }
+
+    .perfume:hover .perfume-art svg {
+      transform: translateY(-8px) scale(1.03);
+    }
+
+    .perfume-text .no {
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+    }
+
+    .perfume-text h3 {
+      font-size: 2.3rem;
+      color: var(--parchment);
+      margin-bottom: 6px;
+    }
+
+    .perfume-text .family {
+      font-size: 0.85rem;
+      color: var(--rose);
+      letter-spacing: 1px;
+      margin-bottom: 26px;
+    }
+
+    .perfume-text .verse {
+      font-size: 1.15rem;
+      color: var(--gold-soft);
+      line-height: 2;
+      margin-bottom: 26px;
+    }
+
+    .perfume-text p.desc {
+      color: rgba(243, 233, 216, 0.65);
+      line-height: 1.95;
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+    }
+
+    .accord-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .accord-tags span {
+      font-size: 0.78rem;
+      padding: 7px 16px;
+      border: 1px solid var(--line);
+      color: var(--gold-soft);
+      border-radius: 100px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .price {
+      font-size: 1.3rem;
+      color: var(--gold);
+      font-family: 'Aref Ruqaa', serif;
+    }
+
+    @media (max-width:860px) {
+
+      .perfume,
+      .perfume:nth-child(even) {
+        grid-template-columns: 1fr;
+        direction: rtl;
+      }
+
+      .perfume-art {
+        max-width: 280px;
+        margin: 0 auto;
+      }
+    }
+
+    /* ---------- story ---------- */
+    .story {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .story-art {
+      position: relative;
+      aspect-ratio: 1/1;
+    }
+
+    .story-text .eyebrow {
+      opacity: 1;
+      animation: none;
+    }
+
+    .story-text h2 {
+      font-size: clamp(1.9rem, 3.6vw, 2.7rem);
+      margin: 18px 0 26px;
+    }
+
+    .story-text p {
+      color: rgba(243, 233, 216, 0.68);
+      line-height: 2.05;
+      margin-bottom: 18px;
+      font-size: 0.98rem;
+    }
+
+    .story-text .verse {
+      color: var(--rose);
+      font-size: 1.15rem;
+      margin-top: 26px;
+      line-height: 2;
+    }
+
+    @media (max-width:860px) {
+      .story {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- process strip ---------- */
+    .process {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .process-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .process-step {
+      padding: 44px 24px;
+      border-left: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .process-step:first-child {
+      border-left: none;
+    }
+
+    .process-step .num {
+      font-family: 'Aref Ruqaa', serif;
+      color: var(--gold);
+      font-size: 1.2rem;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .process-step h4 {
+      font-family: 'Vazirmatn';
+      font-weight: 600;
+      color: var(--gold-soft);
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .process-step p {
+      font-size: 0.85rem;
+      color: rgba(243, 233, 216, 0.55);
+      line-height: 1.8;
+    }
+
+    @media (max-width:860px) {
+      .process-row {
+        grid-template-columns: 1fr;
+      }
+
+      .process-step {
+        border-left: none;
+        border-top: 1px solid var(--line);
+      }
+
+      .process-step:first-child {
+        border-top: none;
+      }
+    }
+
+    /* ---------- newsletter / cta ---------- */
+    .cta-band {
+      text-align: center;
+      padding: 130px 6%;
+      background:
+        linear-gradient(180deg, transparent, rgba(143, 45, 60, 0.08) 40%, transparent),
+        var(--ink);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cta-band h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin-bottom: 20px;
+    }
+
+    .cta-band p {
+      color: rgba(243, 233, 216, 0.6);
+      max-width: 480px;
+      margin: 0 auto 40px;
+      line-height: 1.9;
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      max-width: 440px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .form-row input {
+      flex: 1;
+      min-width: 200px;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--parchment);
+      padding: 15px 20px;
+      font-family: 'Vazirmatn';
+      font-size: 0.92rem;
+    }
+
+    .form-row input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .form-row input::placeholder {
+      color: rgba(243, 233, 216, 0.4);
+    }
+
+    .form-note {
+      margin-top: 16px;
+      font-size: 0.78rem;
+      color: rgba(243, 233, 216, 0.4);
+      min-height: 18px;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      padding: 70px 6% 40px;
+      text-align: center;
+    }
+
+    footer .brand-mark {
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    footer .foot-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 34px;
+      font-size: 0.85rem;
+      color: rgba(243, 233, 216, 0.55);
+      flex-wrap: wrap;
+    }
+
+    footer .foot-links a:hover {
+      color: var(--gold-soft);
+    }
+
+    footer .copy {
+      font-size: 0.76rem;
+      color: rgba(243, 233, 216, 0.3);
+      letter-spacing: 1px;
+    }
+
+    ::selection {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="motes" id="motes"></div>
+
+  <div id="trail-wrap">
+    <svg viewBox="0 0 26 800" preserveAspectRatio="none">
+      <path id="trail-path" d="M13,0 C 4,120 22,240 13,360 C 4,480 22,600 13,800" />
+      <path id="trail-progress" d="M13,0 C 4,120 22,240 13,360 C 4,480 22,600 13,800" stroke-dasharray="1400"
+        stroke-dashoffset="1400" />
+    </svg>
+  </div>
+
+  <nav>
+    <span class="brand-mark">دیوانِ عطر</span>
+    <div class="nav-links">
+      <a href="#notes">رایحه‌ها</a>
+      <a href="#collection">مجموعه</a>
+      <a href="#story">داستان</a>
+      <a href="#join">همراهی</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="bottle-glow"></div>
+    <div class="bottle-wrap">
+      <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gbottle" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#c9a253" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#8f2d3c" stop-opacity="0.55" />
+          </linearGradient>
+        </defs>
+        <rect x="80" y="20" width="40" height="34" rx="4" fill="#c9a253" opacity="0.85" />
+        <rect x="90" y="6" width="20" height="18" rx="3" fill="#e8d6a8" />
+        <path
+          d="M70 54 C 60 80, 60 100, 70 120 L 70 280 Q 70 300 90 300 L 110 300 Q 130 300 130 280 L 130 120 C 140 100, 140 80, 130 54 Z"
+          fill="url(#gbottle)" stroke="#e8d6a8" stroke-width="1.5" opacity="0.92" />
+        <rect x="72" y="150" width="56" height="70" fill="#1b0f14" opacity="0.25" />
+      </svg>
+    </div>
+
+    <div class="hero-inner">
+      <div class="eyebrow"><span class="rule"></span> عطرسازیِ خانگیِ ایرانی <span class="rule"></span></div>
+      <h1>رایحه‌ای که <span>مثل شعر</span><br> از یاد نمی‌رود</h1>
+      <p class="verse">هر عطر ما بیتی‌ست از دیوانی نانوشته،<br>که تنها با نفَس تو خوانده می‌شود.</p>
+      <p class="desc">دیوانِ عطر، خانه‌ای‌ست برای رایحه‌هایی که از دل مواد خام ایران و شرق سر برآورده‌اند؛ گلاب کاشان،
+        عود خراسان، زعفران قائنات. هر شیشه، دفتری‌ست با سه پرده.</p>
+      <div class="hero-cta">
+        <a href="#collection" class="btn solid">دیدن مجموعه</a>
+        <a href="#notes" class="btn ghost">آشنایی با پرده‌های رایحه</a>
+      </div>
+    </div>
+
+    <div class="scroll-cue"><span class="line"></span>پیمایش کنید</div>
+  </header>
+
+  <section id="notes">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span class="rule"></span> ساختار رایحه <span class="rule"></span></div>
+      <h2>سه پرده‌ی هر عطر</h2>
+      <p>مثل هر غزل که مطلع، میانه و مقطعی دارد، هر رایحه‌ی ما در سه پرده روایت می‌شود؛ از لحظه‌ی برخورد با پوست تا
+        ساعت‌ها بعد.</p>
+    </div>
+
+    <div class="pyramid">
+      <div class="note-card reveal">
+        <div class="note-index">پرده‌ی نخست</div>
+        <svg viewBox="0 0 64 64" fill="none" stroke="#c9a253" stroke-width="1.6">
+          <circle cx="32" cy="32" r="14" />
+          <path
+            d="M32 8 L32 18 M32 46 L32 56 M8 32 L18 32 M46 32 L56 32 M14 14 L21 21 M43 43 L50 50 M50 14 L43 21 M21 43 L14 50" />
+        </svg>
+        <h3>مطلع</h3>
+        <div class="sub">نُت‌های سر — بِرگاموت، زعفران، لیموی شیراز</div>
+        <p>اولین نفَس؛ تند و روشن، مثل مصرعی که مخاطب را از همان سطر اول می‌گیرد. عمرش کوتاه است، اما فراموش‌نشدنی.</p>
+      </div>
+      <div class="note-card reveal" style="transition-delay:.15s">
+        <div class="note-index">پرده‌ی میانی</div>
+        <svg viewBox="0 0 64 64" fill="none" stroke="#c9a253" stroke-width="1.6">
+          <path d="M32 12 C 20 12 12 22 12 32 C 12 46 32 56 32 56 C 32 56 52 46 52 32 C 52 22 44 12 32 12 Z" />
+        </svg>
+        <h3>میانه</h3>
+        <div class="sub">نُت‌های قلب — گلِ محمدی، یاس، چوب صندل</div>
+        <p>پس از نیم‌ساعت، شخصیت اصلی وارد می‌شود؛ همان بیتی که غزل را به یاد می‌ماندنی می‌کند.</p>
+      </div>
+      <div class="note-card reveal" style="transition-delay:.3s">
+        <div class="note-index">پرده‌ی پایانی</div>
+        <svg viewBox="0 0 64 64" fill="none" stroke="#c9a253" stroke-width="1.6">
+          <path d="M20 46 Q 32 20 44 46" />
+          <path d="M32 46 L32 20" />
+          <circle cx="32" cy="18" r="3" />
+        </svg>
+        <h3>مقطع</h3>
+        <div class="sub">نُت‌های پایه — عود خراسان، عنبر، مشک</div>
+        <p>آنچه بر پوست و لباس تا پاسی از شب می‌ماند؛ سنگین، آرام، مثل ردیفِ آخر غزل که در گوش می‌ماند.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="collection">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span class="rule"></span> مجموعه‌ی اصلی <span class="rule"></span></div>
+      <h2>دیوان، سه غزل دارد</h2>
+      <p>سه رایحه، سه خلق‌وخو. هرکدام برای ساعتی از روز و حالی از دل.</p>
+    </div>
+
+    <div class="collection">
+
+      <div class="perfume reveal">
+        <div class="perfume-art">
+          <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="p1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#e8d6a8" />
+                <stop offset="100%" stop-color="#c9a253" />
+              </linearGradient>
+            </defs>
+            <rect x="82" y="18" width="36" height="30" rx="3" fill="#8f2d3c" />
+            <path
+              d="M74 48 C 66 70 66 90 74 108 L 74 270 Q 74 288 92 288 L 108 288 Q 126 288 126 270 L 126 108 C 134 90 134 70 126 48 Z"
+              fill="url(#p1)" stroke="#f3e9d8" stroke-width="1.5" />
+          </svg>
+        </div>
+        <div class="perfume-text">
+          <div class="no">غزل ۰۱</div>
+          <h3>نسیمِ زرین</h3>
+          <div class="family">سیترسی — امبری</div>
+          <p class="verse">صبح که برمی‌خیزی، بوی تو پیش از خودت می‌رسد؛<br>مثل نوری که از لای در می‌تابد.</p>
+          <p class="desc">برای صبح‌های زودهنگام و جلسه‌های مهم. زعفران قائنات با بِرگاموت درمی‌آمیزد و در پایان، عنبری
+            گرم جای خود را باز می‌کند.</p>
+          <div class="accord-tags"><span>زعفران</span><span>برگاموت</span><span>عنبر</span><span>چوب صندل</span></div>
+          <div class="price-row">
+            <span class="price">۲٬۴۵۰٬۰۰۰ تومان</span>
+            <a href="#join" class="btn ghost">افزودن به علاقه‌مندی‌ها</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="perfume reveal">
+        <div class="perfume-art">
+          <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="p2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#f3e9d8" />
+                <stop offset="100%" stop-color="#b8768a" />
+              </linearGradient>
+            </defs>
+            <rect x="82" y="18" width="36" height="30" rx="3" fill="#c9a253" />
+            <path
+              d="M74 48 C 66 70 66 90 74 108 L 74 270 Q 74 288 92 288 L 108 288 Q 126 288 126 270 L 126 108 C 134 90 134 70 126 48 Z"
+              fill="url(#p2)" stroke="#f3e9d8" stroke-width="1.5" />
+          </svg>
+        </div>
+        <div class="perfume-text">
+          <div class="no">غزل ۰۲</div>
+          <h3>گلابِ نیمروز</h3>
+          <div class="family">گلی — پودری</div>
+          <p class="verse">میان باغ کاشان، هزار گل شکفته بود؛<br>و تو، فقط یکی را با خود بردی.</p>
+          <p class="desc">قلبِ عطر، گلِ محمدیِ قمصر است؛ با یاسی سبک و پودری ملایم که پوست را در آغوش می‌گیرد. برای
+            بعدازظهرهای آرام.</p>
+          <div class="accord-tags"><span>گل محمدی</span><span>یاس</span><span>مشک سفید</span><span>وانیل</span></div>
+          <div class="price-row">
+            <span class="price">۲٬۲۰۰٬۰۰۰ تومان</span>
+            <a href="#join" class="btn ghost">افزودن به علاقه‌مندی‌ها</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="perfume reveal">
+        <div class="perfume-art">
+          <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="p3" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#c9a253" />
+                <stop offset="100%" stop-color="#3a2418" />
+              </linearGradient>
+            </defs>
+            <rect x="82" y="18" width="36" height="30" rx="3" fill="#1b0f14" />
+            <path
+              d="M74 48 C 66 70 66 90 74 108 L 74 270 Q 74 288 92 288 L 108 288 Q 126 288 126 270 L 126 108 C 134 90 134 70 126 48 Z"
+              fill="url(#p3)" stroke="#e8d6a8" stroke-width="1.5" />
+          </svg>
+        </div>
+        <div class="perfume-text">
+          <div class="no">غزل ۰۳</div>
+          <h3>شبِ عود</h3>
+          <div class="family">چوبی — شرقی</div>
+          <p class="verse">شب که از راه می‌رسد، همه‌چیز آرام می‌گیرد؛<br>جز رایحه‌ای که در اتاق مانده است.</p>
+          <p class="desc">سنگین‌ترین غزلِ دیوان. عود خراسان و دارچین در دلِ عنبر می‌نشینند و رایحه‌ای می‌سازند برای
+            شب‌های بلند و مهمانی‌های دیرهنگام.</p>
+          <div class="accord-tags"><span>عود</span><span>دارچین</span><span>عنبر</span><span>پاچولی</span></div>
+          <div class="price-row">
+            <span class="price">۲٬۹۰۰٬۰۰۰ تومان</span>
+            <a href="#join" class="btn ghost">افزودن به علاقه‌مندی‌ها</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="story">
+      <div class="story-art reveal">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="200" r="150" fill="none" stroke="#c9a253" stroke-width="1" opacity="0.35" />
+          <circle cx="200" cy="200" r="110" fill="none" stroke="#b8768a" stroke-width="1" opacity="0.3" />
+          <path
+            d="M200 90 C 260 90 300 140 300 200 C 300 260 260 310 200 310 C 140 310 100 260 100 200 C 100 140 140 90 200 90 Z"
+            fill="none" stroke="#e8d6a8" stroke-width="1.2" opacity="0.5" />
+          <text x="200" y="212" text-anchor="middle" font-family="Aref Ruqaa, serif" font-size="52"
+            fill="#c9a253">د</text>
+        </svg>
+      </div>
+      <div class="story-text reveal">
+        <div class="eyebrow"><span class="rule"></span> از کجا آمدیم <span class="rule"></span></div>
+        <h2>عطر، پیش از آن‌که صنعت شود، شعر بود</h2>
+        <p>دیوانِ عطر را سه نفر بنیاد گذاشتند که یکی‌شان عطار بود، یکی گیاه‌شناس، و سومی شاعر. قرار بر این شد که هیچ
+          رایحه‌ای منتشر نشود مگر آن‌که بیتی هم‌راهش بیاید.</p>
+        <p>مواد خام از دل ایران می‌آیند؛ گلاب از کاشان، زعفران از قائنات، عود از خراسان. ترکیب در کارگاهی کوچک در تهران
+          انجام می‌شود، دست‌ساز و در نوبت‌های محدود.</p>
+        <p class="verse">ما عطر نمی‌فروشیم؛<br>خاطره‌ای را در شیشه نگه می‌داریم.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="process">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span class="rule"></span> از باغ تا شیشه <span class="rule"></span></div>
+      <h2>مسیر ساخت هر غزل</h2>
+    </div>
+    <div class="process-row reveal">
+      <div class="process-step">
+        <span class="num">۰۱</span>
+        <h4>برداشت</h4>
+        <p>گل و ادویه در اوج تازگی از باغ‌های کاشان و قائنات چیده می‌شود.</p>
+      </div>
+      <div class="process-step">
+        <span class="num">۰۲</span>
+        <h4>تقطیر</h4>
+        <p>عصاره‌گیری سنتی، بدون عجله، در دیگ‌های مسی.</p>
+      </div>
+      <div class="process-step">
+        <span class="num">۰۳</span>
+        <h4>سرایش</h4>
+        <p>ترکیب سه پرده‌ی رایحه توسط عطارِ دیوان.</p>
+      </div>
+      <div class="process-step">
+        <span class="num">۰۴</span>
+        <h4>خوابانیدن</h4>
+        <p>هر ترکیب دستِ‌کم چهل روز در سکوت می‌ماند تا یکدست شود.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band" id="join">
+    <div class="reveal">
+      <div class="eyebrow"><span class="rule"></span> همراهیِ دیوان <span class="rule"></span></div>
+      <h2>نخستین کسی باشید که غزل تازه را می‌بوید</h2>
+      <p>هر فصل، یک رایحه‌ی محدود منتشر می‌کنیم. نامتان را بنویسید تا پیش از دیگران خبردار شوید.</p>
+      <form class="form-row" id="joinForm">
+        <input type="text" placeholder="نام شما" required />
+        <input type="email" placeholder="ایمیل" required />
+        <button type="submit" class="btn solid">پیوستن به دیوان</button>
+      </form>
+      <div class="form-note" id="formNote"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="brand-mark">دیوانِ عطر</span>
+    <div class="foot-links">
+      <a href="#notes">رایحه‌ها</a>
+      <a href="#collection">مجموعه</a>
+      <a href="#story">داستان</a>
+      <a href="#join">همراهی</a>
+    </div>
+    <div class="copy">دیوانِ عطر — کارگاهِ دست‌ساز، تهران</div>
+    <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+      طراحی و توسعه با
+      <span style="font-size:14px; line-height:1;">♥</span>
+      توسط تیم <span style="font-weight:750;">پیکسل</span>
+    </a>
+  </footer>
+
+  <script>
+    // floating motes
+    const motesWrap = document.getElementById('motes');
+    const MOTE_COUNT = 26;
+    for (let i = 0; i < MOTE_COUNT; i++) {
+      const m = document.createElement('div');
+      m.className = 'mote';
+      const size = (Math.random() * 3 + 2).toFixed(1);
+      const dur = (Math.random() * 10 + 12).toFixed(1);
+      const del = (Math.random() * 14).toFixed(1);
+      const dx = (Math.random() * 60 - 30).toFixed(0);
+      const left = (Math.random() * 100).toFixed(1);
+      m.style.setProperty('--s', size + 'px');
+      m.style.setProperty('--dur', dur + 's');
+      m.style.setProperty('--del', '-' + del + 's');
+      m.style.setProperty('--dx', dx + 'px');
+      m.style.left = left + '%';
+      motesWrap.appendChild(m);
+    }
+
+    // scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    // scroll progress on trail path
+    const progressPath = document.getElementById('trail-progress');
+    const pathLength = progressPath.getTotalLength();
+    progressPath.style.strokeDasharray = pathLength;
+    progressPath.style.strokeDashoffset = pathLength;
+
+    function updateTrail() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = Math.min(scrollTop / docHeight, 1);
+      const offset = pathLength - (pathLength * ratio);
+      progressPath.style.strokeDashoffset = offset;
+    }
+    window.addEventListener('scroll', updateTrail, { passive: true });
+    updateTrail();
+
+    // newsletter form (front-end only)
+    const form = document.getElementById('joinForm');
+    const note = document.getElementById('formNote');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      note.textContent = 'به دیوان پیوستید. غزل تازه، نخست برای شما فرستاده می‌شود.';
+      form.reset();
+    });
+  </script>
+
+</body>
+
+</html>

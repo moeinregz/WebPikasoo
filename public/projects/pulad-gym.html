@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پولاد | باشگاه بدنسازی</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Oswald:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --panel: #141416;
+      --panel-2: #1b1b1e;
+      --line: #2b2b2e;
+      --steel: #8d9096;
+      --chalk: #efe9df;
+      --chalk-dim: #b8b2a6;
+      --flame: #ff4419;
+      --flame-2: #ff7a3d;
+      --lime: #d7ff4a;
+      --radius: 2px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--chalk);
+      font-family: 'Vazirmatn', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse 800px 500px at 15% -10%, rgba(255, 68, 25, .08), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 100% 10%, rgba(215, 255, 74, .04), transparent 60%);
+    }
+
+    ::selection {
+      background: var(--flame);
+      color: #0b0b0c;
+    }
+
+    .num {
+      font-family: 'Oswald', sans-serif;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* subtle grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      pointer-events: none;
+      opacity: .035;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- NAV ---------- */
+    header {
+      position: fixed;
+      top: 0;
+      inset-inline: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      background: rgba(11, 11, 12, .7);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .4s var(--ease), background .4s var(--ease);
+    }
+
+    header.scrolled {
+      border-color: var(--line);
+      background: rgba(11, 11, 12, .92);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--flame);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald';
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--flame);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .brand-mark span {
+      transform: rotate(-45deg);
+    }
+
+    .brand-text {
+      font-family: 'Oswald';
+      letter-spacing: .12em;
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .brand-text b {
+      color: var(--flame);
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      display: block;
+      font-family: 'Vazirmatn';
+      font-size: 10px;
+      color: var(--steel);
+      letter-spacing: .02em;
+      margin-top: 1px;
+    }
+
+    nav.links {
+      display: flex;
+      gap: 34px;
+      align-items: center;
+    }
+
+    nav.links a {
+      font-size: 14.5px;
+      color: var(--chalk-dim);
+      position: relative;
+      padding: 6px 0;
+      transition: color .25s;
+    }
+
+    nav.links a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background: var(--flame);
+      transition: width .3s var(--ease);
+    }
+
+    nav.links a:hover {
+      color: var(--chalk);
+    }
+
+    nav.links a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      padding: 13px 26px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--flame);
+      background: var(--flame);
+      color: #0b0b0c;
+      cursor: pointer;
+      letter-spacing: .01em;
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px -8px rgba(255, 68, 25, .55);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--chalk);
+      border-color: var(--line);
+    }
+
+    .btn.ghost:hover {
+      border-color: var(--chalk);
+      box-shadow: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .nav-toggle span {
+      width: 22px;
+      height: 2px;
+      background: var(--chalk);
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 120px;
+      padding-bottom: 60px;
+      position: relative;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse 900px 600px at 70% 30%, black, transparent 75%);
+      mask-image: radial-gradient(ellipse 900px 600px at 70% 30%, black, transparent 75%);
+      opacity: .6;
+    }
+
+    .pulse-wrap {
+      position: absolute;
+      inset-inline: 0;
+      top: 38%;
+      z-index: -1;
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .pulse-line {
+      width: 100%;
+      height: 120px;
+    }
+
+    .pulse-path {
+      fill: none;
+      stroke: var(--flame);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 6px rgba(255, 68, 25, .5));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--flame-2);
+      letter-spacing: .04em;
+      font-weight: 600;
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp .8s var(--ease) .1s forwards;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--flame);
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 7vw, 92px);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      line-height: 1.08;
+      max-width: 920px;
+      opacity: 0;
+      animation: fadeUp .9s var(--ease) .22s forwards;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--bg);
+      background: var(--flame);
+      padding: 0 10px;
+      display: inline-block;
+      transform: skewX(-6deg);
+    }
+
+    .hero h1 em span {
+      display: inline-block;
+      transform: skewX(6deg);
+    }
+
+    .hero p.lead {
+      max-width: 560px;
+      margin-top: 26px;
+      font-size: 17px;
+      color: var(--chalk-dim);
+      opacity: 0;
+      animation: fadeUp .9s var(--ease) .36s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-top: 38px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp .9s var(--ease) .48s forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* marquee */
+    .marquee {
+      margin-top: 70px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      animation: fadeUp .9s var(--ease) .6s forwards;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      animation: scroll 26s linear infinite;
+    }
+
+    .marquee-track span {
+      font-family: 'Oswald';
+      font-size: 15px;
+      letter-spacing: .05em;
+      color: var(--steel);
+      padding: 0 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 22px;
+      text-transform: uppercase;
+    }
+
+    .marquee-track span i {
+      color: var(--flame);
+      font-style: normal;
+    }
+
+    @keyframes scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ---------- STATS ---------- */
+    .stats {
+      padding: 90px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0 10px;
+      border-inline-start: 1px solid var(--line);
+    }
+
+    .stat-item:first-child {
+      border-inline-start: none;
+    }
+
+    .stat-num {
+      font-family: 'Oswald';
+      font-size: clamp(38px, 4.4vw, 58px);
+      font-weight: 600;
+      color: var(--chalk);
+      direction: ltr;
+    }
+
+    .stat-num sup {
+      font-size: .45em;
+      color: var(--flame);
+      font-weight: 600;
+      margin-inline-start: 2px;
+    }
+
+    .stat-label {
+      margin-top: 8px;
+      font-size: 13.5px;
+      color: var(--steel);
+    }
+
+    /* ---------- SECTION HEADS ---------- */
+    .head {
+      max-width: 640px;
+      margin-bottom: 56px;
+    }
+
+    .head .tag {
+      font-size: 13px;
+      color: var(--flame);
+      letter-spacing: .06em;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .head h2 {
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -.01em;
+    }
+
+    .head p {
+      margin-top: 16px;
+      color: var(--chalk-dim);
+      font-size: 16px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- ABOUT ---------- */
+    .about {
+      padding: 130px 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+      aspect-ratio: 4/5;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .about-visual .plates {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plate-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 14px solid var(--panel-2);
+    }
+
+    .plate-ring.p1 {
+      width: 78%;
+      aspect-ratio: 1;
+      border-color: #232326;
+    }
+
+    .plate-ring.p2 {
+      width: 58%;
+      aspect-ratio: 1;
+      border-color: #2c2c2f;
+    }
+
+    .plate-ring.p3 {
+      width: 38%;
+      aspect-ratio: 1;
+      border: 6px solid var(--flame);
+      box-shadow: 0 0 40px rgba(255, 68, 25, .35);
+    }
+
+    .about-visual .bar {
+      position: absolute;
+      inset-inline: 0;
+      top: 50%;
+      height: 6px;
+      margin-top: -3px;
+      background: var(--line);
+    }
+
+    .about-visual .corner-label {
+      position: absolute;
+      bottom: 20px;
+      inset-inline-start: 20px;
+      font-family: 'Oswald';
+      font-size: 13px;
+      color: var(--steel);
+      letter-spacing: .08em;
+    }
+
+    .about-copy h2 {
+      font-size: clamp(28px, 3.6vw, 40px);
+      font-weight: 800;
+      margin-bottom: 22px;
+      line-height: 1.25;
+    }
+
+    .about-copy p {
+      color: var(--chalk-dim);
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    .about-list {
+      margin-top: 28px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .about-list li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      list-style: none;
+      font-size: 15px;
+      color: var(--chalk);
+    }
+
+    .about-list li::before {
+      content: "";
+      flex-shrink: 0;
+      width: 9px;
+      height: 9px;
+      margin-top: 6px;
+      background: var(--flame);
+    }
+
+    /* ---------- PROGRAMS ---------- */
+    .programs {
+      padding: 110px 0;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .prog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .prog-card {
+      background: var(--bg);
+      padding: 38px 30px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: background .35s var(--ease);
+    }
+
+    .prog-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--flame);
+      transform: translateY(100%);
+      transition: transform .45s var(--ease);
+      z-index: 0;
+    }
+
+    .prog-card:hover::before {
+      transform: translateY(0);
+    }
+
+    .prog-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .prog-icon {
+      width: 44px;
+      height: 44px;
+      color: var(--flame);
+      transition: color .35s;
+    }
+
+    .prog-card:hover .prog-icon {
+      color: #0b0b0c;
+    }
+
+    .prog-card h3 {
+      font-size: 21px;
+      font-weight: 700;
+      margin-top: 26px;
+      transition: color .35s;
+    }
+
+    .prog-card:hover h3 {
+      color: #0b0b0c;
+    }
+
+    .prog-card p {
+      font-size: 14px;
+      color: var(--steel);
+      margin-top: 10px;
+      transition: color .35s;
+    }
+
+    .prog-card:hover p {
+      color: rgba(11, 11, 12, .75);
+    }
+
+    .prog-num {
+      position: absolute;
+      top: 30px;
+      inset-inline-end: 30px;
+      font-family: 'Oswald';
+      font-size: 13px;
+      color: var(--line);
+      z-index: 1;
+      transition: color .35s;
+    }
+
+    .prog-card:hover .prog-num {
+      color: rgba(11, 11, 12, .4);
+    }
+
+    /* ---------- SCHEDULE ---------- */
+    .schedule {
+      padding: 110px 0;
+    }
+
+    .sched-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .sched-table th {
+      font-family: 'Oswald';
+      font-size: 12.5px;
+      letter-spacing: .08em;
+      color: var(--steel);
+      text-transform: uppercase;
+      font-weight: 500;
+      text-align: start;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sched-table td {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14.5px;
+      color: var(--chalk-dim);
+      vertical-align: middle;
+    }
+
+    .sched-table tr td:first-child {
+      color: var(--chalk);
+      font-weight: 600;
+      font-family: 'Oswald';
+      letter-spacing: .02em;
+    }
+
+    .sched-table tbody tr {
+      transition: background .25s;
+    }
+
+    .sched-table tbody tr:hover {
+      background: var(--panel);
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 12px;
+      padding: 5px 12px;
+      border: 1px solid var(--line);
+      color: var(--steel);
+    }
+
+    .pill.hot {
+      border-color: var(--flame);
+      color: var(--flame-2);
+    }
+
+    /* ---------- TRAINERS ---------- */
+    .trainers {
+      padding: 110px 0;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .trainer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 26px;
+    }
+
+    .trainer-card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      transition: transform .35s var(--ease), border-color .35s;
+    }
+
+    .trainer-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--flame);
+    }
+
+    .trainer-photo {
+      aspect-ratio: 3/4;
+      background:
+        linear-gradient(160deg, var(--panel-2), var(--bg));
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .trainer-photo svg {
+      width: 62%;
+      opacity: .9;
+      color: #3a3a3d;
+    }
+
+    .trainer-info {
+      padding: 20px 20px 24px;
+    }
+
+    .trainer-info h4 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .trainer-info span {
+      font-size: 13px;
+      color: var(--flame-2);
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* ---------- PRICING ---------- */
+    .pricing {
+      padding: 110px 0;
+    }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .price-card {
+      border: 1px solid var(--line);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+      position: relative;
+      transition: transform .35s var(--ease), border-color .35s;
+    }
+
+    .price-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .price-card.featured {
+      border-color: var(--flame);
+      background: linear-gradient(180deg, rgba(255, 68, 25, .09), var(--panel) 40%);
+    }
+
+    .price-card.featured::before {
+      content: "محبوب‌ترین";
+      position: absolute;
+      top: -13px;
+      inset-inline-start: 32px;
+      background: var(--flame);
+      color: #0b0b0c;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+    }
+
+    .price-name {
+      font-size: 15px;
+      color: var(--steel);
+      letter-spacing: .03em;
+    }
+
+    .price-amount {
+      font-family: 'Oswald';
+      font-size: 44px;
+      font-weight: 600;
+      margin-top: 16px;
+      direction: ltr;
+      text-align: start;
+    }
+
+    .price-amount span {
+      font-family: 'Vazirmatn';
+      font-size: 14px;
+      color: var(--steel);
+      font-weight: 400;
+    }
+
+    .price-list {
+      margin: 28px 0;
+      display: grid;
+      gap: 13px;
+      flex-grow: 1;
+    }
+
+    .price-list li {
+      list-style: none;
+      font-size: 14.5px;
+      color: var(--chalk-dim);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .price-list li::before {
+      content: "✓";
+      color: var(--flame);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+    .testi {
+      padding: 110px 0;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .testi-card {
+      padding: 30px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .testi-quote {
+      font-size: 15.5px;
+      color: var(--chalk-dim);
+      line-height: 1.9;
+    }
+
+    .testi-who {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .testi-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+
+    .testi-who b {
+      font-size: 14px;
+      display: block;
+    }
+
+    .testi-who span {
+      font-size: 12.5px;
+      color: var(--steel);
+    }
+
+    /* ---------- CTA BANNER ---------- */
+    .cta-banner {
+      padding: 120px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner h2 {
+      font-size: clamp(32px, 5.4vw, 64px);
+      font-weight: 800;
+      max-width: 760px;
+      margin: 0 auto 30px;
+    }
+
+    .cta-banner .btn {
+      padding: 16px 40px;
+      font-size: 15.5px;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      padding: 70px 0 30px;
+      border-top: 1px solid var(--line);
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 50px;
+    }
+
+    .foot-brand p {
+      color: var(--steel);
+      font-size: 14px;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .foot-col h5 {
+      font-size: 13px;
+      color: var(--steel);
+      letter-spacing: .05em;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      font-family: 'Oswald';
+      font-weight: 500;
+    }
+
+    .foot-col ul {
+      list-style: none;
+      display: grid;
+      gap: 11px;
+    }
+
+    .foot-col a {
+      font-size: 14.5px;
+      color: var(--chalk-dim);
+      transition: color .2s;
+    }
+
+    .foot-col a:hover {
+      color: var(--flame-2);
+    }
+
+    .foot-bottom {
+      border-top: 1px solid var(--line);
+      padding-top: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--steel);
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .foot-social {
+      display: flex;
+      gap: 14px;
+    }
+
+    .foot-social a {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .2s, color .2s;
+    }
+
+    .foot-social a:hover {
+      border-color: var(--flame);
+      color: var(--flame-2);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width:980px) {
+      nav.links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 34px;
+      }
+
+      .stat-item:nth-child(3) {
+        border-inline-start: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 44px;
+      }
+
+      .prog-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .trainer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .price-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 34px;
+      }
+    }
+
+    @media (max-width:600px) {
+      .prog-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trainer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .sched-table {
+        font-size: 13px;
+      }
+
+      .sched-table th:nth-child(3),
+      .sched-table td:nth-child(3) {
+        display: none;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--flame);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="siteHeader">
+    <div class="brand">
+      <div class="brand-mark"><span>پ</span></div>
+      <div>
+        <div class="brand-text">PU<b>L</b>AD</div>
+        <span class="brand-sub">باشگاه بدنسازی پولاد</span>
+      </div>
+    </div>
+    <nav class="links">
+      <a href="#about">درباره ما</a>
+      <a href="#programs">برنامه‌ها</a>
+      <a href="#schedule">برنامه هفتگی</a>
+      <a href="#trainers">مربیان</a>
+      <a href="#pricing">تعرفه‌ها</a>
+      <a href="#contact">تماس</a>
+    </nav>
+    <a href="#pricing" class="btn">عضویت رایگان</a>
+    <button class="nav-toggle" id="navToggle" aria-label="باز کردن منو">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="pulse-wrap">
+      <svg class="pulse-line" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path id="pulsePath" class="pulse-path"
+          d="M0,60 L180,60 L210,20 L240,100 L270,60 L340,60 L365,45 L390,60 L470,60 L500,10 L530,110 L560,60 L1200,60"
+          stroke-dasharray="1600" stroke-dashoffset="1600" />
+      </svg>
+    </div>
+
+    <div class="wrap">
+      <span class="eyebrow">باشگاه بدنسازی پولاد — از سال ۱۳۹۸</span>
+      <h1>بدنی از <em><span>آهن</span></em> بساز،<br>اراده‌ای از فولاد.</h1>
+      <p class="lead">با برنامه‌های تمرینی اختصاصی، مربیان حرفه‌ای و تجهیزات استاندارد المپیک؛ پولاد جایی‌ست که هر جلسه
+        تمرین، مرز تازه‌ای از توان تو را جابه‌جا می‌کند.</p>
+      <div class="hero-ctas">
+        <a href="#pricing" class="btn">رزرو جلسه رایگان</a>
+        <a href="#programs" class="btn ghost">برنامه‌های تمرینی</a>
+      </div>
+
+      <div class="marquee">
+        <div class="marquee-track">
+          <span>
+            <i>✦</i> قدرت <i>✦</i> استقامت <i>✦</i> انضباط <i>✦</i> عزم <i>✦</i> پیروزی <i>✦</i> تعادل
+            <i>✦</i> قدرت <i>✦</i> استقامت <i>✦</i> انضباط <i>✦</i> عزم <i>✦</i> پیروزی <i>✦</i> تعادل
+          </span>
+          <span aria-hidden="true">
+            <i>✦</i> قدرت <i>✦</i> استقامت <i>✦</i> انضباط <i>✦</i> عزم <i>✦</i> پیروزی <i>✦</i> تعادل
+            <i>✦</i> قدرت <i>✦</i> استقامت <i>✦</i> انضباط <i>✦</i> عزم <i>✦</i> پیروزی <i>✦</i> تعادل
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat-item">
+        <div class="stat-num" data-count="7">0<sup>+</sup></div>
+        <div class="stat-label">سال سابقه فعالیت</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-count="1200">0<sup>+</sup></div>
+        <div class="stat-label">عضو فعال</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-count="14">0</div>
+        <div class="stat-label">مربی متخصص</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">دسترسی به سالن</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <div class="about-visual reveal">
+        <div class="plates">
+          <div class="plate-ring p1"></div>
+          <div class="plate-ring p2"></div>
+          <div class="plate-ring p3"></div>
+        </div>
+        <div class="bar"></div>
+        <span class="corner-label">EST. 1398 — TEHRAN</span>
+      </div>
+      <div class="about-copy reveal">
+        <span class="head tag" style="display:block;margin-bottom:16px;">درباره پولاد</span>
+        <h2>اینجا بهانه نمی‌سازیم، برنامه می‌سازیم.</h2>
+        <p>پولاد از یک باور ساده شروع شد: هر بدنی ظرفیت فولادی‌شدن دارد، فقط به مسیر درست نیاز دارد. به همین دلیل هر
+          عضو، پیش از شروع، یک ارزیابی کامل بدنی و یک برنامه اختصاصی متناسب با هدفش دریافت می‌کند.</p>
+        <p>سالن ۱۸۰۰ متری ما با تجهیزات استاندارد المپیک، اتاق ریکاوری و کلاس‌های گروهی، فضایی را فراهم کرده که در آن
+          انضباط، انگیزه می‌سازد.</p>
+        <ul class="about-list">
+          <li>ارزیابی بدنی و طراحی برنامه اختصاصی برای هر عضو</li>
+          <li>مربیان دارای مدرک بین‌المللی و حضور مستمر در سالن</li>
+          <li>تجهیزات به‌روز و بازرسی ایمنی هفتگی</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="programs" id="programs">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="tag">برنامه‌های تمرینی</span>
+        <h2>هر هدفی، مسیر خودش را دارد</h2>
+        <p>از قدرتی محض تا هوازی و ریکاوری؛ برنامه‌هایی که با مربی طراحی می‌شوند، نه از روی الگوی آماده.</p>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="prog-grid reveal">
+
+        <div class="prog-card">
+          <span class="prog-num">01</span>
+          <svg class="prog-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="4" y="20" width="6" height="8" />
+            <rect x="10" y="16" width="5" height="16" />
+            <rect x="33" y="16" width="5" height="16" />
+            <rect x="38" y="20" width="6" height="8" />
+            <line x1="15" y1="24" x2="33" y2="24" />
+          </svg>
+          <h3>بدنسازی حرفه‌ای</h3>
+          <p>برنامه‌های حجمی و کات‌آپ با پیگیری هفتگی پیشرفت.</p>
+        </div>
+
+        <div class="prog-card">
+          <span class="prog-num">02</span>
+          <svg class="prog-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M8 40 L24 8 L40 40 Z" />
+            <line x1="16" y1="26" x2="32" y2="26" />
+          </svg>
+          <h3>کراس‌فیت</h3>
+          <p>تمرینات ترکیبی با شدت بالا برای قدرت و استقامت هم‌زمان.</p>
+        </div>
+
+        <div class="prog-card">
+          <span class="prog-num">03</span>
+          <svg class="prog-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="24" cy="24" r="16" />
+            <path d="M24 8 L24 40 M8 24 L40 24" />
+          </svg>
+          <h3>بوکس و کیک‌بوکسینگ</h3>
+          <p>تخلیه انرژی، رفلکس و قدرت ضربه در کلاس‌های گروهی.</p>
+        </div>
+
+        <div class="prog-card">
+          <span class="prog-num">04</span>
+          <svg class="prog-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="24" cy="24" r="17" />
+            <path d="M24 24 L24 12 M24 24 L32 30" />
+          </svg>
+          <h3>یوگا و ریکاوری</h3>
+          <p>بازیابی عضلات، تنفس عمیق و افزایش انعطاف‌پذیری.</p>
+        </div>
+
+        <div class="prog-card">
+          <span class="prog-num">05</span>
+          <svg class="prog-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="14" cy="30" r="7" />
+            <circle cx="34" cy="30" r="7" />
+            <path d="M14 23 L20 12 L28 12 L34 23" />
+          </svg>
+          <h3>اسپینینگ</h3>
+          <p>کلاس‌های هوازی پرانرژی روی موسیقی زنده.</p>
+        </div>
+
+        <div class="prog-card">
+          <span class="prog-num">06</span>
+          <svg class="prog-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M24 6 L30 18 L24 30 L18 18 Z" />
+            <line x1="24" y1="30" x2="24" y2="42" />
+          </svg>
+          <h3>تمرینات عملکردی</h3>
+          <p>حرکات کاربردی برای قدرت روزمره و پیشگیری از آسیب.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="schedule" id="schedule">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="tag">برنامه هفتگی</span>
+        <h2>کلاس‌های این هفته</h2>
+        <p>زمان‌بندی ثابت هفتگی — برای رزرو جای خود، حداقل ۲ ساعت زودتر از طریق اپلیکیشن اقدام کنید.</p>
+      </div>
+      <table class="sched-table reveal">
+        <thead>
+          <tr>
+            <th>روز</th>
+            <th>ساعت</th>
+            <th>برنامه</th>
+            <th>مربی</th>
+            <th>وضعیت</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>شنبه</td>
+            <td class="num">07:00 – 08:30</td>
+            <td>بدنسازی حرفه‌ای</td>
+            <td>آرمان رستمی</td>
+            <td><span class="pill">ظرفیت باز</span></td>
+          </tr>
+          <tr>
+            <td>یکشنبه</td>
+            <td class="num">18:00 – 19:00</td>
+            <td>کراس‌فیت</td>
+            <td>سهیل کریمی</td>
+            <td><span class="pill hot">۳ جای باقی‌مانده</span></td>
+          </tr>
+          <tr>
+            <td>دوشنبه</td>
+            <td class="num">19:00 – 20:00</td>
+            <td>بوکس و کیک‌بوکسینگ</td>
+            <td>سهیل کریمی</td>
+            <td><span class="pill">ظرفیت باز</span></td>
+          </tr>
+          <tr>
+            <td>سه‌شنبه</td>
+            <td class="num">08:00 – 09:00</td>
+            <td>یوگا و ریکاوری</td>
+            <td>نگار احمدی</td>
+            <td><span class="pill">ظرفیت باز</span></td>
+          </tr>
+          <tr>
+            <td>چهارشنبه</td>
+            <td class="num">17:30 – 18:30</td>
+            <td>اسپینینگ</td>
+            <td>مهسا نوری</td>
+            <td><span class="pill hot">تکمیل ظرفیت</span></td>
+          </tr>
+          <tr>
+            <td>پنجشنبه</td>
+            <td class="num">10:00 – 11:30</td>
+            <td>تمرینات عملکردی</td>
+            <td>آرمان رستمی</td>
+            <td><span class="pill">ظرفیت باز</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="trainers" id="trainers">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="tag">مربیان</span>
+        <h2>تیمی که کنارت می‌ایستد</h2>
+        <p>هر مربی پولاد، مسیر شخصی‌ات را طراحی می‌کند؛ نه یک برنامه از پیش‌آماده.</p>
+      </div>
+      <div class="trainer-grid reveal">
+
+        <div class="trainer-card">
+          <div class="trainer-photo"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="50" cy="34" r="16" />
+              <path d="M18 96 C18 68 82 68 82 96" />
+            </svg></div>
+          <div class="trainer-info">
+            <h4>آرمان رستمی</h4><span>بدنسازی و پرورش اندام</span>
+          </div>
+        </div>
+
+        <div class="trainer-card">
+          <div class="trainer-photo"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="50" cy="34" r="16" />
+              <path d="M18 96 C18 68 82 68 82 96" />
+            </svg></div>
+          <div class="trainer-info">
+            <h4>نگار احمدی</h4><span>یوگا و ریکاوری</span>
+          </div>
+        </div>
+
+        <div class="trainer-card">
+          <div class="trainer-photo"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="50" cy="34" r="16" />
+              <path d="M18 96 C18 68 82 68 82 96" />
+            </svg></div>
+          <div class="trainer-info">
+            <h4>سهیل کریمی</h4><span>بوکس و کراس‌فیت</span>
+          </div>
+        </div>
+
+        <div class="trainer-card">
+          <div class="trainer-photo"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="50" cy="34" r="16" />
+              <path d="M18 96 C18 68 82 68 82 96" />
+            </svg></div>
+          <div class="trainer-info">
+            <h4>مهسا نوری</h4><span>اسپینینگ و هوازی</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="tag">تعرفه‌ها</span>
+        <h2>پلن مناسب خودت را انتخاب کن</h2>
+        <p>بدون قرارداد بلندمدت، امکان تعلیق ماهانه و لغو در هر زمان.</p>
+      </div>
+      <div class="price-grid reveal">
+
+        <div class="price-card">
+          <span class="price-name">پایه</span>
+          <div class="price-amount">890<span> هزار تومان / ماه</span></div>
+          <ul class="price-list">
+            <li>دسترسی آزاد به سالن بدنسازی</li>
+            <li>یک جلسه ارزیابی بدنی</li>
+            <li>استفاده از رخت‌کن و دوش</li>
+            <li>بدون کلاس‌های گروهی</li>
+          </ul>
+          <a href="#contact" class="btn ghost">شروع کن</a>
+        </div>
+
+        <div class="price-card featured">
+          <span class="price-name">حرفه‌ای</span>
+          <div class="price-amount">1.450<span> هزار تومان / ماه</span></div>
+          <ul class="price-list">
+            <li>همه امکانات پلن پایه</li>
+            <li>دسترسی نامحدود به کلاس‌های گروهی</li>
+            <li>برنامه تمرینی اختصاصی ماهانه</li>
+            <li>یک جلسه مشاوره تغذیه</li>
+          </ul>
+          <a href="#contact" class="btn">شروع کن</a>
+        </div>
+
+        <div class="price-card">
+          <span class="price-name">نامحدود</span>
+          <div class="price-amount">2.100<span> هزار تومان / ماه</span></div>
+          <ul class="price-list">
+            <li>همه امکانات پلن حرفه‌ای</li>
+            <li>۴ جلسه تمرین شخصی (PT) در ماه</li>
+            <li>دسترسی ۲۴ ساعته به سالن</li>
+            <li>اتاق ریکاوری و ساونا</li>
+          </ul>
+          <a href="#contact" class="btn ghost">شروع کن</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="testi">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="tag">تجربه اعضا</span>
+        <h2>حرف کسانی که تمرین کرده‌اند</h2>
+      </div>
+      <div class="testi-grid reveal">
+
+        <div class="testi-card">
+          <p class="testi-quote">«بعد از دو سال بی‌انگیزگی، برنامه اختصاصی پولاد باعث شد دوباره منظم تمرین کنم. تفاوت را
+            در سه ماه اول حس کردم.»</p>
+          <div class="testi-who">
+            <div class="testi-avatar"></div>
+            <div><b>سارا محمودی</b><span>عضو از ۱۴۰۲</span></div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <p class="testi-quote">«کلاس‌های کراس‌فیت اینجا واقعاً حرفه‌ای اداره می‌شن. سهیل همیشه فرم حرکت رو اصلاح
+            می‌کنه، نه فقط شمارش می‌کنه.»</p>
+          <div class="testi-who">
+            <div class="testi-avatar"></div>
+            <div><b>رضا اسدی</b><span>عضو از ۱۴۰۱</span></div>
+          </div>
+        </div>
+
+        <div class="testi-card">
+          <p class="testi-quote">«دسترسی ۲۴ ساعته دقیقاً همون چیزی بود که با شیفت کاریم جواب می‌داد. سالن تمیز و همیشه
+            در دسترسه.»</p>
+          <div class="testi-who">
+            <div class="testi-avatar"></div>
+            <div><b>پویا نجفی</b><span>عضو از ۱۴۰۳</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner" id="contact">
+    <div class="wrap reveal">
+      <span class="eyebrow" style="justify-content:center;">همین حالا شروع کن</span>
+      <h2>آماده‌ای مرزهای بدنت را جابه‌جا کنی؟</h2>
+      <a href="tel:02112345678" class="btn">رزرو جلسه رایگان — ۰۲۱۱۲۳۴۵۶۷۸</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="brand">
+            <div class="brand-mark"><span>پ</span></div>
+            <div>
+              <div class="brand-text">PU<b>L</b>AD</div>
+              <span class="brand-sub">باشگاه بدنسازی پولاد</span>
+            </div>
+          </div>
+          <p>تهران، خیابان ولیعصر، بالاتر از میدان ونک، پلاک ۱۴۰. باشگاهی که با تو رشد می‌کند.</p>
+        </div>
+        <div class="foot-col">
+          <h5>دسترسی سریع</h5>
+          <ul>
+            <li><a href="#about">درباره ما</a></li>
+            <li><a href="#programs">برنامه‌های تمرینی</a></li>
+            <li><a href="#schedule">برنامه هفتگی</a></li>
+            <li><a href="#pricing">تعرفه‌ها</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5>ساعات کاری</h5>
+          <ul>
+            <li>شنبه تا پنجشنبه: ۰۶:۰۰ – ۲۳:۰۰</li>
+            <li>جمعه: ۰۹:۰۰ – ۲۰:۰۰</li>
+            <li>پلن نامحدود: ۲۴ ساعته</li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5>تماس</h5>
+          <ul>
+            <li><a href="tel:02112345678">۰۲۱ – ۱۲۳۴ ۵۶۷۸</a></li>
+            <li><a href="mailto:info@pulad-gym.ir">info@pulad-gym.ir</a></li>
+            <li><a href="#">اینستاگرام</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span id="year"></span> باشگاه پولاد. تمامی حقوق محفوظ است.</span>
+        <div class="foot-social">
+          <a href="#" aria-label="اینستاگرام">IG</a>
+          <a href="#" aria-label="تلگرام">TG</a>
+          <a href="#" aria-label="واتساپ">WA</a>
+        </div>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // header on scroll
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // mobile nav toggle -> simple show/hide of links as column
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.querySelector('nav.links');
+    navToggle.addEventListener('click', () => {
+      const open = navLinks.style.display === 'flex';
+      navLinks.style.display = open ? 'none' : 'flex';
+      navLinks.style.cssText = open ? 'display:none;' :
+        'display:flex; position:fixed; inset-inline:0; top:76px; flex-direction:column; gap:0; background:rgba(11,11,12,.98); padding:10px 28px 24px; border-bottom:1px solid var(--line);';
+    });
+
+    // reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    // pulse line draw animation, looping
+    const pulsePath = document.getElementById('pulsePath');
+    if (pulsePath) {
+      const len = pulsePath.getTotalLength();
+      pulsePath.style.strokeDasharray = len;
+      pulsePath.style.strokeDashoffset = len;
+      let start = null;
+      const duration = 3200;
+      function animatePulse(ts) {
+        if (!start) start = ts;
+        const progress = ((ts - start) % (duration + 900)) / duration;
+        const clamped = Math.min(progress, 1);
+        pulsePath.style.strokeDashoffset = len * (1 - clamped);
+        requestAnimationFrame(animatePulse);
+      }
+      requestAnimationFrame(animatePulse);
+    }
+
+    // stat counters
+    const counters = document.querySelectorAll('.stat-num[data-count]');
+    const counterIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        const supEl = el.querySelector('sup');
+        let cur = 0;
+        const dur = 1400;
+        const t0 = performance.now();
+        function step(t) {
+          const p = Math.min((t - t0) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          cur = Math.floor(eased * target);
+          el.childNodes[0].nodeValue = cur;
+          if (p < 1) requestAnimationFrame(step);
+          else el.childNodes[0].nodeValue = target;
+        }
+        requestAnimationFrame(step);
+        counterIO.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(el => counterIO.observe(el));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+
+</html>

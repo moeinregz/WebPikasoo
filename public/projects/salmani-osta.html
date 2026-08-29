@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سلمونی اوستا | پیرایش مردانه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --charcoal:#17130f;
+  --charcoal-2:#221b15;
+  --charcoal-3:#2c231b;
+  --leather:#4a3320;
+  --brass:#c79a3a;
+  --brass-light:#e8c874;
+  --cream:#ece2ce;
+  --cream-dim:#b8ab93;
+  --barber-red:#9c2b2b;
+  --barber-blue:#2c4a6e;
+  --barber-cream:#ece2ce;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--charcoal);
+  color:var(--cream);
+  font-family:'Vazirmatn',sans-serif;
+  overflow-x:hidden;
+  line-height:1.8;
+}
+h1,h2,h3,.display{
+  font-family:'Lalezar',cursive;
+  font-weight:400;
+  letter-spacing:.5px;
+}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+::selection{background:var(--brass);color:var(--charcoal);}
+
+/* ---------- texture ---------- */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(199,154,58,.05), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(156,43,43,.05), transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ---------- header ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  background:rgba(23,19,15,.7);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(199,154,58,.15);
+  transition:padding .3s ease, background .3s ease;
+}
+header.scrolled{background:rgba(23,19,15,.95);}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 28px;
+  max-width:1180px;margin:0 auto;
+  transition:padding .3s ease;
+}
+header.scrolled .nav{padding:12px 28px;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-mark{width:38px;height:38px;position:relative;border-radius:4px;overflow:hidden;
+  background:repeating-linear-gradient(45deg,
+    var(--barber-red) 0 8px, var(--barber-cream) 8px 16px, var(--barber-blue) 16px 24px, var(--barber-cream) 24px 32px);
+  background-size:200% 200%;
+  animation:pole 1.4s linear infinite;
+  box-shadow:0 0 0 2px var(--brass), inset 0 0 6px rgba(0,0,0,.4);
+}
+@keyframes pole{ to{ background-position:0 -64px; } }
+.logo-text{font-family:'Lalezar',cursive;font-size:1.4rem;color:var(--brass-light);line-height:1;}
+.logo-sub{display:block;font-family:'Vazirmatn';font-size:.62rem;color:var(--cream-dim);letter-spacing:1px;margin-top:3px;}
+
+.nav-links{display:flex;gap:34px;font-size:.95rem;}
+.nav-links a{position:relative;padding:4px 0;color:var(--cream-dim);transition:color .25s;}
+.nav-links a::after{
+  content:"";position:absolute;bottom:-2px;right:0;width:0;height:2px;background:var(--brass);
+  transition:width .3s ease;
+}
+.nav-links a:hover{color:var(--cream);}
+.nav-links a:hover::after{width:100%;}
+
+.nav-cta{
+  border:1px solid var(--brass);
+  color:var(--brass-light);
+  padding:9px 20px;
+  border-radius:2px;
+  font-size:.88rem;
+  transition:background .25s, color .25s;
+  white-space:nowrap;
+}
+.nav-cta:hover{background:var(--brass);color:var(--charcoal);}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:110;}
+.burger span{width:24px;height:2px;background:var(--brass-light);}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding-top:90px;
+  overflow:hidden;
+}
+.hero .wrap{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  align-items:center;
+  gap:40px;
+  position:relative;z-index:2;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--brass);font-size:.82rem;letter-spacing:1px;
+  margin-bottom:22px;
+  opacity:0;animation:rise .8s ease forwards .1s;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--brass);}
+.hero h1{
+  font-size:clamp(3rem,7vw,5.6rem);
+  color:var(--cream);
+  line-height:1.05;
+  opacity:0;animation:rise .8s ease forwards .25s;
+}
+.hero h1 span{color:var(--brass-light);}
+.hero p{
+  margin-top:22px;max-width:480px;
+  color:var(--cream-dim);font-size:1.08rem;
+  opacity:0;animation:rise .8s ease forwards .45s;
+}
+.hero-ctas{
+  margin-top:36px;display:flex;gap:16px;flex-wrap:wrap;
+  opacity:0;animation:rise .8s ease forwards .6s;
+}
+.btn{
+  padding:15px 30px;border-radius:2px;font-size:.95rem;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s;
+  cursor:pointer;border:none;font-family:'Vazirmatn';
+}
+.btn-primary{background:var(--brass);color:var(--charcoal);font-weight:700;}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(199,154,58,.25);}
+.btn-ghost{border:1px solid rgba(236,226,206,.3);color:var(--cream);}
+.btn-ghost:hover{border-color:var(--brass);color:var(--brass-light);transform:translateY(-3px);}
+
+@keyframes rise{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+.hero-visual{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;animation:rise 1s ease forwards .5s;
+}
+.pole-stand{
+  width:120px;height:420px;
+  background:linear-gradient(180deg,#3a2c1c,#241b12);
+  border-radius:60px;
+  position:relative;
+  box-shadow:0 30px 60px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.5);
+  overflow:hidden;
+}
+.pole-cap{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:130px;height:36px;border-radius:18px;
+  background:radial-gradient(circle at 35% 30%, #e8c874, #8a6a1e);
+  box-shadow:0 6px 14px rgba(0,0,0,.5);
+  z-index:3;
+}
+.pole-cap.top{top:-18px;}
+.pole-cap.bottom{bottom:-18px;}
+.pole-glass{
+  position:absolute;top:16px;bottom:16px;left:14px;right:14px;
+  border-radius:44px;overflow:hidden;
+  background:repeating-linear-gradient(45deg,
+    var(--barber-red) 0 26px, var(--barber-cream) 26px 52px, var(--barber-blue) 52px 78px, var(--barber-cream) 78px 104px);
+  background-size:200% 200%;
+  animation:pole-slow 2.2s linear infinite;
+  box-shadow:inset 0 0 30px rgba(0,0,0,.35);
+}
+@keyframes pole-slow{ to{ background-position:0 -208px; } }
+.hero-visual .glow{
+  position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle, rgba(199,154,58,.16), transparent 70%);
+  z-index:0;
+}
+
+.scissor-cut{
+  position:absolute;bottom:0;left:0;right:0;height:44px;
+  background:var(--charcoal-2);
+  clip-path:polygon(0% 100%,0% 30%,4% 0%,8% 30%,12% 0%,16% 30%,20% 0%,24% 30%,28% 0%,32% 30%,36% 0%,40% 30%,44% 0%,48% 30%,52% 0%,56% 30%,60% 0%,64% 30%,68% 0%,72% 30%,76% 0%,80% 30%,84% 0%,88% 30%,92% 0%,96% 30%,100% 0%,100% 100%);
+  z-index:2;
+}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s ease, transform .8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+
+/* ---------- section shell ---------- */
+section{position:relative;padding:120px 0;z-index:1;}
+.section-alt{background:var(--charcoal-2);}
+.eyebrow-center{display:flex;justify-content:center;margin-bottom:14px;}
+.section-head{text-align:center;max-width:640px;margin:0 auto 64px;}
+.section-head h2{font-size:clamp(2.2rem,4vw,3.2rem);color:var(--cream);}
+.section-head p{color:var(--cream-dim);margin-top:14px;font-size:1.02rem;}
+
+/* ---------- services ---------- */
+.services-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:26px;
+}
+.service-card{
+  background:linear-gradient(160deg,var(--charcoal-3),var(--charcoal-2));
+  border:1px solid rgba(199,154,58,.12);
+  border-radius:6px;
+  padding:34px 28px;
+  position:relative;overflow:hidden;
+  transition:transform .35s ease, border-color .35s ease;
+}
+.service-card:hover{transform:translateY(-8px);border-color:rgba(199,154,58,.5);}
+.service-card::before{
+  content:"";position:absolute;top:0;right:0;width:70px;height:70px;
+  background:radial-gradient(circle,rgba(199,154,58,.14),transparent 70%);
+}
+.icon-wrap{
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(199,154,58,.1);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+  transition:transform .4s ease, background .3s ease;
+}
+.service-card:hover .icon-wrap{transform:rotate(-12deg) scale(1.08);background:rgba(199,154,58,.2);}
+.icon-wrap svg{width:26px;height:26px;stroke:var(--brass-light);fill:none;stroke-width:1.6;}
+.service-card h3{font-family:'Vazirmatn';font-weight:700;font-size:1.18rem;color:var(--cream);margin-bottom:10px;}
+.service-card p{color:var(--cream-dim);font-size:.92rem;}
+.service-price{
+  margin-top:18px;padding-top:16px;border-top:1px dashed rgba(199,154,58,.2);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.85rem;color:var(--brass);
+}
+
+/* ---------- about ---------- */
+.about-grid{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center;
+}
+.master-frame{
+  position:relative;
+  aspect-ratio:4/5;
+  border-radius:6px;
+  background:
+    repeating-linear-gradient(135deg, rgba(199,154,58,.06) 0 2px, transparent 2px 14px),
+    linear-gradient(160deg,#3a2c1c,#1c1510);
+  border:1px solid rgba(199,154,58,.25);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.master-frame::after{
+  content:"";position:absolute;inset:14px;
+  border:1px solid rgba(199,154,58,.3);
+  border-radius:4px;
+}
+.master-initial{font-family:'Lalezar';font-size:8rem;color:rgba(199,154,58,.35);}
+.stat-row{display:flex;gap:36px;margin-top:32px;}
+.stat b{display:block;font-family:'Lalezar';font-size:2.2rem;color:var(--brass-light);}
+.stat span{font-size:.85rem;color:var(--cream-dim);}
+.about-grid h2{font-size:clamp(2rem,3.4vw,2.8rem);color:var(--cream);margin-bottom:18px;}
+.about-grid p{color:var(--cream-dim);}
+.about-grid p + p{margin-top:14px;}
+.about-quote{
+  margin-top:26px;padding:18px 22px;
+  border-right:3px solid var(--brass);
+  background:rgba(199,154,58,.06);
+  font-style:normal;color:var(--brass-light);
+  font-family:'Vazirmatn';font-size:.98rem;
+}
+
+/* ---------- gallery ---------- */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:150px;
+  gap:14px;
+}
+.gallery-grid div:nth-child(1){grid-column:span 2;grid-row:span 2;}
+.gallery-grid div:nth-child(4){grid-row:span 2;}
+.gallery-grid div:nth-child(6){grid-column:span 2;}
+.g-item{
+  border-radius:5px;position:relative;overflow:hidden;
+  border:1px solid rgba(199,154,58,.14);
+  display:flex;align-items:flex-end;
+  transition:transform .4s ease;
+}
+.g-item:hover{transform:scale(1.02);}
+.g-item span{
+  position:relative;z-index:2;padding:14px;font-size:.82rem;color:var(--cream);
+  background:linear-gradient(0deg,rgba(0,0,0,.55),transparent);
+  width:100%;
+}
+.g1{background:linear-gradient(150deg,#3a2412,#1a120a);}
+.g2{background:linear-gradient(150deg,#2c4a6e,#17232e);}
+.g3{background:linear-gradient(150deg,#4a3320,#221a11);}
+.g4{background:linear-gradient(150deg,#5a1e1e,#251010);}
+.g5{background:linear-gradient(150deg,#4a3320,#17130f);}
+.g6{background:linear-gradient(150deg,#2c231b,#17130f);}
+
+/* ---------- testimonials ---------- */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.testi-card{
+  background:var(--charcoal-3);
+  border:1px solid rgba(199,154,58,.1);
+  padding:30px 26px;border-radius:6px;
+}
+.stars{color:var(--brass);letter-spacing:3px;margin-bottom:14px;font-size:.9rem;}
+.testi-card p{color:var(--cream-dim);font-size:.95rem;}
+.testi-name{margin-top:18px;display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--brass),var(--barber-red));}
+.testi-name b{color:var(--cream);font-size:.9rem;}
+.testi-name span{display:block;color:var(--cream-dim);font-size:.75rem;}
+
+/* ---------- booking ---------- */
+.booking{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  background:var(--charcoal-3);
+  border-radius:8px;overflow:hidden;
+  border:1px solid rgba(199,154,58,.15);
+}
+.booking-info{
+  padding:56px 46px;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(156,43,43,.12), transparent 55%),
+    linear-gradient(165deg,#241b13,#17130f);
+}
+.booking-info h2{font-size:2.2rem;color:var(--cream);margin-bottom:16px;}
+.booking-info p{color:var(--cream-dim);margin-bottom:30px;}
+.info-line{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px;}
+.info-line svg{width:20px;height:20px;stroke:var(--brass-light);fill:none;stroke-width:1.6;flex-shrink:0;margin-top:2px;}
+.info-line b{display:block;color:var(--cream);font-size:.95rem;}
+.info-line span{color:var(--cream-dim);font-size:.85rem;}
+
+.booking-form{padding:56px 46px;}
+.field{margin-bottom:20px;}
+.field label{display:block;font-size:.85rem;color:var(--cream-dim);margin-bottom:8px;}
+.field input,.field select{
+  width:100%;padding:13px 14px;background:var(--charcoal);
+  border:1px solid rgba(199,154,58,.2);border-radius:4px;color:var(--cream);
+  font-family:'Vazirmatn';font-size:.92rem;
+  transition:border-color .25s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--brass);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.submit-btn{width:100%;margin-top:8px;justify-content:center;}
+
+/* ---------- footer ---------- */
+footer{
+  background:var(--charcoal);
+  padding:60px 0 30px;
+  border-top:1px solid rgba(199,154,58,.12);
+}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-grid h4{color:var(--brass-light);font-family:'Vazirmatn';font-weight:700;margin-bottom:16px;font-size:.95rem;}
+.footer-grid p, .footer-grid a{color:var(--cream-dim);font-size:.88rem;}
+.footer-links{display:flex;flex-direction:column;gap:10px;}
+.footer-links a:hover{color:var(--brass-light);}
+.footer-bottom{
+  border-top:1px solid rgba(199,154,58,.1);
+  padding-top:24px;text-align:center;color:var(--cream-dim);font-size:.8rem;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .nav-links,.nav-cta{display:none;}
+  .burger{display:flex;}
+  .hero .wrap{grid-template-columns:1fr;text-align:center;}
+  .eyebrow{margin-inline:auto;}
+  .hero p{margin-inline:auto;}
+  .hero-ctas{justify-content:center;}
+  .hero-visual{order:-1;margin-bottom:20px;}
+  .about-grid{grid-template-columns:1fr;}
+  .services-grid,.testi-grid{grid-template-columns:1fr;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+  .gallery-grid div:nth-child(1){grid-column:span 2;}
+  .booking{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="nav">
+    <div class="logo">
+      <div class="logo-mark"></div>
+      <div>
+        <div class="logo-text">سلمونی اوستا</div>
+        <span class="logo-sub">پیرایش مردانه از ۱۳۸۲</span>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#services">خدمات</a>
+      <a href="#gallery">گالری</a>
+      <a href="#about">اوستا</a>
+      <a href="#testimonials">نظرات</a>
+      <a href="#booking">تماس</a>
+    </nav>
+    <a href="#booking" class="nav-cta">رزرو نوبت</a>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">نسل سوم پیرایشگری خانوادگی</div>
+      <h1>یه اصلاح درست<br><span>یه اصلاح اوستایی</span></h1>
+      <p>سلمونی اوستا جاییه که تیغ، قیچی و دست استاد کنار هم می‌شینن. بدون عجله، با حوصله‌ی قدیم و دقتِ امروز.</p>
+      <div class="hero-ctas">
+        <a href="#booking" class="btn btn-primary">رزرو نوبت</a>
+        <a href="#services" class="btn btn-ghost">دیدن خدمات</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="glow"></div>
+      <div class="pole-stand">
+        <div class="pole-cap top"></div>
+        <div class="pole-glass"></div>
+        <div class="pole-cap bottom"></div>
+      </div>
+    </div>
+  </div>
+  <div class="scissor-cut"></div>
+</section>
+
+<section id="services" class="section-alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>خدمات سلمونی</h2>
+      <p>از کوتاهی کلاسیک تا تراش سنتی با تیغ گرم؛ هر خدمت با ابزار و روش خودش.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.5" y2="15.5"/><line x1="8.5" y1="8.5" x2="20" y2="20"/></svg></div>
+        <h3>اصلاح مو کلاسیک</h3>
+        <p>کوتاهی با قیچی و ماشین، فید و تیپ‌آپ حرفه‌ای متناسب با فرم صورت.</p>
+        <div class="service-price"><span>۲۵ تا ۴۰ دقیقه</span><span>از ۱۸۰</span></div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M4 12c2-4 6-6 10-6M4 12c2 4 6 6 10 6M14 6l4 6-4 6"/></svg></div>
+        <h3>اصلاح ریش و سبیل</h3>
+        <p>فرم‌دهی دقیق با تیغ گرم، روغن و مرطوب‌کننده‌ی اختصاصی ریش.</p>
+        <div class="service-price"><span>۲۰ دقیقه</span><span>از ۱۲۰</span></div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="4" rx="1"/><line x1="5" y1="14" x2="5" y2="19"/><line x1="19" y1="14" x2="19" y2="19"/></svg></div>
+        <h3>تراش سنتی با تیغ</h3>
+        <p>تراش کامل صورت با تیغ لبه‌تیز، فوم گرم و حوله‌ی داغ؛ به روش قدیم.</p>
+        <div class="service-price"><span>۳۰ دقیقه</span><span>از ۱۵۰</span></div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 6l4-3 4 3M8 18l4 3 4-3"/></svg></div>
+        <h3>رنگ و پوشش موی سفید</h3>
+        <p>رنگ طبیعی و بی‌آسیب، مناسب پوشش کامل یا جزئی موی سفید.</p>
+        <div class="service-price"><span>۴۵ دقیقه</span><span>از ۲۸۰</span></div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M6 20c1-4 3-6 6-6s5 2 6 6"/></svg></div>
+        <h3>اصلاح مخصوص کودک</h3>
+        <p>فضایی آرام و صندلی مخصوص برای اولین تجربه‌های سلمونی بچه‌ها.</p>
+        <div class="service-price"><span>۲۰ دقیقه</span><span>از ۱۰۰</span></div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>مراقبت و ماسک صورت</h3>
+        <p>پاکسازی، اسکراب و ماسک اختصاصی مردانه برای پوست خسته از کار.</p>
+        <div class="service-price"><span>۲۵ دقیقه</span><span>از ۱۴۰</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="master-frame reveal">
+      <span class="master-initial">ر</span>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <h2>اوستا رضا کریمی</h2>
+      <p>۱۸ ساله که پشت همین صندلیه. کارش رو از مغازه‌ی پدرش تو بازار یاد گرفت، بعد رفت سراغ تکنیک‌های جدید فیدینگ و تراش سنتی. حالا هر دو سبک رو با هم قاطی می‌کنه.</p>
+      <p>هر مشتری براش یه فرم صورت جداست، نه یه مدل ثابت. برای همینه که خیلیا از شهرهای دیگه هم میان همینجا نوبت می‌گیرن.</p>
+      <div class="about-quote">«اصلاح خوب عجله نداره. من تا وقتی خودم راضی نشم، شونه رو زمین نمی‌ذارم.»</div>
+      <div class="stat-row">
+        <div class="stat"><b>۱۸</b><span>سال تجربه</span></div>
+        <div class="stat"><b>+۶۰۰۰</b><span>مشتری ثابت</span></div>
+        <div class="stat"><b>۴.۹</b><span>امتیاز مشتریان</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="section-alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>گالری کارها</h2>
+      <p>نمونه‌ای از کوتاهی‌ها و اصلاح‌های این چند وقت اخیر.</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="g-item g1"><span>فید کلاسیک</span></div>
+      <div class="g-item g2"><span>تراش با تیغ</span></div>
+      <div class="g-item g3"><span>فرم ریش پادشاهی</span></div>
+      <div class="g-item g4"><span>تاپ‌آپ تکسچرال</span></div>
+      <div class="g-item g5"><span>کوتاهی کودک</span></div>
+      <div class="g-item g6"><span>رنگ طبیعی موی سفید</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>حرف مشتری‌ها</h2>
+      <p>چیزی که بعد از نشستن روی این صندلی می‌گن.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>«سه ساله فقط اینجا میام. اوستا رضا دست سبکی داره و اصلاً عجله نمی‌کنه، حتی وقتی صف بیرون هست.»</p>
+        <div class="testi-name"><div class="testi-avatar"></div><div><b>حامد م.</b><span>مشتری ثابت</span></div></div>
+      </div>
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p>«تراش با تیغ گرمش رو امتحان کنید، فرق داره. حوله‌ی گرم و فوم درست، آدم رو یاد سلمونی‌های قدیم می‌ندازه.»</p>
+        <div class="testi-name"><div class="testi-avatar"></div><div><b>علی ص.</b><span>مشتری ثابت</span></div></div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p>«پسرم اولین باره میره سلمونی، خیلی خوب باهاش رفتار کردن. دیگه فقط همینجا میاریمش.»</p>
+        <div class="testi-name"><div class="testi-avatar"></div><div><b>سینا ک.</b><span>پدر مشتری</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="booking" class="section-alt">
+  <div class="wrap">
+    <div class="booking reveal">
+      <div class="booking-info">
+        <h2>رزرو نوبت</h2>
+        <p>فرم رو پر کنید تا زودتر باهاتون هماهنگ کنیم، یا مستقیم تماس بگیرید.</p>
+
+        <div class="info-line">
+          <svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .7 3a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.2-1.3a2 2 0 0 1 2.1-.4c1 .3 2 .5 3 .7a2 2 0 0 1 1.6 2z"/></svg>
+          <div><b>۰۲۱-۴۴۵۵۶۶۷۷</b><span>هر روز به‌جز جمعه</span></div>
+        </div>
+        <div class="info-line">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <div><b>۹ صبح تا ۹ شب</b><span>جمعه‌ها فقط با هماهنگی</span></div>
+        </div>
+        <div class="info-line">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><b>خیابان ولیعصر، کوچه‌ی بهار، پلاک ۱۴</b><span>روبه‌روی داروخانه</span></div>
+        </div>
+      </div>
+      <form class="booking-form" onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='نوبت شما ثبت شد ✓';">
+        <div class="field">
+          <label>نام و نام خانوادگی</label>
+          <input type="text" placeholder="مثلاً محمد رضایی" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>شماره تماس</label>
+            <input type="tel" placeholder="09xxxxxxxxx" required>
+          </div>
+          <div class="field">
+            <label>نوع خدمت</label>
+            <select>
+              <option>اصلاح مو کلاسیک</option>
+              <option>اصلاح ریش و سبیل</option>
+              <option>تراش سنتی با تیغ</option>
+              <option>رنگ مو</option>
+              <option>اصلاح کودک</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>تاریخ</label>
+            <input type="date">
+          </div>
+          <div class="field">
+            <label>ساعت ترجیحی</label>
+            <input type="time">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary submit-btn">ثبت درخواست نوبت</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:14px;">
+          <div class="logo-mark" style="width:32px;height:32px;"></div>
+          <div class="logo-text" style="font-size:1.15rem;">سلمونی اوستا</div>
+        </div>
+        <p>یه سلمونی خانوادگی که از نسل پدر به پسر رسیده؛ همون دقت قدیم، با ابزار امروز.</p>
+      </div>
+      <div>
+        <h4>دسترسی سریع</h4>
+        <div class="footer-links">
+          <a href="#services">خدمات</a>
+          <a href="#gallery">گالری</a>
+          <a href="#about">درباره اوستا</a>
+          <a href="#booking">رزرو نوبت</a>
+        </div>
+      </div>
+      <div>
+        <h4>تماس با ما</h4>
+        <div class="footer-links">
+          <a href="tel:02144556677">۰۲۱-۴۴۵۵۶۶۷۷</a>
+          <a href="#">اینستاگرام</a>
+          <a href="#">خیابان ولیعصر، پلاک ۱۴</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© سلمونی اوستا — تمام حقوق محفوظ است.<br>
+    <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a></div>
+  </div>
+</footer>
+
+<script>
+// header shrink
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// mobile menu
+const burger = document.getElementById('burger');
+const navLinks = document.querySelector('.nav-links');
+burger.addEventListener('click', () => {
+  const open = navLinks.style.display === 'flex';
+  navLinks.style.display = open ? 'none' : 'flex';
+  navLinks.style.cssText += 'position:fixed;top:70px;left:0;right:0;background:#17130f;flex-direction:column;padding:24px 28px;gap:20px;border-bottom:1px solid rgba(199,154,58,.15);';
+});
+
+// scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

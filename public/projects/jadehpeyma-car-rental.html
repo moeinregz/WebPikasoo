@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جاده‌پیما | اجاره خودرو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt:#121417;
+    --asphalt-2:#191c21;
+    --asphalt-3:#20242a;
+    --asphalt-4:#282d34;
+    --headlight:#ffb020;
+    --headlight-soft:#ffcf6d;
+    --taillight:#e6484f;
+    --ink:#f2f1ec;
+    --muted:#9aa1ab;
+    --muted-2:#6b7178;
+    --line:rgba(255,255,255,0.09);
+    --paper:#f4f1ea;
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--asphalt);
+    color:var(--ink);
+    font-family:'Vazirmatn', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--headlight); color:var(--asphalt);}
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block; max-width:100%;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  input,select{font-family:inherit;}
+
+  .mono{font-family:'JetBrains Mono', monospace;}
+  .wrap{max-width:1220px; margin:0 auto; padding:0 32px;}
+
+  :focus-visible{outline:2px solid var(--headlight); outline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- background road texture ---------- */
+  .asphalt-noise{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(255,255,255,0.035), transparent 40%),
+      radial-gradient(circle at 85% 60%, rgba(255,255,255,0.03), transparent 45%);
+  }
+
+  /* ---------- scroll road (signature device) ---------- */
+  .road-rail{
+    position:fixed;
+    top:0; bottom:0; left:28px;
+    width:2px;
+    background:repeating-linear-gradient(to bottom, var(--line) 0 10px, transparent 10px 22px);
+    z-index:40;
+    display:none;
+  }
+  .road-rail .car-marker{
+    position:absolute; right:-11px; top:0;
+    width:24px; height:24px;
+    transform:translateY(0);
+    filter:drop-shadow(0 0 6px rgba(255,176,32,0.7));
+    transition:top 60ms linear;
+  }
+  .road-rail .car-marker svg{width:100%; height:100%;}
+  @media (min-width:1180px){ .road-rail{display:block;} }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    padding:18px 0;
+    background:linear-gradient(to bottom, rgba(18,20,23,0.92), rgba(18,20,23,0.6) 70%, transparent);
+    backdrop-filter:blur(6px);
+    transition:padding .3s ease, background .3s ease;
+  }
+  header.nav.scrolled{
+    padding:12px 0;
+    background:rgba(18,20,23,0.88);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:24px;}
+  .logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.25rem; letter-spacing:-0.01em;}
+  .logo .plate{
+    display:flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:8px;
+    background:var(--headlight); color:var(--asphalt);
+  }
+  .logo .plate svg{width:20px; height:20px;}
+  .nav-links{display:flex; align-items:center; gap:30px; font-size:.95rem; color:var(--muted);}
+  .nav-links a{position:relative; padding:6px 0; transition:color .2s ease;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a::after{
+    content:''; position:absolute; right:0; bottom:0; height:1px; width:0;
+    background:var(--headlight); transition:width .25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--headlight); color:var(--asphalt); font-weight:700;
+    padding:11px 22px; border-radius:999px; font-size:.92rem;
+    box-shadow:0 0 0 0 rgba(255,176,32,0.5);
+    transition:transform .2s ease, box-shadow .3s ease;
+  }
+  .nav-cta:hover{transform:translateY(-2px); box-shadow:0 8px 22px -6px rgba(255,176,32,0.6);}
+  .nav-toggle{display:none; width:38px; height:38px; background:transparent; color:var(--ink);}
+  @media (max-width:900px){
+    .nav-links, .nav-cta.desktop-only{display:none;}
+    .nav-toggle{display:flex; align-items:center; justify-content:center;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; z-index:1;
+    padding:150px 0 90px;
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute; top:-10%; left:50%; transform:translateX(-50%);
+    width:900px; height:900px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,176,32,0.16), transparent 60%);
+    pointer-events:none; z-index:-1;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center;}
+  @media (max-width:980px){ .hero-grid{grid-template-columns:1fr;} }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace; font-size:.78rem; letter-spacing:.06em;
+    color:var(--headlight); background:rgba(255,176,32,0.1);
+    padding:7px 14px; border-radius:999px; border:1px solid rgba(255,176,32,0.25);
+    margin-bottom:22px;
+    opacity:0; animation:rise .7s ease forwards .1s;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--headlight); animation:pulse 1.6s infinite;}
+
+  h1.headline{
+    font-size:clamp(2.4rem, 5.4vw, 4.4rem);
+    font-weight:800; line-height:1.12; letter-spacing:-0.01em;
+    margin-bottom:24px;
+  }
+  h1.headline span{
+    color:var(--headlight);
+    position:relative;
+  }
+  .headline-line{
+    display:block; overflow:hidden;
+  }
+  .headline-line span.reveal{
+    display:inline-block;
+    transform:translateY(110%);
+    animation:rise-strong .8s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .headline-line:nth-child(1) span.reveal{animation-delay:.15s;}
+  .headline-line:nth-child(2) span.reveal{animation-delay:.28s;}
+
+  .hero p.lede{
+    font-size:1.08rem; color:var(--muted); max-width:520px; line-height:1.9;
+    margin-bottom:34px;
+    opacity:0; animation:rise .7s ease forwards .5s;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; opacity:0; animation:rise .7s ease forwards .62s;}
+  .btn{
+    padding:15px 28px; border-radius:999px; font-weight:700; font-size:.95rem;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .2s ease, box-shadow .3s ease, background .2s ease;
+  }
+  .btn-primary{background:var(--headlight); color:var(--asphalt);}
+  .btn-primary:hover{transform:translateY(-3px); box-shadow:0 12px 26px -8px rgba(255,176,32,0.55);}
+  .btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--headlight); color:var(--headlight);}
+
+  /* animated road strip under hero copy */
+  .hero-road{
+    position:relative; height:46px; margin-top:56px; opacity:0; animation:rise .7s ease forwards .75s;
+  }
+  .hero-road .strip{
+    position:absolute; inset-inline:0; top:50%; height:3px; transform:translateY(-50%);
+    background:repeating-linear-gradient(to left, var(--headlight) 0 26px, transparent 26px 52px);
+    background-size:200% 100%;
+    animation:road-move 1.4s linear infinite;
+    opacity:.55;
+  }
+  .hero-road .car{
+    position:absolute; top:50%; right:0; width:56px; height:56px; transform:translateY(-62%);
+    filter:drop-shadow(0 8px 14px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,176,32,0.5));
+    animation:drive-in 1.3s cubic-bezier(.2,.8,.2,1) forwards .9s, bob 2.2s ease-in-out infinite 2.2s;
+    opacity:0;
+  }
+
+  /* booking dashboard widget */
+  .dash{
+    position:relative;
+    background:linear-gradient(160deg, var(--asphalt-3), var(--asphalt-2));
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 30px 60px -25px rgba(0,0,0,0.6);
+    opacity:0; animation:rise .8s ease forwards .4s;
+  }
+  .dash::before{
+    content:''; position:absolute; inset:0; border-radius:22px; padding:1px;
+    background:linear-gradient(160deg, rgba(255,176,32,0.35), transparent 40%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    pointer-events:none;
+  }
+  .dash-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;}
+  .dash-head .title{font-weight:800; font-size:1.05rem;}
+  .dash-head .badge{
+    font-family:'JetBrains Mono', monospace; font-size:.72rem; color:var(--headlight);
+    background:rgba(255,176,32,0.1); padding:5px 10px; border-radius:6px; letter-spacing:.05em;
+  }
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:.78rem; color:var(--muted); margin-bottom:7px; font-family:'JetBrains Mono', monospace; letter-spacing:.03em;}
+  .field .control{
+    display:flex; align-items:center; gap:10px;
+    background:var(--asphalt); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .field .control:focus-within{border-color:var(--headlight); box-shadow:0 0 0 4px rgba(255,176,32,0.12);}
+  .field .control svg{width:18px; height:18px; color:var(--headlight); flex-shrink:0;}
+  .field select, .field input{
+    background:transparent; border:none; color:var(--ink); width:100%; font-size:.92rem;
+  }
+  .field select:focus, .field input:focus{outline:none;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .dash .btn-primary{width:100%; justify-content:center; margin-top:8px; font-size:1rem; padding:16px;}
+  .dash-note{display:flex; align-items:center; gap:8px; justify-content:center; margin-top:14px; font-size:.78rem; color:var(--muted-2);}
+  .dash-note svg{width:14px; height:14px; color:var(--headlight);}
+
+  /* ---------- gauges / stats ---------- */
+  .stats{position:relative; z-index:1; padding:30px 0 70px;}
+  .stats-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+    background:var(--asphalt-2); border:1px solid var(--line); border-radius:var(--radius);
+    padding:38px 20px;
+  }
+  @media (max-width:900px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
+  .gauge-item{display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center;}
+  .gauge{position:relative; width:96px; height:96px;}
+  .gauge svg{transform:rotate(-90deg);}
+  .gauge .track{fill:none; stroke:var(--asphalt-4); stroke-width:7;}
+  .gauge .fill{fill:none; stroke:var(--headlight); stroke-width:7; stroke-linecap:round; stroke-dasharray:251; stroke-dashoffset:251; transition:stroke-dashoffset 1.4s cubic-bezier(.3,.8,.3,1);}
+  .gauge .num{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace; font-weight:700; font-size:1rem; color:var(--ink);
+  }
+  .gauge-label{font-size:.85rem; color:var(--muted);}
+
+  /* ---------- section shell ---------- */
+  section{position:relative; z-index:1; padding:100px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .kicker{
+    font-family:'JetBrains Mono', monospace; font-size:.78rem; color:var(--headlight);
+    letter-spacing:.08em; margin-bottom:14px; display:block;
+  }
+  .section-head h2{font-size:clamp(1.8rem, 3.4vw, 2.6rem); font-weight:800; letter-spacing:-0.01em; line-height:1.3;}
+  .section-head p{color:var(--muted); margin-top:14px; font-size:1.02rem; line-height:1.85;}
+
+  .reveal-up{opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal-up.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- fleet ---------- */
+  .fleet-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
+  @media (max-width:1080px){ .fleet-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:600px){ .fleet-grid{grid-template-columns:1fr;} }
+
+  .car-card{
+    background:var(--asphalt-2); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; position:relative; overflow:hidden;
+    transition:transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+  }
+  .car-card:hover{transform:translateY(-8px); border-color:rgba(255,176,32,0.35); box-shadow:0 24px 50px -20px rgba(0,0,0,0.55);}
+  .car-card .glow{
+    position:absolute; bottom:-40%; left:50%; transform:translateX(-50%);
+    width:200px; height:120px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,176,32,0.28), transparent 70%);
+    opacity:0; transition:opacity .35s ease;
+  }
+  .car-card:hover .glow{opacity:1;}
+  .car-card .tag{
+    display:inline-block; font-family:'JetBrains Mono', monospace; font-size:.7rem;
+    color:var(--headlight); background:rgba(255,176,32,0.1); padding:4px 10px; border-radius:6px; margin-bottom:16px;
+  }
+  .car-card .car-icon{width:100%; height:88px; margin-bottom:14px; color:var(--ink); position:relative;}
+  .car-card .car-icon svg{width:100%; height:100%;}
+  .car-card h3{font-size:1.15rem; font-weight:700; margin-bottom:6px;}
+  .car-card .specs{display:flex; gap:14px; color:var(--muted); font-size:.82rem; margin-bottom:18px; flex-wrap:wrap;}
+  .car-card .specs span{display:flex; align-items:center; gap:5px;}
+  .car-card .specs svg{width:14px; height:14px; color:var(--headlight);}
+  .car-card .price-row{display:flex; align-items:end; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px;}
+  .car-card .price{font-family:'JetBrains Mono', monospace; font-weight:700; font-size:1.2rem;}
+  .car-card .price small{font-size:.7rem; color:var(--muted); font-weight:400;}
+  .car-card .mini-btn{
+    width:38px; height:38px; border-radius:50%; background:var(--asphalt-4); color:var(--headlight);
+    display:flex; align-items:center; justify-content:center; transition:background .2s ease, transform .2s ease;
+  }
+  .car-card .mini-btn svg{width:16px; height:16px;}
+  .car-card:hover .mini-btn{background:var(--headlight); color:var(--asphalt); transform:rotate(-45deg);}
+
+  /* ---------- process ---------- */
+  .process-wrap{position:relative;}
+  .process-line{
+    position:absolute; top:44px; right:0; left:0; height:2px;
+    background:repeating-linear-gradient(to left, var(--line) 0 10px, transparent 10px 20px);
+    z-index:0;
+  }
+  @media (max-width:900px){ .process-line{display:none;} }
+  .process-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:30px; position:relative; z-index:1;}
+  @media (max-width:900px){ .process-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:560px){ .process-grid{grid-template-columns:1fr;} }
+  .process-step .num{
+    width:88px; height:88px; border-radius:50%; background:var(--asphalt-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; margin-bottom:20px;
+    font-family:'JetBrains Mono', monospace; font-weight:700; font-size:1.3rem; color:var(--headlight);
+    transition:border-color .3s ease, background .3s ease;
+  }
+  .process-step:hover .num{border-color:var(--headlight); background:rgba(255,176,32,0.08);}
+  .process-step h3{font-weight:700; font-size:1.05rem; margin-bottom:10px;}
+  .process-step p{color:var(--muted); font-size:.92rem; line-height:1.8;}
+
+  /* ---------- why us ---------- */
+  .why-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  @media (max-width:800px){ .why-grid{grid-template-columns:1fr;} }
+  .why-card{
+    display:flex; gap:18px; padding:26px; background:var(--asphalt-2); border:1px solid var(--line); border-radius:16px;
+    transition:border-color .3s ease, transform .3s ease;
+  }
+  .why-card:hover{border-color:rgba(255,176,32,0.3); transform:translateY(-4px);}
+  .why-card .icon{
+    width:50px; height:50px; border-radius:12px; background:rgba(255,176,32,0.1); color:var(--headlight);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .why-card .icon svg{width:24px; height:24px;}
+  .why-card h3{font-weight:700; font-size:1.02rem; margin-bottom:8px;}
+  .why-card p{color:var(--muted); font-size:.9rem; line-height:1.8;}
+
+  /* ---------- cta banner ---------- */
+  .cta-banner{
+    position:relative; z-index:1; margin:0 auto; max-width:1220px; padding:0 32px 100px;
+  }
+  .cta-inner{
+    position:relative; overflow:hidden;
+    background:linear-gradient(135deg, #1c2027, #14161a);
+    border:1px solid var(--line); border-radius:26px;
+    padding:64px 50px; text-align:center;
+  }
+  .cta-inner .beam{
+    position:absolute; top:-50%; right:-10%; width:500px; height:500px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,176,32,0.18), transparent 65%);
+  }
+  .cta-inner h2{font-size:clamp(1.7rem, 3.4vw, 2.4rem); font-weight:800; margin-bottom:16px; position:relative;}
+  .cta-inner p{color:var(--muted); max-width:480px; margin:0 auto 30px; position:relative; line-height:1.8;}
+  .cta-inner .btn{position:relative;}
+
+  /* ---------- footer ---------- */
+  footer{position:relative; z-index:1; border-top:1px solid var(--line); padding:70px 0 30px; background:var(--asphalt-2);}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:40px; margin-bottom:50px;}
+  @media (max-width:900px){ .footer-grid{grid-template-columns:1fr 1fr; row-gap:36px;} }
+  @media (max-width:560px){ .footer-grid{grid-template-columns:1fr;} }
+  .footer-brand p{color:var(--muted); font-size:.9rem; line-height:1.85; margin-top:14px; max-width:280px;}
+  .footer-col h4{font-size:.85rem; margin-bottom:16px; color:var(--muted-2); font-family:'JetBrains Mono', monospace; letter-spacing:.04em;}
+  .footer-col ul li{margin-bottom:11px;}
+  .footer-col ul a{color:var(--muted); font-size:.92rem; transition:color .2s ease;}
+  .footer-col ul a:hover{color:var(--headlight);}
+  .newsletter .control{
+    display:flex; align-items:center; background:var(--asphalt); border:1px solid var(--line); border-radius:12px; padding:5px 5px 5px 14px; margin-top:14px;
+  }
+  .newsletter input{background:transparent; border:none; color:var(--ink); flex:1; padding:9px 0; font-size:.88rem;}
+  .newsletter input:focus{outline:none;}
+  .newsletter button{background:var(--headlight); color:var(--asphalt); border-radius:8px; padding:9px 16px; font-weight:700; font-size:.85rem;}
+  .social-row{display:flex; gap:10px; margin-top:18px;}
+  .social-row a{
+    width:36px; height:36px; border-radius:50%; background:var(--asphalt-4); display:flex; align-items:center; justify-content:center;
+    color:var(--muted); transition:background .2s ease, color .2s ease;
+  }
+  .social-row a:hover{background:var(--headlight); color:var(--asphalt);}
+  .social-row svg{width:16px; height:16px;}
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center; padding-top:26px; border-top:1px solid var(--line);
+    color:var(--muted-2); font-size:.82rem; flex-wrap:wrap; gap:12px;
+  }
+  .footer-bottom .mono{letter-spacing:.02em;}
+
+  /* ---------- keyframes ---------- */
+  @keyframes rise{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes rise-strong{ to{transform:translateY(0);} }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+  @keyframes road-move{ from{background-position:0 0;} to{background-position:-52px 0;} }
+  @keyframes drive-in{ from{opacity:0; transform:translate(90px,-62%);} to{opacity:1; transform:translate(0,-62%);} }
+  @keyframes bob{ 0%,100%{transform:translate(0,-62%);} 50%{transform:translate(0,-70%);} }
+</style>
+</head>
+<body>
+
+<div class="asphalt-noise"></div>
+<div class="road-rail"><div class="car-marker" id="railCar">
+  <svg viewBox="0 0 64 32" fill="none"><use href="#car-side"/></svg>
+</div></div>
+
+<!-- shared SVG symbols -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="car-side" viewBox="0 0 64 32">
+    <path d="M4 21 L8 21 L12 12 Q14 8 20 8 L40 8 Q46 8 49 12 L54 18 L60 19 Q62 19.5 62 22 L62 24 L58 24 M4 21 L2 21 Q0 21 0 19 L0 20 Q0 24 4 24 M4 21 L4 24" fill="var(--asphalt-4,#282d34)" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M16 12 L20 8.5 L37 8.5 L41 12 Z" fill="currentColor" opacity=".18"/>
+    <circle cx="16" cy="24" r="4.6" fill="#0e0f11" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="16" cy="24" r="1.6" fill="currentColor"/>
+    <circle cx="49" cy="24" r="4.6" fill="#0e0f11" stroke="currentColor" stroke-width="1.4"/>
+    <circle cx="49" cy="24" r="1.6" fill="currentColor"/>
+    <rect x="2" y="18.5" width="4" height="2.2" rx="1" fill="var(--headlight,#ffb020)"/>
+  </symbol>
+</svg>
+
+<header class="nav" id="siteNav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo">
+      <span class="plate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M7 8l10-.5M5 16l.6-4M18.4 16l-.6-4"/></svg></span>
+      جاده‌پیما
+    </a>
+    <nav class="nav-links">
+      <a href="#fleet">ناوگان</a>
+      <a href="#process">روند رزرو</a>
+      <a href="#why">چرا ما</a>
+      <a href="#contact">تماس با ما</a>
+    </nav>
+    <a href="#booking" class="nav-cta desktop-only">رزرو آنلاین</a>
+    <button class="nav-toggle" aria-label="باز کردن منو">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow"><span class="dot"></span> ۹ سال تجربه در اجاره خودرو</span>
+        <h1 class="headline">
+          <span class="headline-line"><span class="reveal">خودروت رو انتخاب کن،</span></span>
+          <span class="headline-line"><span class="reveal"><span>جاده</span> منتظرته.</span></span>
+        </h1>
+        <p class="lede">
+          از اقتصادی تا لوکس، بیش از ۸۵۰ خودرو در ۱۲ شهر آماده تحویل فوری‌اند.
+          رزرو آنلاین، بدون هزینه پنهان و با بیمه کامل — فقط چند دقیقه تا شروع سفر.
+        </p>
+        <div class="hero-actions">
+          <a href="#booking" class="btn btn-primary">
+            رزرو آنلاین
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#fleet" class="btn btn-ghost">مشاهده ناوگان</a>
+        </div>
+        <div class="hero-road">
+          <div class="strip"></div>
+          <div class="car"><svg viewBox="0 0 64 32" fill="none" style="color:var(--headlight)"><use href="#car-side"/></svg></div>
+        </div>
+      </div>
+
+      <!-- booking dashboard -->
+      <div class="dash" id="booking">
+        <div class="dash-head">
+          <span class="title">رزرو سریع</span>
+          <span class="badge mono">STEP 1 / 2</span>
+        </div>
+        <div class="field">
+          <label>محل تحویل</label>
+          <div class="control">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <select>
+              <option>فرودگاه امام خمینی (IKA)</option>
+              <option>تهران — میدان ولیعصر</option>
+              <option>مشهد — مرکز شهر</option>
+              <option>شیراز — فرودگاه شیراز</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>تاریخ تحویل</label>
+            <div class="control">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+              <input type="text" placeholder="۱۴۰۴/۰۶/۰۲" />
+            </div>
+          </div>
+          <div class="field">
+            <label>تاریخ بازگشت</label>
+            <div class="control">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+              <input type="text" placeholder="۱۴۰۴/۰۶/۰۷" />
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>دسته خودرو</label>
+          <div class="control">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#car-side" style="display:none"/><path d="M3 12l1.5-4.5A2 2 0 0 1 6.4 6h11.2a2 2 0 0 1 1.9 1.5L21 12M3 12v5a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h12v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-5M3 12h18M6.5 15.5h.01M17.5 15.5h.01"/></svg>
+            <select>
+              <option>سدان — اقتصادی</option>
+              <option>شاسی‌بلند (SUV)</option>
+              <option>لوکس</option>
+              <option>ون / خانوادگی</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary">
+          مشاهده خودروهای موجود
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <div class="dash-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+          لغو رایگان تا ۲۴ ساعت قبل از تحویل
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS / GAUGES -->
+  <section class="stats">
+    <div class="wrap">
+      <div class="stats-grid reveal-up" id="gaugeSection">
+        <div class="gauge-item">
+          <div class="gauge">
+            <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="40"/><circle class="fill" cx="45" cy="45" r="40" data-target="228"/></svg>
+            <span class="num mono" data-count="850">۰</span>
+          </div>
+          <span class="gauge-label">خودرو در ناوگان</span>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge">
+            <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="40"/><circle class="fill" cx="45" cy="45" r="40" data-target="176"/></svg>
+            <span class="num mono" data-count="12">۰</span>
+          </div>
+          <span class="gauge-label">شهر تحت پوشش</span>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge">
+            <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="40"/><circle class="fill" cx="45" cy="45" r="40" data-target="201"/></svg>
+            <span class="num mono" data-count="9">۰</span>
+          </div>
+          <span class="gauge-label">سال تجربه</span>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge">
+            <svg viewBox="0 0 90 90"><circle class="track" cx="45" cy="45" r="40"/><circle class="fill" cx="45" cy="45" r="40" data-target="10"/></svg>
+            <span class="num mono" data-count="4.9">۰</span>
+          </div>
+          <span class="gauge-label">امتیاز مشتریان</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLEET -->
+  <section id="fleet">
+    <div class="wrap">
+      <div class="section-head reveal-up">
+        <span class="kicker">// ناوگان</span>
+        <h2>خودرویی که به سفرت می‌خوره</h2>
+        <p>از شهرگردی روزمره تا سفر خانوادگی، هر دسته برای یک نوع مسیر طراحی شده.</p>
+      </div>
+      <div class="fleet-grid">
+
+        <div class="car-card reveal-up">
+          <div class="glow"></div>
+          <span class="tag mono">اقتصادی</span>
+          <div class="car-icon"><svg viewBox="0 0 64 32" fill="none" style="color:var(--muted)"><use href="#car-side"/></svg></div>
+          <h3>پژو ۲۰۷ یا مشابه</h3>
+          <div class="specs">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> ۴ نفره</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><path d="M23 13v-2"/></svg> اتوماتیک</span>
+          </div>
+          <div class="price-row">
+            <span class="price">۸۹۰<small> هزار / روز</small></span>
+            <span class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
+          </div>
+        </div>
+
+        <div class="car-card reveal-up">
+          <div class="glow"></div>
+          <span class="tag mono">سدان</span>
+          <div class="car-icon"><svg viewBox="0 0 64 32" fill="none" style="color:var(--muted)"><use href="#car-side"/></svg></div>
+          <h3>هیوندای سوناتا</h3>
+          <div class="specs">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> ۵ نفره</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><path d="M23 13v-2"/></svg> اتوماتیک</span>
+          </div>
+          <div class="price-row">
+            <span class="price">۱٬۴۵۰<small> هزار / روز</small></span>
+            <span class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
+          </div>
+        </div>
+
+        <div class="car-card reveal-up">
+          <div class="glow"></div>
+          <span class="tag mono">شاسی‌بلند</span>
+          <div class="car-icon"><svg viewBox="0 0 64 32" fill="none" style="color:var(--muted)"><use href="#car-side"/></svg></div>
+          <h3>هیوندای توسان</h3>
+          <div class="specs">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> ۵ نفره</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><path d="M23 13v-2"/></svg> اتوماتیک</span>
+          </div>
+          <div class="price-row">
+            <span class="price">۲٬۱۰۰<small> هزار / روز</small></span>
+            <span class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
+          </div>
+        </div>
+
+        <div class="car-card reveal-up">
+          <div class="glow"></div>
+          <span class="tag mono">لوکس</span>
+          <div class="car-icon"><svg viewBox="0 0 64 32" fill="none" style="color:var(--headlight)"><use href="#car-side"/></svg></div>
+          <h3>مرسدس‌بنز E-Class</h3>
+          <div class="specs">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> ۴ نفره</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><path d="M23 13v-2"/></svg> اتوماتیک</span>
+          </div>
+          <div class="price-row">
+            <span class="price">۴٬۸۰۰<small> هزار / روز</small></span>
+            <span class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap process-wrap">
+      <div class="section-head reveal-up">
+        <span class="kicker">// روند رزرو</span>
+        <h2>چهار قدم تا پشت فرمون نشستن</h2>
+        <p>مسیر رزرو خطی و ساده است — از انتخاب خودرو تا تحویل، هر مرحله شفاف و قابل پیگیریه.</p>
+      </div>
+      <div class="process-line"></div>
+      <div class="process-grid">
+        <div class="process-step reveal-up">
+          <div class="num">۰۱</div>
+          <h3>خودرو و تاریخ رو انتخاب کن</h3>
+          <p>دسته خودرو، محل تحویل و بازه زمانی سفرت رو مشخص کن.</p>
+        </div>
+        <div class="process-step reveal-up">
+          <div class="num">۰۲</div>
+          <h3>رزرو و پرداخت آنلاین</h3>
+          <p>رزرو رو تأیید کن و پرداخت رو به‌صورت امن آنلاین انجام بده.</p>
+        </div>
+        <div class="process-step reveal-up">
+          <div class="num">۰۳</div>
+          <h3>خودرو رو تحویل بگیر</h3>
+          <p>در فرودگاه یا نزدیک‌ترین شعبه، خودرو آماده و تمیز تحویلت می‌شه.</p>
+        </div>
+        <div class="process-step reveal-up">
+          <div class="num">۰۴</div>
+          <h3>برگردون و برو</h3>
+          <p>در پایان سفر، خودرو رو تحویل بده و بدون معطلی راهت رو ادامه بده.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why">
+    <div class="wrap">
+      <div class="section-head reveal-up">
+        <span class="kicker">// چرا جاده‌پیما</span>
+        <h2>هر چیزی که برای یک سفر بی‌دردسر لازمه</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card reveal-up">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
+          <div><h3>بیمه کامل بدنه و شخص ثالث</h3><p>هر خودرو با بیمه کامل تحویل داده می‌شه، بدون نیاز به خرید جداگانه.</p></div>
+        </div>
+        <div class="why-card reveal-up">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92V19a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 1h2.18a2 2 0 0 1 2 1.72c.12.9.33 1.8.63 2.65a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.43-1.43a2 2 0 0 1 2.11-.45c.85.3 1.75.51 2.65.63A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><h3>پشتیبانی ۲۴ ساعته</h3><p>در هر ساعت از شبانه‌روز، تیم پشتیبانی جاده‌پیما پاسخگوی شماست.</p></div>
+        </div>
+        <div class="why-card reveal-up">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+          <div><h3>تحویل در محل و فرودگاه</h3><p>خودرو رو تا فرودگاه، هتل یا آدرس دلخواهت می‌رسونیم.</p></div>
+        </div>
+        <div class="why-card reveal-up">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><h3>بدون هزینه پنهان</h3><p>قیمتی که در رزرو می‌بینی، همون قیمت نهایی موقع تحویله.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <div class="cta-inner reveal-up">
+      <div class="beam"></div>
+      <h2>آماده‌ای جاده رو بزنی؟</h2>
+      <p>در کمتر از ۳ دقیقه خودروت رو رزرو کن و همین امروز مسیرت رو شروع کن.</p>
+      <a href="#booking" class="btn btn-primary">رزرو آنلاین</a>
+    </div>
+  </div>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo">
+          <span class="plate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M7 8l10-.5M5 16l.6-4M18.4 16l-.6-4"/></svg></span>
+          جاده‌پیما
+        </a>
+        <p>اجاره خودرو ساده، شفاف و مطمئن — در ۱۲ شهر ایران، همیشه در دسترس.</p>
+        <div class="social-row">
+          <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></a>
+          <a href="#" aria-label="واتس‌اپ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>دسترسی سریع</h4>
+        <ul>
+          <li><a href="#fleet">ناوگان خودرو</a></li>
+          <li><a href="#process">روند رزرو</a></li>
+          <li><a href="#why">چرا جاده‌پیما</a></li>
+          <li><a href="#booking">رزرو آنلاین</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>تماس</h4>
+        <ul>
+          <li><a href="#" class="mono" dir="ltr" style="display:block; text-align:right">021-9109-4000</a></li>
+          <li><a href="#">info@jadehpeyma.ir</a></li>
+          <li><a href="#">تهران، بزرگراه همت، برج آسمان</a></li>
+        </ul>
+      </div>
+      <div class="footer-col newsletter">
+        <h4>عضویت در خبرنامه</h4>
+        <p style="color:var(--muted); font-size:.88rem; line-height:1.8;">تخفیف‌های فصلی و خودروهای تازه رو زودتر از همه بشناس.</p>
+        <div class="control">
+          <input type="email" placeholder="ایمیلت رو وارد کن" />
+          <button>عضویت</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© ۱۴۰۴ جاده‌پیما. تمامی حقوق محفوظ است.</span>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav scroll state
+  const navEl = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive:true });
+
+  // road-rail scroll tracker
+  const railCar = document.getElementById('railCar');
+  function updateRail(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? scrollTop / docHeight : 0;
+    const trackHeight = window.innerHeight - 40;
+    railCar.style.top = (pct * trackHeight) + 'px';
+  }
+  window.addEventListener('scroll', updateRail, { passive:true });
+  updateRail();
+
+  // reveal-on-scroll
+  const revealEls = document.querySelectorAll('.reveal-up');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // gauges + count-up
+  const gaugeSection = document.getElementById('gaugeSection');
+  let gaugesPlayed = false;
+  const gio = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !gaugesPlayed){
+        gaugesPlayed = true;
+        document.querySelectorAll('.gauge .fill').forEach(circle => {
+          const target = parseFloat(circle.dataset.target);
+          circle.style.strokeDashoffset = 251 - target;
+        });
+        document.querySelectorAll('.num[data-count]').forEach(el => {
+          const target = parseFloat(el.dataset.count);
+          const isDecimal = target % 1 !== 0;
+          const duration = 1400;
+          const start = performance.now();
+          function tick(now){
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const val = target * eased;
+            el.textContent = toFa(isDecimal ? val.toFixed(1) : Math.round(val));
+            if(p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        });
+      }
+    });
+  }, { threshold:0.4 });
+  gio.observe(gaugeSection);
+
+  function toFa(n){
+    const fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+    return String(n).replace(/[0-9]/g, d => fa[d]);
+  }
+
+  // mobile nav toggle -> simple show/hide of links list
+  const toggleBtn = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  toggleBtn.addEventListener('click', () => {
+    const open = navLinks.style.display === 'flex';
+    navLinks.style.cssText = open ? '' : 'display:flex; position:fixed; top:64px; right:20px; left:20px; flex-direction:column; background:#191c21; border:1px solid rgba(255,255,255,0.09); border-radius:14px; padding:18px; gap:16px; z-index:60;';
+  });
+</script>
+
+</body>
+</html>

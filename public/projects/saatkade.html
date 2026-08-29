@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ساعت‌کده | ساعت‌های مکانیکال و کلاسیک</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0c0f;
+      --bg-alt: #111318;
+      --bg-card: #15171d;
+      --gold: #c9a24b;
+      --gold-light: #e6c877;
+      --gold-dim: rgba(201, 162, 75, .35);
+      --ivory: #efe9db;
+      --ivory-dim: #a8a297;
+      --muted: #8b8d94;
+      --burgundy: #7a2e3a;
+      --line: rgba(201, 162, 75, .18);
+      --radius: 2px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ivory);
+      font-family: 'Vazirmatn', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--gold);
+      color: #0b0c0f;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .latin {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ---------- Texture ---------- */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      opacity: .045;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 22px 0;
+      transition: padding .4s ease, background .4s ease, border-color .4s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    header.scrolled {
+      padding: 12px 0;
+      background: rgba(11, 12, 15, .86);
+      backdrop-filter: blur(14px);
+      border-color: var(--line);
+    }
+
+    header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .brand .name {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      color: var(--ivory);
+    }
+
+    .brand .sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    nav.main-nav {
+      display: flex;
+      align-items: center;
+      gap: 38px;
+    }
+
+    nav.main-nav a {
+      font-size: 14.5px;
+      color: var(--ivory-dim);
+      position: relative;
+      padding: 4px 0;
+      transition: color .25s ease;
+    }
+
+    nav.main-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width .3s ease;
+    }
+
+    nav.main-nav a:hover {
+      color: var(--ivory);
+    }
+
+    nav.main-nav a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 26px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      color: var(--gold-light);
+      background: transparent;
+      transition: all .35s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--gold);
+      color: #0b0c0f;
+      box-shadow: 0 0 26px var(--gold-dim);
+    }
+
+    .btn.solid {
+      background: var(--gold);
+      color: #0b0c0f;
+    }
+
+    .btn.solid:hover {
+      background: var(--gold-light);
+    }
+
+    .btn.ghost {
+      border-color: var(--line);
+      color: var(--ivory-dim);
+    }
+
+    .btn.ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 1.5px;
+      background: var(--gold);
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 150px 0 90px;
+      background:
+        radial-gradient(ellipse at 78% 18%, rgba(201, 162, 75, .09), transparent 55%),
+        radial-gradient(ellipse at 10% 90%, rgba(122, 46, 58, .10), transparent 50%);
+    }
+
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+      color: var(--gold);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .eyebrow .rule {
+      width: 38px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 800;
+      line-height: 1.28;
+      color: var(--ivory);
+      margin-bottom: 22px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold-light);
+    }
+
+    .hero p.lead {
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--ivory-dim);
+      max-width: 490px;
+      margin-bottom: 38px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 34px;
+      margin-top: 56px;
+    }
+
+    .hero-stats div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-stats b {
+      font-size: 24px;
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .hero-stats span {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    /* ---------- clock ---------- */
+    .clock-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .clock-glow {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 75, .16), transparent 68%);
+      filter: blur(6px);
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: .6;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+    }
+
+    svg#heroClock {
+      position: relative;
+      width: min(400px, 80vw);
+      height: min(400px, 80vw);
+    }
+
+    .tick {
+      stroke: var(--ivory-dim);
+      stroke-width: 2;
+    }
+
+    .tick.major {
+      stroke: var(--gold);
+      stroke-width: 3;
+    }
+
+    .hand {
+      stroke-linecap: round;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .hand.hour {
+      stroke: var(--ivory);
+      stroke-width: 5;
+    }
+
+    .hand.minute {
+      stroke: var(--ivory);
+      stroke-width: 3.5;
+    }
+
+    .hand.second {
+      stroke: var(--burgundy);
+      stroke-width: 1.6;
+    }
+
+    .clock-cap {
+      fill: var(--gold);
+    }
+
+    .clock-face {
+      fill: #101217;
+      stroke: var(--gold);
+      stroke-width: 1.4;
+    }
+
+    .clock-bezel {
+      fill: none;
+      stroke: var(--line);
+      stroke-width: 14;
+    }
+
+    .clock-brand {
+      fill: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-anchor: middle;
+    }
+
+    /* ---------- marquee ---------- */
+    .marquee-strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-alt);
+      padding: 16px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      gap: 56px;
+      animation: scroll 32s linear infinite;
+    }
+
+    .marquee-track span {
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 56px;
+    }
+
+    .marquee-track span::after {
+      content: '✦';
+      color: var(--gold);
+      margin-inline-start: 56px;
+    }
+
+    @keyframes scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ---------- section shell ---------- */
+    section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .sec-head {
+      max-width: 640px;
+      margin-bottom: 64px;
+    }
+
+    .sec-head .eyebrow {
+      margin-bottom: 16px;
+    }
+
+    .sec-head h2 {
+      font-size: clamp(28px, 3.4vw, 42px);
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--ivory);
+      margin-bottom: 14px;
+    }
+
+    .sec-head p {
+      color: var(--ivory-dim);
+      font-size: 15.5px;
+      line-height: 1.8;
+    }
+
+    .sec-head.center {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- collections ---------- */
+    .collections {
+      background: var(--bg-alt);
+    }
+
+    .coll-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .coll-card {
+      background: var(--bg-alt);
+      padding: 46px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: background .4s ease;
+    }
+
+    .coll-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(201, 162, 75, .14), transparent 70%);
+      transition: opacity .4s ease;
+    }
+
+    .coll-card:hover::before {
+      opacity: 1;
+    }
+
+    .coll-card:hover {
+      background: #171920;
+    }
+
+    .coll-icon {
+      width: 46px;
+      height: 46px;
+      margin-bottom: 26px;
+    }
+
+    .coll-card h3 {
+      font-size: 19px;
+      color: var(--ivory);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .coll-card p {
+      font-size: 13.8px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .coll-card .arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateX(6px);
+      transition: all .35s ease;
+    }
+
+    [dir="rtl"] .coll-card .arrow {
+      transform: translateX(-6px);
+    }
+
+    .coll-card:hover .arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ---------- products ---------- */
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .prod-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 34px 28px;
+      transition: border-color .4s ease, transform .4s ease;
+      position: relative;
+    }
+
+    .prod-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-6px);
+    }
+
+    .prod-watch {
+      width: 100%;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .prod-watch svg {
+      width: 130px;
+      height: 130px;
+      transition: transform .5s ease;
+    }
+
+    .prod-card:hover .prod-watch svg {
+      transform: rotate(8deg) scale(1.05);
+    }
+
+    .prod-tag {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .prod-card h3 {
+      font-size: 18px;
+      color: var(--ivory);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .prod-card .desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      min-height: 44px;
+    }
+
+    .prod-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .prod-price {
+      font-size: 15px;
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .prod-price small {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-inline-start: 4px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ivory-dim);
+      transition: all .3s ease;
+      background: none;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    /* ---------- craftsmanship ---------- */
+    .craft {
+      background: var(--bg-alt);
+      overflow: hidden;
+    }
+
+    .craft .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .craft-copy p {
+      color: var(--ivory-dim);
+      font-size: 15.5px;
+      line-height: 1.95;
+      margin-bottom: 20px;
+    }
+
+    .craft-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 36px;
+    }
+
+    .craft-stats div {
+      background: var(--bg-alt);
+      padding: 24px;
+    }
+
+    .craft-stats b {
+      display: block;
+      font-size: 26px;
+      color: var(--gold-light);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .craft-stats span {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .gear-stage {
+      position: relative;
+      height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gear {
+      position: absolute;
+    }
+
+    .gear.g1 {
+      width: 230px;
+      height: 230px;
+      animation: spin 26s linear infinite;
+    }
+
+    .gear.g2 {
+      width: 130px;
+      height: 130px;
+      top: 44%;
+      right: 16%;
+      animation: spinRev 18s linear infinite;
+    }
+
+    .gear.g3 {
+      width: 80px;
+      height: 80px;
+      bottom: 10%;
+      left: 18%;
+      animation: spin 12s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spinRev {
+      to {
+        transform: rotate(-360deg);
+      }
+    }
+
+    /* ---------- trust ---------- */
+    .trust-strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 34px 26px;
+      border-inline-start: 1px solid var(--line);
+    }
+
+    .trust-item:first-child {
+      border-inline-start: none;
+    }
+
+    .trust-item svg {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      color: var(--gold);
+    }
+
+    .trust-item b {
+      display: block;
+      font-size: 14px;
+      color: var(--ivory);
+      margin-bottom: 3px;
+    }
+
+    .trust-item span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ---------- testimonials ---------- */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .testi-card {
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+    }
+
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 19px;
+      line-height: 1.7;
+      color: var(--ivory);
+      margin-bottom: 22px;
+    }
+
+    .testi-who {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testi-who .dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--burgundy));
+      flex-shrink: 0;
+    }
+
+    .testi-who b {
+      display: block;
+      font-size: 13.5px;
+      color: var(--ivory);
+    }
+
+    .testi-who span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ---------- cta banner ---------- */
+    .cta-banner {
+      position: relative;
+      text-align: center;
+      padding: 110px 0;
+      background:
+        radial-gradient(ellipse at 50% 100%, rgba(201, 162, 75, .12), transparent 60%),
+        var(--bg-alt);
+      border-top: 1px solid var(--line);
+    }
+
+    .cta-banner h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800;
+      color: var(--ivory);
+      margin-bottom: 18px;
+    }
+
+    .cta-banner p {
+      color: var(--ivory-dim);
+      font-size: 15.5px;
+      margin-bottom: 38px;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      padding: 80px 0 30px;
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 50px;
+      margin-bottom: 60px;
+    }
+
+    .foot-brand p {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.85;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .foot-col h4 {
+      font-size: 14px;
+      color: var(--ivory);
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .foot-col a {
+      display: block;
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 13px;
+      transition: color .25s ease;
+    }
+
+    .foot-col a:hover {
+      color: var(--gold-light);
+    }
+
+    .foot-form {
+      display: flex;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .foot-form input {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 12px 14px;
+      color: var(--ivory);
+      font-family: inherit;
+      font-size: 13.5px;
+    }
+
+    .foot-form input:focus {
+      outline: none;
+    }
+
+    .foot-form button {
+      background: var(--gold);
+      color: #0b0c0f;
+      border: none;
+      padding: 0 18px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .foot-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 26px;
+      font-size: 12.5px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .foot-social {
+      display: flex;
+      gap: 14px;
+    }
+
+    .foot-social a {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: all .3s ease;
+    }
+
+    .foot-social a:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 980px) {
+
+      nav.main-nav,
+      .hero-ctas .btn.ghost {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero p.lead {
+        margin-inline: auto;
+      }
+
+      .hero-ctas {
+        justify-content: center;
+      }
+
+      .hero-stats {
+        justify-content: center;
+      }
+
+      .clock-wrap {
+        order: -1;
+      }
+
+      .coll-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .prod-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .craft .container {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .trust-item:nth-child(3) {
+        border-inline-start: none;
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+
+      .coll-grid,
+      .prod-grid,
+      .foot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-item {
+        border-inline-start: none;
+        border-top: 1px solid var(--line);
+      }
+
+      .trust-item:first-child {
+        border-top: none;
+      }
+
+      section {
+        padding: 80px 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="grain"></div>
+
+  <header id="siteHeader">
+    <div class="container">
+      <div class="brand">
+        <span class="name">ساعت‌کده</span>
+        <span class="sub latin">Saatkadeh — Fine Timepieces</span>
+      </div>
+      <nav class="main-nav">
+        <a href="#collections">مجموعه‌ها</a>
+        <a href="#products">منتخب فروشگاه</a>
+        <a href="#craft">ساخت و کیفیت</a>
+        <a href="#contact">تماس با ما</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <a href="#contact" class="btn ghost">مشاوره رایگان</a>
+        <button class="nav-toggle" id="navToggle" aria-label="باز کردن منو">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="rule"></span> از سال ۱۳۸۲ · ساخت دقیق، شکوه ماندگار</div>
+        <h1>زمان، وقتی <em>هنر</em> می‌شود</h1>
+        <p class="lead">مجموعه‌ای منتخب از ساعت‌های مکانیکال و کلاسیک، دست‌چین‌شده برای کسانی که هر لحظه را جدی
+          می‌گیرند. هر مکانیزم، روایتی از صبر و دقت است.</p>
+        <div class="hero-ctas">
+          <a href="#collections" class="btn solid">مشاهده‌ی مجموعه</a>
+          <a href="#contact" class="btn ghost">رزرو وقت حضوری</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>+۲۰ سال</b><span>تجربه‌ی ساعت‌فروشی</span></div>
+          <div><b>+۴۰۰۰</b><span>مشتری راضی</span></div>
+          <div><b>۲ سال</b><span>گارانتی کامل</span></div>
+        </div>
+      </div>
+      <div class="clock-wrap reveal">
+        <div class="clock-glow"></div>
+        <svg id="heroClock" viewBox="0 0 300 300">
+          <circle class="clock-bezel" cx="150" cy="150" r="140" />
+          <circle class="clock-face" cx="150" cy="150" r="128" />
+          <text class="clock-brand" x="150" y="95">SAATKADEH</text>
+          <g id="ticks"></g>
+          <line id="hourHand" class="hand hour" x1="150" y1="150" x2="150" y2="95" />
+          <line id="minHand" class="hand minute" x1="150" y1="150" x2="150" y2="65" />
+          <line id="secHand" class="hand second" x1="150" y1="168" x2="150" y2="55" />
+          <circle class="clock-cap" cx="150" cy="150" r="5" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <span>مکانیزم سوئیسی و ژاپنی</span>
+      <span>دست‌ساز در کارگاه ساعت‌کده</span>
+      <span>گارانتی ۲۵ ساله روی مکانیزم</span>
+      <span>ضدآب تا عمق ۱۰۰ متر</span>
+      <span>ارسال رایگان سراسر کشور</span>
+      <span>ضمانت اصالت کالا</span>
+      <span>مکانیزم سوئیسی و ژاپنی</span>
+      <span>دست‌ساز در کارگاه ساعت‌کده</span>
+      <span>گارانتی ۲۵ ساله روی مکانیزم</span>
+      <span>ضدآب تا عمق ۱۰۰ متر</span>
+      <span>ارسال رایگان سراسر کشور</span>
+      <span>ضمانت اصالت کالا</span>
+    </div>
+  </div>
+
+  <section class="collections" id="collections">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="rule"></span> مجموعه‌ها</div>
+        <h2>برای هر سبک، ساعتی متفاوت</h2>
+        <p>از خطوط قاطع تا ظرافت‌های ریز؛ هر مجموعه، شخصیتی مستقل دارد.</p>
+      </div>
+    </div>
+    <div class="coll-grid reveal">
+      <div class="coll-card">
+        <svg class="coll-icon" viewBox="0 0 48 48" fill="none" stroke="#c9a24b" stroke-width="1.4">
+          <circle cx="24" cy="24" r="17" />
+          <path d="M24 14v10l7 5" />
+          <path d="M24 3v5M24 40v5M3 24h5M40 24h5" />
+        </svg>
+        <h3>مردانه</h3>
+        <p>خطوط قدرتمند و بدنه‌ی استوار، برای دستانی که تصمیم می‌گیرند.</p>
+        <span class="arrow">مشاهده مجموعه ←</span>
+      </div>
+      <div class="coll-card">
+        <svg class="coll-icon" viewBox="0 0 48 48" fill="none" stroke="#c9a24b" stroke-width="1.4">
+          <circle cx="24" cy="24" r="15" />
+          <circle cx="24" cy="24" r="2.5" fill="#c9a24b" />
+          <path d="M24 24l6-4" />
+          <path d="M12 12l3 3M36 12l-3 3M12 36l3-3M36 36l-3-3" />
+        </svg>
+        <h3>زنانه</h3>
+        <p>ظرافتی که در جزئیات پیداست؛ سبک، سبک و بی‌نهایت زیبا.</p>
+        <span class="arrow">مشاهده مجموعه ←</span>
+      </div>
+      <div class="coll-card">
+        <svg class="coll-icon" viewBox="0 0 48 48" fill="none" stroke="#c9a24b" stroke-width="1.4">
+          <circle cx="24" cy="24" r="17" />
+          <circle cx="24" cy="24" r="10" />
+          <path d="M24 17v7l4 4" />
+        </svg>
+        <h3>کلاسیک مکانیکال</h3>
+        <p>میراثی که کوک می‌شود؛ بی‌نیاز از باتری، پُر از تاریخ.</p>
+        <span class="arrow">مشاهده مجموعه ←</span>
+      </div>
+      <div class="coll-card">
+        <svg class="coll-icon" viewBox="0 0 48 48" fill="none" stroke="#c9a24b" stroke-width="1.4">
+          <rect x="10" y="10" width="28" height="28" rx="6" />
+          <path d="M24 17v7l5 3" />
+          <path d="M16 6l4 4M32 6l-4 4" />
+        </svg>
+        <h3>اسپرت و دایوینگ</h3>
+        <p>ساخته‌شده برای حرکت؛ مقاوم، دقیق، همیشه آماده.</p>
+        <span class="arrow">مشاهده مجموعه ←</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="products">
+    <div class="container">
+      <div class="sec-head center reveal" style="margin-inline:auto;">
+        <div class="eyebrow" style="justify-content:center;"><span class="rule"></span> منتخب فروشگاه</div>
+        <h2>دست‌چین‌شده از میان دقیق‌ترین مکانیزم‌ها</h2>
+        <p>شش ساعتی که این فصل بیشترین توجه مشتریان ساعت‌کده را جلب کرده‌اند.</p>
+      </div>
+
+      <div class="prod-grid">
+        <div class="prod-card reveal">
+          <div class="prod-watch">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#c9a24b" stroke-width="2" />
+              <circle cx="60" cy="60" r="38" fill="#0f1015" stroke="#3a3220" stroke-width="1" />
+              <line x1="60" y1="60" x2="60" y2="34" stroke="#efe9db" stroke-width="3" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="76" y2="66" stroke="#efe9db" stroke-width="2.4" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="60" y2="42" stroke="#7a2e3a" stroke-width="1.2" />
+              <rect x="52" y="14" width="16" height="10" rx="2" fill="none" stroke="#c9a24b" stroke-width="2" />
+            </svg>
+          </div>
+          <div class="prod-tag">کرونوگراف</div>
+          <h3>کرونوگراف نیمه‌شب</h3>
+          <p class="desc">بدنه‌ی استیل مشکی‌کاری‌شده با زیرصفحه‌های طلایی و بند چرم مشکی.</p>
+          <div class="prod-foot"><span class="prod-price">۴۸,۵۰۰,۰۰۰<small> تومان</small></span><button class="icon-btn"
+              aria-label="افزودن به سبد">＋</button></div>
+        </div>
+
+        <div class="prod-card reveal">
+          <div class="prod-watch">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#e6c877" stroke-width="2" />
+              <circle cx="60" cy="60" r="38" fill="#1a1410" stroke="#5c3a2a" stroke-width="1" />
+              <line x1="60" y1="60" x2="60" y2="36" stroke="#e6c877" stroke-width="3" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="74" y2="68" stroke="#e6c877" stroke-width="2.4" stroke-linecap="round" />
+              <rect x="50" y="12" width="20" height="12" rx="2" fill="none" stroke="#e6c877" stroke-width="2" />
+            </svg>
+          </div>
+          <div class="prod-tag">لوکس</div>
+          <h3>الگانس رزگلد</h3>
+          <p class="desc">قاب رزگلد با صفحه‌ی مرواریدی و بند چرم شرابی؛ برای مجالس خاص.</p>
+          <div class="prod-foot"><span class="prod-price">۶۲,۰۰۰,۰۰۰<small> تومان</small></span><button class="icon-btn"
+              aria-label="افزودن به سبد">＋</button></div>
+        </div>
+
+        <div class="prod-card reveal">
+          <div class="prod-watch">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#8b8d94" stroke-width="2" />
+              <circle cx="60" cy="60" r="38" fill="#141518" stroke="#3a3a3d" stroke-width="1" />
+              <line x1="60" y1="60" x2="60" y2="36" stroke="#efe9db" stroke-width="3" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="72" y2="70" stroke="#efe9db" stroke-width="2.4" stroke-linecap="round" />
+              <rect x="48" y="12" width="24" height="12" rx="2" fill="none" stroke="#8b8d94" stroke-width="2" />
+            </svg>
+          </div>
+          <div class="prod-tag">کلاسیک</div>
+          <h3>استیل کلاسیک</h3>
+          <p class="desc">طراحی بی‌زمان با بند استیل مفصلی؛ مناسب استفاده‌ی روزمره.</p>
+          <div class="prod-foot"><span class="prod-price">۳۱,۲۰۰,۰۰۰<small> تومان</small></span><button class="icon-btn"
+              aria-label="افزودن به سبد">＋</button></div>
+        </div>
+
+        <div class="prod-card reveal">
+          <div class="prod-watch">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#4a7fb0" stroke-width="2" />
+              <circle cx="60" cy="60" r="38" fill="#0e1620" stroke="#2a4a63" stroke-width="1" />
+              <line x1="60" y1="60" x2="60" y2="36" stroke="#efe9db" stroke-width="3" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="74" y2="68" stroke="#efe9db" stroke-width="2.4" stroke-linecap="round" />
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#4a7fb0" stroke-width="6" stroke-dasharray="4 260" />
+            </svg>
+          </div>
+          <div class="prod-tag">اسپرت</div>
+          <h3>اسپرت دایور</h3>
+          <p class="desc">مقاوم تا عمق ۱۰۰ متر با بزل چرخان و صفحه‌ی آبی سرمه‌ای.</p>
+          <div class="prod-foot"><span class="prod-price">۳۹,۹۰۰,۰۰۰<small> تومان</small></span><button class="icon-btn"
+              aria-label="افزودن به سبد">＋</button></div>
+        </div>
+
+        <div class="prod-card reveal">
+          <div class="prod-watch">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#c9a24b" stroke-width="2" />
+              <circle cx="60" cy="60" r="38" fill="#efe9db" stroke="#c9a24b" stroke-width="1" />
+              <line x1="60" y1="60" x2="60" y2="38" stroke="#15171d" stroke-width="3" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="72" y2="68" stroke="#15171d" stroke-width="2.4" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="prod-tag">مینیمال</div>
+          <h3>مینیمال ایوری</h3>
+          <p class="desc">صفحه‌ی عاجی‌رنگ و بند چرم قهوه‌ای؛ سادگی در بهترین شکل.</p>
+          <div class="prod-foot"><span class="prod-price">۲۷,۸۰۰,۰۰۰<small> تومان</small></span><button class="icon-btn"
+              aria-label="افزودن به سبد">＋</button></div>
+        </div>
+
+        <div class="prod-card reveal">
+          <div class="prod-watch">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#c9a24b" stroke-width="2" />
+              <circle cx="60" cy="60" r="38" fill="#0a0a0c" stroke="#7a2e3a" stroke-width="1" />
+              <line x1="60" y1="60" x2="60" y2="34" stroke="#c9a24b" stroke-width="3" stroke-linecap="round" />
+              <line x1="60" y1="60" x2="76" y2="66" stroke="#c9a24b" stroke-width="2.4" stroke-linecap="round" />
+              <rect x="50" y="10" width="20" height="12" rx="2" fill="none" stroke="#7a2e3a" stroke-width="2" />
+            </svg>
+          </div>
+          <div class="prod-tag">هریتیج</div>
+          <h3>هریتیج مشکی</h3>
+          <p class="desc">قابی تیره با جزئیات طلایی و بند چرم مشکی دست‌دوز.</p>
+          <div class="prod-foot"><span class="prod-price">۵۵,۰۰۰,۰۰۰<small> تومان</small></span><button class="icon-btn"
+              aria-label="افزودن به سبد">＋</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="craft" id="craft">
+    <div class="container">
+      <div class="craft-copy reveal">
+        <div class="eyebrow"><span class="rule"></span> ساخت و کیفیت</div>
+        <h2 style="font-size:clamp(26px,3.2vw,38px); font-weight:800; margin-bottom:20px; color:var(--ivory);">ساخته‌شده
+          با دقتِ یک ثانیه</h2>
+        <p>هر ساعت ساعت‌کده پیش از رسیدن به ویترین، مسیری طولانی را طی می‌کند. مکانیزم‌ها به‌صورت دستی مونتاژ، تنظیم و
+          بارها آزمایش می‌شوند تا دقتِ زمان‌سنجی، حتی پس از سال‌ها، دست‌نخورده بماند.</p>
+        <p>ما به فلز، شیشه و چرمی که استفاده می‌کنیم به چشم مواد اولیه نگاه نمی‌کنیم؛ آن‌ها بخشی از روایتی هستند که روی
+          مچ شما ادامه پیدا می‌کند.</p>
+        <div class="craft-stats">
+          <div><b>۲۰۰+</b><span>قطعه در هر مکانیزم</span></div>
+          <div><b>۷۲ ساعت</b><span>ذخیره‌ی کوک</span></div>
+          <div><b>۴۸ ساعت</b><span>تست دقت زمان‌سنجی</span></div>
+          <div><b>۲ سال</b><span>گارانتی کامل مکانیزم</span></div>
+        </div>
+      </div>
+      <div class="gear-stage reveal">
+        <svg class="gear g1" viewBox="0 0 100 100">
+          <g id="gearA"></g>
+        </svg>
+        <svg class="gear g2" viewBox="0 0 100 100">
+          <g id="gearB"></g>
+        </svg>
+        <svg class="gear g3" viewBox="0 0 100 100">
+          <g id="gearC"></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="trust-strip">
+    <div class="container">
+      <div class="trust-grid">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 2l8 3v6c0 5-3.4 8.7-8 11-4.6-2.3-8-6-8-11V5l8-3z" />
+          </svg>
+          <div><b>گارانتی ۲۴ ماهه</b><span>پوشش کامل مکانیزم</span></div>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="2" y="7" width="15" height="11" rx="1.5" />
+            <path d="M17 10h3l2 3v5h-5" />
+            <circle cx="7" cy="19" r="1.6" />
+            <circle cx="18" cy="19" r="1.6" />
+          </svg>
+          <div><b>ارسال بیمه‌شده</b><span>به سراسر کشور</span></div>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M9 12l2 2 4-4" />
+            <circle cx="12" cy="12" r="9" />
+          </svg>
+          <div><b>ضمانت اصالت</b><span>۱۰۰٪ کالای اورجینال</span></div>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="2" y="5" width="20" height="14" rx="2" />
+            <path d="M2 10h20" />
+          </svg>
+          <div><b>پرداخت اقساطی</b><span>تا ۱۲ ماه</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="sec-head center reveal" style="margin-inline:auto;">
+        <div class="eyebrow" style="justify-content:center;"><span class="rule"></span> مشتریان ساعت‌کده</div>
+        <h2>روایتی که مشتریان می‌گویند</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <p class="testi-quote">«از لحظه‌ی سفارش تا بسته‌بندی، همه‌چیز حس یک هدیه‌ی خاص را داشت. کیفیت مکانیزم واقعاً
+            فراتر از قیمتش بود.»</p>
+          <div class="testi-who">
+            <div class="dot"></div>
+            <div><b>آرش نجفی</b><span>خریدار کرونوگراف نیمه‌شب</span></div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <p class="testi-quote">«ساعتی که برای سالگرد ازدواجم خریدم، هنوز هم بی‌نقص کار می‌کند. مشاوره‌ی تیم ساعت‌کده
+            هم عالی بود.»</p>
+          <div class="testi-who">
+            <div class="dot"></div>
+            <div><b>مهسا رحیمی</b><span>خریدار الگانس رزگلد</span></div>
+          </div>
+        </div>
+        <div class="testi-card reveal">
+          <p class="testi-quote">«برای شنا و غواصی هم امتحانش کردم؛ هم مقاوم بود، هم شیک. دقیقاً همون چیزی که دنبالش
+            بودم.»</p>
+          <div class="testi-who">
+            <div class="dot"></div>
+            <div><b>بهراد کریمی</b><span>خریدار اسپرت دایور</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner" id="contact">
+    <div class="container reveal">
+      <h2>ساعت بعدی شما، منتظر شماست</h2>
+      <p>برای مشاوره‌ی رایگان و انتخاب دقیق‌ترین گزینه، همین حالا با ما در ارتباط باشید.</p>
+      <a href="#" class="btn solid">رزرو وقت مشاوره</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="brand"><span class="name">ساعت‌کده</span><span class="sub latin">Saatkadeh — Fine
+              Timepieces</span></div>
+          <p>بوتیک تخصصی ساعت‌های مکانیکال و کلاسیک؛ جایی که هر ثانیه با دقت طراحی شده است.</p>
+          <form class="foot-form" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="ایمیل شما" aria-label="ایمیل برای خبرنامه">
+            <button type="submit">عضویت</button>
+          </form>
+        </div>
+        <div class="foot-col">
+          <h4>مجموعه‌ها</h4>
+          <a href="#collections">مردانه</a>
+          <a href="#collections">زنانه</a>
+          <a href="#collections">کلاسیک مکانیکال</a>
+          <a href="#collections">اسپرت و دایوینگ</a>
+        </div>
+        <div class="foot-col">
+          <h4>درباره ما</h4>
+          <a href="#craft">ساخت و کیفیت</a>
+          <a href="#products">منتخب فروشگاه</a>
+          <a href="#">داستان ساعت‌کده</a>
+          <a href="#">فرصت‌های شغلی</a>
+        </div>
+        <div class="foot-col">
+          <h4>خدمات مشتریان</h4>
+          <a href="#contact">تماس با ما</a>
+          <a href="#">راهنمای اندازه‌گیری</a>
+          <a href="#">شرایط گارانتی</a>
+          <a href="#">پیگیری سفارش</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© ۱۴۰۳ ساعت‌کده — تمامی حقوق محفوظ است.</span>
+        <div class="foot-social">
+          <a href="#" aria-label="اینستاگرام"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" />
+            </svg></a>
+          <a href="#" aria-label="تلگرام"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.6">
+              <path d="M21 4L2 12l7 2 2 6 3-4 5 3 2-15z" />
+            </svg></a>
+          <a href="#" aria-label="واتساپ"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.6">
+              <path d="M4 20l1.4-4A8 8 0 1112 20a8 8 0 01-5-1.7z" />
+            </svg></a>
+        </div>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // header scroll state
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    // mobile nav toggle -> simply scroll to contact / show alert nav (basic fallback)
+    document.getElementById('navToggle').addEventListener('click', () => {
+      const nav = document.querySelector('.main-nav');
+      const open = nav.style.display === 'flex';
+      nav.style.cssText = open ? '' : 'display:flex; flex-direction:column; position:fixed; top:70px; inset-inline:20px; background:#111318; border:1px solid var(--line); padding:20px; border-radius:4px; z-index:200; gap:18px;';
+    });
+
+    // reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ticks for hero clock
+    const ticksGroup = document.getElementById('ticks');
+    for (let i = 0; i < 60; i++) {
+      const angle = (i * 6) * Math.PI / 180;
+      const isMajor = i % 5 === 0;
+      const r1 = isMajor ? 108 : 116;
+      const r2 = 122;
+      const x1 = 150 + r1 * Math.sin(angle);
+      const y1 = 150 - r1 * Math.cos(angle);
+      const x2 = 150 + r2 * Math.sin(angle);
+      const y2 = 150 - r2 * Math.cos(angle);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+      line.setAttribute('class', 'tick' + (isMajor ? ' major' : ''));
+      ticksGroup.appendChild(line);
+    }
+
+    // real-time analog hands
+    const hourHand = document.getElementById('hourHand');
+    const minHand = document.getElementById('minHand');
+    const secHand = document.getElementById('secHand');
+    function setTime() {
+      const now = new Date();
+      const h = now.getHours() % 12, m = now.getMinutes(), s = now.getSeconds();
+      const hDeg = (h + m / 60) * 30;
+      const mDeg = (m + s / 60) * 6;
+      const sDeg = s * 6;
+      hourHand.style.transform = `rotate(${hDeg}deg)`;
+      minHand.style.transform = `rotate(${mDeg}deg)`;
+      secHand.style.transform = `rotate(${sDeg}deg)`;
+    }
+    setTime();
+    setInterval(setTime, 1000);
+
+    // generate mechanical gear SVGs
+    function buildGear(el, teeth, outerR, innerR, holeR) {
+      const cx = 50, cy = 50;
+      const step = (Math.PI * 2) / teeth;
+      let path = '';
+      for (let i = 0; i < teeth; i++) {
+        const a0 = i * step;
+        const a1 = a0 + step * 0.5;
+        const a2 = a0 + step;
+        const p = (a, r) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+        const [x0, y0] = p(a0, innerR);
+        const [x1, y1] = p(a0, outerR);
+        const [x2, y2] = p(a1, outerR);
+        const [x3, y3] = p(a1, innerR);
+        const [x4, y4] = p(a2, innerR);
+        path += `M${x0},${y0} L${x1},${y1} L${x2},${y2} L${x3},${y3} L${x4},${y4} `;
+      }
+      const ns = 'http://www.w3.org/2000/svg';
+      const g1 = document.createElementNS(ns, 'path');
+      g1.setAttribute('d', path);
+      g1.setAttribute('fill', 'none');
+      g1.setAttribute('stroke', '#c9a24b');
+      g1.setAttribute('stroke-width', '1.6');
+      g1.setAttribute('stroke-linejoin', 'round');
+      g1.setAttribute('opacity', '0.55');
+      const g2 = document.createElementNS(ns, 'circle');
+      g2.setAttribute('cx', cx); g2.setAttribute('cy', cy); g2.setAttribute('r', holeR);
+      g2.setAttribute('fill', 'none'); g2.setAttribute('stroke', '#c9a24b'); g2.setAttribute('stroke-width', '1.2'); g2.setAttribute('opacity', '0.4');
+      el.appendChild(g1); el.appendChild(g2);
+    }
+    buildGear(document.getElementById('gearA'), 12, 42, 34, 14);
+    buildGear(document.getElementById('gearB'), 10, 40, 32, 12);
+    buildGear(document.getElementById('gearC'), 8, 40, 30, 10);
+  </script>
+
+</body>
+
+</html>

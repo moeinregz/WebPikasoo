@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تنور | نانوایی محله</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Vazirmatn:wght@200;300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --flour: #F6EFE0;
+      --flour-soft: #EFE4CC;
+      --crust-dark: #2B1810;
+      --crust: #6B3A1D;
+      --gold: #C17F2B;
+      --gold-soft: #D89C4A;
+      --ember: #D6491C;
+      --wheat: #E8CD8A;
+      --ink: #2B1810;
+      --paper-shadow: 0 20px 50px -20px rgba(43, 24, 16, 0.35);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--flour);
+      color: var(--ink);
+      font-family: 'Vazirmatn', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    h1,
+    h2,
+    h3,
+    .display {
+      font-family: 'Aref Ruqaa', serif;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    ::selection {
+      background: var(--ember);
+      color: var(--flour);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ============ NAV ============ */
+    .nav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 6vw;
+      transition: background .4s ease, padding .4s ease, box-shadow .4s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(246, 239, 224, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 14px 6vw;
+      box-shadow: 0 8px 30px -15px rgba(43, 24, 16, 0.3);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Aref Ruqaa', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--crust-dark);
+    }
+
+    .brand svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      font-size: .98rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 4px;
+      opacity: .85;
+      transition: opacity .25s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--ember);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-cta {
+      background: var(--crust-dark);
+      color: var(--flour) !important;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: .92rem;
+      font-weight: 600;
+      transition: transform .25s, background .25s;
+    }
+
+    .nav-cta:hover {
+      background: var(--ember);
+      transform: translateY(-2px);
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 105%, rgba(214, 73, 28, 0.35), transparent 70%),
+        linear-gradient(180deg, var(--flour) 0%, var(--flour-soft) 60%, var(--wheat) 100%);
+      padding: 120px 6vw 80px;
+    }
+
+    .oven-glow {
+      position: absolute;
+      bottom: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      max-width: 160vw;
+      background: radial-gradient(circle, rgba(214, 73, 28, 0.55) 0%, rgba(193, 127, 43, 0.28) 40%, transparent 72%);
+      filter: blur(10px);
+      animation: glowPulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        opacity: .75;
+        transform: translateX(-50%) scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.06);
+      }
+    }
+
+    .dust {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .dust span {
+      position: absolute;
+      bottom: -10px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(232, 205, 138, 0.8);
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: .9;
+      }
+
+      90% {
+        opacity: .5;
+      }
+
+      100% {
+        transform: translateY(-110vh) translateX(var(--drift, 20px));
+        opacity: 0;
+      }
+    }
+
+    .dough-blob {
+      position: absolute;
+      z-index: 0;
+      width: min(560px, 78vw);
+      height: min(560px, 78vw);
+      background: radial-gradient(circle at 35% 30%, rgba(255, 248, 232, 0.9), rgba(232, 205, 138, 0.55) 55%, rgba(193, 127, 43, 0.15) 80%);
+      animation: doughRise 9s ease-in-out infinite;
+      filter: blur(2px);
+      opacity: .9;
+    }
+
+    @keyframes doughRise {
+
+      0%,
+      100% {
+        border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+        transform: scale(1) rotate(0deg);
+      }
+
+      33% {
+        border-radius: 60% 40% 45% 55% / 55% 60% 40% 45%;
+        transform: scale(1.04) rotate(3deg);
+      }
+
+      66% {
+        border-radius: 48% 52% 38% 62% / 40% 55% 45% 60%;
+        transform: scale(0.98) rotate(-2deg);
+      }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .85rem;
+      letter-spacing: .05em;
+      font-weight: 600;
+      color: var(--ember);
+      margin-bottom: 26px;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: '';
+      width: 26px;
+      height: 1px;
+      background: var(--ember);
+      opacity: .6;
+    }
+
+    .hero h1 {
+      font-size: clamp(3.2rem, 9vw, 6.4rem);
+      color: var(--crust-dark);
+      margin-bottom: 22px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--ember);
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      color: var(--crust);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 34px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s, background .3s;
+    }
+
+    .btn-primary {
+      background: var(--ember);
+      color: var(--flour);
+      box-shadow: 0 14px 30px -12px rgba(214, 73, 28, 0.6);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px -12px rgba(214, 73, 28, 0.75);
+    }
+
+    .btn-ghost {
+      border: 1.5px solid var(--crust-dark);
+      color: var(--crust-dark);
+    }
+
+    .btn-ghost:hover {
+      background: var(--crust-dark);
+      color: var(--flour);
+      transform: translateY(-3px);
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-size: .78rem;
+      color: var(--crust);
+      opacity: .7;
+      z-index: 2;
+    }
+
+    .scroll-cue span.line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(180deg, var(--crust), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0% {
+        transform: scaleY(0);
+        transform-origin: top;
+      }
+
+      50% {
+        transform: scaleY(1);
+        transform-origin: top;
+      }
+
+      50.01% {
+        transform-origin: bottom;
+      }
+
+      100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    /* ============ CRUST DIVIDER ============ */
+    .crust-divider {
+      width: 100%;
+      height: 60px;
+      display: block;
+      position: relative;
+      z-index: 3;
+    }
+
+    .crust-divider svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ============ SECTION SHELL ============ */
+    section {
+      position: relative;
+      padding: 120px 6vw;
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+
+    .section-head .eyebrow {
+      color: var(--gold);
+    }
+
+    .section-head h2 {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      color: var(--crust-dark);
+    }
+
+    .section-head p {
+      color: var(--crust);
+      margin-top: 16px;
+      font-size: 1.05rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .8s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============ MENU ============ */
+    .menu {
+      background: var(--flour);
+    }
+
+    .menu-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .item-card {
+      position: relative;
+      background: #fffaf0;
+      border: 1px solid rgba(107, 58, 29, 0.12);
+      border-radius: 22px;
+      padding: 34px 28px 28px;
+      transition: transform .4s cubic-bezier(.2, .8, .2, 1), box-shadow .4s;
+      overflow: hidden;
+    }
+
+    .item-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--paper-shadow);
+    }
+
+    .item-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 18px;
+      color: var(--gold);
+      position: relative;
+    }
+
+    .steam {
+      position: absolute;
+      top: -26px;
+      right: 14px;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .item-card:hover .steam {
+      opacity: .85;
+    }
+
+    .steam path {
+      stroke: var(--gold-soft);
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: steamRise 1.8s ease-in-out infinite;
+    }
+
+    .steam path:nth-child(2) {
+      animation-delay: .3s;
+    }
+
+    @keyframes steamRise {
+      0% {
+        stroke-dashoffset: 40;
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+        transform: translateY(-14px);
+      }
+    }
+
+    .item-card h3 {
+      font-size: 1.4rem;
+      color: var(--crust-dark);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .item-card p {
+      color: var(--crust);
+      font-size: .92rem;
+      margin-bottom: 18px;
+    }
+
+    .item-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed rgba(107, 58, 29, 0.25);
+      padding-top: 16px;
+      font-weight: 700;
+      color: var(--ember);
+      font-size: 1.05rem;
+    }
+
+    .item-price span.unit {
+      font-size: .8rem;
+      color: var(--crust);
+      font-weight: 500;
+    }
+
+    /* ============ PROCESS ============ */
+    .process {
+      background: var(--crust-dark);
+      color: var(--flour);
+      background-image: radial-gradient(circle at 20% 20%, rgba(214, 73, 28, 0.18), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(193, 127, 43, 0.18), transparent 45%);
+    }
+
+    .process .section-head h2 {
+      color: var(--flour);
+    }
+
+    .process .section-head p {
+      color: var(--wheat);
+    }
+
+    .process .eyebrow {
+      color: var(--gold-soft);
+    }
+
+    .process .eyebrow::before,
+    .process .eyebrow::after {
+      background: var(--gold-soft);
+    }
+
+    .steps {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 38px;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, rgba(232, 205, 138, 0.4) 0 10px, transparent 10px 20px);
+      z-index: 0;
+    }
+
+    .step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 14px;
+    }
+
+    .step-num {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 26px;
+      border-radius: 50%;
+      background: var(--crust-dark);
+      border: 2px solid var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Aref Ruqaa', serif;
+      font-size: 1.8rem;
+      color: var(--wheat);
+      transition: background .3s, transform .3s;
+    }
+
+    .step:hover .step-num {
+      background: var(--ember);
+      border-color: var(--ember);
+      transform: scale(1.08);
+    }
+
+    .step h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--flour);
+    }
+
+    .step p {
+      font-size: .9rem;
+      color: var(--wheat);
+      opacity: .85;
+    }
+
+    /* ============ STORY ============ */
+    .story {
+      background: var(--wheat);
+    }
+
+    .story-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .story-art {
+      position: relative;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .story-art .ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(43, 24, 16, 0.25);
+      animation: spin 60s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .story-art svg {
+      width: 60%;
+      height: 60%;
+      color: var(--crust-dark);
+    }
+
+    .story-text .eyebrow {
+      color: var(--ember);
+    }
+
+    .story-text .eyebrow::before,
+    .story-text .eyebrow::after {
+      background: var(--ember);
+    }
+
+    .story-text h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: var(--crust-dark);
+      margin-bottom: 22px;
+    }
+
+    .story-text p {
+      color: var(--crust-dark);
+      opacity: .85;
+      margin-bottom: 18px;
+      font-size: 1.02rem;
+    }
+
+    .story-sign {
+      margin-top: 26px;
+      font-family: 'Aref Ruqaa', serif;
+      font-size: 1.3rem;
+      color: var(--crust-dark);
+    }
+
+    /* ============ HOURS / LOCATION ============ */
+    .hours {
+      background: var(--crust-dark);
+      color: var(--flour);
+    }
+
+    .hours-card {
+      max-width: 960px;
+      margin: 0 auto;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(232, 205, 138, 0.18);
+      border-radius: 28px;
+      padding: 56px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 56px;
+    }
+
+    .hours-card h3 {
+      font-size: 1.5rem;
+      color: var(--wheat);
+      margin-bottom: 22px;
+    }
+
+    .hours-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(232, 205, 138, 0.12);
+      font-size: .98rem;
+    }
+
+    .hours-list li span:last-child {
+      color: var(--gold-soft);
+      font-weight: 600;
+    }
+
+    .addr p {
+      color: var(--wheat);
+      opacity: .85;
+      margin-bottom: 22px;
+      line-height: 2;
+    }
+
+    .addr .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ============ FOOTER ============ */
+    footer {
+      background: var(--ember);
+      color: var(--flour);
+      padding: 90px 6vw 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    footer .brand {
+      color: var(--flour);
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    footer h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 18px;
+    }
+
+    footer p.sub {
+      opacity: .9;
+      margin-bottom: 34px;
+    }
+
+    .foot-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 0 30px;
+      font-size: .92rem;
+      flex-wrap: wrap;
+    }
+
+    .foot-links a {
+      opacity: .85;
+      transition: opacity .2s;
+    }
+
+    .foot-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .copyright {
+      font-size: .8rem;
+      opacity: .7;
+      margin-top: 20px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width:900px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 50px;
+      }
+
+      .steps::before {
+        display: none;
+      }
+
+      .story-wrap {
+        grid-template-columns: 1fr;
+        gap: 50px;
+      }
+
+      .story-art {
+        order: -1;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .hours-card {
+        grid-template-columns: 1fr;
+        padding: 36px;
+      }
+    }
+
+    @media (max-width:640px) {
+      .nav-links {
+        position: fixed;
+        inset: 0 0 0 auto;
+        width: 78vw;
+        height: 100vh;
+        background: var(--flour);
+        flex-direction: column;
+        justify-content: center;
+        transform: translateX(100%);
+        transition: transform .4s ease;
+        gap: 28px;
+        box-shadow: -10px 0 40px rgba(0, 0, 0, .15);
+      }
+
+      .nav-links.open {
+        transform: translateX(0);
+      }
+
+      .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 200;
+        padding: 6px;
+      }
+
+      .nav-toggle span {
+        width: 24px;
+        height: 2px;
+        background: var(--crust-dark);
+        border-radius: 2px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 90px 6vw;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M24 4C15 4 9 12 9 20c0 3 1 5 2 7-3 1-5 4-5 8 0 5 4 9 9 9h18c5 0 9-4 9-9 0-4-2-7-5-8 1-2 2-4 2-7 0-8-6-16-15-16Z"
+          stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" />
+        <path d="M24 4c3 4 3 9 0 13M17 8c2 3 2 7 0 10M31 8c-2 3-2 7 0 10" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" />
+      </svg>
+      تنور
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#menu">منو</a></li>
+      <li><a href="#process">از خمیر تا نان</a></li>
+      <li><a href="#story">قصه ما</a></li>
+      <li><a href="#hours">ساعات کاری</a></li>
+      <li><a href="#hours" class="nav-cta">سفارش تلفنی</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="باز کردن منو">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="hero">
+    <div class="oven-glow"></div>
+    <div class="dough-blob"></div>
+    <div class="dust" id="dust"></div>
+    <div class="hero-inner reveal in">
+      <p class="eyebrow">نانوایی محله، از سال ۱۳۷۲</p>
+      <h1>بوی نان تازه،<br>هر روز <em>از تنور</em></h1>
+      <p>هر صبح قبل از آفتاب، خمیر دیشب را باز می‌کنیم و تنور را روشن می‌کنیم؛ تا وقتی شما بیدار می‌شوید، نان تازه
+        منتظرتان باشد.</p>
+      <div class="hero-actions">
+        <a href="#menu" class="btn btn-primary">دیدن منوی امروز</a>
+        <a href="#story" class="btn btn-ghost">قصه تنور</a>
+      </div>
+    </div>
+    <div class="scroll-cue"><span class="line"></span>پایین بروید</div>
+  </section>
+
+  <div class="crust-divider">
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+      <path
+        d="M0,20 Q30,45 60,22 T120,25 Q150,5 180,28 T240,18 Q270,40 300,20 T360,26 Q390,8 420,24 T480,20 Q510,42 540,22 T600,24 Q630,6 660,26 T720,20 Q750,40 780,22 T840,25 Q870,8 900,24 T960,20 Q990,42 1020,22 T1080,24 Q1110,6 1140,26 T1200,20 L1200,0 L0,0 Z"
+        fill="var(--flour)" />
+    </svg>
+  </div>
+
+  <section class="menu" id="menu">
+    <div class="section-head reveal">
+      <p class="eyebrow">امروز از تنور</p>
+      <h2>تازه‌های امروز</h2>
+      <p>هرچه اینجاست، همین امروز خمیر شده و پخته شده؛ چیزی از دیروز نمی‌ماند.</p>
+    </div>
+    <div class="menu-grid">
+
+      <div class="item-card reveal">
+        <div class="item-icon">
+          <svg class="steam" viewBox="0 0 40 30" width="40" height="30">
+            <path d="M8 28C8 20 14 20 14 12" />
+            <path d="M18 28C18 20 24 20 24 12" />
+          </svg>
+          <svg viewBox="0 0 64 64" fill="none">
+            <ellipse cx="32" cy="34" rx="26" ry="12" stroke="currentColor" stroke-width="2.4" />
+            <path d="M10 34c2-4 8-6 22-6s20 2 22 6M14 30c3-2 8-3 18-3s15 1 18 3" stroke="currentColor"
+              stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </div>
+        <h3>بربری تازه</h3>
+        <p>نان سنتی کشیده با روکش کنجد و روغن زرد، تازه از تنور سنگی</p>
+        <div class="item-price"><span>۴۵,۰۰۰</span><span class="unit">تومان / عدد</span></div>
+      </div>
+
+      <div class="item-card reveal">
+        <div class="item-icon">
+          <svg class="steam" viewBox="0 0 40 30" width="40" height="30">
+            <path d="M8 28C8 20 14 20 14 12" />
+            <path d="M18 28C18 20 24 20 24 12" />
+          </svg>
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="10" y="22" width="44" height="20" rx="6" stroke="currentColor" stroke-width="2.4" />
+            <path d="M16 26v12M24 24v16M32 23v18M40 24v16M48 26v12" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" />
+          </svg>
+        </div>
+        <h3>سنگک</h3>
+        <p>روی سنگ‌ریزه‌های داغ پخته می‌شود، برای همین این‌قدر ترد و خوش‌عطر است</p>
+        <div class="item-price"><span>۵۵,۰۰۰</span><span class="unit">تومان / عدد</span></div>
+      </div>
+
+      <div class="item-card reveal">
+        <div class="item-icon">
+          <svg class="steam" viewBox="0 0 40 30" width="40" height="30">
+            <path d="M8 28C8 20 14 20 14 12" />
+            <path d="M18 28C18 20 24 20 24 12" />
+          </svg>
+          <svg viewBox="0 0 64 64" fill="none">
+            <ellipse cx="32" cy="32" rx="24" ry="8" stroke="currentColor" stroke-width="2.4" />
+          </svg>
+        </div>
+        <h3>لواش نازک</h3>
+        <p>ورقه‌های نازک و نرم، مناسب سفره روزانه و پیچیدن انواع خوراک</p>
+        <div class="item-price"><span>۲۵,۰۰۰</span><span class="unit">تومان / بسته</span></div>
+      </div>
+
+      <div class="item-card reveal">
+        <div class="item-icon">
+          <svg class="steam" viewBox="0 0 40 30" width="40" height="30">
+            <path d="M8 28C8 20 14 20 14 12" />
+            <path d="M18 28C18 20 24 20 24 12" />
+          </svg>
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="2.4" />
+            <path d="M32 16v8M32 40v8M16 32h8M40 32h8" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" />
+          </svg>
+        </div>
+        <h3>شیرمال زعفرانی</h3>
+        <p>خمیر شیرین با زعفران و شیر، مخصوص صبحانه‌های آرام</p>
+        <div class="item-price"><span>۳۵,۰۰۰</span><span class="unit">تومان / عدد</span></div>
+      </div>
+
+      <div class="item-card reveal">
+        <div class="item-icon">
+          <svg class="steam" viewBox="0 0 40 30" width="40" height="30">
+            <path d="M8 28C8 20 14 20 14 12" />
+            <path d="M18 28C18 20 24 20 24 12" />
+          </svg>
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M14 40c8-24 28-24 36 0" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+            <path d="M18 38q6-14 14-14M32 38q6-14 14-14" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" />
+          </svg>
+        </div>
+        <h3>کروسان کره‌ای</h3>
+        <p>هزار لایه، کره فراوان، و همان صدای «کراچ» معروفش</p>
+        <div class="item-price"><span>۴۰,۰۰۰</span><span class="unit">تومان / عدد</span></div>
+      </div>
+
+      <div class="item-card reveal">
+        <div class="item-icon">
+          <svg class="steam" viewBox="0 0 40 30" width="40" height="30">
+            <path d="M8 28C8 20 14 20 14 12" />
+            <path d="M18 28C18 20 24 20 24 12" />
+          </svg>
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="18" y="12" width="10" height="40" rx="5" stroke="currentColor" stroke-width="2.4" />
+            <path d="M20 18l6 4M20 26l6 4M20 34l6 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+          </svg>
+        </div>
+        <h3>باگت فرانسوی</h3>
+        <p>پوسته‌ای ترد و مغزی نرم، برای عاشقان نان اروپایی</p>
+        <div class="item-price"><span>۵۰,۰۰۰</span><span class="unit">تومان / عدد</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="section-head reveal">
+      <p class="eyebrow">پشت پرده</p>
+      <h2>از خمیر تا نان</h2>
+      <p>چهار مرحله، هیچ‌کدام قابل عجله نیست</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">۱</div>
+        <h3>خمیرسازی</h3>
+        <p>آرد، آب، نمک و کمی صبر؛ همین چهار چیز</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">۲</div>
+        <h3>تخمیر</h3>
+        <p>چند ساعت آرام، در سکوت و تاریکی</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">۳</div>
+        <h3>شکل‌دهی</h3>
+        <p>با دست، هر قرص خمیر یک شکل می‌گیرد</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">۴</div>
+        <h3>تنور</h3>
+        <p>چند دقیقه در آتش، تا طلایی و ترد شود</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="story-wrap">
+      <div class="story-art reveal">
+        <div class="ring"></div>
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M20 60c0-22 13-40 30-40s30 18 30 40" stroke="currentColor" stroke-width="2" />
+          <path d="M15 60h70v6a8 8 0 0 1-8 8H23a8 8 0 0 1-8-8v-6Z" stroke="currentColor" stroke-width="2" />
+          <path d="M35 40c2-6 6-10 15-10s13 4 15 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      </div>
+      <div class="story-text reveal">
+        <p class="eyebrow">قصه ما</p>
+        <h2>یک تنور، سه نسل</h2>
+        <p>سی سال پیش، پدربزرگ ما اولین تنور محله را روشن کرد. صبح‌ها همسایه‌ها با ظرف خالی می‌آمدند و با نان گرم
+          برمی‌گشتند؛ همان رسمی که هنوز ادامه دارد.</p>
+        <p>هنوز آرد را از همان آسیاب می‌گیریم، هنوز خمیر را با دست می‌زنیم، و هنوز تنور با هیزم روشن می‌شود؛ نه برای
+          تفاخر، فقط چون طعمش فرق می‌کند.</p>
+        <p class="story-sign">با احترام، خانواده تنور</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="hours" id="hours">
+    <div class="section-head reveal">
+      <p class="eyebrow">پیدا کردن ما</p>
+      <h2>ساعات کاری و آدرس</h2>
+    </div>
+    <div class="hours-card reveal">
+      <div>
+        <h3>ساعات کاری</h3>
+        <ul class="hours-list">
+          <li><span>شنبه تا چهارشنبه</span><span>۰۶:۰۰ – ۲۱:۰۰</span></li>
+          <li><span>پنجشنبه</span><span>۰۶:۰۰ – ۱۹:۰۰</span></li>
+          <li><span>جمعه</span><span>۰۷:۰۰ – ۱۴:۰۰</span></li>
+          <li><span>تنور اول روشن می‌شود</span><span>۰۴:۳۰</span></li>
+        </ul>
+      </div>
+      <div class="addr">
+        <h3>آدرس</h3>
+        <p>خیابان ولیعصر، نرسیده به میدان ونک، کوچه نان، پلاک ۱۲<br>پارکینگ دوچرخه در ورودی موجود است</p>
+        <a href="tel:02100000000" class="btn btn-primary">تماس برای سفارش</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+        <path
+          d="M24 4C15 4 9 12 9 20c0 3 1 5 2 7-3 1-5 4-5 8 0 5 4 9 9 9h18c5 0 9-4 9-9 0-4-2-7-5-8 1-2 2-4 2-7 0-8-6-16-15-16Z"
+          stroke="currentColor" stroke-width="2.2" />
+      </svg>
+      تنور
+    </div>
+    <h2>فردا صبح، بوی نان تازه</h2>
+    <p class="sub">هر روز از ساعت ۰۶:۰۰، منتظرتان هستیم</p>
+    <div class="foot-links">
+      <a href="#menu">منو</a>
+      <a href="#process">از خمیر تا نان</a>
+      <a href="#story">قصه ما</a>
+      <a href="#hours">ساعات و آدرس</a>
+    </div>
+    <p class="copyright">© تنور، نانوایی محله — با دست، از سه نسل پیش</p>
+    <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+      طراحی و توسعه با
+      <span style="font-size:14px; line-height:1;">♥</span>
+      توسط تیم <span style="font-weight:750;">پیکسل</span>
+    </a>
+  </footer>
+
+  <script>
+    // nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+    // flour dust particles
+    const dustContainer = document.getElementById('dust');
+    const dustCount = window.innerWidth < 640 ? 14 : 26;
+    for (let i = 0; i < dustCount; i++) {
+      const d = document.createElement('span');
+      const left = Math.random() * 100;
+      const duration = 9 + Math.random() * 10;
+      const delay = Math.random() * 12;
+      const drift = (Math.random() * 80 - 40) + 'px';
+      const size = 3 + Math.random() * 4;
+      d.style.left = left + '%';
+      d.style.animationDuration = duration + 's';
+      d.style.animationDelay = delay + 's';
+      d.style.setProperty('--drift', drift);
+      d.style.width = size + 'px';
+      d.style.height = size + 'px';
+      dustContainer.appendChild(d);
+    }
+
+    // scroll reveal
+    const revealEls = document.querySelectorAll('.reveal:not(.in)');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+
+</html>

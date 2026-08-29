@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برق — کفش‌های دویدن نسل تازه</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#0c0c0e;
+  --bg-alt:#141416;
+  --card:#19191c;
+  --line:#2a2a2e;
+  --fg:#f2f0ea;
+  --fg-dim:#96959c;
+  --accent:#d4ff3d;
+  --accent-2:#ff5a29;
+  --accent-ink:#0c0c0e;
+  --radius:18px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+img,svg{display:block;max-width:100%;}
+
+a{color:inherit;text-decoration:none;}
+
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+
+::selection{background:var(--accent);color:var(--accent-ink);}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px;}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px;}
+
+@media(max-width:680px){.wrap{padding:0 20px;}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:700;letter-spacing:.04em;
+  color:var(--accent);
+  margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:2px;background:var(--accent);display:inline-block;}
+
+/* ---------- reveal-on-scroll ---------- */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .8s cubic-bezier(.16,.8,.3,1), transform .8s cubic-bezier(.16,.8,.3,1);
+  transition-delay:var(--d,0s);
+}
+[data-reveal].in-view{opacity:1;transform:translateY(0);}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  [data-reveal]{opacity:1;transform:none;transition:none;}
+  *{animation-duration:0.001s !important;animation-iteration-count:1 !important;transition-duration:0.001s !important;}
+}
+
+/* ---------- nav ---------- */
+header.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(12,12,14,.72);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1240px;margin:0 auto;padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:.01em;}
+.logo svg{width:22px;height:22px;}
+.nav-links{display:flex;gap:34px;font-size:15px;font-weight:500;color:var(--fg-dim);}
+.nav-links a{transition:color .25s;position:relative;}
+.nav-links a:hover{color:var(--fg);}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 26px;border-radius:100px;font-weight:700;font-size:14.5px;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+}
+.btn-primary{background:var(--accent);color:var(--accent-ink);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 28px -8px rgba(212,255,61,.5);}
+.btn-outline{border:1.5px solid var(--line);color:var(--fg);}
+.btn-outline:hover{border-color:var(--accent);transform:translateY(-3px);}
+@media(max-width:800px){.nav-links{display:none;}}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  padding:168px 0 90px;
+  overflow:hidden;
+  background:
+    repeating-linear-gradient(115deg, transparent 0 64px, rgba(255,255,255,.028) 64px 65px),
+    var(--bg);
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr;}}
+
+.hero h1{
+  font-size:clamp(42px,6.4vw,84px);
+  font-weight:900;
+  line-height:1.04;
+  letter-spacing:-.01em;
+  margin-bottom:26px;
+}
+.hero h1 span{display:block;}
+.hero h1 .hl{color:var(--accent);}
+
+.hero p.lead{
+  font-size:clamp(16px,1.6vw,19px);
+  color:var(--fg-dim);
+  max-width:480px;
+  margin-bottom:38px;
+}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:56px;}
+
+.stats{display:flex;gap:0;flex-wrap:wrap;}
+.stat{padding-left:36px;margin-left:36px;border-left:1px solid var(--line);}
+.stat:last-child{border-left:none;}
+@media(max-width:520px){.stat{padding-left:22px;margin-left:22px;}}
+.stat b{display:block;font-size:26px;font-weight:800;color:var(--accent);}
+.stat span{font-size:13px;color:var(--fg-dim);}
+
+.shoe-stage{position:relative;}
+.shoe-stage svg{width:100%;height:auto;overflow:visible;}
+.shoe-outline{fill:none;stroke:var(--accent);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+.shoe-sole-line{fill:none;stroke:var(--fg-dim);stroke-width:1.6;stroke-linecap:round;}
+.shoe-lace{stroke:var(--accent-2);stroke-width:2.2;stroke-linecap:round;}
+.shoe-eyelet{fill:var(--bg);stroke:var(--accent-2);stroke-width:1.6;}
+.shoe-tick{stroke:var(--fg-dim);stroke-width:1.4;opacity:.55;}
+.shoe-bolt{fill:var(--accent);opacity:.9;}
+
+/* ---------- marquee ---------- */
+.marquee-band{
+  background:var(--accent);
+  color:var(--accent-ink);
+  transform:rotate(-1.6deg);
+  margin:-34px 0 -20px;
+  position:relative;z-index:5;
+  overflow:hidden;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
+}
+.marquee-track{
+  display:flex;white-space:nowrap;
+  animation:scrollx 26s linear infinite;
+}
+.marquee-band:hover .marquee-track{animation-play-state:paused;}
+.marquee-track span{
+  font-size:20px;font-weight:800;padding:16px 28px;
+  display:inline-flex;align-items:center;gap:14px;
+}
+.marquee-track span::after{content:'⚡';font-size:14px;}
+@keyframes scrollx{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ---------- sections generic ---------- */
+section{padding:120px 0;position:relative;}
+@media(max-width:680px){section{padding:80px 0;}}
+h2.h-sec{
+  font-size:clamp(30px,4vw,48px);
+  font-weight:800;letter-spacing:-.01em;
+  margin-bottom:16px;max-width:620px;
+}
+p.sec-lead{color:var(--fg-dim);max-width:520px;font-size:16.5px;margin-bottom:56px;}
+
+/* ---------- features ---------- */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media(max-width:880px){.feat-grid{grid-template-columns:1fr;}}
+.feat-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:34px 30px;transition:border-color .3s, transform .3s;
+}
+.feat-card:hover{border-color:var(--accent);transform:translateY(-6px);}
+.feat-icon{width:46px;height:46px;margin-bottom:22px;}
+.feat-card h3{font-size:19px;font-weight:700;margin-bottom:10px;}
+.feat-card p{color:var(--fg-dim);font-size:14.5px;}
+
+/* ---------- products ---------- */
+.model-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+@media(max-width:760px){.model-grid{grid-template-columns:1fr;}}
+.model-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px;transition:transform .35s cubic-bezier(.16,.8,.3,1), border-color .35s;
+  position:relative;overflow:hidden;
+}
+.model-card:hover{transform:translateY(-8px);border-color:var(--accent);}
+.model-tag{
+  position:absolute;top:22px;left:22px;
+  font-size:11.5px;font-weight:700;color:var(--accent-ink);
+  background:var(--accent);padding:5px 12px;border-radius:100px;
+}
+.model-icon-wrap{
+  height:130px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;border-radius:12px;
+  background:radial-gradient(120% 100% at 30% 20%, rgba(212,255,61,.08), transparent 65%);
+}
+.model-icon-wrap svg{width:78%;height:auto;transition:transform .5s cubic-bezier(.16,.8,.3,1);}
+.model-card:hover .model-icon-wrap svg{transform:translateY(-4px) rotate(-2deg) scale(1.03);}
+.model-card h3{font-size:21px;font-weight:800;margin-bottom:6px;}
+.model-card .desc{color:var(--fg-dim);font-size:14px;margin-bottom:18px;}
+.sizes{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px;}
+.size-chip{
+  width:38px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--fg-dim);
+  transition:all .2s;
+}
+.size-chip:hover{border-color:var(--fg-dim);color:var(--fg);}
+.size-chip.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700;}
+.model-foot{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--line);}
+.price{font-size:16.5px;font-weight:800;}
+.price small{color:var(--fg-dim);font-weight:500;font-size:12.5px;}
+
+/* ---------- tech / cutaway ---------- */
+.tech-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center;}
+@media(max-width:900px){.tech-wrap{grid-template-columns:1fr;}}
+.layer{transition:opacity .8s cubic-bezier(.16,.8,.3,1), transform .8s cubic-bezier(.16,.8,.3,1);}
+.layer{opacity:0;transform:translateY(18px);}
+.layer.in-view{opacity:1;transform:translateY(0);}
+.layer-list{display:flex;flex-direction:column;gap:22px;}
+.layer-item{display:flex;gap:16px;align-items:flex-start;}
+.dot{width:13px;height:13px;border-radius:4px;margin-top:6px;flex-shrink:0;}
+.layer-item h4{font-size:17px;font-weight:700;margin-bottom:4px;}
+.layer-item p{color:var(--fg-dim);font-size:14px;}
+
+/* ---------- community ---------- */
+.quote-row{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media(max-width:880px){.quote-row{grid-template-columns:1fr;}}
+.quote-card{
+  background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--radius);
+  padding:30px;
+}
+.quote-card p.q{font-size:17px;font-weight:500;margin-bottom:22px;}
+.quote-who{display:flex;align-items:center;gap:12px;}
+.quote-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex-shrink:0;}
+.quote-who b{font-size:14.5px;display:block;}
+.quote-who span{font-size:13px;color:var(--fg-dim);}
+
+/* ---------- final cta ---------- */
+.cta-band{
+  background:var(--accent);color:var(--accent-ink);
+  border-radius:28px;padding:64px 48px;
+  display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap;
+}
+@media(max-width:680px){.cta-band{padding:44px 26px;}}
+.cta-band h2{font-size:clamp(26px,3.4vw,38px);font-weight:800;max-width:440px;line-height:1.25;}
+.signup{display:flex;gap:10px;flex-wrap:wrap;}
+.signup input{
+  padding:14px 20px;border-radius:100px;border:1.5px solid var(--accent-ink);
+  background:transparent;color:var(--accent-ink);font-family:inherit;font-size:14.5px;min-width:230px;
+}
+.signup input::placeholder{color:rgba(12,12,14,.55);}
+.signup button{
+  background:var(--accent-ink);color:var(--accent);
+  padding:14px 26px;border-radius:100px;font-weight:700;font-size:14.5px;
+  transition:transform .3s;
+}
+.signup button:hover{transform:translateY(-3px);}
+.signup-msg{font-size:13.5px;font-weight:700;margin-top:10px;}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:70px 0 34px;}
+.foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:56px;}
+.foot-cols{display:flex;gap:64px;flex-wrap:wrap;}
+.foot-col h5{font-size:13px;color:var(--fg-dim);margin-bottom:16px;font-weight:700;}
+.foot-col a{display:block;font-size:14.5px;margin-bottom:10px;color:var(--fg);opacity:.85;transition:opacity .2s;}
+.foot-col a:hover{opacity:1;color:var(--accent);}
+.foot-bottom{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  padding-top:26px;border-top:1px solid var(--line);color:var(--fg-dim);font-size:13px;
+}
+.social-row{display:flex;gap:10px;}
+.social-row a{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+  transition:all .2s;
+}
+.social-row a:hover{border-color:var(--accent);color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="logo">
+      <svg viewBox="0 0 24 24"><polygon class="shoe-bolt" points="13,1 4,14 11,14 9,23 20,9 12,9"/></svg>
+      برق
+    </a>
+    <nav class="nav-links">
+      <a href="#models">مدل‌ها</a>
+      <a href="#tech">فناوری</a>
+      <a href="#community">داستان‌ها</a>
+    </nav>
+    <a href="#models" class="btn btn-primary">فروشگاه</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">کلکسیون پاییز ۱۴۰۴</div>
+        <h1>
+          <span>سرعت رو</span>
+          <span class="hl">بپوش.</span>
+        </h1>
+        <p class="lead">کفشی که برای همون یک لحظه طراحی شده؛ لحظه‌ای که پاشنه‌ت از زمین جدا می‌شه و فوم زیر پات فشار می‌ده به جلو.</p>
+        <div class="hero-cta">
+          <a href="#models" class="btn btn-primary">مشاهده مدل‌ها</a>
+          <a href="#tech" class="btn btn-outline">فناوری برق</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>۲۱۸ گرم</b><span>سبک‌ترین مدل</span></div>
+          <div class="stat"><b>٪۸۵</b><span>بازگشت انرژی</span></div>
+          <div class="stat"><b>۱۲ شهر</b><span>فروشگاه حضوری</span></div>
+        </div>
+      </div>
+
+      <div class="shoe-stage">
+        <svg viewBox="0 0 600 280" fill="none">
+          <path id="shoePath" class="shoe-outline" d="M 50,200 C 40,200 32,192 34,180 C 38,160 55,142 82,130 C 100,122 108,108 118,92 C 128,76 142,64 162,60 C 180,57 196,62 205,75 L 205,95 C 260,85 330,88 390,98 C 440,106 480,118 512,134 C 538,147 556,160 565,175 C 572,186 566,197 552,199 L 130,204 C 100,206 70,206 50,200 Z"/>
+          <path class="shoe-sole-line" d="M 45,204 C 120,214 300,216 420,212 C 480,210 540,206 568,196"/>
+          <g class="shoe-tick">
+            <line x1="90" y1="206" x2="90" y2="216"/>
+            <line x1="140" y1="209" x2="140" y2="219"/>
+            <line x1="190" y1="211" x2="190" y2="221"/>
+            <line x1="240" y1="212" x2="240" y2="222"/>
+            <line x1="290" y1="213" x2="290" y2="223"/>
+            <line x1="340" y1="212" x2="340" y2="222"/>
+            <line x1="390" y1="211" x2="390" y2="221"/>
+            <line x1="440" y1="209" x2="440" y2="219"/>
+            <line x1="490" y1="205" x2="490" y2="215"/>
+            <line x1="530" y1="200" x2="530" y2="210"/>
+          </g>
+          <g class="shoe-lace">
+            <line x1="200" y1="70" x2="236" y2="82"/>
+            <line x1="198" y1="82" x2="234" y2="94"/>
+            <line x1="196" y1="94" x2="232" y2="106"/>
+            <line x1="194" y1="106" x2="230" y2="118"/>
+          </g>
+          <g class="shoe-eyelet">
+            <circle cx="200" cy="70" r="3.2"/><circle cx="236" cy="82" r="3.2"/>
+            <circle cx="198" cy="82" r="3.2"/><circle cx="234" cy="94" r="3.2"/>
+            <circle cx="196" cy="94" r="3.2"/><circle cx="232" cy="106" r="3.2"/>
+            <circle cx="194" cy="106" r="3.2"/><circle cx="230" cy="118" r="3.2"/>
+          </g>
+          <polygon class="shoe-bolt" opacity="0.85" points="470,150 448,172 460,172 452,192 480,166 465,166"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-band">
+    <div class="marquee-track">
+      <span>سبک &nbsp;•&nbsp; سریع &nbsp;•&nbsp; چسبیده به زمین &nbsp;•&nbsp; بی‌وزن &nbsp;•&nbsp; برق</span>
+      <span>سبک &nbsp;•&nbsp; سریع &nbsp;•&nbsp; چسبیده به زمین &nbsp;•&nbsp; بی‌وزن &nbsp;•&nbsp; برق</span>
+    </div>
+  </div>
+
+  <!-- ===================== FEATURES ===================== -->
+  <section id="features">
+    <div class="wrap">
+      <div data-reveal>
+        <div class="eyebrow">چرا برق؟</div>
+        <h2 class="h-sec">سه تصمیم فنی که همه‌چیز رو عوض می‌کنه</h2>
+        <p class="sec-lead">هیچ‌کدوم از این‌ها تزئینی نیست؛ هر کدوم یه مشکل مشخص توی دویدن رو حل می‌کنه.</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card" data-reveal style="--d:.05s">
+          <svg class="feat-icon" viewBox="0 0 48 48" fill="none">
+            <path d="M4 32 Q12 18 20 32 T36 32 T44 24" stroke="#d4ff3d" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+          <h3>فوم انرژی</h3>
+          <p>فومی که ٪۸۵ ضربه رو جذب می‌کنه و بقیه‌ش رو به جای بعدی برمی‌گردونه، نه هدر می‌ده.</p>
+        </div>
+        <div class="feat-card" data-reveal style="--d:.15s">
+          <svg class="feat-icon" viewBox="0 0 48 48" fill="none">
+            <path d="M6 36 L16 12 L24 30 L32 8 L42 36" stroke="#ff5a29" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3>تخته فنر کربنی</h3>
+          <p>یه تیغه‌ی نازک زیر کف پا که هر قدم رو به یه فشار رو به جلو تبدیل می‌کنه.</p>
+        </div>
+        <div class="feat-card" data-reveal style="--d:.25s">
+          <svg class="feat-icon" viewBox="0 0 48 48" fill="none">
+            <circle cx="12" cy="14" r="2.4" fill="#d4ff3d"/><circle cx="22" cy="14" r="2.4" fill="#d4ff3d"/><circle cx="32" cy="14" r="2.4" fill="#d4ff3d"/>
+            <circle cx="12" cy="24" r="2.4" fill="#d4ff3d"/><circle cx="22" cy="24" r="2.4" fill="#d4ff3d"/><circle cx="32" cy="24" r="2.4" fill="#d4ff3d"/>
+            <circle cx="12" cy="34" r="2.4" fill="#d4ff3d"/><circle cx="22" cy="34" r="2.4" fill="#d4ff3d"/><circle cx="32" cy="34" r="2.4" fill="#d4ff3d"/>
+          </svg>
+          <h3>تهویه فعال</h3>
+          <p>روکش توری که با هر قدم، هوا رو می‌کشه تو و پا رو خنک نگه می‌داره.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MODELS ===================== -->
+  <section id="models">
+    <div class="wrap">
+      <div data-reveal>
+        <div class="eyebrow">مدل‌های موجود</div>
+        <h2 class="h-sec">هر مسیر، یه مدل برای خودش</h2>
+        <p class="sec-lead">از پیست دو گرفته تا پیاده‌روی شب؛ چهار مدل، چهار شخصیت.</p>
+      </div>
+
+      <div class="model-grid">
+
+        <div class="model-card" data-reveal style="--d:.05s">
+          <span class="model-tag">پرفروش</span>
+          <div class="model-icon-wrap">
+            <svg viewBox="0 0 120 60" fill="none">
+              <path d="M8,42 C8,34 16,28 28,25 L78,17 C92,15 104,20 112,29 C116,33 115,39 107,41 L98,44 C78,48 40,48 18,46 C12,45 8,46 8,42 Z" fill="#d4ff3d" opacity="0.92"/>
+              <path d="M26,31 L58,20 L64,27 L34,39 Z" fill="#0c0c0e" opacity="0.85"/>
+            </svg>
+          </div>
+          <h3>برق رانر</h3>
+          <p class="desc">مشکی و لیمویی — برای دویدن روزانه، وزن ۲۱۸ گرم</p>
+          <div class="sizes">
+            <div class="size-chip">۳۹</div><div class="size-chip active">۴۰</div><div class="size-chip">۴۱</div><div class="size-chip">۴۲</div><div class="size-chip">۴۳</div><div class="size-chip">۴۴</div>
+          </div>
+          <div class="model-foot"><div class="price">۳,۹۸۰,۰۰۰ <small>تومان</small></div><a href="#" class="btn btn-outline" style="padding:9px 18px;font-size:13px;">افزودن</a></div>
+        </div>
+
+        <div class="model-card" data-reveal style="--d:.15s">
+          <div class="model-icon-wrap">
+            <svg viewBox="0 0 120 60" fill="none">
+              <path d="M8,42 C8,34 16,28 28,25 L78,17 C92,15 104,20 112,29 C116,33 115,39 107,41 L98,44 C78,48 40,48 18,46 C12,45 8,46 8,42 Z" fill="#ff5a29" opacity="0.92"/>
+              <path d="M26,31 L58,20 L64,27 L34,39 Z" fill="#0c0c0e" opacity="0.85"/>
+            </svg>
+          </div>
+          <h3>برق شهر</h3>
+          <p class="desc">نارنجی و مشکی — برای پیاده‌روی و استفاده روزمره</p>
+          <div class="sizes">
+            <div class="size-chip">۳۹</div><div class="size-chip">۴۰</div><div class="size-chip active">۴۱</div><div class="size-chip">۴۲</div><div class="size-chip">۴۳</div><div class="size-chip">۴۴</div>
+          </div>
+          <div class="model-foot"><div class="price">۳,۲۵۰,۰۰۰ <small>تومان</small></div><a href="#" class="btn btn-outline" style="padding:9px 18px;font-size:13px;">افزودن</a></div>
+        </div>
+
+        <div class="model-card" data-reveal style="--d:.05s">
+          <div class="model-icon-wrap">
+            <svg viewBox="0 0 120 60" fill="none">
+              <path d="M8,42 C8,34 16,28 28,25 L78,17 C92,15 104,20 112,29 C116,33 115,39 107,41 L98,44 C78,48 40,48 18,46 C12,45 8,46 8,42 Z" fill="#f2f0ea" opacity="0.92"/>
+              <path d="M26,31 L58,20 L64,27 L34,39 Z" fill="#0c0c0e" opacity="0.7"/>
+            </svg>
+          </div>
+          <h3>برق سبک</h3>
+          <p class="desc">سفید و طوسی — فوق‌سبک، وزن ۱۹۰ گرم</p>
+          <div class="sizes">
+            <div class="size-chip">۳۸</div><div class="size-chip">۳۹</div><div class="size-chip">۴۰</div><div class="size-chip active">۴۱</div><div class="size-chip">۴۲</div><div class="size-chip">۴۳</div>
+          </div>
+          <div class="model-foot"><div class="price">۴,۴۵۰,۰۰۰ <small>تومان</small></div><a href="#" class="btn btn-outline" style="padding:9px 18px;font-size:13px;">افزودن</a></div>
+        </div>
+
+        <div class="model-card" data-reveal style="--d:.15s">
+          <div class="model-icon-wrap">
+            <svg viewBox="0 0 120 60" fill="none">
+              <path d="M8,42 C8,34 16,28 28,25 L78,17 C92,15 104,20 112,29 C116,33 115,39 107,41 L98,44 C78,48 40,48 18,46 C12,45 8,46 8,42 Z" fill="#3a3a3f" opacity="0.95"/>
+              <path d="M26,31 L58,20 L64,27 L34,39 Z" fill="#d4ff3d" opacity="0.9"/>
+            </svg>
+          </div>
+          <h3>برق شب</h3>
+          <p class="desc">مشکی با نوار بازتاب‌دهنده — برای دویدن در تاریکی</p>
+          <div class="sizes">
+            <div class="size-chip">۳۹</div><div class="size-chip">۴۰</div><div class="size-chip">۴۱</div><div class="size-chip active">۴۲</div><div class="size-chip">۴۳</div><div class="size-chip">۴۴</div>
+          </div>
+          <div class="model-foot"><div class="price">۴,۱۵۰,۰۰۰ <small>تومان</small></div><a href="#" class="btn btn-outline" style="padding:9px 18px;font-size:13px;">افزودن</a></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TECH ===================== -->
+  <section id="tech">
+    <div class="wrap tech-wrap">
+      <div data-reveal>
+        <svg viewBox="0 0 560 220" fill="none">
+          <path class="layer" data-layer="1" d="M20,195 Q280,180 540,195 L540,170 Q280,155 20,170 Z" fill="#2a2a2e"/>
+          <g class="layer" data-layer="1" opacity="1">
+            <line x1="60" y1="192" x2="60" y2="198" stroke="#d4ff3d" stroke-width="2"/>
+            <line x1="120" y1="194" x2="120" y2="200" stroke="#d4ff3d" stroke-width="2"/>
+            <line x1="180" y1="195" x2="180" y2="201" stroke="#d4ff3d" stroke-width="2"/>
+            <line x1="280" y1="195" x2="280" y2="201" stroke="#d4ff3d" stroke-width="2"/>
+            <line x1="380" y1="195" x2="380" y2="201" stroke="#d4ff3d" stroke-width="2"/>
+            <line x1="440" y1="194" x2="440" y2="200" stroke="#d4ff3d" stroke-width="2"/>
+            <line x1="500" y1="192" x2="500" y2="198" stroke="#d4ff3d" stroke-width="2"/>
+          </g>
+          <path class="layer" data-layer="2" d="M20,170 Q280,155 540,170 L540,150 Q280,135 20,150 Z" fill="#ff5a29"/>
+          <path class="layer" data-layer="3" d="M20,150 Q280,135 540,150 L540,95 Q280,80 20,95 Z" fill="#d4ff3d"/>
+          <path class="layer" data-layer="4" d="M20,95 Q280,80 540,95 L540,78 Q280,63 20,78 Z" fill="#f2f0ea"/>
+        </svg>
+      </div>
+
+      <div>
+        <div class="eyebrow" data-reveal>مقطع عرضی</div>
+        <h2 class="h-sec" data-reveal style="--d:.05s">لایه به لایه</h2>
+        <p class="sec-lead" data-reveal style="--d:.1s">از زمین تا کف پا، هر لایه یه وظیفه مشخص داره.</p>
+        <div class="layer-list">
+          <div class="layer-item" data-reveal style="--d:.15s"><span class="dot" style="background:#2a2a2e;"></span><div><h4>زیره تراکشن</h4><p>الگوی آج برای چسبندگی روی آسفالت خیس و خشک.</p></div></div>
+          <div class="layer-item" data-reveal style="--d:.25s"><span class="dot" style="background:#ff5a29;"></span><div><h4>تخته فنر کربنی</h4><p>یه تیغه‌ی سفت که انرژی فشار رو ذخیره و رها می‌کنه.</p></div></div>
+          <div class="layer-item" data-reveal style="--d:.35s"><span class="dot" style="background:#d4ff3d;"></span><div><h4>فوم انرژی</h4><p>لایه اصلی جذب ضربه؛ نرم موقع فرود، سفت موقع فشار.</p></div></div>
+          <div class="layer-item" data-reveal style="--d:.45s"><span class="dot" style="background:#f2f0ea;"></span><div><h4>کفی رویی</h4><p>تماس مستقیم با پا، ضدعرق و قابل شست‌وشو.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COMMUNITY ===================== -->
+  <section id="community">
+    <div class="wrap">
+      <div data-reveal>
+        <div class="eyebrow">جامعه برق</div>
+        <h2 class="h-sec">حرف اون‌هایی که پوشیدنش</h2>
+      </div>
+      <div class="quote-row">
+        <div class="quote-card" data-reveal style="--d:.05s">
+          <p class="q">«از وقتی برق پام کردم، رکورد ۱۰ کیلومترم رو ۴۰ ثانیه زدم پایین.»</p>
+          <div class="quote-who"><span class="quote-avatar"></span><div><b>سارا احمدی</b><span>دونده آماتور</span></div></div>
+        </div>
+        <div class="quote-card" data-reveal style="--d:.15s">
+          <p class="q">«انگار زمین زیر پام فنری شده. برای مسافت‌های بلند فرق واقعی داره.»</p>
+          <div class="quote-who"><span class="quote-avatar"></span><div><b>امیر رضایی</b><span>دونده مسافت بلند</span></div></div>
+        </div>
+        <div class="quote-card" data-reveal style="--d:.25s">
+          <p class="q">«سبک‌ترین کفشیه که تا حالا پوشیدم؛ حتی یادم می‌ره پامه.»</p>
+          <div class="quote-who"><span class="quote-avatar"></span><div><b>نگار محمدی</b><span>کوه‌نورد شهری</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section>
+    <div class="wrap">
+      <div class="cta-band" data-reveal>
+        <h2>اولین نفری باش که مدل بعدی برق رو می‌بینه.</h2>
+        <form class="signup" id="signupForm">
+          <input type="email" required placeholder="ایمیلت رو بنویس">
+          <button type="submit">ثبت‌نام</button>
+        </form>
+      </div>
+      <p class="signup-msg" id="signupMsg" style="display:none;">ثبت شد — منتظر خبرهای برق باش ⚡</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <a href="#hero" class="logo">
+        <svg viewBox="0 0 24 24"><polygon class="shoe-bolt" points="13,1 4,14 11,14 9,23 20,9 12,9"/></svg>
+        برق
+      </a>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>محصولات</h5>
+          <a href="#models">مدل‌ها</a>
+          <a href="#tech">فناوری</a>
+          <a href="#">راهنمای سایز</a>
+        </div>
+        <div class="foot-col">
+          <h5>برق</h5>
+          <a href="#community">داستان ما</a>
+          <a href="#">فروشگاه‌ها</a>
+          <a href="#">همکاری با ما</a>
+        </div>
+        <div class="foot-col">
+          <h5>پشتیبانی</h5>
+          <a href="#">تماس با ما</a>
+          <a href="#">پرسش‌های متداول</a>
+          <a href="#">بازگشت کالا</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© ۱۴۰۴ برق. تمام حقوق محفوظ است.</span>
+      <div class="social-row">
+        <a href="#" aria-label="اینستاگرام">IG</a>
+        <a href="#" aria-label="تلگرام">TG</a>
+        <a href="#" aria-label="توییتر">TW</a>
+      </div>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// scroll reveal
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in-view');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.15});
+document.querySelectorAll('[data-reveal], .layer').forEach(el=>io.observe(el));
+
+// lace-draw animation on hero load (line-draw technique)
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduceMotion){
+  const shoePath = document.getElementById('shoePath');
+  if(shoePath){
+    const len = shoePath.getTotalLength();
+    shoePath.style.strokeDasharray = len;
+    shoePath.style.strokeDashoffset = len;
+    requestAnimationFrame(()=>{
+      shoePath.style.transition = 'stroke-dashoffset 2.1s cubic-bezier(.16,.8,.3,1)';
+      requestAnimationFrame(()=>{ shoePath.style.strokeDashoffset = 0; });
+    });
+  }
+}
+
+// size chip selection
+document.querySelectorAll('.sizes').forEach(group=>{
+  group.querySelectorAll('.size-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      group.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+});
+
+// newsletter form
+const form = document.getElementById('signupForm');
+const msg = document.getElementById('signupMsg');
+if(form){
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    msg.style.display = 'block';
+    form.reset();
+  });
+}
+
+// subtle hero shoe parallax on pointer move
+if(!reduceMotion){
+  const stage = document.querySelector('.shoe-stage');
+  if(stage){
+    stage.addEventListener('mousemove', (e)=>{
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - .5;
+      const y = (e.clientY - r.top)/r.height - .5;
+      stage.style.transform = `rotate(${x*3}deg) translateY(${y*6}px)`;
+    });
+    stage.addEventListener('mouseleave', ()=>{ stage.style.transform = ''; });
+    stage.style.transition = 'transform .4s ease-out';
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>زمرد | مشاور املاک لوکس</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --emerald-950: #04211a;
+      --emerald-900: #072d23;
+      --emerald-800: #0e4a36;
+      --emerald-700: #155c42;
+      --emerald-600: #1c6b4e;
+      --emerald-500: #237e5c;
+      --gold-600: #a9821e;
+      --gold-500: #c9a227;
+      --gold-400: #dab949;
+      --gold-300: #e4c97a;
+      --ivory-50: #faf7ef;
+      --ivory-100: #f3ecd9;
+      --ink-900: #12140f;
+      --ink-700: #3a3a34;
+      --line-gold: linear-gradient(90deg, transparent, var(--gold-400), transparent);
+      --shadow-emerald: 0 20px 60px -20px rgba(4, 33, 26, 0.55);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: var(--ivory-50);
+      color: var(--ink-900);
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--gold-400);
+      color: var(--emerald-950);
+    }
+
+    .naskh {
+      font-family: 'Noto Naskh Arabic', serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      color: var(--gold-600);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--gold-500);
+    }
+
+    /* ---------------- NAV ---------------- */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 100;
+      padding: 22px 0;
+      transition: all .45s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    header.scrolled {
+      padding: 12px 0;
+      background: rgba(4, 33, 26, 0.86);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.5);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--ivory-50);
+    }
+
+    .logo .gem {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--gold-300), var(--gold-600));
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      box-shadow: 0 0 14px rgba(201, 162, 39, 0.6);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 34px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ivory-100);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 4px;
+      opacity: 0.85;
+      transition: opacity .3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--gold-400);
+      transition: width .35s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
+      color: var(--emerald-950);
+      padding: 11px 24px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 8px 22px -8px rgba(201, 162, 39, 0.6);
+      transition: transform .3s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+    }
+
+    .burger {
+      display: none;
+    }
+
+    /* ---------------- HERO ---------------- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(201, 162, 39, 0.16), transparent 60%),
+        radial-gradient(900px 700px at -10% 110%, rgba(35, 126, 92, 0.35), transparent 60%),
+        linear-gradient(160deg, var(--emerald-950) 0%, var(--emerald-900) 45%, var(--emerald-800) 100%);
+      overflow: hidden;
+      padding-top: 120px;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(228, 201, 122, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(228, 201, 122, 0.05) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(circle at 70% 30%, black, transparent 70%);
+    }
+
+    .sweep {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -30%;
+      width: 40%;
+      background: linear-gradient(100deg, transparent, rgba(228, 201, 122, 0.09), transparent);
+      transform: skewX(-18deg);
+      animation: sweep 9s ease-in-out infinite;
+    }
+
+    @keyframes sweep {
+      0% {
+        left: -40%;
+      }
+
+      50% {
+        left: 110%;
+      }
+
+      100% {
+        left: 110%;
+      }
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold-400);
+      box-shadow: 0 0 8px 2px rgba(228, 201, 122, 0.7);
+      opacity: 0.7;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: .35;
+      }
+
+      50% {
+        transform: translateY(-26px) scale(1.3);
+        opacity: .9;
+      }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      color: var(--gold-300);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .hero-eyebrow .rule {
+      width: 40px;
+      height: 1px;
+      background: var(--gold-400);
+    }
+
+    .hero h1 {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: clamp(38px, 5.2vw, 68px);
+      line-height: 1.28;
+      color: var(--ivory-50);
+      font-weight: 700;
+      margin-bottom: 26px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold-300);
+      background: linear-gradient(180deg, transparent 62%, rgba(201, 162, 39, 0.35) 62%);
+    }
+
+    .hero p.lead {
+      font-size: 17px;
+      line-height: 1.9;
+      color: rgba(250, 247, 239, 0.72);
+      max-width: 520px;
+      margin-bottom: 38px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
+      color: var(--emerald-950);
+      padding: 16px 32px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: 0 14px 30px -12px rgba(201, 162, 39, 0.65);
+      transition: transform .3s, box-shadow .3s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px -12px rgba(201, 162, 39, 0.8);
+    }
+
+    .btn-ghost {
+      padding: 16px 30px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ivory-50);
+      border: 1px solid rgba(250, 247, 239, 0.28);
+      transition: border-color .3s, background .3s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold-400);
+      background: rgba(228, 201, 122, 0.06);
+    }
+
+    /* concierge search bar */
+    .search-bar {
+      background: rgba(250, 247, 239, 0.06);
+      border: 1px solid rgba(228, 201, 122, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 14px;
+      max-width: 640px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 11px;
+      color: var(--gold-300);
+      font-weight: 600;
+    }
+
+    .field select,
+    .field input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(250, 247, 239, 0.25);
+      color: var(--ivory-50);
+      font-family: inherit;
+      font-size: 14px;
+      padding: 6px 2px;
+    }
+
+    .field select option {
+      color: var(--ink-900);
+    }
+
+    .field select:focus,
+    .field input:focus {
+      outline: none;
+      border-color: var(--gold-400);
+    }
+
+    .search-btn {
+      align-self: end;
+      background: var(--gold-500);
+      color: var(--emerald-950);
+      border-radius: 12px;
+      padding: 0 22px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background .3s;
+    }
+
+    .search-btn:hover {
+      background: var(--gold-400);
+    }
+
+    /* Emerald seal - signature element */
+    .seal-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .seal {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      max-width: 80vw;
+    }
+
+    .seal-ring {
+      position: absolute;
+      inset: 0;
+      animation: spin 30s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .seal-core {
+      position: absolute;
+      inset: 26%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, var(--emerald-500), var(--emerald-800) 65%, var(--emerald-950));
+      box-shadow:
+        0 0 0 1px rgba(228, 201, 122, 0.35),
+        0 0 60px rgba(35, 126, 92, 0.55),
+        inset 0 0 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .seal-core .gem-big {
+      width: 34%;
+      height: 34%;
+      background: linear-gradient(135deg, var(--gold-300), var(--gold-600));
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      box-shadow: 0 0 24px rgba(228, 201, 122, 0.6);
+      animation: pulseGem 3.5s ease-in-out infinite;
+    }
+
+    @keyframes pulseGem {
+
+      0%,
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: scale(1.08);
+        filter: brightness(1.2);
+      }
+    }
+
+    .seal-float {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
+      background: var(--ivory-50);
+      color: var(--emerald-900);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow-emerald);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: bob 4.5s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .seal-float .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold-500);
+    }
+
+    /* ---------------- STATS ---------------- */
+    .stats {
+      background: var(--ivory-100);
+      border-top: 1px solid rgba(169, 130, 30, 0.18);
+      border-bottom: 1px solid rgba(169, 130, 30, 0.18);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 44px 0;
+    }
+
+    .stat {
+      text-align: center;
+      position: relative;
+      padding: 0 16px;
+    }
+
+    .stat:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: rgba(169, 130, 30, 0.25);
+    }
+
+    .stat .num {
+      font-size: clamp(30px, 3.4vw, 42px);
+      font-weight: 800;
+      color: var(--emerald-800);
+      font-family: 'Noto Naskh Arabic', serif;
+    }
+
+    .stat .cap {
+      margin-top: 8px;
+      font-size: 13.5px;
+      color: var(--ink-700);
+      font-weight: 500;
+    }
+
+    /* ---------------- SECTION shared ---------------- */
+    section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .section-head h2 {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: clamp(28px, 3.4vw, 42px);
+      color: var(--emerald-900);
+      line-height: 1.4;
+    }
+
+    .section-head p {
+      max-width: 380px;
+      font-size: 14.5px;
+      color: var(--ink-700);
+      line-height: 1.8;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------------- PROPERTIES ---------------- */
+    .properties {
+      background: var(--ivory-50);
+    }
+
+    .prop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .prop-card {
+      background: #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px -22px rgba(18, 20, 15, 0.25);
+      border: 1px solid rgba(18, 20, 15, 0.06);
+      transition: transform .5s cubic-bezier(.2, .8, .2, 1), box-shadow .5s;
+      position: relative;
+    }
+
+    .prop-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px -24px rgba(4, 33, 26, 0.35);
+    }
+
+    .prop-visual {
+      height: 210px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--emerald-800), var(--emerald-950));
+    }
+
+    .prop-visual svg {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: transform .6s ease;
+    }
+
+    .prop-card:hover .prop-visual svg {
+      transform: scale(1.06) translateY(-2%);
+    }
+
+    .ribbon {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
+      color: var(--emerald-950);
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 999px;
+      z-index: 2;
+      box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.4);
+    }
+
+    .prop-body {
+      padding: 22px 22px 24px;
+    }
+
+    .prop-loc {
+      font-size: 12.5px;
+      color: var(--gold-600);
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .prop-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--emerald-900);
+      margin-bottom: 14px;
+    }
+
+    .prop-specs {
+      display: flex;
+      gap: 16px;
+      font-size: 12.5px;
+      color: var(--ink-700);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px dashed rgba(18, 20, 15, 0.15);
+    }
+
+    .prop-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .prop-price {
+      font-weight: 800;
+      color: var(--emerald-800);
+      font-size: 16.5px;
+    }
+
+    .prop-price span {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--ink-700);
+    }
+
+    .prop-arrow {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--ivory-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .3s, transform .3s;
+    }
+
+    .prop-card:hover .prop-arrow {
+      background: var(--gold-400);
+      transform: rotate(-45deg);
+    }
+
+    /* ---------------- PROCESS ---------------- */
+    .process {
+      background: linear-gradient(180deg, var(--ivory-100), var(--ivory-50));
+    }
+
+    .process-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .process-item {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 24px;
+      border: 1px solid rgba(18, 20, 15, 0.06);
+      position: relative;
+      transition: transform .4s;
+    }
+
+    .process-item:hover {
+      transform: translateY(-6px);
+    }
+
+    .process-num {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 15px;
+      color: var(--gold-600);
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .process-num::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(169, 130, 30, 0.3);
+    }
+
+    .process-item h3 {
+      font-size: 17px;
+      color: var(--emerald-900);
+      margin-bottom: 10px;
+    }
+
+    .process-item p {
+      font-size: 13.5px;
+      color: var(--ink-700);
+      line-height: 1.8;
+    }
+
+    /* ---------------- WHY US ---------------- */
+    .why {
+      background: radial-gradient(1000px 500px at 20% 0%, rgba(228, 201, 122, 0.12), transparent 60%),
+        linear-gradient(160deg, var(--emerald-950), var(--emerald-800));
+      color: var(--ivory-50);
+    }
+
+    .why .section-head h2,
+    .why .eyebrow {
+      color: var(--ivory-50);
+    }
+
+    .why .eyebrow {
+      color: var(--gold-300);
+    }
+
+    .why .section-head p {
+      color: rgba(250, 247, 239, 0.7);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .why-card {
+      background: rgba(250, 247, 239, 0.05);
+      border: 1px solid rgba(228, 201, 122, 0.2);
+      border-radius: 20px;
+      padding: 34px 26px;
+      backdrop-filter: blur(8px);
+      transition: border-color .4s, transform .4s, background .4s;
+    }
+
+    .why-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold-400);
+      background: rgba(228, 201, 122, 0.07);
+    }
+
+    .why-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 24px -10px rgba(201, 162, 39, 0.7);
+    }
+
+    .why-card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .why-card p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: rgba(250, 247, 239, 0.68);
+    }
+
+    /* ---------------- TESTIMONIALS ---------------- */
+    .testi {
+      background: var(--ivory-50);
+    }
+
+    .testi-track {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scroll-snap-type: x proximity;
+    }
+
+    .testi-track::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .testi-track::-webkit-scrollbar-thumb {
+      background: var(--gold-400);
+      border-radius: 10px;
+    }
+
+    .testi-card {
+      min-width: 340px;
+      scroll-snap-align: start;
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(18, 20, 15, 0.06);
+      box-shadow: 0 16px 40px -26px rgba(18, 20, 15, 0.3);
+    }
+
+    .quote-mark {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 44px;
+      color: var(--gold-400);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .testi-card p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--ink-700);
+      margin-bottom: 22px;
+    }
+
+    .testi-person {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--emerald-600), var(--emerald-900));
+    }
+
+    .testi-person b {
+      display: block;
+      font-size: 14px;
+      color: var(--emerald-900);
+    }
+
+    .testi-person span {
+      font-size: 12px;
+      color: var(--ink-700);
+    }
+
+    /* ---------------- CTA BAND ---------------- */
+    .cta-band {
+      background: linear-gradient(135deg, var(--emerald-950), var(--emerald-800) 60%, var(--emerald-950));
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: 100px 0;
+    }
+
+    .cta-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(600px 300px at 15% 20%, rgba(228, 201, 122, 0.14), transparent 60%),
+        radial-gradient(600px 300px at 85% 80%, rgba(228, 201, 122, 0.1), transparent 60%);
+    }
+
+    .cta-band h2 {
+      position: relative;
+      z-index: 2;
+      font-family: 'Noto Naskh Arabic', serif;
+      color: var(--ivory-50);
+      font-size: clamp(28px, 3.6vw, 44px);
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .cta-band p {
+      position: relative;
+      z-index: 2;
+      color: rgba(250, 247, 239, 0.7);
+      margin-bottom: 36px;
+      font-size: 15px;
+    }
+
+    .cta-band .btn-primary {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ---------------- FOOTER ---------------- */
+    footer {
+      background: var(--emerald-950);
+      color: rgba(250, 247, 239, 0.7);
+      padding: 70px 0 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 40px;
+      padding-bottom: 46px;
+      border-bottom: 1px solid rgba(228, 201, 122, 0.15);
+    }
+
+    .footer-grid h4 {
+      color: var(--ivory-50);
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    .footer-grid ul li {
+      margin-bottom: 12px;
+      font-size: 13.5px;
+    }
+
+    .footer-grid ul li a:hover {
+      color: var(--gold-300);
+    }
+
+    .footer-about p {
+      font-size: 13.5px;
+      line-height: 1.9;
+      margin-top: 14px;
+      color: rgba(250, 247, 239, 0.55);
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--ivory-50);
+    }
+
+    .newsletter {
+      display: flex;
+      margin-top: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(228, 201, 122, 0.3);
+    }
+
+    .newsletter input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 12px 14px;
+      color: var(--ivory-50);
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .newsletter input:focus {
+      outline: none;
+    }
+
+    .newsletter button {
+      background: var(--gold-500);
+      color: var(--emerald-950);
+      padding: 0 18px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 26px;
+      font-size: 12.5px;
+      color: rgba(250, 247, 239, 0.45);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ---------------- RESPONSIVE ---------------- */
+    @media (max-width:980px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .seal-wrap {
+        order: -1;
+        margin-bottom: 10px;
+        height: auto;
+      }
+
+      .seal {
+        width: 220px;
+        height: 220px;
+      }
+
+      .search-bar {
+        grid-template-columns: 1fr 1fr;
+        max-width: 100%;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 28px;
+      }
+
+      .stat:nth-child(2)::after {
+        display: none;
+      }
+
+      .prop-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width:640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .prop-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-list {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-bar {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 80px 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="siteHeader">
+    <div class="container">
+      <nav>
+        <div class="logo"><span class="gem"></span> زمرد</div>
+        <ul class="nav-links">
+          <li><a href="#hero">خانه</a></li>
+          <li><a href="#properties">املاک</a></li>
+          <li><a href="#process">فرآیند</a></li>
+          <li><a href="#why">چرا زمرد</a></li>
+          <li><a href="#contact">تماس</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">مشاوره رایگان</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero-grid"></div>
+    <div class="sweep"></div>
+    <div class="container hero-inner">
+      <div>
+        <div class="hero-eyebrow"><span class="rule"></span> مشاور املاک لوکس از سال ۱۳۸۵</div>
+        <h1>ملکی به وسعت <em>رؤیای</em> شما،<br>با دقتی زرگرانه</h1>
+        <p class="lead">زمرد فقط خانه نمی‌فروشد؛ ملک‌هایی را می‌یابد که شایسته‌ی سبک زندگی شماست. از ارزیابی حقوقی تا
+          تحویل کلید، هر مرحله را با شفافیت کامل طی می‌کنیم.</p>
+        <div class="hero-actions">
+          <a href="#properties" class="btn-primary">مشاهده املاک منتخب</a>
+          <a href="#contact" class="btn-ghost">رزرو مشاوره اختصاصی</a>
+        </div>
+
+        <div class="search-bar">
+          <div class="field">
+            <label>نوع ملک</label>
+            <select>
+              <option>ویلا</option>
+              <option>پنت‌هاوس</option>
+              <option>آپارتمان</option>
+              <option>دفتر تجاری</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>منطقه</label>
+            <select>
+              <option>ولنجک</option>
+              <option>زعفرانیه</option>
+              <option>نیاوران</option>
+              <option>الهیه</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>سقف بودجه (میلیارد تومان)</label>
+            <input type="text" placeholder="مثلاً ۵۰">
+          </div>
+          <button class="search-btn">جستجو</button>
+        </div>
+      </div>
+
+      <div class="seal-wrap">
+        <div class="seal">
+          <svg class="seal-ring" viewBox="0 0 340 340">
+            <defs>
+              <path id="ringPath" d="M170,170 m-140,0 a140,140 0 1,1 280,0 a140,140 0 1,1 -280,0" />
+            </defs>
+            <circle cx="170" cy="170" r="164" fill="none" stroke="rgba(228,201,122,0.35)" stroke-width="1" />
+            <circle cx="170" cy="170" r="140" fill="none" stroke="rgba(228,201,122,0.5)" stroke-width="1"
+              stroke-dasharray="2 6" />
+            <text fill="#e4c97a" font-size="13.5" letter-spacing="4" font-family="Vazirmatn">
+              <textPath href="#ringPath" startOffset="0%">مهر اعتماد زمرد • تضمین اصالت سند • مشاوره اختصاصی •
+              </textPath>
+            </text>
+          </svg>
+          <div class="seal-core">
+            <div class="gem-big"></div>
+          </div>
+        </div>
+        <div class="seal-float"><span class="dot"></span> بیش از ۳۲۰ معامله موفق</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container stats-grid">
+      <div class="stat reveal">
+        <div class="num" data-count="320">۰</div>
+        <div class="cap">ملک فروخته‌شده</div>
+      </div>
+      <div class="stat reveal">
+        <div class="num" data-count="4200" data-suffix=" میلیارد">۰</div>
+        <div class="cap">تومان ارزش معاملات</div>
+      </div>
+      <div class="stat reveal">
+        <div class="num" data-count="18" data-suffix=" سال">۰</div>
+        <div class="cap">تجربه در بازار لوکس</div>
+      </div>
+      <div class="stat reveal">
+        <div class="num" data-count="96" data-suffix="٪"> ۰</div>
+        <div class="cap">رضایت مشتریان</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="properties" id="properties">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">مجموعه منتخب</div>
+          <h2>ملک‌هایی که تنها به<br>معدودی نشان داده می‌شوند</h2>
+        </div>
+        <p>هر ملک پیش از معرفی، توسط تیم زمرد از نظر سند، موقعیت و ارزش بازار بررسی و تأیید می‌شود.</p>
+      </div>
+
+      <div class="prop-grid">
+        <!-- Card 1 -->
+        <div class="prop-card reveal">
+          <div class="ribbon">ویژه</div>
+          <div class="prop-visual">
+            <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice">
+              <rect x="0" y="120" width="400" height="90" fill="#0b3d2e" />
+              <rect x="40" y="70" width="90" height="140" fill="#0e4a36" />
+              <rect x="150" y="40" width="70" height="170" fill="#155c42" />
+              <rect x="240" y="90" width="110" height="120" fill="#0e4a36" />
+              <g fill="#e4c97a" opacity="0.85">
+                <rect x="55" y="90" width="12" height="12" />
+                <rect x="80" y="90" width="12" height="12" />
+                <rect x="55" y="120" width="12" height="12" />
+                <rect x="80" y="120" width="12" height="12" />
+                <rect x="165" y="60" width="10" height="10" />
+                <rect x="190" y="60" width="10" height="10" />
+                <rect x="165" y="90" width="10" height="10" />
+                <rect x="190" y="90" width="10" height="10" />
+                <rect x="260" y="110" width="14" height="14" />
+                <rect x="300" y="110" width="14" height="14" />
+              </g>
+            </svg>
+          </div>
+          <div class="prop-body">
+            <div class="prop-loc">◆ ولنجک، تهران</div>
+            <div class="prop-title">ویلای زمردین ولنجک</div>
+            <div class="prop-specs"><span>۴۸۰ متر</span><span>۵ خواب</span><span>پارکینگ دوبل</span></div>
+            <div class="prop-footer">
+              <div class="prop-price">۸۵ <span>میلیارد تومان</span></div>
+              <div class="prop-arrow">→</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="prop-card reveal">
+          <div class="prop-visual">
+            <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice">
+              <rect x="0" y="140" width="400" height="70" fill="#0b3d2e" />
+              <rect x="70" y="30" width="120" height="180" fill="#0e4a36" />
+              <rect x="210" y="70" width="150" height="140" fill="#155c42" />
+              <g fill="#e4c97a" opacity="0.85">
+                <rect x="90" y="50" width="14" height="14" />
+                <rect x="130" y="50" width="14" height="14" />
+                <rect x="90" y="90" width="14" height="14" />
+                <rect x="130" y="90" width="14" height="14" />
+                <rect x="90" y="130" width="14" height="14" />
+                <rect x="130" y="130" width="14" height="14" />
+                <rect x="230" y="100" width="12" height="12" />
+                <rect x="260" y="100" width="12" height="12" />
+                <rect x="290" y="100" width="12" height="12" />
+              </g>
+            </svg>
+          </div>
+          <div class="prop-body">
+            <div class="prop-loc">◆ زعفرانیه، تهران</div>
+            <div class="prop-title">پنت‌هاوس زعفرانیه</div>
+            <div class="prop-specs"><span>۳۲۰ متر</span><span>۳ خواب</span><span>تراس پانوراما</span></div>
+            <div class="prop-footer">
+              <div class="prop-price">۶۲ <span>میلیارد تومان</span></div>
+              <div class="prop-arrow">→</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="prop-card reveal">
+          <div class="ribbon">نایاب</div>
+          <div class="prop-visual">
+            <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice">
+              <rect x="0" y="130" width="400" height="80" fill="#0b3d2e" />
+              <rect x="30" y="60" width="340" height="150" fill="#0e4a36" />
+              <polygon points="30,60 200,20 370,60" fill="#155c42" />
+              <g fill="#e4c97a" opacity="0.85">
+                <rect x="60" y="90" width="14" height="14" />
+                <rect x="100" y="90" width="14" height="14" />
+                <rect x="180" y="90" width="14" height="14" />
+                <rect x="220" y="90" width="14" height="14" />
+                <rect x="300" y="90" width="14" height="14" />
+                <rect x="330" y="90" width="14" height="14" />
+                <rect x="60" y="130" width="14" height="14" />
+                <rect x="100" y="130" width="14" height="14" />
+                <rect x="180" y="130" width="14" height="14" />
+                <rect x="220" y="130" width="14" height="14" />
+                <rect x="300" y="130" width="14" height="14" />
+                <rect x="330" y="130" width="14" height="14" />
+              </g>
+            </svg>
+          </div>
+          <div class="prop-body">
+            <div class="prop-loc">◆ نیاوران، تهران</div>
+            <div class="prop-title">عمارت کلاسیک نیاوران</div>
+            <div class="prop-specs"><span>۶۵۰ متر</span><span>۶ خواب</span><span>باغ اختصاصی</span></div>
+            <div class="prop-footer">
+              <div class="prop-price">۱۲۰ <span>میلیارد تومان</span></div>
+              <div class="prop-arrow">→</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="prop-card reveal">
+          <div class="prop-visual">
+            <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice">
+              <rect x="0" y="150" width="400" height="60" fill="#0b3d2e" />
+              <rect x="110" y="20" width="180" height="190" fill="#0e4a36" />
+              <g fill="#e4c97a" opacity="0.85">
+                <rect x="130" y="45" width="12" height="12" />
+                <rect x="160" y="45" width="12" height="12" />
+                <rect x="190" y="45" width="12" height="12" />
+                <rect x="220" y="45" width="12" height="12" />
+                <rect x="250" y="45" width="12" height="12" />
+                <rect x="130" y="80" width="12" height="12" />
+                <rect x="160" y="80" width="12" height="12" />
+                <rect x="190" y="80" width="12" height="12" />
+                <rect x="220" y="80" width="12" height="12" />
+                <rect x="250" y="80" width="12" height="12" />
+                <rect x="130" y="115" width="12" height="12" />
+                <rect x="160" y="115" width="12" height="12" />
+                <rect x="190" y="115" width="12" height="12" />
+                <rect x="220" y="115" width="12" height="12" />
+                <rect x="250" y="115" width="12" height="12" />
+              </g>
+            </svg>
+          </div>
+          <div class="prop-body">
+            <div class="prop-loc">◆ الهیه، تهران</div>
+            <div class="prop-title">آپارتمان لوکس الهیه</div>
+            <div class="prop-specs"><span>۲۱۰ متر</span><span>۳ خواب</span><span>لابی هتلی</span></div>
+            <div class="prop-footer">
+              <div class="prop-price">۳۸ <span>میلیارد تومان</span></div>
+              <div class="prop-arrow">→</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="prop-card reveal">
+          <div class="prop-visual">
+            <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice">
+              <rect x="0" y="120" width="400" height="90" fill="#0b3d2e" />
+              <rect x="60" y="40" width="280" height="170" fill="#155c42" />
+              <g fill="#e4c97a" opacity="0.8">
+                <rect x="80" y="60" width="240" height="10" />
+                <rect x="80" y="90" width="240" height="10" />
+                <rect x="80" y="120" width="240" height="10" />
+                <rect x="80" y="150" width="240" height="10" />
+              </g>
+            </svg>
+          </div>
+          <div class="prop-body">
+            <div class="prop-loc">◆ برج زمرد، مرکز شهر</div>
+            <div class="prop-title">دفتر تجاری برج زمرد</div>
+            <div class="prop-specs"><span>۳۰۰ متر</span><span>سالن باز</span><span>پارکینگ اختصاصی</span></div>
+            <div class="prop-footer">
+              <div class="prop-price">۴۵ <span>میلیارد تومان</span></div>
+              <div class="prop-arrow">→</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="prop-card reveal">
+          <div class="ribbon">استثنایی</div>
+          <div class="prop-visual">
+            <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice">
+              <rect x="0" y="150" width="400" height="60" fill="#0b3d2e" />
+              <circle cx="330" cy="130" r="45" fill="#155c42" />
+              <rect x="40" y="90" width="140" height="120" fill="#0e4a36" />
+              <g fill="#e4c97a" opacity="0.85">
+                <rect x="60" y="115" width="14" height="14" />
+                <rect x="95" y="115" width="14" height="14" />
+                <rect x="130" y="115" width="14" height="14" />
+                <rect x="60" y="150" width="14" height="14" />
+                <rect x="95" y="150" width="14" height="14" />
+                <rect x="130" y="150" width="14" height="14" />
+              </g>
+            </svg>
+          </div>
+          <div class="prop-body">
+            <div class="prop-loc">◆ کردان، البرز</div>
+            <div class="prop-title">باغ‌ویلای کردان</div>
+            <div class="prop-specs"><span>۱۲۰۰ متر</span><span>۴ خواب</span><span>استخر روباز</span></div>
+            <div class="prop-footer">
+              <div class="prop-price">۹۵ <span>میلیارد تومان</span></div>
+              <div class="prop-arrow">→</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">مسیر همکاری</div>
+          <h2>از اولین جلسه تا<br>تحویل کلید</h2>
+        </div>
+        <p>هر معامله زمرد از چهار مرحله‌ی مشخص عبور می‌کند تا خیال شما از هر جهت راحت باشد.</p>
+      </div>
+
+      <div class="process-list">
+        <div class="process-item reveal">
+          <div class="process-num">۰۱</div>
+          <h3>مشاوره اختصاصی</h3>
+          <p>جلسه‌ای خصوصی برای شناخت دقیق سبک زندگی، بودجه و اولویت‌های شما.</p>
+        </div>
+        <div class="process-item reveal">
+          <div class="process-num">۰۲</div>
+          <h3>بازدید کیوریت‌شده</h3>
+          <p>فقط ملک‌هایی برای بازدید معرفی می‌شوند که واقعاً با معیارهای شما هم‌خوانی دارند.</p>
+        </div>
+        <div class="process-item reveal">
+          <div class="process-num">۰۳</div>
+          <h3>مذاکره و بررسی حقوقی</h3>
+          <p>تیم حقوقی زمرد تمام اسناد، استعلامات و شرایط قرارداد را راستی‌آزمایی می‌کند.</p>
+        </div>
+        <div class="process-item reveal">
+          <div class="process-num">۰۴</div>
+          <h3>تحویل کلید</h3>
+          <p>امضای قرارداد نهایی، تحویل ملک و پشتیبانی زمرد پس از خرید.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why" id="why">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">چرا زمرد</div>
+          <h2>اعتمادی که با<br>سند ثابت می‌شود</h2>
+        </div>
+        <p>در بازار املاک لوکس، شفافیت مهم‌تر از سرعت است. ما هر دو را با هم به شما می‌دهیم.</p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card reveal">
+          <div class="why-icon">⚖</div>
+          <h3>امنیت حقوقی کامل</h3>
+          <p>هر معامله پیش از امضا زیر نظر تیم حقوقی مستقل زمرد بررسی و تأیید می‌شود.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">◎</div>
+          <h3>ارزیابی دقیق و منصفانه</h3>
+          <p>قیمت‌گذاری بر پایه‌ی داده‌های واقعی بازار، نه حدس و گمان یا فشار فروش.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">✦</div>
+          <h3>شبکه‌ی انحصاری</h3>
+          <p>دسترسی به ملک‌هایی که هرگز به‌صورت عمومی آگهی نمی‌شوند، پیش از هرکس دیگر.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testi">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">تجربه‌ی مشتریان</div>
+          <h2>روایت‌هایی از<br>معاملات زمرد</h2>
+        </div>
+      </div>
+      <div class="testi-track reveal">
+        <div class="testi-card">
+          <div class="quote-mark">”</div>
+          <p>زمرد ویلایی پیدا کرد که حتی در رویاهایم هم نمی‌گنجید. از اولین جلسه تا امضای قرارداد، همه‌چیز شفاف بود.</p>
+          <div class="testi-person">
+            <div class="avatar"></div>
+            <div><b>سارا م.</b><span>خریدار ویلا، ولنجک</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="quote-mark">”</div>
+          <p>فرآیند حقوقی آنقدر دقیق و شفاف بود که با خیال کاملاً راحت عمارت نیاوران را خریدم.</p>
+          <div class="testi-person">
+            <div class="avatar"></div>
+            <div><b>امیر ر.</b><span>خریدار عمارت، نیاوران</span></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="quote-mark">”</div>
+          <p>به‌عنوان یک سرمایه‌گذار، دقت تیم زمرد در ارزیابی و مذاکره واقعاً بی‌نظیر است.</p>
+          <div class="testi-person">
+            <div class="avatar"></div>
+            <div><b>نگار ک.</b><span>سرمایه‌گذار املاک</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band" id="contact">
+    <div class="container">
+      <h2>آماده‌اید ملک رؤیایی‌تان<br>را بیابید؟</h2>
+      <p>یک جلسه‌ی مشاوره‌ی رایگان با کارشناسان زمرد، اولین قدم است.</p>
+      <a href="#" class="btn-primary">رزرو مشاوره رایگان</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="footer-logo"><span class="gem"></span> زمرد</div>
+          <p>مشاور املاک لوکس، همراه شما در یافتن، ارزیابی و تملک ملک‌هایی که ارزششان را حفظ می‌کنند.</p>
+        </div>
+        <div>
+          <h4>دسترسی سریع</h4>
+          <ul>
+            <li><a href="#hero">خانه</a></li>
+            <li><a href="#properties">املاک</a></li>
+            <li><a href="#process">فرآیند</a></li>
+            <li><a href="#why">چرا زمرد</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>تماس با ما</h4>
+          <ul>
+            <li>تهران، خیابان ولیعصر</li>
+            <li>۰۲۱-۱۲۳۴۵۶۷۸</li>
+            <li>info@zomorod-melk.ir</li>
+          </ul>
+        </div>
+        <div>
+          <h4>عضویت در خبرنامه</h4>
+          <p style="font-size:13px;margin-bottom:14px;color:rgba(250,247,239,0.55)">ملک‌های تازه، پیش از انتشار عمومی.
+          </p>
+          <div class="newsletter">
+            <input type="email" placeholder="ایمیل شما">
+            <button>ثبت</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© ۱۴۰۴ زمرد. تمامی حقوق محفوظ است.</span>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll state
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Persian digit formatter
+    const faDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    function toFa(n) {
+      return String(n).replace(/\d/g, d => faDigits[d]);
+    }
+
+    // Counter animation
+    const counters = document.querySelectorAll('.num[data-count]');
+    const counterIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count, 10);
+          const suffix = el.dataset.suffix || '';
+          let cur = 0;
+          const duration = 1600;
+          const start = performance.now();
+          function tick(now) {
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            cur = Math.floor(eased * target);
+            el.textContent = toFa(cur) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+            else el.textContent = toFa(target) + suffix;
+          }
+          requestAnimationFrame(tick);
+          counterIO.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => counterIO.observe(el));
+
+    // Ambient gold particles in hero
+    const hero = document.querySelector('.hero');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.top = Math.random() * 100 + '%';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = (Math.random() * 6) + 's';
+      p.style.animationDuration = (5 + Math.random() * 5) + 's';
+      hero.appendChild(p);
+    }
+  </script>
+
+</body>
+
+</html>
