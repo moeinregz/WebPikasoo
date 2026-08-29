@@ -31,7 +31,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "پایه",
-        price: "از ۸",
+        price: "از 14",
         unit: "میلیون تومان / ماه",
         features: [
           "تحقیق و انتخاب کلمات کلیدی",
@@ -42,7 +42,7 @@ const categories: Category[] = [
       },
       {
         name: "حرفه‌ای",
-        price: "از ۱۵",
+        price: "از 37",
         unit: "میلیون تومان / ماه",
         features: [
           "سئوی داخلی کامل تمام صفحات",
@@ -76,7 +76,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "استارتاپ",
-        price: "از ۱۲",
+        price: "از 25",
         unit: "میلیون تومان",
         features: [
           "قالب اختصاصی و سفارشی‌سازی‌شده",
@@ -88,7 +88,7 @@ const categories: Category[] = [
       },
       {
         name: "کسب‌وکار",
-        price: "از ۲۲",
+        price: "از 37",
         unit: "میلیون تومان",
         features: [
           "طراحی UI اختصاصی روی وردپرس",
@@ -101,7 +101,7 @@ const categories: Category[] = [
       },
       {
         name: "فروشگاهی",
-        price: "از ۳۵",
+        price: "از 42",
         unit: "میلیون تومان",
         features: [
           "فروشگاه کامل با ووکامرس",
@@ -122,7 +122,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "پایه",
-        price: "از ۲۰",
+        price: "از 48",
         unit: "میلیون تومان",
         features: [
           "کدنویسی اختصاصی با Next.js / React",
@@ -134,7 +134,7 @@ const categories: Category[] = [
       },
       {
         name: "پیشرفته",
-        price: "از ۴۵",
+        price: "از 82",
         unit: "میلیون تومان",
         features: [
           "فرانت‌اند و بک‌اند اختصاصی",
@@ -168,7 +168,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "پنل ساده",
-        price: "از ۳۰",
+        price: "از 82",
         unit: "میلیون تومان",
         features: [
           "پنل مدیریت تک‌کاربره",
@@ -180,7 +180,7 @@ const categories: Category[] = [
       },
       {
         name: "پنل حرفه‌ای",
-        price: "از ۵۵",
+        price: "از 178",
         unit: "میلیون تومان",
         features: [
           "چند نقش کاربری (ادمین/کارمند/مشتری)",
@@ -220,7 +220,7 @@ export default function PricingPlans() {
             key={c.slug}
             type="button"
             onClick={() => setActive(c.slug)}
-            className={`rounded-full border px-5 py-2.5 text-[13.5px] font-bold transition ${
+            className={`rounded-lg border px-5 py-2.5 text-[13.5px] font-bold transition ${
               active === c.slug
                 ? "border-transparent text-white shadow-glow"
                 : "border-ink/15 bg-surface/40 text-dim hover:border-ink/25 hover:text-ink"

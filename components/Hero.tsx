@@ -81,7 +81,7 @@ export default function Hero() {
             <div className="flex flex-wrap gap-3.5">
               <a
                 href="#showcase"
-                className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[15px] font-bold text-canvas shadow-glow-soft transition hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3.5 text-[15px] font-bold text-canvas shadow-glow-soft transition hover:-translate-y-0.5"
               >
                 مشاهده‌ی نمونه‌کارها
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -90,7 +90,7 @@ export default function Hero() {
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-full border-2 border-ink/15 px-6 py-[13px] text-[15px] font-bold text-ink transition hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-2 rounded-lg border-2 border-ink/15 px-6 py-[13px] text-[15px] font-bold text-ink transition hover:border-accent hover:text-accent"
               >
                 تماس مستقیم
               </a>

@@ -62,7 +62,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             <div className="flex justify-end">
               <Link
                 href="/account"
-                className="whitespace-nowrap rounded-full bg-ink px-4 py-2 font-mono text-[12.5px] font-bold text-canvas transition hover:opacity-85"
+                className="whitespace-nowrap rounded-lg bg-ink px-4 py-2 font-mono text-[12.5px] font-bold text-canvas transition hover:opacity-85"
               >
                 {accountLabel}
               </Link>
@@ -103,14 +103,14 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             <div className="flex items-center gap-3">
               <Link
                 href="/account"
-                className="whitespace-nowrap rounded-full bg-ink px-5 py-[9px] font-mono text-[13px] font-bold text-canvas transition hover:opacity-85"
+                className="whitespace-nowrap rounded-lg bg-ink px-5 py-[9px] font-mono text-[13px] font-bold text-canvas transition hover:opacity-85"
               >
                 {accountLabel}
               </Link>
 
               <a
                 href="/contact"
-                className="whitespace-nowrap rounded-full border border-accent/40 bg-accent/10 px-5 py-[9px] font-mono text-[13px] font-bold text-accent transition hover:bg-accent/20"
+                className="whitespace-nowrap rounded-lg border border-accent/40 bg-accent/10 px-5 py-[9px] font-mono text-[13px] font-bold text-accent transition hover:bg-accent/20"
               >
                 تماس با ما
               </a>
