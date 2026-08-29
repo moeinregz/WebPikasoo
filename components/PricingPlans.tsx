@@ -31,7 +31,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "پایه",
-        price: "از 14",
+        price: "از ۸",
         unit: "میلیون تومان / ماه",
         features: [
           "تحقیق و انتخاب کلمات کلیدی",
@@ -42,7 +42,7 @@ const categories: Category[] = [
       },
       {
         name: "حرفه‌ای",
-        price: "از 37",
+        price: "از ۱۵",
         unit: "میلیون تومان / ماه",
         features: [
           "سئوی داخلی کامل تمام صفحات",
@@ -55,7 +55,7 @@ const categories: Category[] = [
       },
       {
         name: "رقابتی / سازمانی",
-        price: "قیمت توافقی",
+        price: "قیمت  توافقی ",
         unit: "بسته به حوزه‌ی رقابتی",
         features: [
           "استراتژی سئوی رقابتی اختصاصی",
@@ -76,7 +76,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "استارتاپ",
-        price: "از 25",
+        price: "از ۱۲",
         unit: "میلیون تومان",
         features: [
           "قالب اختصاصی و سفارشی‌سازی‌شده",
@@ -88,7 +88,7 @@ const categories: Category[] = [
       },
       {
         name: "کسب‌وکار",
-        price: "از 37",
+        price: "از ۲۲",
         unit: "میلیون تومان",
         features: [
           "طراحی UI اختصاصی روی وردپرس",
@@ -101,7 +101,7 @@ const categories: Category[] = [
       },
       {
         name: "فروشگاهی",
-        price: "از 42",
+        price: "از ۳۵",
         unit: "میلیون تومان",
         features: [
           "فروشگاه کامل با ووکامرس",
@@ -122,7 +122,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "پایه",
-        price: "از 48",
+        price: "از ۲۰",
         unit: "میلیون تومان",
         features: [
           "کدنویسی اختصاصی با Next.js / React",
@@ -134,7 +134,7 @@ const categories: Category[] = [
       },
       {
         name: "پیشرفته",
-        price: "از 82",
+        price: "از ۴۵",
         unit: "میلیون تومان",
         features: [
           "فرانت‌اند و بک‌اند اختصاصی",
@@ -147,7 +147,7 @@ const categories: Category[] = [
       },
       {
         name: "اختصاصی / سازمانی",
-        price: "قیمت توافقی",
+        price: "قیمت توافقی ",
         unit: "بسته به نیاز پروژه",
         features: [
           "معماری مقیاس‌پذیر (Next.js + Node/Mongo)",
@@ -168,7 +168,7 @@ const categories: Category[] = [
     plans: [
       {
         name: "پنل ساده",
-        price: "از 82",
+        price: "از ۳۰",
         unit: "میلیون تومان",
         features: [
           "پنل مدیریت تک‌کاربره",
@@ -180,7 +180,7 @@ const categories: Category[] = [
       },
       {
         name: "پنل حرفه‌ای",
-        price: "از 178",
+        price: "از ۵۵",
         unit: "میلیون تومان",
         features: [
           "چند نقش کاربری (ادمین/کارمند/مشتری)",
@@ -193,7 +193,7 @@ const categories: Category[] = [
       },
       {
         name: "سیستم سازمانی",
-        price: "قیمت توافقی",
+        price: "قیمت توافقی ",
         unit: "بسته به مقیاس پروژه",
         features: [
           "معماری مقیاس‌پذیر و چندبخشی",
@@ -220,7 +220,7 @@ export default function PricingPlans() {
             key={c.slug}
             type="button"
             onClick={() => setActive(c.slug)}
-            className={`rounded-lg border px-5 py-2.5 text-[13.5px] font-bold transition ${
+            className={`rounded-full border px-5 py-2.5 text-[13.5px] font-bold transition ${
               active === c.slug
                 ? "border-transparent text-white shadow-glow"
                 : "border-ink/15 bg-surface/40 text-dim hover:border-ink/25 hover:text-ink"
