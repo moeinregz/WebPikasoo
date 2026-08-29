@@ -49,22 +49,6 @@ export default async function OrderPage({
     <>
       <Nav isLoggedIn={isLoggedIn} />
 
-      <PageHero
-        eyebrow="Plans & Order"
-        title="پلن‌ها و ثبت سفارش"
-        desc="بر اساس نوع پروژه‌ت یه دسته رو انتخاب کن، پلن مناسبت رو ببین و فرم ثبت سفارش رو پر کن — بعد از بررسی، قیمت و زمان‌بندی دقیق رو برات مشخص می‌کنیم."
-      >
-        <a
-          href="#order-form"
-          className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[14.5px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
-        >
-          رفتن به فرم ثبت سفارش
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
-            <path d="M12 5v14M18 13l-6 6-6-6" />
-          </svg>
-        </a>
-      </PageHero>
-
       {/* پلن‌ها بر اساس نوع خدمت — سئو، وردپرس، کدنویسی اختصاصی، نرم‌افزار/پنل مدیریت */}
       <section className="relative overflow-hidden py-16 sm:py-20">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
