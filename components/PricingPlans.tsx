@@ -220,7 +220,7 @@ export default function PricingPlans() {
             key={c.slug}
             type="button"
             onClick={() => setActive(c.slug)}
-            className={`rounded-full border px-5 py-2.5 text-[13.5px] font-bold transition ${
+            className={`rounded-lg border px-5 py-2.5 text-[13.5px] font-bold transition ${
               active === c.slug
                 ? "border-transparent text-white shadow-glow"
                 : "border-ink/15 bg-surface/40 text-dim hover:border-ink/25 hover:text-ink"
