@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مروارید خزر | هتل بوتیک ساحلی</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&family=Vazirmatn:wght@100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #16231f;
+      --petrol: #0e3b3d;
+      --petrol-dark: #092a2c;
+      --sand: #efe6d2;
+      --ivory: #fbf8f1;
+      --brass: #c69a4e;
+      --brass-light: #e3c784;
+      --ember: #c1633d;
+      --ease: cubic-bezier(.22, .68, 0, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: var(--ivory);
+      color: var(--ink);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    .display {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .container {
+      width: min(1180px, 92%);
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .8rem;
+      letter-spacing: .03em;
+      color: var(--brass);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--brass);
+      display: inline-block;
+    }
+
+    .section {
+      padding: min(11vw, 120px) 0;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.4vw, 2.7rem);
+      margin-bottom: 20px;
+      color: var(--petrol);
+    }
+
+    .lead {
+      max-width: 620px;
+      color: #3c4a45;
+      font-size: 1.02rem;
+    }
+
+    /* reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .9s var(--ease), transform .9s var(--ease);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================= NAV ================= */
+    header {
+      position: fixed;
+      inset-inline: 0;
+      top: 0;
+      z-index: 100;
+      padding: 22px 0;
+      transition: background .5s var(--ease), padding .4s var(--ease), box-shadow .4s var(--ease);
+    }
+
+    header.scrolled {
+      background: rgba(14, 59, 61, .92);
+      backdrop-filter: blur(10px);
+      padding: 14px 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .15);
+    }
+
+    nav.container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.35rem;
+      color: var(--ivory);
+      letter-spacing: .01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand .mark {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 34px;
+      font-size: .92rem;
+    }
+
+    .nav-links a {
+      color: var(--sand);
+      position: relative;
+      padding-bottom: 4px;
+      transition: color .3s;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background: var(--brass-light);
+      transition: width .35s var(--ease);
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      border: 1px solid var(--brass-light);
+      color: var(--brass-light);
+      padding: 9px 22px;
+      border-radius: 2px;
+      font-size: .85rem;
+      transition: background .35s var(--ease), color .35s var(--ease);
+    }
+
+    .nav-cta:hover {
+      background: var(--brass-light);
+      color: var(--petrol-dark);
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+
+    /* ================= HERO ================= */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(180deg, #0a2b2d 0%, #123f41 32%, #4c6a55 62%, #b0784f 84%, #c1633d 100%);
+      overflow: hidden;
+    }
+
+    .hero-sun {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 40%, #ffe3b0, var(--brass) 55%, rgba(198, 154, 78, 0) 72%);
+      filter: blur(1px);
+      animation: pulse 7s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: .85;
+        transform: translateX(-50%) scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.06);
+      }
+    }
+
+    .cliff {
+      position: absolute;
+      bottom: 0;
+      width: 46%;
+      opacity: .9;
+    }
+
+    .cliff.right {
+      right: -4%;
+      transform: scaleX(-1);
+    }
+
+    .cliff.left {
+      left: -4%;
+    }
+
+    .hero-waves {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      line-height: 0;
+    }
+
+    .wave-row {
+      width: 200%;
+      display: flex;
+    }
+
+    .wave-row svg {
+      width: 50%;
+      height: auto;
+      flex-shrink: 0;
+    }
+
+    .wave-row.slow {
+      animation: driftA 22s linear infinite;
+    }
+
+    .wave-row.fast {
+      animation: driftA 13s linear infinite;
+      margin-top: -6%;
+      opacity: .7;
+    }
+
+    @keyframes driftA {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      width: 100%;
+      padding-top: 60px;
+    }
+
+    .hero-content .eyebrow {
+      color: var(--brass-light);
+      justify-content: center;
+    }
+
+    .hero-content .eyebrow::before {
+      display: none;
+    }
+
+    .hero-title {
+      color: var(--ivory);
+      font-size: clamp(3rem, 8vw, 6.2rem);
+      text-shadow: 0 6px 40px rgba(0, 0, 0, .25);
+    }
+
+    .hero-sub {
+      color: var(--sand);
+      max-width: 520px;
+      margin: 22px auto 40px;
+      font-size: 1.08rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 15px 34px;
+      font-size: .92rem;
+      border-radius: 2px;
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .35s;
+    }
+
+    .btn-primary {
+      background: var(--brass);
+      color: var(--petrol-dark);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(198, 154, 78, .35);
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(255, 255, 255, .5);
+      color: #fff;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, .12);
+      transform: translateY(-3px);
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--sand);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .scroll-cue .line {
+      width: 1px;
+      height: 34px;
+      background: linear-gradient(var(--brass-light), transparent);
+      animation: down 1.8s ease-in-out infinite;
+    }
+
+    @keyframes down {
+      0% {
+        transform: scaleY(0);
+        transform-origin: top;
+      }
+
+      50% {
+        transform: scaleY(1);
+        transform-origin: top;
+      }
+
+      51% {
+        transform-origin: bottom;
+      }
+
+      100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    /* ================= DIVIDER WAVE ================= */
+    .divider {
+      line-height: 0;
+      width: 100%;
+      overflow: hidden;
+      background: var(--ivory);
+    }
+
+    .divider.petrol-to-ivory {
+      background: var(--petrol-dark);
+    }
+
+    .divider svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ================= STORY ================= */
+    .story {
+      background: var(--ivory);
+    }
+
+    .story .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .story-art {
+      position: relative;
+    }
+
+    .story-art svg {
+      border-radius: 4px;
+    }
+
+    .story-figure {
+      position: absolute;
+      bottom: -26px;
+      right: -26px;
+      background: var(--petrol);
+      color: var(--ivory);
+      padding: 22px 26px;
+      max-width: 230px;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1rem;
+      box-shadow: 0 20px 40px rgba(14, 59, 61, .25);
+    }
+
+    .story-figure b {
+      display: block;
+      font-size: 1.9rem;
+      color: var(--brass-light);
+      margin-bottom: 4px;
+    }
+
+    /* ================= ROOMS ================= */
+    .rooms {
+      background: var(--sand);
+    }
+
+    .rooms-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .room-card {
+      background: var(--ivory);
+      position: relative;
+      transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+    }
+
+    .room-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 50px rgba(22, 35, 31, .18);
+    }
+
+    .room-thumb {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .room-thumb svg {
+      width: 100%;
+      height: 100%;
+      transition: transform .8s var(--ease);
+    }
+
+    .room-card:hover .room-thumb svg {
+      transform: scale(1.08);
+    }
+
+    .room-body {
+      padding: 26px 24px 30px;
+    }
+
+    .room-name {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.35rem;
+      color: var(--petrol);
+      margin-bottom: 8px;
+    }
+
+    .room-desc {
+      font-size: .9rem;
+      color: #5b6560;
+      margin-bottom: 18px;
+    }
+
+    .room-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #e6dfce;
+      padding-top: 16px;
+    }
+
+    .room-price {
+      color: var(--ember);
+      font-weight: 700;
+      font-size: .95rem;
+    }
+
+    .room-price span {
+      color: #8a8378;
+      font-weight: 400;
+      font-size: .78rem;
+    }
+
+    .room-link {
+      font-size: .85rem;
+      color: var(--petrol);
+      position: relative;
+    }
+
+    .room-link::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: -3px;
+      width: 0;
+      height: 1px;
+      background: var(--brass);
+      transition: width .35s var(--ease);
+    }
+
+    .room-card:hover .room-link::after {
+      width: 100%;
+    }
+
+    /* ================= AMENITIES ================= */
+    .amenities {
+      background: var(--ivory);
+    }
+
+    .amen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: #e6dfce;
+      margin-top: 50px;
+    }
+
+    .amen-item {
+      background: var(--ivory);
+      padding: 44px 30px;
+      text-align: center;
+      transition: background .4s var(--ease);
+    }
+
+    .amen-item:hover {
+      background: var(--sand);
+    }
+
+    .amen-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--petrol);
+      color: var(--brass-light);
+      transition: transform .45s var(--ease), background .45s;
+    }
+
+    .amen-item:hover .amen-icon {
+      transform: rotate(-8deg) scale(1.08);
+      background: var(--ember);
+    }
+
+    .amen-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .amen-name {
+      font-weight: 600;
+      font-size: .98rem;
+      color: var(--petrol);
+    }
+
+    /* ================= DINING ================= */
+    .dining {
+      background: var(--petrol-dark);
+      color: var(--sand);
+    }
+
+    .dining .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .dining .eyebrow {
+      color: var(--brass-light);
+    }
+
+    .dining h2 {
+      color: var(--ivory);
+    }
+
+    .dining .lead {
+      color: #c9d3ce;
+    }
+
+    .dining-quote {
+      margin-top: 28px;
+      padding-inline-start: 20px;
+      border-inline-start: 2px solid var(--brass);
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.1rem;
+      color: var(--brass-light);
+    }
+
+    /* ================= GALLERY ================= */
+    .gallery {
+      background: var(--ivory);
+    }
+
+    .gal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 130px;
+      gap: 14px;
+      margin-top: 50px;
+    }
+
+    .gal-item {
+      overflow: hidden;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .gal-item svg {
+      width: 100%;
+      height: 100%;
+      transition: transform .7s var(--ease);
+    }
+
+    .gal-item:hover svg {
+      transform: scale(1.12);
+    }
+
+    .gal-item span {
+      position: absolute;
+      inset-inline-start: 14px;
+      bottom: 12px;
+      color: #fff;
+      font-size: .8rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: .4s var(--ease);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, .5);
+    }
+
+    .gal-item:hover span {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .g1 {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .g4 {
+      grid-column: span 2;
+    }
+
+    .g6 {
+      grid-row: span 2;
+    }
+
+    /* ================= TESTIMONIALS ================= */
+    .testi {
+      background: var(--sand);
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .testi-card {
+      background: var(--ivory);
+      padding: 36px 30px;
+      position: relative;
+    }
+
+    .testi-card::before {
+      content: "”";
+      position: absolute;
+      top: 14px;
+      right: 22px;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 3rem;
+      color: var(--brass-light);
+    }
+
+    .testi-text {
+      font-size: .95rem;
+      color: #4a544e;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testi-name {
+      font-weight: 700;
+      color: var(--petrol);
+      font-size: .92rem;
+    }
+
+    .testi-role {
+      font-size: .78rem;
+      color: #8a8378;
+    }
+
+    /* ================= BOOKING BAND ================= */
+    .booking {
+      background: linear-gradient(120deg, var(--brass), var(--ember));
+      padding: 70px 0;
+    }
+
+    .booking .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .booking h2 {
+      color: var(--petrol-dark);
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+    }
+
+    .booking-form {
+      background: var(--ivory);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
+    }
+
+    .booking-field {
+      padding: 16px 22px;
+      border-inline-end: 1px solid #e6dfce;
+      min-width: 140px;
+    }
+
+    .booking-field label {
+      display: block;
+      font-size: .72rem;
+      color: #8a8378;
+      margin-bottom: 4px;
+    }
+
+    .booking-field input,
+    .booking-field select {
+      border: none;
+      background: none;
+      font-family: inherit;
+      font-size: .9rem;
+      color: var(--ink);
+      width: 100%;
+    }
+
+    .booking-field input:focus,
+    .booking-field select:focus {
+      outline: 2px solid var(--brass);
+      outline-offset: 2px;
+    }
+
+    .booking-submit {
+      background: var(--petrol);
+      color: var(--ivory);
+      padding: 0 32px;
+      font-weight: 600;
+      font-size: .9rem;
+      transition: background .35s;
+    }
+
+    .booking-submit:hover {
+      background: var(--petrol-dark);
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      background: var(--petrol-dark);
+      color: var(--sand);
+      padding: 80px 0 30px;
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 50px;
+      padding-bottom: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .foot-brand .brand {
+      margin-bottom: 16px;
+    }
+
+    .foot-brand p {
+      color: #9fb0aa;
+      font-size: .88rem;
+      max-width: 280px;
+    }
+
+    .foot-col h4 {
+      color: var(--brass-light);
+      font-size: .92rem;
+      margin-bottom: 18px;
+      font-weight: 600;
+    }
+
+    .foot-col li {
+      margin-bottom: 11px;
+      font-size: .88rem;
+      color: #c9d3ce;
+    }
+
+    .foot-col a:hover {
+      color: #fff;
+    }
+
+    .newsletter {
+      display: flex;
+      margin-top: 14px;
+      border: 1px solid rgba(255, 255, 255, .2);
+    }
+
+    .newsletter input {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 12px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: .85rem;
+    }
+
+    .newsletter button {
+      background: var(--brass);
+      color: var(--petrol-dark);
+      padding: 0 18px;
+      font-weight: 700;
+      font-size: .85rem;
+      transition: background .3s;
+    }
+
+    .newsletter button:hover {
+      background: var(--brass-light);
+    }
+
+    .foot-bottom {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 26px;
+      font-size: .78rem;
+      color: #7f938c;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width:900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .story .container,
+      .dining .container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .room-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .amen-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .gal-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .g1 {
+        grid-column: span 2;
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .booking .container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width:560px) {
+      .amen-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gal-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 110px;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .booking-form {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .booking-field {
+        border-inline-end: none;
+        border-bottom: 1px solid #e6dfce;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="site-header">
+    <nav class="container">
+      <a href="#top" class="brand">
+        <svg class="mark" viewBox="0 0 40 40">
+          <circle cx="20" cy="20" r="19" fill="none" stroke="#e3c784" stroke-width="1.4" />
+          <path d="M6 24 Q13 18 20 24 T34 24" stroke="#e3c784" stroke-width="1.6" fill="none" stroke-linecap="round" />
+          <circle cx="20" cy="14" r="4" fill="#e3c784" />
+        </svg>
+        مروارید خزر
+      </a>
+      <ul class="nav-links">
+        <li><a href="#top">خانه</a></li>
+        <li><a href="#story">داستان ما</a></li>
+        <li><a href="#rooms">اتاق‌ها</a></li>
+        <li><a href="#amenities">امکانات</a></li>
+        <li><a href="#dining">رستوران</a></li>
+      </ul>
+      <a href="#booking" class="nav-cta">رزرو اتاق</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="hero-sun"></div>
+    <svg class="cliff left" viewBox="0 0 400 300" preserveAspectRatio="none">
+      <path d="M0 300 L0 180 L60 140 L110 170 L170 90 L230 150 L270 130 L400 220 L400 300 Z" fill="#0a1d1c" />
+    </svg>
+    <svg class="cliff right" viewBox="0 0 400 300" preserveAspectRatio="none">
+      <path d="M0 300 L0 200 L80 160 L140 190 L190 120 L240 160 L300 140 L400 210 L400 300 Z" fill="#0a1d1c"
+        opacity="0.85" />
+    </svg>
+
+    <div class="hero-content container">
+      <div class="eyebrow">هتل بوتیک ساحل خزر</div>
+      <h1 class="hero-title">مروارید خزر</h1>
+      <p class="hero-sub">اقامتی بی‌نظیر بر صخره‌های ساحل خزر؛ جایی که افق دریا با آسمان می‌آمیزد و هر غروب یک روایت
+        تازه می‌شود.</p>
+      <div class="hero-actions">
+        <a href="#booking" class="btn btn-primary">رزرو اتاق</a>
+        <a href="#rooms" class="btn btn-ghost">کشف هتل</a>
+      </div>
+    </div>
+
+    <div class="hero-waves">
+      <div class="wave-row slow">
+        <svg viewBox="0 0 800 140" preserveAspectRatio="none">
+          <path d="M0 70 Q100 20 200 70 T400 70 T600 70 T800 70 V140 H0 Z" fill="#efe6d2" opacity="0.9" />
+        </svg>
+        <svg viewBox="0 0 800 140" preserveAspectRatio="none">
+          <path d="M0 70 Q100 20 200 70 T400 70 T600 70 T800 70 V140 H0 Z" fill="#efe6d2" opacity="0.9" />
+        </svg>
+      </div>
+      <div class="wave-row fast">
+        <svg viewBox="0 0 800 120" preserveAspectRatio="none">
+          <path d="M0 60 Q100 100 200 60 T400 60 T600 60 T800 60 V120 H0 Z" fill="#fbf8f1" />
+        </svg>
+        <svg viewBox="0 0 800 120" preserveAspectRatio="none">
+          <path d="M0 60 Q100 100 200 60 T400 60 T600 60 T800 60 V120 H0 Z" fill="#fbf8f1" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="scroll-cue"><span>پیمایش کنید</span><span class="line"></span></div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="container">
+      <div class="story-art reveal">
+        <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg">
+          <rect width="520" height="420" fill="#dfd3ab" />
+          <path d="M0 420 V260 L90 210 L150 250 L230 160 L300 220 L360 190 L520 270 V420 Z" fill="#0e3b3d" />
+          <path d="M0 420 V320 Q130 280 260 320 T520 320 V420 Z" fill="#c69a4e" opacity="0.85" />
+          <circle cx="420" cy="90" r="46" fill="#c1633d" opacity="0.9" />
+        </svg>
+        <div class="story-figure"><b>۱۳۷۷</b>سالی که اولین سنگ این هتل بر صخره‌های خزر بنا شد.</div>
+      </div>
+      <div class="reveal">
+        <div class="eyebrow">داستان ما</div>
+        <h2 class="section-title">میان صخره و دریا</h2>
+        <p class="lead">مروارید خزر از دل معماری بومی سواحل شمالی الهام گرفته؛ سنگ‌های محلی، چوب کهنه و شیشه‌های بلند رو
+          به دریا. هر فضا طوری طراحی شده که نور غروب را به داخل بیاورد و صدای موج را هرگز از یاد شما نبرد. اینجا فقط
+          اقامتگاه نیست؛ توقفی آرام در مسیر یک زندگی شلوغ است.</p>
+        <p class="lead" style="margin-top:16px;">تیم میزبانی ما اهل همین سواحل‌اند؛ می‌دانند بهترین ساعت برای دیدن غروب
+          کجاست و کدام ماهی صبح از دریا رسیده.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <path d="M0 40 Q360 0 720 40 T1440 40 V90 H0 Z" fill="#efe6d2" />
+    </svg>
+  </div>
+
+  <section class="rooms" id="rooms">
+    <div class="container">
+      <div class="rooms-head reveal">
+        <div>
+          <div class="eyebrow">اقامتگاه‌ها</div>
+          <h2 class="section-title" style="margin-bottom:0;">اتاقی برای هر افق</h2>
+        </div>
+        <p class="lead">از اتاق‌های رو به دریا تا ویلاهای اختصاصی روی صخره؛ هر اقامتگاه چشم‌اندازی متفاوت از خزر را برای
+          شما روایت می‌کند.</p>
+      </div>
+
+      <div class="room-grid">
+        <div class="room-card reveal">
+          <div class="room-thumb">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+              <rect width="400" height="300" fill="#123f41" />
+              <path d="M0 300 V190 Q100 150 200 190 T400 190 V300 Z" fill="#c69a4e" opacity="0.5" />
+              <circle cx="320" cy="70" r="34" fill="#e3c784" />
+            </svg>
+          </div>
+          <div class="room-body">
+            <div class="room-name">اتاق کلاسیک دریا</div>
+            <p class="room-desc">۳۲ متر مربع، بالکن رو به دریا، تخت کینگ و حمام سنگی.</p>
+            <div class="room-foot">
+              <div class="room-price">۳٬۲۰۰٬۰۰۰ <span>تومان / شب</span></div>
+              <a href="#booking" class="room-link">رزرو ←</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal">
+          <div class="room-thumb">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+              <rect width="400" height="300" fill="#0a2b2d" />
+              <path d="M0 300 V210 L120 150 L220 200 L320 140 L400 190 V300 Z" fill="#c1633d" opacity="0.55" />
+              <circle cx="100" cy="80" r="28" fill="#e3c784" />
+            </svg>
+          </div>
+          <div class="room-body">
+            <div class="room-name">سوئیت صخره</div>
+            <p class="room-desc">۵۴ متر مربع، جکوزی روباز، نشیمن جداگانه و منظره ۱۸۰ درجه.</p>
+            <div class="room-foot">
+              <div class="room-price">۵٬۸۰۰٬۰۰۰ <span>تومان / شب</span></div>
+              <a href="#booking" class="room-link">رزرو ←</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal">
+          <div class="room-thumb">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+              <rect width="400" height="300" fill="#1a4a48" />
+              <path d="M0 300 V230 Q100 180 200 220 T400 210 V300 Z" fill="#efe6d2" opacity="0.4" />
+              <rect x="160" y="60" width="80" height="60" fill="#e3c784" opacity="0.8" />
+            </svg>
+          </div>
+          <div class="room-body">
+            <div class="room-name">ویلای ساحلی</div>
+            <p class="room-desc">۹۰ متر مربع، استخر اختصاصی، دسترسی مستقیم به ساحل خصوصی.</p>
+            <div class="room-foot">
+              <div class="room-price">۹٬۴۰۰٬۰۰۰ <span>تومان / شب</span></div>
+              <a href="#booking" class="room-link">رزرو ←</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="amenities" id="amenities">
+    <div class="container">
+      <div class="reveal" style="text-align:center;">
+        <div class="eyebrow" style="justify-content:center;"><span style="display:none;"></span>امکانات</div>
+        <h2 class="section-title">هر آنچه برای آرامش نیاز دارید</h2>
+      </div>
+
+      <div class="amen-grid">
+        <div class="amen-item reveal">
+          <div class="amen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M2 17 Q6 13 10 17 T18 17 T26 17" />
+              <path d="M2 21 Q6 17 10 21 T18 21" />
+              <circle cx="17" cy="6" r="3" />
+            </svg></div>
+          <div class="amen-name">استخر روباز رو به دریا</div>
+        </div>
+        <div class="amen-item reveal">
+          <div class="amen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 3c3 3 4 6 4 9a4 4 0 0 1-8 0c0-3 1-6 4-9Z" />
+              <path d="M12 21v-6" />
+            </svg></div>
+          <div class="amen-name">اسپا و ماساژ سنتی</div>
+        </div>
+        <div class="amen-item reveal">
+          <div class="amen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M6 2v8a3 3 0 0 0 3 3v9M9 2v9M12 2v9M18 2c-2 2-2 5-2 7a2 2 0 0 0 2 2v9" />
+            </svg></div>
+          <div class="amen-name">رستوران دریایی</div>
+        </div>
+        <div class="amen-item reveal">
+          <div class="amen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 3v4M12 21c4-2 4-8 4-8H8s0 6 4 8Z" />
+              <path d="M9 8h6" />
+            </svg></div>
+          <div class="amen-name">دسترسی به ساحل خصوصی</div>
+        </div>
+        <div class="amen-item reveal">
+          <div class="amen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="4" y="9" width="16" height="11" rx="1" />
+              <path d="M8 9V6a4 4 0 0 1 8 0v3" />
+            </svg></div>
+          <div class="amen-name">پارکینگ اختصاصی و امن</div>
+        </div>
+        <div class="amen-item reveal">
+          <div class="amen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M2 9c6-6 14-6 20 0M5.5 13c4-4 9-4 13 0M9 17c1.6-1.6 4.4-1.6 6 0" />
+              <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" />
+            </svg></div>
+          <div class="amen-name">اینترنت پرسرعت رایگان</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dining" id="dining">
+    <div class="container">
+      <div class="reveal">
+        <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="500" height="400" fill="#092a2c" />
+          <circle cx="250" cy="200" r="120" fill="none" stroke="#c69a4e" stroke-width="1.5" opacity="0.5" />
+          <ellipse cx="250" cy="230" rx="90" ry="18" fill="#c1633d" opacity="0.6" />
+          <path d="M180 230 Q250 150 320 230" stroke="#e3c784" stroke-width="2" fill="none" />
+          <circle cx="250" cy="80" r="26" fill="#e3c784" />
+        </svg>
+      </div>
+      <div class="reveal">
+        <div class="eyebrow">رستوران</div>
+        <h2 class="section-title">طعم دریا، روایت خزر</h2>
+        <p class="lead">آشپزخانه ما با محصولات تازه‌ی روزانه‌ی صیادان محلی کار می‌کند؛ از سفره‌ماهی گریل‌شده تا خورش‌های
+          سنتی گیلان، همه در سالنی با دیوارهای شیشه‌ای رو به غروب سرو می‌شود.</p>
+        <div class="dining-quote">«هر شام اینجا، با یک غروب متفاوت همراه است.»</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">گالری</div>
+        <h2 class="section-title">لحظه‌هایی از مروارید</h2>
+      </div>
+
+      <div class="gal-grid">
+        <div class="gal-item g1 reveal"><svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice">
+            <rect width="300" height="300" fill="#123f41" />
+            <path d="M0 300 V180 Q150 130 300 180 V300 Z" fill="#c69a4e" opacity="0.5" />
+            <circle cx="220" cy="70" r="30" fill="#e3c784" />
+          </svg><span>غروب از تراس اصلی</span></div>
+        <div class="gal-item reveal"><svg viewBox="0 0 150 130" preserveAspectRatio="xMidYMid slice">
+            <rect width="150" height="130" fill="#0a2b2d" />
+            <rect x="30" y="30" width="90" height="70" fill="#efe6d2" opacity="0.7" />
+          </svg><span>سوئیت صخره</span></div>
+        <div class="gal-item reveal"><svg viewBox="0 0 150 130" preserveAspectRatio="xMidYMid slice">
+            <rect width="150" height="130" fill="#c1633d" />
+            <circle cx="75" cy="65" r="40" fill="#e3c784" opacity="0.6" />
+          </svg><span>رستوران دریایی</span></div>
+        <div class="gal-item g4 reveal"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice">
+            <rect width="300" height="130" fill="#1a4a48" />
+            <path d="M0 130 V70 Q150 30 300 70 V130 Z" fill="#fbf8f1" opacity="0.5" />
+          </svg><span>استخر روباز</span></div>
+        <div class="gal-item g6 reveal"><svg viewBox="0 0 150 270" preserveAspectRatio="xMidYMid slice">
+            <rect width="150" height="270" fill="#092a2c" />
+            <circle cx="75" cy="90" r="34" fill="#c69a4e" />
+            <path d="M0 270 V190 Q75 150 150 190 V270 Z" fill="#0e3b3d" />
+          </svg><span>ساحل خصوصی</span></div>
+        <div class="gal-item reveal"><svg viewBox="0 0 150 130" preserveAspectRatio="xMidYMid slice">
+            <rect width="150" height="130" fill="#e3c784" />
+            <path d="M0 130 V90 Q75 60 150 90 V130 Z" fill="#0e3b3d" opacity="0.7" />
+          </svg><span>اسپا</span></div>
+        <div class="gal-item reveal"><svg viewBox="0 0 150 130" preserveAspectRatio="xMidYMid slice">
+            <rect width="150" height="130" fill="#c69a4e" />
+            <circle cx="110" cy="40" r="20" fill="#fbf8f1" />
+          </svg><span>لابی</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testi">
+    <div class="container">
+      <div class="reveal" style="text-align:center;">
+        <div class="eyebrow" style="justify-content:center;">مهمانان می‌گویند</div>
+        <h2 class="section-title">تجربه‌ای که تکرار می‌شود</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <p class="testi-text">از لحظه‌ی ورود تا صبحانه‌ی کنار دریا، همه‌چیز حساب‌شده و صمیمی بود. سکوت شب و صدای موج
+            هنوز با من است.</p>
+          <div class="testi-name">نیلوفر احمدی</div>
+          <div class="testi-role">اقامت سه‌شبه، سوئیت صخره</div>
+        </div>
+        <div class="testi-card reveal">
+          <p class="testi-text">رستوران هتل یکی از بهترین تجربه‌های غذایی سواحل خزر بود؛ تازگی ماهی و منظره‌ی غروب
+            فراموش‌نشدنی بودند.</p>
+          <div class="testi-name">آرش کریمی</div>
+          <div class="testi-role">اقامت آخر هفته، ویلای ساحلی</div>
+        </div>
+        <div class="testi-card reveal">
+          <p class="testi-text">میزبانی گرم و شخصی‌سازی‌شده. حس کردیم واقعاً برای ما اهمیت قائل‌اند، نه فقط یک رزرو
+            دیگر.</p>
+          <div class="testi-name">مهسا رضایی</div>
+          <div class="testi-role">اقامت پنج‌شبه، اتاق کلاسیک</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="booking" id="booking">
+    <div class="container">
+      <h2 class="reveal">اقامت خود را رزرو کنید</h2>
+      <form class="booking-form reveal"
+        onsubmit="event.preventDefault(); alert('درخواست رزرو شما ثبت شد. به‌زودی با شما تماس می‌گیریم.');">
+        <div class="booking-field">
+          <label for="checkin">تاریخ ورود</label>
+          <input type="date" id="checkin" required>
+        </div>
+        <div class="booking-field">
+          <label for="checkout">تاریخ خروج</label>
+          <input type="date" id="checkout" required>
+        </div>
+        <div class="booking-field">
+          <label for="guests">تعداد مهمان</label>
+          <select id="guests">
+            <option>۱ نفر</option>
+            <option selected>۲ نفر</option>
+            <option>۳ نفر</option>
+            <option>۴ نفر</option>
+          </select>
+        </div>
+        <button type="submit" class="booking-submit">بررسی موجودی</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a href="#top" class="brand">
+            <svg class="mark" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="19" fill="none" stroke="#e3c784" stroke-width="1.4" />
+              <path d="M6 24 Q13 18 20 24 T34 24" stroke="#e3c784" stroke-width="1.6" fill="none"
+                stroke-linecap="round" />
+              <circle cx="20" cy="14" r="4" fill="#e3c784" />
+            </svg>
+            مروارید خزر
+          </a>
+          <p>هتلی بوتیک بر صخره‌های ساحل خزر؛ اقامتی آرام میان دریا و آسمان.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="ایمیل شما">
+            <button>عضویت</button>
+          </div>
+        </div>
+        <div class="foot-col">
+          <h4>دسترسی سریع</h4>
+          <ul>
+            <li><a href="#story">داستان ما</a></li>
+            <li><a href="#rooms">اتاق‌ها</a></li>
+            <li><a href="#amenities">امکانات</a></li>
+            <li><a href="#dining">رستوران</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>تماس با ما</h4>
+          <ul>
+            <li>ساحل خزر، جاده کنار دریا</li>
+            <li>۰۲۱-۹۱۲۳۴۵۶۷</li>
+            <li>info@morvaridkhazar.example</li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>ما را دنبال کنید</h4>
+          <ul>
+            <li><a href="#">اینستاگرام</a></li>
+            <li><a href="#">تلگرام</a></li>
+            <li><a href="#">پینترست</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© ۱۴۰۴ هتل مروارید خزر. تمامی حقوق محفوظ است.</span>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+
+</html>

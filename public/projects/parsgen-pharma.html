@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پارس‌ژن | داروسازی علمی برای زندگی سالم‌تر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0A2E2C;
+    --navy-soft:#123F3B;
+    --teal:#12726B;
+    --teal-light:#1C9186;
+    --green-vital:#3FB88B;
+    --gold:#D9A441;
+    --bg:#F5F8F6;
+    --bg-card:#FFFFFF;
+    --ink:#0E211E;
+    --ink-soft:#546b65;
+    --line:#DCE6E2;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Vazirmatn',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    overflow-x:hidden;
+    line-height:1.7;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  section{position:relative;}
+  .wrap{max-width:1220px;margin:0 auto;padding:0 32px;}
+  ::selection{background:var(--green-vital);color:var(--navy-deep);}
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* ---------- scroll progress capsule ---------- */
+  .capsule-progress{
+    position:fixed; top:0; right:0; left:0; height:4px; z-index:999;
+    background:transparent;
+  }
+  .capsule-progress__bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--green-vital),var(--gold));
+    transition:width .1s linear;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed; top:4px; right:0; left:0; z-index:900;
+    padding:18px 0;
+    transition:.35s;
+  }
+  header.scrolled{
+    background:rgba(10,46,42,.86);
+    backdrop-filter:blur(14px) saturate(140%);
+    padding:12px 0;
+    box-shadow:0 8px 30px rgba(0,0,0,.15);
+  }
+  header .wrap{display:flex;align-items:center;justify-content:space-between;}
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-weight:800;font-size:1.25rem;color:#fff;
+    letter-spacing:.5px;
+  }
+  .logo__mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--green-vital),var(--teal-light));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(63,184,139,.4);
+  }
+  .logo__mark svg{width:19px;height:19px;}
+  nav ul{display:flex;gap:34px;}
+  nav a{
+    color:rgba(255,255,255,.82);
+    font-size:.95rem;font-weight:500;
+    position:relative;
+    padding:4px 0;
+    transition:.25s;
+  }
+  nav a::after{
+    content:"";position:absolute;bottom:-2px;right:0;left:auto;
+    width:0;height:2px;background:var(--green-vital);
+    transition:.3s;
+  }
+  nav a:hover{color:#fff;}
+  nav a:hover::after{width:100%;}
+  .header-actions{display:flex;align-items:center;gap:18px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 26px;border-radius:100px;
+    font-weight:600;font-size:.92rem;
+    border:none;cursor:pointer;
+    transition:.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .btn-primary{
+    background:var(--green-vital);color:var(--navy-deep);
+    box-shadow:0 6px 20px rgba(63,184,139,.35);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(63,184,139,.5);}
+  .btn-ghost{
+    background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.1);}
+  .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;
+    background:
+      radial-gradient(ellipse 900px 600px at 85% -10%, rgba(63,184,139,.28), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 0% 100%, rgba(217,164,65,.14), transparent 60%),
+      linear-gradient(160deg,var(--navy-deep) 0%, var(--navy-soft) 60%, var(--teal) 130%);
+    padding:150px 0 90px;
+    overflow:hidden;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    color:var(--green-vital);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;letter-spacing:.14em;
+    padding:8px 16px;border:1px solid rgba(63,184,139,.4);
+    border-radius:100px;margin-bottom:26px;
+    background:rgba(63,184,139,.08);
+  }
+  .eyebrow span.dot{width:6px;height:6px;border-radius:50%;background:var(--green-vital);animation:pulse-dot 1.8s infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+  .hero h1{
+    font-size:clamp(2.3rem,4.6vw,3.7rem);
+    font-weight:800;color:#fff;
+    line-height:1.28;letter-spacing:-.5px;
+    margin-bottom:24px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(90deg,var(--green-vital),#8fe0c4);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{
+    color:rgba(255,255,255,.72);
+    font-size:1.08rem; max-width:520px; margin-bottom:36px;
+  }
+  .hero-ctas{display:flex;gap:16px;margin-bottom:56px;flex-wrap:wrap;}
+  .hero-stats{display:flex;gap:38px;flex-wrap:wrap;}
+  .hero-stats .stat b{
+    display:block;font-family:'JetBrains Mono',monospace;
+    font-size:1.6rem;color:#fff;font-weight:600;
+  }
+  .hero-stats .stat span{color:rgba(255,255,255,.55);font-size:.82rem;}
+
+  /* hero visual: molecule / capsule assembly */
+  .hero-visual{position:relative;height:520px;}
+  .capsule-core{
+    position:absolute;top:50%;right:50%;
+    transform:translate(50%,-50%);
+    width:230px;height:98px;
+    border-radius:60px;
+    overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08) inset;
+    animation:float-capsule 6s ease-in-out infinite;
+  }
+  @keyframes float-capsule{
+    0%,100%{transform:translate(50%,-50%) rotate(-8deg);}
+    50%{transform:translate(50%,-56%) rotate(-4deg);}
+  }
+  .capsule-core .half{position:absolute;top:0;bottom:0;width:50%;}
+  .capsule-core .half.a{right:0;background:linear-gradient(135deg,var(--green-vital),var(--teal-light));}
+  .capsule-core .half.b{left:0;background:linear-gradient(135deg,#fff,#dfeee9);}
+  .capsule-core .shine{position:absolute;top:8px;right:20px;width:60px;height:14px;background:rgba(255,255,255,.5);border-radius:20px;filter:blur(2px);}
+
+  .orbit{position:absolute;top:50%;right:50%;border:1px dashed rgba(255,255,255,.16);border-radius:50%;transform:translate(50%,-50%);}
+  .orbit.o1{width:340px;height:340px;animation:spin 26s linear infinite;}
+  .orbit.o2{width:440px;height:440px;animation:spin 40s linear infinite reverse;}
+  .orbit.o3{width:520px;height:230px;animation:spin 34s linear infinite;}
+  @keyframes spin{from{transform:translate(50%,-50%) rotate(0deg);}to{transform:translate(50%,-50%) rotate(360deg);}}
+
+  .molecule{
+    position:absolute;width:14px;height:14px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 16px rgba(217,164,65,.7);
+  }
+  .molecule::before{
+    content:"";position:absolute;top:50%;right:100%;width:80px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(217,164,65,.5));
+  }
+  .m1{top:8%;right:10%;}
+  .m2{top:20%;right:78%;width:9px;height:9px;background:var(--green-vital);box-shadow:0 0 12px rgba(63,184,139,.7);}
+  .m2::before{display:none;}
+  .m3{bottom:12%;right:20%;width:11px;height:11px;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.6);}
+  .m3::before{display:none;}
+
+  .scroll-hint{
+    position:absolute;bottom:26px;right:50%;transform:translateX(50%);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    color:rgba(255,255,255,.55);font-size:.72rem;font-family:'JetBrains Mono',monospace;
+  }
+  .scroll-hint .line{width:1px;height:34px;background:linear-gradient(180deg,rgba(255,255,255,.6),transparent);animation:scroll-line 2s infinite;}
+  @keyframes scroll-line{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal-delay-1{transition-delay:.1s;}
+  .reveal-delay-2{transition-delay:.22s;}
+  .reveal-delay-3{transition-delay:.34s;}
+  .reveal-delay-4{transition-delay:.46s;}
+
+  /* ---------- section heading ---------- */
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:.76rem;letter-spacing:.16em;
+    color:var(--teal);font-weight:600;display:block;margin-bottom:14px;
+  }
+  .section-head h2{font-size:clamp(1.7rem,3vw,2.5rem);font-weight:800;letter-spacing:-.4px;}
+  .section-head p{color:var(--ink-soft);margin-top:14px;font-size:1.02rem;max-width:560px;}
+  .section-head.center{margin-inline:auto;text-align:center;}
+
+  /* ---------- stats band ---------- */
+  .stats-band{background:var(--bg-card);border-bottom:1px solid var(--line);border-top:1px solid var(--line);}
+  .stats-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    padding:52px 0;
+  }
+  .stats-grid .stat{text-align:center;border-left:1px solid var(--line);padding:0 12px;}
+  .stats-grid .stat:last-child{border-left:none;}
+  .stats-grid .stat b{
+    display:block;font-family:'JetBrains Mono',monospace;font-weight:600;
+    font-size:2.3rem;color:var(--navy-deep);
+    background:linear-gradient(135deg,var(--navy-deep),var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stats-grid .stat span{display:block;color:var(--ink-soft);font-size:.88rem;margin-top:6px;}
+
+  /* ---------- about ---------- */
+  .about{padding:120px 0;}
+  .about .wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:center;}
+  .about-visual{position:relative;height:440px;border-radius:var(--radius);overflow:hidden;background:linear-gradient(160deg,var(--navy-deep),var(--teal) 140%);}
+  .about-visual .grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:34px 34px;}
+  .about-visual .badge-float{
+    position:absolute;padding:16px 20px;background:rgba(255,255,255,.1);
+    backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);
+    border-radius:14px;color:#fff;font-size:.85rem;
+    animation:float-badge 5s ease-in-out infinite;
+  }
+  .about-visual .b1{top:14%;right:10%;animation-delay:0s;}
+  .about-visual .b2{bottom:18%;right:40%;animation-delay:1.4s;}
+  .about-visual .b3{top:44%;right:64%;animation-delay:2.6s;}
+  @keyframes float-badge{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  .about-visual .b1 b, .about-visual .b2 b, .about-visual .b3 b{display:block;font-family:'JetBrains Mono',monospace;color:var(--green-vital);font-size:1.1rem;}
+
+  .about-text .kicker{margin-bottom:14px;}
+  .about-text h2{font-size:clamp(1.7rem,3vw,2.35rem);font-weight:800;margin-bottom:22px;letter-spacing:-.4px;}
+  .about-text p{color:var(--ink-soft);margin-bottom:18px;font-size:1.02rem;}
+  .about-checklist{margin-top:28px;display:grid;gap:14px;}
+  .about-checklist li{display:flex;align-items:flex-start;gap:12px;font-size:.96rem;}
+  .about-checklist .ic{
+    flex:none;width:26px;height:26px;border-radius:50%;
+    background:rgba(63,184,139,.14);color:var(--teal);
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;
+  }
+
+  /* ---------- process timeline ---------- */
+  .process{padding:120px 0;background:var(--navy-deep);color:#fff;position:relative;overflow:hidden;}
+  .process::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse 800px 500px at 100% 0%,rgba(63,184,139,.16),transparent 60%);
+  }
+  .process .section-head p{color:rgba(255,255,255,.62);}
+  .process .kicker{color:var(--green-vital);}
+  .process .section-head h2{color:#fff;}
+
+  .timeline{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:20px;}
+  .timeline-line{
+    position:absolute;top:34px;right:10%;left:10%;height:2px;
+    background:linear-gradient(90deg,var(--green-vital),var(--gold));
+    transform-origin:right;transform:scaleX(0);
+    transition:transform 1.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .timeline-line.in{transform:scaleX(1);}
+  .tl-step{position:relative;padding:0 14px;text-align:center;}
+  .tl-num{
+    width:68px;height:68px;border-radius:50%;
+    margin:0 auto 22px;
+    background:var(--navy-soft);border:2px solid rgba(255,255,255,.14);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-weight:600;font-size:1.05rem;
+    color:var(--green-vital);position:relative;z-index:2;
+    transition:.4s;
+  }
+  .tl-step.in .tl-num{background:var(--green-vital);color:var(--navy-deep);border-color:var(--green-vital);box-shadow:0 0 0 8px rgba(63,184,139,.14);}
+  .tl-step h3{font-size:1rem;font-weight:700;margin-bottom:10px;}
+  .tl-step p{font-size:.86rem;color:rgba(255,255,255,.58);}
+
+  /* ---------- products ---------- */
+  .products{padding:120px 0;}
+  .product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .product-card{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px 24px;transition:.35s cubic-bezier(.2,.7,.2,1);position:relative;overflow:hidden;
+  }
+  .product-card::after{
+    content:"";position:absolute;inset:0;opacity:0;
+    background:linear-gradient(160deg,rgba(63,184,139,.08),transparent 60%);
+    transition:.35s;
+  }
+  .product-card:hover{transform:translateY(-8px);box-shadow:0 22px 44px rgba(10,46,42,.12);border-color:transparent;}
+  .product-card:hover::after{opacity:1;}
+  .product-card .pc-icon{
+    width:52px;height:52px;border-radius:14px;
+    background:linear-gradient(135deg,var(--teal),var(--green-vital));
+    display:flex;align-items:center;justify-content:center;margin-bottom:22px;
+    box-shadow:0 8px 20px rgba(18,114,107,.25);
+  }
+  .product-card .pc-icon svg{width:26px;height:26px;stroke:#fff;}
+  .product-card h3{font-size:1.08rem;font-weight:700;margin-bottom:10px;}
+  .product-card p{color:var(--ink-soft);font-size:.9rem;margin-bottom:18px;}
+  .product-card .pc-code{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);letter-spacing:.06em;}
+
+  /* ---------- quality ---------- */
+  .quality{padding:110px 0;background:linear-gradient(180deg,var(--bg),#EDF3F0);}
+  .quality .wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  .quality-badges{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .qb{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 14px;text-align:center;transition:.3s;
+  }
+  .qb:hover{border-color:var(--green-vital);transform:translateY(-4px);}
+  .qb .qb-mono{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.05rem;color:var(--teal);margin-bottom:6px;}
+  .qb span{font-size:.76rem;color:var(--ink-soft);}
+
+  /* ---------- facility banner ---------- */
+  .facility{
+    margin:0 auto 0; max-width:1220px; border-radius:28px;
+    background:linear-gradient(120deg,var(--teal) 0%, var(--navy-deep) 100%);
+    padding:70px 60px; color:#fff; position:relative; overflow:hidden;
+  }
+  .facility::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 34px);
+  }
+  .facility-inner{position:relative;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;}
+  .facility h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:16px;}
+  .facility p{color:rgba(255,255,255,.72);max-width:480px;}
+  .facility-stats{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .facility-stats .fs b{display:block;font-family:'JetBrains Mono',monospace;font-size:1.9rem;font-weight:600;}
+  .facility-stats .fs span{font-size:.8rem;color:rgba(255,255,255,.6);}
+
+  /* ---------- cta ---------- */
+  .cta-band{padding:120px 0;text-align:center;}
+  .cta-band h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:800;max-width:680px;margin:0 auto 20px;letter-spacing:-.5px;}
+  .cta-band p{color:var(--ink-soft);max-width:520px;margin:0 auto 38px;}
+  .cta-actions{display:flex;justify-content:center;gap:16px;}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--navy-deep);color:rgba(255,255,255,.7);padding:80px 0 30px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:50px;margin-bottom:60px;}
+  .footer-brand .logo{color:#fff;margin-bottom:16px;}
+  .footer-brand p{font-size:.9rem;color:rgba(255,255,255,.55);max-width:280px;}
+  footer h4{color:#fff;font-size:.92rem;margin-bottom:18px;font-weight:700;}
+  footer ul li{margin-bottom:11px;}
+  footer ul a{font-size:.88rem;color:rgba(255,255,255,.6);transition:.25s;}
+  footer ul a:hover{color:var(--green-vital);}
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,.1);padding-top:26px;
+    display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:rgba(255,255,255,.45);
+    font-family:'JetBrains Mono',monospace;flex-wrap:wrap;gap:12px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1000px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-visual{height:360px;order:-1;}
+    .about .wrap{grid-template-columns:1fr;}
+    .quality .wrap{grid-template-columns:1fr;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);row-gap:30px;}
+    .stats-grid .stat:nth-child(2){border-left:none;}
+    .product-grid{grid-template-columns:repeat(2,1fr);}
+    .timeline{grid-template-columns:repeat(5,1fr);}
+    .facility-inner{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:760px){
+    nav, .header-actions .btn-ghost{display:none;}
+    .nav-toggle{display:block;}
+    .timeline{grid-template-columns:1fr;gap:34px;}
+    .timeline-line{display:none;}
+    .quality-badges{grid-template-columns:repeat(2,1fr);}
+    .product-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;gap:34px;}
+    .facility{padding:44px 26px;border-radius:20px;}
+    .wrap{padding:0 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="capsule-progress"><div class="capsule-progress__bar" id="progressBar"></div></div>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <a href="#top" class="logo">
+      <span class="logo__mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12C4 7.58 7.58 4 12 4s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8Z" stroke="#0A2E2C" stroke-width="1.6"/><path d="M8 12h8M12 8v8" stroke="#0A2E2C" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      پارس‌ژن
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#about">درباره ما</a></li>
+        <li><a href="#process">فرآیند تولید</a></li>
+        <li><a href="#products">محصولات</a></li>
+        <li><a href="#quality">کیفیت و مجوزها</a></li>
+        <li><a href="#contact">تماس</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="#contact" class="btn btn-ghost">همکاری با ما</a>
+      <a href="#contact" class="btn btn-primary">تماس با ما</a>
+    </div>
+    <button class="nav-toggle" aria-label="منو">☰</button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="orbit o1"></div>
+  <div class="orbit o2"></div>
+  <div class="orbit o3"></div>
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="eyebrow"><span class="dot"></span> دارای مجوز GMP اتحادیه اروپا</span>
+      <h1>علم دقیق، برای <em>سلامتی</em> که می‌توان به آن اعتماد کرد</h1>
+      <p class="lead">پارس‌ژن بیش از دو دهه است در مسیر تحقیق، توسعه و تولید داروهای باکیفیت گام برمی‌دارد؛ از آزمایشگاه تحقیقاتی تا داروخانه محله شما.</p>
+      <div class="hero-ctas">
+        <a href="#products" class="btn btn-primary">مشاهده محصولات</a>
+        <a href="#process" class="btn btn-ghost">فرآیند تولید را ببینید</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b class="mono" data-count="22">0</b><span>سال سابقه علمی</span></div>
+        <div class="stat"><b class="mono" data-count="140">0</b><span>محصول ثبت‌شده</span></div>
+        <div class="stat"><b class="mono" data-count="18">0</b><span>کشور صادراتی</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="molecule m1"></div>
+      <div class="molecule m2"></div>
+      <div class="molecule m3"></div>
+      <div class="capsule-core">
+        <div class="half a"></div>
+        <div class="half b"></div>
+        <div class="shine"></div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>اسکرول کنید</span><span class="line"></span></div>
+</section>
+
+<section class="stats-band">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat reveal"><b class="mono" data-count="22">0</b><span>سال تجربه در تولید دارو</span></div>
+      <div class="stat reveal reveal-delay-1"><b class="mono" data-count="140">0</b><span>قلم دارویی فعال</span></div>
+      <div class="stat reveal reveal-delay-2"><b class="mono" data-count="450">0</b><span>متخصص و پژوهشگر</span></div>
+      <div class="stat reveal reveal-delay-3"><b class="mono" data-count="12">0</b><span>خط تولید استاندارد</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-visual reveal">
+      <div class="grid-lines"></div>
+      <div class="badge-float b1"><b class="mono">ISO 9001</b>مدیریت کیفیت</div>
+      <div class="badge-float b2"><b class="mono">GMP</b>استاندارد تولید</div>
+      <div class="badge-float b3"><b class="mono">R&amp;D</b>واحد تحقیقات</div>
+    </div>
+    <div class="about-text">
+      <span class="kicker reveal">درباره پارس‌ژن</span>
+      <h2 class="reveal reveal-delay-1">از ایده در آزمایشگاه، تا دارویی در دستان بیمار</h2>
+      <p class="reveal reveal-delay-2">پارس‌ژن با تکیه بر دانش داخلی و همکاری با مراکز تحقیقاتی بین‌المللی، داروهایی تولید می‌کند که استانداردهای جهانی کیفیت و ایمنی را رعایت می‌کنند. هر قرص و کپسولی که از خط تولید ما خارج می‌شود، مسیری طولانی از پژوهش، آزمایش و کنترل کیفیت را پشت سر گذاشته است.</p>
+      <ul class="about-checklist">
+        <li class="reveal reveal-delay-2"><span class="ic">✓</span> آزمایشگاه کنترل کیفیت مستقل در تمام مراحل تولید</li>
+        <li class="reveal reveal-delay-3"><span class="ic">✓</span> انطباق کامل با دستورالعمل‌های GMP و WHO</li>
+        <li class="reveal reveal-delay-4"><span class="ic">✓</span> ردیابی دیجیتال هر بچ تولید از مواد اولیه تا توزیع</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="kicker">مسیر تولید</span>
+      <h2>از کشف مولکول تا رسیدن به داروخانه</h2>
+      <p>هر داروی پارس‌ژن پنج مرحله دقیق علمی و صنعتی را طی می‌کند پیش از آنکه به دست شما برسد.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-line" id="tlLine"></div>
+      <div class="tl-step reveal"><div class="tl-num">۰۱</div><h3>کشف مولکول</h3><p>شناسایی و غربالگری ترکیبات مؤثر توسط تیم تحقیقاتی</p></div>
+      <div class="tl-step reveal reveal-delay-1"><div class="tl-num">۰۲</div><h3>مطالعات پیش‌بالینی</h3><p>بررسی ایمنی و اثربخشی در محیط آزمایشگاهی</p></div>
+      <div class="tl-step reveal reveal-delay-2"><div class="tl-num">۰۳</div><h3>کارآزمایی بالینی</h3><p>آزمون کنترل‌شده روی داوطلبان طبق پروتکل‌های استاندارد</p></div>
+      <div class="tl-step reveal reveal-delay-3"><div class="tl-num">۰۴</div><h3>تولید صنعتی</h3><p>تولید در خطوط استاندارد GMP با کنترل کیفیت مستمر</p></div>
+      <div class="tl-step reveal reveal-delay-4"><div class="tl-num">۰۵</div><h3>توزیع و پایش</h3><p>ارسال به داروخانه‌ها همراه با پایش پس از عرضه</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="products" id="products">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">محصولات</span>
+      <h2>دسته‌بندی محصولات دارویی</h2>
+      <p>سبد محصولات پارس‌ژن پاسخگوی نیازهای درمانی در چند حوزه اصلی سلامت است.</p>
+    </div>
+    <div class="product-grid">
+      <div class="product-card reveal">
+        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="m14 7 3 3"/></svg></div>
+        <h3>قلبی - عروقی</h3>
+        <p>داروهای کنترل فشار خون، چربی خون و حفاظت قلبی</p>
+        <span class="pc-code mono">CAT / CV-01</span>
+      </div>
+      <div class="product-card reveal reveal-delay-1">
+        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v6a6 6 0 0 0 12 0V2"/><path d="M12 14v8M8 22h8"/></svg></div>
+        <h3>گوارش</h3>
+        <p>ترکیبات مؤثر بر سیستم گوارشی و کبدی</p>
+        <span class="pc-code mono">CAT / GI-02</span>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a6 6 0 0 0-6 6c0 7 6 12 6 12s6-5 6-12a6 6 0 0 0-6-6Z"/><circle cx="8" cy="8" r="2"/></svg></div>
+        <h3>تنفسی</h3>
+        <p>محصولات تخصصی آسم، آلرژی و راه‌های هوایی</p>
+        <span class="pc-code mono">CAT / RS-03</span>
+      </div>
+      <div class="product-card reveal reveal-delay-3">
+        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg></div>
+        <h3>مکمل و ویتامین</h3>
+        <p>مکمل‌های تقویتی برای گروه‌های سنی مختلف</p>
+        <span class="pc-code mono">CAT / VT-04</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quality" id="quality">
+  <div class="wrap">
+    <div class="quality-text">
+      <span class="kicker reveal">کیفیت و مجوزها</span>
+      <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:18px;">استانداردهایی که به آن‌ها متعهدیم</h2>
+      <p class="reveal reveal-delay-2" style="color:var(--ink-soft);max-width:460px;">تمامی خطوط تولید پارس‌ژن تحت نظارت مستمر نهادهای داخلی و بین‌المللی کیفیت فعالیت می‌کنند و به‌صورت دوره‌ای ممیزی می‌شوند.</p>
+    </div>
+    <div class="quality-badges">
+      <div class="qb reveal"><div class="qb-mono">GMP</div><span>وزارت بهداشت</span></div>
+      <div class="qb reveal reveal-delay-1"><div class="qb-mono">ISO 9001</div><span>مدیریت کیفیت</span></div>
+      <div class="qb reveal reveal-delay-2"><div class="qb-mono">ISO 14001</div><span>مدیریت محیط‌زیست</span></div>
+      <div class="qb reveal reveal-delay-1"><div class="qb-mono">WHO-GMP</div><span>سازمان جهانی بهداشت</span></div>
+      <div class="qb reveal reveal-delay-2"><div class="qb-mono">EU-QP</div><span>تأیید اتحادیه اروپا</span></div>
+      <div class="qb reveal reveal-delay-3"><div class="qb-mono">HALAL</div><span>گواهی حلال</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 20px 20px;">
+  <div class="facility reveal">
+    <div class="facility-inner">
+      <div>
+        <h2>یک کارخانه، هزاران بچ استاندارد در سال</h2>
+        <p>کارخانه پارس‌ژن با اتاق‌های تمیز کلاس D و تجهیزات تمام‌اتوماتیک، تولیدی یکنواخت و قابل ردیابی را تضمین می‌کند.</p>
+      </div>
+      <div class="facility-stats">
+        <div class="fs"><b class="mono" data-count="12000">0</b><span>متر مربع فضای تولید</span></div>
+        <div class="fs"><b class="mono" data-count="99">0</b><span>٪ کنترل کیفیت بچ‌ها</span></div>
+        <div class="fs"><b class="mono" data-count="24">0</b><span>ساعت پایش دما و رطوبت</span></div>
+        <div class="fs"><b class="mono" data-count="6">0</b><span>اتاق تمیز فعال</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <div class="wrap">
+    <span class="kicker reveal">همکاری و تماس</span>
+    <h2 class="reveal reveal-delay-1">برای همکاری، توزیع یا سرمایه‌گذاری با ما در تماس باشید</h2>
+    <p class="reveal reveal-delay-2">تیم روابط تجاری پارس‌ژن آماده پاسخ‌گویی به داروخانه‌ها، توزیع‌کنندگان و شرکای بین‌المللی است.</p>
+    <div class="cta-actions reveal reveal-delay-3">
+      <a href="mailto:info@parsgen-pharma.example" class="btn btn-primary">ارسال ایمیل</a>
+      <a href="tel:+982100000000" class="btn btn-ghost" style="color:var(--ink);border-color:var(--line);">تماس تلفنی</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo">
+          <span class="logo__mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12C4 7.58 7.58 4 12 4s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8Z" stroke="#0A2E2C" stroke-width="1.6"/><path d="M8 12h8M12 8v8" stroke="#0A2E2C" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          پارس‌ژن
+        </a>
+        <p>داروسازی پارس‌ژن؛ تولید دارو با استانداردهای علمی روز دنیا، برای سلامت نسل امروز و فردا.</p>
+      </div>
+      <div>
+        <h4>شرکت</h4>
+        <ul>
+          <li><a href="#about">درباره ما</a></li>
+          <li><a href="#process">فرآیند تولید</a></li>
+          <li><a href="#quality">کیفیت و مجوزها</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>محصولات</h4>
+        <ul>
+          <li><a href="#products">قلبی - عروقی</a></li>
+          <li><a href="#products">گوارش</a></li>
+          <li><a href="#products">تنفسی</a></li>
+          <li><a href="#products">مکمل و ویتامین</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>تماس</h4>
+        <ul>
+          <li>تهران، شهرک صنعتی دارویی</li>
+          <li class="mono" style="direction:ltr;text-align:right;">+98 21 0000 0000</li>
+          <li class="mono" style="direction:ltr;text-align:right;">info@parsgen-pharma.example</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© ۱۴۰۴ پارس‌ژن. تمامی حقوق محفوظ است.</span>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+  </div>
+</footer>
+
+<script>
+  // header scroll state
+  const header = document.getElementById('siteHeader');
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal, .tl-step, .timeline-line');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+      }
+    });
+  }, { threshold: 0.18 });
+  revealEls.forEach(el => io.observe(el));
+
+  // count-up numbers
+  const counters = document.querySelectorAll('[data-count]');
+  const countIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && !entry.target.dataset.done){
+        entry.target.dataset.done = "1";
+        const target = parseInt(entry.target.dataset.count, 10);
+        const duration = 1400;
+        const start = performance.now();
+        function tick(now){
+          const p = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          entry.target.textContent = Math.floor(eased * target).toLocaleString('en-US');
+          if(p < 1) requestAnimationFrame(tick);
+          else entry.target.textContent = target.toLocaleString('en-US');
+        }
+        requestAnimationFrame(tick);
+      }
+    });
+  }, { threshold: 0.4 });
+  counters.forEach(el => countIO.observe(el));
+
+  // mobile nav toggle (simple)
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav.style.display === 'block';
+    nav.style.display = open ? 'none' : 'block';
+    if(!open){
+      nav.style.position='absolute';
+      nav.style.top='100%';
+      nav.style.right='0';
+      nav.style.left='0';
+      nav.style.background='rgba(10,46,42,.97)';
+      nav.style.padding='20px 24px';
+    }
+    nav.querySelectorAll('ul').forEach(u=>{u.style.flexDirection='column';u.style.gap='16px';});
+  });
+</script>
+
+</body>
+</html>

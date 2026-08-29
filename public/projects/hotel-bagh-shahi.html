@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هتل باغ شاهی · اقامتگاه پنج ستاره</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A1B22;
+    --ink-2:#0F2831;
+    --ink-3:#123540;
+    --turquoise:#2F98A3;
+    --turquoise-deep:#114B52;
+    --turquoise-glow: rgba(47,152,163,0.35);
+    --gold:#C9A24C;
+    --gold-soft:#E6C77A;
+    --gold-dim: rgba(201,162,76,0.35);
+    --cream:#F3E9D2;
+    --muted:#8FADB3;
+    --line: rgba(230, 199, 122, 0.18);
+    --serif-space: 0.02em;
+    --container: 1180px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'Vazirmatn', 'Tahoma', sans-serif;
+    font-weight:400;
+    line-height:1.75;
+    overflow-x:hidden;
+  }
+
+  ::selection{background:var(--gold); color:var(--ink);}
+
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit; cursor:pointer;}
+
+  .wrap{max-width:var(--container); margin:0 auto; padding:0 32px;}
+
+  /* ===== Reveal on scroll ===== */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition: opacity 0.9s cubic-bezier(.16,.84,.44,1), transform 0.9s cubic-bezier(.16,.84,.44,1);
+  }
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  .reveal-stagger > *{
+    opacity:0; transform:translateY(24px);
+    transition: opacity 0.8s cubic-bezier(.16,.84,.44,1), transform 0.8s cubic-bezier(.16,.84,.44,1);
+  }
+  .reveal-stagger.in-view > *{opacity:1; transform:translateY(0);}
+  .reveal-stagger.in-view > *:nth-child(1){transition-delay:.05s;}
+  .reveal-stagger.in-view > *:nth-child(2){transition-delay:.15s;}
+  .reveal-stagger.in-view > *:nth-child(3){transition-delay:.25s;}
+  .reveal-stagger.in-view > *:nth-child(4){transition-delay:.35s;}
+  .reveal-stagger.in-view > *:nth-child(5){transition-delay:.45s;}
+  .reveal-stagger.in-view > *:nth-child(6){transition-delay:.55s;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal, .reveal-stagger > *{opacity:1 !important; transform:none !important; transition:none !important;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important;}
+  }
+
+  /* ===== Ornamental divider ===== */
+  .divider{
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    margin:0 auto; width:100%;
+  }
+  .divider .line{ flex:1; max-width:220px; height:1px; background:linear-gradient(90deg, transparent, var(--gold-dim)); }
+  .divider .line.rev{ background:linear-gradient(270deg, transparent, var(--gold-dim)); }
+  .divider svg{ width:26px; height:26px; flex-shrink:0; }
+
+  .eyebrow{
+    font-size:13px; letter-spacing:0.14em; color:var(--gold-soft);
+    display:flex; align-items:center; gap:10px; justify-content:center;
+    text-transform:none; margin-bottom:18px; font-weight:600;
+  }
+  .eyebrow::before, .eyebrow::after{content:''; width:26px; height:1px; background:var(--gold-dim);}
+
+  h1,h2,h3{ font-weight:700; letter-spacing:var(--serif-space); }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:16px 34px; border-radius:2px;
+    font-size:15px; font-weight:600; letter-spacing:0.03em;
+    border:1px solid transparent; transition: all .45s cubic-bezier(.16,.84,.44,1);
+    position:relative; overflow:hidden;
+  }
+  .btn-gold{ background:var(--gold); color:var(--ink); }
+  .btn-gold:hover{ background:var(--gold-soft); transform:translateY(-2px); box-shadow:0 14px 30px -10px var(--gold-dim); }
+  .btn-ghost{ border-color:var(--gold-dim); color:var(--cream); }
+  .btn-ghost:hover{ border-color:var(--gold); background:rgba(230,199,122,0.06); transform:translateY(-2px); }
+
+  /* ===================== NAV ===================== */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:26px 0; transition: all .5s ease;
+    background:linear-gradient(to bottom, rgba(10,27,34,0.85), transparent);
+  }
+  header.solid{ background:rgba(10,20,26,0.92); backdrop-filter:blur(14px); padding:16px 0; border-bottom:1px solid var(--line); }
+  header .wrap{ display:flex; align-items:center; justify-content:space-between; }
+  .logo{ display:flex; align-items:center; gap:12px; font-size:19px; font-weight:700; letter-spacing:0.04em; }
+  .logo svg{ width:34px; height:34px; }
+  .logo .sub{ display:block; font-size:10px; font-weight:400; letter-spacing:0.2em; color:var(--gold-soft); margin-top:2px; }
+
+  nav.main-nav{ display:flex; align-items:center; gap:38px; }
+  nav.main-nav a{ font-size:14.5px; color:var(--cream); position:relative; padding-bottom:4px; opacity:0.88; }
+  nav.main-nav a::after{ content:''; position:absolute; bottom:0; right:0; left:auto; width:0; height:1px; background:var(--gold); transition:width .4s ease; }
+  nav.main-nav a:hover{ opacity:1; }
+  nav.main-nav a:hover::after{ width:100%; }
+  .nav-cta{ display:flex; align-items:center; gap:20px; }
+  .nav-cta .btn{ padding:11px 24px; font-size:13.5px; }
+  .burger{ display:none; width:26px; height:20px; position:relative; background:none; border:none; }
+  .burger span{ position:absolute; right:0; width:100%; height:1.5px; background:var(--cream); transition:all .3s ease; }
+  .burger span:nth-child(1){top:0;} .burger span:nth-child(2){top:9px;} .burger span:nth-child(3){top:18px;}
+
+  /* ===================== HERO ===================== */
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(47,152,163,0.28), transparent 55%),
+      radial-gradient(ellipse at 15% 100%, rgba(201,162,76,0.14), transparent 45%),
+      linear-gradient(180deg, #081319 0%, #0A1B22 55%, #0C222B 100%);
+  }
+  .hero-pattern{
+    position:absolute; inset:0; opacity:0.35; pointer-events:none;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 72%);
+    mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 72%);
+  }
+  .hero-pattern svg{ width:100%; height:100%; animation: driftRotate 140s linear infinite; transform-origin:50% 50%; }
+  @keyframes driftRotate{ from{transform:rotate(0deg) scale(1.15);} to{transform:rotate(360deg) scale(1.15);} }
+
+  .hero-content{ position:relative; z-index:2; max-width:820px; padding:0 24px; }
+  .hero-content .eyebrow{ opacity:0; animation: fadeUp 1s ease forwards .3s; }
+  .hero-content h1{
+    font-size:clamp(38px, 6.2vw, 74px); line-height:1.22; margin-bottom:26px;
+    opacity:0; animation: fadeUp 1.1s ease forwards .5s;
+  }
+  .hero-content h1 em{ font-style:normal; color:var(--gold-soft); }
+  .hero-content p{
+    font-size:18px; color:var(--muted); max-width:560px; margin:0 auto 40px; font-weight:300;
+    opacity:0; animation: fadeUp 1.1s ease forwards .75s;
+  }
+  .hero-btns{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; opacity:0; animation: fadeUp 1.1s ease forwards 1s; }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);} }
+
+  .scroll-cue{
+    position:absolute; bottom:38px; left:50%; transform:translateX(-50%); z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:10px; color:var(--muted); font-size:11px;
+    letter-spacing:0.16em; opacity:0; animation: fadeUp 1s ease forwards 1.3s;
+  }
+  .scroll-cue .stem{ width:1px; height:38px; background:linear-gradient(180deg, var(--gold-soft), transparent); position:relative; overflow:hidden; }
+  .scroll-cue .stem::after{ content:''; position:absolute; top:-40%; right:0; width:100%; height:40%; background:var(--gold-soft); animation:cueDrop 2.4s ease-in-out infinite; }
+  @keyframes cueDrop{ 0%{top:-40%;} 60%{top:100%;} 100%{top:100%;} }
+
+  /* ===================== SECTION BASE ===================== */
+  section{ position:relative; padding:130px 0; }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 70px; }
+  .section-head h2{ font-size:clamp(30px,4vw,46px); margin-bottom:20px; }
+  .section-head p{ color:var(--muted); font-size:16.5px; font-weight:300; }
+
+  /* ===================== STORY ===================== */
+  .story{ background:var(--ink); }
+  .story .wrap{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:80px; align-items:center; }
+  .story-visual{ position:relative; aspect-ratio:4/5; }
+  .arch-frame{
+    position:absolute; inset:0; border-radius:220px 220px 8px 8px;
+    background: linear-gradient(160deg, var(--turquoise-deep) 0%, #0d3038 45%, var(--ink-3) 100%);
+    border:1px solid var(--line); overflow:hidden;
+    box-shadow: 0 40px 90px -40px rgba(0,0,0,0.7);
+  }
+  .arch-frame svg{ position:absolute; inset:0; width:100%; height:100%; opacity:0.55; }
+  .arch-frame .glow{ position:absolute; width:70%; height:40%; left:15%; top:20%; background:radial-gradient(ellipse, var(--turquoise-glow), transparent 70%); filter:blur(20px); }
+  .story-visual .year-badge{
+    position:absolute; bottom:-26px; right:-26px; width:130px; height:130px; border-radius:50%;
+    background:var(--gold); color:var(--ink); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-weight:700; text-align:center; box-shadow:0 20px 40px -14px rgba(0,0,0,0.5);
+  }
+  .story-visual .year-badge span{ display:block; }
+  .story-visual .year-badge .num{ font-size:26px; }
+  .story-visual .year-badge .lbl{ font-size:10.5px; font-weight:500; letter-spacing:0.05em; margin-top:2px; }
+
+  .story-text h2{ font-size:clamp(28px,3.6vw,42px); margin-bottom:26px; line-height:1.35; }
+  .story-text p{ color:var(--muted); font-size:16px; font-weight:300; margin-bottom:18px; }
+  .story-text p strong{ color:var(--cream); font-weight:500; }
+
+  .stat-row{ display:flex; gap:0; margin-top:44px; border-top:1px solid var(--line); padding-top:30px; }
+  .stat-row .stat{ flex:1; padding-left:20px; border-left:1px solid var(--line); }
+  .stat-row .stat:last-child{ border-left:none; }
+  .stat-row .stat .n{ font-size:26px; font-weight:700; color:var(--gold-soft); display:block; margin-bottom:4px; }
+  .stat-row .stat .l{ font-size:12.5px; color:var(--muted); }
+
+  /* ===================== SUITES — Chahar Bagh grid ===================== */
+  .suites{ background: linear-gradient(180deg, #0a1a21, #0c2028 100%); }
+  .bagh-grid{
+    position:relative; display:grid; grid-template-columns:1fr 1fr; gap:2px;
+    background:var(--gold-dim); border:1px solid var(--gold-dim); max-width:1000px; margin:0 auto;
+  }
+  .bagh-grid::before, .bagh-grid::after{ content:none; }
+  .bagh-medallion{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3;
+    width:64px; height:64px; border-radius:50%; background:var(--ink); border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .bagh-medallion svg{ width:34px; height:34px; animation: spinSlow 30s linear infinite; }
+  @keyframes spinSlow{ from{transform:rotate(0);} to{transform:rotate(360deg);} }
+
+  .suite-card{ background:var(--ink); padding:46px 42px; position:relative; transition: background .4s ease; }
+  .suite-card:hover{ background:#0d232c; }
+  .suite-photo{ width:100%; aspect-ratio:16/10; border-radius:2px; margin-bottom:26px; position:relative; overflow:hidden; }
+  .suite-photo::after{ content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06) 0, transparent 40%); }
+  .suite-photo svg{ position:absolute; inset:0; width:100%; height:100%; opacity:0.5; }
+  .p1{ background:linear-gradient(135deg,#123a2e,#1f5b47 55%,#2f8c6f);}
+  .p2{ background:linear-gradient(135deg,#0d2f45,#155a78 55%,#2f98a3);}
+  .p3{ background:linear-gradient(135deg,#3a2a10,#7a5a1c 55%,#c9a24c);}
+  .p4{ background:linear-gradient(135deg,#3a1c16,#7a3f28 55%,#c97a4c);}
+
+  .suite-meta{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .suite-card h3{ font-size:21px; }
+  .suite-price{ font-size:13px; color:var(--gold-soft); font-weight:600; white-space:nowrap; }
+  .suite-card .desc{ color:var(--muted); font-size:14.5px; font-weight:300; margin-bottom:20px; }
+  .suite-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+  .suite-tags span{ font-size:12px; color:var(--muted); border:1px solid var(--line); padding:5px 12px; border-radius:20px; }
+  .suite-card .btn-ghost{ padding:11px 22px; font-size:13px; }
+
+  /* ===================== AMENITIES ===================== */
+  .amenities{ background:var(--ink); }
+  .amenity-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .amenity{ background:var(--ink); padding:48px 40px; transition: background .4s ease; }
+  .amenity:hover{ background:#0d232c; }
+  .amenity .icon{ width:46px; height:46px; margin-bottom:24px; color:var(--gold-soft); }
+  .amenity .icon svg{ width:100%; height:100%; }
+  .amenity h3{ font-size:18px; margin-bottom:10px; }
+  .amenity p{ font-size:14px; color:var(--muted); font-weight:300; }
+
+  /* ===================== DINING ===================== */
+  .dining{
+    background: linear-gradient(160deg, var(--turquoise-deep), #0a2129 70%);
+    position:relative; overflow:hidden;
+  }
+  .dining::before{
+    content:''; position:absolute; inset:0;
+    background-image: radial-gradient(circle at 85% 20%, rgba(201,162,76,0.12), transparent 40%);
+  }
+  .dining .wrap{ position:relative; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+  .quote-mark{ font-size:60px; color:var(--gold); line-height:1; margin-bottom:6px; font-family:Georgia, serif; }
+  .dining blockquote{ font-size:clamp(22px,2.6vw,30px); line-height:1.55; margin-bottom:26px; font-weight:500; }
+  .dining .attribution{ color:var(--gold-soft); font-size:14px; }
+  .dining .attribution span{ display:block; color:var(--muted); font-size:12.5px; margin-top:4px; }
+  .dining-visual{ aspect-ratio:1/1; position:relative; }
+  .dining-visual .ring{ position:absolute; inset:0; border:1px solid var(--gold-dim); border-radius:50%; }
+  .dining-visual .ring.r2{ inset:34px; }
+  .dining-visual .plate{
+    position:absolute; inset:64px; border-radius:50%;
+    background: radial-gradient(circle at 40% 35%, #1c3f37, #0c231f 70%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dining-visual .plate svg{ width:56%; height:56%; opacity:0.85; }
+
+  /* ===================== GALLERY ===================== */
+  .gallery{ background:var(--ink); }
+  .gal-grid{ display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:150px; gap:14px; }
+  .gal-item{ position:relative; border-radius:2px; overflow:hidden; border:1px solid var(--line); }
+  .gal-item::before{ content:''; position:absolute; inset:0; z-index:1; transition:transform .7s cubic-bezier(.16,.84,.44,1); }
+  .gal-item:hover::before{ transform:scale(1.08); }
+  .gal-item .cap{
+    position:absolute; bottom:0; right:0; left:0; z-index:2; padding:16px;
+    background:linear-gradient(0deg, rgba(0,0,0,0.55), transparent);
+    font-size:13px; color:var(--cream); font-weight:500; opacity:0; transition:opacity .4s ease;
+  }
+  .gal-item:hover .cap{ opacity:1; }
+  .gal-item.tall{ grid-row: span 2; }
+  .g1::before{ background:linear-gradient(135deg,#123a2e,#2f8c6f);}
+  .g2::before{ background:linear-gradient(135deg,#0d2f45,#2f98a3);}
+  .g3::before{ background:linear-gradient(135deg,#3a2a10,#c9a24c);}
+  .g4::before{ background:linear-gradient(135deg,#1a2a3a,#3f6a7a);}
+  .g5::before{ background:linear-gradient(135deg,#3a1c16,#c97a4c);}
+  .g6::before{ background:linear-gradient(135deg,#0c231f,#1f5b47);}
+  .g7::before{ background:linear-gradient(135deg,#241a3a,#5a3f7a);}
+
+  /* ===================== TESTIMONIALS ===================== */
+  .testimonials{ background:linear-gradient(180deg,#0a1a21,#0c2028); }
+  .test-track{ display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
+  .test-card{ background:var(--ink-2); border:1px solid var(--line); padding:38px; border-radius:2px; }
+  .stars{ display:flex; gap:4px; margin-bottom:20px; color:var(--gold); }
+  .stars svg{ width:16px; height:16px; }
+  .test-card p{ font-size:15px; color:var(--cream); font-weight:300; margin-bottom:24px; min-height:96px; }
+  .test-who{ display:flex; align-items:center; gap:14px; }
+  .test-who .av{ width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--turquoise),var(--gold)); flex-shrink:0; }
+  .test-who .name{ font-size:14px; font-weight:600; }
+  .test-who .loc{ font-size:12px; color:var(--muted); }
+
+  /* ===================== BOOKING CTA ===================== */
+  .booking{
+    background: linear-gradient(135deg, #14323a, #1c4a52 60%, #14323a);
+    padding:90px 0; position:relative; overflow:hidden;
+  }
+  .booking::before{ content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 10% 10%, rgba(201,162,76,0.15), transparent 40%), radial-gradient(circle at 90% 90%, rgba(201,162,76,0.1), transparent 40%); }
+  .booking .wrap{ position:relative; }
+  .booking-inner{ text-align:center; max-width:720px; margin:0 auto 50px; }
+  .booking-inner h2{ font-size:clamp(28px,3.6vw,40px); margin-bottom:18px; }
+  .booking-inner p{ color:var(--cream); opacity:0.8; font-weight:300; }
+  .booking-form{
+    display:flex; gap:0; background:rgba(10,27,34,0.55); border:1px solid var(--gold-dim);
+    border-radius:4px; padding:8px; max-width:760px; margin:0 auto; backdrop-filter:blur(6px);
+    flex-wrap:wrap;
+  }
+  .booking-form .field{ flex:1; padding:14px 22px; border-left:1px solid var(--line); min-width:160px; }
+  .booking-form .field:last-of-type{ border-left:none; }
+  .booking-form label{ display:block; font-size:11px; color:var(--gold-soft); letter-spacing:0.06em; margin-bottom:6px; }
+  .booking-form input, .booking-form select{
+    background:transparent; border:none; color:var(--cream); font-family:inherit; font-size:14.5px; width:100%; outline:none;
+  }
+  .booking-form input::placeholder{ color:var(--muted); }
+  .booking-form .btn{ margin:0; border-radius:2px; flex:0 0 auto; align-self:center; }
+
+  /* ===================== FOOTER ===================== */
+  footer{ background:#081319; padding:90px 0 34px; border-top:1px solid var(--line); }
+  .foot-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr 1.2fr; gap:60px; margin-bottom:70px; }
+  .foot-brand .logo{ margin-bottom:20px; }
+  .foot-brand p{ color:var(--muted); font-size:14px; font-weight:300; max-width:280px; margin-bottom:24px; }
+  .social-row{ display:flex; gap:14px; }
+  .social-row a{ width:38px; height:38px; border:1px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all .3s ease; }
+  .social-row a:hover{ border-color:var(--gold); background:rgba(201,162,76,0.08); }
+  .social-row svg{ width:16px; height:16px; }
+
+  .foot-col h4{ font-size:14px; margin-bottom:22px; color:var(--gold-soft); letter-spacing:0.03em; }
+  .foot-col ul{ list-style:none; }
+  .foot-col li{ margin-bottom:13px; }
+  .foot-col a{ font-size:14px; color:var(--muted); transition:color .3s ease; }
+  .foot-col a:hover{ color:var(--cream); }
+
+  .newsletter p{ font-size:14px; color:var(--muted); margin-bottom:18px; font-weight:300; }
+  .news-form{ display:flex; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .news-form input{ flex:1; background:none; border:none; outline:none; color:var(--cream); font-family:inherit; font-size:14px; }
+  .news-form input::placeholder{ color:var(--muted); }
+  .news-form button{ background:none; border:none; color:var(--gold-soft); font-size:13px; font-weight:600; }
+
+  .foot-bottom{ display:flex; justify-content:space-between; align-items:center; padding-top:30px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted); flex-wrap:wrap; gap:14px; }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 980px){
+    .story .wrap{ grid-template-columns:1fr; gap:50px; }
+    .dining .wrap{ grid-template-columns:1fr; gap:50px; }
+    .dining-visual{ max-width:320px; margin:0 auto; order:-1; }
+    .amenity-grid{ grid-template-columns:repeat(2,1fr); }
+    .bagh-grid{ grid-template-columns:1fr; }
+    .bagh-medallion{ display:none; }
+    .test-track{ grid-template-columns:1fr; }
+    .foot-grid{ grid-template-columns:1fr 1fr; gap:40px; }
+    .gal-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+
+  @media (max-width: 720px){
+    nav.main-nav, .nav-cta .btn-ghost{ display:none; }
+    .burger{ display:block; }
+    section{ padding:90px 0; }
+    .stat-row{ flex-wrap:wrap; gap:20px; }
+    .stat-row .stat{ flex:1 1 40%; border-left:none; padding-left:0; }
+    .amenity-grid{ grid-template-columns:1fr; }
+    .booking-form{ flex-direction:column; }
+    .booking-form .field{ border-left:none; border-bottom:1px solid var(--line); }
+    .booking-form .btn{ width:100%; justify-content:center; margin-top:8px; }
+    .foot-grid{ grid-template-columns:1fr; gap:36px; }
+    .gal-grid{ grid-template-columns:1fr 1fr; grid-auto-rows:130px; }
+  }
+
+  .mobile-menu{
+    position:fixed; inset:0; background:#081319; z-index:200; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:36px; transform:translateY(-100%); transition:transform .5s cubic-bezier(.16,.84,.44,1);
+  }
+  .mobile-menu.open{ transform:translateY(0); }
+  .mobile-menu a{ font-size:24px; }
+  .mobile-menu .close{ position:absolute; top:30px; left:30px; font-size:28px; background:none; border:none; color:var(--cream); }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header id="siteHeader">
+  <div class="wrap">
+    <div class="logo">
+      <svg viewBox="0 0 40 40" fill="none"><path d="M20 3L23 12L32 9L26 17L36 20L26 23L32 31L23 28L20 37L17 28L8 31L14 23L4 20L14 17L8 9L17 12L20 3Z" stroke="#C9A24C" stroke-width="1.2" stroke-linejoin="round"/><circle cx="20" cy="20" r="4" fill="#2F98A3"/></svg>
+      <span>باغ شاهی<span class="sub">HOTEL ROYAL GARDEN</span></span>
+    </div>
+    <nav class="main-nav">
+      <a href="#story">درباره ما</a>
+      <a href="#suites">اتاق‌ها و سوئیت‌ها</a>
+      <a href="#amenities">امکانات</a>
+      <a href="#dining">رستوران</a>
+      <a href="#gallery">گالری</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#booking" class="btn btn-ghost">تماس با ما</a>
+      <a href="#booking" class="btn btn-gold">رزرو اقامت</a>
+    </div>
+    <button class="burger" id="burgerBtn"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close" id="closeMenu">×</button>
+  <a href="#story">درباره ما</a>
+  <a href="#suites">اتاق‌ها و سوئیت‌ها</a>
+  <a href="#amenities">امکانات</a>
+  <a href="#dining">رستوران</a>
+  <a href="#gallery">گالری</a>
+  <a href="#booking" class="btn btn-gold">رزرو اقامت</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-pattern">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="gereh" width="50" height="50" patternUnits="userSpaceOnUse">
+          <g stroke="#E6C77A" stroke-width="0.6" fill="none" opacity="0.8">
+            <path d="M25 0 L50 25 L25 50 L0 25 Z"/>
+            <path d="M25 0 L25 50 M0 25 L50 25"/>
+            <circle cx="25" cy="25" r="10"/>
+          </g>
+        </pattern>
+      </defs>
+      <rect width="400" height="400" fill="url(#gereh)"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <p class="eyebrow">پنج‌ستاره · کرانه خزر</p>
+    <h1>میان باغ ایرانی و <em>آسمان بی‌کران</em>،<br>اقامتی که به یاد می‌ماند</h1>
+    <p>هتل باغ شاهی، بازآفرینیِ معماری چهارباغِ ایرانی در قامتِ اقامتگاهی مدرن؛ جایی که آب، سبزینه و مهمان‌نوازی در کنار هم روایت می‌شوند.</p>
+    <div class="hero-btns">
+      <a href="#booking" class="btn btn-gold">رزرو اقامت</a>
+      <a href="#suites" class="btn btn-ghost">کاوش در سوئیت‌ها</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>اسکرول کنید</span><div class="stem"></div></div>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="story" id="story">
+  <div class="wrap">
+    <div class="story-visual reveal">
+      <div class="arch-frame">
+        <div class="glow"></div>
+        <svg viewBox="0 0 300 375" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="gereh2" width="38" height="38" patternUnits="userSpaceOnUse">
+              <g stroke="#2F98A3" stroke-width="0.7" fill="none">
+                <path d="M19 0 L38 19 L19 38 L0 19 Z"/>
+              </g>
+            </pattern>
+          </defs>
+          <rect width="300" height="375" fill="url(#gereh2)"/>
+        </svg>
+      </div>
+      <div class="year-badge"><span class="num">۱۳۸۲</span><span class="lbl">تأسیس</span></div>
+    </div>
+    <div class="story-text reveal">
+      <p class="eyebrow" style="justify-content:flex-start; text-align:right;">داستان ما</p>
+      <h2>باغی که هتل شد،<br>هتلی که باغ ماند</h2>
+      <p>ایده‌ی «باغ شاهی» از الگوی <strong>چهارباغ</strong> گرفته شده است؛ ترکیبِ ایرانیِ آب، درخت و معماری که هزاران سال پیش در باغ‌های اصفهان و شیراز شکل گرفت. ما این الگو را به شکل اقامتگاهی معاصر بازخوانی کرده‌ایم.</p>
+      <p>هر بخش از هتل، از حیاط مرکزی تا سوئیت‌های گنبددار، حول یک حوض و باغچه‌ی مشترک می‌چرخد؛ رفت‌وآمدی آرام میان سایه‌ی درختان نارنج و صدای فواره.</p>
+      <div class="stat-row">
+        <div class="stat"><span class="n">۴۲</span><span class="l">اتاق و سوئیت</span></div>
+        <div class="stat"><span class="n">۶۰۰۰م²</span><span class="l">باغ اختصاصی</span></div>
+        <div class="stat"><span class="n">۲۴ساعته</span><span class="l">خدمات پذیرایی</span></div>
+        <div class="stat"><span class="n">۹.۷/۱۰</span><span class="l">رضایت میهمانان</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUITES — CHAHAR BAGH ============ -->
+<section class="suites" id="suites">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">اقامت</p>
+      <h2>چهار باغ، چهار حس</h2>
+      <p>سوئیت‌های ما همچون چهارباغ ایرانی، حول یک محور مشترک شکل گرفته‌اند — هرکدام روایتی جدا از نور، آب و سبزینه.</p>
+    </div>
+
+    <div class="bagh-grid reveal">
+      <div class="bagh-medallion">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M20 2L24 16L38 12L28 22L40 20L28 24L34 36L22 30L20 40L18 30L6 36L12 24L0 20L12 22L2 12L16 16Z" stroke="#C9A24C" stroke-width="1"/></svg>
+      </div>
+
+      <div class="suite-card">
+        <div class="suite-photo p1">
+          <svg viewBox="0 0 200 120"><g stroke="#F3E9D2" stroke-width="0.5" opacity="0.4"><path d="M0 100 Q50 60 100 100 T200 100"/><path d="M0 80 Q50 40 100 80 T200 80"/></g></svg>
+        </div>
+        <div class="suite-meta"><h3>اتاق باغ</h3><span class="suite-price">از ۴٬۸۰۰٬۰۰۰ تومان</span></div>
+        <p class="desc">رو به باغچه‌ی نارنج، با ایوانی کوچک برای صبحانه در سایه‌ی درختان.</p>
+        <div class="suite-tags"><span>۳۲ متر</span><span>منظره باغ</span><span>ایوان خصوصی</span></div>
+        <a href="#booking" class="btn btn-ghost">جزئیات و رزرو</a>
+      </div>
+
+      <div class="suite-card">
+        <div class="suite-photo p2">
+          <svg viewBox="0 0 200 120"><circle cx="100" cy="60" r="35" fill="none" stroke="#F3E9D2" stroke-width="0.5" opacity="0.4"/><circle cx="100" cy="60" r="20" fill="none" stroke="#F3E9D2" stroke-width="0.5" opacity="0.4"/></svg>
+        </div>
+        <div class="suite-meta"><h3>سوئیت حوض</h3><span class="suite-price">از ۷٬۲۰۰٬۰۰۰ تومان</span></div>
+        <p class="desc">مشرف به حوض مرکزی هتل، با صدای ملایم فواره تا پاسی از شب.</p>
+        <div class="suite-tags"><span>۴۶ متر</span><span>منظره حوض</span><span>وان سنتی</span></div>
+        <a href="#booking" class="btn btn-ghost">جزئیات و رزرو</a>
+      </div>
+
+      <div class="suite-card">
+        <div class="suite-photo p3">
+          <svg viewBox="0 0 200 120"><path d="M40 100 Q100 20 160 100" fill="none" stroke="#F3E9D2" stroke-width="0.5" opacity="0.5"/></svg>
+        </div>
+        <div class="suite-meta"><h3>سوئیت گنبد</h3><span class="suite-price">از ۱۲٬۵۰۰٬۰۰۰ تومان</span></div>
+        <p class="desc">بالاترین طبقه؛ سقفی گنبدی با کاشی‌کاری دست‌ساز و نشیمن اختصاصی.</p>
+        <div class="suite-tags"><span>۷۸ متر</span><span>ویو کامل باغ</span><span>باتلر اختصاصی</span></div>
+        <a href="#booking" class="btn btn-ghost">جزئیات و رزرو</a>
+      </div>
+
+      <div class="suite-card">
+        <div class="suite-photo p4">
+          <svg viewBox="0 0 200 120"><g stroke="#F3E9D2" stroke-width="0.5" opacity="0.4"><line x1="20" y1="100" x2="20" y2="30"/><line x1="60" y1="100" x2="60" y2="20"/><line x1="100" y1="100" x2="100" y2="35"/></g></svg>
+        </div>
+        <div class="suite-meta"><h3>اتاق ایوان</h3><span class="suite-price">از ۵٬۹۰۰٬۰۰۰ تومان</span></div>
+        <p class="desc">با ایوان سرتاسری رو به کوهستان و غروب‌های نارنجی کرانه خزر.</p>
+        <div class="suite-tags"><span>۳۸ متر</span><span>منظره کوهستان</span><span>صبحانه در اتاق</span></div>
+        <a href="#booking" class="btn btn-ghost">جزئیات و رزرو</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AMENITIES ============ -->
+<section class="amenities" id="amenities">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">امکانات</p>
+      <h2>هرچه برای آرامش لازم است</h2>
+    </div>
+    <div class="amenity-grid reveal-stagger">
+      <div class="amenity">
+        <div class="icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 34C8 22 14 14 24 14C34 14 40 22 40 34" stroke-linecap="round"/><path d="M6 34H42" stroke-linecap="round"/><path d="M24 14V8"/><circle cx="24" cy="6" r="1.6" fill="currentColor" stroke="none"/></svg></div>
+        <h3>اسپا و حمام سنتی</h3>
+        <p>حمام‌های گلی سنتی و ماساژ با روغن‌های گیاهی بومی کرانه خزر.</p>
+      </div>
+      <div class="amenity">
+        <div class="icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 20C10 16 14 24 18 20C22 16 26 24 30 20C34 16 38 24 42 20" stroke-linecap="round"/><path d="M6 28C10 24 14 32 18 28C22 24 26 32 30 28C34 24 38 32 42 28" stroke-linecap="round"/><rect x="10" y="10" width="28" height="4" rx="2"/></svg></div>
+        <h3>استخر بی‌کران</h3>
+        <p>استخر روباز با چشم‌انداز کوهستان، باز از سپیده تا نیمه‌شب.</p>
+      </div>
+      <div class="amenity">
+        <div class="icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M24 6C18 12 18 20 24 26C30 20 30 12 24 6Z"/><path d="M24 26V42"/><path d="M16 42H32"/></svg></div>
+        <h3>رستوران باغ گلستان</h3>
+        <p>آشپزی فصلی با محصولات باغ اختصاصی هتل، زیر نور چراغ‌های سنتی.</p>
+      </div>
+      <div class="amenity">
+        <div class="icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="18" cy="24" r="6"/><path d="M24 24H42" stroke-linecap="round"/><path d="M34 24V32"/><path d="M40 24V30"/></svg></div>
+        <h3>باتلر ۲۴ ساعته</h3>
+        <p>خدمات شخصی‌سازی‌شده در تمام ساعات، از چای صبحگاهی تا برنامه‌ی گردش.</p>
+      </div>
+      <div class="amenity">
+        <div class="icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M24 44V18" stroke-linecap="round"/><path d="M24 18C14 18 10 8 10 8C10 8 20 6 24 18Z"/><path d="M24 18C34 18 38 8 38 8C38 8 28 6 24 18Z"/></svg></div>
+        <h3>باغ اختصاصی</h3>
+        <p>مسیرهای پیاده‌روی میان درختان سرو و نارنج، فارغ از شلوغی شهر.</p>
+      </div>
+      <div class="amenity">
+        <div class="icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="8" y="10" width="32" height="28" rx="2"/><path d="M8 16H40" /><path d="M16 22H32M16 28H32M16 34H24"/></svg></div>
+        <h3>کتابخانه و سالن خواندن</h3>
+        <p>گوشه‌ای آرام با نور طبیعی برای مطالعه در کنار شومینه‌ی سنگی.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DINING ============ -->
+<section class="dining" id="dining">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow" style="justify-content:flex-start;">رستوران باغ گلستان</p>
+      <div class="quote-mark">”</div>
+      <blockquote>ما آشپزی نمی‌کنیم؛ فصل را روی بشقاب روایت می‌کنیم — از نارنج باغ خودمان تا ماهی تازه‌ی کرانه.</blockquote>
+      <div class="attribution">سرآشپز آرش کیانی<span>سرآشپز اجرایی، رستوران باغ گلستان</span></div>
+      <div style="margin-top:32px;"><a href="#booking" class="btn btn-gold">مشاهده منو و رزرو میز</a></div>
+    </div>
+    <div class="dining-visual reveal">
+      <div class="ring"></div>
+      <div class="ring r2"></div>
+      <div class="plate">
+        <svg viewBox="0 0 100 100" fill="none" stroke="#E6C77A" stroke-width="1"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="18"/><path d="M50 20V80M20 50H80" opacity="0.4"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">گالری</p>
+      <h2>لحظه‌هایی از باغ شاهی</h2>
+    </div>
+    <div class="gal-grid reveal-stagger">
+      <div class="gal-item tall g1"><span class="cap">حیاط مرکزی</span></div>
+      <div class="gal-item g2"><span class="cap">استخر بی‌کران</span></div>
+      <div class="gal-item g3"><span class="cap">سوئیت گنبد</span></div>
+      <div class="gal-item tall g4"><span class="cap">تراس غروب</span></div>
+      <div class="gal-item g5"><span class="cap">رستوران باغ گلستان</span></div>
+      <div class="gal-item g6"><span class="cap">باغ نارنج</span></div>
+      <div class="gal-item g7"><span class="cap">حمام سنتی</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">میهمانان می‌گویند</p>
+      <h2>روایت اقامت‌ها</h2>
+    </div>
+    <div class="test-track reveal-stagger">
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p>سکوت باغ، صدای فواره و عطر نارنج... بیدار شدن در سوئیت حوض تجربه‌ای بود که هنوز به یادش هستم.</p>
+        <div class="test-who"><div class="av"></div><div><div class="name">نگار ص.</div><div class="loc">تهران</div></div></div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p>خدمات باتلر ۲۴ ساعته واقعاً بی‌نظیر بود. هر درخواستی، هرچقدر کوچک، با آرامش و دقت پاسخ داده می‌شد.</p>
+        <div class="test-who"><div class="av"></div><div><div class="name">علی ر.</div><div class="loc">باکو</div></div></div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p>سوئیت گنبد از آن اتاق‌هایی است که دلت نمی‌خواهد ترکش کنی. کاشی‌کاری‌ها و نور غروب فراموش‌نشدنی بود.</p>
+        <div class="test-who"><div class="av"></div><div><div class="name">مریم ک.</div><div class="loc">شیراز</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOKING CTA ============ -->
+<section class="booking" id="booking">
+  <div class="wrap">
+    <div class="booking-inner reveal">
+      <h2>اقامتی که در انتظار شماست</h2>
+      <p>تاریخ سفرتان را انتخاب کنید؛ ما بقیه را به باغ می‌سپاریم.</p>
+    </div>
+    <form class="booking-form reveal" onsubmit="return false;">
+      <div class="field"><label>ورود</label><input type="date"></div>
+      <div class="field"><label>خروج</label><input type="date"></div>
+      <div class="field">
+        <label>مهمانان</label>
+        <select><option>۱ نفر</option><option selected>۲ نفر</option><option>۳ نفر</option><option>۴ نفر</option></select>
+      </div>
+      <button type="submit" class="btn btn-gold">جست‌وجوی اتاق</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M20 3L23 12L32 9L26 17L36 20L26 23L32 31L23 28L20 37L17 28L8 31L14 23L4 20L14 17L8 9L17 12L20 3Z" stroke="#C9A24C" stroke-width="1.2" stroke-linejoin="round"/><circle cx="20" cy="20" r="4" fill="#2F98A3"/></svg>
+          <span>باغ شاهی</span>
+        </div>
+        <p>اقامتگاهی پنج‌ستاره در دل باغی الهام‌گرفته از معماری چهارباغ ایرانی، بر کرانه‌ی خزر.</p>
+        <div class="social-row">
+          <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 4L3 11l6 2m12-9L9 13m12-9l-4 17-6-6"/></svg></a>
+          <a href="#" aria-label="واتس‌اپ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 20l1.4-4A8 8 0 1112 20a8 8 0 01-4-1.1L4 20z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>هتل</h4>
+        <ul>
+          <li><a href="#story">درباره ما</a></li>
+          <li><a href="#suites">اتاق‌ها</a></li>
+          <li><a href="#dining">رستوران</a></li>
+          <li><a href="#gallery">گالری</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>تماس</h4>
+        <ul>
+          <li><a href="#">کرانه خزر، جاده ساحلی، کیلومتر ۱۲</a></li>
+          <li><a href="tel:+981100000000">۰۰۰۰ ۱۱۰ ۹۸+</a></li>
+          <li><a href="mailto:reservation@baghshahi.com">reservation@baghshahi.com</a></li>
+        </ul>
+      </div>
+      <div class="foot-col newsletter">
+        <h4>خبرنامه باغ شاهی</h4>
+        <p>از پیشنهادهای فصلی و رویدادهای هتل باخبر شوید.</p>
+        <form class="news-form" onsubmit="return false;">
+          <input type="email" placeholder="ایمیل شما">
+          <button type="submit">ثبت</button>
+        </form>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© ۱۴۰۴ هتل باغ شاهی — تمامی حقوق محفوظ است.</span>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header solid on scroll
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('solid', window.scrollY > 40);
+  });
+
+  // Mobile menu
+  const burger = document.getElementById('burgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const closeMenu = document.getElementById('closeMenu');
+  burger.addEventListener('click', () => mobileMenu.classList.add('open'));
+  closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

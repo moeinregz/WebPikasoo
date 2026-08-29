@@ -1,0 +1,480 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import {
+  createBlogPostAction,
+  updateBlogPostAction,
+  deleteBlogPostAction,
+  toggleBlogPublishedAction,
+  uploadBlogContentImageAction,
+  type BlogFormState,
+} from "./actions";
+import { slugify } from "@/lib/slug";
+
+export type BlogPost = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  cover_image: string;
+  published: number;
+  created_at: string;
+  updated_at: string;
+  author_name: string | null;
+};
+
+const inputClass =
+  "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
+
+function DeleteButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="rounded-full border border-red-500/40 bg-black/40 px-3 py-1.5 text-[12px] font-semibold text-red-400 backdrop-blur transition hover:bg-red-500/10 disabled:pointer-events-none disabled:opacity-60"
+    >
+      حذف
+    </button>
+  );
+}
+
+function PublishToggleButton({ published }: { published: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={`rounded-full border px-3 py-1.5 text-[12px] font-bold transition disabled:pointer-events-none disabled:opacity-60 ${
+        published
+          ? "border-ink/[0.2] text-dim hover:border-accent hover:text-accent"
+          : "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
+      }`}
+    >
+      {published ? "برگردوندن به پیش‌نویس" : "انتشار"}
+    </button>
+  );
+}
+
+/** The two ways a create/edit form can be submitted — real HTML buttons,
+ *  each with its own name+value, so whichever one gets physically clicked
+ *  is what ends up in the FormData. No checkbox to forget to tick before
+ *  saving, which used to be exactly how a finished article would get saved
+ *  as an invisible draft (and then 404 on its own page). */
+function PublishButtons({ currentlyPublished }: { currentlyPublished?: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <div className="mt-1 flex flex-wrap gap-3">
+      <button
+        type="submit"
+        name="published"
+        value="1"
+        disabled={pending}
+        className="rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      >
+        {pending ? "در حال ذخیره..." : currentlyPublished ? "ذخیره‌ی تغییرات (منتشرشده)" : "انتشار مقاله"}
+      </button>
+      <button
+        type="submit"
+        name="published"
+        value="0"
+        disabled={pending}
+        className="rounded-full border border-ink/[0.2] px-6 py-3 text-[14.5px] font-semibold text-ink transition hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-60"
+      >
+        {pending ? "..." : "ذخیره به‌عنوان پیش‌نویس"}
+      </button>
+    </div>
+  );
+}
+
+const TOOLBAR_BUTTON_CLASS =
+  "rounded-md border border-ink/[0.16] bg-canvas px-2.5 py-1.5 text-[12.5px] font-bold text-ink transition hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-50";
+
+/** Body-text editor for the article's full content: a plain textarea plus a
+ *  toolbar that inserts a small, purpose-built syntax (## heading, "- "
+ *  list items, [text](url) links, ![alt](url) images) at the cursor —
+ *  matching exactly what lib/blogContent.tsx knows how to render on the
+ *  public article page. The image button uploads right away (via Vercel
+ *  Blob) and drops the resulting URL in, so a full illustrated article can
+ *  be written and previewed here without ever leaving this form. */
+function ContentEditor({ defaultValue }: { defaultValue?: string }) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [value, setValue] = useState(defaultValue ?? "");
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+
+  /** Wraps the current selection with `before`/`after` (or, if nothing is
+   *  selected, inserts `placeholder` between them), then puts the cursor
+   *  right after the inserted text. */
+  function wrapSelection(before: string, after: string, placeholder: string) {
+    const el = textareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = value.slice(start, end) || placeholder;
+    const next = value.slice(0, start) + before + selected + after + value.slice(end);
+    setValue(next);
+    const cursor = start + before.length + selected.length + after.length;
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(cursor, cursor);
+    });
+  }
+
+  /** Inserts a standalone block (heading/list/image) on its own line,
+   *  making sure there's a blank line before and after it so it never
+   *  merges into a neighboring paragraph. */
+  function insertBlock(text: string) {
+    const el = textareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const needsLeadingBreak = start > 0 && value[start - 1] !== "\n";
+    const before = (needsLeadingBreak ? "\n\n" : "") + text + "\n\n";
+    const next = value.slice(0, start) + before + value.slice(start);
+    setValue(next);
+    const cursor = start + before.length;
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(cursor, cursor);
+    });
+  }
+
+  function handleHeading() {
+    wrapSelection("", "", "");
+    insertBlock("## عنوان بخش");
+  }
+
+  function handleList() {
+    insertBlock("- مورد اول\n- مورد دوم\n- مورد سوم");
+  }
+
+  function handleLink() {
+    wrapSelection("[", "](https://) ", "متن لینک");
+  }
+
+  function handleImageClick() {
+    setUploadError("");
+    fileInputRef.current?.click();
+  }
+
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setUploading(true);
+    setUploadError("");
+    try {
+      const fd = new FormData();
+      fd.set("image", file);
+      const result = await uploadBlogContentImageAction(fd);
+      if (result.ok && result.url) {
+        insertBlock(`![توضیح تصویر](${result.url})`);
+      } else {
+        setUploadError(result.message || "آپلود تصویر ناموفق بود.");
+      }
+    } catch {
+      setUploadError("آپلود تصویر ناموفق بود.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div>
+      <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">متن کامل مقاله</label>
+
+      <div className="mb-2 flex flex-wrap items-center gap-1.5">
+        <button type="button" onClick={handleHeading} className={TOOLBAR_BUTTON_CLASS} title="تیتر (H2)">
+          H2
+        </button>
+        <button type="button" onClick={handleList} className={TOOLBAR_BUTTON_CLASS} title="لیست">
+          لیست
+        </button>
+        <button type="button" onClick={handleLink} className={TOOLBAR_BUTTON_CLASS} title="لینک روی یه کلمه">
+          لینک
+        </button>
+        <button
+          type="button"
+          onClick={handleImageClick}
+          disabled={uploading}
+          className={TOOLBAR_BUTTON_CLASS}
+          title="افزودن عکس داخل مقاله"
+        >
+          {uploading ? "در حال آپلود..." : "افزودن عکس"}
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageChange}
+        />
+      </div>
+
+      {uploadError && <p className="mb-2 text-[12px] text-red-500">{uploadError}</p>}
+
+      <textarea
+        ref={textareaRef}
+        name="content"
+        required
+        rows={14}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="متن کامل مقاله... برای تیتر/لیست/لینک/عکس از دکمه‌های بالا استفاده کن."
+        className={`${inputClass} resize-y leading-relaxed`}
+        dir="rtl"
+      />
+      <p className="mt-1 text-[12px] text-dim/70">
+        متن رو انتخاب کن و «لینک» رو بزن تا لینک روی همون کلمه بره؛ بدون انتخاب متن، دکمه‌ها یه نمونه‌ی آماده اضافه
+        می‌کنن که می‌تونی جاش رو عوض کنی.
+      </p>
+    </div>
+  );
+}
+
+/** Shared field set for both the "create" and "edit" forms. The slug field
+ *  auto-fills from the title as the admin types (client-side, via the same
+ *  slugify() the server re-validates with) but stays freely editable — this
+ *  is the "لینک سازی" for the post's public URL, /blog/[slug]. */
+function BlogFields({
+  defaults,
+}: {
+  defaults?: {
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    coverImage: string;
+  };
+}) {
+  const [title, setTitle] = useState(defaults?.title ?? "");
+  const [slug, setSlug] = useState(defaults?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(!!defaults?.slug);
+
+  function handleTitleChange(value: string) {
+    setTitle(value);
+    if (!slugTouched) setSlug(slugify(value));
+  }
+
+  return (
+    <div className="grid gap-4">
+      <input
+        name="title"
+        required
+        placeholder="عنوان مقاله"
+        value={title}
+        onChange={(e) => handleTitleChange(e.target.value)}
+        className={inputClass}
+      />
+
+      <div>
+        <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">
+          لینک مقاله (webpikaso.com/blog/…)
+        </label>
+        <input
+          name="slug"
+          dir="ltr"
+          placeholder="خودکار از عنوان ساخته می‌شه"
+          value={slug}
+          onChange={(e) => {
+            setSlugTouched(true);
+            setSlug(slugify(e.target.value));
+          }}
+          className={`${inputClass} text-left`}
+        />
+      </div>
+
+      <textarea
+        name="excerpt"
+        rows={2}
+        defaultValue={defaults?.excerpt}
+        placeholder="توضیح کوتاه (برای نمایش در لیست وبلاگ)"
+        className={`${inputClass} resize-none`}
+      />
+
+      <ContentEditor defaultValue={defaults?.content} />
+
+      <div>
+        <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">تصویر کاور</label>
+        {defaults?.coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={defaults.coverImage}
+            alt=""
+            className="mb-2 h-32 w-full max-w-xs rounded-lg border border-ink/[0.14] object-cover"
+          />
+        )}
+        <input
+          type="file"
+          name="coverImage"
+          accept="image/*"
+          className="block w-full text-[13.5px] text-dim file:ml-3 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-[12.5px] file:font-bold file:text-canvas"
+        />
+        {defaults?.coverImage && (
+          <p className="mt-1 text-[12px] text-dim/70">یه فایل جدید انتخاب کن تا عکس فعلی جایگزین بشه، وگرنه همون می‌مونه.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const initialState: BlogFormState = null;
+
+function AddBlogPostForm() {
+  const [state, formAction] = useFormState(createBlogPostAction, initialState);
+  const [open, setOpen] = useState(false);
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-ink/70 px-5 py-2.5 text-[13.5px] font-bold text-ink transition hover:bg-ink hover:text-canvas"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        نوشتن مقاله‌ی جدید
+      </button>
+    );
+  }
+
+  return (
+    <form action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="font-display text-lg font-normal">مقاله‌ی جدید</h2>
+        <button type="button" onClick={() => setOpen(false)} className="text-sm text-dim transition hover:text-ink">
+          بستن
+        </button>
+      </div>
+
+      <BlogFields />
+
+      {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-dim"}`}>{state.message}</p>}
+      <PublishButtons />
+    </form>
+  );
+}
+
+function EditBlogPostForm({ post, onClose }: { post: BlogPost; onClose: () => void }) {
+  const [state, formAction] = useFormState(updateBlogPostAction, initialState);
+
+  return (
+    <form action={formAction} className="mt-4 border-t border-ink/[0.1] pt-4">
+      <input type="hidden" name="postId" value={post.id} />
+      <BlogFields
+        defaults={{
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          content: post.content,
+          coverImage: post.cover_image,
+        }}
+      />
+      {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-dim"}`}>{state.message}</p>}
+      <div className="mt-2 flex flex-wrap items-center gap-3">
+        <PublishButtons currentlyPublished={!!post.published} />
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-full border border-ink/[0.2] px-6 py-3 text-[14.5px] font-semibold text-dim transition hover:text-ink"
+        >
+          انصراف
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function BlogPostCard({ post }: { post: BlogPost }) {
+  const [editing, setEditing] = useState(false);
+  const isPublished = !!post.published;
+
+  return (
+    <article className="rounded-card border border-ink/[0.14] bg-surface/20 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="mb-1.5 flex flex-wrap items-center gap-2">
+            <h3 className="font-display text-lg font-normal">{post.title}</h3>
+            <span
+              className={`rounded-md border px-2 py-0.5 font-mono text-[11px] ${
+                isPublished
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
+                  : "border-ink/[0.2] text-dim"
+              }`}
+            >
+              {isPublished ? "منتشرشده" : "پیش‌نویس"}
+            </span>
+          </div>
+          <a
+            href={`/blog/${post.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            dir="ltr"
+            className="block truncate text-[12.5px] text-accent underline"
+          >
+            /blog/{post.slug}
+          </a>
+          {post.excerpt && <p className="mt-2 text-[13.5px] text-dim">{post.excerpt}</p>}
+          {post.author_name && (
+            <p className="mt-1 font-mono text-[11.5px] text-dim/70">نویسنده: {post.author_name}</p>
+          )}
+        </div>
+
+        {post.cover_image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={post.cover_image}
+            alt=""
+            className="h-16 w-24 flex-shrink-0 rounded-lg border border-ink/[0.14] object-cover"
+          />
+        )}
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2 border-t border-ink/[0.1] pt-4">
+        <button
+          type="button"
+          onClick={() => setEditing((v) => !v)}
+          className="rounded-full border border-ink/[0.2] px-3 py-1.5 text-[12px] font-bold text-ink transition hover:border-accent hover:text-accent"
+        >
+          {editing ? "بستن ویرایش" : "ویرایش"}
+        </button>
+        <form action={toggleBlogPublishedAction}>
+          <input type="hidden" name="postId" value={post.id} />
+          <input type="hidden" name="published" value={isPublished ? "0" : "1"} />
+          <PublishToggleButton published={isPublished} />
+        </form>
+        <form action={deleteBlogPostAction}>
+          <input type="hidden" name="postId" value={post.id} />
+          <DeleteButton />
+        </form>
+      </div>
+
+      {editing && <EditBlogPostForm post={post} onClose={() => setEditing(false)} />}
+    </article>
+  );
+}
+
+export default function BlogPanel({ posts }: { posts: BlogPost[] }) {
+  return (
+    <div>
+      <AddBlogPostForm />
+
+      {posts.length === 0 ? (
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+          هنوز مقاله‌ای ثبت نشده — از دکمه‌ی بالا اولین مقاله رو بنویس.
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {posts.map((p) => (
+            <BlogPostCard key={p.id} post={p} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

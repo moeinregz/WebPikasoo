@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رخش | نمایشگاه اختصاصی خودرو</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --bg-alt: #111114;
+      --surface: #18181c;
+      --surface-2: #1f1f24;
+      --line: #2b2b31;
+      --chrome: #c9cfd6;
+      --chrome-dim: #7d818a;
+      --gold: #d4a24e;
+      --gold-dim: #8a6b34;
+      --wine: #7c2230;
+      --text: #eeecea;
+      --text-dim: #9a9a9e;
+      --radius: 2px;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Vazirmatn', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    ::selection {
+      background: var(--gold);
+      color: #0a0a0c;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    /* ---------- texture ---------- */
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: .035;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- nav ---------- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 22px 0;
+      transition: padding .4s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav.scrolled {
+      padding: 14px 0;
+      background: rgba(10, 10, 12, .82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-color: var(--line);
+    }
+
+    .nav .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand svg {
+      width: 34px;
+      height: 34px;
+      flex: none;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: .02em;
+      color: var(--text);
+    }
+
+    .brand-tag {
+      display: block;
+      font-size: .62rem;
+      color: var(--gold);
+      letter-spacing: .22em;
+      margin-top: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: .92rem;
+      color: var(--chrome);
+      position: relative;
+      padding: 4px 0;
+      transition: color .25s;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width .3s var(--ease);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      padding: 9px 20px;
+      font-size: .85rem;
+      border-radius: var(--radius);
+      transition: .3s var(--ease);
+    }
+
+    .nav-cta:hover {
+      background: var(--gold);
+      color: #0a0a0c;
+      border-color: var(--gold);
+    }
+
+    .burger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      width: 28px;
+      height: 20px;
+      position: relative;
+    }
+
+    .burger span {
+      position: absolute;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: currentColor;
+      transition: .3s;
+    }
+
+    .burger span:nth-child(1) {
+      top: 0;
+    }
+
+    .burger span:nth-child(2) {
+      top: 9px;
+    }
+
+    .burger span:nth-child(3) {
+      top: 18px;
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 120px;
+      padding-bottom: 60px;
+      background:
+        radial-gradient(600px circle at var(--mx, 70%) var(--my, 40%), rgba(212, 162, 78, .10), transparent 60%),
+        linear-gradient(180deg, #0a0a0c 0%, #0d0d10 60%, #0a0a0c 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      /* showroom floor grid */
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 46%;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, .9), transparent);
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, .9), transparent);
+      transform: perspective(500px) rotateX(55deg);
+      transform-origin: bottom;
+      opacity: .6;
+    }
+
+    .beam {
+      position: absolute;
+      top: -20%;
+      right: 8%;
+      width: 520px;
+      height: 140%;
+      background: conic-gradient(from 200deg at 50% 0%, transparent 0deg, rgba(212, 162, 78, .14) 12deg, transparent 30deg);
+      animation: sweep 9s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sweep {
+
+      0%,
+      100% {
+        transform: rotate(-6deg);
+      }
+
+      50% {
+        transform: rotate(10deg);
+      }
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      font-size: .8rem;
+      letter-spacing: .18em;
+      font-weight: 600;
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: rise .8s var(--ease) .1s forwards;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+      font-weight: 800;
+      line-height: 1.14;
+      letter-spacing: -.01em;
+      opacity: 0;
+      animation: rise .9s var(--ease) .25s forwards;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+      position: relative;
+    }
+
+    .hero p.lede {
+      margin-top: 24px;
+      max-width: 46ch;
+      color: var(--chrome);
+      font-size: 1.05rem;
+      opacity: 0;
+      animation: rise .9s var(--ease) .4s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 38px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: rise .9s var(--ease) .55s forwards;
+    }
+
+    .btn {
+      padding: 15px 28px;
+      font-size: .92rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      transition: .35s var(--ease);
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-solid {
+      background: var(--gold);
+      color: #0a0a0c;
+    }
+
+    .btn-solid:hover {
+      background: #e6b866;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--chrome);
+      background: var(--surface);
+    }
+
+    .hero-pun {
+      margin-top: 44px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: .85rem;
+      color: var(--text-dim);
+      max-width: 46ch;
+      opacity: 0;
+      animation: rise .9s var(--ease) .7s forwards;
+    }
+
+    .hero-pun b {
+      color: var(--chrome);
+      font-weight: 600;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-art {
+      position: relative;
+      height: 340px;
+    }
+
+    .hero-art svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .hero-art path.car-line {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 8px rgba(212, 162, 78, .25));
+    }
+
+    .hero-art circle.wheel {
+      fill: none;
+      stroke: var(--chrome-dim);
+      stroke-width: 1.4;
+    }
+
+    .hero-art .shadow-ellipse {
+      fill: rgba(0, 0, 0, .5);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .beam {
+        animation: none;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    /* ---------- marquee ---------- */
+    .marquee-band {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-alt);
+      padding: 16px 0;
+      overflow: hidden;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 48px;
+      white-space: nowrap;
+      width: max-content;
+      animation: scroll-x 28s linear infinite;
+    }
+
+    @keyframes scroll-x {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .marquee-track span {
+      font-size: .82rem;
+      letter-spacing: .2em;
+      color: var(--chrome-dim);
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .marquee-track span::after {
+      content: "◆";
+      color: var(--gold-dim);
+      font-size: .6rem;
+      margin-right: 48px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track {
+        animation: none;
+      }
+    }
+
+    /* ---------- section shared ---------- */
+    section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+    }
+
+    .section-eyebrow {
+      color: var(--gold);
+      font-size: .78rem;
+      letter-spacing: .18em;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+      font-weight: 800;
+      max-width: 16ch;
+    }
+
+    .section-head p {
+      color: var(--text-dim);
+      max-width: 38ch;
+      font-size: .95rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- stats ---------- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .stat {
+      padding: 38px 24px;
+      text-align: center;
+      border-left: 1px solid var(--line);
+      background: var(--bg-alt);
+    }
+
+    .stat:last-child {
+      border-left: none;
+    }
+
+    .stat .num {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+    }
+
+    .stat .label {
+      color: var(--text-dim);
+      font-size: .82rem;
+      margin-top: 8px;
+      letter-spacing: .02em;
+    }
+
+    /* ---------- models ---------- */
+    .models {
+      background: var(--bg-alt);
+    }
+
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .5s var(--ease), border-color .5s var(--ease);
+    }
+
+    .model-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold-dim);
+    }
+
+    .model-card .stage {
+      height: 150px;
+      position: relative;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .model-card .stage .glow {
+      position: absolute;
+      left: 50%;
+      bottom: 6px;
+      width: 70%;
+      height: 60%;
+      background: radial-gradient(ellipse at center, rgba(212, 162, 78, .16), transparent 70%);
+      transform: translateX(-50%);
+      transition: opacity .5s;
+    }
+
+    .model-card .stage svg {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88%;
+      transition: transform .6s var(--ease);
+    }
+
+    .model-card:hover .stage svg {
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .model-card .stage svg .body {
+      stroke: var(--chrome);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .model-card .stage svg .wheel {
+      fill: var(--bg);
+      stroke: var(--chrome-dim);
+      stroke-width: 1.3;
+    }
+
+    .model-card:hover .stage svg .wheel {
+      animation: spin 1.1s linear infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .model-name-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .model-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .model-class {
+      font-size: .72rem;
+      color: var(--gold);
+      letter-spacing: .1em;
+    }
+
+    .model-desc {
+      color: var(--text-dim);
+      font-size: .88rem;
+      margin-bottom: 20px;
+    }
+
+    .model-specs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      margin-bottom: 20px;
+    }
+
+    .model-specs div {
+      text-align: center;
+    }
+
+    .model-specs .v {
+      display: block;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .model-specs .k {
+      font-size: .68rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .model-card .row-cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .model-card .row-cta a {
+      font-size: .85rem;
+      color: var(--gold);
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 2px;
+    }
+
+    .model-card .row-cta a:hover {
+      border-color: var(--gold);
+    }
+
+    /* ---------- experience ---------- */
+    .experience .wrap {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .exp-visual {
+      position: relative;
+      height: 420px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 30%, rgba(212, 162, 78, .10), transparent 55%),
+        var(--surface);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .exp-visual svg {
+      width: 70%;
+    }
+
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-item {
+      display: flex;
+      gap: 20px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .exp-item:first-child {
+      padding-top: 0;
+    }
+
+    .exp-item .idx {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold-dim);
+      font-size: .85rem;
+      padding-top: 3px;
+    }
+
+    .exp-item h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .exp-item p {
+      color: var(--text-dim);
+      font-size: .9rem;
+      max-width: 52ch;
+    }
+
+    /* ---------- gallery ---------- */
+    .gallery {
+      background: var(--bg-alt);
+    }
+
+    .gal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 130px;
+      gap: 14px;
+    }
+
+    .gal-tile {
+      position: relative;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+    }
+
+    .gal-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 60% 20%, rgba(212, 162, 78, .18), transparent 60%);
+      opacity: .7;
+      transition: opacity .4s;
+    }
+
+    .gal-tile:hover::before {
+      opacity: 1;
+    }
+
+    .gal-tile span {
+      position: relative;
+      z-index: 1;
+      font-size: .78rem;
+      color: var(--chrome);
+      letter-spacing: .05em;
+    }
+
+    .gal-tile.tall {
+      grid-row: span 2;
+    }
+
+    .gal-tile.wide {
+      grid-column: span 2;
+    }
+
+    /* ---------- contact ---------- */
+    .contact .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+
+    .contact-info dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px 20px;
+      margin-top: 28px;
+    }
+
+    .contact-info dt {
+      color: var(--text-dim);
+      font-size: .82rem;
+      padding-top: 2px;
+    }
+
+    .contact-info dd {
+      font-size: .98rem;
+      font-weight: 500;
+    }
+
+    .hours-table {
+      margin-top: 32px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    .hours-table div {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: .88rem;
+      color: var(--text-dim);
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .hours-table div b {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: .8rem;
+      color: var(--text-dim);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: .92rem;
+      transition: border-color .3s;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--gold-dim);
+      outline: none;
+    }
+
+    form .btn {
+      align-self: flex-start;
+      margin-top: 6px;
+      border: none;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 64px 0 32px;
+      background: var(--bg-alt);
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 56px;
+    }
+
+    .foot-brand p {
+      color: var(--text-dim);
+      font-size: .88rem;
+      margin-top: 16px;
+      max-width: 32ch;
+    }
+
+    .foot-col h4 {
+      font-size: .82rem;
+      color: var(--chrome);
+      margin-bottom: 16px;
+      letter-spacing: .05em;
+    }
+
+    .foot-col a {
+      display: block;
+      color: var(--text-dim);
+      font-size: .88rem;
+      margin-bottom: 10px;
+      transition: color .25s;
+    }
+
+    .foot-col a:hover {
+      color: var(--gold);
+    }
+
+    .foot-bottom {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      font-size: .78rem;
+      color: var(--text-dim);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ---------- responsive ---------- */
+    @media (max-width:980px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-art {
+        height: 220px;
+        order: -1;
+      }
+
+      .nav-links {
+        position: fixed;
+        inset: 0 0 0 auto;
+        width: 78%;
+        max-width: 320px;
+        background: #0d0d10;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 100px 32px 32px;
+        gap: 26px;
+        transform: translateX(100%);
+        transition: transform .4s var(--ease);
+        border-left: 1px solid var(--line);
+      }
+
+      .nav-links.open {
+        transform: translateX(0);
+      }
+
+      .burger {
+        display: block;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat:nth-child(2) {
+        border-left: none;
+      }
+
+      .stat:nth-child(3),
+      .stat:nth-child(4) {
+        border-top: 1px solid var(--line);
+      }
+
+      .model-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .experience .wrap,
+      .contact .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .exp-visual {
+        height: 280px;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gal-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .gal-tile.wide {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width:560px) {
+      section {
+        padding: 80px 0;
+      }
+
+      .wrap {
+        padding: 0 20px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="grain"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="wrap">
+      <a href="#" class="brand" aria-label="رخش - صفحه اصلی">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M9 31 L9 17 A11 11 0 0 1 31 17 L31 31" fill="none" stroke="#d4a24e" stroke-width="3.4"
+            stroke-linecap="round" />
+          <circle cx="9" cy="33.4" r="1.6" fill="#d4a24e" />
+          <circle cx="31" cy="33.4" r="1.6" fill="#d4a24e" />
+        </svg>
+        <span>
+          <span class="brand-name">رخش</span>
+          <span class="brand-tag">RAKHSH MOTORS</span>
+        </span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#models">مدل‌ها</a></li>
+        <li><a href="#experience">تجربه رخش</a></li>
+        <li><a href="#gallery">گالری</a></li>
+        <li><a href="#contact">تماس و بازدید</a></li>
+        <li class="only-mobile"><a href="#contact" class="nav-cta">رزرو بازدید</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta desktop-cta">رزرو بازدید</a>
+      <button class="burger" id="burger" aria-label="باز کردن منو" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="hero">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">نمایشگاه اختصاصی خودروهای لوکس</span>
+        <h1>از اسطوره <br> تا <em>جاده</em> می‌رانیم</h1>
+        <p class="lede">
+          رخش، نامش را از اسب افسانه‌ای رستم گرفته؛ همدمی که در شاهنامه پا به پای قهرمان، از دل خطر عبور می‌کرد.
+          در این نمایشگاه، هر خودرو با همان معیار انتخاب شده است: قدرتی که می‌توان به آن اعتماد کرد.
+        </p>
+        <div class="hero-actions">
+          <a href="#models" class="btn btn-solid">مشاهده مدل‌ها</a>
+          <a href="#contact" class="btn btn-ghost">رزرو بازدید حضوری</a>
+        </div>
+        <p class="hero-pun">
+          در فارسی، قدرت موتور را با <b>«اسب بخار»</b> می‌سنجند.
+          ما ترجیح می‌دهیم آن را با <b>«رخش»</b> بسنجیم؛ نامی که یعنی «درخشان» و «تیزتک».
+        </p>
+      </div>
+      <div class="hero-art">
+        <svg viewBox="0 0 600 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <ellipse class="shadow-ellipse" cx="300" cy="215" rx="220" ry="14"></ellipse>
+          <path id="heroCar" class="car-line" d="M40,175
+          C40,150 60,150 85,148
+          C110,120 150,95 210,92
+          C260,88 300,86 345,92
+          C400,99 430,118 460,140
+          C500,143 535,150 555,168
+          C560,178 552,183 540,183
+          L480,183
+          C476,163 460,150 442,150
+          C424,150 408,163 405,183
+          L235,183
+          C231,163 215,150 197,150
+          C179,150 163,163 160,183
+          L70,183
+          C52,183 40,183 40,175 Z" />
+          <circle class="wheel" cx="197" cy="196" r="26"></circle>
+          <circle class="wheel" cx="442" cy="196" r="26"></circle>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- MARQUEE -->
+  <div class="marquee-band">
+    <div class="marquee-track" aria-hidden="true">
+      <span>سرعت<span>قدرت</span><span>اصالت</span><span>دقت مهندسی</span><span>راحتی سواری</span><span>گارانتی
+          معتبر</span><span>تحویل درب منزل</span></span>
+      <span>سرعت<span>قدرت</span><span>اصالت</span><span>دقت مهندسی</span><span>راحتی سواری</span><span>گارانتی
+          معتبر</span><span>تحویل درب منزل</span></span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <div class="wrap">
+      <div class="stats reveal">
+        <div class="stat">
+          <span class="num mono" data-count="42">0</span>
+          <span class="label">خودرو در نمایشگاه</span>
+        </div>
+        <div class="stat">
+          <span class="num mono" data-count="18">0</span>
+          <span class="label">سال تجربه</span>
+        </div>
+        <div class="stat">
+          <span class="num mono" data-count="98" data-suffix="%">0</span>
+          <span class="label">رضایت مشتریان</span>
+        </div>
+        <div class="stat">
+          <span class="num mono" data-count="12">0</span>
+          <span class="label">برند همکار</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODELS -->
+  <section class="models" id="models">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="section-eyebrow">مجموعه شاهنامه</span>
+          <h2>مدل‌های ویژه رخش</h2>
+        </div>
+        <p>هر خودرو در این مجموعه نامی از دل حماسه گرفته؛ انتخابی برای کسانی که رانندگی را روایتی می‌دانند، نه فقط
+          جابه‌جایی.</p>
+      </div>
+
+      <div class="model-grid">
+
+        <article class="model-card reveal">
+          <div class="stage">
+            <div class="glow"></div>
+            <svg viewBox="0 0 260 90" aria-hidden="true">
+              <path class="body"
+                d="M15,68 C15,55 30,50 45,49 C60,35 85,25 115,24 C145,23 165,28 185,40 C205,42 225,46 238,58 C240,64 235,68 228,68 L205,68 C203,58 194,51 184,51 C174,51 165,58 163,68 L100,68 C98,58 89,51 79,51 C69,51 60,58 58,68 L25,68 C18,68 15,72 15,68 Z" />
+              <circle class="wheel" cx="79" cy="70" r="11" />
+              <circle class="wheel" cx="184" cy="70" r="11" />
+            </svg>
+          </div>
+          <div class="model-name-row">
+            <span class="model-name">سیمرغ GT</span>
+            <span class="model-class">کوپه اسپرت</span>
+          </div>
+          <p class="model-desc">طراحی‌شده برای جاده‌های باز؛ چابک، سبک و بی‌درنگ در واکنش.</p>
+          <div class="model-specs">
+            <div><span class="v mono">420</span><span class="k">اسب بخار</span></div>
+            <div><span class="v mono">3.9</span><span class="k">ثانیه تا ۱۰۰</span></div>
+            <div><span class="v mono">280</span><span class="k">سرعت نهایی</span></div>
+          </div>
+          <div class="row-cta">
+            <a href="#contact">رزرو تست جاده</a>
+            <span class="mono" style="color:var(--text-dim);font-size:.8rem;">SM-GT</span>
+          </div>
+        </article>
+
+        <article class="model-card reveal">
+          <div class="stage">
+            <div class="glow"></div>
+            <svg viewBox="0 0 260 90" aria-hidden="true">
+              <path class="body"
+                d="M20,68 C20,50 35,44 50,43 L62,28 C72,20 90,17 110,17 L165,17 C182,17 195,22 205,32 L215,43 C228,44 240,50 245,60 C247,65 242,68 236,68 L212,68 C210,58 201,51 191,51 C181,51 172,58 170,68 L105,68 C103,58 94,51 84,51 C74,51 65,58 63,68 L30,68 C22,68 20,72 20,68 Z" />
+              <circle class="wheel" cx="84" cy="70" r="11.5" />
+              <circle class="wheel" cx="191" cy="70" r="11.5" />
+            </svg>
+          </div>
+          <div class="model-name-row">
+            <span class="model-name">کیخسرو S</span>
+            <span class="model-class">شاسی‌بلند لوکس</span>
+          </div>
+          <p class="model-desc">فضایی برای خانواده، قدرتی برای هر جاده؛ راحتی بدون سازش.</p>
+          <div class="model-specs">
+            <div><span class="v mono">380</span><span class="k">اسب بخار</span></div>
+            <div><span class="v mono">5.2</span><span class="k">ثانیه تا ۱۰۰</span></div>
+            <div><span class="v mono">240</span><span class="k">سرعت نهایی</span></div>
+          </div>
+          <div class="row-cta">
+            <a href="#contact">رزرو تست جاده</a>
+            <span class="mono" style="color:var(--text-dim);font-size:.8rem;">KX-S</span>
+          </div>
+        </article>
+
+        <article class="model-card reveal">
+          <div class="stage">
+            <div class="glow"></div>
+            <svg viewBox="0 0 260 90" aria-hidden="true">
+              <path class="body"
+                d="M18,68 C18,54 32,49 48,48 C64,32 88,23 118,23 C148,23 168,30 182,42 C202,44 222,48 234,58 C237,64 231,68 224,68 L202,68 C200,58 191,51 181,51 C171,51 162,58 160,68 L98,68 C96,58 87,51 77,51 C67,51 58,58 56,68 L28,68 C20,68 18,72 18,68 Z" />
+              <circle class="wheel" cx="77" cy="70" r="10.5" />
+              <circle class="wheel" cx="181" cy="70" r="10.5" />
+            </svg>
+          </div>
+          <div class="model-name-row">
+            <span class="model-name">بهرام روبستر</span>
+            <span class="model-class">کروک دو در</span>
+          </div>
+          <p class="model-desc">سقفی که کنار می‌رود تا آسمان بخشی از سواری شود.</p>
+          <div class="model-specs">
+            <div><span class="v mono">350</span><span class="k">اسب بخار</span></div>
+            <div><span class="v mono">4.6</span><span class="k">ثانیه تا ۱۰۰</span></div>
+            <div><span class="v mono">265</span><span class="k">سرعت نهایی</span></div>
+          </div>
+          <div class="row-cta">
+            <a href="#contact">رزرو تست جاده</a>
+            <span class="mono" style="color:var(--text-dim);font-size:.8rem;">BH-R</span>
+          </div>
+        </article>
+
+        <article class="model-card reveal">
+          <div class="stage">
+            <div class="glow"></div>
+            <svg viewBox="0 0 260 90" aria-hidden="true">
+              <path class="body"
+                d="M16,66 C16,52 30,47 46,46 L58,32 C70,23 92,19 116,19 L160,19 C178,19 192,25 200,35 C218,37 234,42 242,54 C245,61 239,66 232,66 L210,66 C208,56 199,49 189,49 C179,49 170,56 168,66 L92,66 C90,56 81,49 71,49 C61,49 52,56 50,66 L24,66 C18,66 16,70 16,66 Z" />
+              <circle class="wheel" cx="71" cy="68" r="11.5" />
+              <circle class="wheel" cx="189" cy="68" r="11.5" />
+            </svg>
+          </div>
+          <div class="model-name-row">
+            <span class="model-name">جمشید X</span>
+            <span class="model-class">سدان اجرایی</span>
+          </div>
+          <p class="model-desc">سکوت کابین، دقت مهندسی؛ برای مسیرهایی که فکر می‌کنید در آن‌ها.</p>
+          <div class="model-specs">
+            <div><span class="v mono">310</span><span class="k">اسب بخار</span></div>
+            <div><span class="v mono">5.8</span><span class="k">ثانیه تا ۱۰۰</span></div>
+            <div><span class="v mono">230</span><span class="k">سرعت نهایی</span></div>
+          </div>
+          <div class="row-cta">
+            <a href="#contact">رزرو تست جاده</a>
+            <span class="mono" style="color:var(--text-dim);font-size:.8rem;">JM-X</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="experience" id="experience">
+    <div class="wrap">
+      <div class="exp-visual reveal">
+        <svg viewBox="0 0 200 160" aria-hidden="true">
+          <path
+            d="M12,120 C12,100 25,94 40,93 C52,72 78,58 100,58 C122,58 140,66 152,80 C168,82 182,88 190,100 C192,108 186,112 178,112 L160,112 C158,98 148,90 136,90 C124,90 114,98 112,112 L70,112 C68,98 58,90 46,90 C34,90 24,98 22,112 L18,112 C10,112 12,116 12,120 Z"
+            fill="none" stroke="#d4a24e" stroke-width="1.6" opacity=".9" />
+          <circle cx="46" cy="116" r="16" fill="none" stroke="#7d818a" stroke-width="1.4" />
+          <circle cx="136" cy="116" r="16" fill="none" stroke="#7d818a" stroke-width="1.4" />
+          <line x1="20" y1="30" x2="100" y2="30" stroke="#2b2b31" stroke-width="1" />
+          <line x1="20" y1="42" x2="80" y2="42" stroke="#2b2b31" stroke-width="1" />
+        </svg>
+      </div>
+      <div>
+        <span class="section-eyebrow reveal">تجربه رخش</span>
+        <h2 class="reveal"
+          style="font-size:clamp(1.9rem,3.4vw,2.7rem);font-weight:800;margin-bottom:36px;max-width:20ch;">
+          بازدید از نمایشگاه، خودش یک تجربه است
+        </h2>
+        <div class="exp-list">
+          <div class="exp-item reveal">
+            <span class="idx mono">01</span>
+            <div>
+              <h3>مشاور خرید اختصاصی</h3>
+              <p>یک کارشناس، از اولین بازدید تا تحویل کلید، همراه شماست؛ بدون فشار فروش.</p>
+            </div>
+          </div>
+          <div class="exp-item reveal">
+            <span class="idx mono">02</span>
+            <div>
+              <h3>تست جاده واقعی</h3>
+              <p>پیش از تصمیم، مسیر پیشنهادی ما را برانید؛ نه دور میدان نمایشگاه، بلکه در جاده اصلی.</p>
+            </div>
+          </div>
+          <div class="exp-item reveal">
+            <span class="idx mono">03</span>
+            <div>
+              <h3>تحویل درب منزل</h3>
+              <p>خودروی نهایی‌شده را در آدرس دلخواه شما تحویل می‌دهیم، آماده و بی‌نقص.</p>
+            </div>
+          </div>
+          <div class="exp-item reveal">
+            <span class="idx mono">04</span>
+            <div>
+              <h3>گارانتی معتبر و خدمات پس از فروش</h3>
+              <p>پشتیبانی فنی و گارانتی مکتوب برای تمام مدل‌های موجود در مجموعه.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="section-eyebrow">نمایی از نمایشگاه</span>
+          <h2>فضایی طراحی‌شده برای نور و فلز</h2>
+        </div>
+        <p>سالن اصلی رخش با نورپردازی نمایشی، هر خودرو را مثل یک اثر هنری به نمایش می‌گذارد.</p>
+      </div>
+      <div class="gal-grid reveal">
+        <div class="gal-tile tall wide"><span>سالن اصلی — نورپردازی نمایشی</span></div>
+        <div class="gal-tile"><span>گوشه سیمرغ GT</span></div>
+        <div class="gal-tile"><span>ایستگاه مشاوره خرید</span></div>
+        <div class="gal-tile tall"><span>ویترین بهرام روبستر</span></div>
+        <div class="gal-tile wide"><span>لانژ انتظار مشتریان</span></div>
+        <div class="gal-tile"><span>کارگاه فنی و بازرسی</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="contact-info">
+        <span class="section-eyebrow reveal">تماس و بازدید</span>
+        <h2 class="reveal" style="font-size:clamp(1.9rem,3.4vw,2.7rem);font-weight:800;max-width:16ch;">
+          رخش را از نزدیک ببینید
+        </h2>
+        <dl class="reveal">
+          <dt>نشانی</dt>
+          <dd>تهران، بزرگراه شهید همت، نمایشگاه بین‌المللی خودرو، سالن ۴</dd>
+          <dt>تلفن</dt>
+          <dd class="mono">021 - 8800 1245</dd>
+          <dt>ایمیل</dt>
+          <dd class="mono">visit@rakhsh-motors.example</dd>
+        </dl>
+        <div class="hours-table reveal">
+          <div><span>شنبه تا چهارشنبه</span> <b>۹:۰۰ تا ۲۰:۰۰</b></div>
+          <div><span>پنجشنبه</span> <b>۹:۰۰ تا ۱۸:۰۰</b></div>
+          <div><span>جمعه</span> <b>۱۴:۰۰ تا ۱۹:۰۰</b></div>
+        </div>
+      </div>
+      <form class="reveal"
+        onsubmit="event.preventDefault(); this.querySelector('.btn').textContent='درخواست شما ثبت شد ✓';">
+        <div class="field">
+          <label for="name">نام و نام خانوادگی</label>
+          <input id="name" type="text" placeholder="مثلاً آرش کیانی" required>
+        </div>
+        <div class="field">
+          <label for="phone">شماره تماس</label>
+          <input id="phone" type="tel" class="mono" placeholder="0912 000 0000" required>
+        </div>
+        <div class="field">
+          <label for="model">مدل مورد علاقه</label>
+          <select id="model">
+            <option>سیمرغ GT</option>
+            <option>کیخسرو S</option>
+            <option>بهرام روبستر</option>
+            <option>جمشید X</option>
+            <option>هنوز مطمئن نیستم</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">توضیحات (اختیاری)</label>
+          <textarea id="msg" rows="3" placeholder="زمان پیشنهادی برای بازدید یا سوال شما..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-solid">درخواست رزرو بازدید</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="brand">
+            <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true">
+              <path d="M9 31 L9 17 A11 11 0 0 1 31 17 L31 31" fill="none" stroke="#d4a24e" stroke-width="3.4"
+                stroke-linecap="round" />
+              <circle cx="9" cy="33.4" r="1.6" fill="#d4a24e" />
+              <circle cx="31" cy="33.4" r="1.6" fill="#d4a24e" />
+            </svg>
+            <span class="brand-name">رخش</span>
+          </div>
+          <p>نمایشگاه اختصاصی خودرو با روحیه‌ی اسب افسانه‌ای شاهنامه؛ سرعت، وفاداری و قدرتی که می‌توان به آن تکیه کرد.
+          </p>
+        </div>
+        <div class="foot-col">
+          <h4>نمایشگاه</h4>
+          <a href="#models">مدل‌ها</a>
+          <a href="#experience">تجربه رخش</a>
+          <a href="#gallery">گالری</a>
+        </div>
+        <div class="foot-col">
+          <h4>خدمات</h4>
+          <a href="#contact">تست جاده</a>
+          <a href="#contact">تحویل درب منزل</a>
+          <a href="#contact">گارانتی</a>
+        </div>
+        <div class="foot-col">
+          <h4>ارتباط</h4>
+          <a href="#contact">رزرو بازدید</a>
+          <a href="#contact">۰۲۱-۸۸۰۰۱۲۴۵</a>
+          <a href="#contact">تهران، سالن ۴</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© تمام حقوق برای نمایشگاه رخش محفوظ است.</span>
+        <span class="mono">RAKHSH MOTORS — EST. 2008</span>
+        <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+          طراحی و توسعه با
+          <span style="font-size:14px; line-height:1;">♥</span>
+          توسط تیم <span style="font-weight:750;">پیکسل</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // mobile menu
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      burger.setAttribute('aria-expanded', false);
+    }));
+
+    // hero mouse-follow spotlight
+    const hero = document.getElementById('hero');
+    hero.addEventListener('mousemove', (e) => {
+      const r = hero.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      hero.style.setProperty('--mx', x + '%');
+      hero.style.setProperty('--my', y + '%');
+    });
+
+    // hero car draw-in
+    const heroCar = document.getElementById('heroCar');
+    if (heroCar && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const len = heroCar.getTotalLength();
+      heroCar.style.strokeDasharray = len;
+      heroCar.style.strokeDashoffset = len;
+      heroCar.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(.22,1,.36,1) .3s';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        heroCar.style.strokeDashoffset = 0;
+      }));
+    }
+
+    // scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('in'), i * 60);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    // count-up stats
+    const counters = document.querySelectorAll('[data-count]');
+    const countIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        const dur = 1400;
+        const start = performance.now();
+        function tick(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        countIO.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => countIO.observe(el));
+  </script>
+
+</body>
+
+</html>

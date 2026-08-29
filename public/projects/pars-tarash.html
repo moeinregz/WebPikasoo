@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پارس‌تراش | ماشین‌سازی و تجهیزات صنعتی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17181a;
+    --ink-2:#212327;
+    --steel:#3c4247;
+    --steel-2:#585f64;
+    --steel-3:#868e93;
+    --paper:#ece7dc;
+    --paper-dim:#d9d2c3;
+    --signal:#f2b705;
+    --signal-dim:#c99a04;
+    --blueprint:#2c5b78;
+    --blueprint-2:#3e7ea3;
+    --rust:#b5482f;
+    --line: rgba(236,231,220,0.14);
+    --line-strong: rgba(236,231,220,0.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Vazirmatn', sans-serif;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    direction:ltr;
+    unicode-bidi:isolate;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  ::selection{background:var(--signal);color:var(--ink);}
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  :focus-visible{outline:2px solid var(--signal); outline-offset:3px;}
+
+  .wrap{
+    max-width:1240px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- background grid ---------- */
+  .grid-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:56px 56px;
+    background-position:center;
+    opacity:0.5;
+    pointer-events:none;
+    animation:gridPan 60s linear infinite;
+  }
+  @keyframes gridPan{
+    from{background-position:0 0;}
+    to{background-position:56px 56px;}
+  }
+
+  /* ---------- top strip ---------- */
+  .topstrip{
+    position:relative;
+    z-index:5;
+    border-bottom:1px solid var(--line);
+    background:var(--ink-2);
+    font-size:12.5px;
+  }
+  .topstrip .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:38px;
+    color:var(--steel-3);
+  }
+  .topstrip .code{letter-spacing:.06em;}
+  .topstrip .phone{color:var(--paper); display:flex; gap:8px; align-items:center;}
+  .topstrip .phone::before{
+    content:"";
+    width:6px;height:6px;border-radius:50%;
+    background:var(--signal);
+    box-shadow:0 0 0 3px rgba(242,183,5,0.18);
+  }
+
+  /* ---------- nav ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:rgba(23,24,26,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-weight:800; font-size:20px; letter-spacing:-.01em;
+  }
+  .logo .mark{
+    width:34px;height:34px;
+    border:1.5px solid var(--signal);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    transform:rotate(45deg);
+  }
+  .logo .mark span{
+    transform:rotate(-45deg);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px; font-weight:600; color:var(--signal);
+  }
+  .navlinks{display:flex; gap:36px; font-size:15px;}
+  .navlinks a{
+    position:relative; padding:4px 0; color:var(--paper-dim);
+    transition:color .25s;
+  }
+  .navlinks a::after{
+    content:"";
+    position:absolute; right:0; bottom:-2px;
+    width:0; height:1.5px; background:var(--signal);
+    transition:width .3s ease;
+  }
+  .navlinks a:hover{color:var(--paper);}
+  .navlinks a:hover::after{width:100%;}
+  .nav-cta{
+    border:1px solid var(--line-strong);
+    padding:10px 20px;
+    font-size:14px;
+    display:flex; align-items:center; gap:8px;
+    transition:border-color .25s, background .25s;
+  }
+  .nav-cta:hover{border-color:var(--signal); background:rgba(242,183,5,0.06);}
+  .burger{display:none;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    z-index:2;
+    padding:96px 0 60px;
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:40px;
+    align-items:center;
+    overflow:hidden;
+  }
+  .hero .crosshair{
+    position:absolute; width:26px; height:26px; opacity:.6;
+  }
+  .hero .crosshair::before,.hero .crosshair::after{
+    content:""; position:absolute; background:var(--steel-3);
+  }
+  .hero .crosshair::before{width:100%;height:1px;top:50%;}
+  .hero .crosshair::after{height:100%;width:1px;left:50%;}
+  .ch-tl{top:20px; left:20px;}
+  .ch-tr{top:20px; right:20px;}
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px; letter-spacing:.12em;
+    color:var(--signal);
+    border:1px solid rgba(242,183,5,0.35);
+    padding:6px 12px;
+    margin-bottom:26px;
+  }
+  .eyebrow::before{content:"//";}
+
+  .hero h1{
+    font-size:clamp(38px, 4.6vw, 62px);
+    font-weight:800;
+    line-height:1.15;
+    letter-spacing:-0.01em;
+    margin-bottom:24px;
+    color:var(--paper);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--signal);
+  }
+  .hero p.lead{
+    font-size:17.5px;
+    color:var(--paper-dim);
+    max-width:520px;
+    margin-bottom:36px;
+  }
+  .hero-ctas{display:flex; gap:14px; margin-bottom:52px; flex-wrap:wrap;}
+  .btn{
+    padding:15px 28px;
+    font-size:15px; font-weight:600;
+    display:inline-flex; align-items:center; gap:10px;
+    transition:transform .25s, box-shadow .25s, background .25s, border-color .25s;
+    cursor:pointer; border:none; font-family:inherit;
+  }
+  .btn-primary{
+    background:var(--signal); color:var(--ink);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(242,183,5,0.25);}
+  .btn-ghost{
+    border:1px solid var(--line-strong); color:var(--paper);
+    background:transparent;
+  }
+  .btn-ghost:hover{border-color:var(--paper); background:rgba(236,231,220,0.04);}
+
+  .hero-meta{
+    display:flex; gap:28px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px; color:var(--steel-3);
+    padding-top:26px;
+    border-top:1px solid var(--line);
+    max-width:560px;
+  }
+  .hero-meta div span{display:block; color:var(--paper-dim); font-size:13px; margin-top:4px;}
+
+  /* hero blueprint drawing */
+  .hero-art{
+    position:relative;
+    aspect-ratio:1/1;
+  }
+  .hero-art svg{width:100%; height:100%; overflow:visible;}
+  .draw-line{
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    animation:draw 2.6s cubic-bezier(.65,0,.35,1) forwards;
+  }
+  .draw-line.d2{animation-delay:.3s;}
+  .draw-line.d3{animation-delay:.6s;}
+  .draw-line.d4{animation-delay:.9s;}
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+  .fade-in-part{opacity:0; animation:fadePart .8s ease forwards;}
+  .fp1{animation-delay:1.6s;}
+  .fp2{animation-delay:1.9s;}
+  .fp3{animation-delay:2.2s;}
+  @keyframes fadePart{to{opacity:1;}}
+  .gear-rotate{
+    transform-origin:center;
+    animation:spin 18s linear infinite;
+  }
+  .gear-rotate.rev{animation-direction:reverse; animation-duration:24s;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .dim-text{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    fill:var(--steel-3);
+    letter-spacing:.02em;
+  }
+
+  /* ---------- section shell ---------- */
+  section{position:relative; z-index:2;}
+  .section-pad{padding:110px 0;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:56px; gap:30px; flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+    padding-bottom:28px;
+  }
+  .section-head .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px; letter-spacing:.14em; color:var(--signal);
+    margin-bottom:14px; display:block;
+  }
+  .section-head h2{
+    font-size:clamp(28px,3.2vw,40px);
+    font-weight:800; color:var(--paper); letter-spacing:-.01em;
+  }
+  .section-head p{color:var(--steel-3); max-width:380px; font-size:15px;}
+
+  .reveal{
+    opacity:0; transform:translateY(26px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+
+  /* ---------- stats / gauges ---------- */
+  .stats{
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .stats-grid{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    padding:60px 0;
+  }
+  .stat{
+    text-align:center;
+    border-left:1px solid var(--line);
+    padding:0 20px;
+  }
+  .stat:last-child{border-left:none;}
+  .gauge{width:104px; height:104px; margin:0 auto 18px;}
+  .gauge .track{fill:none; stroke:var(--line-strong); stroke-width:6;}
+  .gauge .fill{
+    fill:none; stroke:var(--signal); stroke-width:6; stroke-linecap:round;
+    stroke-dasharray:251; stroke-dashoffset:251;
+    transition:stroke-dashoffset 1.6s cubic-bezier(.3,.8,.4,1);
+  }
+  .gauge-num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:15px; fill:var(--paper); font-weight:600;
+  }
+  .stat .label{font-size:14px; color:var(--steel-3);}
+
+  /* ---------- products ---------- */
+  .products-grid{
+    display:grid; grid-template-columns:repeat(2,1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .sheet{
+    background:var(--ink);
+    padding:38px 34px 0;
+    position:relative;
+    transition:background .3s;
+  }
+  .sheet:hover{background:var(--ink-2);}
+  .sheet .sheet-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:22px;
+  }
+  .sheet .idx{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px; color:var(--steel-3);
+  }
+  .sheet .bracket{
+    width:18px;height:18px;
+    border-top:1.5px solid transparent; border-right:1.5px solid transparent;
+    transition:border-color .3s;
+  }
+  .sheet:hover .bracket{border-color:var(--signal);}
+  .sheet h3{
+    font-size:22px; font-weight:700; margin-bottom:10px; color:var(--paper);
+  }
+  .sheet .series{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px; color:var(--blueprint-2);
+    margin-bottom:16px; display:block;
+  }
+  .sheet p.desc{
+    color:var(--paper-dim); font-size:14.5px; margin-bottom:26px; max-width:420px;
+  }
+  .titleblock{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line-strong);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+  }
+  .titleblock div{
+    padding:12px 0; border-left:1px solid var(--line);
+  }
+  .titleblock div:last-child{border-left:none;}
+  .titleblock span{display:block; color:var(--steel-3); margin-bottom:4px; font-size:10.5px;}
+  .titleblock b{color:var(--paper-dim); font-weight:500;}
+
+  /* ---------- process ---------- */
+  .process-list{border-top:1px solid var(--line);}
+  .proc-row{
+    display:grid; grid-template-columns:90px 1fr 1.4fr;
+    gap:30px; align-items:center;
+    padding:34px 0;
+    border-bottom:1px solid var(--line);
+    transition:padding-right .3s;
+  }
+  .proc-row:hover{padding-right:14px;}
+  .proc-row .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:34px; font-weight:600; color:var(--steel);
+    transition:color .3s;
+  }
+  .proc-row:hover .num{color:var(--signal);}
+  .proc-row h4{font-size:19px; color:var(--paper); font-weight:700;}
+  .proc-row p{color:var(--steel-3); font-size:14.5px;}
+
+  /* ---------- industries ticker ---------- */
+  .ticker-wrap{
+    overflow:hidden;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--ink-2);
+    padding:26px 0;
+  }
+  .ticker-track{
+    display:flex; gap:64px; width:max-content;
+    animation:tickerMove 28s linear infinite;
+  }
+  .ticker-track span{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:15px; color:var(--steel-3);
+    display:flex; align-items:center; gap:14px;
+    white-space:nowrap;
+  }
+  .ticker-track span::before{content:"◆"; color:var(--signal); font-size:9px;}
+  @keyframes tickerMove{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  /* ---------- certifications ---------- */
+  .cert-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:2px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .cert{
+    background:var(--ink); padding:34px 20px; text-align:center;
+  }
+  .cert .code{
+    font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600;
+    color:var(--paper); margin-bottom:8px;
+  }
+  .cert .desc{font-size:13px; color:var(--steel-3);}
+
+  /* ---------- CTA / contact ---------- */
+  .contact{
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+  }
+  .contact-grid{
+    display:grid; grid-template-columns:0.85fr 1.15fr; gap:60px;
+  }
+  .contact-info .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.14em;
+    color:var(--signal); display:block; margin-bottom:16px;
+  }
+  .contact-info h2{font-size:clamp(26px,3vw,36px); font-weight:800; margin-bottom:20px;}
+  .contact-info p{color:var(--paper-dim); font-size:15px; margin-bottom:34px; max-width:400px;}
+  .contact-line{
+    display:flex; justify-content:space-between; padding:16px 0;
+    border-top:1px solid var(--line); font-size:14.5px;
+  }
+  .contact-line:last-child{border-bottom:1px solid var(--line);}
+  .contact-line span:first-child{color:var(--steel-3);}
+  .contact-line span:last-child{font-family:'IBM Plex Mono',monospace; color:var(--paper);}
+
+  form{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  form .full{grid-column:1/-1;}
+  label{font-size:13px; color:var(--steel-3); display:block; margin-bottom:8px;}
+  input, select, textarea{
+    width:100%; background:var(--ink); border:1px solid var(--line-strong);
+    color:var(--paper); padding:13px 14px; font-family:inherit; font-size:14.5px;
+    transition:border-color .25s;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--signal); outline:none;}
+  textarea{resize:vertical; min-height:100px;}
+  form .btn-primary{margin-top:6px; justify-self:start;}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px; color:var(--steel-3);
+  }
+  .foot-row{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  }
+  .foot-row b{color:var(--paper-dim); font-weight:500;}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr; padding-top:60px;}
+    .navlinks, .hero-meta{display:none;}
+    .products-grid, .cert-grid{grid-template-columns:1fr;}
+    .stats-grid{grid-template-columns:repeat(2,1fr); row-gap:36px;}
+    .stat{border-left:none; border-bottom:1px solid var(--line); padding-bottom:24px;}
+    .contact-grid{grid-template-columns:1fr;}
+    form{grid-template-columns:1fr;}
+    .proc-row{grid-template-columns:50px 1fr; row-gap:8px;}
+    .proc-row p{grid-column:2/3;}
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="topstrip">
+  <div class="wrap">
+    <span class="code mono">DWG-NO: PT-2026 / REV.C</span>
+    <a href="tel:+982188451200" class="phone mono">+98 21 8845 1200</a>
+  </div>
+</div>
+
+<header class="site">
+  <nav class="wrap">
+    <a href="#top" class="logo">
+      <span class="mark"><span>PT</span></span>
+      پارس‌تراش
+    </a>
+    <ul class="navlinks">
+      <li><a href="#products">محصولات</a></li>
+      <li><a href="#process">فرآیند ساخت</a></li>
+      <li><a href="#industries">صنایع مشتری</a></li>
+      <li><a href="#certs">استانداردها</a></li>
+      <li><a href="#contact">تماس</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">درخواست مشاوره فنی</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="crosshair ch-tl"></div>
+    <div class="crosshair ch-tr"></div>
+
+    <div class="hero-copy">
+      <span class="eyebrow">تولیدکننده ماشین‌آلات صنعتی از سال ۱۳۶۳</span>
+      <h1>دقتِ صنعتی، <br>ساخته‌شده برای <em>دوام</em>.</h1>
+      <p class="lead">
+        از طراحی مهندسی تا نصب روی خط تولید؛ پارس‌تراش ماشین‌آلات تراشکاری، پرس‌کاری و اتوماسیون را برای کارخانه‌هایی می‌سازد که توقف تولید را نمی‌پذیرند.
+      </p>
+      <div class="hero-ctas">
+        <a href="#products" class="btn btn-primary">مشاهده محصولات</a>
+        <a href="#contact" class="btn btn-ghost">دریافت مشاوره فنی</a>
+      </div>
+      <div class="hero-meta">
+        <div>سابقه فعالیت<span class="mono">42 YRS</span></div>
+        <div>دستگاه فعال در کارخانه‌ها<span class="mono">3,800+</span></div>
+        <div>گواهی کیفیت<span class="mono">ISO 9001</span></div>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <svg viewBox="0 0 480 480" fill="none">
+        <!-- dimension lines -->
+        <line x1="40" y1="60" x2="440" y2="60" stroke="var(--steel)" stroke-width="1" class="fade-in-part fp1"/>
+        <text x="220" y="48" class="dim-text fade-in-part fp1" text-anchor="middle">1350 mm</text>
+
+        <!-- machine base -->
+        <rect x="70" y="330" width="340" height="26" rx="2" stroke="var(--paper-dim)" stroke-width="1.6" class="draw-line" />
+        <!-- machine bed -->
+        <rect x="90" y="300" width="300" height="30" stroke="var(--paper-dim)" stroke-width="1.6" class="draw-line d2" />
+        <!-- headstock -->
+        <rect x="90" y="215" width="70" height="85" stroke="var(--blueprint-2)" stroke-width="1.6" class="draw-line d2" />
+        <!-- spindle line -->
+        <line x1="160" y1="255" x2="360" y2="255" stroke="var(--paper-dim)" stroke-width="1.6" class="draw-line d3" />
+        <!-- tailstock -->
+        <rect x="340" y="230" width="40" height="50" stroke="var(--paper-dim)" stroke-width="1.6" class="draw-line d3" />
+        <!-- carriage -->
+        <rect x="200" y="270" width="55" height="30" stroke="var(--signal)" stroke-width="1.8" class="draw-line d4" />
+
+        <!-- control panel -->
+        <rect x="90" y="140" width="60" height="60" rx="2" stroke="var(--steel-3)" stroke-width="1.4" class="fade-in-part fp2" />
+        <line x1="100" y1="155" x2="140" y2="155" stroke="var(--steel-3)" stroke-width="1" class="fade-in-part fp2"/>
+        <line x1="100" y1="168" x2="130" y2="168" stroke="var(--steel-3)" stroke-width="1" class="fade-in-part fp2"/>
+        <circle cx="112" cy="182" r="6" stroke="var(--signal)" stroke-width="1.4" class="fade-in-part fp2"/>
+
+        <!-- gears (ambient rotation) -->
+        <g class="gear-rotate fade-in-part fp3" style="transform-origin:395px 200px;">
+          <circle cx="395" cy="200" r="26" stroke="var(--blueprint-2)" stroke-width="1.4" stroke-dasharray="4 5"/>
+          <circle cx="395" cy="200" r="26" stroke="var(--blueprint-2)" stroke-width="1"/>
+          <circle cx="395" cy="200" r="6" stroke="var(--blueprint-2)" stroke-width="1.4"/>
+        </g>
+        <g class="gear-rotate rev fade-in-part fp3" style="transform-origin:430px 235px;">
+          <circle cx="430" cy="235" r="15" stroke="var(--steel-3)" stroke-width="1.2" stroke-dasharray="3 4"/>
+          <circle cx="430" cy="235" r="15" stroke="var(--steel-3)" stroke-width="0.8"/>
+        </g>
+
+        <!-- dim line vertical -->
+        <line x1="440" y1="200" x2="440" y2="356" stroke="var(--steel)" stroke-width="1" class="fade-in-part fp3"/>
+        <text x="452" y="280" class="dim-text fade-in-part fp3" writing-mode="vertical-rl">Ø450 mm</text>
+
+        <!-- crosshair marker on part -->
+        <g class="fade-in-part fp3">
+          <line x1="227" y1="270" x2="227" y2="245" stroke="var(--signal)" stroke-width="1"/>
+          <line x1="215" y1="257" x2="240" y2="257" stroke="var(--signal)" stroke-width="1"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat reveal">
+        <svg class="gauge" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="40" transform="rotate(-90 50 50)"/>
+          <circle class="fill" cx="50" cy="50" r="40" transform="rotate(-90 50 50)" data-pct="0.92"/>
+          <text x="50" y="56" text-anchor="middle" class="gauge-num" data-count="42" data-suffix="">0</text>
+        </svg>
+        <div class="label">سال تجربه ساخت</div>
+      </div>
+      <div class="stat reveal">
+        <svg class="gauge" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="40" transform="rotate(-90 50 50)"/>
+          <circle class="fill" cx="50" cy="50" r="40" transform="rotate(-90 50 50)" data-pct="0.85"/>
+          <text x="50" y="56" text-anchor="middle" class="gauge-num" data-count="3800" data-suffix="+">0</text>
+        </svg>
+        <div class="label">دستگاه نصب‌شده</div>
+      </div>
+      <div class="stat reveal">
+        <svg class="gauge" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="40" transform="rotate(-90 50 50)"/>
+          <circle class="fill" cx="50" cy="50" r="40" transform="rotate(-90 50 50)" data-pct="0.992"/>
+          <text x="50" y="56" text-anchor="middle" class="gauge-num" data-count="99.2" data-suffix="%">0</text>
+        </svg>
+        <div class="label">نرخ آپتایم تضمینی</div>
+      </div>
+      <div class="stat reveal">
+        <svg class="gauge" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="40" transform="rotate(-90 50 50)"/>
+          <circle class="fill" cx="50" cy="50" r="40" transform="rotate(-90 50 50)" data-pct="0.45"/>
+          <text x="50" y="56" text-anchor="middle" class="gauge-num" data-count="18" data-suffix="">0</text>
+        </svg>
+        <div class="label">کشور صادراتی</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="section-pad" id="products">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="tag">// خط تولید</span>
+          <h2>ماشین‌آلاتی برای هر ایستگاه از خط تولید</h2>
+        </div>
+        <p>هر دستگاه بر اساس نیاز کارخانه مشتری مهندسی و در کارگاه ماشین‌کاری پارس‌تراش ساخته می‌شود.</p>
+      </div>
+
+      <div class="products-grid">
+        <div class="sheet reveal">
+          <div class="sheet-top"><span class="idx mono">SHEET 01/04</span><span class="bracket"></span></div>
+          <span class="series mono">SERIES PT-CNC-450</span>
+          <h3>مراکز تراشکاری CNC</h3>
+          <p class="desc">تراشکاری قطعات دوّار با تلورانس ۰.۰۰۵ میلی‌متر، مناسب تولید انبوه قطعات خودرو و نفت و گاز.</p>
+          <div class="titleblock">
+            <div><span>تلورانس</span><b class="mono">±0.005mm</b></div>
+            <div><span>قطر تراش</span><b class="mono">Ø450mm</b></div>
+            <div><span>متریال بدنه</span><b class="mono">GG25</b></div>
+          </div>
+        </div>
+
+        <div class="sheet reveal">
+          <div class="sheet-top"><span class="idx mono">SHEET 02/04</span><span class="bracket"></span></div>
+          <span class="series mono">SERIES PT-HP-800</span>
+          <h3>پرس‌های هیدرولیک</h3>
+          <p class="desc">پرس‌کاری فلزات با ظرفیت ۸۰۰ تن برای خطوط تولید سنگین در صنایع فولاد و لوازم‌خانگی.</p>
+          <div class="titleblock">
+            <div><span>ظرفیت</span><b class="mono">800 Ton</b></div>
+            <div><span>کورس</span><b class="mono">500mm</b></div>
+            <div><span>سرعت پرس</span><b class="mono">18 SPM</b></div>
+          </div>
+        </div>
+
+        <div class="sheet reveal">
+          <div class="sheet-top"><span class="idx mono">SHEET 03/04</span><span class="bracket"></span></div>
+          <span class="series mono">SERIES PT-AL-CONV</span>
+          <h3>خطوط انتقال و اتوماسیون</h3>
+          <p class="desc">سیستم‌های انتقال مواد با کنترل PLC/SCADA برای خطوط پیوسته بسته‌بندی و مواد غذایی.</p>
+          <div class="titleblock">
+            <div><span>سرعت خط</span><b class="mono">0.2-2m/s</b></div>
+            <div><span>کنترل</span><b class="mono">PLC</b></div>
+            <div><span>ظرفیت بار</span><b class="mono">250kg/m</b></div>
+          </div>
+        </div>
+
+        <div class="sheet reveal">
+          <div class="sheet-top"><span class="idx mono">SHEET 04/04</span><span class="bracket"></span></div>
+          <span class="series mono">SERIES PT-RB-6X</span>
+          <h3>بازوهای رباتیک صنعتی</h3>
+          <p class="desc">اتوماسیون بارگذاری و برداشت قطعات با ۶ درجه آزادی برای دقت تکرارپذیر در چیدمان.</p>
+          <div class="titleblock">
+            <div><span>درجه آزادی</span><b class="mono">6-Axis</b></div>
+            <div><span>بار مجاز</span><b class="mono">20kg</b></div>
+            <div><span>تکرارپذیری</span><b class="mono">±0.02mm</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section-pad" id="process" style="background:var(--ink-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="tag">// از سفارش تا راه‌اندازی</span>
+          <h2>فرآیند ساخت، گام‌به‌گام</h2>
+        </div>
+        <p>هر سفارش این پنج مرحله را طی می‌کند تا به دستگاهی قابل‌اتکا روی خط تولید شما تبدیل شود.</p>
+      </div>
+
+      <div class="process-list">
+        <div class="proc-row reveal">
+          <span class="num">01</span>
+          <h4>طراحی مهندسی</h4>
+          <p>مدل‌سازی سه‌بعدی و تحلیل تنش قطعات پیش از ورود به خط ساخت.</p>
+        </div>
+        <div class="proc-row reveal">
+          <span class="num">02</span>
+          <h4>ساخت و ماشین‌کاری</h4>
+          <p>تولید قطعات با تلورانس میکرونی روی دستگاه‌های CNC داخلی.</p>
+        </div>
+        <div class="proc-row reveal">
+          <span class="num">03</span>
+          <h4>کنترل کیفیت</h4>
+          <p>بازرسی ابعادی و تست عملکرد مطابق با استاندارد ISO 9001.</p>
+        </div>
+        <div class="proc-row reveal">
+          <span class="num">04</span>
+          <h4>نصب و راه‌اندازی</h4>
+          <p>استقرار دستگاه در محل کارخانه مشتری و آموزش اپراتور.</p>
+        </div>
+        <div class="proc-row reveal">
+          <span class="num">05</span>
+          <h4>خدمات پس از فروش</h4>
+          <p>پشتیبانی فنی مستمر و تأمین قطعات یدکی اصل.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRIES TICKER -->
+  <section id="industries" class="ticker-wrap">
+    <div class="ticker-track">
+      <span>خودروسازی</span><span>نفت و گاز</span><span>فولاد و متالورژی</span><span>مواد غذایی</span><span>بسته‌بندی</span><span>معدن</span><span>سیمان</span><span>پتروشیمی</span>
+      <span>خودروسازی</span><span>نفت و گاز</span><span>فولاد و متالورژی</span><span>مواد غذایی</span><span>بسته‌بندی</span><span>معدن</span><span>سیمان</span><span>پتروشیمی</span>
+    </div>
+  </section>
+
+  <!-- CERTS -->
+  <section class="section-pad" id="certs">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="tag">// تضمین کیفیت</span>
+          <h2>استانداردها و گواهی‌نامه‌ها</h2>
+        </div>
+        <p>تمام خطوط تولید پارس‌تراش تحت نظارت گواهی‌های بین‌المللی کیفیت فعالیت می‌کنند.</p>
+      </div>
+      <div class="cert-grid">
+        <div class="cert reveal"><div class="code mono">ISO 9001:2015</div><div class="desc">سیستم مدیریت کیفیت</div></div>
+        <div class="cert reveal"><div class="code mono">ISO 3834</div><div class="desc">کیفیت جوشکاری صنعتی</div></div>
+        <div class="cert reveal"><div class="code mono">CE MARKING</div><div class="desc">تطابق با استاندارد اروپا</div></div>
+        <div class="cert reveal"><div class="code mono">INSO</div><div class="desc">استاندارد ملی ایران</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section-pad contact" id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-info reveal">
+        <span class="tag">// شروع همکاری</span>
+        <h2>برای دستگاه بعدی خط تولید‌تان مشاوره بگیرید</h2>
+        <p>تیم فنی پارس‌تراش ظرف کمتر از ۴۸ ساعت کاری با شما تماس می‌گیرد و نیازسنجی اولیه را انجام می‌دهد.</p>
+        <div class="contact-line"><span>دفتر مرکزی</span><span>شهرک صنعتی البرز، تهران</span></div>
+        <div class="contact-line"><span>تلفن کارگاه</span><span class="mono">+98 21 8845 1200</span></div>
+        <div class="contact-line"><span>ایمیل فنی</span><span class="mono">sales@parstarash.co</span></div>
+        <div class="contact-line"><span>ساعات پاسخگویی</span><span>شنبه تا چهارشنبه، ۸ تا ۱۷</span></div>
+      </div>
+
+      <form onsubmit="event.preventDefault(); this.querySelector('.btn-primary').textContent='درخواست ثبت شد ✓';">
+        <div>
+          <label>نام و نام‌خانوادگی</label>
+          <input type="text" placeholder="مثلاً محمد رضایی" required>
+        </div>
+        <div>
+          <label>نام شرکت</label>
+          <input type="text" placeholder="نام کارخانه یا شرکت">
+        </div>
+        <div>
+          <label>شماره تماس</label>
+          <input type="tel" placeholder="09xx xxx xxxx" required>
+        </div>
+        <div>
+          <label>نوع نیاز</label>
+          <select>
+            <option>تراشکاری CNC</option>
+            <option>پرس هیدرولیک</option>
+            <option>اتوماسیون خط تولید</option>
+            <option>خدمات پس از فروش</option>
+          </select>
+        </div>
+        <div class="full">
+          <label>توضیحات پروژه</label>
+          <textarea placeholder="ظرفیت مورد نیاز، جنس قطعه، حجم تولید ماهانه..."></textarea>
+        </div>
+        <div class="full">
+          <button type="submit" class="btn btn-primary">ارسال درخواست مشاوره فنی</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <span><b>شرکت پارس‌تراش</b> — تولیدکننده ماشین‌آلات و تجهیزات صنعتی</span>
+    <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    <span>© 2026 Pars-Tarash Industrial Co.</span>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach((entry, i)=>{
+      if(entry.isIntersecting){
+        setTimeout(()=>entry.target.classList.add('in-view'), i*70);
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // gauges + counters
+  const stats = document.querySelector('.stats-grid');
+  let statsPlayed = false;
+  const statsIO = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting && !statsPlayed){
+        statsPlayed = true;
+        document.querySelectorAll('.gauge').forEach(g=>{
+          const fill = g.querySelector('.fill');
+          const pct = parseFloat(fill.dataset.pct);
+          const circumference = 251;
+          fill.style.strokeDashoffset = circumference - (circumference*pct);
+
+          const numEl = g.querySelector('.gauge-num');
+          const target = parseFloat(numEl.dataset.count);
+          const suffix = numEl.dataset.suffix || '';
+          const isDecimal = target % 1 !== 0;
+          let current = 0;
+          const duration = 1500;
+          const start = performance.now();
+          function tick(now){
+            const p = Math.min((now-start)/duration, 1);
+            const eased = 1 - Math.pow(1-p, 3);
+            current = target*eased;
+            numEl.textContent = (isDecimal ? current.toFixed(1) : Math.round(current).toLocaleString('en-US')) + suffix;
+            if(p<1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        });
+      }
+    });
+  }, {threshold:0.4});
+  if(stats) statsIO.observe(stats);
+</script>
+
+</body>
+</html>

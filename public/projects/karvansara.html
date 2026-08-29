@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کاروانسرا | آژانس مسافرتی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12332E;
+    --ink-soft:#1E453D;
+    --paper:#F3ECD9;
+    --cream:#FBF6EA;
+    --gold:#B98B3E;
+    --gold-soft:#DDBD7E;
+    --rust:#9C4A30;
+    --line: rgba(18,51,46,0.16);
+    --shadow: 0 18px 40px rgba(18,51,46,0.14);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    overflow-x:hidden;
+    line-height:1.75;
+  }
+  h1,h2,h3,.display{
+    font-family:'Lalezar', 'Vazirmatn', sans-serif;
+    font-weight:400;
+    letter-spacing:.5px;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+  section{position:relative;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  ::selection{background:var(--gold-soft);color:var(--ink);}
+
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline: 3px solid var(--rust);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Texture ---------- */
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:999;
+    opacity:.045;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:22px 0;
+    transition:.4s ease;
+  }
+  header.scrolled{
+    padding:12px 0;
+    background:rgba(243,236,217,0.92);
+    backdrop-filter: blur(10px);
+    box-shadow:0 4px 24px rgba(18,51,46,0.08);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Lalezar';font-size:26px;color:var(--ink);}
+  .logo svg{width:34px;height:34px;flex-shrink:0;}
+  .nav-links{display:flex;gap:36px;align-items:center;}
+  .nav-links a{
+    font-size:15px;font-weight:500;position:relative;padding:4px 0;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;bottom:-2px;right:0;width:0;height:2px;background:var(--rust);
+    transition:width .3s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--ink);color:var(--cream);
+    padding:11px 26px;border-radius:3px;font-size:14px;font-weight:600;
+    box-shadow: 0 6px 16px rgba(18,51,46,.25);
+    transition:.3s;
+  }
+  .nav-cta:hover{background:var(--rust);transform:translateY(-2px);}
+  .nav-toggle{display:none;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:150px 0 110px;
+    background:
+      radial-gradient(ellipse at 85% 15%, rgba(185,139,62,.16), transparent 55%),
+      var(--paper);
+    display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+    position:relative;overflow:hidden;
+  }
+  .hero > *{position:relative;z-index:2;}
+  .ambient-grid{
+    position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(circle, rgba(18,51,46,.14) 1.5px, transparent 1.5px);
+    background-size:28px 28px;
+    -webkit-mask-image:linear-gradient(to bottom, transparent, black 18%, black 75%, transparent);
+    mask-image:linear-gradient(to bottom, transparent, black 18%, black 75%, transparent);
+  }
+  .ambient-plane{
+    position:absolute;top:14%;right:-10%;z-index:1;pointer-events:none;
+    opacity:.16;animation:flyAcross 26s linear infinite;
+  }
+  .ambient-plane svg{width:64px;height:64px;transform:rotate(230deg);}
+  .ambient-plane.p2{top:62%;animation-duration:34s;animation-delay:-14s;opacity:.1;}
+  .ambient-plane.p2 svg{width:44px;height:44px;}
+  @keyframes flyAcross{
+    from{transform:translateX(0);}
+    to{transform:translateX(-140vw);}
+  }
+  .ticket-code{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Vazirmatn';font-weight:800;font-size:13px;letter-spacing:1px;
+    background:var(--ink);color:var(--cream);
+    padding:8px 8px 8px 16px;border-radius:20px;margin-bottom:24px;
+  }
+  .ticket-code b{
+    background:var(--rust);color:var(--cream);border-radius:14px;
+    padding:5px 12px;font-family:'Lalezar';font-weight:400;letter-spacing:1.5px;
+  }
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:13px;letter-spacing:2px;color:var(--rust);font-weight:700;
+    margin-bottom:16px;
+  }
+  .hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--rust);}
+  .hero h1{
+    font-size:clamp(40px,5.4vw,68px);
+    line-height:1.28;color:var(--ink);
+    margin-bottom:22px;
+  }
+  .hero h1 span{color:var(--rust);}
+  .hero p.lead{
+    font-size:18px;max-width:480px;color:var(--ink-soft);margin-bottom:38px;
+    font-weight:400;
+  }
+
+  /* search / ticket widget */
+  .ticket{
+    background:var(--cream);
+    border-radius:8px;
+    box-shadow:var(--shadow);
+    padding:26px 28px;
+    display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:0;
+    position:relative;
+    border:1px solid var(--line);
+  }
+  .lux-tag{
+    position:absolute;top:-30px;right:26px;z-index:3;
+    background:var(--gold);color:var(--ink);
+    padding:9px 18px;border-radius:5px;
+    font-size:12.5px;font-weight:700;letter-spacing:.2px;
+    transform:rotate(-5deg);
+    box-shadow:0 10px 20px rgba(18,51,46,.2);
+  }
+  .lux-tag::after{
+    content:'';position:absolute;bottom:-14px;left:18px;width:1.5px;height:16px;
+    background:var(--ink);opacity:.35;
+  }
+  .lux-tag::before{
+    content:'';position:absolute;top:6px;left:8px;width:6px;height:6px;
+    border-radius:50%;background:var(--cream);
+  }
+  .ticket::before, .ticket::after{
+    content:'';position:absolute;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;background:var(--paper);border-radius:50%;
+  }
+  .field{
+    padding:6px 20px;border-left:1px dashed var(--line);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .field:first-child{padding-right:0;}
+  .field label{font-size:11px;letter-spacing:1px;color:var(--gold);font-weight:700;}
+  .field input{
+    border:none;background:none;font-family:'Vazirmatn';font-size:16px;font-weight:600;color:var(--ink);
+    width:100%;
+  }
+  .field input::placeholder{color:#9aa9a4;font-weight:500;}
+  .ticket-btn{
+    background:var(--rust);color:var(--cream);
+    border-radius:5px;padding:0 30px;font-weight:700;font-size:15px;
+    display:flex;align-items:center;gap:8px;margin-right:14px;
+    transition:.3s;
+  }
+  .ticket-btn:hover{background:var(--ink);}
+
+  .hero-tags{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap;}
+  .hero-tags span{
+    font-size:12.5px;color:var(--ink-soft);background:rgba(18,51,46,.06);
+    padding:6px 14px;border-radius:20px;font-weight:600;
+  }
+
+  /* flight map */
+  .map-wrap{position:relative;}
+  .map-wrap svg{width:100%;height:auto;}
+  .route-line{
+    fill:none;stroke:var(--rust);stroke-width:2;stroke-dasharray:6 7;
+    stroke-linecap:round;
+    stroke-dashoffset:1000;
+    animation:draw 3.2s ease-out forwards;
+  }
+  .route-line.alt{stroke:var(--gold);animation-delay:.3s;}
+  .route-line.alt2{stroke:var(--ink-soft);animation-delay:.6s;opacity:.55;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .city-dot circle{fill:var(--ink);}
+  .city-dot.origin circle{fill:var(--rust);}
+  .city-dot text{font-family:'Vazirmatn';font-size:11.5px;font-weight:700;fill:var(--ink);}
+  .plane{transform-box:fill-box;transform-origin:center;}
+
+  /* ---------- Section headings ---------- */
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:52px;gap:24px;flex-wrap:wrap;
+  }
+  .section-eyebrow{
+    font-size:13px;letter-spacing:2px;color:var(--rust);font-weight:700;margin-bottom:12px;
+    display:block;
+  }
+  .section-head h2{font-size:clamp(30px,3.6vw,44px);color:var(--ink);}
+  .section-head p{max-width:420px;color:var(--ink-soft);font-size:15.5px;}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  /* ---------- Destinations (passport stamp cards) ---------- */
+  .destinations{padding:120px 0 100px;}
+  .dest-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:30px;
+  }
+  .dest-card{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:30px 26px 26px;
+    position:relative;
+    transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s;
+  }
+  .dest-card:hover{transform:translateY(-8px);box-shadow:var(--shadow);}
+  .stamp{
+    width:88px;height:88px;border-radius:50%;
+    border:2.5px dashed var(--rust);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:20px;color:var(--rust);
+    transform:rotate(-8deg);
+    transition:transform .45s ease;
+  }
+  .dest-card:hover .stamp{transform:rotate(4deg) scale(1.05);}
+  .stamp svg{width:42px;height:42px;stroke:var(--rust);fill:none;stroke-width:1.6;}
+  .dest-card h3{font-size:24px;margin-bottom:4px;color:var(--ink);}
+  .dest-card .country{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:14px;display:block;}
+  .dest-card p{font-size:14.5px;color:var(--ink-soft);margin-bottom:20px;}
+  .perf{
+    border-top:1px dashed var(--line);
+    padding-top:16px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .perf .price{font-size:13px;color:var(--ink-soft);}
+  .perf .price b{font-family:'Lalezar';font-size:20px;color:var(--ink);display:block;}
+  .perf a{
+    font-size:13.5px;font-weight:700;color:var(--rust);
+    display:flex;align-items:center;gap:5px;
+  }
+  .perf a svg{width:15px;height:15px;transition:transform .3s;}
+  .perf a:hover svg{transform:translateX(-4px);}
+
+  /* ---------- Stats band ---------- */
+  .stats-band{
+    background:var(--ink);color:var(--cream);
+    padding:70px 0;
+  }
+  .stats-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;
+  }
+  .stat b{
+    font-family:'Lalezar';font-size:clamp(34px,4vw,52px);color:var(--gold-soft);
+    display:block;
+  }
+  .stat span{font-size:13.5px;color:rgba(251,246,234,.75);letter-spacing:.5px;}
+
+  /* ---------- Packages ---------- */
+  .packages{padding:120px 0;}
+  .pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .pack-card{
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    background:var(--cream);
+    display:flex;flex-direction:column;
+    transition:transform .4s ease, box-shadow .4s ease;
+  }
+  .pack-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);}
+  .pack-top{
+    padding:26px;background:var(--ink-soft);color:var(--cream);
+    position:relative;
+  }
+  .pack-top .days{
+    position:absolute;top:20px;left:20px;background:var(--rust);
+    font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;
+  }
+  .pack-top h3{font-size:22px;margin-bottom:6px;}
+  .pack-top span{font-size:13px;color:var(--gold-soft);}
+  .pack-body{padding:24px 26px;flex:1;display:flex;flex-direction:column;gap:16px;}
+  .pack-body ul{display:flex;flex-direction:column;gap:9px;}
+  .pack-body li{font-size:14px;color:var(--ink-soft);display:flex;gap:8px;align-items:flex-start;}
+  .pack-body li svg{width:15px;height:15px;flex-shrink:0;margin-top:3px;stroke:var(--rust);}
+  .pack-foot{
+    margin-top:auto;padding-top:16px;border-top:1px dashed var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .pack-foot .price b{font-family:'Lalezar';font-size:24px;color:var(--ink);}
+  .pack-foot .price span{display:block;font-size:11.5px;color:var(--ink-soft);}
+  .seats{font-size:11.5px;color:var(--rust);font-weight:700;margin-bottom:14px;}
+
+  .book-btn{
+    background:var(--ink);color:var(--cream);padding:10px 20px;border-radius:5px;
+    font-size:13.5px;font-weight:700;transition:.3s;
+  }
+  .book-btn:hover{background:var(--rust);}
+
+  /* ---------- Testimonials ---------- */
+  .testimonials{padding:110px 0;background:var(--cream);}
+  .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .test-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:28px;
+  }
+  .quote-mark{font-family:'Lalezar';font-size:44px;color:var(--gold);line-height:1;margin-bottom:6px;display:block;}
+  .test-card p{font-size:14.5px;color:var(--ink-soft);margin-bottom:22px;}
+  .test-person{display:flex;align-items:center;gap:12px;}
+  .avatar{
+    width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--cream);
+    display:flex;align-items:center;justify-content:center;font-family:'Lalezar';font-size:16px;
+  }
+  .test-person b{font-size:14px;display:block;}
+  .test-person span{font-size:12px;color:var(--gold);}
+
+  /* ---------- CTA / newsletter ---------- */
+  .cta-band{
+    background:var(--ink);color:var(--cream);padding:90px 0;text-align:center;
+    background-image: radial-gradient(circle at 20% 30%, rgba(185,139,62,.14), transparent 45%),
+                       radial-gradient(circle at 80% 70%, rgba(156,74,48,.16), transparent 45%);
+  }
+  .cta-band h2{font-size:clamp(28px,3.6vw,42px);margin-bottom:14px;}
+  .cta-band p{color:rgba(251,246,234,.75);margin-bottom:34px;font-size:15.5px;}
+  .newsletter{
+    display:flex;max-width:460px;margin:0 auto;background:var(--cream);border-radius:6px;overflow:hidden;
+    box-shadow:0 14px 34px rgba(0,0,0,.25);
+  }
+  .newsletter input{
+    flex:1;border:none;padding:0 18px;font-family:'Vazirmatn';font-size:14px;color:var(--ink);
+  }
+  .newsletter button{
+    background:var(--rust);color:var(--cream);padding:15px 24px;font-weight:700;font-size:14px;
+    transition:.3s;
+  }
+  .newsletter button:hover{background:var(--gold);}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--ink);color:rgba(251,246,234,.8);padding:70px 0 24px;}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px;}
+  .foot-logo{display:flex;align-items:center;gap:10px;font-family:'Lalezar';font-size:24px;color:var(--cream);margin-bottom:14px;}
+  .foot-logo svg{width:28px;height:28px;}
+  .foot-grid p{font-size:13.5px;line-height:1.9;max-width:280px;}
+  .foot-grid h4{font-size:14px;color:var(--gold-soft);margin-bottom:18px;font-weight:700;letter-spacing:.5px;}
+  .foot-grid ul{display:flex;flex-direction:column;gap:11px;}
+  .foot-grid a{font-size:13.5px;transition:.25s;}
+  .foot-grid a:hover{color:var(--gold-soft);}
+  .foot-bottom{
+    border-top:1px solid rgba(251,246,234,.12);padding-top:22px;
+    display:flex;justify-content:space-between;align-items:center;font-size:12.5px;
+    color:rgba(251,246,234,.55);flex-wrap:wrap;gap:12px;
+  }
+  .socials{display:flex;gap:14px;}
+  .socials a{
+    width:34px;height:34px;border:1px solid rgba(251,246,234,.2);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;transition:.3s;
+  }
+  .socials a:hover{background:var(--rust);border-color:var(--rust);}
+  .socials svg{width:15px;height:15px;stroke:currentColor;fill:none;}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .hero{grid-template-columns:1fr;padding-top:140px;}
+    .map-wrap{order:-1;max-width:420px;margin:0 auto 20px;}
+    .dest-grid, .pack-grid, .test-grid{grid-template-columns:repeat(2,1fr);}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:34px;}
+  }
+  @media (max-width:720px){
+    .nav-links{display:none;}
+    .ticket{grid-template-columns:1fr;gap:14px;}
+    .field{border-left:none;border-bottom:1px dashed var(--line);padding-bottom:14px;}
+    .ticket-btn{margin:8px 0 0;width:100%;justify-content:center;padding:14px;}
+    .dest-grid, .pack-grid, .test-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+    .section-head{flex-direction:column;align-items:flex-start;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .route-line{animation:none;stroke-dashoffset:0;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+      <a href="#top" class="logo">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="20" cy="20" r="17"/><path d="M20 6 L20 34 M6 20 L34 20"/><path d="M20 11 L23 20 L20 29 L17 20 Z" fill="currentColor" stroke="none"/></svg>
+        کاروانسرا
+      </a>
+      <ul class="nav-links">
+        <li><a href="#destinations">مقصدها</a></li>
+        <li><a href="#packages">تورهای ویژه</a></li>
+        <li><a href="#testimonials">تجربه مسافران</a></li>
+        <li><a href="#contact">تماس با ما</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">رزرو سفر</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="ambient-grid"></div>
+    <div class="ambient-plane">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#12332E" stroke-width="1.4"><path d="M2 12h20M12 2v20M6 6l6 6-6 6M18 6l-6 6 6 6"/></svg>
+    </div>
+    <div class="ambient-plane p2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#12332E" stroke-width="1.4"><path d="M2 12h20M12 2v20M6 6l6 6-6 6M18 6l-6 6 6 6"/></svg>
+    </div>
+    <div>
+      <span class="ticket-code">پرواز <b>THR ✈ همه‌جا</b></span>
+      <span class="hero-eyebrow">آژانس مسافرتی کاروانسرا</span>
+      <h1>سفر بعدی‌تان<br>از <span>همین‌جا</span> شروع می‌شود</h1>
+      <p class="lead">از کوچه‌های سنگی استانبول تا سواحل آنتالیا؛ مسیرها را برایتان می‌کشیم، بلیت و اقامت را می‌چینیم، شما فقط چمدان ببندید.</p>
+
+      <div class="ticket">
+        <span class="lux-tag">بلیط ✈ هتل ✈ ویزا ✈ ترانسفر</span>
+        <div class="field">
+          <label>مبدأ</label>
+          <input type="text" value="تهران" placeholder="شهر مبدأ">
+        </div>
+        <div class="field">
+          <label>مقصد</label>
+          <input type="text" placeholder="کجا می‌روید؟">
+        </div>
+        <div class="field">
+          <label>تاریخ رفت</label>
+          <input type="text" placeholder="انتخاب تاریخ">
+        </div>
+        <button class="ticket-btn">
+          جستجوی سفر
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="hero-tags">
+        <span>بلیت هواپیما</span>
+        <span>رزرو هتل</span>
+        <span>ویزای توریستی</span>
+        <span>تور گروهی و خصوصی</span>
+      </div>
+    </div>
+
+    <div class="map-wrap">
+      <svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg">
+        <path class="route-line" d="M240 210 C 300 160, 340 120, 400 70" />
+        <path class="route-line alt" d="M240 210 C 190 150, 140 100, 90 60" />
+        <path class="route-line alt2" d="M240 210 C 260 270, 300 320, 360 360" />
+        <path class="route-line alt2" d="M240 210 C 180 260, 140 300, 100 350" />
+
+        <g class="city-dot origin"><circle cx="240" cy="210" r="7"/><circle cx="240" cy="210" r="12" fill="none" stroke="#9C4A30" stroke-width="1"/><text x="252" y="215">تهران</text></g>
+
+        <g class="city-dot"><circle cx="400" cy="70" r="5"/><text x="356" y="52">تفلیس</text>
+          <g transform="translate(388,26)" stroke="#1E453D" stroke-width="1.4" fill="none"><path d="M6 26 L6 8"/><circle cx="6" cy="4" r="4"/></g></g>
+
+        <g class="city-dot"><circle cx="90" cy="60" r="5"/><text x="46" y="44">استانبول</text>
+          <g transform="translate(78,20)" stroke="#1E453D" stroke-width="1.4" fill="none"><path d="M2 26 L14 6 L20 6 L26 26"/><path d="M6 20 h16"/></g></g>
+
+        <g class="city-dot"><circle cx="360" cy="360" r="5"/><text x="372" y="365">دبی</text>
+          <g transform="translate(378,326)" stroke="#1E453D" stroke-width="1.4" fill="none"><rect x="0" y="10" width="6" height="20"/><rect x="9" y="0" width="6" height="30"/></g></g>
+
+        <g class="city-dot"><circle cx="100" cy="350" r="5"/><text x="18" y="347">آنتالیا</text>
+          <g transform="translate(70,318)" stroke="#1E453D" stroke-width="1.4" fill="none"><path d="M0 20 Q7 12 14 20 T28 20"/><circle cx="24" cy="6" r="4"/></g></g>
+
+        <g class="plane">
+          <path d="M0 -5 L4 4 L0 2 L-4 4 Z" fill="#9C4A30"/>
+          <animateMotion dur="6s" repeatCount="indefinite" rotate="auto"
+            path="M240 210 C 300 160, 340 120, 400 70" />
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- DESTINATIONS -->
+  <section class="destinations wrap" id="destinations">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-eyebrow">مهرهای گذرنامه شما</span>
+        <h2>مقصدهایی که باید ببینید</h2>
+      </div>
+      <p>مقصدهایی که بیشترین استقبال مسافران کاروانسرا را داشته‌اند؛ هرکدام با تور آماده و قیمت مشخص.</p>
+    </div>
+
+    <div class="dest-grid">
+
+      <div class="dest-card reveal">
+        <div class="stamp">
+          <svg viewBox="0 0 48 48"><path d="M10 38 L18 14 L24 14 L30 38"/><path d="M13 30 h20"/><circle cx="24" cy="8" r="3"/></svg>
+        </div>
+        <span class="country">ترکیه</span>
+        <h3>استانبول</h3>
+        <p>گذر از دو قاره در یک بعدازظهر، بازار بزرگ و چای‌های کنار بسفر.</p>
+        <div class="perf">
+          <div class="price">شروع از<b>۱۹,۹۰۰,۰۰۰ تومان</b></div>
+          <a href="#">مشاهده تور <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="dest-card reveal">
+        <div class="stamp">
+          <svg viewBox="0 0 48 48"><rect x="16" y="10" width="6" height="28"/><rect x="26" y="16" width="6" height="22"/><path d="M10 38 h28"/><path d="M19 10 l0 -4 M29 16 l0 -4"/></svg>
+        </div>
+        <span class="country">امارات</span>
+        <h3>دبی</h3>
+        <p>برج‌های شیشه‌ای، بازار طلا و شب‌گردی در دل صحرا.</p>
+        <div class="perf">
+          <div class="price">شروع از<b>۲۴,۵۰۰,۰۰۰ تومان</b></div>
+          <a href="#">مشاهده تور <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="dest-card reveal">
+        <div class="stamp">
+          <svg viewBox="0 0 48 48"><path d="M24 6 L24 20"/><circle cx="24" cy="24" r="5"/><path d="M12 40 L24 30 L36 40"/></svg>
+        </div>
+        <span class="country">گرجستان</span>
+        <h3>تفلیس</h3>
+        <p>کوچه‌های قدیمی، چشمه‌های آب‌گرم و طبیعت قفقاز.</p>
+        <div class="perf">
+          <div class="price">شروع از<b>۱۴,۲۰۰,۰۰۰ تومان</b></div>
+          <a href="#">مشاهده تور <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="dest-card reveal">
+        <div class="stamp">
+          <svg viewBox="0 0 48 48"><path d="M8 32 Q16 22 24 32 T40 32"/><path d="M6 38 h36"/><circle cx="34" cy="14" r="5"/></svg>
+        </div>
+        <span class="country">ترکیه</span>
+        <h3>آنتالیا</h3>
+        <p>سواحل مدیترانه، هتل‌های آل‌اینکلوسیو و آفتاب تمام‌سال.</p>
+        <div class="perf">
+          <div class="price">شروع از<b>۱۷,۸۰۰,۰۰۰ تومان</b></div>
+          <a href="#">مشاهده تور <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="dest-card reveal">
+        <div class="stamp">
+          <svg viewBox="0 0 48 48"><path d="M14 38 L14 16 L24 8 L34 16 L34 38"/><path d="M20 38 v-10 h8 v10"/></svg>
+        </div>
+        <span class="country">فرانسه</span>
+        <h3>پاریس</h3>
+        <p>کافه‌های خیابانی، موزه‌ها و غروب کنار رود سن.</p>
+        <div class="perf">
+          <div class="price">شروع از<b>۳۸,۹۰۰,۰۰۰ تومان</b></div>
+          <a href="#">مشاهده تور <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="dest-card reveal">
+        <div class="stamp">
+          <svg viewBox="0 0 48 48"><rect x="12" y="14" width="9" height="24"/><rect x="27" y="8" width="9" height="30"/><path d="M8 38 h34"/></svg>
+        </div>
+        <span class="country">مالزی</span>
+        <h3>کوالالامپور</h3>
+        <p>برج‌های دوقلو، جنگل شهری و بازارهای شبانه پرهیاهو.</p>
+        <div class="perf">
+          <div class="price">شروع از<b>۲۹,۴۰۰,۰۰۰ تومان</b></div>
+          <a href="#">مشاهده تور <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-band">
+    <div class="wrap stats-grid">
+      <div class="stat reveal"><b data-count="15">۰</b><span>سال تجربه</span></div>
+      <div class="stat reveal"><b data-count="42">۰</b><span>مقصد فعال</span></div>
+      <div class="stat reveal"><b data-count="12400">۰</b><span>مسافر راضی</span></div>
+      <div class="stat reveal"><b data-count="24" data-suffix="/۷">۰</b><span>پشتیبانی سفر</span></div>
+    </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section class="packages wrap" id="packages">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-eyebrow">پروازهای این فصل</span>
+        <h2>تورهای ویژه کاروانسرا</h2>
+      </div>
+      <p>بسته‌های آماده با تاریخ مشخص و ظرفیت محدود؛ برنامه‌ریزی شده تا خیالتان از جزئیات راحت باشد.</p>
+    </div>
+
+    <div class="pack-grid">
+
+      <div class="pack-card reveal">
+        <div class="pack-top">
+          <span class="days">۴ شب</span>
+          <h3>آخر هفته در استانبول</h3>
+          <span>پرواز مستقیم از تهران</span>
+        </div>
+        <div class="pack-body">
+          <ul>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> بلیت رفت و برگشت</li>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> اقامت در هتل ۴ ستاره، مرکز شهر</li>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> صبحانه و گشت نیم‌روز بسفر</li>
+          </ul>
+          <div class="pack-foot">
+            <div class="price"><span>هرنفر</span><b>۲۱,۵۰۰,۰۰۰ت</b></div>
+            <a href="#" class="book-btn">رزرو</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pack-card reveal">
+        <div class="pack-top">
+          <span class="days">۷ شب</span>
+          <h3>ساحل و آفتاب آنتالیا</h3>
+          <span>ویژه تابستان</span>
+        </div>
+        <div class="pack-body">
+          <span class="seats">تنها ۶ جای خالی باقی مانده</span>
+          <ul>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> بلیت رفت و برگشت</li>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> هتل آل‌اینکلوسیو ساحلی</li>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> ترانسفر فرودگاهی رفت و برگشت</li>
+          </ul>
+          <div class="pack-foot">
+            <div class="price"><span>هرنفر</span><b>۲۶,۹۰۰,۰۰۰ت</b></div>
+            <a href="#" class="book-btn">رزرو</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pack-card reveal">
+        <div class="pack-top">
+          <span class="days">۵ شب</span>
+          <h3>طبیعت‌گردی تفلیس</h3>
+          <span>تور خصوصی خانواده</span>
+        </div>
+        <div class="pack-body">
+          <ul>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> بلیت رفت و برگشت</li>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> اقامت بوتیک در شهر قدیم</li>
+            <li><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> یک‌روز گشت کوهستان قفقاز</li>
+          </ul>
+          <div class="pack-foot">
+            <div class="price"><span>هرنفر</span><b>۱۸,۲۰۰,۰۰۰ت</b></div>
+            <a href="#" class="book-btn">رزرو</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="section-eyebrow">دفتر خاطرات مسافران</span>
+          <h2>تجربه‌ای که برایمان نوشتند</h2>
+        </div>
+      </div>
+
+      <div class="test-grid">
+        <div class="test-card reveal">
+          <span class="quote-mark">”</span>
+          <p>از لحظه رزرو تا برگشت، هرچیزی که نیاز داشتیم از قبل هماهنگ بود. حتی تاخیر پرواز را هم مدیریت کردند.</p>
+          <div class="test-person">
+            <div class="avatar">ن.ر</div>
+            <div><b>نگار رستمی</b><span>سفر به استانبول</span></div>
+          </div>
+        </div>
+        <div class="test-card reveal">
+          <span class="quote-mark">”</span>
+          <p>تور خانوادگی تفلیس دقیقا همانی بود که می‌خواستیم؛ نه شلوغ، نه فشرده، با یک راهنمای محلی فوق‌العاده.</p>
+          <div class="test-person">
+            <div class="avatar">ک.م</div>
+            <div><b>کاوه محمدی</b><span>سفر به تفلیس</span></div>
+          </div>
+        </div>
+        <div class="test-card reveal">
+          <span class="quote-mark">”</span>
+          <p>قیمت هتل و بلیت با هیچ سایتی قابل مقایسه نبود، و پشتیبانی شبانه واقعا جواب داد.</p>
+          <div class="test-person">
+            <div class="avatar">س.ح</div>
+            <div><b>سارا حسینی</b><span>سفر به دبی</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band" id="contact">
+    <div class="wrap">
+      <h2>مقصد بعدی از کجا باشد؟</h2>
+      <p>پیشنهاد پروازهای ارزان و تورهای تازه را هر هفته برایتان می‌فرستیم.</p>
+      <form class="newsletter" onsubmit="return false;">
+        <input type="email" placeholder="ایمیل شما" required>
+        <button type="submit">عضویت</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="20" cy="20" r="17"/><path d="M20 6 L20 34 M6 20 L34 20"/><path d="M20 11 L23 20 L20 29 L17 20 Z" fill="currentColor" stroke="none"/></svg>
+          کاروانسرا
+        </div>
+        <p>آژانس مسافرتی کاروانسرا، همراه شما در برنامه‌ریزی و رزرو سفرهای داخلی و خارجی از سال ۱۳۸۸.</p>
+      </div>
+      <div>
+        <h4>مقصدها</h4>
+        <ul>
+          <li><a href="#">استانبول</a></li>
+          <li><a href="#">دبی</a></li>
+          <li><a href="#">تفلیس</a></li>
+          <li><a href="#">آنتالیا</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>آژانس</h4>
+        <ul>
+          <li><a href="#">درباره ما</a></li>
+          <li><a href="#">تورهای ویژه</a></li>
+          <li><a href="#">همکاری با ما</a></li>
+          <li><a href="#">سوالات متداول</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>تماس</h4>
+        <ul>
+          <li><a href="tel:+982188889999">۰۲۱-۸۸۸۸۹۹۹۹</a></li>
+          <li><a href="mailto:info@karvansara.ir">info@karvansara.ir</a></li>
+          <li><a href="#">تهران، خیابان ولیعصر</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© ۱۴۰۴ کاروانسرا. تمامی حقوق محفوظ است.</span>
+      <div class="socials">
+        <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg></a>
+        <a href="#" aria-label="واتساپ"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20l1.1-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg></a>
+      </div>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header scroll state
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Count-up stats
+  const faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  function toFa(num){
+    return String(num).replace(/\d/g, d => faDigits[d]);
+  }
+  const statEls = document.querySelectorAll('.stat b[data-count]');
+  const statIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '+';
+      let cur = 0;
+      const step = Math.max(1, Math.round(target / 60));
+      const timer = setInterval(() => {
+        cur += step;
+        if (cur >= target) { cur = target; clearInterval(timer); }
+        el.textContent = toFa(cur.toLocaleString('en-US')) + suffix;
+      }, 20);
+      statIO.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  statEls.forEach(el => statIO.observe(el));
+</script>
+
+</body>
+</html>

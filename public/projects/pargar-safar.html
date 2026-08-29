@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پرگار | آژانس تخصصی تور و بلیط</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#0A1F33;
+  --navy-800:#123A52;
+  --navy-700:#1B4A66;
+  --gold-500:#E3A857;
+  --gold-300:#F0CD92;
+  --coral-500:#F0704F;
+  --paper-50:#FAF5EA;
+  --paper-100:#F1E9D8;
+  --ink-900:#16232C;
+  --ink-600:#4B5C66;
+  --line:rgba(255,255,255,0.14);
+  --font-display:'Vazirmatn',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-display);
+  background:var(--paper-50);
+  color:var(--ink-900);
+  line-height:1.7;
+  overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 24px;}
+.ltr{direction:ltr;unicode-bidi:isolate;font-family:var(--font-mono);}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+/* ===== buttons ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 28px;border-radius:999px;font-weight:700;font-size:.95rem;
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
+  white-space:nowrap;
+}
+.btn-gold{background:var(--gold-500);color:var(--navy-950);}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 14px 28px -12px rgba(227,168,87,.65);}
+.btn-outline{border:1.5px solid var(--line);color:var(--paper-50);}
+.btn-outline:hover{background:rgba(255,255,255,.08);}
+.btn-dark{background:var(--navy-950);color:var(--paper-50);}
+.btn-dark:hover{transform:translateY(-3px);box-shadow:0 14px 28px -14px rgba(10,31,51,.55);}
+
+/* ===== eyebrow / section title ===== */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;
+  color:var(--coral-500);font-weight:700;margin-bottom:14px;text-transform:uppercase;
+}
+.eyebrow::before{content:'';width:26px;height:1.5px;background:var(--coral-500);}
+.section-title{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;color:var(--navy-950);}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:44px;flex-wrap:wrap;}
+.section-sub{color:var(--ink-600);max-width:440px;font-size:.98rem;}
+
+/* ===== header ===== */
+header{
+  position:fixed;top:0;right:0;left:0;z-index:100;
+  padding:18px 0;transition:background .35s ease,padding .35s ease,box-shadow .35s ease;
+}
+header.scrolled{background:rgba(10,31,51,.92);backdrop-filter:blur(10px);padding:12px 0;box-shadow:0 8px 24px -18px rgba(0,0,0,.5);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.logo{display:flex;align-items:center;gap:10px;color:var(--paper-50);font-weight:800;font-size:1.25rem;}
+.logo-mark{width:38px;height:38px;flex:none;}
+.nav-links{display:flex;align-items:center;gap:34px;}
+.nav-links a{color:var(--paper-100);font-size:.94rem;font-weight:500;position:relative;padding:4px 0;}
+.nav-links a::after{content:'';position:absolute;bottom:0;right:0;width:0;height:1.5px;background:var(--gold-500);transition:width .3s ease;}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{display:flex;align-items:center;gap:14px;}
+.burger{display:none;flex-direction:column;gap:5px;width:26px;}
+.burger span{height:2px;background:var(--paper-50);border-radius:2px;}
+
+/* ===== hero ===== */
+.hero{
+  position:relative;padding:150px 0 100px;
+  background:radial-gradient(ellipse 90% 60% at 20% 0%,rgba(227,168,87,.16),transparent 60%),
+             radial-gradient(ellipse 70% 50% at 90% 20%,rgba(240,112,79,.14),transparent 60%),
+             linear-gradient(180deg,var(--navy-950) 0%,#0D2C46 100%);
+  overflow:hidden;color:var(--paper-50);
+}
+.hero-stars{position:absolute;inset:0;background-image:
+  radial-gradient(1.5px 1.5px at 12% 22%,rgba(255,255,255,.5),transparent),
+  radial-gradient(1.5px 1.5px at 78% 12%,rgba(255,255,255,.4),transparent),
+  radial-gradient(1px 1px at 45% 62%,rgba(255,255,255,.35),transparent),
+  radial-gradient(1.5px 1.5px at 88% 70%,rgba(255,255,255,.3),transparent),
+  radial-gradient(1px 1px at 30% 85%,rgba(255,255,255,.3),transparent);
+  opacity:.8;pointer-events:none;
+}
+.flight-path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55;}
+.flight-path path{fill:none;stroke:rgba(240,205,146,.3);stroke-width:1.4;stroke-dasharray:6 8;}
+.plane-icon{offset-rotate:0deg;animation:fly 14s linear infinite;}
+@keyframes fly{
+  0%{offset-distance:0%;opacity:0;}
+  6%{opacity:1;}
+  94%{opacity:1;}
+  100%{offset-distance:100%;opacity:0;}
+}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;color:var(--gold-300);text-transform:uppercase;margin-bottom:20px;}
+.hero h1{font-size:clamp(2.3rem,4.6vw,3.6rem);font-weight:800;line-height:1.25;margin-bottom:20px;}
+.hero h1 em{font-style:normal;color:var(--gold-500);}
+.hero p{color:rgba(250,245,234,.72);font-size:1.05rem;max-width:480px;margin-bottom:34px;}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:46px;}
+.hero-stats-row{display:flex;gap:34px;flex-wrap:wrap;}
+.hero-stat b{display:block;font-size:1.5rem;font-weight:800;color:var(--gold-500);}
+.hero-stat span{font-size:.8rem;color:rgba(250,245,234,.6);}
+
+/* ===== ticket search widget ===== */
+.ticket{
+  position:relative;background:var(--paper-50);border-radius:20px;color:var(--ink-900);
+  box-shadow:0 40px 70px -30px rgba(0,0,0,.55);
+  display:grid;grid-template-columns:1fr auto;overflow:visible;margin-top:6px;
+}
+.ticket-notch{position:absolute;top:0;bottom:0;width:26px;background:var(--navy-950);border-radius:50%;z-index:3;}
+.ticket::before,.ticket::after{
+  content:'';position:absolute;top:-14px;width:28px;height:28px;background:var(--navy-950);
+  border-radius:50%;z-index:1;
+}
+.ticket-body{padding:26px 26px 24px 0;}
+.ticket-tabs{display:flex;gap:6px;margin-bottom:20px;}
+.ticket-tab{padding:8px 18px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--ink-600);}
+.ticket-tab.active{background:var(--navy-950);color:var(--paper-50);}
+.ticket-fields{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:16px;align-items:end;}
+.field label{display:block;font-size:.72rem;color:var(--ink-600);margin-bottom:6px;font-weight:600;}
+.field input,.field select{
+  width:100%;border:1.5px solid #E4DCC9;border-radius:10px;padding:11px 12px;
+  font-family:inherit;font-size:.92rem;color:var(--ink-900);background:#fff;
+}
+.field input:focus,.field select:focus{outline:2px solid var(--gold-500);outline-offset:1px;}
+.ticket-stub{
+  border-right:2px dashed #D9CFB6;padding:26px 22px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;min-width:170px;position:relative;
+}
+.ticket-stub .search-btn{width:100%;}
+.stub-code{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-600);letter-spacing:.08em;}
+.barcode{display:flex;gap:2px;align-items:flex-end;height:26px;}
+.barcode span{width:2px;background:var(--ink-900);display:block;}
+
+/* ===== departure board ===== */
+.board-wrap{position:relative;z-index:2;}
+.board{
+  background:linear-gradient(180deg,#08111C,#0D2036);
+  border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;
+  box-shadow:0 40px 80px -35px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.03);
+}
+.board-title{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 16px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:10px;}
+.board-title span{font-family:var(--font-mono);font-size:.72rem;color:var(--gold-300);letter-spacing:.1em;}
+.board-dot{width:8px;height:8px;border-radius:50%;background:#4CD07B;box-shadow:0 0 8px #4CD07B;display:inline-block;margin-left:6px;}
+.board-header-row,.board-row{
+  display:grid;grid-template-columns:52px 1.3fr 62px 1.1fr 1fr;gap:10px;align-items:center;
+  padding:10px 8px;
+}
+.board-header-row{font-family:var(--font-mono);font-size:.62rem;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;}
+.board-row{border-top:1px solid rgba(255,255,255,.06);}
+.board-row .cell{overflow:hidden;perspective:300px;}
+.cell-inner{transition:transform .45s cubic-bezier(.6,.05,.2,1),opacity .3s ease;transform-style:preserve-3d;}
+.board-row.flipping .cell-inner{transform:rotateX(90deg);opacity:0;}
+.code{font-family:var(--font-mono);color:var(--gold-300);font-size:.82rem;font-weight:700;}
+.dest{color:var(--paper-50);font-size:.9rem;font-weight:600;}
+.nights{font-family:var(--font-mono);color:rgba(255,255,255,.55);font-size:.78rem;}
+.price{font-family:var(--font-mono);color:var(--paper-50);font-size:.8rem;}
+.status{font-family:var(--font-mono);font-size:.68rem;font-weight:600;letter-spacing:.02em;padding:4px 8px;border-radius:5px;display:inline-block;}
+.status.open{color:#4CD07B;background:rgba(76,208,123,.1);}
+.status.limited{color:var(--coral-500);background:rgba(240,112,79,.12);}
+.status.early{color:var(--gold-300);background:rgba(227,168,87,.12);}
+
+/* ===== route ticker ===== */
+.ticker-strip{background:var(--navy-950);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:14px 0;}
+.ticker-track{display:flex;gap:56px;width:max-content;animation:tick 32s linear infinite;}
+.ticker-track span{font-family:var(--font-mono);font-size:.82rem;color:rgba(250,245,234,.55);white-space:nowrap;display:flex;align-items:center;gap:10px;}
+.ticker-track span b{color:var(--gold-300);}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ===== destinations (boarding pass cards) ===== */
+.destinations{padding:110px 0 90px;}
+.dest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.dest-card{
+  position:relative;border-radius:18px;overflow:hidden;color:#fff;
+  box-shadow:0 20px 40px -22px rgba(10,31,51,.4);transition:transform .35s ease,box-shadow .35s ease;
+}
+.dest-card:hover{transform:translateY(-8px);box-shadow:0 28px 50px -20px rgba(10,31,51,.5);}
+.dest-top{padding:26px 24px 60px;position:relative;min-height:170px;}
+.dest-top .compass-wm{position:absolute;left:-10px;bottom:-16px;width:110px;height:110px;opacity:.16;}
+.dest-code{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;opacity:.85;margin-bottom:8px;display:block;}
+.dest-name{font-size:1.4rem;font-weight:800;margin-bottom:6px;}
+.dest-desc{font-size:.85rem;opacity:.85;max-width:220px;}
+.dest-cut{position:relative;height:0;}
+.dest-cut::before{
+  content:'';position:absolute;top:0;right:0;left:0;border-top:2px dashed rgba(255,255,255,.45);
+}
+.notch-l,.notch-r{position:absolute;top:-10px;width:20px;height:20px;background:var(--paper-50);border-radius:50%;z-index:2;}
+.notch-l{right:-10px;}.notch-r{left:-10px;}
+.dest-bottom{background:rgba(0,0,0,.18);backdrop-filter:blur(2px);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+.dest-price{font-family:var(--font-mono);font-weight:700;font-size:.95rem;}
+.dest-price small{font-weight:400;font-size:.68rem;opacity:.75;display:block;}
+.dest-arrow{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;transition:background .25s;}
+.dest-card:hover .dest-arrow{background:var(--gold-500);}
+.dest-arrow svg{width:16px;height:16px;}
+
+.d1{background:linear-gradient(150deg,#123A52,#0A1F33);}
+.d2{background:linear-gradient(150deg,#7B4A22,#3A2410);}
+.d3{background:linear-gradient(150deg,#1B4A66,#0D2436);}
+.d4{background:linear-gradient(150deg,#8C4A34,#3F1F16);}
+.d5{background:linear-gradient(150deg,#2C5C4A,#0F2620);}
+.d6{background:linear-gradient(150deg,#5A3A63,#221530);}
+
+/* ===== tours ===== */
+.tours{padding:90px 0;background:var(--paper-100);}
+.tour-tabs{display:flex;gap:10px;margin-bottom:38px;}
+.tour-tab{padding:10px 22px;border-radius:999px;font-weight:700;font-size:.88rem;color:var(--ink-600);border:1.5px solid #E4DCC9;transition:all .25s ease;}
+.tour-tab.active{background:var(--navy-950);color:#fff;border-color:var(--navy-950);}
+.tour-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.tour-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 16px 32px -22px rgba(22,35,44,.25);transition:transform .3s ease,box-shadow .3s ease;}
+.tour-card:hover{transform:translateY(-6px);box-shadow:0 24px 40px -18px rgba(22,35,44,.3);}
+.tour-media{height:150px;position:relative;}
+.tour-badge{position:absolute;top:14px;right:14px;background:var(--coral-500);color:#fff;font-size:.7rem;font-weight:700;padding:5px 12px;border-radius:999px;}
+.tour-body{padding:20px 22px 22px;}
+.tour-loc{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--ink-600);margin-bottom:6px;font-family:var(--font-mono);}
+.tour-title{font-size:1.12rem;font-weight:800;margin-bottom:10px;}
+.tour-includes{display:flex;gap:14px;margin-bottom:16px;}
+.tour-includes span{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--ink-600);}
+.tour-includes svg{width:15px;height:15px;stroke:var(--navy-800);}
+.tour-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed #E4DCC9;padding-top:14px;}
+.tour-price b{font-family:var(--font-mono);font-size:1.05rem;color:var(--navy-950);}
+.tour-price span{display:block;font-size:.68rem;color:var(--ink-600);}
+.tour-cta{font-size:.82rem;font-weight:700;color:var(--navy-950);display:flex;align-items:center;gap:5px;}
+
+.t1{background:linear-gradient(140deg,#1B4A66,#123A52);}
+.t2{background:linear-gradient(140deg,#2C5C4A,#12362A);}
+.t3{background:linear-gradient(140deg,#8C4A34,#5A2E1F);}
+.t4{background:linear-gradient(140deg,#5A3A63,#31203A);}
+.t5{background:linear-gradient(140deg,#7B4A22,#4A2C13);}
+.t6{background:linear-gradient(140deg,#0A1F33,#1B4A66);}
+
+/* ===== stats ===== */
+.stats-section{background:var(--navy-950);padding:80px 0;position:relative;overflow:hidden;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;position:relative;z-index:2;}
+.stat-card{text-align:center;color:#fff;padding:0 10px;border-left:1px solid var(--line);}
+.stat-card:last-child{border-left:none;}
+.stat-card b{display:block;font-size:2.3rem;font-weight:800;color:var(--gold-500);font-family:var(--font-mono);margin-bottom:8px;}
+.stat-card span{font-size:.85rem;color:rgba(250,245,234,.65);}
+
+/* ===== testimonials ===== */
+.testimonials{padding:100px 0;}
+.tag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;}
+.tag-card{
+  background:#fff;border-radius:14px;padding:28px 24px 24px;position:relative;
+  box-shadow:0 16px 30px -20px rgba(22,35,44,.3);
+  border:1.5px solid #EDE4CF;
+}
+.tag-card::before{
+  content:'';position:absolute;top:24px;left:-9px;width:18px;height:18px;background:var(--paper-50);
+  border-radius:50%;border:1.5px solid #EDE4CF;
+}
+.tag-hole{position:absolute;top:22px;right:22px;width:14px;height:14px;border-radius:50%;background:var(--paper-50);border:1.5px solid #D9CFB6;}
+.tag-quote{color:var(--ink-600);font-size:.92rem;margin:20px 0 20px;min-height:96px;}
+.tag-person{display:flex;align-items:center;gap:12px;border-top:1px dashed #E4DCC9;padding-top:16px;}
+.tag-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex:none;}
+.tag-name{font-weight:700;font-size:.9rem;}
+.tag-trip{font-size:.75rem;color:var(--ink-600);font-family:var(--font-mono);}
+
+/* ===== cta / newsletter ===== */
+.cta-section{
+  background:linear-gradient(120deg,var(--navy-950),#123A52);
+  border-radius:24px;margin:0 auto 100px;max-width:1180px;padding:56px 50px;
+  display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;color:#fff;
+  position:relative;overflow:hidden;
+}
+.cta-section::after{
+  content:'';position:absolute;left:-40px;bottom:-40px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(227,168,87,.25),transparent 70%);
+}
+.cta-text h3{font-size:1.5rem;font-weight:800;margin-bottom:8px;}
+.cta-text p{color:rgba(250,245,234,.7);font-size:.92rem;max-width:400px;}
+.cta-form{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:2;}
+.cta-form input{padding:13px 16px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;min-width:230px;}
+.cta-form input::placeholder{color:rgba(250,245,234,.5);}
+
+/* ===== footer ===== */
+footer{background:var(--navy-950);color:rgba(250,245,234,.7);padding:70px 0 26px;}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:46px;border-bottom:1px solid var(--line);}
+.footer-logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:1.2rem;margin-bottom:14px;}
+.footer-desc{font-size:.88rem;max-width:280px;margin-bottom:18px;}
+.footer-social{display:flex;gap:10px;}
+.footer-social a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:background .25s;}
+.footer-social a:hover{background:var(--gold-500);color:var(--navy-950);}
+.footer-social svg{width:16px;height:16px;}
+.footer-col h4{color:#fff;font-size:.9rem;font-weight:700;margin-bottom:16px;}
+.footer-col ul li{margin-bottom:11px;font-size:.86rem;}
+.footer-col ul li a:hover{color:var(--gold-300);}
+.footer-contact li{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:14px;}
+.footer-contact svg{width:16px;height:16px;flex:none;color:var(--gold-300);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font-size:.8rem;flex-wrap:wrap;gap:10px;}
+
+/* ===== responsive ===== */
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr;}
+  .ticket-fields{grid-template-columns:1fr 1fr;}
+  .dest-grid{grid-template-columns:repeat(2,1fr);}
+  .tour-grid{grid-template-columns:repeat(2,1fr);}
+  .stats-grid{grid-template-columns:repeat(2,1fr);row-gap:34px;}
+  .stat-card:nth-child(2){border-left:none;}
+  .tag-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:700px){
+  .nav-links{display:none;}
+  .burger{display:flex;}
+  .nav-links.open{
+    display:flex;position:absolute;top:100%;right:0;left:0;background:var(--navy-950);
+    flex-direction:column;padding:20px 24px;gap:18px;border-top:1px solid var(--line);
+  }
+  .ticket{grid-template-columns:1fr;}
+  .ticket-stub{border-right:none;border-top:2px dashed #D9CFB6;}
+  .ticket-fields{grid-template-columns:1fr;}
+  .dest-grid{grid-template-columns:1fr;}
+  .tour-grid{grid-template-columns:1fr;}
+  .board-header-row,.board-row{grid-template-columns:44px 1fr 46px;}
+  .board-header-row span:nth-child(4),.board-header-row span:nth-child(5),
+  .board-row .price,.board-row .status{display:none;}
+  .cta-section{padding:40px 26px;}
+  .footer-grid{grid-template-columns:1fr;}
+  .section-head{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="container nav-inner">
+    <a href="#" class="logo">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="#E3A857" stroke-width="1.6"/>
+        <circle cx="20" cy="20" r="2.4" fill="#E3A857"/>
+        <path d="M20 4 L23 17 L36 20 L23 23 L20 36 L17 23 L4 20 L17 17 Z" fill="#E3A857" opacity="0.85"/>
+      </svg>
+      پرگار
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#hero">خانه</a>
+      <a href="#destinations">مقاصد</a>
+      <a href="#tours">تورها</a>
+      <a href="#stats">درباره ما</a>
+      <a href="#testimonials">نظرات مسافران</a>
+      <a href="#contact">تماس با ما</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#hero" class="btn btn-gold">رزرو آنلاین</a>
+      <button class="burger" id="burgerBtn" aria-label="منو">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-stars"></div>
+  <svg class="flight-path" viewBox="0 0 1180 640" preserveAspectRatio="none">
+    <path id="fp1" d="M -20 480 C 250 380, 480 560, 720 380 S 1100 220, 1220 260"></path>
+    <path id="fp2" d="M -30 180 C 200 260, 420 60, 650 140 S 1050 300, 1200 160"></path>
+  </svg>
+  <svg class="plane-icon" style="position:absolute;width:22px;height:22px;offset-path:path('M -20 480 C 250 380, 480 560, 720 380 S 1100 220, 1220 260');" viewBox="0 0 24 24" fill="none">
+    <path d="M2 12l19-8-6 8 6 8-19-8z" fill="#E3A857"/>
+  </svg>
+
+  <div class="container hero-grid">
+    <div class="reveal is-visible">
+      <div class="hero-eyebrow">
+        <span>PARGAR TRAVEL &amp; TICKETS</span>
+      </div>
+      <h1>سفر بعدی‌تان <em>کجاست؟</em></h1>
+      <p>پرگار جهت سفر شما را پیدا می‌کند؛ از تورهای داخلی خنک شمال تا پروازهای مستقیم به استانبول و دبی. مسیر را با ما انتخاب کنید، بقیه‌اش با ماست.</p>
+      <div class="hero-actions">
+        <a href="#tours" class="btn btn-gold">مشاهده تورها</a>
+        <a href="#destinations" class="btn btn-outline">مقاصد پرطرفدار</a>
+      </div>
+      <div class="hero-stats-row">
+        <div class="hero-stat"><b>۱۸+</b><span>سال تجربه</span></div>
+        <div class="hero-stat"><b>۶۵</b><span>مقصد فعال</span></div>
+        <div class="hero-stat"><b>۴۰هزار+</b><span>مسافر راضی</span></div>
+      </div>
+
+      <div class="ticket reveal">
+        <div class="ticket-notch" style="right:-13px;top:calc(50% - 13px);"></div>
+        <div class="ticket-body">
+          <div class="ticket-tabs">
+            <button class="ticket-tab active" type="button">تور مسافرتی</button>
+            <button class="ticket-tab" type="button">بلیط هواپیما</button>
+          </div>
+          <div class="ticket-fields">
+            <div class="field">
+              <label>مبدأ</label>
+              <select><option>تهران (THR)</option><option>مشهد (MHD)</option><option>شیراز (SYZ)</option></select>
+            </div>
+            <div class="field">
+              <label>مقصد</label>
+              <select><option>استانبول (IST)</option><option>کیش (KIH)</option><option>دبی (DXB)</option><option>آنتالیا (AYT)</option></select>
+            </div>
+            <div class="field">
+              <label>تاریخ رفت</label>
+              <input type="text" placeholder="۱۴۰۴/۰۷/۱۲">
+            </div>
+            <div class="field">
+              <label>مسافران</label>
+              <select><option>۲ نفر</option><option>۱ نفر</option><option>۳ نفر</option><option>۴+ نفر</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-stub">
+          <button class="btn btn-dark search-btn" type="button">جستجوی تور</button>
+          <span class="stub-code ltr">PGR-2026</span>
+          <div class="barcode" aria-hidden="true">
+            <span style="height:26px;"></span><span style="height:14px;"></span><span style="height:22px;"></span>
+            <span style="height:10px;"></span><span style="height:26px;"></span><span style="height:18px;"></span>
+            <span style="height:12px;"></span><span style="height:24px;"></span><span style="height:16px;"></span>
+            <span style="height:26px;"></span><span style="height:10px;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board-wrap reveal">
+      <div class="board">
+        <div class="board-title">
+          <span><span class="board-dot"></span>تابلوی پروازها و تورها</span>
+          <span class="ltr" id="clockNow">--:--</span>
+        </div>
+        <div class="board-header-row">
+          <span>کد</span><span>مقصد</span><span>مدت</span><span>قیمت</span><span>وضعیت</span>
+        </div>
+        <div class="board-body" id="boardBody"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-strip" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<section class="destinations" id="destinations">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">مقاصد پرطرفدار</div>
+        <h2 class="section-title">کارت پرواز مقصد رویایی‌تان</h2>
+      </div>
+      <p class="section-sub">شش مقصدی که این فصل بیشترین رزرو را از پرگار داشته‌اند؛ از پروازهای کوتاه منطقه‌ای تا سفرهای اروپایی.</p>
+    </div>
+
+    <div class="dest-grid">
+      <!-- card 1 -->
+      <div class="dest-card d1 reveal">
+        <div class="dest-top">
+          <svg class="compass-wm" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" stroke="#fff" stroke-width="1.5"/><path d="M50 10 L58 45 L50 90 L42 45 Z" fill="#fff"/></svg>
+          <span class="dest-code ltr">THR → IST</span>
+          <div class="dest-name">استانبول</div>
+          <div class="dest-desc">تلاقی دو قاره؛ بازار بزرگ، بسفر و شب‌های پرنور.</div>
+        </div>
+        <div class="dest-cut"><span class="notch-l"></span><span class="notch-r"></span></div>
+        <div class="dest-bottom">
+          <div class="dest-price">۱۲,۵۰۰,۰۰۰ <small>تومان / ۴ شب</small></div>
+          <div class="dest-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 5l7 7-7 7M21 12H3"/></svg></div>
+        </div>
+      </div>
+      <!-- card 2 -->
+      <div class="dest-card d2 reveal">
+        <div class="dest-top">
+          <svg class="compass-wm" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" stroke="#fff" stroke-width="1.5"/><path d="M50 10 L58 45 L50 90 L42 45 Z" fill="#fff"/></svg>
+          <span class="dest-code ltr">THR → KIH</span>
+          <div class="dest-name">کیش</div>
+          <div class="dest-desc">ساحل خلیج فارس، بازارهای بدون گمرک و آفتاب تمام سال.</div>
+        </div>
+        <div class="dest-cut"><span class="notch-l"></span><span class="notch-r"></span></div>
+        <div class="dest-bottom">
+          <div class="dest-price">۴,۲۰۰,۰۰۰ <small>تومان / ۳ شب</small></div>
+          <div class="dest-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 5l7 7-7 7M21 12H3"/></svg></div>
+        </div>
+      </div>
+      <!-- card 3 -->
+      <div class="dest-card d3 reveal">
+        <div class="dest-top">
+          <svg class="compass-wm" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" stroke="#fff" stroke-width="1.5"/><path d="M50 10 L58 45 L50 90 L42 45 Z" fill="#fff"/></svg>
+          <span class="dest-code ltr">THR → DXB</span>
+          <div class="dest-name">دبی</div>
+          <div class="dest-desc">آسمان‌خراش‌ها، مرکز خرید و صحرای بی‌انتها.</div>
+        </div>
+        <div class="dest-cut"><span class="notch-l"></span><span class="notch-r"></span></div>
+        <div class="dest-bottom">
+          <div class="dest-price">۱۸,۹۰۰,۰۰۰ <small>تومان / ۴ شب</small></div>
+          <div class="dest-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 5l7 7-7 7M21 12H3"/></svg></div>
+        </div>
+      </div>
+      <!-- card 4 -->
+      <div class="dest-card d4 reveal">
+        <div class="dest-top">
+          <svg class="compass-wm" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" stroke="#fff" stroke-width="1.5"/><path d="M50 10 L58 45 L50 90 L42 45 Z" fill="#fff"/></svg>
+          <span class="dest-code ltr">THR → AYT</span>
+          <div class="dest-name">آنتالیا</div>
+          <div class="dest-desc">هتل‌های آل‌اینکلوسیو و ساحل مدیترانه.</div>
+        </div>
+        <div class="dest-cut"><span class="notch-l"></span><span class="notch-r"></span></div>
+        <div class="dest-bottom">
+          <div class="dest-price">۲۲,۴۰۰,۰۰۰ <small>تومان / ۶ شب</small></div>
+          <div class="dest-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 5l7 7-7 7M21 12H3"/></svg></div>
+        </div>
+      </div>
+      <!-- card 5 -->
+      <div class="dest-card d5 reveal">
+        <div class="dest-top">
+          <svg class="compass-wm" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" stroke="#fff" stroke-width="1.5"/><path d="M50 10 L58 45 L50 90 L42 45 Z" fill="#fff"/></svg>
+          <span class="dest-code ltr">THR → SYZ</span>
+          <div class="dest-name">شیراز</div>
+          <div class="dest-desc">تخت‌جمشید، باغ ارم و عطر بهارنارنج.</div>
+        </div>
+        <div class="dest-cut"><span class="notch-l"></span><span class="notch-r"></span></div>
+        <div class="dest-bottom">
+          <div class="dest-price">۲,۸۰۰,۰۰۰ <small>تومان / ۲ شب</small></div>
+          <div class="dest-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 5l7 7-7 7M21 12H3"/></svg></div>
+        </div>
+      </div>
+      <!-- card 6 -->
+      <div class="dest-card d6 reveal">
+        <div class="dest-top">
+          <svg class="compass-wm" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" stroke="#fff" stroke-width="1.5"/><path d="M50 10 L58 45 L50 90 L42 45 Z" fill="#fff"/></svg>
+          <span class="dest-code ltr">THR → TBS</span>
+          <div class="dest-name">تفلیس</div>
+          <div class="dest-desc">کوچه‌های سنگفرش، شراب و کوهستان قفقاز.</div>
+        </div>
+        <div class="dest-cut"><span class="notch-l"></span><span class="notch-r"></span></div>
+        <div class="dest-bottom">
+          <div class="dest-price">۹,۶۰۰,۰۰۰ <small>تومان / ۳ شب</small></div>
+          <div class="dest-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 5l7 7-7 7M21 12H3"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tours" id="tours">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">بسته‌های سفر</div>
+        <h2 class="section-title">تور آماده برای هر بودجه</h2>
+      </div>
+      <div class="tour-tabs">
+        <button class="tour-tab active" type="button">همه</button>
+        <button class="tour-tab" type="button">داخلی</button>
+        <button class="tour-tab" type="button">خارجی</button>
+      </div>
+    </div>
+
+    <div class="tour-grid">
+      <div class="tour-card reveal">
+        <div class="tour-media t1"><span class="tour-badge">پرفروش</span></div>
+        <div class="tour-body">
+          <div class="tour-loc">THR → RAS · داخلی</div>
+          <div class="tour-title">تور جنگل‌های شمال</div>
+          <div class="tour-includes">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21l6-14 6 14M9 7l6 14M15 21l6-16"/></svg>هتل ۴ ستاره</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>ترانسفر</span>
+          </div>
+          <div class="tour-foot">
+            <div class="tour-price"><b>۳,۹۰۰,۰۰۰ تومان</b><span>۳ روز و ۲ شب</span></div>
+            <a href="#contact" class="tour-cta">رزرو ←</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card reveal">
+        <div class="tour-media t3"><span class="tour-badge">جدید</span></div>
+        <div class="tour-body">
+          <div class="tour-loc">THR → IST · خارجی</div>
+          <div class="tour-title">تور استانبول کامل</div>
+          <div class="tour-includes">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 12l19-8-6 8 6 8-19-8z"/></svg>پرواز مستقیم</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>گشت شهری</span>
+          </div>
+          <div class="tour-foot">
+            <div class="tour-price"><b>۱۲,۵۰۰,۰۰۰ تومان</b><span>۴ شب و ۵ روز</span></div>
+            <a href="#contact" class="tour-cta">رزرو ←</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card reveal">
+        <div class="tour-media t2"></div>
+        <div class="tour-body">
+          <div class="tour-loc">THR → KIH · داخلی</div>
+          <div class="tour-title">تور تفریحی کیش</div>
+          <div class="tour-includes">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21l6-14 6 14M9 7l6 14M15 21l6-16"/></svg>هتل ساحلی</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 12l19-8-6 8 6 8-19-8z"/></svg>بلیط رفت و برگشت</span>
+          </div>
+          <div class="tour-foot">
+            <div class="tour-price"><b>۴,۲۰۰,۰۰۰ تومان</b><span>۲ شب و ۳ روز</span></div>
+            <a href="#contact" class="tour-cta">رزرو ←</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card reveal">
+        <div class="tour-media t4"></div>
+        <div class="tour-body">
+          <div class="tour-loc">THR → TBS · خارجی</div>
+          <div class="tour-title">تور تفلیس و کوهستان</div>
+          <div class="tour-includes">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>بیمه مسافرتی</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>ترانسفر فرودگاهی</span>
+          </div>
+          <div class="tour-foot">
+            <div class="tour-price"><b>۹,۶۰۰,۰۰۰ تومان</b><span>۳ شب و ۴ روز</span></div>
+            <a href="#contact" class="tour-cta">رزرو ←</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card reveal">
+        <div class="tour-media t5"></div>
+        <div class="tour-body">
+          <div class="tour-loc">THR → SYZ · داخلی</div>
+          <div class="tour-title">تور تاریخی شیراز</div>
+          <div class="tour-includes">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21l6-14 6 14M9 7l6 14M15 21l6-16"/></svg>هتل مرکز شهر</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>راهنمای تور</span>
+          </div>
+          <div class="tour-foot">
+            <div class="tour-price"><b>۲,۸۰۰,۰۰۰ تومان</b><span>۲ شب و ۳ روز</span></div>
+            <a href="#contact" class="tour-cta">رزرو ←</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card reveal">
+        <div class="tour-media t6"><span class="tour-badge">لوکس</span></div>
+        <div class="tour-body">
+          <div class="tour-loc">THR → DXB · خارجی</div>
+          <div class="tour-title">تور دبی VIP</div>
+          <div class="tour-includes">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 12l19-8-6 8 6 8-19-8z"/></svg>پرواز بیزینس</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21l6-14 6 14M9 7l6 14M15 21l6-16"/></svg>هتل ۵ ستاره</span>
+          </div>
+          <div class="tour-foot">
+            <div class="tour-price"><b>۱۸,۹۰۰,۰۰۰ تومان</b><span>۴ شب و ۵ روز</span></div>
+            <a href="#contact" class="tour-cta">رزرو ←</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section" id="stats">
+  <div class="container stats-grid">
+    <div class="stat-card reveal"><b>۱۸+</b><span>سال تجربه در صنعت گردشگری</span></div>
+    <div class="stat-card reveal"><b>۴۰هزار+</b><span>مسافر جابجا شده</span></div>
+    <div class="stat-card reveal"><b>۶۵</b><span>مقصد داخلی و خارجی</span></div>
+    <div class="stat-card reveal"><b>۹۸٪</b><span>رضایت مسافران پرگار</span></div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">حرف مسافران</div>
+        <h2 class="section-title">برچسب چمدان، امضای رضایت</h2>
+      </div>
+      <p class="section-sub">تجربه واقعی کسانی که مسیرشان را با پرگار رزرو کردند.</p>
+    </div>
+    <div class="tag-grid">
+      <div class="tag-card reveal">
+        <span class="tag-hole"></span>
+        <p class="tag-quote">«از رزرو تا فرودگاه همه چیز دقیق پیش رفت. هتل استانبول دقیقاً همان چیزی بود که در سایت دیده بودم.»</p>
+        <div class="tag-person">
+          <div class="tag-avatar" style="background:#1B4A66;">م.ر</div>
+          <div><div class="tag-name">مریم رضایی</div><div class="tag-trip ltr">THR → IST</div></div>
+        </div>
+      </div>
+      <div class="tag-card reveal">
+        <span class="tag-hole"></span>
+        <p class="tag-quote">«پشتیبانی پرگار وسط سفر هم جواب داد. تغییر تاریخ بلیط برگشت را در کمتر از یک ساعت انجام دادند.»</p>
+        <div class="tag-person">
+          <div class="tag-avatar" style="background:#8C4A34;">ع.ک</div>
+          <div><div class="tag-name">علی کریمی</div><div class="tag-trip ltr">THR → DXB</div></div>
+        </div>
+      </div>
+      <div class="tag-card reveal">
+        <span class="tag-hole"></span>
+        <p class="tag-quote">«تور شمال با قیمتی که دیدم منطقی‌ترین گزینه بازار بود، بدون هیچ هزینه پنهانی.»</p>
+        <div class="tag-person">
+          <div class="tag-avatar" style="background:#2C5C4A;">س.ن</div>
+          <div><div class="tag-name">سارا نجفی</div><div class="tag-trip ltr">THR → RAS</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="cta-section reveal" id="contact">
+    <div class="cta-text">
+      <h3>به باشگاه مسافران پرگار بپیوندید</h3>
+      <p>پیشنهادهای زودهنگام و تخفیف تورهای فصلی را زودتر از همه در ایمیل‌تان دریافت کنید.</p>
+    </div>
+    <form class="cta-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="ایمیل شما" required>
+      <button type="submit" class="btn btn-gold">عضویت رایگان</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="footer-logo">
+          <svg class="logo-mark" viewBox="0 0 40 40" fill="none" style="width:32px;height:32px;">
+            <circle cx="20" cy="20" r="18" stroke="#E3A857" stroke-width="1.6"/>
+            <path d="M20 4 L23 17 L36 20 L23 23 L20 36 L17 23 L4 20 L17 17 Z" fill="#E3A857" opacity="0.85"/>
+          </svg>
+          پرگار
+        </a>
+        <p class="footer-desc">آژانس تخصصی تور و بلیط؛ مسیر سفر شما را با دقت یک قطب‌نما پیدا می‌کنیم.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></a>
+          <a href="#" aria-label="واتساپ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-12.35 7.6L3 21l2-5.4A8.5 8.5 0 1121 11.5z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>لینک‌های سریع</h4>
+        <ul>
+          <li><a href="#hero">خانه</a></li>
+          <li><a href="#tours">تورها</a></li>
+          <li><a href="#destinations">مقاصد</a></li>
+          <li><a href="#testimonials">نظرات</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>مقاصد محبوب</h4>
+        <ul>
+          <li><a href="#destinations">استانبول</a></li>
+          <li><a href="#destinations">دبی</a></li>
+          <li><a href="#destinations">کیش</a></li>
+          <li><a href="#destinations">شیراز</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>تماس با ما</h4>
+        <ul class="footer-contact">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.4 2.1L8 9.9a16 16 0 006 6l1.4-1.4a2 2 0 012.1-.4c.9.3 1.8.5 2.7.6a2 2 0 011.8 2z"/></svg><span class="ltr">021-8877-6655</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg><span class="ltr">info@pargar-travel.ir</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-7.5 8-13a8 8 0 10-16 0c0 5.5 8 13 8 13z"/><circle cx="12" cy="9" r="2.5"/></svg><span>تهران، خیابان ولیعصر</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© ۱۴۰۴ آژانس مسافرتی پرگار. تمامی حقوق محفوظ است.</span>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// header scroll state
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// mobile nav
+const burger = document.getElementById('burgerBtn');
+const navLinks = document.getElementById('navLinks');
+burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+// scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+// tabs (visual only)
+document.querySelectorAll('.ticket-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.ticket-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+document.querySelectorAll('.tour-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tour-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// live clock in board header
+function updateClock(){
+  const d = new Date();
+  const h = String(d.getHours()).padStart(2,'0');
+  const m = String(d.getMinutes()).padStart(2,'0');
+  document.getElementById('clockNow').textContent = h+':'+m;
+}
+updateClock(); setInterval(updateClock, 30000);
+
+// ===== split-flap departure board =====
+const boardData = [
+  {code:'IST', dest:'استانبول', nights:'۴ شب', price:'۱۲,۵۰۰,۰۰۰', status:'ظرفیت محدود', cls:'limited'},
+  {code:'KIH', dest:'کیش',      nights:'۳ شب', price:'۴,۲۰۰,۰۰۰',  status:'باز',           cls:'open'},
+  {code:'DXB', dest:'دبی',      nights:'۴ شب', price:'۱۸,۹۰۰,۰۰۰', status:'باز',           cls:'open'},
+  {code:'AYT', dest:'آنتالیا',  nights:'۶ شب', price:'۲۲,۴۰۰,۰۰۰', status:'رزرو زودهنگام', cls:'early'},
+  {code:'SYZ', dest:'شیراز',    nights:'۲ شب', price:'۲,۸۰۰,۰۰۰',  status:'باز',           cls:'open'},
+  {code:'CDG', dest:'پاریس',    nights:'۷ شب', price:'۵۸,۰۰۰,۰۰۰', status:'ظرفیت محدود',   cls:'limited'},
+  {code:'TBS', dest:'تفلیس',    nights:'۳ شب', price:'۹,۶۰۰,۰۰۰',  status:'باز',           cls:'open'},
+];
+
+const boardBody = document.getElementById('boardBody');
+const ROWS = 5;
+const rowState = [];
+for (let i=0;i<ROWS;i++){
+  const row = document.createElement('div');
+  row.className = 'board-row';
+  row.innerHTML =
+    '<div class="cell"><div class="cell-inner code"></div></div>'+
+    '<div class="cell"><div class="cell-inner dest"></div></div>'+
+    '<div class="cell"><div class="cell-inner nights"></div></div>'+
+    '<div class="cell"><div class="cell-inner price"></div></div>'+
+    '<div class="cell"><div class="cell-inner"><span class="status"></span></div></div>';
+  boardBody.appendChild(row);
+  rowState.push({el: row, idx: i % boardData.length});
+}
+
+function renderRow(state){
+  const d = boardData[state.idx];
+  const el = state.el;
+  el.querySelector('.code').textContent = d.code;
+  el.querySelector('.dest').textContent = d.dest;
+  el.querySelector('.nights').textContent = d.nights;
+  el.querySelector('.price').textContent = d.price;
+  const st = el.querySelector('.status');
+  st.textContent = d.status;
+  st.className = 'status ' + d.cls;
+}
+rowState.forEach(renderRow);
+
+function flipRow(state){
+  state.el.classList.add('flipping');
+  setTimeout(()=>{
+    state.idx = (state.idx + 1) % boardData.length;
+    renderRow(state);
+  }, 240);
+  setTimeout(()=>{
+    state.el.classList.remove('flipping');
+  }, 480);
+}
+
+rowState.forEach((state, i)=>{
+  setInterval(()=> flipRow(state), 3200 + i*650);
+});
+
+// ===== ticker strip =====
+const routes = [
+  'THR → IST', 'THR → DXB', 'THR → KIH', 'THR → AYT', 'THR → SYZ', 'THR → CDG', 'THR → TBS', 'THR → MHD'
+];
+const track = document.getElementById('tickerTrack');
+function buildTicker(){
+  let html = '';
+  for(let n=0;n<2;n++){
+    routes.forEach(r=>{
+      html += '<span><b class="ltr">'+r+'</b> پرواز مستقیم موجود</span>';
+    });
+  }
+  track.innerHTML = html;
+}
+buildTicker();
+</script>
+</body>
+</html>

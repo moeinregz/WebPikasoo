@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قنادی زعفران | شیرینی‌سرای سنتی</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FBF2E3;
+      --cream-2: #F5E8D3;
+      --gold: #C6942F;
+      --gold-deep: #9C6E1E;
+      --pistachio: #77875A;
+      --pistachio-deep: #566140;
+      --rose: #C67B7A;
+      --maroon: #4A2020;
+      --maroon-deep: #331515;
+      --paper: #FFFDF8;
+      --ink: #3A2418;
+      --shadow: 0 18px 40px -18px rgba(74, 32, 32, .35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ---------- texture ---------- */
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: .05;
+      background-image: radial-gradient(circle, #000 1px, transparent 1px);
+      background-size: 3px 3px;
+    }
+
+    /* ---------- scalloped tray-edge dividers ---------- */
+    .scallop {
+      width: 100%;
+      height: 26px;
+      background-repeat: repeat-x;
+      background-size: 26px 26px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .scallop.down-cream {
+      background-image: radial-gradient(circle at 13px 0, transparent 12.5px, var(--cream) 13px);
+    }
+
+    .scallop.up-cream {
+      background-image: radial-gradient(circle at 13px 26px, transparent 12.5px, var(--cream) 13px);
+    }
+
+    .scallop.down-maroon {
+      background-image: radial-gradient(circle at 13px 0, transparent 12.5px, var(--maroon) 13px);
+    }
+
+    .scallop.up-paper {
+      background-image: radial-gradient(circle at 13px 26px, transparent 12.5px, var(--paper) 13px);
+    }
+
+    .scallop.down-paper {
+      background-image: radial-gradient(circle at 13px 0, transparent 12.5px, var(--paper) 13px);
+    }
+
+    /* ---------- header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(251, 242, 227, .9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(74, 32, 32, .08);
+      transition: padding .3s ease;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand .mark {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      animation: swing 4.5s ease-in-out infinite;
+      transform-origin: 50% 0%;
+    }
+
+    @keyframes swing {
+
+      0%,
+      100% {
+        transform: rotate(-6deg);
+      }
+
+      50% {
+        transform: rotate(6deg);
+      }
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--maroon);
+      letter-spacing: .5px;
+    }
+
+    .brand-sub {
+      font-size: .68rem;
+      color: var(--gold-deep);
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 34px;
+      font-weight: 500;
+      font-size: .95rem;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding: 6px 2px;
+      color: var(--maroon);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width .3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .92rem;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+      color: #fff;
+      box-shadow: 0 10px 24px -10px rgba(156, 110, 30, .6);
+    }
+
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, .55) 50%, transparent 70%);
+      transform: translateX(-120%);
+    }
+
+    .btn-gold:hover::before {
+      transform: translateX(120%);
+      transition: transform .7s ease;
+    }
+
+    .btn-outline {
+      border: 1.5px solid var(--maroon);
+      color: var(--maroon);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--maroon);
+      color: var(--cream);
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      position: relative;
+      padding: 70px 0 60px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 85% 10%, rgba(198, 148, 47, .14), transparent 55%),
+        radial-gradient(ellipse at 10% 90%, rgba(119, 135, 90, .12), transparent 55%),
+        var(--cream);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--gold-deep);
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: '✦';
+      color: var(--gold);
+    }
+
+    h1.hero-title {
+      font-size: clamp(2.3rem, 4.4vw, 3.6rem);
+      font-weight: 900;
+      color: var(--maroon);
+      line-height: 1.28;
+      margin-bottom: 20px;
+    }
+
+    h1.hero-title .accent {
+      color: var(--gold-deep);
+      position: relative;
+      white-space: nowrap;
+    }
+
+    h1.hero-title .accent svg {
+      position: absolute;
+      right: 0;
+      bottom: -6px;
+      width: 100%;
+      height: 10px;
+    }
+
+    .hero-desc {
+      font-size: 1.06rem;
+      color: #5b4436;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 34px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat b {
+      display: block;
+      font-size: 1.5rem;
+      color: var(--maroon);
+      font-weight: 800;
+    }
+
+    .hero-stat span {
+      font-size: .8rem;
+      color: #8a6f5c;
+    }
+
+    /* tray illustration */
+    .tray-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
+    }
+
+    .tray {
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 42%, #EADFC5 0%, #DCC99B 46%, #C6A662 62%, #A9853C 100%);
+      box-shadow: 0 30px 60px -20px rgba(74, 32, 32, .45), inset 0 0 0 10px rgba(255, 255, 255, .25), inset 0 0 0 12px rgba(156, 110, 30, .5);
+      position: relative;
+    }
+
+    .tray::before {
+      content: '';
+      position: absolute;
+      inset: 36px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(from 0deg, rgba(156, 110, 30, .12) 0deg 6deg, transparent 6deg 12deg);
+      opacity: .5;
+    }
+
+    .sweet {
+      position: absolute;
+      border-radius: 10px;
+      box-shadow: 0 10px 18px -6px rgba(74, 32, 32, .35);
+      opacity: 0;
+      transform: translateY(-40px) scale(.6) rotate(var(--r, 0deg));
+      animation: drop .7s cubic-bezier(.34, 1.56, .64, 1) forwards;
+    }
+
+    .sweet:hover {
+      animation: jiggle .5s ease;
+    }
+
+    @keyframes drop {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(var(--r, 0deg));
+      }
+    }
+
+    @keyframes jiggle {
+
+      0%,
+      100% {
+        transform: rotate(var(--r, 0deg));
+      }
+
+      30% {
+        transform: rotate(calc(var(--r, 0deg) + 8deg));
+      }
+
+      60% {
+        transform: rotate(calc(var(--r, 0deg) - 6deg));
+      }
+    }
+
+    .s-baklava {
+      width: 64px;
+      height: 64px;
+      top: 36px;
+      right: 120px;
+      --r: -10deg;
+      background: linear-gradient(135deg, #D9A94A, #B67D24);
+      transform-origin: center;
+      animation-delay: .1s;
+    }
+
+    .s-baklava::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .35) 0 2px, transparent 2px 10px);
+    }
+
+    .s-sohan {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      top: 150px;
+      right: 40px;
+      --r: 6deg;
+      background: radial-gradient(circle at 35% 30%, #E8C878, #B98A2E);
+      animation-delay: .28s;
+    }
+
+    .s-sohan::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-image: radial-gradient(circle, var(--pistachio) 2.5px, transparent 2.5px), radial-gradient(circle, #C0392B 2px, transparent 2px);
+      background-size: 14px 14px, 18px 18px;
+      background-position: 0 0, 6px 8px;
+      opacity: .7;
+    }
+
+    .s-gaz {
+      width: 96px;
+      height: 52px;
+      border-radius: 14px;
+      bottom: 110px;
+      right: 150px;
+      --r: -4deg;
+      background: linear-gradient(160deg, #F4EBD6, #E3D3AC);
+      animation-delay: .42s;
+    }
+
+    .s-gaz::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background-image: radial-gradient(circle, var(--pistachio-deep) 2px, transparent 2px);
+      background-size: 12px 12px;
+    }
+
+    .s-cup {
+      width: 70px;
+      height: 56px;
+      bottom: 40px;
+      right: 250px;
+      --r: 0deg;
+      animation-delay: .55s;
+      background: linear-gradient(180deg, #fff, #e9d9b8);
+      border-radius: 6px 6px 26px 26px;
+      box-shadow: 0 10px 18px -6px rgba(74, 32, 32, .35), inset 0 -8px 0 rgba(198, 148, 47, .5);
+    }
+
+    .steam {
+      position: absolute;
+      bottom: 96px;
+      right: 270px;
+      width: 6px;
+      height: 40px;
+      z-index: 2;
+    }
+
+    .steam i {
+      position: absolute;
+      bottom: 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .8);
+      filter: blur(1px);
+      animation: rise 2.6s ease-in infinite;
+    }
+
+    .steam i:nth-child(2) {
+      animation-delay: .9s;
+      right: 8px;
+    }
+
+    .steam i:nth-child(3) {
+      animation-delay: 1.7s;
+      right: -6px;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(.6);
+        opacity: 0;
+      }
+
+      20% {
+        opacity: .7;
+      }
+
+      100% {
+        transform: translateY(-70px) scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    .s-crescent {
+      width: 70px;
+      height: 44px;
+      bottom: 150px;
+      right: 290px;
+      --r: 12deg;
+      animation-delay: .68s;
+      background: linear-gradient(135deg, #E7C77E, #C89A44);
+      border-radius: 60% 40% 60% 40%/70% 60% 40% 30%;
+    }
+
+    .thread-field {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .thread {
+      position: absolute;
+      top: -20px;
+      width: 2px;
+      height: 26px;
+      border-radius: 2px;
+      background: linear-gradient(#E24E1B, #B23412);
+      animation: fall linear infinite;
+      opacity: .75;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: .8;
+      }
+
+      90% {
+        opacity: .6;
+      }
+
+      100% {
+        transform: translateY(430px) rotate(50deg);
+        opacity: 0;
+      }
+    }
+
+    /* ---------- reveal ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- section heading ---------- */
+    .section {
+      padding: 86px 0;
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto 54px;
+    }
+
+    .section-head .eyebrow {
+      justify-content: center;
+      display: flex;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      color: var(--maroon);
+      margin-bottom: 14px;
+    }
+
+    .section-head p {
+      color: #6b5546;
+      font-size: 1rem;
+    }
+
+    /* ---------- menu ---------- */
+    .menu {
+      background: var(--paper);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .card {
+      background: var(--cream);
+      border-radius: 22px;
+      padding: 30px 26px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform .35s cubic-bezier(.2, .9, .3, 1.3), box-shadow .35s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) rotate(-.6deg);
+      box-shadow: 0 26px 50px -18px rgba(74, 32, 32, .45);
+    }
+
+    .card .icon-wrap {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 35% 30%, var(--cream-2), #E4CE9F);
+      box-shadow: inset 0 0 0 6px rgba(255, 255, 255, .5), 0 8px 16px -8px rgba(74, 32, 32, .3);
+    }
+
+    .card h3 {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--maroon);
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: .92rem;
+      color: #71594a;
+      margin-bottom: 18px;
+      min-height: 66px;
+    }
+
+    .card .price {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(74, 32, 32, .18);
+    }
+
+    .card .price b {
+      color: var(--gold-deep);
+      font-size: 1.05rem;
+    }
+
+    .card .price span {
+      font-size: .78rem;
+      color: #9a8371;
+    }
+
+    /* mini css icons */
+    .icon-baklava {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, #D9A94A, #B67D24);
+      transform: rotate(45deg);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .icon-baklava::after {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .4) 0 2px, transparent 2px 8px);
+    }
+
+    .icon-sohan {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #E8C878, #B98A2E);
+      position: relative;
+    }
+
+    .icon-sohan::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-image: radial-gradient(circle, var(--pistachio) 2px, transparent 2px), radial-gradient(circle, #C0392B 1.6px, transparent 1.6px);
+      background-size: 9px 9px, 11px 11px;
+      background-position: 0 0, 4px 5px;
+    }
+
+    .icon-gaz {
+      width: 40px;
+      height: 24px;
+      border-radius: 8px;
+      background: linear-gradient(160deg, #F4EBD6, #E3D3AC);
+      position: relative;
+    }
+
+    .icon-gaz::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background-image: radial-gradient(circle, var(--pistachio-deep) 1.6px, transparent 1.6px);
+      background-size: 9px 9px;
+    }
+
+    .icon-koloocheh {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #E7C77E, #B57C2C);
+      position: relative;
+    }
+
+    .icon-koloocheh::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 2px dashed rgba(255, 255, 255, .55);
+      border-radius: 50%;
+    }
+
+    .icon-zoolbia {
+      width: 36px;
+      height: 36px;
+      border: 5px solid #E2891A;
+      border-radius: 50% 40% 55% 45%/45% 55% 40% 50%;
+      background: transparent;
+    }
+
+    .icon-cake {
+      width: 36px;
+      height: 26px;
+      background: linear-gradient(180deg, #fff, #e9d9b8);
+      border-radius: 4px 4px 12px 12px;
+      position: relative;
+      box-shadow: inset 0 -6px 0 rgba(198, 148, 47, .5);
+    }
+
+    /* ---------- story ---------- */
+    .story {
+      background: linear-gradient(180deg, var(--cream), var(--cream-2));
+      position: relative;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .story-visual {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 28px;
+      overflow: hidden;
+      background:
+        repeating-linear-gradient(45deg, rgba(119, 135, 90, .14) 0 12px, transparent 12px 24px),
+        linear-gradient(160deg, #E9D9B4, #C9A65E);
+      box-shadow: var(--shadow);
+    }
+
+    .story-visual .pattern-ring {
+      position: absolute;
+      inset: 16%;
+      border-radius: 50%;
+      border: 2px solid rgba(74, 32, 32, .18);
+    }
+
+    .story-visual .pattern-ring::before {
+      content: '';
+      position: absolute;
+      inset: 14%;
+      border-radius: 50%;
+      border: 2px dashed rgba(198, 148, 47, .5);
+    }
+
+    .story-visual .center-word {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 900;
+      color: var(--maroon);
+      font-size: 1.4rem;
+      line-height: 1.9;
+    }
+
+    .story h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 800;
+      color: var(--maroon);
+      margin-bottom: 20px;
+    }
+
+    .story p {
+      color: #5b4436;
+      margin-bottom: 16px;
+      max-width: 520px;
+    }
+
+    .story-facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 26px;
+    }
+
+    .fact {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 12px 24px -16px rgba(74, 32, 32, .3);
+    }
+
+    .fact b {
+      display: block;
+      color: var(--gold-deep);
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .fact span {
+      font-size: .82rem;
+      color: #7a6353;
+    }
+
+    /* ---------- testimonials ---------- */
+    .testi {
+      background: var(--paper);
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .t-card {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 28px;
+      position: relative;
+      box-shadow: 0 14px 30px -18px rgba(74, 32, 32, .35);
+    }
+
+    .t-card::before {
+      content: '”';
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 3rem;
+      color: var(--gold);
+      opacity: .35;
+      font-family: Georgia, serif;
+    }
+
+    .t-card p {
+      color: #5b4436;
+      font-size: .95rem;
+      margin-bottom: 16px;
+    }
+
+    .t-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .t-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+    }
+
+    .t-name b {
+      font-size: .9rem;
+      color: var(--maroon);
+    }
+
+    .t-name span {
+      font-size: .76rem;
+      color: #9a8371;
+      display: block;
+    }
+
+    /* ---------- CTA / order ---------- */
+    .cta {
+      background: radial-gradient(ellipse at 20% 20%, rgba(198, 148, 47, .25), transparent 55%), linear-gradient(160deg, var(--maroon), var(--maroon-deep));
+      color: var(--cream);
+      position: relative;
+    }
+
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .cta h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .cta p {
+      color: #E8D6C8;
+      margin-bottom: 28px;
+      max-width: 480px;
+    }
+
+    .cta .btn-outline {
+      border-color: var(--cream);
+      color: var(--cream);
+    }
+
+    .cta .btn-outline:hover {
+      background: var(--cream);
+      color: var(--maroon);
+    }
+
+    .hours {
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 20px;
+      padding: 30px;
+    }
+
+    .hours h3 {
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--gold);
+    }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, .15);
+      font-size: .92rem;
+    }
+
+    .hours-row:last-child {
+      border-bottom: none;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      background: var(--maroon-deep);
+      color: #D9C4B4;
+      padding: 50px 0 26px;
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 34px;
+    }
+
+    .foot-brand .brand-name {
+      color: var(--cream);
+    }
+
+    .foot-brand p {
+      margin-top: 12px;
+      font-size: .88rem;
+      color: #B79E8B;
+      max-width: 340px;
+    }
+
+    footer h4 {
+      color: var(--gold);
+      font-size: .9rem;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    footer ul li {
+      margin-bottom: 10px;
+      font-size: .9rem;
+    }
+
+    footer ul li a:hover {
+      color: var(--gold);
+    }
+
+    .foot-bottom {
+      text-align: center;
+      font-size: .8rem;
+      color: #8a7566;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    /* ---------- responsive ---------- */
+    @media (max-width:900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-grid,
+      .story-grid,
+      .cta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .foot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tray {
+        width: 300px;
+        height: 300px;
+      }
+
+      .tray-wrap {
+        min-height: 320px;
+      }
+    }
+
+    @media (max-width:560px) {
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .story-facts {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--gold-deep);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="19" fill="#C6942F" opacity=".15" />
+          <path d="M10 24c2-8 6-12 10-12s8 4 10 12" stroke="#9C6E1E" stroke-width="2.4" stroke-linecap="round" />
+          <ellipse cx="20" cy="25" rx="12" ry="3.4" fill="#9C6E1E" />
+        </svg>
+        <div>
+          <span class="brand-name">قنادی زعفران</span>
+          <span class="brand-sub" style="display:block;">SINCE 1345</span>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#menu">منوی شیرینی</a></li>
+        <li><a href="#story">داستان ما</a></li>
+        <li><a href="#testi">مشتریان</a></li>
+        <li><a href="#order">سفارش</a></li>
+      </ul>
+      <a href="#order" class="btn btn-gold">سفارش آنلاین</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="thread-field" id="threadField"></div>
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">دستپخت خانگی، از دل زعفران و گلاب</span>
+        <h1 class="hero-title">
+          طعمی که بوی <span class="accent">خانه‌ی مادربزرگ<svg viewBox="0 0 200 10" preserveAspectRatio="none">
+              <path d="M0 6 Q 50 0 100 6 T 200 6" stroke="#C6942F" stroke-width="4" fill="none"
+                stroke-linecap="round" />
+            </svg></span> می‌دهد
+        </h1>
+        <p class="hero-desc">
+          هر سینی از قنادی زعفران، با دستور آشپزخانه‌های قدیمی اصفهان و یزد پخته می‌شود؛
+          از باقلوای مغزدار تا سوهان‌عسلی تازه، همان‌طور که نسل به نسل رسیده است.
+        </p>
+        <div class="hero-cta">
+          <a href="#menu" class="btn btn-gold">مشاهده‌ی منو</a>
+          <a href="#order" class="btn btn-outline">رزرو سینی مجلسی</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>۷۹ سال</b><span>تجربه‌ی خانوادگی</span></div>
+          <div class="hero-stat"><b>۲۸ نوع</b><span>شیرینی سنتی</span></div>
+          <div class="hero-stat"><b>هرروز</b><span>تازه و دستپخت</span></div>
+        </div>
+      </div>
+
+      <div class="tray-wrap">
+        <div class="tray" id="tray">
+          <div class="sweet s-baklava"></div>
+          <div class="sweet s-sohan"></div>
+          <div class="sweet s-gaz"></div>
+          <div class="sweet s-cup"></div>
+          <div class="sweet s-crescent"></div>
+          <div class="steam"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="scallop down-paper"></div>
+
+  <section class="menu section" id="menu">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">امروز در ویترین</span>
+        <h2>منتخب شیرینی‌های امروز</h2>
+        <p>هر روز صبح زود پخته می‌شود؛ اگر دیر بیایید فقط بوی زعفران می‌ماند.</p>
+      </div>
+      <div class="menu-grid">
+        <div class="card reveal">
+          <div class="icon-wrap">
+            <div class="icon-baklava"></div>
+          </div>
+          <h3>باقلوای یزدی</h3>
+          <p>لایه‌های نازک خمیر، مغز پسته و بادام، عطر هل و شربت زعفرانی.</p>
+          <div class="price"><span>هر کیلوگرم</span><b>۴۸۵٬۰۰۰ تومان</b></div>
+        </div>
+        <div class="card reveal">
+          <div class="icon-wrap">
+            <div class="icon-sohan"></div>
+          </div>
+          <h3>سوهان عسلی قم</h3>
+          <p>کاراملی نازک با زعفران اصیل، پسته سبز و کمی گلپر تازه‌آسیاب.</p>
+          <div class="price"><span>هر بسته</span><b>۱۹۰٬۰۰۰ تومان</b></div>
+        </div>
+        <div class="card reveal">
+          <div class="icon-wrap">
+            <div class="icon-gaz"></div>
+          </div>
+          <h3>گز اصفهان</h3>
+          <p>بافت نرم و ابری، پر از مغز پسته، درست مثل خیابان چهارباغ.</p>
+          <div class="price"><span>هر کیلوگرم</span><b>۳۶۰٬۰۰۰ تومان</b></div>
+        </div>
+        <div class="card reveal">
+          <div class="icon-wrap">
+            <div class="icon-koloocheh"></div>
+          </div>
+          <h3>کلوچه گردویی فومنی</h3>
+          <p>خمیر لطیف با مغز گردو، دارچین و کمی هل، همان طعم گیلان.</p>
+          <div class="price"><span>هر جعبه</span><b>۲۱۵٬۰۰۰ تومان</b></div>
+        </div>
+        <div class="card reveal">
+          <div class="icon-wrap">
+            <div class="icon-zoolbia"></div>
+          </div>
+          <h3>زولبیا و بامیه</h3>
+          <p>ترد و شربتی، تازه سرخ‌شده، مخصوص عصرانه‌های رمضان.</p>
+          <div class="price"><span>هر کیلوگرم</span><b>۲۹۰٬۰۰۰ تومان</b></div>
+        </div>
+        <div class="card reveal">
+          <div class="icon-wrap">
+            <div class="icon-cake"></div>
+          </div>
+          <h3>کیک زعفرانی خانگی</h3>
+          <p>پف‌دار و مرطوب، با روکش نازک زعفران و رگه‌های پسته.</p>
+          <div class="price"><span>هر عدد</span><b>۲۴۰٬۰۰۰ تومان</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="scallop up-cream" style="transform:scaleY(-1);"></div>
+
+  <section class="story section" id="story">
+    <div class="container story-grid">
+      <div class="story-visual reveal">
+        <div class="pattern-ring"></div>
+        <div class="center-word">قنادی<br>زعفران<br>از ۱۳۴۵</div>
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">داستان قنادی</span>
+        <h2>از اجاق زغالی مادربزرگ تا سینی امروز شما</h2>
+        <p>قنادی زعفران را حاج‌آقا رضایی در سال ۱۳۴۵ در یک مغازه‌ی کوچک نبش کوچه باز کرد.
+          امروز نوه‌هایش همان دستور‌ها را دنبال می‌کنند: زعفران قاین، پسته دامغان، و صبر —
+          چون شیرینی خوب عجله ندارد.</p>
+        <p>هیچ‌کدام از شیرینی‌های ما پیش‌ساخته یا منجمد نیستند؛ همه در همان مغازه، همان روز، پخته می‌شوند.</p>
+        <div class="story-facts">
+          <div class="fact"><b>۱۰۰٪</b><span>زعفران قاین درجه یک</span></div>
+          <div class="fact"><b>۰</b><span>مواد نگه‌دارنده</span></div>
+          <div class="fact"><b>۳ نسل</b><span>یک خانواده، یک دستور</span></div>
+          <div class="fact"><b>روزانه</b><span>پخت تازه صبحگاهی</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="scallop down-paper"></div>
+  <section class="testi section" id="testi">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">از زبان مشتری‌ها</span>
+        <h2>سینی‌هایی که میهمانی را یادماندنی می‌کنند</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="t-card reveal">
+          <p>باقلوای این‌جا دقیقاً طعم عروسی‌های قدیم اصفهان رو داره. برای عقد دخترم سفارش دادم، مهمون‌ها تعریف می‌کردن.
+          </p>
+          <div class="t-name">
+            <div class="t-avatar"></div>
+            <div><b>سارا محمودی</b><span>اصفهان</span></div>
+          </div>
+        </div>
+        <div class="t-card reveal">
+          <p>سوهانشون واقعا دست‌ساز و تازه‌ست، نه مثل بقیه که خیلی سفت و شیرینن. هر هفته سفارش می‌دم.</p>
+          <div class="t-name">
+            <div class="t-avatar"></div>
+            <div><b>امیر توکلی</b><span>تهران</span></div>
+          </div>
+        </div>
+        <div class="t-card reveal">
+          <p>گز و کلوچه‌شون رو برای پذیرایی شرکت خریدم، همه پرسیدن از کجا گرفتی. بسته‌بندی هم خیلی شیک بود.</p>
+          <div class="t-name">
+            <div class="t-avatar"></div>
+            <div><b>نگار رستمی</b><span>شیراز</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="scallop down-maroon"></div>
+  <section class="cta section" id="order">
+    <div class="container cta-grid">
+      <div class="reveal">
+        <span class="eyebrow" style="color:var(--gold);">سفارش سینی مجلسی</span>
+        <h2>برای مجلس بعدی‌تان، یک سینی از ما بگیرید</h2>
+        <p>سینی‌های مجلسی از ۲ کیلوگرم تا ۱۵ کیلوگرم، با ترکیب دلخواه شما آماده و همان روز تحویل داده می‌شود.</p>
+        <div class="hero-cta">
+          <a href="tel:02133445566" class="btn btn-gold">تماس: ۰۲۱-۳۳۴۴۵۵۶۶</a>
+          <a href="#" class="btn btn-outline">پیام در واتس‌اپ</a>
+        </div>
+      </div>
+      <div class="hours reveal">
+        <h3>ساعات کار مغازه</h3>
+        <div class="hours-row"><span>شنبه تا چهارشنبه</span><span>۹:۰۰ – ۲۱:۰۰</span></div>
+        <div class="hours-row"><span>پنجشنبه</span><span>۹:۰۰ – ۲۲:۰۰</span></div>
+        <div class="hours-row"><span>جمعه</span><span>۱۵:۰۰ – ۲۲:۰۰</span></div>
+        <div class="hours-row"><span>آدرس</span><span>خیابان چهارباغ، نبش کوچه گلستان</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="scallop up-paper" style="background-color:transparent; margin-top:-1px;"></div>
+    <div class="container">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <span class="brand-name">قنادی زعفران</span>
+          <p>شیرینی‌سرای خانوادگی، از سال ۱۳۴۵ تا امروز، با همان دستور و همان صبر.</p>
+        </div>
+        <div>
+          <h4>دسترسی سریع</h4>
+          <ul>
+            <li><a href="#menu">منوی شیرینی</a></li>
+            <li><a href="#story">داستان ما</a></li>
+            <li><a href="#order">سفارش سینی</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>تماس با ما</h4>
+          <ul>
+            <li>۰۲۱-۳۳۴۴۵۵۶۶</li>
+            <li>info@zafaran-pastry.ir</li>
+            <li>اصفهان، خیابان چهارباغ</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">© ۱۴۰۴ قنادی زعفران — تمام حقوق محفوظ است.</div>
+      <a href="https://webpikaso.click" target="_blank" rel="noopener noreferrer" style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   " onmouseover="this.style.opacity='.95'" onmouseout="this.style.opacity='.7'">
+        طراحی و توسعه با
+        <span style="font-size:14px; line-height:1;">♥</span>
+        توسط تیم <span style="font-weight:750;">پیکسل</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // falling saffron threads
+    const field = document.getElementById('threadField');
+    const count = window.innerWidth < 700 ? 10 : 18;
+    for (let i = 0; i < count; i++) {
+      const t = document.createElement('div');
+      t.className = 'thread';
+      t.style.left = Math.random() * 100 + '%';
+      t.style.animationDuration = (5 + Math.random() * 4) + 's';
+      t.style.animationDelay = (Math.random() * 6) + 's';
+      t.style.height = (16 + Math.random() * 16) + 'px';
+      field.appendChild(t);
+    }
+
+    // scroll reveal
+    const items = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: .15 });
+    items.forEach(el => io.observe(el));
+
+    // header compact on scroll
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      header.style.boxShadow = window.scrollY > 20 ? '0 8px 20px -14px rgba(74,32,32,.4)' : 'none';
+    });
+  </script>
+</body>
+
+</html>

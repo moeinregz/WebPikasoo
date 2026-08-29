@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>چیپست | فروشگاه تخصصی لپ‌تاپ و قطعات کامپیوتر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E13;
+    --bg-2:#0F151C;
+    --surface:#141B23;
+    --surface-2:#1B242E;
+    --line:#263241;
+    --line-soft:#1C2530;
+    --text:#E9EEF3;
+    --text-dim:#8FA0AF;
+    --text-faint:#5C6C7A;
+    --copper:#D69A52;
+    --copper-bright:#F2B76B;
+    --teal:#4FD3C4;
+    --teal-dim:#2E7A72;
+    --red:#E8615A;
+    --green:#5FC77E;
+    --radius:10px;
+    --font-display:'Vazirmatn', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-display);
+    line-height:1.6;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 900px 500px at 85% -5%, rgba(214,154,82,0.08), transparent),
+      radial-gradient(ellipse 700px 500px at 10% 15%, rgba(79,211,196,0.05), transparent);
+  }
+  ::selection{background:var(--copper);color:#0A0E13;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block;}
+  .container{max-width:1240px;margin:0 auto;padding:0 28px;}
+  .mono{font-family:var(--font-mono);}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.12em;
+    color:var(--copper);
+    display:flex;align-items:center;gap:8px;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:var(--copper);}
+
+  /* ---------- PCB trace background (signature motif) ---------- */
+  .trace-line{
+    position:absolute;
+    stroke:var(--line);
+    stroke-width:1;
+    fill:none;
+  }
+  .trace-pad{fill:var(--line);}
+  .pulse-dot{
+    fill:var(--copper-bright);
+    filter:drop-shadow(0 0 4px var(--copper-bright));
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(10,14,19,0.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .nav-wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-size:21px;font-weight:800;letter-spacing:-0.01em;
+  }
+  .logo-mark{
+    width:34px;height:34px;
+    border:1.5px solid var(--copper);
+    border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .logo-mark svg{width:18px;height:18px;}
+  .logo-mark::after{
+    content:'';position:absolute;inset:-4px;
+    border:1px solid var(--line);
+    border-radius:11px;
+  }
+  nav.main-links{display:flex;gap:34px;align-items:center;}
+  nav.main-links a{
+    font-size:14.5px;font-weight:500;color:var(--text-dim);
+    position:relative;padding:6px 0;
+    transition:color .2s;
+  }
+  nav.main-links a:hover{color:var(--text);}
+  nav.main-links a.active{color:var(--copper-bright);}
+  nav.main-links a::after{
+    content:'';position:absolute;bottom:0;right:0;left:0;height:1px;
+    background:var(--copper);transform:scaleX(0);transform-origin:right;
+    transition:transform .25s ease;
+  }
+  nav.main-links a:hover::after{transform:scaleX(1);}
+  .nav-actions{display:flex;align-items:center;gap:18px;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);color:var(--text-dim);
+    transition:.2s;cursor:pointer;position:relative;
+  }
+  .icon-btn:hover{border-color:var(--copper);color:var(--copper-bright);}
+  .icon-btn svg{width:17px;height:17px;}
+  .cart-count{
+    position:absolute;top:-6px;left:-6px;
+    background:var(--copper);color:#0A0E13;
+    font-family:var(--font-mono);font-size:10px;font-weight:700;
+    width:17px;height:17px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .call-chip{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--font-mono);font-size:13px;color:var(--text-dim);
+    padding-right:14px;border-right:1px solid var(--line);
+  }
+  .call-chip b{color:var(--text);font-weight:600;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:78px 0 60px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.02fr 0.98fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(34px,4.4vw,56px);
+    font-weight:800;
+    line-height:1.18;
+    letter-spacing:-0.015em;
+    margin-bottom:22px;
+  }
+  .hero h1 .accent{
+    color:var(--copper-bright);
+    position:relative;
+    white-space:nowrap;
+  }
+  .hero p.lead{
+    font-size:16.5px;color:var(--text-dim);
+    max-width:480px;margin-bottom:34px;
+  }
+  .hero-cta{display:flex;gap:14px;margin-bottom:44px;}
+  .btn{
+    font-family:var(--font-display);
+    font-size:14.5px;font-weight:600;
+    padding:14px 26px;border-radius:8px;
+    cursor:pointer;transition:.2s;
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid transparent;
+  }
+  .btn-primary{
+    background:var(--copper);color:#0A0E13;
+  }
+  .btn-primary:hover{background:var(--copper-bright);transform:translateY(-1px);}
+  .btn-ghost{
+    border-color:var(--line);color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+
+  .hero-stats{
+    display:flex;gap:0;
+    border-top:1px solid var(--line-soft);
+    padding-top:22px;
+  }
+  .hero-stat{
+    flex:1;padding-left:22px;
+  }
+  .hero-stat + .hero-stat{
+    border-right:1px solid var(--line-soft);
+    padding-right:22px;padding-left:0;
+  }
+  .hero-stat .num{
+    font-family:var(--font-mono);font-size:24px;font-weight:700;
+    color:var(--text);
+  }
+  .hero-stat .num .unit{font-size:13px;color:var(--copper);margin-right:3px;}
+  .hero-stat .lbl{font-size:12.5px;color:var(--text-faint);margin-top:3px;}
+
+  /* Hero visual: benchmark/spec panel */
+  .hero-visual{position:relative;height:460px;}
+  .device-card{
+    position:absolute;inset:0;
+    background:linear-gradient(160deg,var(--surface),var(--bg-2));
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+  }
+  .device-card::before{
+    content:'';position:absolute;inset:0;
+    background-image:radial-gradient(circle at 1px 1px, var(--line-soft) 1px, transparent 1px);
+    background-size:22px 22px;
+    opacity:.5;
+  }
+  .device-inner{position:relative;height:100%;padding:26px;display:flex;flex-direction:column;}
+  .device-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .device-topbar .dot-row{display:flex;gap:6px;}
+  .device-topbar .dot-row span{width:8px;height:8px;border-radius:50%;background:var(--line);}
+  .device-topbar .tag{
+    font-family:var(--font-mono);font-size:11px;color:var(--teal);
+    border:1px solid var(--teal-dim);padding:3px 9px;border-radius:20px;
+  }
+  .laptop-illustration{flex:1;display:flex;align-items:center;justify-content:center;}
+  .laptop-illustration svg{width:88%;max-width:340px;height:auto;}
+  .bench-readout{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    margin-top:18px;
+  }
+  .bench-item{
+    background:var(--bg);border:1px solid var(--line-soft);
+    border-radius:8px;padding:10px 12px;
+  }
+  .bench-item .k{font-size:11px;color:var(--text-faint);font-family:var(--font-mono);}
+  .bench-item .v{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--copper-bright);margin-top:2px;}
+  .bench-item .v small{font-size:11px;color:var(--text-dim);font-weight:400;}
+
+  .float-chip{
+    position:absolute;
+    background:var(--surface-2);border:1px solid var(--line);
+    border-radius:9px;padding:9px 13px;
+    font-family:var(--font-mono);font-size:12px;
+    display:flex;align-items:center;gap:8px;
+    box-shadow:0 12px 30px rgba(0,0,0,.35);
+    animation:float 5s ease-in-out infinite;
+  }
+  .float-chip.a{top:8%;left:-4%;animation-delay:0s;}
+  .float-chip.b{bottom:12%;left:-2%;animation-delay:1.4s;}
+  .float-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-9px);}
+  }
+
+  /* ---------- Ticker ---------- */
+  .ticker-bar{
+    background:var(--surface);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+    overflow:hidden;white-space:nowrap;
+    padding:13px 0;
+  }
+  .ticker-track{
+    display:inline-flex;
+    animation:ticker 32s linear infinite;
+  }
+  .ticker-track span{
+    font-family:var(--font-mono);font-size:13px;color:var(--text-dim);
+    padding:0 26px;border-left:1px solid var(--line-soft);
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .ticker-track span b{color:var(--text);font-weight:600;}
+  .ticker-track span.up{color:var(--green);}
+  .ticker-track span.down{color:var(--red);}
+  @keyframes ticker{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .ticker-track{animation:none;}
+    .float-chip{animation:none;}
+  }
+
+  /* ---------- Section shell ---------- */
+  section{padding:88px 0;position:relative;}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:44px;gap:20px;
+  }
+  .section-head h2{
+    font-size:clamp(24px,2.6vw,32px);font-weight:800;letter-spacing:-0.01em;
+  }
+  .section-head p{color:var(--text-dim);font-size:14.5px;max-width:420px;}
+  .see-all{
+    font-family:var(--font-mono);font-size:13px;color:var(--copper);
+    white-space:nowrap;display:flex;align-items:center;gap:6px;
+  }
+
+  /* ---------- Categories ---------- */
+  .cat-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  .cat-card{
+    background:var(--surface);border:1px solid var(--line-soft);
+    border-radius:var(--radius);
+    padding:24px 20px;
+    transition:.25s;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+  }
+  .cat-card:hover{border-color:var(--copper);transform:translateY(-3px);}
+  .cat-card .icon{
+    width:42px;height:42px;color:var(--teal);margin-bottom:16px;
+    transition:.25s;
+  }
+  .cat-card:hover .icon{color:var(--copper-bright);}
+  .cat-card .icon svg{width:100%;height:100%;}
+  .cat-card h3{font-size:15.5px;font-weight:600;margin-bottom:4px;}
+  .cat-card .count{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);}
+
+  /* ---------- Products ---------- */
+  .prod-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  .prod-card{
+    background:var(--surface);
+    border:1px solid var(--line-soft);
+    border-radius:var(--radius);
+    overflow:hidden;
+    transition:.25s;
+    position:relative;
+  }
+  .prod-card:hover{border-color:var(--line);box-shadow:0 18px 40px rgba(0,0,0,.35);transform:translateY(-4px);}
+  .prod-media{
+    height:168px;position:relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(79,211,196,0.09), transparent 65%),
+      var(--bg-2);
+    display:flex;align-items:center;justify-content:center;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .prod-media svg{width:60%;height:60%;color:var(--text-dim);transition:.3s;}
+  .prod-card:hover .prod-media svg{color:var(--copper-bright);}
+  .badge{
+    position:absolute;top:10px;right:10px;
+    font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+    padding:4px 9px;border-radius:20px;
+  }
+  .badge.discount{background:rgba(232,97,90,0.15);color:var(--red);border:1px solid rgba(232,97,90,0.35);}
+  .badge.new{background:rgba(79,211,196,0.15);color:var(--teal);border:1px solid rgba(79,211,196,0.35);}
+  .prod-body{padding:16px 16px 18px;}
+  .prod-cat{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;}
+  .prod-title{font-size:14.5px;font-weight:600;margin-bottom:10px;line-height:1.5;min-height:44px;}
+  .prod-specs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .prod-specs span{
+    font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);
+    background:var(--bg-2);border:1px solid var(--line-soft);
+    padding:3px 8px;border-radius:5px;
+  }
+  .prod-foot{display:flex;justify-content:space-between;align-items:center;}
+  .price-wrap .old{
+    font-family:var(--font-mono);font-size:11.5px;color:var(--text-faint);
+    text-decoration:line-through;display:block;margin-bottom:2px;
+  }
+  .price-wrap .price{font-family:var(--font-mono);font-size:16.5px;font-weight:700;color:var(--text);}
+  .price-wrap .price small{font-size:11px;color:var(--text-dim);font-weight:400;}
+  .add-btn{
+    width:36px;height:36px;border-radius:8px;
+    background:var(--bg-2);border:1px solid var(--line-soft);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-dim);cursor:pointer;transition:.2s;
+  }
+  .add-btn:hover{background:var(--copper);border-color:var(--copper);color:#0A0E13;}
+  .add-btn svg{width:16px;height:16px;}
+
+  /* ---------- Compare (signature element) ---------- */
+  .compare-section{
+    background:var(--bg-2);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .compare-wrap{
+    display:grid;grid-template-columns:1fr 1fr;
+    border:1px solid var(--line-soft);border-radius:14px;
+    overflow:hidden;
+    background:var(--surface);
+  }
+  .compare-col{padding:28px;position:relative;}
+  .compare-col:first-child{border-left:1px solid var(--line-soft);}
+  .compare-col .cc-eyebrow{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);margin-bottom:6px;}
+  .compare-col h4{font-size:18px;font-weight:700;margin-bottom:18px;}
+  .compare-row{
+    display:flex;justify-content:space-between;
+    padding:11px 0;border-top:1px dashed var(--line-soft);
+    font-size:13.5px;
+  }
+  .compare-row:first-of-type{border-top:none;}
+  .compare-row .k{color:var(--text-faint);font-family:var(--font-mono);font-size:11.5px;}
+  .compare-row .v{font-weight:600;}
+  .compare-row .v.win{color:var(--copper-bright);}
+  .vs-badge{
+    position:absolute;top:50%;right:-1px;left:-1px;
+    display:flex;justify-content:center;pointer-events:none;
+  }
+  .vs-badge span{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--copper);color:#0A0E13;
+    font-family:var(--font-mono);font-weight:700;font-size:12px;
+    display:flex;align-items:center;justify-content:center;
+    border:4px solid var(--bg-2);
+    transform:translateY(-50%);
+  }
+
+  /* ---------- Trust strip ---------- */
+  .trust-strip{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line-soft);
+    border:1px solid var(--line-soft);border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .trust-item{
+    background:var(--surface);padding:26px 22px;
+    display:flex;gap:14px;align-items:flex-start;
+  }
+  .trust-item .icon{width:30px;height:30px;color:var(--copper);flex:none;margin-top:2px;}
+  .trust-item .icon svg{width:100%;height:100%;}
+  .trust-item h5{font-size:14px;font-weight:600;margin-bottom:4px;}
+  .trust-item p{font-size:12.5px;color:var(--text-faint);}
+
+  /* ---------- Brands ---------- */
+  .brand-row{
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:20px;
+    padding:34px 0;
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .brand-row span{
+    font-family:var(--font-mono);font-size:15px;font-weight:600;
+    color:var(--text-faint);letter-spacing:.04em;
+    transition:.2s;
+  }
+  .brand-row span:hover{color:var(--text-dim);}
+
+  /* ---------- Newsletter ---------- */
+  .newsletter{
+    border:1px solid var(--line-soft);border-radius:16px;
+    padding:44px;
+    display:flex;justify-content:space-between;align-items:center;gap:30px;
+    background:linear-gradient(120deg, var(--surface), var(--bg-2));
+    position:relative;overflow:hidden;
+  }
+  .newsletter h3{font-size:22px;font-weight:800;margin-bottom:8px;}
+  .newsletter p{color:var(--text-dim);font-size:14px;max-width:380px;}
+  .newsletter-form{display:flex;gap:10px;flex:none;}
+  .newsletter-form input{
+    font-family:var(--font-mono);
+    background:var(--bg);border:1px solid var(--line);
+    border-radius:8px;padding:13px 16px;color:var(--text);
+    width:250px;font-size:13px;
+  }
+  .newsletter-form input:focus{outline:2px solid var(--copper);outline-offset:1px;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:64px 0 30px;border-top:1px solid var(--line-soft);}
+  .foot-grid{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;
+    margin-bottom:50px;
+  }
+  .foot-brand p{color:var(--text-faint);font-size:13px;margin-top:14px;max-width:280px;}
+  .foot-col h6{font-size:12.5px;font-weight:700;color:var(--text-dim);margin-bottom:16px;letter-spacing:.03em;}
+  .foot-col ul li{margin-bottom:11px;}
+  .foot-col ul li a{font-size:13.5px;color:var(--text-faint);transition:.2s;}
+  .foot-col ul li a:hover{color:var(--copper-bright);}
+  .foot-bottom{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:26px;border-top:1px solid var(--line-soft);
+    font-size:12.5px;color:var(--text-faint);
+  }
+  .foot-social{display:flex;gap:10px;}
+  .foot-social a{
+    width:34px;height:34px;border:1px solid var(--line);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;color:var(--text-dim);
+  }
+  .foot-social a svg{width:15px;height:15px;}
+  .foot-social a:hover{border-color:var(--copper);color:var(--copper-bright);}
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:1080px){
+    .cat-grid{grid-template-columns:repeat(2,1fr);}
+    .prod-grid{grid-template-columns:repeat(2,1fr);}
+    .trust-strip{grid-template-columns:repeat(2,1fr);}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{height:340px;order:-1;}
+    .compare-wrap{grid-template-columns:1fr;}
+    .compare-col:first-child{border-left:none;border-bottom:1px solid var(--line-soft);}
+    .vs-badge{top:auto;bottom:-1px;left:0;right:0;}
+    .vs-badge span{transform:translateY(50%);}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:30px;}
+  }
+  @media(max-width:680px){
+    nav.main-links{display:none;}
+    .call-chip{display:none;}
+    .cat-grid,.prod-grid{grid-template-columns:1fr 1fr;}
+    .hero-stats{flex-wrap:wrap;gap:16px;}
+    .hero-stat{flex:1 1 45%;padding:0!important;border:none!important;}
+    .newsletter{flex-direction:column;align-items:flex-start;}
+    .newsletter-form{width:100%;}
+    .newsletter-form input{width:100%;}
+    .foot-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav-wrap">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color:var(--copper-bright)" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4V2M15 4V2M9 22v-2M15 22v-2M4 9H2M4 15H2M22 9h-2M22 15h-2"/><rect x="8" y="8" width="8" height="8" rx="1"/></svg>
+      </div>
+      چیپست
+    </div>
+    <nav class="main-links">
+      <a href="#" class="active">فروشگاه</a>
+      <a href="#categories">دسته‌بندی‌ها</a>
+      <a href="#products">لپ‌تاپ‌ها</a>
+      <a href="#compare">مقایسه</a>
+      <a href="#trust">خدمات</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="call-chip">
+        <span>پشتیبانی</span>
+        <b class="mono">۰۲۱-۹۱۰۵۵۵۰۰</b>
+      </div>
+      <div class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6h15l-1.5 9h-12L6 6z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
+        <span class="cart-count">۳</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">فروشگاه تخصصی سخت‌افزار</div>
+      <h1>قطعه به قطعه،<br><span class="accent">دستگاه رویاییت</span> رو بچین</h1>
+      <p class="lead">از لپ‌تاپ‌های گیمینگ گرفته تا آخرین کارت‌گرافیک و پردازنده — با گارانتی اصالت کالا و تحویل همون روز در تهران.</p>
+      <div class="hero-cta">
+        <a href="#products" class="btn btn-primary">
+          مشاهده محصولات
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5l-7 7 7 7"/></svg>
+        </a>
+        <a href="#compare" class="btn btn-ghost">مقایسه دو مدل</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num" id="stat-products">۰</div>
+          <div class="lbl">قطعه و لپ‌تاپ موجود</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" id="stat-cities"><span class="unit">+</span>۰</div>
+          <div class="lbl">شهر تحت پوشش ارسال</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" id="stat-rating">۰.۰</div>
+          <div class="lbl">امتیاز رضایت مشتریان</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="float-chip a"><span class="dot"></span> موجودی انبار به‌روزرسانی شد</div>
+      <div class="float-chip b"><span class="dot"></span> ارسال ۹۰ دقیقه‌ای فعال</div>
+      <div class="device-card">
+        <div class="device-inner">
+          <div class="device-topbar">
+            <div class="dot-row"><span></span><span></span><span></span></div>
+            <div class="tag mono">بنچمارک زنده</div>
+          </div>
+          <div class="laptop-illustration">
+            <svg viewBox="0 0 340 220" fill="none">
+              <rect x="70" y="18" width="200" height="130" rx="8" fill="var(--bg-2)" stroke="var(--line)" stroke-width="1.5"/>
+              <rect x="82" y="30" width="176" height="106" rx="3" fill="#0A0E13" stroke="var(--teal-dim)" stroke-width="1"/>
+              <path d="M96 100 L120 70 L140 92 L165 55 L190 88 L215 62 L240 96" stroke="var(--copper)" stroke-width="2" fill="none" opacity="0.85"/>
+              <circle cx="240" cy="96" r="3.5" fill="var(--copper-bright)"/>
+              <path d="M40 168 L300 168 L282 154 L58 154 Z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/>
+              <rect x="150" y="158" width="40" height="4" rx="2" fill="var(--line)"/>
+            </svg>
+          </div>
+          <div class="bench-readout">
+            <div class="bench-item"><div class="k">CPU SCORE</div><div class="v">۲۸,۴۱۰</div></div>
+            <div class="bench-item"><div class="k">GPU FPS</div><div class="v">۱۴۲ <small>fps</small></div></div>
+            <div class="bench-item"><div class="k">RAM</div><div class="v">۳۲ <small>GB</small></div></div>
+            <div class="bench-item"><div class="k">STORAGE</div><div class="v">۱ <small>TB NVMe</small></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <!-- duplicated via JS for seamless loop -->
+  </div>
+</div>
+
+<section id="categories">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">دسته‌بندی محصولات</div>
+        <h2>هرچی برای ساخت یا ارتقای سیستم لازم داری</h2>
+      </div>
+      <a href="#" class="see-all">مشاهده همه دسته‌ها ←</a>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20l-2-4H4l-2 4z"/></svg></div>
+        <h3>لپ‌تاپ</h3>
+        <div class="count mono">۲۱۴ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="10" rx="1.5"/><path d="M6 7V5M10 7V5M14 7V5M18 7V5M6 17v2M10 17v2M14 17v2M18 17v2"/></svg></div>
+        <h3>کارت گرافیک</h3>
+        <div class="count mono">۹۸ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg></div>
+        <h3>پردازنده</h3>
+        <div class="count mono">۶۷ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="7" rx="1"/><rect x="4" y="13" width="16" height="7" rx="1"/><circle cx="8" cy="7.5" r="0.8" fill="currentColor"/><circle cx="8" cy="16.5" r="0.8" fill="currentColor"/></svg></div>
+        <h3>رم و حافظه</h3>
+        <div class="count mono">۱۵۲ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/></svg></div>
+        <h3>مادربرد</h3>
+        <div class="count mono">۴۳ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 22v-2h6v2"/><circle cx="12" cy="9" r="3"/></svg></div>
+        <h3>پاور و کیس</h3>
+        <div class="count mono">۷۹ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></div>
+        <h3>خنک‌کننده</h3>
+        <div class="count mono">۵۶ محصول</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h2M10 10h2M14 10h6M6 14h10"/></svg></div>
+        <h3>کیبورد و ماوس</h3>
+        <div class="count mono">۱۸۸ محصول</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="products" style="background:var(--bg-2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">پرفروش‌ترین‌ها</div>
+        <h2>لپ‌تاپ‌ها و قطعات منتخب این هفته</h2>
+      </div>
+      <a href="#" class="see-all">مشاهده کل فروشگاه ←</a>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <span class="badge discount mono">٪۱۲-</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20l-2-4H4l-2 4z"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">لپ‌تاپ گیمینگ</div>
+          <div class="prod-title">لپ‌تاپ گیمینگ ۱۶ اینچ نسل ۱۳ اینتل</div>
+          <div class="prod-specs">
+            <span>i7-13700H</span><span>RTX 4060</span><span>۱۶GB</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="old mono">۱۲۹,۰۰۰,۰۰۰</span>
+              <span class="price mono">۱۱۳,۵۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <span class="badge new mono">جدید</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="7" width="20" height="10" rx="1.5"/><path d="M6 7V5M10 7V5M14 7V5M18 7V5M6 17v2M10 17v2M14 17v2M18 17v2"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">کارت گرافیک</div>
+          <div class="prod-title">کارت گرافیک RTX 4070 Super ۱۲ گیگ</div>
+          <div class="prod-specs">
+            <span>GDDR6X</span><span>DLSS 3</span><span>۱۲GB</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="price mono">۴۶,۹۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">پردازنده</div>
+          <div class="prod-title">پردازنده AMD Ryzen 9 7900X</div>
+          <div class="prod-specs">
+            <span>۱۲ هسته</span><span>۵.۶GHz</span><span>AM5</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="price mono">۲۱,۲۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <span class="badge discount mono">٪۸-</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20l-2-4H4l-2 4z"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">لپ‌تاپ اداری</div>
+          <div class="prod-title">اولترابوک ۱۴ اینچ سبک با باتری ۲۰ ساعته</div>
+          <div class="prod-specs">
+            <span>i5-1340P</span><span>Iris Xe</span><span>۱TB SSD</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="old mono">۶۸,۰۰۰,۰۰۰</span>
+              <span class="price mono">۶۲,۵۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="4" y="4" width="16" height="7" rx="1"/><rect x="4" y="13" width="16" height="7" rx="1"/><circle cx="8" cy="7.5" r="0.8" fill="currentColor"/><circle cx="8" cy="16.5" r="0.8" fill="currentColor"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">حافظه رم</div>
+          <div class="prod-title">رم DDR5 کینگستون فیوری ۳۲ گیگ ۶۰۰۰</div>
+          <div class="prod-specs">
+            <span>۳۲GB</span><span>۶۰۰۰MHz</span><span>CL36</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="price mono">۸,۴۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <span class="badge new mono">جدید</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20l-2-4H4l-2 4z"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">لپ‌تاپ گیمینگ</div>
+          <div class="prod-title">لپ‌تاپ گیمینگ ۱۷ اینچ صفحه ۲۴۰ هرتز</div>
+          <div class="prod-specs">
+            <span>i9-13900HX</span><span>RTX 4080</span><span>۳۲GB</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="price mono">۱۸۹,۰۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">مادربرد</div>
+          <div class="prod-title">مادربرد ایسوس ROG STRIX B650-A</div>
+          <div class="prod-specs">
+            <span>AM5</span><span>DDR5</span><span>WiFi 6E</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="price mono">۱۴,۹۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card reveal">
+        <div class="prod-media">
+          <span class="badge discount mono">٪۱۵-</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 22v-2h6v2"/><circle cx="12" cy="9" r="3"/></svg>
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">پاور</div>
+          <div class="prod-title">پاور ۸۵۰ وات کورسیر گلد فول ماژولار</div>
+          <div class="prod-specs">
+            <span>۸۵۰W</span><span>Gold</span><span>ماژولار</span>
+          </div>
+          <div class="prod-foot">
+            <div class="price-wrap">
+              <span class="old mono">۹,۸۰۰,۰۰۰</span>
+              <span class="price mono">۸,۳۰۰,۰۰۰<small> ت</small></span>
+            </div>
+            <div class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="compare" class="compare-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">تصمیم‌گیری آسون‌تر</div>
+        <h2>دو مدل رو کنار هم بذار، بهترین رو انتخاب کن</h2>
+      </div>
+    </div>
+    <div class="compare-wrap reveal">
+      <div class="compare-col">
+        <div class="cc-eyebrow mono">مدل الف</div>
+        <h4>لپ‌تاپ گیمینگ ۱۶ اینچ RTX 4060</h4>
+        <div class="compare-row"><span class="k">CPU</span><span class="v">Core i7-13700H</span></div>
+        <div class="compare-row"><span class="k">GPU</span><span class="v">RTX 4060 8GB</span></div>
+        <div class="compare-row"><span class="k">RAM</span><span class="v">۱۶ گیگابایت</span></div>
+        <div class="compare-row"><span class="k">نمایشگر</span><span class="v win">۱۶۵ هرتز QHD</span></div>
+        <div class="compare-row"><span class="k">وزن</span><span class="v win">۲.۱ کیلوگرم</span></div>
+        <div class="compare-row"><span class="k">قیمت</span><span class="v win mono">۱۱۳,۵۰۰,۰۰۰ ت</span></div>
+      </div>
+      <div class="compare-col">
+        <div class="cc-eyebrow mono">مدل ب</div>
+        <h4>لپ‌تاپ گیمینگ ۱۷ اینچ RTX 4080</h4>
+        <div class="compare-row"><span class="k">CPU</span><span class="v win">Core i9-13900HX</span></div>
+        <div class="compare-row"><span class="k">GPU</span><span class="v win">RTX 4080 12GB</span></div>
+        <div class="compare-row"><span class="k">RAM</span><span class="v win">۳۲ گیگابایت</span></div>
+        <div class="compare-row"><span class="k">نمایشگر</span><span class="v">۲۴۰ هرتز FHD</span></div>
+        <div class="compare-row"><span class="k">وزن</span><span class="v">۲.۹ کیلوگرم</span></div>
+        <div class="compare-row"><span class="k">قیمت</span><span class="v mono">۱۸۹,۰۰۰,۰۰۰ ت</span></div>
+      </div>
+      <div class="vs-badge"><span>VS</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="trust">
+  <div class="container">
+    <div class="trust-strip reveal">
+      <div class="trust-item">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div><h5>گارانتی اصالت کالا</h5><p>تمام قطعات با شناسه اصالت و ۱۸ ماه گارانتی</p></div>
+      </div>
+      <div class="trust-item">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="6" width="15" height="11" rx="1.5"/><path d="M16 10h4l3 3v4h-7"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg></div>
+        <div><h5>ارسال همان‌روز تهران</h5><p>ثبت سفارش تا ساعت ۱۶ برای تحویل امروز</p></div>
+      </div>
+      <div class="trust-item">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div><h5>پرداخت امن و اقساطی</h5><p>پرداخت در محل و امکان خرید اقساطی</p></div>
+      </div>
+      <div class="trust-item">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div><h5>پشتیبانی فنی تخصصی</h5><p>مشاوره رایگان قبل و بعد از خرید</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="container">
+    <div class="brand-row reveal">
+      <span>ASUS ROG</span><span>MSI</span><span>Lenovo Legion</span><span>Corsair</span><span>NVIDIA</span><span>AMD</span><span>Kingston</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="newsletter reveal">
+      <div>
+        <h3>قیمت‌ها رو زودتر از همه ببین</h3>
+        <p>عضو خبرنامه چیپست شو و تخفیف‌های ویژه قطعات و لپ‌تاپ رو مستقیم توی ایمیلت دریافت کن.</p>
+      </div>
+      <form class="newsletter-form" onsubmit="event.preventDefault();">
+        <input type="email" placeholder="ایمیل شما" required>
+        <button type="submit" class="btn btn-primary">عضویت</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color:var(--copper-bright)" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4V2M15 4V2M9 22v-2M15 22v-2M4 9H2M4 15H2M22 9h-2M22 15h-2"/><rect x="8" y="8" width="8" height="8" rx="1"/></svg>
+          </div>
+          چیپست
+        </div>
+        <p>فروشگاه تخصصی لپ‌تاپ و قطعات کامپیوتر با ضمانت اصالت کالا و مشاوره تخصصی برای انتخاب بهترین سیستم.</p>
+      </div>
+      <div class="foot-col">
+        <h6>محصولات</h6>
+        <ul>
+          <li><a href="#">لپ‌تاپ گیمینگ</a></li>
+          <li><a href="#">لپ‌تاپ اداری</a></li>
+          <li><a href="#">کارت گرافیک</a></li>
+          <li><a href="#">پردازنده</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h6>خدمات مشتریان</h6>
+        <ul>
+          <li><a href="#">پیگیری سفارش</a></li>
+          <li><a href="#">شرایط گارانتی</a></li>
+          <li><a href="#">راهنمای خرید</a></li>
+          <li><a href="#">تماس با ما</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h6>درباره چیپست</h6>
+        <ul>
+          <li><a href="#">درباره ما</a></li>
+          <li><a href="#">فرصت‌های شغلی</a></li>
+          <li><a href="#">نمایندگی‌ها</a></li>
+          <li><a href="#">وبلاگ فنی</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© ۱۴۰۴ فروشگاه چیپست — تمامی حقوق محفوظ است.</span>
+      <div class="foot-social">
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 4s-.7 2-2 3c1.2 7-6 12-13 8 2.5.2 5-.7 6.5-2.4-2.4-.2-4-1.8-4.6-3.7.8.2 1.5.1 2.1-.1C7.5 8.4 6 6.6 6 4.5c.8.5 1.7.8 2.6.9C6.7 3.9 6.2 1.5 7.4.3 9.7 3 13 4.7 16.5 4.9c-.6-2.6 1.5-4.9 4-4.9 1.2 0 2.2.5 3 1.3.9-.2 1.7-.5 2.5-1-.3.9-.9 1.7-1.7 2.2.8-.1 1.5-.3 2.2-.6z"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
+      </div>
+      <a href="https://webpikaso.click"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="
+     display:inline-flex;
+     align-items:center;
+     gap:5px;
+     color:inherit;
+     font:inherit;
+     font-size:13px;
+     text-decoration:none;
+     opacity:.7;
+     transition:opacity .25s ease;
+   "
+   onmouseover="this.style.opacity='.95'"
+   onmouseout="this.style.opacity='.7'">
+  طراحی و توسعه با
+  <span style="font-size:14px; line-height:1;">♥</span>
+  توسط تیم <span style="font-weight:750;">پیکسل</span>
+</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Ticker content (spec/price feed) ----
+  const tickerItems = [
+    { t: 'RTX 4070 Super', v: '٪۱۲ کاهش قیمت', cls: 'down' },
+    { t: 'i9-13900HX', v: 'موجودی محدود', cls: '' },
+    { t: 'DDR5 6000MHz', v: '٪۵ افزایش موجودی', cls: 'up' },
+    { t: 'لپ‌تاپ‌های ROG', v: 'ارسال رایگان این هفته', cls: '' },
+    { t: 'SSD NVMe 2TB', v: '٪۹ کاهش قیمت', cls: 'down' },
+    { t: 'کیس گیمینگ آرجی‌بی', v: 'موجودی جدید رسید', cls: 'up' },
+  ];
+  const track = document.getElementById('ticker');
+  function buildTicker(){
+    const frag = document.createDocumentFragment();
+    for(let rep=0; rep<2; rep++){
+      tickerItems.forEach(it=>{
+        const span = document.createElement('span');
+        if(it.cls) span.classList.add(it.cls);
+        span.innerHTML = `<b>${it.t}</b> ${it.v}`;
+        frag.appendChild(span);
+      });
+    }
+    track.appendChild(frag);
+  }
+  buildTicker();
+
+  // ---- Hero stat count-up ----
+  function toFa(n){ return n.toLocaleString('fa-IR'); }
+  function countUp(el, target, suffix, duration){
+    const start = performance.now();
+    function tick(now){
+      const p = Math.min((now-start)/duration, 1);
+      const eased = 1 - Math.pow(1-p, 3);
+      const val = Math.floor(eased * target);
+      el.textContent = (suffix==='rating') ? (val/10).toFixed(1).replace('.', '.') : toFa(val) + (suffix||'');
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const statsEls = {
+    products: document.getElementById('stat-products'),
+    cities: document.getElementById('stat-cities'),
+    rating: document.getElementById('stat-rating')
+  };
+  let statsStarted = false;
+  function startStats(){
+    if(statsStarted) return;
+    statsStarted = true;
+    countUp(statsEls.products, 4280, '', 1400);
+    setTimeout(()=>{ statsEls.cities.innerHTML = '<span class="unit">+</span>' + '۳۱'; }, 200);
+    setTimeout(()=>{ statsEls.rating.textContent = '۴.۸'; }, 300);
+  }
+
+  // ---- Scroll reveal ----
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el=>io.observe(el));
+
+  window.addEventListener('load', startStats);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,319 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode — pure white canvas, GitHub-light-esque neutrals. This is
+       now the SECONDARY theme; dark is the default (see layout.tsx script). */
+    --color-ink: 12 12 15;
+    --color-dim: 107 114 128;
+    --color-canvas: 255 255 255;
+    --color-surface: 246 247 249;
+  }
+
+  .dark {
+    /* Dark mode — pure black canvas, near-white text, near-black cards.
+       This is the default look: Vercel/GitHub dashboard style. */
+    --color-ink: 237 237 240;
+    --color-dim: 138 143 152;
+    --color-canvas: 0 0 0;
+    --color-surface: 14 14 16;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* وقتی محتوای دینامیک (مثل دکمه‌ی «بیشتر» تو گالری کسب‌وکارها) بالای
+       اسکرول فعلی اضافه می‌شه، رفتار پیش‌فرض مرورگر (CSS Scroll Anchoring)
+       سعی می‌کنه موقعیت دید رو با جابه‌جا کردن اسکرول «جبران» کنه — که خروجیش
+       دقیقاً همون پرش ناخواسته به پایین صفحه‌ست. چون رفتارش غیرقابل‌پیش‌بینیه و
+       این سایت خودش موقعیت اسکرول رو موقع اضافه‌شدن محتوا کنترل می‌کنه،
+       کلاً خاموشش می‌کنیم. */
+    overflow-anchor: none;
+  }
+  body {
+    @apply bg-canvas text-ink font-fa font-semibold leading-[1.7] overflow-x-hidden relative transition-colors duration-300;
+  }
+  p {
+    @apply font-medium;
+  }
+  ::selection {
+    @apply bg-accent text-white;
+  }
+
+  /* Thin custom scrollbar — Vercel/GitHub dashboards never show the chunky
+     default OS scrollbar. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-ink) / 0.14);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-ink) / 0.24);
+  }
+}
+
+@layer components {
+  /* Faint dot/grid backdrop used behind hero + section headers — the
+     signature Vercel/GitHub marketing-page texture. A radial mask fades it
+     out toward the edges so it never fights with foreground content. */
+  .bg-dot-grid {
+    background-image: radial-gradient(rgb(var(--color-ink) / 0.16) 1px, transparent 1px);
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
+     همون آبی آسمانی اصلی برند. */
+  .accent-gradient-text {
+    color: #0077B6;
+  }
+
+  /* Skill card — each card tracks the cursor with --sx/--sy (set via JS on
+     mousemove, percentage within that card) and lights up ONLY the side
+     near the pointer, tinted with that technology's own brand color
+     (--skill-color, set inline per card). Two pseudo layers: ::before is a
+     1px gradient-border ring (padding + mask trick), ::after is a soft
+     radial fill behind the content for the background tint. Both are
+     driven by --glow-o (0–1), set from JS based on cursor *proximity* to
+     the card — not just direct :hover — see SkillCard.tsx. */
+  .skill-card {
+    position: relative;
+    isolation: isolate;
+    --sx: 50%;
+    --sy: 50%;
+    --glow-o: 0;
+  }
+  .skill-card::before,
+  .skill-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .skill-card::before {
+    z-index: 2;
+    padding: 1px;
+    opacity: var(--glow-o, 0);
+    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .skill-card::after {
+    z-index: 0;
+    opacity: calc(var(--glow-o, 0) * 0.16);
+    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 72%);
+  }
+  .skill-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Logo inside a skill card: dim + grayscale at rest, snaps to full brand
+     color with a matching glow only while that card is hovered. */
+  .skill-icon-logo {
+    filter: grayscale(1);
+    opacity: 0.45;
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+  .skill-card:hover .skill-icon-logo {
+    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #0077B6));
+    opacity: 1;
+  }
+
+  /* Title stays the normal ink color on hover (never the same color as the
+     tinted background) — it just gets a soft glow lit behind it in the
+     skill's brand color. */
+  .skill-title-glow {
+    transition: text-shadow 0.35s ease;
+  }
+  .skill-card:hover .skill-title-glow {
+    text-shadow: 0 0 8px var(--skill-color, #0077B6), 0 0 26px var(--skill-color, #0077B6);
+  }
+
+  /* رجیستر کردن --tool-angle به‌عنوان یه <angle> واقعی — بدون این، مرورگر
+     نمی‌تونه بین ۰ و ۳۶۰ درجه انیمیشنش کنه و conic-gradient پرش می‌کنه
+     (در مرورگرهای بدون پشتیبانی از @property هم فقط انیمیشن اجرا نمی‌شه،
+     ولی بردر رنگی خودش عادی نمایش داده می‌شه). */
+  @property --tool-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  /* ابزار/زبان تکمیلی — هر کدوم توی یه کانتینر جدا با بردری که دور تا دورش
+     می‌چرخه، دقیقاً به رنگ برند خودِ همون ابزار (--tool-color، از
+     skillMeta ست می‌شه)؛ یعنی مثلاً بردر TypeScript همیشه آبیه. */
+  .tool-chip {
+    position: relative;
+    isolation: isolate;
+    border-radius: 10px;
+    --tool-angle: 0deg;
+  }
+  .tool-chip::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: conic-gradient(
+      from var(--tool-angle),
+      var(--tool-color, #0077B6) 0deg,
+      transparent 90deg,
+      transparent 230deg,
+      var(--tool-color, #0077B6) 320deg,
+      var(--tool-color, #0077B6) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.75;
+    transition: opacity 0.3s ease;
+    animation: toolBorderSpin 3.2s linear infinite;
+  }
+  .tool-chip:hover::before {
+    opacity: 1;
+  }
+  .tool-chip:hover {
+    box-shadow: 0 10px 28px -14px var(--tool-color, #0077B6);
+  }
+  .tool-chip > * {
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes toolBorderSpin {
+    to {
+      --tool-angle: 360deg;
+    }
+  }
+
+  /* کارت هر دسته داخل «ابزارها و زبان‌های تکمیلی» — یه هاله‌ی نرم از
+     رنگ خودِ دسته (--group-color) پشت کارت، که فقط با هاور روشن می‌شه؛
+     دقیقاً همون زبونی که seo-card و skill-card دارن، برای یکدست موندن
+     حس بصری کل بخش مهارت‌ها. */
+  .tool-group-card {
+    position: relative;
+    isolation: isolate;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .tool-group-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #0077B6), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .tool-group-card:hover {
+    transform: translateY(-3px);
+    border-color: transparent;
+    box-shadow: 0 20px 40px -24px var(--group-color, #0077B6);
+  }
+  .tool-group-card:hover::before {
+    opacity: 0.16;
+  }
+
+  /* پنل "سئو و رشد" — کارت شیشه‌ای مشکی (بک‌گراند نیمه‌شفاف + بلور پشتش)
+     با یه گلوی قوی و تک‌رنگ (نه چندرنگ و نه چرخان) که فقط پشت خودِ کارت
+     نرم پخش می‌شه؛ حس شلوغ/رنگارنگ نداره، فقط یه هاله‌ی آبی ملایم. */
+  .seo-hero {
+    isolation: isolate;
+  }
+  .seo-hero::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: -1;
+    width: 85%;
+    height: 140%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 119, 182, .4);
+    filter: blur(90px);
+    animation: seoHeroPulse 6s ease-in-out infinite;
+  }
+  @keyframes seoHeroPulse {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* خط نمودار رشد — گلوی رنگی دورش که با گرادیان خودِ استروک هماهنگه. */
+  .seo-chart-line {
+    filter: drop-shadow(0 0 5px rgba(0, 119, 182, 0.85)) drop-shadow(0 0 16px rgba(2, 62, 138, 0.45));
+  }
+  .seo-chart-dot {
+    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #0077B6);
+  }
+
+  /* کارت‌های ستون سئو — طرح ساده و کم‌رنگ: بک‌گراند تیره‌ی یکدست برای
+     همه‌ی کارت‌ها (نه یه گرادیان رنگی متفاوت برای هرکدوم)، رنگ هر آیتم
+     فقط روی آیکون، عدد و لبه‌ی ظریف هاور دیده می‌شه — نه کل پس‌زمینه. */
+  .seo-card {
+    isolation: isolate;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .seo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -22px rgba(0, 0, 0, 0.55);
+  }
+  .seo-card-arrow {
+    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+  .seo-card:hover .seo-card-arrow {
+    transform: translateX(-3px);
+    border-color: var(--seo-color, #0077B6);
+    color: var(--seo-color, #0077B6);
+  }
+
+  /* Syntax-highlight classes injected via dangerouslySetInnerHTML by the
+     hero terminal typewriter. Custom semantic names (not Tailwind
+     utilities), so they need a real CSS rule. */
+  .terminal-body .key {
+    color: #ededf0;
+  }
+  .terminal-body .str {
+    color: #0077B6;
+  }
+  .terminal-body .punc {
+    color: rgba(237, 237, 240, 0.45);
+  }
+  .terminal-body .kw {
+    color: #023E8A;
+    font-weight: 600;
+  }
+
+  /* اسلایدر هیرو — نوار پیشرفتِ داخل نقطه‌ی اسلاید فعال، هم‌زمان با
+     تایمر اتوپلی از راست به چپ پر می‌شه (هماهنگ با جهت RTL سایت). */
+  .hero-slide-progress {
+    width: 0%;
+    animation-name: heroSlideProgress;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+  @keyframes heroSlideProgress {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+}
