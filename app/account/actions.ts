@@ -12,6 +12,14 @@ export type AccountFormState = {
   message: string;
 } | null;
 
+/** فقط مسیرهای داخلی نسبی (با یه اسلش شروع بشن، نه «//» یا «/\») رو به
+ *  عنوان مقصد ریدایرکت بعد از ورود/ثبت‌نام قبول می‌کنیم — تا کسی نتونه
+ *  با دستکاری فیلد «next» کاربر رو به یه سایت بیرونی بفرسته. */
+function safeNextPath(raw: FormDataEntryValue | null): string | null {
+  const value = (raw ?? "").toString();
+  return /^\/(?!\/|\\)/.test(value) ? value : null;
+}
+
 export async function signup(
   _prevState: AccountFormState,
   formData: FormData
@@ -39,6 +47,8 @@ export async function signup(
     return { ok: false, message: "این شماره قبلاً ثبت‌نام کرده — از فرم ورود استفاده کن." };
   }
 
+  const next = safeNextPath(formData.get("next"));
+
   try {
     const { hash, salt } = hashPassword(password);
     const userId = await createUser({ name, phone, passwordHash: hash, passwordSalt: salt });
@@ -48,7 +58,9 @@ export async function signup(
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
   }
 
-  redirect("/account");
+  // اگه از یه صفحه‌ی دیگه (مثلاً سفارش) به فرم ثبت‌نام اومده، بعد از
+  // ساخت حساب برش می‌گردونیم همونجا؛ وگرنه مثل قبل می‌ره به /account.
+  redirect(next ?? "/account");
 }
 
 export async function login(
@@ -73,7 +85,13 @@ export async function login(
   // Admins and developers land straight in /dashboard (their real
   // workspace); this login form doubles as the staff login too — there's
   // no separate admin password anymore.
-  redirect(user.role === "admin" || user.role === "developer" ? "/dashboard" : "/account");
+  if (user.role === "admin" || user.role === "developer") {
+    redirect("/dashboard");
+  }
+  // اگه از یه صفحه‌ی دیگه (مثلاً سفارش) اومده، بعد از ورود برش می‌گردونیم
+  // همونجا؛ وگرنه مثل قبل می‌ره به /account.
+  const next = safeNextPath(formData.get("next"));
+  redirect(next ?? "/account");
 }
 
 export async function logout() {

@@ -30,10 +30,13 @@ function FormMessage({ state }: { state: AccountFormState }) {
   );
 }
 
-function LoginForm() {
+function LoginForm({ next }: { next?: string }) {
   const [state, formAction] = useFormState(login, initialState);
   return (
     <form action={formAction}>
+      {/* بعد از ورود موفق، کاربر رو به همین مسیر برمی‌گردونیم (مثلاً صفحه‌ی
+          سفارشی که قبل از ورود روش بوده) — به‌جای همیشه فرستادنش به /account. */}
+      {next && <input type="hidden" name="next" value={next} />}
       <div className="flex flex-col gap-4">
         <input
           name="phone"
@@ -57,10 +60,11 @@ function LoginForm() {
   );
 }
 
-function SignupForm() {
+function SignupForm({ next }: { next?: string }) {
   const [state, formAction] = useFormState(signup, initialState);
   return (
     <form action={formAction}>
+      {next && <input type="hidden" name="next" value={next} />}
       <div className="flex flex-col gap-4">
         <input name="name" required placeholder="اسمت" className={inputClass} />
         <input
@@ -90,7 +94,7 @@ function SignupForm() {
  *  half is always the active form, the other half is a navy pitch panel
  *  ("Don't have an account?" / "Already have one?") — clicking its button
  *  slides the whole thing over to the other mode. */
-export default function AuthForms() {
+export default function AuthForms({ next }: { next?: string }) {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const isSignup = mode === "signup";
 
@@ -118,7 +122,7 @@ export default function AuthForms() {
             ثبت‌نام
           </button>
         </div>
-        {mode === "login" ? <LoginForm /> : <SignupForm />}
+        {mode === "login" ? <LoginForm next={next} /> : <SignupForm next={next} />}
       </div>
 
       {/* md and up: split panel with a sliding overlay */}
@@ -134,7 +138,7 @@ export default function AuthForms() {
           <div className="flex h-full flex-col justify-center">
             <h1 className="mb-2 font-display text-2xl font-normal">ورود به حساب</h1>
             <p className="mb-7 text-sm text-dim">وارد شو تا وضعیت پروژه‌ت رو دنبال کنی.</p>
-            <LoginForm />
+            <LoginForm next={next} />
           </div>
         </div>
 
@@ -149,7 +153,7 @@ export default function AuthForms() {
             <p className="mb-7 text-sm text-dim">
               چند ثانیه‌ای — بعدش می‌تونی درخواست پروژه بدی و تیکت بزنی.
             </p>
-            <SignupForm />
+            <SignupForm next={next} />
           </div>
         </div>
 

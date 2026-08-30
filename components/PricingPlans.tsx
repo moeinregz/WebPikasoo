@@ -247,6 +247,16 @@ export default function PricingPlans({
   // فقط یه‌بار، برای جلوگیری از ثبت تکراری اگه کامپوننت دوباره رندر بشه.
   const autoOrderFired = useRef(false);
 
+  // وقتی کاربر لاگین نیست و روی «سفارش این پلن» می‌زنه، به‌جای فرستادن سفارش
+  // یه پیام وسط صفحه نشون داده می‌شه که باید اول ثبت‌نام/ورود کنه. همین پلن
+  // اینجا نگه داشته می‌شه تا لینک ورود/ثبت‌نام دقیقاً برای همین پلن باشه.
+  const [loginPromptPlan, setLoginPromptPlan] = useState<{ cat: Category; plan: Plan } | null>(
+    null
+  );
+  // بعد از ثبت موفق سفارش (چه با کلیک مستقیم، چه خودکار بعد از برگشت از
+  // ورود/ثبت‌نام) یه نوتیف وسط صفحه نشون داده می‌شه.
+  const [successPlan, setSuccessPlan] = useState<{ cat: Category; plan: Plan } | null>(null);
+
   function placeOrder(c: Category, p: Plan) {
     const key = planKey(c.slug, p.name);
     setStatuses((s) => ({ ...s, [key]: "sending" }));
@@ -261,6 +271,7 @@ export default function PricingPlans({
       });
       if (result?.ok) {
         setStatuses((s) => ({ ...s, [key]: "sent" }));
+        setSuccessPlan({ cat: c, plan: p });
       } else {
         setStatuses((s) => ({ ...s, [key]: "error" }));
         setErrorMessages((m) => ({ ...m, [key]: result?.message || "یه مشکلی پیش اومد." }));
@@ -311,7 +322,6 @@ export default function PricingPlans({
         {cat.plans.map((p, i) => {
           const key = planKey(cat.slug, p.name);
           const status = statuses[key] ?? "idle";
-          const showLoggedOutPrompt = status === "idle" && !isLoggedIn;
 
           return (
             <Reveal key={key} delay={i * 80}>
@@ -360,13 +370,15 @@ export default function PricingPlans({
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 flex-shrink-0">
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
-                    خرید شما با موفقیت انجام شد
+                    سفارش شما ثبت شد
                   </div>
                 ) : (
                   <button
                     type="button"
                     disabled={status === "sending" || isPending}
-                    onClick={() => (isLoggedIn ? placeOrder(cat, p) : undefined)}
+                    onClick={() =>
+                      isLoggedIn ? placeOrder(cat, p) : setLoginPromptPlan({ cat, plan: p })
+                    }
                     className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-bold transition disabled:pointer-events-none disabled:opacity-60 ${
                       p.highlight
                         ? "text-white shadow-glow hover:-translate-y-0.5"
@@ -383,25 +395,104 @@ export default function PricingPlans({
                     {errorMessages[key] || "یه مشکلی پیش اومد."}
                   </p>
                 )}
-
-                {showLoggedOutPrompt && (
-                  <div className="mt-3 rounded-[12px] border border-dashed border-ink/[0.2] bg-surface/40 p-3.5 text-center">
-                    <p className="text-[12.5px] text-dim">قبل از خرید باید وارد حساب بشی یا ثبت‌نام کنی.</p>
-                    <Link
-                      href={`/account?next=${encodeURIComponent(
-                        `/order?category=${encodeURIComponent(cat.slug)}&plan=${encodeURIComponent(p.name)}`
-                      )}`}
-                      className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-2 text-[12.5px] font-bold text-canvas transition hover:-translate-y-0.5"
-                    >
-                      ورود / ثبت‌نام
-                    </Link>
-                  </div>
-                )}
               </div>
             </Reveal>
           );
         })}
       </div>
+
+      {/* پیام وسط صفحه: کاربر لاگین نیست و روی «سفارش این پلن» زده — باید
+          اول ثبت‌نام/ورود کنه، بعد خودکار برمی‌گرده همینجا و سفارشش ثبت می‌شه. */}
+      {loginPromptPlan && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/55 p-5 backdrop-blur-sm"
+          onClick={() => setLoginPromptPlan(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[380px] rounded-card border border-ink/10 bg-canvas p-7 text-center shadow-2xl"
+          >
+            <div
+              className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
+              style={{ background: `${loginPromptPlan.cat.color}18` }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={loginPromptPlan.cat.color}
+                strokeWidth={2}
+                className="h-6 w-6"
+              >
+                <path d="M12 15v2M6 10V8a6 6 0 1112 0v2M5 10h14a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9a1 1 0 011-1z" />
+              </svg>
+            </div>
+            <h4 className="mb-2 font-display text-lg font-normal">برای ثبت سفارش باید ثبت‌نام کنی</h4>
+            <p className="mb-6 text-[13.5px] leading-relaxed text-dim">
+              پلن «{loginPromptPlan.plan.name}» از دسته‌ی {loginPromptPlan.cat.label} رو انتخاب کردی.
+              اول وارد حساب شو یا ثبت‌نام کن، خودکار برمی‌گردی همینجا و همین سفارش برات ثبت می‌شه.
+            </p>
+            <div className="flex flex-col gap-2.5 sm:flex-row-reverse">
+              <Link
+                href={`/account?next=${encodeURIComponent(
+                  `/order?category=${encodeURIComponent(loginPromptPlan.cat.slug)}&plan=${encodeURIComponent(
+                    loginPromptPlan.plan.name
+                  )}`
+                )}`}
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-3 text-[13.5px] font-bold text-canvas transition hover:-translate-y-0.5"
+              >
+                ورود / ثبت‌نام
+              </Link>
+              <button
+                type="button"
+                onClick={() => setLoginPromptPlan(null)}
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-ink/15 px-4 py-3 text-[13.5px] font-bold text-dim transition hover:border-ink/25 hover:text-ink"
+              >
+                انصراف
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* نوتیف وسط صفحه: سفارش با موفقیت ثبت شد. */}
+      {successPlan && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/55 p-5 backdrop-blur-sm"
+          onClick={() => setSuccessPlan(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[380px] rounded-card border border-emerald-500/30 bg-canvas p-7 text-center shadow-2xl"
+          >
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                className="h-6 w-6 text-emerald-600"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </div>
+            <h4 className="mb-2 font-display text-lg font-normal">سفارش شما با موفقیت ثبت شد</h4>
+            <p className="mb-6 text-[13.5px] leading-relaxed text-dim">
+              سفارش پلن «{successPlan.plan.name}» ثبت شد. تیم وب پیکاسو به‌زودی باهات تماس می‌گیره.
+            </p>
+            <button
+              type="button"
+              onClick={() => setSuccessPlan(null)}
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-3 text-[13.5px] font-bold text-canvas transition hover:-translate-y-0.5"
+            >
+              متوجه شدم
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -11,14 +11,31 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AccountPage() {
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams?: { next?: string };
+}) {
   const user = await getCurrentUser();
+
+  // فقط مسیرهای داخلی و نسبی رو قبول می‌کنیم (با یه اسلش شروع بشه و با
+  // «//» یا «/\» شروع نشه) تا کسی نتونه با این پارامتر کاربر رو به یه
+  // سایت بیرونی ریدایرکت کنه (open redirect).
+  const rawNext = searchParams?.next ?? "";
+  const next = /^\/(?!\/|\\)/.test(rawNext) ? rawNext : undefined;
 
   // Admins/developers have their own workspace — send them there instead
   // of the customer dashboard (mirrors /dashboard sending customers back
   // here).
   if (user?.isStaff) {
     redirect("/dashboard");
+  }
+
+  // اگه کاربر از قبل وارد بوده (مثلاً سشنش هنوز برقراره) و با لینک
+  // «next» به این صفحه اومده، دیگه لازم نیست فرم ورود رو ببینه —
+  // مستقیم برگرده همون صفحه‌ای که ازش اومده (مثلاً صفحه‌ی سفارش).
+  if (user && next) {
+    redirect(next);
   }
 
   let projects: Awaited<ReturnType<typeof getInquiriesByUserId>> = [];
@@ -64,7 +81,7 @@ export default async function AccountPage() {
                 وارد شو یا حساب بساز تا وضعیت پروژه‌ت رو دنبال کنی.
               </p>
             </div>
-            <AuthForms />
+            <AuthForms next={next} />
           </div>
         )}
       </main>
