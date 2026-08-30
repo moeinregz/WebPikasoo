@@ -77,7 +77,7 @@ export default function DashboardTabs({ tabs }: { tabs: DashboardTab[] }) {
           start side there too). */}
       <aside
         className={`fixed inset-y-0 right-0 z-50 flex w-[80%] max-w-[300px] flex-col gap-1.5 overflow-y-auto border-l border-ink/10 bg-canvas px-4 pb-8 pt-[86px] shadow-2xl transition-transform duration-300 ease-out
-          lg:sticky lg:top-[92px] lg:z-auto lg:h-[calc(100vh-116px)] lg:w-[248px] lg:flex-shrink-0 lg:translate-x-0
+          lg:inset-y-auto lg:right-auto lg:sticky lg:top-[92px] lg:z-auto lg:h-[calc(100vh-116px)] lg:w-[248px] lg:flex-shrink-0 lg:translate-x-0
           lg:border-l-0 lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-0 lg:shadow-none lg:transition-none
           ${open ? "translate-x-0" : "translate-x-full"}`}
       >

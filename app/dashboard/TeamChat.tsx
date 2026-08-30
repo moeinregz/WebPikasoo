@@ -215,7 +215,7 @@ export default function TeamChat({
   }
 
   return (
-    <div className="flex h-[50vh] max-h-[560px] min-h-[280px] flex-col overflow-hidden rounded-card border border-ink/[0.14] sm:h-[70vh] sm:min-h-[380px]">
+    <div className="flex h-[50vh] w-full max-h-[560px] min-h-[280px] flex-col overflow-hidden rounded-card border border-ink/[0.14] sm:h-[70vh] sm:min-h-[380px]">
       <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-surface/20 p-3 sm:p-5">
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center text-center text-dim">
