@@ -111,6 +111,65 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateY(18px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+
+        // --- لودینگ صفحه (app/loading.tsx) — تکه‌های هندسی که به شکل
+        // یه چهره‌ی کوبیستی (الهام از لوگو) کنار هم جمع می‌شن، یه لحظه
+        // می‌مونن، دوباره از هم می‌پاشن؛ حلقه‌وار تکرار می‌شه. ---
+        assemblePiece: {
+          "0%": {
+            transform:
+              "translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--dr, 0deg)) scale(.45)",
+            opacity: "0",
+          },
+          "22%": { opacity: "1" },
+          "40%, 62%": {
+            transform: "translate(0, 0) rotate(0deg) scale(1)",
+            opacity: "1",
+          },
+          "80%": { opacity: "1" },
+          "100%": {
+            transform:
+              "translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--dr, 0deg)) scale(.45)",
+            opacity: "0",
+          },
+        },
+        centerMarkFade: {
+          "0%, 34%": { opacity: "0", transform: "scale(.6)" },
+          "44%, 60%": { opacity: "1", transform: "scale(1)" },
+          "72%, 100%": { opacity: "0", transform: "scale(.6)" },
+        },
+        loaderBarSlide: {
+          "0%": { transform: "translateX(-110%)" },
+          "50%": { transform: "translateX(60%)" },
+          "100%": { transform: "translateX(230%)" },
+        },
+
+        // --- صفحه‌ی 404 — افکت گلیچ روی عدد 404 + چشمی که دنبال صفحه
+        // می‌گرده و پلک می‌زنه. ---
+        glitchShift: {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "20%": { transform: "translate(-3px, 2px)" },
+          "40%": { transform: "translate(3px, -2px)" },
+          "60%": { transform: "translate(-2px, -1px)" },
+          "80%": { transform: "translate(2px, 1px)" },
+        },
+        glitchClip: {
+          "0%, 100%": { clipPath: "inset(0 0 0 0)" },
+          "10%": { clipPath: "inset(10% 0 62% 0)" },
+          "30%": { clipPath: "inset(58% 0 4% 0)" },
+          "50%": { clipPath: "inset(28% 0 42% 0)" },
+          "70%": { clipPath: "inset(4% 0 72% 0)" },
+          "90%": { clipPath: "inset(48% 0 18% 0)" },
+        },
+        eyeLook: {
+          "0%, 15%": { transform: "translateX(-16px)" },
+          "40%, 55%": { transform: "translateX(16px)" },
+          "80%, 100%": { transform: "translateX(-16px)" },
+        },
+        eyeBlink: {
+          "0%, 92%, 100%": { transform: "scaleY(1)" },
+          "95%": { transform: "scaleY(.1)" },
+        },
       },
       animation: {
         "pulse-dot": "pulseDot 2.4s ease-in-out infinite",
@@ -125,6 +184,18 @@ const config: Config = {
         "float-glow-slow": "floatGlow 13s ease-in-out infinite reverse",
         "gradient-move": "gradientMove 6s ease infinite",
         "fade-in-up": "fadeInUp .6s cubic-bezier(.16,1,.3,1) forwards",
+
+        "assemble-piece": "assemblePiece 3.6s ease-in-out infinite",
+        "center-mark-fade": "centerMarkFade 3.6s ease-in-out infinite",
+        "loader-bar-slide": "loaderBarSlide 1.7s ease-in-out infinite",
+        "spin-slow": "spin 6s linear infinite",
+        "gradient-move-fast": "gradientMove 2.2s ease infinite",
+
+        "glitch-shift": "glitchShift 3s ease-in-out infinite",
+        "glitch-clip-1": "glitchClip 3.4s steps(10) infinite",
+        "glitch-clip-2": "glitchClip 2.7s steps(8) infinite reverse",
+        "eye-look": "eyeLook 4.5s ease-in-out infinite",
+        "eye-blink": "eyeBlink 5s ease-in-out infinite",
       },
     },
   },
