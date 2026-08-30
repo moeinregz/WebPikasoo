@@ -6,6 +6,9 @@ import Link from "next/link";
 import { createCrmLeadAction, toggleCrmCalledAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 import SearchInput from "./SearchInput";
+import Pagination from "./Pagination";
+
+const PAGE_SIZE = 20;
 
 type Lead = {
   id: number;
@@ -14,6 +17,7 @@ type Lead = {
   note: string;
   called: number;
   created_at: string;
+  created_by: number | null;
 };
 
 const inputClass =
@@ -75,9 +79,22 @@ function CalledToggle({ id, called }: { id: number; called: number }) {
   );
 }
 
-export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; canDelete?: boolean }) {
+export default function CrmPanel({
+  leads,
+  canDelete = false,
+  creatorNames = {},
+}: {
+  leads: Lead[];
+  canDelete?: boolean;
+  /** Admin-only: maps a lead's created_by user id to a display name, so
+   *  the admin can see who sourced each lead. Empty for non-admins, who
+   *  only ever see their own leads anyway (filtered server-side). */
+  creatorNames?: Record<number, string>;
+}) {
+  const showCreator = Object.keys(creatorNames).length > 0 || canDelete;
   const calledCount = leads.filter((l) => l.called).length;
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -90,6 +107,17 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
         (l.note && l.note.toLowerCase().includes(q))
     );
   }, [leads, query]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query]);
+
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+
+  function creatorLabel(id: number | null) {
+    if (!id) return "—";
+    return creatorNames[id] || `کاربر #${id}`;
+  }
 
   return (
     <div>
@@ -117,7 +145,7 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                   unusable with one thumb, so below the desktop breakpoint
                   each lead gets its own stacked card instead. */}
               <div className="flex flex-col gap-3 lg:hidden">
-                {filtered.map((l) => (
+                {paged.map((l) => (
                   <div key={l.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
                     <div className="min-w-0">
                       <p className="font-semibold text-[14.5px]">{l.name}</p>
@@ -130,6 +158,9 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                       </Link>
                     </div>
                     {l.note && <p className="mt-2 text-[13px] text-dim">{l.note}</p>}
+                    {showCreator && (
+                      <p className="mt-2 font-mono text-[11.5px] text-dim/70">ثبت‌کننده: {creatorLabel(l.created_by)}</p>
+                    )}
                     <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
                       <form action={toggleCrmCalledAction}>
                         <input type="hidden" name="leadId" value={l.id} />
@@ -161,11 +192,12 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                       <th className="px-5 py-3.5 font-semibold">شماره</th>
                       <th className="px-5 py-3.5 font-semibold">یادداشت</th>
                       <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
+                      {showCreator && <th className="px-5 py-3.5 font-semibold">ثبت‌کننده</th>}
                       {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map((l, i) => (
+                    {paged.map((l, i) => (
                       <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
                         <td className="px-5 py-3.5 font-semibold">{l.name}</td>
                         <td className="px-5 py-3.5 font-mono" dir="ltr">
@@ -181,6 +213,9 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                             <CalledToggle id={l.id} called={l.called} />
                           </form>
                         </td>
+                        {showCreator && (
+                          <td className="px-5 py-3.5 font-mono text-[12.5px] text-dim">{creatorLabel(l.created_by)}</td>
+                        )}
                         {canDelete && (
                           <td className="px-5 py-3.5">
                             <form action={deleteCrmLeadAction}>
@@ -199,6 +234,8 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                   </tbody>
                 </table>
               </div>
+
+              <Pagination page={page} totalItems={filtered.length} pageSize={PAGE_SIZE} onChange={setPage} />
             </>
           )}
         </>

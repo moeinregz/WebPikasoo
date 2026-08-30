@@ -138,6 +138,14 @@ export async function createSupportTicket(
   }
 
   revalidatePath("/account");
+  // Ticket form also lives on the public /contact page (TicketForm is
+  // reused there) — without revalidating that path too, the very first
+  // ticket a session submits from /contact can fall back to a full
+  // document reload to resync (losing the in-memory useFormState result,
+  // so the success modal never shows and the form just looks like it
+  // silently cleared). Once /contact has been revalidated once, later
+  // submissions patch in normally.
+  revalidatePath("/contact");
   return { ok: true, message: "تیکتت ثبت شد — به‌زودی جواب می‌دیم." };
 }
 

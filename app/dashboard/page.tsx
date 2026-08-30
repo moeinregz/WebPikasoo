@@ -69,7 +69,11 @@ export default async function DashboardPage() {
   const admins = await getUsersByRole("admin");
   const teamMembers = [...admins, ...developers];
   const teamMessages = perms.chat ? await getTeamMessages() : [];
-  const crmLeads = isAdmin || perms.crm ? await getAllCrmLeads() : [];
+  // Admin sees every lead in the CRM; a developer with "crm" access only
+  // ever sees the numbers *they themselves* sourced — everyone's private
+  // pipeline, not a shared pool visible to the whole team.
+  const allCrmLeads = isAdmin || perms.crm ? await getAllCrmLeads() : [];
+  const crmLeads = isAdmin ? allCrmLeads : allCrmLeads.filter((l) => l.created_by === currentUser.id);
   const allTasks = isAdmin ? await getAllTasks() : [];
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
@@ -285,10 +289,15 @@ export default async function DashboardPage() {
     });
   }
   if (isAdmin || perms.crm) {
+    // So the admin's table can show "ثبت‌کننده" (who sourced each lead)
+    // instead of a bare user id.
+    const creatorNames = isAdmin
+      ? Object.fromEntries(teamMembers.map((u) => [u.id, u.name]))
+      : {};
     tabs.push({
       id: "crm",
       label: `CRM (${toPersianDigits(crmLeads.length)})`,
-      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} />,
+      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} creatorNames={creatorNames} />,
     });
   }
   if (isAdmin) {

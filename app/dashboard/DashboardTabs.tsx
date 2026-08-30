@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { logout } from "./actions";
 
 export type DashboardTab = {
@@ -10,9 +11,32 @@ export type DashboardTab = {
 };
 
 export default function DashboardTabs({ tabs }: { tabs: DashboardTab[] }) {
-  const [tab, setTab] = useState<string>(tabs[0]?.id ?? "");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // The active tab is kept in the URL (?tab=crm) instead of only in memory.
+  // A server action (e.g. adding a CRM lead) revalidates this page, and the
+  // very first such revalidation in a session can fall back to a full
+  // document reload instead of a soft RSC patch — which would otherwise
+  // wipe plain useState and dump the user back on the first tab. Reading
+  // the tab from the URL means it survives that reload either way.
+  const tabParam = searchParams.get("tab");
+  const [tab, setTab] = useState<string>(() =>
+    tabParam && tabs.some((t) => t.id === tabParam) ? tabParam : tabs[0]?.id ?? ""
+  );
   const [open, setOpen] = useState(false);
   const active = tabs.find((t) => t.id === tab) ?? tabs[0];
+
+  // If the URL's ?tab= changes to something valid (e.g. back/forward
+  // navigation, or a fresh load that landed with a tab already in the
+  // querystring) keep local state in sync with it.
+  useEffect(() => {
+    if (tabParam && tabs.some((t) => t.id === tabParam) && tabParam !== tab) {
+      setTab(tabParam);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabParam]);
 
   // If the viewport grows into the desktop breakpoint while the mobile
   // drawer happens to be open, close it so it doesn't linger behind the
@@ -39,6 +63,9 @@ export default function DashboardTabs({ tabs }: { tabs: DashboardTab[] }) {
   function selectTab(id: string) {
     setTab(id);
     setOpen(false);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", id);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
   return (

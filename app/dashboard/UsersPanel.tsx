@@ -1,16 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import UserActions from "./UserActions";
 import IdBadge from "./IdBadge";
 import SearchInput from "./SearchInput";
+import Pagination from "./Pagination";
 import { toPersianDigits } from "@/lib/auth";
 import { formatDate } from "./format";
 import type { PublicUser } from "@/lib/db";
 
+const PAGE_SIZE = 20;
+
 export default function UsersPanel({ customers, isAdmin }: { customers: PublicUser[]; isAdmin: boolean }) {
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     const q = query.trim();
@@ -20,6 +24,18 @@ export default function UsersPanel({ customers, isAdmin }: { customers: PublicUs
       (u) => u.name.toLowerCase().includes(qLower) || u.phone.includes(q) || toPersianDigits(u.phone).includes(q)
     );
   }, [customers, query]);
+
+  // Searching a filtered-down list from, say, page 4 would otherwise leave
+  // the view stuck showing an empty page — jump back to page 1 whenever
+  // the query (and therefore the result set) changes.
+  useEffect(() => {
+    setPage(1);
+  }, [query]);
+
+  const paged = useMemo(
+    () => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filtered, page]
+  );
 
   if (customers.length === 0) {
     return (
@@ -43,7 +59,7 @@ export default function UsersPanel({ customers, isAdmin }: { customers: PublicUs
               unusable with one thumb, so below the desktop breakpoint
               each user gets its own stacked card instead. */}
           <div className="flex flex-col gap-3 lg:hidden">
-            {filtered.map((u) => (
+            {paged.map((u) => (
               <div key={u.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -85,7 +101,7 @@ export default function UsersPanel({ customers, isAdmin }: { customers: PublicUs
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((u, i) => (
+                {paged.map((u, i) => (
                   <tr key={u.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
                     <td className="px-5 py-3.5">
                       <IdBadge id={u.id} />
@@ -107,6 +123,8 @@ export default function UsersPanel({ customers, isAdmin }: { customers: PublicUs
               </tbody>
             </table>
           </div>
+
+          <Pagination page={page} totalItems={filtered.length} pageSize={PAGE_SIZE} onChange={setPage} />
         </>
       )}
     </div>
