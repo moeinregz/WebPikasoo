@@ -2,9 +2,10 @@ import { Fragment, type ReactNode } from "react";
 
 // A deliberately tiny, purpose-built markdown-lite — not a general markdown
 // parser. It only understands the handful of things the BlogPanel editor's
-// toolbar (H2 / list / link / image) actually inserts, which keeps this
-// dependency-free and predictable. Plain paragraphs (no special syntax)
-// render exactly like before — this only adds new block types on top.
+// toolbar (H2..H6 / list / link / image / custom text size) actually
+// inserts, which keeps this dependency-free and predictable. Plain
+// paragraphs (no special syntax) render exactly like before — this only
+// adds new block/inline types on top.
 
 type Block =
   | { type: "heading"; level: 2 | 3 | 4 | 5 | 6; text: string }
@@ -74,21 +75,31 @@ function toBlocks(content: string): Block[] {
 }
 
 // Font sizes step down clearly as the heading level goes deeper — each level
-// needs a visible gap from its neighbors (not just 1-2px) so every level
-// reads unmistakably as its own heading, smaller than h1 (28px/34px) but
-// still bigger than the body text (16px/leading-[1.9]) down through h5.
+// needs a visible gap from its neighbors (a real, unmistakable jump, not
+// 1-2px) so every level reads as its own heading: smaller than the h1 title
+// (28px/34px) but still bigger than the body text (16px/leading-[1.9]) down
+// through h5. h6 is deliberately styled as a small uppercase label rather
+// than shrinking below body text, which would be unreadable.
 const HEADING_CLASS: Record<2 | 3 | 4 | 5 | 6, string> = {
-  2: "mb-4 mt-10 font-display text-[24px] font-semibold leading-snug text-ink sm:text-[28px]",
-  3: "mb-3.5 mt-8 font-display text-[21px] font-semibold leading-snug text-ink sm:text-[24px]",
-  4: "mb-3 mt-7 font-display text-[18.5px] font-semibold leading-snug text-ink sm:text-[20px]",
-  5: "mb-2.5 mt-6 text-[17px] font-bold leading-snug text-ink sm:text-[17.5px]",
-  6: "mb-2 mt-5 text-[14.5px] font-bold uppercase tracking-wide leading-snug text-ink/65 sm:text-[15px]",
+  2: "mb-4 mt-10 font-display text-[26px] font-semibold leading-snug text-ink sm:text-[30px]",
+  3: "mb-3.5 mt-8 font-display text-[22px] font-semibold leading-snug text-ink sm:text-[25px]",
+  4: "mb-3 mt-7 font-display text-[19px] font-semibold leading-snug text-ink sm:text-[21px]",
+  5: "mb-2.5 mt-6 text-[17px] font-bold leading-snug text-ink sm:text-[18px]",
+  6: "mb-2 mt-5 text-[14px] font-bold uppercase tracking-wide leading-snug text-ink/65 sm:text-[14.5px]",
 };
+
+// Custom inline text-size wrapper the editor's "بزرگ‌نمایی متن" tool inserts
+// around a selected word/phrase: {{size:32}}متن{{/size}}. Kept as its own
+// tiny syntax (not real HTML) so untrusted content still never gets
+// interpreted as markup — this only ever produces a <span style="font-size">.
+const SIZE_RE = /\{\{size:(\d{1,3})\}\}([\s\S]*?)\{\{\/size\}\}/g;
+const MIN_SIZE = 10;
+const MAX_SIZE = 96;
 
 /** Renders `[text](url)` links inside otherwise-plain text; everything else
  *  passes through untouched (and untrusted HTML is never interpreted —
  *  this only ever produces text nodes and <a> elements). */
-function renderInline(text: string, keyPrefix: string): ReactNode[] {
+function renderLinks(text: string, keyPrefix: string): ReactNode[] {
   const linkRe = /\[([^\]]+)\]\(([^)\s]+)\)/g;
   const parts: ReactNode[] = [];
   let lastIndex = 0;
@@ -114,9 +125,40 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
   return parts;
 }
 
+/** Renders `{{size:N}}text{{/size}}` custom-size spans (from the editor's
+ *  "بزرگ‌نمایی متن" tool) on top of link parsing — a plain word or phrase
+ *  wrapped so it renders visibly bigger, both in the editor's live preview
+ *  and on the published article page. Size is clamped to a sane range so a
+ *  stray/garbled value can never blow up the layout. */
+function renderInline(text: string, keyPrefix: string): ReactNode[] {
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let i = 0;
+
+  SIZE_RE.lastIndex = 0;
+  while ((match = SIZE_RE.exec(text))) {
+    if (match.index > lastIndex) {
+      parts.push(...renderLinks(text.slice(lastIndex, match.index), `${keyPrefix}-t${i}`));
+    }
+    const size = Math.min(MAX_SIZE, Math.max(MIN_SIZE, parseInt(match[1], 10) || MIN_SIZE));
+    parts.push(
+      <span key={`${keyPrefix}-sz-${i}`} style={{ fontSize: `${size}px`, lineHeight: 1.4 }} className="font-semibold">
+        {renderLinks(match[2], `${keyPrefix}-sz-${i}-in`)}
+      </span>
+    );
+    i++;
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < text.length) parts.push(...renderLinks(text.slice(lastIndex), `${keyPrefix}-t${i}`));
+  return parts;
+}
+
 /** Turns an article's stored content into styled JSX — headings, lists,
- *  links, and inline images, on top of plain paragraphs. Server-safe (no
- *  client-only APIs), so it can be called straight from /blog/[slug]. */
+ *  links, custom-size text spans, and inline images, on top of plain
+ *  paragraphs. Server-safe (no client-only APIs), so it can be called
+ *  straight from /blog/[slug] — and also from the BlogPanel editor's live
+ *  preview, since it's a plain function with no server-only imports. */
 export function renderBlogContent(content: string): ReactNode {
   const blocks = toBlocks(content);
 
