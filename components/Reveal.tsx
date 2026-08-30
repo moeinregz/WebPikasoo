@@ -18,10 +18,25 @@ export default function Reveal({
   delay = 0,
 }: RevealProps) {
   const [node, setNode] = useState<Element | null>(null);
-  const [visible, setVisible] = useState(false);
+  // پیش‌فرض «دیده‌شده» — سرور و همون اولین رندر همیشه محتوا رو کامل و
+  // واضح نشون می‌ده (بدون فلش خالی/محو روی سکشن‌هایی مثل هیرو، درست
+  // بعد از تموم‌شدن لودینگ). فقط وقتی جاوااسکریپت هیدریت شد و تشخیص داد
+  // این المان الان واقعاً پایین صفحه و بیرون از دیده، مخفی و منتظر
+  // اسکرول می‌مونه؛ برای هرچیزی که همون لحظه‌ی اول تو دیده، اصلاً مخفی
+  // نمی‌شه.
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     if (!node) return;
+
+    const rect = node.getBoundingClientRect();
+    const alreadyInView = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+    if (alreadyInView) {
+      setVisible(true);
+      return;
+    }
+
+    setVisible(false);
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
