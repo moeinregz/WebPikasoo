@@ -12,15 +12,6 @@ export type AccountFormState = {
   message: string;
 } | null;
 
-// Only ever trust a redirect target that's an internal path — never
-// "//..." (protocol-relative, would leave the site) — since this comes
-// straight from a hidden form field an attacker could tamper with.
-function safeNextPath(raw: FormDataEntryValue | null): string | undefined {
-  const value = (raw ?? "").toString().trim();
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return undefined;
-  return value;
-}
-
 export async function signup(
   _prevState: AccountFormState,
   formData: FormData
@@ -28,7 +19,6 @@ export async function signup(
   const name = (formData.get("name") ?? "").toString().trim();
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
   const password = (formData.get("password") ?? "").toString();
-  const next = safeNextPath(formData.get("next"));
 
   if (!name || !phoneRaw || !password) {
     return { ok: false, message: "لطفاً نام، شماره تماس و رمز عبور رو پر کن." };
@@ -58,9 +48,7 @@ export async function signup(
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
   }
 
-  // New signups are always plain customers — safe to always honor `next`
-  // (e.g. straight back to /order to finish an in-progress plan order).
-  redirect(next || "/account");
+  redirect("/account");
 }
 
 export async function login(
@@ -69,7 +57,6 @@ export async function login(
 ): Promise<AccountFormState> {
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
   const password = (formData.get("password") ?? "").toString();
-  const next = safeNextPath(formData.get("next"));
 
   if (!phoneRaw || !password) {
     return { ok: false, message: "شماره تماس و رمز عبور رو وارد کن." };
@@ -84,10 +71,9 @@ export async function login(
 
   setSessionCookie(user.id);
   // Admins and developers land straight in /dashboard (their real
-  // workspace) no matter what — a `next` target only ever makes sense for
-  // a customer coming back to finish something like a plan order.
-  const isStaff = user.role === "admin" || user.role === "developer";
-  redirect(isStaff ? "/dashboard" : next || "/account");
+  // workspace); this login form doubles as the staff login too — there's
+  // no separate admin password anymore.
+  redirect(user.role === "admin" || user.role === "developer" ? "/dashboard" : "/account");
 }
 
 export async function logout() {

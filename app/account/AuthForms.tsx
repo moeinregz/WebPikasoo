@@ -30,14 +30,10 @@ function FormMessage({ state }: { state: AccountFormState }) {
   );
 }
 
-function LoginForm({ next }: { next?: string }) {
+function LoginForm() {
   const [state, formAction] = useFormState(login, initialState);
   return (
     <form action={formAction}>
-      {/* Where to send a customer back to after a successful login —
-          e.g. the /order page with their plan still selected. Admin/dev
-          logins ignore this and always land on /dashboard (see actions.ts). */}
-      {next && <input type="hidden" name="next" value={next} />}
       <div className="flex flex-col gap-4">
         <input
           name="phone"
@@ -61,14 +57,10 @@ function LoginForm({ next }: { next?: string }) {
   );
 }
 
-function SignupForm({ next }: { next?: string }) {
+function SignupForm() {
   const [state, formAction] = useFormState(signup, initialState);
   return (
     <form action={formAction}>
-      {/* Same redirect target as the login form above — carried through
-          signup too, so someone who didn't have an account yet still
-          lands back on /order, not the dashboard. */}
-      {next && <input type="hidden" name="next" value={next} />}
       <div className="flex flex-col gap-4">
         <input name="name" required placeholder="اسمت" className={inputClass} />
         <input
@@ -98,7 +90,7 @@ function SignupForm({ next }: { next?: string }) {
  *  half is always the active form, the other half is a navy pitch panel
  *  ("Don't have an account?" / "Already have one?") — clicking its button
  *  slides the whole thing over to the other mode. */
-export default function AuthForms({ next }: { next?: string } = {}) {
+export default function AuthForms() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const isSignup = mode === "signup";
 
@@ -126,7 +118,7 @@ export default function AuthForms({ next }: { next?: string } = {}) {
             ثبت‌نام
           </button>
         </div>
-        {mode === "login" ? <LoginForm next={next} /> : <SignupForm next={next} />}
+        {mode === "login" ? <LoginForm /> : <SignupForm />}
       </div>
 
       {/* md and up: split panel with a sliding overlay */}
@@ -142,7 +134,7 @@ export default function AuthForms({ next }: { next?: string } = {}) {
           <div className="flex h-full flex-col justify-center">
             <h1 className="mb-2 font-display text-2xl font-normal">ورود به حساب</h1>
             <p className="mb-7 text-sm text-dim">وارد شو تا وضعیت پروژه‌ت رو دنبال کنی.</p>
-            <LoginForm next={next} />
+            <LoginForm />
           </div>
         </div>
 
@@ -157,7 +149,7 @@ export default function AuthForms({ next }: { next?: string } = {}) {
             <p className="mb-7 text-sm text-dim">
               چند ثانیه‌ای — بعدش می‌تونی درخواست پروژه بدی و تیکت بزنی.
             </p>
-            <SignupForm next={next} />
+            <SignupForm />
           </div>
         </div>
 
