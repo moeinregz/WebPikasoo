@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Vazirmatn, Lalezar, JetBrains_Mono } from "next/font/google";
+import { Vazirmatn, Lalezar } from "next/font/google";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -14,13 +14,6 @@ const lalezar = Lalezar({
   subsets: ["arabic"],
   weight: "400",
   variable: "--font-lalezar",
-  display: "swap",
-});
-
-const jbMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-jbmono",
   display: "swap",
 });
 
@@ -55,7 +48,7 @@ export default function RootLayout({
     <html
       lang="fa"
       dir="rtl"
-      className={`${vazirmatn.variable} ${lalezar.variable} ${jbMono.variable}`}
+      className={`${vazirmatn.variable} ${lalezar.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

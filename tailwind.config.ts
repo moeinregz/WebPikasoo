@@ -46,12 +46,11 @@ const config: Config = {
       fontFamily: {
         fa: ["var(--font-vazirmatn)", "sans-serif"],
         display: ["var(--font-lalezar)", "var(--font-vazirmatn)", "sans-serif"],
-        // JetBrains Mono فقط لاتین رو پوشش می‌ده (بدون گلیف فارسی)، برای
-        // همین قبل از افتادن به مونوی جنریک سیستم، اول به Vazirmatn
-        // فال‌بک می‌کنیم؛ وگرنه حروف فارسی داخل badge/آمار‌های font-mono
-        // با فونت پیش‌فرض مرورگر (که با بقیه‌ی سایت هماهنگ نیست) رندر
-        // می‌شن و محو/نامنظم به نظر می‌رسن.
-        mono: ["var(--font-jbmono)", "var(--font-vazirmatn)", "monospace"],
+        // JetBrains Mono کلاً از پروژه حذف شد — فقط لاتین رو پوشش می‌داد و
+        // باعث می‌شد حروف فارسی داخل badge/آمار‌های font-mono با فونت
+        // پیش‌فرض/محو مرورگر رندر بشن. حالا font-mono هم مستقیم همون
+        // Vazirmatn هست، یعنی همه‌جای سایت یکدست و بدون فال‌بک ناهماهنگ.
+        mono: ["var(--font-vazirmatn)", "sans-serif"],
       },
       maxWidth: {
         container: "1160px",
