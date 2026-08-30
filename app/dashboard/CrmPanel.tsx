@@ -90,7 +90,48 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
           <p className="mb-4 font-mono text-[12.5px] text-dim">
             {toPersianDigits(calledCount)} از {toPersianDigits(leads.length)} تماس گرفته شده
           </p>
-          <div className="overflow-x-auto rounded-card border border-ink/[0.14]">
+
+          {/* Card list — phones/tablets. A side-scrolling table is
+              unusable with one thumb, so below the desktop breakpoint
+              each lead gets its own stacked card instead. */}
+          <div className="flex flex-col gap-3 lg:hidden">
+            {leads.map((l) => (
+              <div key={l.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
+                <div className="min-w-0">
+                  <p className="font-semibold text-[14.5px]">{l.name}</p>
+                  <Link
+                    href={`tel:${l.phone}`}
+                    dir="ltr"
+                    className="mt-1 inline-block font-mono text-[13px] text-dim hover:text-accent"
+                  >
+                    {toPersianDigits(l.phone)}
+                  </Link>
+                </div>
+                {l.note && <p className="mt-2 text-[13px] text-dim">{l.note}</p>}
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
+                  <form action={toggleCrmCalledAction}>
+                    <input type="hidden" name="leadId" value={l.id} />
+                    <input type="hidden" name="called" value={l.called ? "0" : "1"} />
+                    <CalledToggle id={l.id} called={l.called} />
+                  </form>
+                  {canDelete && (
+                    <form action={deleteCrmLeadAction}>
+                      <input type="hidden" name="leadId" value={l.id} />
+                      <button
+                        type="submit"
+                        className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+                      >
+                        حذف
+                      </button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Table — desktop only. */}
+          <div className="hidden overflow-x-auto rounded-card border border-ink/[0.14] lg:block">
             <table className="w-full min-w-[560px] border-collapse text-right text-[14px]">
               <thead>
                 <tr className="bg-navy text-alabaster">

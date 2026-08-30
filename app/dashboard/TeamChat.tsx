@@ -215,8 +215,8 @@ export default function TeamChat({
   }
 
   return (
-    <div className="flex h-[560px] flex-col overflow-hidden rounded-card border border-ink/[0.14]">
-      <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-surface/20 p-5">
+    <div className="flex h-[70vh] max-h-[560px] min-h-[380px] flex-col overflow-hidden rounded-card border border-ink/[0.14]">
+      <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-surface/20 p-3 sm:p-5">
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center text-center text-dim">
             هنوز پیامی رد و بدل نشده — اولین نفر باش.
@@ -228,7 +228,7 @@ export default function TeamChat({
             return (
               <div key={m.id} className={`group flex ${isMe ? "justify-start" : "justify-end"}`}>
                 <div
-                  className={`relative max-w-[75%] rounded-card px-4 py-2.5 ${
+                  className={`relative max-w-[88%] rounded-card px-4 py-2.5 sm:max-w-[75%] ${
                     isMe ? "bg-accent text-black" : "border border-ink/[0.14] bg-canvas"
                   }`}
                 >
@@ -264,7 +264,7 @@ export default function TeamChat({
         )}
       </div>
 
-      <form action={handleSubmit} className="flex flex-col gap-2 border-t border-ink/[0.14] bg-canvas p-4">
+      <form action={handleSubmit} className="flex flex-col gap-2 border-t border-ink/[0.14] bg-canvas p-3 sm:p-4">
         {pendingFile && (
           <div className="flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-[12.5px] text-accent">
             <span className="truncate">{pendingFile.name}</span>
@@ -283,14 +283,14 @@ export default function TeamChat({
         )}
         {error && <p className="text-[12.5px] text-red-500">{error}</p>}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <input ref={fileInputRef} type="file" onChange={handleFileChange} className="hidden" id="chat-file-input" />
           <label
             htmlFor="chat-file-input"
             title="پیوست فایل"
-            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-ink/[0.16] text-dim transition hover:border-accent hover:text-accent"
+            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-ink/[0.16] text-dim transition hover:border-accent hover:text-accent sm:h-10 sm:w-10"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[17px] w-[17px]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[16px] w-[16px] sm:h-[17px] sm:w-[17px]">
               <path d="M21.44 11.05l-9.19 9.19a5 5 0 01-7.07-7.07l9.19-9.19a3.5 3.5 0 014.95 4.95l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
             </svg>
           </label>
@@ -299,13 +299,13 @@ export default function TeamChat({
             type="button"
             onClick={recording ? stopRecording : startRecording}
             title={recording ? "پایان ضبط" : "پیام صوتی"}
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition ${
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition sm:h-10 sm:w-10 ${
               recording
                 ? "animate-pulse border-red-500 bg-red-500/10 text-red-500"
                 : "border-ink/[0.16] text-dim hover:border-accent hover:text-accent"
             }`}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[17px] w-[17px]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[16px] w-[16px] sm:h-[17px] sm:w-[17px]">
               <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" />
               <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" />
             </svg>
@@ -315,10 +315,10 @@ export default function TeamChat({
             name="message"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder={recording ? "در حال ضبط پیام صوتی..." : "پیامت رو بنویس..."}
+            placeholder={recording ? "در حال ضبط..." : "پیامت رو بنویس..."}
             autoComplete="off"
             disabled={recording}
-            className="flex-1 rounded-full border border-ink/[0.16] bg-surface/40 px-4 py-2.5 text-[14px] text-ink outline-none transition focus:border-accent disabled:opacity-60"
+            className="w-0 min-w-0 flex-1 rounded-full border border-ink/[0.16] bg-surface/40 px-3.5 py-2.5 text-[14px] text-ink outline-none transition focus:border-accent disabled:opacity-60 sm:px-4"
           />
           <SendButton />
         </div>
