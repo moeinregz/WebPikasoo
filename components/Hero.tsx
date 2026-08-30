@@ -89,10 +89,10 @@ export default function Hero() {
                 </svg>
               </a>
               <a
-                href="#contact"
+                href="/order"
                 className="inline-flex items-center gap-2 rounded-lg border-2 border-ink/15 px-6 py-[13px] text-[15px] font-bold text-ink transition hover:border-accent hover:text-accent"
               >
-                تماس مستقیم
+                ثبت سفارش 
               </a>
             </div>
           </Reveal>
