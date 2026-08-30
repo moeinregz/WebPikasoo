@@ -74,20 +74,20 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:gap-10 lg:grid-cols-[1.3fr_0.9fr_1fr_1.2fr]">
           {/* برند + توضیح کوتاه + شبکه‌های اجتماعی */}
           <div>
-            <a href="/" className="inline-flex items-center gap-2 font-mono text-[16px] font-black text-ink sm:gap-2.5 sm:text-[18px]">
+            <Link href="/" className="inline-flex items-center gap-2 font-mono text-[16px] font-black text-ink sm:gap-2.5 sm:text-[18px]">
               <span className="relative flex h-8 w-8 flex-shrink-0 overflow-hidden rounded-lg shadow-glow sm:h-10 sm:w-10">
                 <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="40px" className="object-cover" />
               </span>
               <span className="leading-none">
                 WebPIKASO<span className="text-accent">.</span>
               </span>
-            </a>
+            </Link>
             <p className="mt-4 hidden max-w-[34ch] text-[14px] leading-relaxed text-dim sm:block">
               طراحی و توسعه‌ی وب‌سایت‌های حرفه‌ای، فروشگاهی و اختصاصی — از ایده تا اجرا، کنار کسب‌وکار شما.
             </p>
             <div className="mt-3 flex items-center gap-2 sm:mt-5 sm:gap-2.5">
               {socials.map((s) => (
-                <a
+                <Link
                   key={s.label}
                   href={s.href}
                   target="_blank"
@@ -98,7 +98,7 @@ export default function Footer() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3.5 w-3.5 sm:h-4 sm:w-4">
                     {s.icon}
                   </svg>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -127,9 +127,9 @@ export default function Footer() {
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z" />
                   </svg>
                 </span>
-                <a href={PHONE_HREF} dir="ltr" className="text-right transition hover:text-accent">
+                <Link href={PHONE_HREF} dir="ltr" className="text-right transition hover:text-accent">
                   {PHONE_DISPLAY}
-                </a>
+                </Link>
               </li>
               <li className="flex items-center gap-2 sm:gap-2.5">
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-8 sm:w-8">
@@ -138,9 +138,9 @@ export default function Footer() {
                     <path d="m4 6.5 8 6 8-6" />
                   </svg>
                 </span>
-                <a href={`mailto:${EMAIL}`} className="truncate transition hover:text-accent">
+                <Link href={`mailto:${EMAIL}`} className="truncate transition hover:text-accent">
                   {EMAIL}
-                </a>
+                </Link>
               </li>
               <li className="hidden items-center gap-2.5 sm:flex">
                 <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
@@ -171,7 +171,7 @@ export default function Footer() {
               <span>{SHORT_ADDRESS}</span>
             </p>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              <a
+              <Link
                 href={NESHAN_MAP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -182,8 +182,8 @@ export default function Footer() {
                   <circle cx="12" cy="9.8" r="2.4" />
                 </svg>
                 نشان
-              </a>
-              <a
+              </Link>
+              <Link
                 href={BALAD_MAP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -194,7 +194,7 @@ export default function Footer() {
                   <circle cx="12" cy="9.8" r="2.4" />
                 </svg>
                 بلد
-              </a>
+              </Link>
             </div>
           </div>
         </div>

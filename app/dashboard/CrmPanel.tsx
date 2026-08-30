@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import Link from "next/link";
 import { createCrmLeadAction, toggleCrmCalledAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 
@@ -105,9 +106,9 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                   <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
                     <td className="px-5 py-3.5 font-semibold">{l.name}</td>
                     <td className="px-5 py-3.5 font-mono" dir="ltr">
-                      <a href={`tel:${l.phone}`} className="hover:text-accent">
+                      <Link href={`tel:${l.phone}`} className="hover:text-accent">
                         {toPersianDigits(l.phone)}
-                      </a>
+                      </Link>
                     </td>
                     <td className="px-5 py-3.5 text-dim">{l.note || "—"}</td>
                     <td className="px-5 py-3.5">

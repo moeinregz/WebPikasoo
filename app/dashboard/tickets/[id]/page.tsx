@@ -61,9 +61,9 @@ export default async function StaffTicketPage({ params }: { params: { id: string
                   <>
                     <span>{requester.name}</span>
                     <span aria-hidden="true">·</span>
-                    <a href={`tel:${requester.phone}`} className="hover:text-accent" dir="ltr">
+                    <Link href={`tel:${requester.phone}`} className="hover:text-accent" dir="ltr">
                       {toPersianDigits(requester.phone)}
-                    </a>
+                    </Link>
                   </>
                 )}
               </div>

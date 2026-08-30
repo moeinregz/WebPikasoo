@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
+import Image from "next/image";
+import Link from "next/link";
 import { getTeamMessagesAction, sendTeamMessageAction, deleteTeamMessageAction } from "./actions";
 
 type Message = {
@@ -58,14 +60,21 @@ function Attachment({
   }
   if (type?.startsWith("image/")) {
     return (
-      <a href={url} target="_blank" rel="noopener noreferrer" className="mt-2 block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={url} alt={name ?? "تصویر"} className="max-h-[220px] max-w-full rounded-[10px] object-cover" />
-      </a>
+      <Link href={url} target="_blank" rel="noopener noreferrer" className="mt-2 block">
+        <Image
+          src={url}
+          alt={name ?? "تصویر"}
+          width={400}
+          height={220}
+          unoptimized
+          style={{ width: "auto", height: "auto", maxHeight: 220, maxWidth: "100%" }}
+          className="rounded-[10px]"
+        />
+      </Link>
     );
   }
   return (
-    <a
+    <Link
       href={url}
       target="_blank"
       rel="noopener noreferrer"
@@ -76,7 +85,7 @@ function Attachment({
         <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" />
       </svg>
       <span className="truncate">{name || "دانلود فایل"}</span>
-    </a>
+    </Link>
   );
 }
 

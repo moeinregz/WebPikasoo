@@ -131,20 +131,20 @@ export default async function DashboardPage() {
                 </div>
                 <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[12.5px] text-dim">
                   {inq.email && (
-                    <a
+                    <Link
                       href={`mailto:${inq.email}`}
                       className="underline decoration-dim/40 underline-offset-4 hover:text-accent"
                       dir="ltr"
                     >
                       {inq.email}
-                    </a>
+                    </Link>
                   )}
                   {inq.phone && (
                     <>
                       {inq.email && <span aria-hidden="true">·</span>}
-                      <a href={`tel:${inq.phone}`} className="hover:text-accent" dir="ltr">
+                      <Link href={`tel:${inq.phone}`} className="hover:text-accent" dir="ltr">
                         {inq.phone}
-                      </a>
+                      </Link>
                     </>
                   )}
                   {!inq.email && !inq.phone && <span>راه ارتباطی ثبت نشده</span>}
@@ -240,9 +240,9 @@ export default async function DashboardPage() {
                   </td>
                   <td className="px-5 py-3.5 font-semibold">{u.name}</td>
                   <td className="px-5 py-3.5 font-mono" dir="ltr">
-                    <a href={`tel:${u.phone}`} className="hover:text-accent">
+                    <Link href={`tel:${u.phone}`} className="hover:text-accent">
                       {toPersianDigits(u.phone)}
-                    </a>
+                    </Link>
                   </td>
                   <td className="px-5 py-3.5 font-mono text-xs text-dim">{formatDate(u.created_at)}</td>
                   {isAdmin && (
@@ -368,9 +368,9 @@ export default async function DashboardPage() {
                     </span>
                   </td>
                   <td className="px-5 py-3.5 font-mono" dir="ltr">
-                    <a href={`tel:${u.phone}`} className="hover:text-accent">
+                    <Link href={`tel:${u.phone}`} className="hover:text-accent">
                       {toPersianDigits(u.phone)}
-                    </a>
+                    </Link>
                   </td>
                   <td className="px-5 py-3.5 font-mono text-xs text-dim">{formatDate(u.created_at)}</td>
                   {isAdmin && (

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import Image from "next/image";
+import Link from "next/link";
 import { createProjectAction, deleteProjectAction, type ProjectFormState } from "./actions";
 import { categories } from "@/lib/businessSites";
 
@@ -115,10 +117,16 @@ export default function ProjectsPanel({ projects }: { projects: Project[] }) {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <article key={p.id} className="group relative overflow-hidden rounded-card border border-ink/[0.14] bg-surface/20">
-              <div className="aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
                 {p.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                  <Image
+                    src={p.image}
+                    alt={p.name}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    unoptimized
+                    className="object-cover"
+                  />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center font-mono text-xs text-white/30">
                     بدون تصویر
@@ -131,9 +139,9 @@ export default function ProjectsPanel({ projects }: { projects: Project[] }) {
                 </span>
                 <h4 className="mb-1 font-display text-base font-normal">{p.name}</h4>
                 {p.description && <p className="mb-2 text-[13px] text-dim">{p.description}</p>}
-                <a href={p.url} target="_blank" rel="noopener noreferrer" dir="ltr" className="block truncate text-[12px] text-accent underline">
+                <Link href={p.url} target="_blank" rel="noopener noreferrer" dir="ltr" className="block truncate text-[12px] text-accent underline">
                   {p.url}
-                </a>
+                </Link>
               </div>
               <form action={deleteProjectAction} className="absolute left-3 top-3">
                 <input type="hidden" name="projectId" value={p.id} />

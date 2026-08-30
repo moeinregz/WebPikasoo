@@ -24,6 +24,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com",
       },
+      // Small per-skill logo icons shown in SkillCard (components/SkillCard.tsx).
+      {
+        protocol: "https",
+        hostname: "cdn.simpleicons.org",
+      },
     ],
   },
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import Image from "next/image";
 import { SKILL_META, DEFAULT_SKILL_COLOR } from "./skillMeta";
 
 type Skill = { name: string; desc: string };
@@ -73,13 +74,13 @@ export default function SkillCard({ skill }: { skill: Skill }) {
 
         <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center">
           {meta.slug && logoOk ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={`https://cdn.simpleicons.org/${meta.slug}`}
               alt=""
               width={20}
               height={20}
               loading="lazy"
+              unoptimized
               className="skill-icon-logo h-5 w-5"
               onError={() => setLogoOk(false)}
             />

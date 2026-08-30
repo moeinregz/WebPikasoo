@@ -362,13 +362,8 @@ function CoverImageField({ existingCoverImage }: { existingCoverImage?: string }
       <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">تصویر کاور</label>
 
       {previewUrl && (
-        <div className="relative mb-2 inline-block">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={previewUrl}
-            alt=""
-            className="h-32 w-full max-w-xs rounded-lg border border-ink/[0.14] object-cover"
-          />
+        <div className="relative mb-2 inline-block h-32 w-full max-w-xs overflow-hidden rounded-lg border border-ink/[0.14]">
+          <Image src={previewUrl} alt="" fill unoptimized sizes="320px" className="object-cover" />
           <RemoveImageButton onClick={clearPickedFile} title="حذف عکس انتخاب‌شده" />
         </div>
       )}

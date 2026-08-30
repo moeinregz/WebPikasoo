@@ -1,4 +1,6 @@
 import { Fragment, type ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 // A deliberately tiny, purpose-built markdown-lite — not a general markdown
 // parser. It only understands the handful of things the BlogPanel editor's
@@ -98,7 +100,7 @@ const MAX_SIZE = 96;
 
 /** Renders `[text](url)` links inside otherwise-plain text; everything else
  *  passes through untouched (and untrusted HTML is never interpreted —
- *  this only ever produces text nodes and <a> elements). */
+ *  this only ever produces text nodes and <Link> elements). */
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {
   const linkRe = /\[([^\]]+)\]\(([^)\s]+)\)/g;
   const parts: ReactNode[] = [];
@@ -109,7 +111,7 @@ function renderLinks(text: string, keyPrefix: string): ReactNode[] {
   while ((match = linkRe.exec(text))) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
     parts.push(
-      <a
+      <Link
         key={`${keyPrefix}-a-${i++}`}
         href={match[2]}
         target="_blank"
@@ -117,7 +119,7 @@ function renderLinks(text: string, keyPrefix: string): ReactNode[] {
         className="text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent"
       >
         {match[1]}
-      </a>
+      </Link>
     );
     lastIndex = match.index + match[0].length;
   }
@@ -184,12 +186,15 @@ export function renderBlogContent(content: string): ReactNode {
         }
         if (block.type === "image") {
           return (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               key={i}
               src={block.url}
               alt={block.alt}
-              className="my-6 w-full rounded-card border border-ink/[0.14] object-cover"
+              width={1200}
+              height={675}
+              unoptimized
+              style={{ width: "100%", height: "auto" }}
+              className="my-6 rounded-card border border-ink/[0.14]"
             />
           );
         }

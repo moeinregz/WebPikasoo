@@ -54,11 +54,11 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
               <ThemeToggle />
             </div>
 
-            <a href="#" className="flex items-center justify-center gap-2 font-mono text-[16px] font-black tracking-wide text-ink">
+            <Link href="/" className="flex items-center justify-center gap-2 font-mono text-[16px] font-black tracking-wide text-ink">
               <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-glow">
                 <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="32px" className="object-cover" priority />
               </span>
-            </a>
+            </Link>
 
             <div className="flex justify-end">
               <Link
@@ -78,7 +78,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
               still shape and read correctly. */}
           <div dir="ltr" className="hidden h-[68px] items-center justify-between md:flex">
             <div className="flex items-center gap-8">
-              <a href="#" className="flex items-center gap-2.5 font-mono text-[17px] font-black tracking-wide text-ink">
+              <Link href="/" className="flex items-center gap-2.5 font-mono text-[17px] font-black tracking-wide text-ink">
                 <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-glow">
                   <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="36px" className="object-cover" priority />
                 </span>
@@ -86,17 +86,17 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
                   WebPIKASO
                   <span className="text-accent">.</span>
                 </span>
-              </a>
+              </Link>
 
               <nav className="flex items-center gap-7">
                 {[...links].reverse().map((l) => (
-                  <a
+                  <Link
                     key={l.href}
                     href={l.href}
                     className="text-[14px] font-semibold text-dim transition hover:text-ink"
                   >
                     {l.label}
-                  </a>
+                  </Link>
                 ))}
               </nav>
             </div>
@@ -124,9 +124,9 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
         }`}
       >
         {links.map((l) => (
-          <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
+          <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
             {l.label}
-          </a>
+          </Link>
         ))}
         <Link href="/account" onClick={() => setMobileOpen(false)}>
           {accountLabel}
