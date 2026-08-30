@@ -96,7 +96,7 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
       <AddLeadForm />
 
       {leads.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
           هنوز شماره‌ای تو CRM ثبت نشده.
         </div>
       ) : (
@@ -108,7 +108,7 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
           </p>
 
           {filtered.length === 0 ? (
-            <div className="rounded-card border border-dashed border-ink/[0.2] p-10 text-center text-dim">
+            <div className="rounded-card border border-dashed border-ink/[0.2] p-6 sm:p-10 text-center text-dim">
               نتیجه‌ای برای این جستجو پیدا نشد.
             </div>
           ) : (

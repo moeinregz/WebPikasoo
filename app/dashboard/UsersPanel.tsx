@@ -23,7 +23,7 @@ export default function UsersPanel({ customers, isAdmin }: { customers: PublicUs
 
   if (customers.length === 0) {
     return (
-      <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+      <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
         به‌محض این‌که کسی تو /account ثبت‌نام کنه، همین‌جا با شماره‌ش نشون داده می‌شه.
       </div>
     );
@@ -34,7 +34,7 @@ export default function UsersPanel({ customers, isAdmin }: { customers: PublicUs
       <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام یا شماره موبایل..." />
 
       {filtered.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-10 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-6 sm:p-10 text-center text-dim">
           نتیجه‌ای برای این جستجو پیدا نشد.
         </div>
       ) : (

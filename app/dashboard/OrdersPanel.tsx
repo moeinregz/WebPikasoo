@@ -22,7 +22,7 @@ export default function OrdersPanel({ inquiries, isAdmin }: { inquiries: Inquiry
 
   if (inquiries.length === 0) {
     return (
-      <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+      <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
         به‌محض این‌که کسی فرم تماس رو پر کنه، همین‌جا نشونش می‌دیم.
       </div>
     );
@@ -33,7 +33,7 @@ export default function OrdersPanel({ inquiries, isAdmin }: { inquiries: Inquiry
       <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، ایمیل، شماره یا متن پیام..." />
 
       {filtered.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-10 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-6 sm:p-10 text-center text-dim">
           نتیجه‌ای برای این جستجو پیدا نشد.
         </div>
       ) : (

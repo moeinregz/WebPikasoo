@@ -111,7 +111,7 @@ export default async function DashboardPage() {
         />
       )}
       {teamMembers.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
           هنوز عضوی از تیم برنامه‌نویسی یا ادمین اضافه نشده.
         </div>
       ) : (
@@ -326,7 +326,7 @@ export default async function DashboardPage() {
       id: "empty",
       label: "داشبورد",
       panel: (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
           هنوز به این حساب دسترسی‌ای داده نشده — از یه ادمین بخواه از تب «تیم برنامه‌نویسی» برات دسترسی فعال کنه.
         </div>
       ),

@@ -636,7 +636,7 @@ export default function BlogPanel({ posts, canDelete = false }: { posts: BlogPos
       <AddBlogPostForm />
 
       {posts.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
           هنوز مقاله‌ای ثبت نشده — از دکمه‌ی بالا اولین مقاله رو بنویس.
         </div>
       ) : (

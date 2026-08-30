@@ -110,7 +110,7 @@ export default function ProjectsPanel({ projects }: { projects: Project[] }) {
       <AddProjectForm />
 
       {projects.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
           هنوز پروژه‌ای ثبت نشده — از فرم بالا اولین پروژه رو اضافه کن.
         </div>
       ) : (

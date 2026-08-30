@@ -97,7 +97,7 @@ export function AdminTasksPanel({
       <AddTaskForm developers={developers} />
 
       {tasks.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+        <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
           هنوز تسکی محول نشده.
         </div>
       ) : (
@@ -168,7 +168,7 @@ function TaskCheckbox({ id, status }: { id: number; status: "open" | "done" }) {
 export function MyTasksPanel({ tasks }: { tasks: OwnTask[] }) {
   if (tasks.length === 0) {
     return (
-      <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+      <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
         فعلاً تسکی برات ثبت نشده.
       </div>
     );

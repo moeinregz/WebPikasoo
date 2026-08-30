@@ -42,7 +42,7 @@ export type AccessDeveloper = {
 export default function AccessPanel({ developers }: { developers: AccessDeveloper[] }) {
   if (developers.length === 0) {
     return (
-      <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
+      <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-14 text-center text-dim">
         هنوز برنامه‌نویسی اضافه نشده. از تب «تیم برنامه‌نویسی» یه عضو جدید اضافه کن، بعد از همین‌جا بهش دسترسی بده.
       </div>
     );
