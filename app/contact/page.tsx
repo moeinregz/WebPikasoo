@@ -19,8 +19,8 @@ type SocialLink = { href: string; label: string; value: string; icon: ReactNode 
 // اینجا (صفحه‌ی تماس با ما) هست تا با بقیه‌ی راه‌های ارتباط و فرم‌ها
 // یک‌جا باشه. ایمیل، آدرس کوتاه و لینک نقشه فعلاً نمونه‌ان — با اطلاعات
 // واقعی خودت جایگزین کن.
-const EMAIL = "info@webpikaso.com";
-const SHORT_ADDRESS = "آدرس دقیق شرکت رو اینجا جایگزین کن";
+const EMAIL = "webpikaso@gmail.com";
+const SHORT_ADDRESS = "استان البرز، کرج، اصفهانی ها، بلوار قدس، فاطمیه";
 const MAP_LINK = "https://maps.google.com"; // لینک لوکیشن گوگل‌مپ رو اینجا بذار
 
 const socials: SocialLink[] = [
@@ -47,7 +47,7 @@ const socials: SocialLink[] = [
   {
     href: "https://t.me/WebPikaso",
     label: "تلگرام",
-    value: "WebPikaso@",
+    value: "@WebPikaso",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
         <path d="M22 2 11 13" />
@@ -58,7 +58,7 @@ const socials: SocialLink[] = [
   {
     href: "https://instagram.com/regzly",
     label: "اینستاگرام",
-    value: "regzly@",
+    value: "@regzly",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
         <rect x="3" y="3" width="18" height="18" rx="5" />

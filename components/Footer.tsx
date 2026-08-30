@@ -15,11 +15,11 @@ const quickLinks = [
 ];
 
 // اطلاعات شرکت — فعلاً نمونه‌ان، با اطلاعات واقعی جایگزین کن.
-const PHONE_DISPLAY = "۰۹۹۶۵ ۷۴۵۵۳۵";
+const PHONE_DISPLAY = "09965745535";
 const PHONE_HREF = "tel:+989965745535";
-const EMAIL = "info@webpikaso.com";
-const WORK_HOURS = "شنبه تا پنجشنبه، ۹ تا ۱۸";
-const SHORT_ADDRESS = "آدرس دقیق شرکت رو اینجا جایگزین کن";
+const EMAIL = "webpikaso@gmail.com";
+const WORK_HOURS = "شنبه تا پنجشنبه، 10 تا 16";
+const SHORT_ADDRESS = "استان البرز، کرج، اصفهانی ها، بلوار قدس، فاطمیه";
 // لینک موقعیت روی نقشه‌ی نشان و بله رو اینجا جایگزین کن.
 const NESHAN_MAP_LINK = "https://neshan.org";
 const BALAD_MAP_LINK = "https://balad.ir";
