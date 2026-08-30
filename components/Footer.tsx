@@ -70,22 +70,22 @@ export default function Footer() {
       />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-accent/50 to-transparent" />
 
-      <div className="relative z-[1] mx-auto max-w-container px-6 pb-8 pt-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr_1fr_1.2fr]">
+      <div className="relative z-[1] mx-auto max-w-container px-6 pb-5 pt-9 sm:pb-8 sm:pt-16">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:gap-10 lg:grid-cols-[1.3fr_0.9fr_1fr_1.2fr]">
           {/* برند + توضیح کوتاه + شبکه‌های اجتماعی */}
           <div>
-            <a href="/" className="inline-flex items-center gap-2.5 font-mono text-[18px] font-black text-ink">
-              <span className="relative flex h-10 w-10 flex-shrink-0 overflow-hidden rounded-full shadow-glow">
+            <a href="/" className="inline-flex items-center gap-2 font-mono text-[16px] font-black text-ink sm:gap-2.5 sm:text-[18px]">
+              <span className="relative flex h-8 w-8 flex-shrink-0 overflow-hidden rounded-full shadow-glow sm:h-10 sm:w-10">
                 <Image src="/logo.jpg" alt="وب پیکاسو" fill sizes="40px" className="object-cover" />
               </span>
               <span className="leading-none">
                 WebPIKASO<span className="text-accent">.</span>
               </span>
             </a>
-            <p className="mt-4 max-w-[34ch] text-[14px] leading-relaxed text-dim">
+            <p className="mt-4 hidden max-w-[34ch] text-[14px] leading-relaxed text-dim sm:block">
               طراحی و توسعه‌ی وب‌سایت‌های حرفه‌ای، فروشگاهی و اختصاصی — از ایده تا اجرا، کنار کسب‌وکار شما.
             </p>
-            <div className="mt-5 flex items-center gap-2.5">
+            <div className="mt-3 flex items-center gap-2 sm:mt-5 sm:gap-2.5">
               {socials.map((s) => (
                 <a
                   key={s.label}
@@ -93,9 +93,9 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/[0.14] text-dim transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-ink/[0.14] text-dim transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent sm:h-9 sm:w-9"
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-4 w-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3.5 w-3.5 sm:h-4 sm:w-4">
                     {s.icon}
                   </svg>
                 </a>
@@ -105,11 +105,11 @@ export default function Footer() {
 
           {/* دسترسی سریع */}
           <div>
-            <h3 className="mb-4 text-[15px] font-bold text-ink">دسترسی سریع</h3>
-            <ul className="flex flex-col gap-2.5">
+            <h3 className="mb-2.5 text-[13.5px] font-bold text-ink sm:mb-4 sm:text-[15px]">دسترسی سریع</h3>
+            <ul className="flex flex-col gap-1.5 sm:gap-2.5">
               {quickLinks.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-[14px] text-dim transition hover:text-accent">
+                  <Link href={l.href} className="text-[13px] text-dim transition hover:text-accent sm:text-[14px]">
                     {l.label}
                   </Link>
                 </li>
@@ -119,11 +119,11 @@ export default function Footer() {
 
           {/* اطلاعات شرکت */}
           <div>
-            <h3 className="mb-4 text-[15px] font-bold text-ink">اطلاعات شرکت</h3>
-            <ul className="flex flex-col gap-3 text-[14px] text-dim">
-              <li className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-4 w-4">
+            <h3 className="mb-2.5 text-[13.5px] font-bold text-ink sm:mb-4 sm:text-[15px]">اطلاعات شرکت</h3>
+            <ul className="flex flex-col gap-2 text-[13px] text-dim sm:gap-3 sm:text-[14px]">
+              <li className="flex items-center gap-2 sm:gap-2.5">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-8 sm:w-8">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3 w-3 sm:h-4 sm:w-4">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z" />
                   </svg>
                 </span>
@@ -131,18 +131,18 @@ export default function Footer() {
                   {PHONE_DISPLAY}
                 </a>
               </li>
-              <li className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-4 w-4">
+              <li className="flex items-center gap-2 sm:gap-2.5">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-8 sm:w-8">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3 w-3 sm:h-4 sm:w-4">
                     <rect x="3" y="5" width="18" height="14" rx="2.5" />
                     <path d="m4 6.5 8 6 8-6" />
                   </svg>
                 </span>
-                <a href={`mailto:${EMAIL}`} className="transition hover:text-accent">
+                <a href={`mailto:${EMAIL}`} className="truncate transition hover:text-accent">
                   {EMAIL}
                 </a>
               </li>
-              <li className="flex items-center gap-2.5">
+              <li className="hidden items-center gap-2.5 sm:flex">
                 <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-4 w-4">
                     <circle cx="12" cy="12" r="9" />
@@ -156,53 +156,53 @@ export default function Footer() {
 
           {/* آدرس و نقشه */}
           <div>
-            <h3 className="mb-4 text-[15px] font-bold text-ink">آدرس و موقعیت</h3>
-            <p className="mb-4 flex items-start gap-2.5 text-[14px] leading-relaxed text-dim">
+            <h3 className="mb-2.5 text-[13.5px] font-bold text-ink sm:mb-4 sm:text-[15px]">آدرس و موقعیت</h3>
+            <p className="mb-3 flex items-start gap-2 text-[13px] leading-relaxed text-dim sm:mb-4 sm:gap-2.5 sm:text-[14px]">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={1.7}
-                className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent"
+                className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-accent sm:h-4 sm:w-4"
               >
                 <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
                 <circle cx="12" cy="9.8" r="2.4" />
               </svg>
               <span>{SHORT_ADDRESS}</span>
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               <a
                 href={NESHAN_MAP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-surface/60 px-4 py-2 text-[13px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent"
+                className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-surface/60 px-3 py-1.5 text-[12px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent sm:px-4 sm:py-2 sm:text-[13px]"
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3.5 w-3.5">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3 w-3 sm:h-3.5 sm:w-3.5">
                   <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
                   <circle cx="12" cy="9.8" r="2.4" />
                 </svg>
-                مشاهده در نشان
+                نشان
               </a>
               <a
                 href={BALAD_MAP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-surface/60 px-4 py-2 text-[13px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent"
+                className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-surface/60 px-3 py-1.5 text-[12px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent sm:px-4 sm:py-2 sm:text-[13px]"
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3.5 w-3.5">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3 w-3 sm:h-3.5 sm:w-3.5">
                   <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
                   <circle cx="12" cy="9.8" r="2.4" />
                 </svg>
-                مشاهده در بله
+                بله
               </a>
             </div>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-3 border-t border-ink/10 pt-6">
-          <p className="font-mono text-[13px] text-dim">© 2026 وب پیکاسو WebPIKASO — تمامی حقوق محفوظ است.</p>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-2.5 border-t border-ink/10 pt-4 sm:mt-14 sm:gap-3 sm:pt-6">
+          <p className="font-mono text-[11.5px] text-dim sm:text-[13px]">© 2026 وب پیکاسو — تمامی حقوق محفوظ است.</p>
           <button
-            className="flex items-center gap-2 font-mono text-[13px] text-dim transition-colors hover:text-accent"
+            className="flex items-center gap-2 font-mono text-[11.5px] text-dim transition-colors hover:text-accent sm:text-[13px]"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             بازگشت به بالا

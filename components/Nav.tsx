@@ -89,7 +89,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
               </a>
 
               <nav className="flex items-center gap-7">
-                {links.map((l) => (
+                {[...links].reverse().map((l) => (
                   <a
                     key={l.href}
                     href={l.href}
