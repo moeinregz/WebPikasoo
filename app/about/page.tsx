@@ -12,73 +12,6 @@ export const metadata = {
   description: "درباره‌ی تیم وب پیکاسو — چرا کسب‌وکارت رو باید به ما بسپاری.",
 };
 
-// ─── این چند مورد رو با اطلاعات واقعی خودت جایگزین کن ───────────────────
-// ایمیل، آدرس کوتاه و لینک نقشه فعلاً نمونه‌ان؛ بقیه (اینستا/تلگرام/واتساپ)
-// همون شماره و آیدی‌هایی‌ان که همین الان تو صفحه‌ی تماس با ما استفاده می‌شن.
-const EMAIL = "info@webpikaso.com";
-const SHORT_ADDRESS = "آدرس دقیق شرکت رو اینجا جایگزین کن";
-const MAP_LINK = "https://maps.google.com"; // لینک لوکیشن گوگل‌مپ رو اینجا بذار
-
-type FindUsItem = { href: string; label: string; value: string; icon: ReactNode };
-
-const findUs: FindUsItem[] = [
-  {
-    href: `mailto:${EMAIL}`,
-    label: "ایمیل",
-    value: EMAIL,
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
-        <rect x="3" y="5" width="18" height="14" rx="2.5" />
-        <path d="m4 6.5 8 6 8-6" />
-      </svg>
-    ),
-  },
-  {
-    href: "https://instagram.com/regzly",
-    label: "اینستاگرام",
-    value: "regzly@",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
-        <rect x="3" y="3" width="18" height="18" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1" />
-      </svg>
-    ),
-  },
-  {
-    href: "https://t.me/WebPikaso",
-    label: "تلگرام",
-    value: "WebPikaso@",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
-        <path d="M22 2 11 13" />
-        <path d="M22 2 15 22l-4-9-9-4 20-7Z" />
-      </svg>
-    ),
-  },
-  {
-    href: "https://wa.me/989965745535",
-    label: "واتساپ",
-    value: "چت کن",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
-        <path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z" />
-      </svg>
-    ),
-  },
-  {
-    href: MAP_LINK,
-    label: "موقعیت روی نقشه",
-    value: SHORT_ADDRESS,
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-full w-full">
-        <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-        <circle cx="12" cy="9.8" r="2.4" />
-      </svg>
-    ),
-  },
-];
-
 type Feature = { title: string; desc: string; icon: ReactNode };
 
 const features: Feature[] = [
@@ -218,48 +151,6 @@ export default async function AboutPage() {
       </section>
 
       <Trust />
-
-      {/* راه‌های پیدا کردن ما — ایمیل، شبکه‌های اجتماعی و موقعیت روی نقشه */}
-      <section className="relative overflow-hidden border-t border-ink/10 py-16 sm:py-20">
-        <div className="relative z-[1] mx-auto max-w-container px-6">
-          <Reveal className="mb-12 flex items-baseline gap-4">
-            <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
-              Find us
-            </span>
-            <div>
-              <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-                از هر راهی راحت‌تری، پیدامون کن
-              </h2>
-              <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
-                ایمیل، شبکه‌های اجتماعی یا حتی سر بزن — هر جا راحت‌تری در دسترسیم.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {findUs.map((item, i) => (
-              <Reveal key={item.label} delay={i * 60}>
-                <a
-                  href={item.href}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="group flex h-full flex-col items-start gap-4 rounded-card border border-ink/10 bg-surface/50 p-6 transition hover:-translate-y-1 hover:border-accent/40"
-                >
-                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] bg-accent/10 p-2.5 text-accent transition-transform duration-300 group-hover:scale-110">
-                    {item.icon}
-                  </span>
-                  <div className="min-w-0">
-                    <h3 className="mb-1 text-[15.5px] font-bold text-ink">{item.label}</h3>
-                    <p dir="ltr" className="truncate text-right text-[13px] text-dim">
-                      {item.value}
-                    </p>
-                  </div>
-                </a>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section className="relative overflow-hidden border-t border-ink/10 py-16 sm:py-20">
         <div className="relative z-[1] mx-auto max-w-container px-6">

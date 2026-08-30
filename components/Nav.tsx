@@ -14,6 +14,7 @@ const links = [
   { href: "/order", label: "ثبت سفارش" },
   { href: "/about", label: "درباره ما" },
   { href: "/blog", label: "وبلاگ" },
+  { href: "/contact", label: "تماس با ما" },
 ];
 
 
@@ -108,13 +109,6 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
                 {accountLabel}
               </Link>
 
-              <a
-                href="/contact"
-                className="whitespace-nowrap rounded-lg border border-accent/40 bg-accent/10 px-5 py-[9px] font-mono text-[13px] font-bold text-accent transition hover:bg-accent/20"
-              >
-                تماس با ما
-              </a>
-
               <ThemeToggle />
             </div>
           </div>
@@ -134,9 +128,6 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             {l.label}
           </a>
         ))}
-        <a href="/contact" onClick={() => setMobileOpen(false)}>
-          تماس با ما
-        </a>
         <Link href="/account" onClick={() => setMobileOpen(false)}>
           {accountLabel}
         </Link>
