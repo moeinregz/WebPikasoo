@@ -55,7 +55,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             </div>
 
             <a href="#" className="flex items-center justify-center gap-2 font-mono text-[16px] font-black tracking-wide text-ink">
-              <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full shadow-glow">
+              <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-glow">
                 <Image src="/logo.jpg" alt="وب پیکاسو" fill sizes="32px" className="object-cover" priority />
               </span>
             </a>
@@ -79,7 +79,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
           <div dir="ltr" className="hidden h-[68px] items-center justify-between md:flex">
             <div className="flex items-center gap-8">
               <a href="#" className="flex items-center gap-2.5 font-mono text-[17px] font-black tracking-wide text-ink">
-                <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full shadow-glow">
+                <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-glow">
                   <Image src="/logo.jpg" alt="وب پیکاسو" fill sizes="36px" className="object-cover" priority />
                 </span>
                 <span className="leading-none">
