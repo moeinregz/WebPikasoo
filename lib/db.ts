@@ -517,6 +517,14 @@ export async function reopenTicket(ticketId: number): Promise<void> {
   await database.collection("tickets").updateOne({ id: ticketId }, { $set: { status: "open" } });
 }
 
+/** Admin-only: removes a ticket entirely, along with its full message
+ *  thread (so nothing orphaned is left behind in ticket_messages). */
+export async function deleteTicket(ticketId: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("ticket_messages").deleteMany({ ticket_id: ticketId });
+  await database.collection("tickets").deleteOne({ id: ticketId });
+}
+
 export type TicketWithUser = Ticket & { user_name: string; user_phone: string };
 
 /** All tickets with the submitter's name/phone joined in — for the admin dashboard. */
@@ -744,6 +752,18 @@ export async function createCrmLead(data: NewCrmLead): Promise<number> {
     created_by: data.createdBy ?? null,
   });
   return id;
+}
+
+/** Looks up an existing lead by phone — used to reject duplicates before
+ *  insert. Expects the same normalized/trimmed form the caller is about to
+ *  store, so it catches the common case (same number typed twice) without
+ *  trying to fuzzy-match every possible formatting variant. */
+export async function getCrmLeadByPhone(phone: string): Promise<CrmLead | undefined> {
+  const database = await getDb();
+  const lead = await database
+    .collection<CrmLead>("crm_leads")
+    .findOne({ phone }, { projection: { _id: 0 } });
+  return lead ?? undefined;
 }
 
 export async function getAllCrmLeads(): Promise<CrmLead[]> {

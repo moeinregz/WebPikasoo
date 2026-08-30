@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createCrmLeadAction, toggleCrmCalledAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
@@ -34,15 +34,23 @@ const initialState: CrmFormState = null;
 
 function AddLeadForm() {
   const [state, formAction] = useFormState(createCrmLeadAction, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Clear the fields after a successful add, so registering several
+  // numbers in a row doesn't leave the previous one's info sitting there.
+  useEffect(() => {
+    if (state?.ok) formRef.current?.reset();
+  }, [state]);
+
   return (
-    <form action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
+    <form ref={formRef} action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
       <h2 className="mb-4 font-display text-lg font-normal">افزودن شماره‌ی جدید به CRM</h2>
       <div className="grid gap-4 sm:grid-cols-3">
         <input name="name" required placeholder="نام / نام کسب‌وکار" className={inputClass} />
         <input name="phone" required dir="ltr" placeholder="شماره تماس" className={inputClass} />
         <input name="note" placeholder="یادداشت (اختیاری)" className={inputClass} />
       </div>
-      {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-dim"}`}>{state.message}</p>}
+      {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
     </form>
   );
@@ -65,7 +73,7 @@ function CalledToggle({ id, called }: { id: number; called: number }) {
   );
 }
 
-export default function CrmPanel({ leads }: { leads: Lead[] }) {
+export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; canDelete?: boolean }) {
   const calledCount = leads.filter((l) => l.called).length;
 
   return (
@@ -89,7 +97,7 @@ export default function CrmPanel({ leads }: { leads: Lead[] }) {
                   <th className="px-5 py-3.5 font-semibold">شماره</th>
                   <th className="px-5 py-3.5 font-semibold">یادداشت</th>
                   <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
-                  <th className="px-5 py-3.5 font-semibold"></th>
+                  {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
                 </tr>
               </thead>
               <tbody>
@@ -109,17 +117,19 @@ export default function CrmPanel({ leads }: { leads: Lead[] }) {
                         <CalledToggle id={l.id} called={l.called} />
                       </form>
                     </td>
-                    <td className="px-5 py-3.5">
-                      <form action={deleteCrmLeadAction}>
-                        <input type="hidden" name="leadId" value={l.id} />
-                        <button
-                          type="submit"
-                          className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
-                        >
-                          حذف
-                        </button>
-                      </form>
-                    </td>
+                    {canDelete && (
+                      <td className="px-5 py-3.5">
+                        <form action={deleteCrmLeadAction}>
+                          <input type="hidden" name="leadId" value={l.id} />
+                          <button
+                            type="submit"
+                            className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+                          >
+                            حذف
+                          </button>
+                        </form>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

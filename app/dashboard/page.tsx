@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Nav from "@/components/Nav";
-import { markInquiryFollowedUpAction, deleteInquiryAction } from "./actions";
+import { markInquiryFollowedUpAction, deleteInquiryAction, deleteTicketAction } from "./actions";
 import {
   getAllInquiries,
   getAllUsers,
@@ -208,8 +208,13 @@ export default async function DashboardPage() {
 
   const usersPanel = (
     <div>
-      {isAdmin && (
-        <AddUserForm defaultRole="customer" heading="افزودن کاربر جدید" buttonLabel="افزودن کاربر جدید" />
+      {(isAdmin || perms.users) && (
+        <AddUserForm
+          defaultRole="customer"
+          heading="افزودن کاربر جدید"
+          buttonLabel="افزودن کاربر جدید"
+          lockRoleToCustomer={!isAdmin}
+        />
       )}
       {customers.length === 0 ? (
         <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
@@ -264,12 +269,11 @@ export default async function DashboardPage() {
         {tickets.map((t, ticketIndex) => {
           const lastMessage = ticketLastMessages[ticketIndex];
           return (
-            <Link
+            <div
               key={t.id}
-              href={`/dashboard/tickets/${t.id}`}
               className="group flex items-center justify-between gap-4 rounded-card border border-ink/[0.14] bg-surface/20 p-5 transition hover:-translate-y-0.5 hover:border-accent/40 hover:bg-surface/40"
             >
-              <div className="min-w-0">
+              <Link href={`/dashboard/tickets/${t.id}`} className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="font-display text-base font-normal">{t.subject}</h2>
                   <span
@@ -287,20 +291,33 @@ export default async function DashboardPage() {
                   <span aria-hidden="true">·</span>
                   <span className="truncate">{lastMessage ? lastMessage.message : t.message}</span>
                 </div>
-              </div>
+              </Link>
               <div className="flex shrink-0 items-center gap-3">
                 <span className="whitespace-nowrap font-mono text-xs text-dim/70">{formatDateTime(t.created_at)}</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  className="h-4 w-4 text-dim transition group-hover:translate-x-[-3px] group-hover:text-accent"
-                >
-                  <path d="M15 6L9 12l6 6" />
-                </svg>
+                {isAdmin && (
+                  <form action={deleteTicketAction}>
+                    <input type="hidden" name="ticketId" value={t.id} />
+                    <button
+                      type="submit"
+                      className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+                    >
+                      حذف
+                    </button>
+                  </form>
+                )}
+                <Link href={`/dashboard/tickets/${t.id}`}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="h-4 w-4 text-dim transition group-hover:translate-x-[-3px] group-hover:text-accent"
+                  >
+                    <path d="M15 6L9 12l6 6" />
+                  </svg>
+                </Link>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>
@@ -447,7 +464,11 @@ export default async function DashboardPage() {
     });
   }
   if (isAdmin || perms.crm) {
-    tabs.push({ id: "crm", label: `CRM (${toPersianDigits(crmLeads.length)})`, panel: <CrmPanel leads={crmLeads} /> });
+    tabs.push({
+      id: "crm",
+      label: `CRM (${toPersianDigits(crmLeads.length)})`,
+      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} />,
+    });
   }
   if (isAdmin) {
     tabs.push({
@@ -473,7 +494,7 @@ export default async function DashboardPage() {
     tabs.push({
       id: "blog",
       label: `وبلاگ (${toPersianDigits(blogPosts.length)})`,
-      panel: <BlogPanel posts={blogPosts} />,
+      panel: <BlogPanel posts={blogPosts} canDelete={isAdmin} />,
     });
   }
 

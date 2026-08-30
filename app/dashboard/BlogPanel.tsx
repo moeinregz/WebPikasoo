@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {
   createBlogPostAction,
@@ -485,6 +485,16 @@ const initialState: BlogFormState = null;
 function AddBlogPostForm() {
   const [state, formAction] = useFormState(createBlogPostAction, initialState);
   const [open, setOpen] = useState(false);
+  // Bumped after a successful create so <BlogFields> (and its nested
+  // ContentEditor/CoverImageField, which hold their own controlled state)
+  // remounts from scratch — a plain form.reset() wouldn't touch that
+  // controlled state, so the title/content/cover would otherwise stick
+  // around after the article's been saved.
+  const [resetKey, setResetKey] = useState(0);
+
+  useEffect(() => {
+    if (state?.ok) setResetKey((k) => k + 1);
+  }, [state]);
 
   if (!open) {
     return (
@@ -510,7 +520,7 @@ function AddBlogPostForm() {
         </button>
       </div>
 
-      <BlogFields />
+      <BlogFields key={resetKey} />
 
       {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-dim"}`}>{state.message}</p>}
       <PublishButtons />
@@ -520,6 +530,13 @@ function AddBlogPostForm() {
 
 function EditBlogPostForm({ post, onClose }: { post: BlogPost; onClose: () => void }) {
   const [state, formAction] = useFormState(updateBlogPostAction, initialState);
+
+  // Once the edit is saved, close the inline form — reopening it later
+  // remounts BlogFields fresh from the (now-updated) post prop, which is
+  // the "refresh" here since the fields are controlled state.
+  useEffect(() => {
+    if (state?.ok) onClose();
+  }, [state, onClose]);
 
   return (
     <form action={formAction} className="mt-4 border-t border-ink/[0.1] pt-4">
@@ -548,7 +565,7 @@ function EditBlogPostForm({ post, onClose }: { post: BlogPost; onClose: () => vo
   );
 }
 
-function BlogPostCard({ post }: { post: BlogPost }) {
+function BlogPostCard({ post, canDelete }: { post: BlogPost; canDelete: boolean }) {
   const [editing, setEditing] = useState(false);
   const isPublished = !!post.published;
 
@@ -606,10 +623,12 @@ function BlogPostCard({ post }: { post: BlogPost }) {
           <input type="hidden" name="published" value={isPublished ? "0" : "1"} />
           <PublishToggleButton published={isPublished} />
         </form>
-        <form action={deleteBlogPostAction}>
-          <input type="hidden" name="postId" value={post.id} />
-          <DeleteButton />
-        </form>
+        {canDelete && (
+          <form action={deleteBlogPostAction}>
+            <input type="hidden" name="postId" value={post.id} />
+            <DeleteButton />
+          </form>
+        )}
       </div>
 
       {editing && <EditBlogPostForm post={post} onClose={() => setEditing(false)} />}
@@ -617,7 +636,7 @@ function BlogPostCard({ post }: { post: BlogPost }) {
   );
 }
 
-export default function BlogPanel({ posts }: { posts: BlogPost[] }) {
+export default function BlogPanel({ posts, canDelete = false }: { posts: BlogPost[]; canDelete?: boolean }) {
   return (
     <div>
       <AddBlogPostForm />
@@ -629,7 +648,7 @@ export default function BlogPanel({ posts }: { posts: BlogPost[] }) {
       ) : (
         <div className="flex flex-col gap-4">
           {posts.map((p) => (
-            <BlogPostCard key={p.id} post={p} />
+            <BlogPostCard key={p.id} post={p} canDelete={canDelete} />
           ))}
         </div>
       )}

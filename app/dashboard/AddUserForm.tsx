@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createUserAction, type CreateUserFormState } from "./actions";
 import PasswordInput from "@/components/PasswordInput";
@@ -25,20 +25,35 @@ function SubmitButton() {
 
 /** Lets an admin create any account type directly — customer, developer,
  *  or admin — instead of needing shell access to run the setUserRole
- *  script. Only rendered for admins (checked again server-side too). Used
- *  from both the "کاربران ثبت‌نامی" and "تیم برنامه‌نویسی" tabs, each
- *  passing a sensible default role/heading for where it's opened from. */
+ *  script. Also rendered for a developer with the "users" permission, but
+ *  then locked to adding plain customers only (see lockRoleToCustomer).
+ *  Both cases are re-checked server-side in createUserAction. Used from
+ *  both the "کاربران ثبت‌نامی" and "تیم برنامه‌نویسی" tabs, each passing a
+ *  sensible default role/heading for where it's opened from. */
 export default function AddUserForm({
   defaultRole = "customer",
   heading = "افزودن کاربر جدید",
   buttonLabel = "افزودن کاربر جدید",
+  lockRoleToCustomer = false,
 }: {
   defaultRole?: "customer" | "developer" | "admin";
   heading?: string;
   buttonLabel?: string;
+  /** For a developer with the "users" permission — they can only add plain
+   *  customers, so the role/title fields (staff-only concerns) are hidden
+   *  instead of just disabled. Server-side re-checked in createUserAction. */
+  lockRoleToCustomer?: boolean;
 }) {
   const [state, formAction] = useFormState(createUserAction, initialState);
   const [open, setOpen] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // After a successful submit, clear the fields instead of leaving the
+  // just-added user's info sitting there — so adding several in a row
+  // doesn't require manually wiping each field first.
+  useEffect(() => {
+    if (state?.ok) formRef.current?.reset();
+  }, [state]);
 
   if (!open) {
     return (
@@ -57,6 +72,7 @@ export default function AddUserForm({
 
   return (
     <form
+      ref={formRef}
       action={formAction}
       className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6"
     >
@@ -88,16 +104,20 @@ export default function AddUserForm({
           autoComplete="new-password"
           className={inputClass}
         />
-        <select name="role" defaultValue={defaultRole} className={inputClass}>
-          <option value="customer">مشتری</option>
-          <option value="developer">عضو تیم (برنامه‌نویس/سئو/فروش و...)</option>
-          <option value="admin">ادمین</option>
-        </select>
-        <input
-          name="title"
-          placeholder="عنوان/سمت (مثلاً برنامه‌نویس، کارشناس سئو، کارشناس فروش) — اختیاری"
-          className={`${inputClass} sm:col-span-2`}
-        />
+        {!lockRoleToCustomer && (
+          <select name="role" defaultValue={defaultRole} className={inputClass}>
+            <option value="customer">مشتری</option>
+            <option value="developer">عضو تیم (برنامه‌نویس/سئو/فروش و...)</option>
+            <option value="admin">ادمین</option>
+          </select>
+        )}
+        {!lockRoleToCustomer && (
+          <input
+            name="title"
+            placeholder="عنوان/سمت (مثلاً برنامه‌نویس، کارشناس سئو، کارشناس فروش) — اختیاری"
+            className={`${inputClass} sm:col-span-2`}
+          />
+        )}
       </div>
 
       {state && (

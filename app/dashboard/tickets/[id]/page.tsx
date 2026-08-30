@@ -5,7 +5,7 @@ import TicketThread from "@/components/TicketThread";
 import { getCurrentUser } from "@/lib/session";
 import { getTicketById, getTicketMessages, getUserById } from "@/lib/db";
 import { toPersianDigits } from "@/lib/auth";
-import { replyToTicketAction, closeTicketAction, reopenTicketAction } from "../../actions";
+import { replyToTicketAction, closeTicketAction, reopenTicketAction, deleteTicketAction } from "../../actions";
 
 function formatDate(iso: string) {
   const d = new Date(iso.replace(" ", "T") + "Z");
@@ -39,6 +39,18 @@ export default async function StaffTicketPage({ params }: { params: { id: string
           </svg>
           بازگشت به داشبورد
         </Link>
+
+        {user.isAdmin && (
+          <form action={deleteTicketAction} className="mb-5 flex justify-end">
+            <input type="hidden" name="ticketId" value={ticket.id} />
+            <button
+              type="submit"
+              className="rounded-full border border-red-500/40 px-4 py-1.5 text-[12.5px] font-semibold text-red-500 transition hover:bg-red-500/10"
+            >
+              حذف تیکت
+            </button>
+          </form>
+        )}
 
         <div className="rounded-card border border-ink/[0.14] bg-surface/20 p-6">
           <div className="mb-4 flex flex-wrap items-start justify-between gap-3">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {
   updateUserAction,
@@ -73,6 +73,13 @@ export default function UserActions({
   const [editState, editAction] = useFormState(updateUserAction, initialEditState);
   const [editing, setEditing] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+
+  // Once the edit is saved, close the inline form instead of leaving it
+  // open with the just-submitted values — reopening it later shows the
+  // fresh (revalidated) name/phone/role again.
+  useEffect(() => {
+    if (editState?.ok) setEditing(false);
+  }, [editState]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -173,6 +180,14 @@ export default function UserActions({
           <label className="flex items-center gap-1.5">
             <input type="checkbox" name="perm_chat" defaultChecked={permissions?.chat} />
             چت
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input type="checkbox" name="perm_crm" defaultChecked={permissions?.crm} />
+            CRM
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input type="checkbox" name="perm_blog" defaultChecked={permissions?.blog} />
+            وبلاگ
           </label>
           <button
             type="submit"

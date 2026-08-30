@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createTaskAction, toggleTaskStatusAction, deleteTaskAction, type TaskFormState } from "./actions";
 
@@ -42,8 +42,17 @@ const initialState: TaskFormState = null;
 
 function AddTaskForm({ developers }: { developers: { id: number; name: string }[] }) {
   const [state, formAction] = useFormState(createTaskAction, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Clear the fields after successfully assigning a task, so handing out
+  // several tasks in a row doesn't leave the previous one's text sitting
+  // in the form.
+  useEffect(() => {
+    if (state?.ok) formRef.current?.reset();
+  }, [state]);
+
   return (
-    <form action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
+    <form ref={formRef} action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
       <h2 className="mb-4 font-display text-lg font-normal">تسک جدید</h2>
       <div className="grid gap-4 sm:grid-cols-2">
         <input name="title" required placeholder="عنوان تسک" className={inputClass} />

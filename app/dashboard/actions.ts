@@ -13,12 +13,14 @@ import {
   getTicketById,
   closeTicket,
   reopenTicket,
+  deleteTicket,
   createUser,
   setUserRole,
   updateUser,
   deleteUser,
   setUserPermissions,
   createCrmLead,
+  getCrmLeadByPhone,
   setCrmLeadCalled,
   deleteCrmLead,
   createTask,
@@ -256,6 +258,20 @@ export async function reopenTicketAction(formData: FormData) {
   revalidatePath(`/account/tickets/${ticketId}`);
 }
 
+/** Admin-only (not just "has the tickets permission") — a developer who can
+ *  reply to/close tickets still can't delete one. */
+export async function deleteTicketAction(formData: FormData) {
+  await requireAdmin();
+  const ticketId = Number(formData.get("ticketId"));
+  if (!ticketId) return;
+
+  await deleteTicket(ticketId);
+  revalidatePath("/dashboard");
+  revalidatePath(`/dashboard/tickets/${ticketId}`);
+  revalidatePath("/account");
+  redirect("/dashboard");
+}
+
 // --- Admin adding a user directly from the dashboard ------------------------
 // Previously the only way to create staff (developer/admin) accounts was a
 // one-off Node script. This lets an admin create any account — customer,
@@ -268,14 +284,21 @@ export async function createUserAction(
   formData: FormData
 ): Promise<CreateUserFormState> {
   const currentUser = await getCurrentUser();
-  if (!currentUser || currentUser.role !== "admin") {
-    return { ok: false, message: "فقط ادمین می‌تونه کاربر اضافه کنه." };
+  if (!currentUser || !currentUser.isStaff) {
+    return { ok: false, message: "اجازه‌ی این کار رو نداری." };
+  }
+  const isAdmin = currentUser.role === "admin";
+  // A developer only gets here via the "کاربران ثبت‌نامی" tab's add-form,
+  // which is granted by the "users" permission — and even then can only
+  // add plain customers, never promote anyone to developer/admin.
+  if (!isAdmin && !currentUser.permissions.users) {
+    return { ok: false, message: "اجازه‌ی این کار رو نداری." };
   }
 
   const name = (formData.get("name") ?? "").toString().trim();
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
   const password = (formData.get("password") ?? "").toString();
-  const role = (formData.get("role") ?? "customer").toString() as UserRole;
+  const role = isAdmin ? ((formData.get("role") ?? "customer").toString() as UserRole) : "customer";
   const title = (formData.get("title") ?? "").toString().trim();
 
   if (!name || !phoneRaw || !password) {
@@ -488,6 +511,10 @@ export async function createCrmLeadAction(
 
   const phone = isValidPhone(phoneRaw) ? normalizePhone(phoneRaw) : phoneRaw;
 
+  if (await getCrmLeadByPhone(phone)) {
+    return { ok: false, message: "شماره تکراریه — این شماره قبلاً تو CRM ثبت شده." };
+  }
+
   try {
     await createCrmLead({ name, phone, note, createdBy: currentUser.id });
   } catch (err) {
@@ -509,8 +536,10 @@ export async function toggleCrmCalledAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+/** Admin-only — a developer with the "crm" permission can add leads and
+ *  flip the "called" flag, but can't delete one. */
 export async function deleteCrmLeadAction(formData: FormData) {
-  await requireCrmAccess();
+  await requireAdmin();
   const id = Number(formData.get("leadId"));
   if (!id) return;
 
@@ -711,8 +740,10 @@ export async function toggleBlogPublishedAction(formData: FormData) {
   if (post) revalidatePath(`/blog/${post.slug}`);
 }
 
+/** Admin-only — a developer with the "blog" permission can write, edit,
+ *  and publish/unpublish articles, but can't delete one. */
 export async function deleteBlogPostAction(formData: FormData) {
-  await requireBlogAccess();
+  await requireAdmin();
   const postId = Number(formData.get("postId"));
   if (!postId) return;
 
