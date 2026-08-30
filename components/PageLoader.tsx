@@ -87,11 +87,6 @@ export default function PageLoader() {
           <div className="h-[3px] w-52 overflow-hidden rounded-full bg-surface">
             <span className="block h-full w-1/3 animate-loader-bar-slide rounded-full bg-gradient-to-r from-accent2 via-accent to-accent3" />
           </div>
-          <p className="flex items-center gap-1.5 font-mono text-[12.5px] font-semibold text-dim">
-            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
-            در حال ساختن صفحه
-            <span className="animate-blink-cursor">_</span>
-          </p>
         </div>
       </div>
     </div>
