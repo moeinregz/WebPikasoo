@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Slide = {
@@ -14,17 +15,17 @@ const slides: Slide[] = [
   {
     title: "فروشگاه تخصصی صنعت قارچ",
     accent: "#2E7D32",
-    image: "/work/site-mushroom-shop.png",
+    image: "/work/site-mushroom-shop.webp",
   },
   {
     title: "پلتفرم بازار بین‌المللی",
     accent: "#E85D04",
-    image: "/work/site-market-dashboard.png",
+    image: "/work/site-market-dashboard.webp",
   },
   {
     title: "پنل مدیریت فروشگاه",
     accent: "#0077B6",
-    image: "/work/site-novapanel.png",
+    image: "/work/site-novapanel.webp",
   },
 ];
 
@@ -67,8 +68,14 @@ export default function HeroSlider() {
             className="absolute inset-0 transition-opacity duration-700 ease-out"
             style={{ opacity: i === index ? 1 : 0, pointerEvents: i === index ? "auto" : "none" }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={s.image} alt={s.title} className="h-full w-full object-cover" />
+            <Image
+              src={s.image}
+              alt={s.title}
+              fill
+              sizes="(min-width: 1024px) 560px, 100vw"
+              priority={i === 0}
+              className="object-cover"
+            />
 
             {/* گرادیان تیره از پایین فقط برای خوانا موندن عنوان */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />

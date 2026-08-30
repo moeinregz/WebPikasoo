@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {
@@ -373,12 +374,13 @@ function CoverImageField({ existingCoverImage }: { existingCoverImage?: string }
       )}
 
       {showExisting && (
-        <div className="relative mb-2 inline-block">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={existingCoverImage}
+        <div className="relative mb-2 inline-block h-32 w-full max-w-xs overflow-hidden rounded-lg border border-ink/[0.14]">
+          <Image
+            src={existingCoverImage!}
             alt=""
-            className="h-32 w-full max-w-xs rounded-lg border border-ink/[0.14] object-cover"
+            fill
+            sizes="320px"
+            className="object-cover"
           />
           <RemoveImageButton onClick={() => setRemoveExisting(true)} title="حذف تصویر کاور" />
         </div>
@@ -601,12 +603,9 @@ function BlogPostCard({ post, canDelete }: { post: BlogPost; canDelete: boolean 
         </div>
 
         {post.cover_image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={post.cover_image}
-            alt=""
-            className="h-16 w-24 flex-shrink-0 rounded-lg border border-ink/[0.14] object-cover"
-          />
+          <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg border border-ink/[0.14]">
+            <Image src={post.cover_image} alt="" fill sizes="96px" className="object-cover" />
+          </div>
         )}
       </div>
 

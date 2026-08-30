@@ -2,6 +2,7 @@
 
 import { insertInquiry } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
+import { allowAndCooldown } from "@/lib/redis";
 
 export type InquiryFormState = {
   ok: boolean;
@@ -17,11 +18,10 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Minimum gap between two project-request submissions from the same
 // account — stops the "submit the same order 100 times in a row" case
-// without needing a captcha. In-memory, so it resets on a server restart
-// and is per-process; fine for this scale, and cheap to swap for a
-// DB/Redis-backed limiter later if this ever runs across many instances.
+// without needing a captcha. Backed by Redis (lib/redis.ts) so the limit
+// is shared across every serverless instance; falls back to a local
+// in-memory check with the same effect when REDIS_URL isn't configured.
 const SUBMIT_COOLDOWN_MS = 60_000;
-const lastSubmitByUser = new Map<number, number>();
 
 export async function submitInquiry(
   _prevState: InquiryFormState,
@@ -48,9 +48,8 @@ export async function submitInquiry(
 
   // Stops someone (or a stuck double-click) from firing the same request
   // over and over — one project request per account per minute.
-  const now = Date.now();
-  const lastSubmit = lastSubmitByUser.get(currentUser.id);
-  if (lastSubmit && now - lastSubmit < SUBMIT_COOLDOWN_MS) {
+  const allowed = await allowAndCooldown(`inquiry:${currentUser.id}`, SUBMIT_COOLDOWN_MS);
+  if (!allowed) {
     return {
       ok: false,
       message: "همین الان یه درخواست ثبت کردی — یه دقیقه صبر کن و دوباره امتحان کن.",
@@ -92,13 +91,12 @@ export async function submitInquiry(
 }
 
 // Same per-account cooldown idea as submitInquiry above, kept as a
-// separate map/window since this is a different, much lighter-weight
+// separate key/window since this is a different, much lighter-weight
 // action (one click on a plan card, no form to fill) — stops a
 // double-click (or someone mashing the button) from creating duplicate
 // orders without blocking a legitimate second order a few seconds later
-// being confused with a stuck request.
+// being confused with a stuck request. Backed by Redis, same as above.
 const PLAN_ORDER_COOLDOWN_MS = 10_000;
-const lastPlanOrderByUser = new Map<number, number>();
 
 /** Fired straight from a plan card's "سفارش این پلن" button (see
  *  PricingPlans.tsx) — no form to fill. Requires login (checked here,
@@ -123,9 +121,11 @@ export async function submitPlanOrder(input: {
     };
   }
 
-  const now = Date.now();
-  const lastOrder = lastPlanOrderByUser.get(currentUser.id);
-  if (lastOrder && now - lastOrder < PLAN_ORDER_COOLDOWN_MS) {
+  // A double-click (or a resubmit while the first request is still in
+  // flight) hits this before the insert below — we pretend success
+  // instead of erroring, since the first click already placed the order.
+  const allowed = await allowAndCooldown(`plan-order:${currentUser.id}`, PLAN_ORDER_COOLDOWN_MS);
+  if (!allowed) {
     return { ok: true, message: "خرید شما با موفقیت انجام شد." };
   }
 
@@ -147,7 +147,6 @@ export async function submitPlanOrder(input: {
       message,
       userId: currentUser.id,
     });
-    lastPlanOrderByUser.set(currentUser.id, now);
     return { ok: true, message: "خرید شما با موفقیت انجام شد." };
   } catch (err) {
     console.error("submitPlanOrder failed:", err);

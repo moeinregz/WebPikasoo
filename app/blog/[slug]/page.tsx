@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -72,12 +73,16 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         <h1 className="mb-6 font-display text-[28px] font-normal leading-tight sm:text-[34px]">{post.title}</h1>
 
         {post.cover_image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={post.cover_image}
-            alt={post.title}
-            className="mb-8 aspect-[16/9] w-full rounded-card border border-ink/[0.14] object-cover"
-          />
+          <div className="relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-card border border-ink/[0.14]">
+            <Image
+              src={post.cover_image}
+              alt={post.title}
+              fill
+              sizes="(min-width: 768px) 720px, 100vw"
+              priority
+              className="object-cover"
+            />
+          </div>
         )}
 
         <article className="text-[16px] leading-[1.9] text-ink/90">{renderBlogContent(post.content)}</article>

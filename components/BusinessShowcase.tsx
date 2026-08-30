@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { categories, type BusinessCategory } from "@/lib/businessSites";
@@ -254,13 +255,14 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
                   key={s.id}
                   className="group relative overflow-hidden rounded-card border border-ink/10 bg-surface/40 transition-all hover:-translate-y-1 hover:border-ink/20"
                 >
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
                     {s.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Image
                         src={s.image}
                         alt={s.name}
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center font-mono text-xs text-white/30">

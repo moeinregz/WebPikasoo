@@ -76,7 +76,7 @@ export default function Footer() {
           <div>
             <a href="/" className="inline-flex items-center gap-2 font-mono text-[16px] font-black text-ink sm:gap-2.5 sm:text-[18px]">
               <span className="relative flex h-8 w-8 flex-shrink-0 overflow-hidden rounded-lg shadow-glow sm:h-10 sm:w-10">
-                <Image src="/logo.jpg" alt="وب پیکاسو" fill sizes="40px" className="object-cover" />
+                <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="40px" className="object-cover" />
               </span>
               <span className="leading-none">
                 WebPIKASO<span className="text-accent">.</span>

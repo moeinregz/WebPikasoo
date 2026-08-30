@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createUser, getUserByPhone, createTicket, getTicketById, addTicketMessage, reopenTicket } from "@/lib/db";
 import { hashPassword, verifyPassword, isValidPhone, normalizePhone } from "@/lib/auth";
+import { isStrongPassword, missingPasswordRequirements } from "@/lib/passwordPolicy";
 import { USER_COOKIE_NAME, setSessionCookie, getCurrentUser } from "@/lib/session";
 
 export type AccountFormState = {
@@ -27,9 +28,10 @@ export async function signup(
   const name = (formData.get("name") ?? "").toString().trim();
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
   const password = (formData.get("password") ?? "").toString();
+  const confirmPassword = (formData.get("confirmPassword") ?? "").toString();
 
-  if (!name || !phoneRaw || !password) {
-    return { ok: false, message: "لطفاً نام، شماره تماس و رمز عبور رو پر کن." };
+  if (!name || !phoneRaw || !password || !confirmPassword) {
+    return { ok: false, message: "لطفاً همه‌ی فیلدها رو پر کن." };
   }
   if (name.length > 120) {
     return { ok: false, message: "نام خیلی طولانیه." };
@@ -37,8 +39,15 @@ export async function signup(
   if (!isValidPhone(phoneRaw)) {
     return { ok: false, message: "شماره موبایل معتبر نیست — مثل ۰۹۱۲۳۴۵۶۷۸۹ وارد کن." };
   }
-  if (password.length < 6) {
-    return { ok: false, message: "رمز عبور باید حداقل ۶ کاراکتر باشه." };
+  if (password !== confirmPassword) {
+    return { ok: false, message: "رمز عبور و تکرار آن یکسان نیستند." };
+  }
+  if (!isStrongPassword(password)) {
+    const missing = missingPasswordRequirements(password);
+    return {
+      ok: false,
+      message: `رمز عبور باید این موارد رو داشته باشه: ${missing.join("، ")}.`,
+    };
   }
 
   const phone = normalizePhone(phoneRaw);

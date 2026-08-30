@@ -4,18 +4,28 @@ import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { login, signup, type AccountFormState } from "./actions";
 import PasswordInput from "@/components/PasswordInput";
+import PasswordStrengthMeter from "@/components/PasswordStrengthMeter";
+import { isStrongPassword } from "@/lib/passwordPolicy";
 
 const initialState: AccountFormState = null;
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
 
-function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
+function SubmitButton({
+  label,
+  pendingLabel,
+  disabled,
+}: {
+  label: string;
+  pendingLabel: string;
+  disabled?: boolean;
+}) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={pending || disabled}
       className="mt-5 w-full rounded-full bg-accent px-6 py-3 text-[15px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? pendingLabel : label}
@@ -62,6 +72,15 @@ function LoginForm({ next }: { next?: string }) {
 
 function SignupForm({ next }: { next?: string }) {
   const [state, formAction] = useFormState(signup, initialState);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const passwordOk = isStrongPassword(password);
+  // Only nag about a mismatch once they've actually started typing the
+  // confirmation — an empty confirm field isn't a "mismatch" yet.
+  const showMismatch = confirmPassword.length > 0 && confirmPassword !== password;
+  const canSubmit = passwordOk && confirmPassword.length > 0 && !showMismatch;
+
   return (
     <form action={formAction}>
       {next && <input type="hidden" name="next" value={next} />}
@@ -75,15 +94,32 @@ function SignupForm({ next }: { next?: string }) {
           dir="ltr"
           className={inputClass}
         />
-        <PasswordInput
-          name="password"
-          required
-          placeholder="رمز عبور (حداقل ۶ کاراکتر)"
-          autoComplete="new-password"
-          className={inputClass}
-        />
+        <div>
+          <PasswordInput
+            name="password"
+            required
+            placeholder="رمز عبور"
+            autoComplete="new-password"
+            className={inputClass}
+            value={password}
+            onChange={setPassword}
+          />
+          <PasswordStrengthMeter password={password} />
+        </div>
+        <div>
+          <PasswordInput
+            name="confirmPassword"
+            required
+            placeholder="تکرار رمز عبور"
+            autoComplete="new-password"
+            className={inputClass}
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+          />
+          {showMismatch && <p className="mt-1.5 text-[12.5px] text-red-500">رمز عبور و تکرار آن یکسان نیستند.</p>}
+        </div>
       </div>
-      <SubmitButton label="ساخت حساب کاربری" pendingLabel="در حال ساخت حساب..." />
+      <SubmitButton label="ساخت حساب کاربری" pendingLabel="در حال ساخت حساب..." disabled={!canSubmit} />
       <FormMessage state={state} />
     </form>
   );

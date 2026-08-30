@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -45,13 +46,14 @@ export default async function BlogIndexPage() {
                 href={`/blog/${post.slug}`}
                 className="group flex flex-col overflow-hidden rounded-card border border-ink/[0.14] bg-surface/20 transition hover:-translate-y-1 hover:border-accent/40"
               >
-                <div className="aspect-[16/10] w-full overflow-hidden bg-[#0a0a0c]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0a0a0c]">
                   {post.cover_image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={post.cover_image}
                       alt={post.title}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center font-mono text-xs text-white/30">

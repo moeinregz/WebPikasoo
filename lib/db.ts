@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import { cacheWrap, invalidateCache } from "@/lib/redis";
 
 // MongoDB Atlas storage. This is the async, serverless-friendly
 // replacement for the old file-based SQLite database — it works on
@@ -691,21 +692,29 @@ export async function createProject(data: NewProject): Promise<number> {
     url: data.url,
     image: data.image || "",
   });
+  await invalidateCache("projects:all");
   return id;
 }
 
+/** Public portfolio grid (BusinessShowcase reads the hardcoded list in
+ *  lib/businessSites.ts, but admin-added projects — ProjectsPanel — go
+ *  through here). Cached briefly since this is read on every dashboard
+ *  load and rarely changes. */
 export async function getAllProjects(): Promise<Project[]> {
-  const database = await getDb();
-  return database
-    .collection<Project>("projects")
-    .find({}, { projection: { _id: 0 } })
-    .sort({ created_at: -1, id: -1 })
-    .toArray();
+  return cacheWrap("projects:all", 60, async () => {
+    const database = await getDb();
+    return database
+      .collection<Project>("projects")
+      .find({}, { projection: { _id: 0 } })
+      .sort({ created_at: -1, id: -1 })
+      .toArray();
+  });
 }
 
 export async function deleteProject(id: number): Promise<void> {
   const database = await getDb();
   await database.collection("projects").deleteOne({ id });
+  await invalidateCache("projects:all");
 }
 
 /** One-time seed from the old hardcoded lib/businessSites.ts array, so
@@ -918,11 +927,15 @@ export async function createBlogPost(data: NewBlogPost): Promise<number> {
     published: data.published ? 1 : 0,
     author_id: data.authorId ?? null,
   });
+  await invalidateCache("blog:published", `blog:slug:${data.slug}`);
   return id;
 }
 
 export async function updateBlogPost(id: number, data: UpdateBlogPostData): Promise<void> {
   const database = await getDb();
+  const existing = await database
+    .collection<BlogPost>("blog_posts")
+    .findOne({ id }, { projection: { _id: 0, slug: 1 } });
   const set: Record<string, unknown> = {
     title: data.title,
     slug: data.slug,
@@ -935,18 +948,28 @@ export async function updateBlogPost(id: number, data: UpdateBlogPostData): Prom
     set.cover_image = data.coverImage;
   }
   await database.collection("blog_posts").updateOne({ id }, { $set: set });
+  // Invalidate both the old and new slug in case this edit renamed it.
+  await invalidateCache("blog:published", `blog:slug:${data.slug}`, ...(existing ? [`blog:slug:${existing.slug}`] : []));
 }
 
 export async function setBlogPostPublished(id: number, published: boolean): Promise<void> {
   const database = await getDb();
+  const existing = await database
+    .collection<BlogPost>("blog_posts")
+    .findOne({ id }, { projection: { _id: 0, slug: 1 } });
   await database
     .collection("blog_posts")
     .updateOne({ id }, { $set: { published: published ? 1 : 0, updated_at: nowStr() } });
+  await invalidateCache("blog:published", ...(existing ? [`blog:slug:${existing.slug}`] : []));
 }
 
 export async function deleteBlogPost(id: number): Promise<void> {
   const database = await getDb();
+  const existing = await database
+    .collection<BlogPost>("blog_posts")
+    .findOne({ id }, { projection: { _id: 0, slug: 1 } });
   await database.collection("blog_posts").deleteOne({ id });
+  await invalidateCache("blog:published", ...(existing ? [`blog:slug:${existing.slug}`] : []));
 }
 
 export async function getBlogPostById(id: number): Promise<BlogPost | undefined> {
@@ -998,25 +1021,32 @@ export async function getAllBlogPosts(): Promise<BlogPostWithAuthor[]> {
   return attachAuthorNames(posts);
 }
 
-/** Published posts only, for the public /blog listing. */
+/** Published posts only, for the public /blog listing. Cached briefly —
+ *  this is the single most-read query on the public site and posts don't
+ *  change often enough to justify hitting Mongo on every visitor. */
 export async function getPublishedBlogPosts(): Promise<BlogPostWithAuthor[]> {
-  const database = await getDb();
-  const posts = await database
-    .collection<BlogPost>("blog_posts")
-    .find({ published: 1 }, { projection: { _id: 0 } })
-    .sort({ created_at: -1, id: -1 })
-    .toArray();
-  return attachAuthorNames(posts);
+  return cacheWrap("blog:published", 60, async () => {
+    const database = await getDb();
+    const posts = await database
+      .collection<BlogPost>("blog_posts")
+      .find({ published: 1 }, { projection: { _id: 0 } })
+      .sort({ created_at: -1, id: -1 })
+      .toArray();
+    return attachAuthorNames(posts);
+  });
 }
 
 /** A single published post for the public /blog/[slug] page — drafts and
- *  unpublished posts 404 there even if you know the slug. */
+ *  unpublished posts 404 there even if you know the slug. Cached briefly,
+ *  same reasoning as getPublishedBlogPosts. */
 export async function getPublishedBlogPostBySlug(slug: string): Promise<BlogPostWithAuthor | undefined> {
-  const database = await getDb();
-  const post = await database
-    .collection<BlogPost>("blog_posts")
-    .findOne({ slug, published: 1 }, { projection: { _id: 0 } });
-  if (!post) return undefined;
-  const [withAuthor] = await attachAuthorNames([post]);
-  return withAuthor;
+  return cacheWrap(`blog:slug:${slug}`, 60, async () => {
+    const database = await getDb();
+    const post = await database
+      .collection<BlogPost>("blog_posts")
+      .findOne({ slug, published: 1 }, { projection: { _id: 0 } });
+    if (!post) return undefined;
+    const [withAuthor] = await attachAuthorNames([post]);
+    return withAuthor;
+  });
 }
