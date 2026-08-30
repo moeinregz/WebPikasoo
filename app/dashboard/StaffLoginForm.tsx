@@ -2,6 +2,7 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { staffLogin, type DashboardFormState } from "./actions";
+import PasswordInput from "@/components/PasswordInput";
 
 const initialState: DashboardFormState = null;
 
@@ -43,11 +44,11 @@ export default function StaffLoginForm() {
           autoFocus
           className="w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink outline-none transition focus:border-accent"
         />
-        <input
-          type="password"
+        <PasswordInput
           name="password"
           required
           placeholder="رمز عبور"
+          autoComplete="current-password"
           className="w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink outline-none transition focus:border-accent"
         />
       </div>

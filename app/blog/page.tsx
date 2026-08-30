@@ -4,6 +4,9 @@ import Footer from "@/components/Footer";
 import { getPublishedBlogPosts } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 
+// Always read the latest posts straight from the database.
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "وبلاگ — وب پیکاسو",
   description: "مقاله‌ها و یادداشت‌های تیم وب پیکاسو درباره‌ی طراحی سایت، توسعه و کسب‌وکار آنلاین.",

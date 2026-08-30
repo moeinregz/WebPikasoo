@@ -6,13 +6,13 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { logout } from "@/app/account/actions";
 
-// Same four items on desktop (as direct buttons) and inside the mobile
+// Same items on desktop (as direct buttons) and inside the mobile
 // slide-down panel (behind the hamburger).
 const links = [
-  { href: "/#showcase", label: "نمونه‌کارها" },
+  { href: "/", label: "خانه" },
+  { href: "/portfolio", label: "نمونه‌کارها" },
   { href: "/order", label: "ثبت سفارش" },
-  { href: "/services", label: "خدمات" },
-  { href: "/#trust", label: "درباره ما" },
+  { href: "/about", label: "درباره ما" },
   { href: "/blog", label: "وبلاگ" },
 ];
 

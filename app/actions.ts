@@ -8,6 +8,11 @@ export type InquiryFormState = {
   message: string;
 } | null;
 
+export type PlanOrderState = {
+  ok: boolean;
+  message: string;
+} | null;
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Minimum gap between two project-request submissions from the same
@@ -83,5 +88,69 @@ export async function submitInquiry(
   } catch (err) {
     console.error("submitInquiry failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد. می‌تونی از واتساپ هم پیام بدی." };
+  }
+}
+
+// Same per-account cooldown idea as submitInquiry above, kept as a
+// separate map/window since this is a different, much lighter-weight
+// action (one click on a plan card, no form to fill) — stops a
+// double-click (or someone mashing the button) from creating duplicate
+// orders without blocking a legitimate second order a few seconds later
+// being confused with a stuck request.
+const PLAN_ORDER_COOLDOWN_MS = 10_000;
+const lastPlanOrderByUser = new Map<number, number>();
+
+/** Fired straight from a plan card's "سفارش این پلن" button (see
+ *  PricingPlans.tsx) — no form to fill. Requires login (checked here,
+ *  server-side, same as submitInquiry) and, when logged in, builds the
+ *  order entirely from the account's own name/phone plus the clicked
+ *  plan's details, then saves it as a normal inquiry so it shows up
+ *  under "سفارش‌ها" in /dashboard exactly like a contact-form submission
+ *  would. */
+export async function submitPlanOrder(input: {
+  categoryLabel: string;
+  categoryProjectType: string;
+  planName: string;
+  planPrice: string;
+  planUnit: string;
+  planFeatures: string[];
+}): Promise<PlanOrderState> {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return {
+      ok: false,
+      message: "برای ثبت سفارش اول باید وارد حساب کاربریت بشی.",
+    };
+  }
+
+  const now = Date.now();
+  const lastOrder = lastPlanOrderByUser.get(currentUser.id);
+  if (lastOrder && now - lastOrder < PLAN_ORDER_COOLDOWN_MS) {
+    return { ok: true, message: "خرید شما با موفقیت انجام شد." };
+  }
+
+  const { categoryLabel, categoryProjectType, planName, planPrice, planUnit, planFeatures } = input;
+  const budget = `${planPrice} ${planUnit}`.trim();
+  const message = [
+    `سفارش پلن «${planName}» از دسته‌ی «${categoryLabel}»`,
+    "",
+    "امکانات پلن:",
+    ...planFeatures.map((f) => `- ${f}`),
+  ].join("\n");
+
+  try {
+    await insertInquiry({
+      name: currentUser.name,
+      phone: currentUser.phone,
+      projectType: categoryProjectType,
+      budget,
+      message,
+      userId: currentUser.id,
+    });
+    lastPlanOrderByUser.set(currentUser.id, now);
+    return { ok: true, message: "خرید شما با موفقیت انجام شد." };
+  } catch (err) {
+    console.error("submitPlanOrder failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد. دوباره امتحان کن یا از واتساپ پیام بده." };
   }
 }

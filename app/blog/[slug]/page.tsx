@@ -6,13 +6,31 @@ import { getPublishedBlogPostBySlug } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { renderBlogContent } from "@/lib/blogContent";
 
+// Always read the latest posts straight from the database — never serve a
+// stale/pre-rendered version of an article page.
+export const dynamic = "force-dynamic";
+
 function formatDate(iso: string) {
   const d = new Date(iso.replace(" ", "T") + "Z");
   return new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium" }).format(d);
 }
 
+/** Next.js hands dynamic route params to us *as they appeared in the URL*
+ *  — for a Persian (or any non-ASCII) slug that means still percent-encoded
+ *  (e.g. "%DA%86%D8%B7..."), not the decoded "چطور-..." string that's
+ *  actually stored in the database. Without this decode step, every post
+ *  with a Persian slug 404s the moment you click it from the /blog list,
+ *  even though it's right there in the database. */
+function decodeSlugParam(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await getPublishedBlogPostBySlug(params.slug);
+  const post = await getPublishedBlogPostBySlug(decodeSlugParam(params.slug));
   if (!post) return { title: "مقاله پیدا نشد — وب پیکاسو" };
   return {
     title: `${post.title} — وبلاگ وب پیکاسو`,
@@ -22,7 +40,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const isLoggedIn = !!(await getCurrentUser());
-  const post = await getPublishedBlogPostBySlug(params.slug);
+  const post = await getPublishedBlogPostBySlug(decodeSlugParam(params.slug));
 
   if (!post) notFound();
 

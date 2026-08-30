@@ -669,12 +669,19 @@ export async function updateBlogPostAction(
 
   let coverImage: string | undefined = undefined;
   const file = formData.get("coverImage");
+  // The "حذف تصویر کاور" checkbox in BlogPanel.tsx sends this when the
+  // admin wants to clear the cover without picking a replacement file.
+  // A newly-picked file always wins over it (see BlogFields: the checkbox
+  // is hidden the moment a new file is chosen).
+  const removeCoverImage = formData.get("removeCoverImage") === "1";
   if (file instanceof File && file.size > 0) {
     try {
       coverImage = (await saveBlogImage(file)) || undefined;
     } catch (err) {
       return { ok: false, message: err instanceof Error ? err.message : "آپلود عکس ناموفق بود." };
     }
+  } else if (removeCoverImage) {
+    coverImage = "";
   }
 
   try {

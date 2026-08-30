@@ -92,9 +92,11 @@ function PublishButtons({ currentlyPublished }: { currentlyPublished?: boolean }
 const TOOLBAR_BUTTON_CLASS =
   "rounded-md border border-ink/[0.16] bg-canvas px-2.5 py-1.5 text-[12.5px] font-bold text-ink transition hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-50";
 
+const HEADING_LEVELS = [2, 3, 4, 5, 6] as const;
+
 /** Body-text editor for the article's full content: a plain textarea plus a
- *  toolbar that inserts a small, purpose-built syntax (## heading, "- "
- *  list items, [text](url) links, ![alt](url) images) at the cursor —
+ *  toolbar that inserts a small, purpose-built syntax (## .. ###### headings,
+ *  "- " list items, [text](url) links, ![alt](url) images) at the cursor —
  *  matching exactly what lib/blogContent.tsx knows how to render on the
  *  public article page. The image button uploads right away (via Vercel
  *  Blob) and drops the resulting URL in, so a full illustrated article can
@@ -105,24 +107,11 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
   const [value, setValue] = useState(defaultValue ?? "");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
-
-  /** Wraps the current selection with `before`/`after` (or, if nothing is
-   *  selected, inserts `placeholder` between them), then puts the cursor
-   *  right after the inserted text. */
-  function wrapSelection(before: string, after: string, placeholder: string) {
-    const el = textareaRef.current;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const selected = value.slice(start, end) || placeholder;
-    const next = value.slice(0, start) + before + selected + after + value.slice(end);
-    setValue(next);
-    const cursor = start + before.length + selected.length + after.length;
-    requestAnimationFrame(() => {
-      el.focus();
-      el.setSelectionRange(cursor, cursor);
-    });
-  }
+  // Selected text (or the cursor position, if nothing was selected) captured
+  // the moment "لینک" is clicked — kept around so the mini URL-entry panel
+  // below the toolbar knows exactly what to wrap once the admin confirms.
+  const [linkDraft, setLinkDraft] = useState<{ start: number; end: number; text: string } | null>(null);
+  const [linkUrl, setLinkUrl] = useState("");
 
   /** Inserts a standalone block (heading/list/image) on its own line,
    *  making sure there's a blank line before and after it so it never
@@ -142,17 +131,50 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
     });
   }
 
-  function handleHeading() {
-    wrapSelection("", "", "");
-    insertBlock("## عنوان بخش");
+  function handleHeading(level: (typeof HEADING_LEVELS)[number]) {
+    insertBlock(`${"#".repeat(level)} عنوان بخش`);
   }
 
   function handleList() {
     insertBlock("- مورد اول\n- مورد دوم\n- مورد سوم");
   }
 
-  function handleLink() {
-    wrapSelection("[", "](https://) ", "متن لینک");
+  /** Opens the mini link panel, remembering exactly which range of text
+   *  (or, with nothing selected, just the cursor spot) it should wrap once
+   *  a URL is entered — matches the "link" button's old wrapSelection
+   *  behavior but defers the actual insertion until the URL is confirmed. */
+  function handleLinkClick() {
+    const el = textareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = value.slice(start, end) || "متن لینک";
+    setLinkDraft({ start, end, text });
+    setLinkUrl("");
+  }
+
+  function applyLink() {
+    if (!linkDraft) return;
+    const url = linkUrl.trim();
+    if (!url) return;
+    const { start, end, text } = linkDraft;
+    const markdown = `[${text}](${url})`;
+    const next = value.slice(0, start) + markdown + value.slice(end);
+    setValue(next);
+    const cursor = start + markdown.length;
+    setLinkDraft(null);
+    setLinkUrl("");
+    requestAnimationFrame(() => {
+      const el = textareaRef.current;
+      el?.focus();
+      el?.setSelectionRange(cursor, cursor);
+    });
+  }
+
+  function cancelLink() {
+    setLinkDraft(null);
+    setLinkUrl("");
+    textareaRef.current?.focus();
   }
 
   function handleImageClick() {
@@ -188,13 +210,22 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
       <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">متن کامل مقاله</label>
 
       <div className="mb-2 flex flex-wrap items-center gap-1.5">
-        <button type="button" onClick={handleHeading} className={TOOLBAR_BUTTON_CLASS} title="تیتر (H2)">
-          H2
-        </button>
+        {HEADING_LEVELS.map((level) => (
+          <button
+            key={level}
+            type="button"
+            onClick={() => handleHeading(level)}
+            className={TOOLBAR_BUTTON_CLASS}
+            title={`تیتر (H${level})`}
+          >
+            H{level}
+          </button>
+        ))}
+        <span className="mx-0.5 h-5 w-px bg-ink/[0.14]" aria-hidden="true" />
         <button type="button" onClick={handleList} className={TOOLBAR_BUTTON_CLASS} title="لیست">
           لیست
         </button>
-        <button type="button" onClick={handleLink} className={TOOLBAR_BUTTON_CLASS} title="لینک روی یه کلمه">
+        <button type="button" onClick={handleLinkClick} className={TOOLBAR_BUTTON_CLASS} title="لینک روی یه کلمه">
           لینک
         </button>
         <button
@@ -215,6 +246,47 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
         />
       </div>
 
+      {linkDraft && (
+        <div className="mb-2 flex flex-wrap items-center gap-2 rounded-md border border-accent/40 bg-accent/[0.06] p-2.5">
+          <span className="max-w-[9rem] truncate text-[12.5px] font-semibold text-ink" title={linkDraft.text}>
+            «{linkDraft.text}»
+          </span>
+          <input
+            type="url"
+            autoFocus
+            dir="ltr"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applyLink();
+              } else if (e.key === "Escape") {
+                e.preventDefault();
+                cancelLink();
+              }
+            }}
+            placeholder="https://example.com"
+            className={`${inputClass} flex-1 py-1.5 text-left text-[13px]`}
+          />
+          <button
+            type="button"
+            onClick={applyLink}
+            disabled={!linkUrl.trim()}
+            className="rounded-md bg-accent px-3 py-1.5 text-[12.5px] font-bold text-black transition disabled:pointer-events-none disabled:opacity-50"
+          >
+            اعمال لینک
+          </button>
+          <button
+            type="button"
+            onClick={cancelLink}
+            className="rounded-md border border-ink/[0.2] px-3 py-1.5 text-[12.5px] font-semibold text-dim transition hover:text-ink"
+          >
+            انصراف
+          </button>
+        </div>
+      )}
+
       {uploadError && <p className="mb-2 text-[12px] text-red-500">{uploadError}</p>}
 
       <textarea
@@ -229,9 +301,114 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
         dir="rtl"
       />
       <p className="mt-1 text-[12px] text-dim/70">
-        متن رو انتخاب کن و «لینک» رو بزن تا لینک روی همون کلمه بره؛ بدون انتخاب متن، دکمه‌ها یه نمونه‌ی آماده اضافه
-        می‌کنن که می‌تونی جاش رو عوض کنی.
+        متن رو انتخاب کن، «لینک» رو بزن، آدرس رو توی همون کادر بنویس و «اعمال لینک» رو بزن. بدون انتخاب متن، یه نمونه‌ی
+        آماده اضافه می‌شه که می‌تونی جاش رو عوض کنی. برای تیتر هم از H2 تا H6 رو داری — هرچی عدد کوچیک‌تر، تیتر بزرگ‌تره.
       </p>
+    </div>
+  );
+}
+
+function RemoveImageButton({ onClick, title }: { onClick: () => void; title: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className="absolute -left-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full border border-ink/[0.14] bg-canvas text-dim shadow transition hover:border-red-500/40 hover:text-red-500"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-3.5 w-3.5">
+        <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+      </svg>
+    </button>
+  );
+}
+
+/** Cover-image field: a file picker with a preview, where both a freshly
+ *  picked file and an already-saved cover image (in edit mode) can be
+ *  cleared with a small × button instead of just being replaced.
+ *  - Clearing a freshly picked file just resets the <input>, nothing is
+ *    submitted.
+ *  - "Removing" the existing saved cover sets a hidden removeCoverImage=1
+ *    field that actions.ts reads to explicitly clear cover_image — but only
+ *    when no new file was picked in the same submit (a new pick always
+ *    wins, and picking one cancels a pending removal). */
+function CoverImageField({ existingCoverImage }: { existingCoverImage?: string }) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [removeExisting, setRemoveExisting] = useState(false);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return file ? URL.createObjectURL(file) : null;
+    });
+    if (file) setRemoveExisting(false);
+  }
+
+  function clearPickedFile() {
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  }
+
+  const showExisting = !!existingCoverImage && !removeExisting && !previewUrl;
+
+  return (
+    <div>
+      <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">تصویر کاور</label>
+
+      {previewUrl && (
+        <div className="relative mb-2 inline-block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={previewUrl}
+            alt=""
+            className="h-32 w-full max-w-xs rounded-lg border border-ink/[0.14] object-cover"
+          />
+          <RemoveImageButton onClick={clearPickedFile} title="حذف عکس انتخاب‌شده" />
+        </div>
+      )}
+
+      {showExisting && (
+        <div className="relative mb-2 inline-block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={existingCoverImage}
+            alt=""
+            className="h-32 w-full max-w-xs rounded-lg border border-ink/[0.14] object-cover"
+          />
+          <RemoveImageButton onClick={() => setRemoveExisting(true)} title="حذف تصویر کاور" />
+        </div>
+      )}
+
+      {removeExisting && !previewUrl && (
+        <p className="mb-2 flex flex-wrap items-center gap-2 text-[12px] text-red-500">
+          تصویر کاور فعلی با ذخیره‌ی فرم حذف می‌شه.
+          <button
+            type="button"
+            onClick={() => setRemoveExisting(false)}
+            className="font-semibold text-accent underline"
+          >
+            لغو حذف
+          </button>
+        </p>
+      )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        name="coverImage"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="block w-full text-[13.5px] text-dim file:ml-3 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-[12.5px] file:font-bold file:text-canvas"
+      />
+      {existingCoverImage && <input type="hidden" name="removeCoverImage" value={removeExisting ? "1" : "0"} />}
+      {existingCoverImage && !removeExisting && (
+        <p className="mt-1 text-[12px] text-dim/70">یه فایل جدید انتخاب کن تا عکس فعلی جایگزین بشه، وگرنه همون می‌مونه.</p>
+      )}
     </div>
   );
 }
@@ -298,26 +475,7 @@ function BlogFields({
 
       <ContentEditor defaultValue={defaults?.content} />
 
-      <div>
-        <label className="mb-1.5 block text-[12.5px] font-semibold text-dim">تصویر کاور</label>
-        {defaults?.coverImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={defaults.coverImage}
-            alt=""
-            className="mb-2 h-32 w-full max-w-xs rounded-lg border border-ink/[0.14] object-cover"
-          />
-        )}
-        <input
-          type="file"
-          name="coverImage"
-          accept="image/*"
-          className="block w-full text-[13.5px] text-dim file:ml-3 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-[12.5px] file:font-bold file:text-canvas"
-        />
-        {defaults?.coverImage && (
-          <p className="mt-1 text-[12px] text-dim/70">یه فایل جدید انتخاب کن تا عکس فعلی جایگزین بشه، وگرنه همون می‌مونه.</p>
-        )}
-      </div>
+      <CoverImageField existingCoverImage={defaults?.coverImage} />
     </div>
   );
 }

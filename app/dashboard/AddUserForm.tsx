@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createUserAction, type CreateUserFormState } from "./actions";
+import PasswordInput from "@/components/PasswordInput";
 
 const initialState: CreateUserFormState = null;
 
@@ -80,11 +81,11 @@ export default function AddUserForm({
           dir="ltr"
           className={inputClass}
         />
-        <input
-          type="password"
+        <PasswordInput
           name="password"
           required
           placeholder="رمز عبور (حداقل ۶ کاراکتر)"
+          autoComplete="new-password"
           className={inputClass}
         />
         <select name="role" defaultValue={defaultRole} className={inputClass}>

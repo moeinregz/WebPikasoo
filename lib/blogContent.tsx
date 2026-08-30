@@ -7,12 +7,14 @@ import { Fragment, type ReactNode } from "react";
 // render exactly like before — this only adds new block types on top.
 
 type Block =
-  | { type: "heading"; text: string }
+  | { type: "heading"; level: 2 | 3 | 4 | 5 | 6; text: string }
   | { type: "list"; items: string[] }
   | { type: "image"; url: string; alt: string }
   | { type: "paragraph"; lines: string[] };
 
-const HEADING_RE = /^##\s+/;
+// "##" through "######" — H1 is reserved for the page/post title itself, so
+// the editor toolbar only ever offers H2..H6 (see BlogPanel.tsx).
+const HEADING_RE = /^(#{2,6})\s+/;
 const LIST_ITEM_RE = /^[-*]\s+/;
 const STANDALONE_IMAGE_RE = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
 
@@ -29,8 +31,10 @@ function toBlocks(content: string): Block[] {
       continue;
     }
 
-    if (HEADING_RE.test(line)) {
-      blocks.push({ type: "heading", text: line.replace(HEADING_RE, "").trim() });
+    const headingMatch = line.match(HEADING_RE);
+    if (headingMatch) {
+      const level = headingMatch[1].length as 2 | 3 | 4 | 5 | 6;
+      blocks.push({ type: "heading", level, text: line.replace(HEADING_RE, "").trim() });
       i++;
       continue;
     }
@@ -68,6 +72,18 @@ function toBlocks(content: string): Block[] {
 
   return blocks;
 }
+
+// Font sizes step down clearly as the heading level goes deeper — each level
+// needs a visible gap from its neighbors (not just 1-2px) so every level
+// reads unmistakably as its own heading, smaller than h1 (28px/34px) but
+// still bigger than the body text (16px/leading-[1.9]) down through h5.
+const HEADING_CLASS: Record<2 | 3 | 4 | 5 | 6, string> = {
+  2: "mb-4 mt-10 font-display text-[24px] font-semibold leading-snug text-ink sm:text-[28px]",
+  3: "mb-3.5 mt-8 font-display text-[21px] font-semibold leading-snug text-ink sm:text-[24px]",
+  4: "mb-3 mt-7 font-display text-[18.5px] font-semibold leading-snug text-ink sm:text-[20px]",
+  5: "mb-2.5 mt-6 text-[17px] font-bold leading-snug text-ink sm:text-[17.5px]",
+  6: "mb-2 mt-5 text-[14.5px] font-bold uppercase tracking-wide leading-snug text-ink/65 sm:text-[15px]",
+};
 
 /** Renders `[text](url)` links inside otherwise-plain text; everything else
  *  passes through untouched (and untrusted HTML is never interpreted —
@@ -108,13 +124,11 @@ export function renderBlogContent(content: string): ReactNode {
     <>
       {blocks.map((block, i) => {
         if (block.type === "heading") {
+          const Tag = `h${block.level}` as "h2" | "h3" | "h4" | "h5" | "h6";
           return (
-            <h2
-              key={i}
-              className="mb-4 mt-10 font-display text-[21px] font-normal leading-snug text-ink sm:text-[24px]"
-            >
+            <Tag key={i} className={HEADING_CLASS[block.level]}>
               {renderInline(block.text, `h-${i}`)}
-            </h2>
+            </Tag>
           );
         }
         if (block.type === "list") {

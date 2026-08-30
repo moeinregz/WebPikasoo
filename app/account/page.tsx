@@ -10,14 +10,39 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AccountPage() {
+// Only an internal path is ever accepted for `next` (must start with a
+// single "/", never "//..." which browsers treat as protocol-relative and
+// would send the person off-site) — this is a redirect target coming
+// straight from the URL, so it can't be trusted blindly.
+function safeNextPath(raw?: string): string | undefined {
+  if (!raw) return undefined;
+  if (!raw.startsWith("/") || raw.startsWith("//")) return undefined;
+  return raw;
+}
+
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams?: { next?: string };
+}) {
   const user = await getCurrentUser();
+  const next = safeNextPath(searchParams?.next);
 
   // Admins/developers have their own workspace — send them there instead
   // of the customer dashboard (mirrors /dashboard sending customers back
-  // here).
+  // here). A `next` target (e.g. back to /order) only ever makes sense
+  // for a customer completing a purchase, so staff still always land on
+  // /dashboard regardless of it.
   if (user?.isStaff) {
     redirect("/dashboard");
+  }
+
+  // Already logged in (as a customer) and arrived here with a `next`
+  // target — e.g. clicked "ورود / ثبت‌نام" on a plan card from a stale tab
+  // that still shows them logged out. Send them straight back instead of
+  // showing the dashboard.
+  if (user && next) {
+    redirect(next);
   }
 
   let projects: Awaited<ReturnType<typeof getInquiriesByUserId>> = [];
@@ -58,10 +83,12 @@ export default async function AccountPage() {
             </Link>
             <h1 className="mb-2 font-display text-2xl font-normal">حساب کاربری</h1>
             <p className="text-sm text-dim">
-              وارد شو یا حساب بساز تا وضعیت پروژه‌ت رو دنبال کنی.
+              {next
+                ? "برای ادامه‌ی خرید، اول وارد شو یا حساب بساز."
+                : "وارد شو یا حساب بساز تا وضعیت پروژه‌ت رو دنبال کنی."}
             </p>
           </div>
-          <AuthForms />
+          <AuthForms next={next} />
         </div>
       )}
     </main>

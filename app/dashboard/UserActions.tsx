@@ -9,6 +9,7 @@ import {
   type EditUserFormState,
 } from "./actions";
 import type { UserRole, UserPermissions } from "@/lib/db";
+import PasswordInput from "@/components/PasswordInput";
 
 const inputClass =
   "w-full rounded-[8px] border border-ink/[0.16] bg-surface/40 px-3 py-2 text-[13.5px] text-ink outline-none transition focus:border-accent";
@@ -131,10 +132,10 @@ export default function UserActions({
               className={`${inputClass} sm:w-48`}
             />
           )}
-          <input
-            type="password"
+          <PasswordInput
             name="password"
             placeholder="رمز جدید (اختیاری)"
+            autoComplete="new-password"
             className={`${inputClass} sm:w-40`}
           />
           <SaveButton />
