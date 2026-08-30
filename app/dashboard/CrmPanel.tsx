@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { createCrmLeadAction, toggleCrmCalledAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
+import SearchInput from "./SearchInput";
 
 type Lead = {
   id: number;
@@ -76,6 +77,19 @@ function CalledToggle({ id, called }: { id: number; called: number }) {
 
 export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; canDelete?: boolean }) {
   const calledCount = leads.filter((l) => l.called).length;
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return leads;
+    return leads.filter(
+      (l) =>
+        l.name.toLowerCase().includes(q) ||
+        l.phone.includes(query.trim()) ||
+        toPersianDigits(l.phone).includes(query.trim()) ||
+        (l.note && l.note.toLowerCase().includes(q))
+    );
+  }, [leads, query]);
 
   return (
     <div>
@@ -87,80 +101,42 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
         </div>
       ) : (
         <>
+          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا یادداشت..." />
+
           <p className="mb-4 font-mono text-[12.5px] text-dim">
             {toPersianDigits(calledCount)} از {toPersianDigits(leads.length)} تماس گرفته شده
           </p>
 
-          {/* Card list — phones/tablets. A side-scrolling table is
-              unusable with one thumb, so below the desktop breakpoint
-              each lead gets its own stacked card instead. */}
-          <div className="flex flex-col gap-3 lg:hidden">
-            {leads.map((l) => (
-              <div key={l.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
-                <div className="min-w-0">
-                  <p className="font-semibold text-[14.5px]">{l.name}</p>
-                  <Link
-                    href={`tel:${l.phone}`}
-                    dir="ltr"
-                    className="mt-1 inline-block font-mono text-[13px] text-dim hover:text-accent"
-                  >
-                    {toPersianDigits(l.phone)}
-                  </Link>
-                </div>
-                {l.note && <p className="mt-2 text-[13px] text-dim">{l.note}</p>}
-                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
-                  <form action={toggleCrmCalledAction}>
-                    <input type="hidden" name="leadId" value={l.id} />
-                    <input type="hidden" name="called" value={l.called ? "0" : "1"} />
-                    <CalledToggle id={l.id} called={l.called} />
-                  </form>
-                  {canDelete && (
-                    <form action={deleteCrmLeadAction}>
-                      <input type="hidden" name="leadId" value={l.id} />
-                      <button
-                        type="submit"
-                        className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+          {filtered.length === 0 ? (
+            <div className="rounded-card border border-dashed border-ink/[0.2] p-10 text-center text-dim">
+              نتیجه‌ای برای این جستجو پیدا نشد.
+            </div>
+          ) : (
+            <>
+              {/* Card list — phones/tablets. A side-scrolling table is
+                  unusable with one thumb, so below the desktop breakpoint
+                  each lead gets its own stacked card instead. */}
+              <div className="flex flex-col gap-3 lg:hidden">
+                {filtered.map((l) => (
+                  <div key={l.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[14.5px]">{l.name}</p>
+                      <Link
+                        href={`tel:${l.phone}`}
+                        dir="ltr"
+                        className="mt-1 inline-block font-mono text-[13px] text-dim hover:text-accent"
                       >
-                        حذف
-                      </button>
-                    </form>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Table — desktop only. */}
-          <div className="hidden overflow-x-auto rounded-card border border-ink/[0.14] lg:block">
-            <table className="w-full min-w-[560px] border-collapse text-right text-[14px]">
-              <thead>
-                <tr className="bg-navy text-alabaster">
-                  <th className="px-5 py-3.5 font-semibold">نام</th>
-                  <th className="px-5 py-3.5 font-semibold">شماره</th>
-                  <th className="px-5 py-3.5 font-semibold">یادداشت</th>
-                  <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
-                  {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
-                </tr>
-              </thead>
-              <tbody>
-                {leads.map((l, i) => (
-                  <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
-                    <td className="px-5 py-3.5 font-semibold">{l.name}</td>
-                    <td className="px-5 py-3.5 font-mono" dir="ltr">
-                      <Link href={`tel:${l.phone}`} className="hover:text-accent">
                         {toPersianDigits(l.phone)}
                       </Link>
-                    </td>
-                    <td className="px-5 py-3.5 text-dim">{l.note || "—"}</td>
-                    <td className="px-5 py-3.5">
+                    </div>
+                    {l.note && <p className="mt-2 text-[13px] text-dim">{l.note}</p>}
+                    <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
                       <form action={toggleCrmCalledAction}>
                         <input type="hidden" name="leadId" value={l.id} />
                         <input type="hidden" name="called" value={l.called ? "0" : "1"} />
                         <CalledToggle id={l.id} called={l.called} />
                       </form>
-                    </td>
-                    {canDelete && (
-                      <td className="px-5 py-3.5">
+                      {canDelete && (
                         <form action={deleteCrmLeadAction}>
                           <input type="hidden" name="leadId" value={l.id} />
                           <button
@@ -170,13 +146,61 @@ export default function CrmPanel({ leads, canDelete = false }: { leads: Lead[]; 
                             حذف
                           </button>
                         </form>
-                      </td>
-                    )}
-                  </tr>
+                      )}
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </div>
+
+              {/* Table — desktop only. */}
+              <div className="hidden overflow-x-auto rounded-card border border-ink/[0.14] lg:block">
+                <table className="w-full min-w-[560px] border-collapse text-right text-[14px]">
+                  <thead>
+                    <tr className="bg-navy text-alabaster">
+                      <th className="px-5 py-3.5 font-semibold">نام</th>
+                      <th className="px-5 py-3.5 font-semibold">شماره</th>
+                      <th className="px-5 py-3.5 font-semibold">یادداشت</th>
+                      <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
+                      {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((l, i) => (
+                      <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
+                        <td className="px-5 py-3.5 font-semibold">{l.name}</td>
+                        <td className="px-5 py-3.5 font-mono" dir="ltr">
+                          <Link href={`tel:${l.phone}`} className="hover:text-accent">
+                            {toPersianDigits(l.phone)}
+                          </Link>
+                        </td>
+                        <td className="px-5 py-3.5 text-dim">{l.note || "—"}</td>
+                        <td className="px-5 py-3.5">
+                          <form action={toggleCrmCalledAction}>
+                            <input type="hidden" name="leadId" value={l.id} />
+                            <input type="hidden" name="called" value={l.called ? "0" : "1"} />
+                            <CalledToggle id={l.id} called={l.called} />
+                          </form>
+                        </td>
+                        {canDelete && (
+                          <td className="px-5 py-3.5">
+                            <form action={deleteCrmLeadAction}>
+                              <input type="hidden" name="leadId" value={l.id} />
+                              <button
+                                type="submit"
+                                className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+                              >
+                                حذف
+                              </button>
+                            </form>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

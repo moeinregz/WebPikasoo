@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Nav from "@/components/Nav";
-import { markInquiryFollowedUpAction, deleteInquiryAction, deleteTicketAction } from "./actions";
 import {
   getAllInquiries,
   getAllUsers,
@@ -22,38 +21,21 @@ import StaffLoginForm from "./StaffLoginForm";
 import TeamChat from "./TeamChat";
 import AddUserForm from "./AddUserForm";
 import UserActions from "./UserActions";
+import IdBadge from "./IdBadge";
 import AccessPanel from "./AccessPanel";
 import CrmPanel from "./CrmPanel";
+import OrdersPanel from "./OrdersPanel";
+import TicketsPanel from "./TicketsPanel";
+import UsersPanel from "./UsersPanel";
 import { AdminTasksPanel, MyTasksPanel } from "./TasksPanel";
 import OverviewPanel from "./OverviewPanel";
 import BlogPanel from "./BlogPanel";
+import { formatDate } from "./format";
 
 export const metadata = {
   title: "داشبورد — وب پیکاسو",
   robots: { index: false, follow: false },
 };
-
-function formatDateTime(iso: string) {
-  // Stored as UTC "YYYY-MM-DD HH:MM:SS" from SQLite's datetime('now').
-  const d = new Date(iso.replace(" ", "T") + "Z");
-  return new Intl.DateTimeFormat("fa-IR", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(d);
-}
-
-function formatDate(iso: string) {
-  const d = new Date(iso.replace(" ", "T") + "Z");
-  return new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium" }).format(d);
-}
-
-function IdBadge({ id }: { id: number }) {
-  return (
-    <span className="inline-flex items-center rounded-md border border-ink/[0.16] bg-canvas px-2 py-0.5 font-mono text-[11px] text-dim">
-      #{toPersianDigits(id)}
-    </span>
-  );
-}
 
 export default async function DashboardPage() {
   const currentUser = await getCurrentUser();
@@ -99,113 +81,6 @@ export default async function DashboardPage() {
     })
   );
 
-  const ordersPanel =
-    inquiries.length === 0 ? (
-      <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
-        به‌محض این‌که کسی فرم تماس رو پر کنه، همین‌جا نشونش می‌دیم.
-      </div>
-    ) : (
-      <div className="flex flex-col gap-4">
-        {inquiries.map((inq) => (
-          <article
-            key={inq.id}
-            className={`rounded-card border p-6 ${
-              inq.status === "followed_up"
-                ? "border-emerald-500/25 bg-emerald-500/[0.04]"
-                : "border-ink/[0.14] bg-surface/20"
-            }`}
-          >
-            <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="font-display text-xl font-normal">{inq.name}</h2>
-                  <span
-                    className={`rounded-md border px-2.5 py-0.5 font-mono text-[11px] ${
-                      inq.status === "followed_up"
-                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
-                        : "border-accent/30 bg-accent/10 text-accent"
-                    }`}
-                  >
-                    {inq.status === "followed_up" ? "پیگیری شد" : "جدید"}
-                  </span>
-                </div>
-                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[12.5px] text-dim">
-                  {inq.email && (
-                    <Link
-                      href={`mailto:${inq.email}`}
-                      className="underline decoration-dim/40 underline-offset-4 hover:text-accent"
-                      dir="ltr"
-                    >
-                      {inq.email}
-                    </Link>
-                  )}
-                  {inq.phone && (
-                    <>
-                      {inq.email && <span aria-hidden="true">·</span>}
-                      <Link href={`tel:${inq.phone}`} className="hover:text-accent" dir="ltr">
-                        {inq.phone}
-                      </Link>
-                    </>
-                  )}
-                  {!inq.email && !inq.phone && <span>راه ارتباطی ثبت نشده</span>}
-                </div>
-              </div>
-              <span className="whitespace-nowrap font-mono text-xs text-dim/70">
-                {formatDateTime(inq.created_at)}
-              </span>
-            </div>
-
-            <div className="mb-4 flex flex-wrap gap-2">
-              {inq.project_type && (
-                <span className="rounded-md border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-xs text-accent">
-                  {inq.project_type}
-                </span>
-              )}
-              {inq.budget && (
-                <span className="rounded-md border border-ink/[0.2] px-3 py-1 font-mono text-xs text-dim">
-                  بودجه: {inq.budget}
-                </span>
-              )}
-            </div>
-
-            <p className="whitespace-pre-wrap text-[14.5px] leading-relaxed text-ink/90">{inq.message}</p>
-
-            {isAdmin && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                <form action={markInquiryFollowedUpAction}>
-                  <input type="hidden" name="inquiryId" value={inq.id} />
-                  <input
-                    type="hidden"
-                    name="status"
-                    value={inq.status === "followed_up" ? "new" : "followed_up"}
-                  />
-                  <button
-                    type="submit"
-                    className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
-                      inq.status === "followed_up"
-                        ? "border-ink/[0.2] text-dim hover:border-accent hover:text-accent"
-                        : "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
-                    }`}
-                  >
-                    {inq.status === "followed_up" ? "برگردوندن به جدید" : "پیگیری شد ✓"}
-                  </button>
-                </form>
-                <form action={deleteInquiryAction}>
-                  <input type="hidden" name="inquiryId" value={inq.id} />
-                  <button
-                    type="submit"
-                    className="rounded-full border border-red-500/30 px-4 py-1.5 text-[12.5px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
-                  >
-                    حذف
-                  </button>
-                </form>
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
-    );
-
   const usersPanel = (
     <div>
       {(isAdmin || perms.users) && (
@@ -216,148 +91,15 @@ export default async function DashboardPage() {
           lockRoleToCustomer={!isAdmin}
         />
       )}
-      {customers.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
-          به‌محض این‌که کسی تو /account ثبت‌نام کنه، همین‌جا با شماره‌ش نشون داده می‌شه.
-        </div>
-      ) : (
-        <>
-          {/* Card list — phones/tablets. A side-scrolling table is
-              unusable with one thumb, so below the desktop breakpoint
-              each user gets its own stacked card instead. */}
-          <div className="flex flex-col gap-3 lg:hidden">
-            {customers.map((u) => (
-              <div key={u.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-semibold text-[14.5px]">{u.name}</span>
-                      <IdBadge id={u.id} />
-                    </div>
-                    <Link
-                      href={`tel:${u.phone}`}
-                      dir="ltr"
-                      className="mt-1.5 inline-block font-mono text-[13px] text-dim hover:text-accent"
-                    >
-                      {toPersianDigits(u.phone)}
-                    </Link>
-                  </div>
-                  <span className="whitespace-nowrap font-mono text-[11px] text-dim/70">
-                    {formatDate(u.created_at)}
-                  </span>
-                </div>
-                {isAdmin && (
-                  <div className="mt-3 border-t border-ink/10 pt-3">
-                    <UserActions id={u.id} name={u.name} phone={u.phone} role={u.role} />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Table — desktop only. */}
-          <div className="hidden overflow-x-auto rounded-card border border-ink/[0.14] lg:block">
-            <table className="w-full min-w-[620px] border-collapse text-right text-[14px]">
-              <thead>
-                <tr className="bg-navy text-alabaster">
-                  <th className="px-5 py-3.5 font-semibold">شناسه</th>
-                  <th className="px-5 py-3.5 font-semibold">نام</th>
-                  <th className="px-5 py-3.5 font-semibold">شماره موبایل</th>
-                  <th className="px-5 py-3.5 font-semibold">تاریخ ثبت‌نام</th>
-                  {isAdmin && <th className="px-5 py-3.5 font-semibold"></th>}
-                </tr>
-              </thead>
-              <tbody>
-                {customers.map((u, i) => (
-                  <tr key={u.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
-                    <td className="px-5 py-3.5">
-                      <IdBadge id={u.id} />
-                    </td>
-                    <td className="px-5 py-3.5 font-semibold">{u.name}</td>
-                    <td className="px-5 py-3.5 font-mono" dir="ltr">
-                      <Link href={`tel:${u.phone}`} className="hover:text-accent">
-                        {toPersianDigits(u.phone)}
-                      </Link>
-                    </td>
-                    <td className="px-5 py-3.5 font-mono text-xs text-dim">{formatDate(u.created_at)}</td>
-                    {isAdmin && (
-                      <td className="px-5 py-3.5">
-                        <UserActions id={u.id} name={u.name} phone={u.phone} role={u.role} />
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+      <UsersPanel customers={customers} isAdmin={isAdmin} />
     </div>
   );
 
-  const ticketsPanel =
-    tickets.length === 0 ? (
-      <div className="rounded-card border border-dashed border-ink/[0.2] p-14 text-center text-dim">
-        به‌محض این‌که یه کاربر از حساب خودش تیکت بزنه، همین‌جا نشونش می‌دیم.
-      </div>
-    ) : (
-      <div className="flex flex-col gap-3">
-        {tickets.map((t, ticketIndex) => {
-          const lastMessage = ticketLastMessages[ticketIndex];
-          return (
-            <div
-              key={t.id}
-              className="group flex items-center justify-between gap-4 rounded-card border border-ink/[0.14] bg-surface/20 p-5 transition hover:-translate-y-0.5 hover:border-accent/40 hover:bg-surface/40"
-            >
-              <Link href={`/dashboard/tickets/${t.id}`} className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="font-display text-base font-normal">{t.subject}</h2>
-                  <span
-                    className={`rounded-md border px-2.5 py-0.5 font-mono text-[11px] ${
-                      t.status === "open"
-                        ? "border-accent/30 bg-accent/10 text-accent"
-                        : "border-ink/[0.2] text-dim"
-                    }`}
-                  >
-                    {t.status === "open" ? "باز" : "بسته"}
-                  </span>
-                </div>
-                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11.5px] text-dim">
-                  <span>{t.user_name}</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="truncate">{lastMessage ? lastMessage.message : t.message}</span>
-                </div>
-              </Link>
-              <div className="flex shrink-0 items-center gap-3">
-                <span className="whitespace-nowrap font-mono text-xs text-dim/70">{formatDateTime(t.created_at)}</span>
-                {isAdmin && (
-                  <form action={deleteTicketAction}>
-                    <input type="hidden" name="ticketId" value={t.id} />
-                    <button
-                      type="submit"
-                      className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
-                    >
-                      حذف
-                    </button>
-                  </form>
-                )}
-                <Link href={`/dashboard/tickets/${t.id}`}>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    className="h-4 w-4 text-dim transition group-hover:translate-x-[-3px] group-hover:text-accent"
-                  >
-                    <path d="M15 6L9 12l6 6" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
+  const ordersPanel = <OrdersPanel inquiries={inquiries} isAdmin={isAdmin} />;
+
+  const ticketsPanel = (
+    <TicketsPanel tickets={tickets} ticketLastMessages={ticketLastMessages} isAdmin={isAdmin} />
+  );
 
   const teamPanel = (
     <div>
