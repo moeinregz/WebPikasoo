@@ -696,11 +696,41 @@ export async function createProject(data: NewProject): Promise<number> {
   return id;
 }
 
-/** Public portfolio grid (BusinessShowcase reads the hardcoded list in
- *  lib/businessSites.ts, but admin-added projects — ProjectsPanel — go
- *  through here). Cached briefly since this is read on every dashboard
- *  load and rarely changes. */
+// One-time (per cold start) fix for rows seeded before the site's local
+// screenshots/hero images were converted to WebP (see seedProjectsIfEmpty
+// below — it only runs once, while the collection is empty, so any
+// database that was already seeded keeps the old .jpg/.png paths forever
+// unless something rewrites them). Only touches images that point at our
+// own /screenshots/ or /work/ folders — those paths are exclusively set
+// by our seed data, never by an admin pasting an external image URL — so
+// it's safe to blanket-rewrite their extension.
+let didFixLegacyProjectImages = false;
+async function fixLegacyProjectImageExtensions(): Promise<void> {
+  if (didFixLegacyProjectImages) return;
+  didFixLegacyProjectImages = true;
+  const database = await getDb();
+  const stale = await database
+    .collection<Project>("projects")
+    .find(
+      { image: { $regex: /^\/(screenshots|work)\/[^/]+\.(jpe?g|png)$/i } },
+      { projection: { _id: 0, id: 1, image: 1 } }
+    )
+    .toArray();
+  if (stale.length === 0) return;
+  for (const p of stale) {
+    const webpImage = p.image.replace(/\.(jpe?g|png)$/i, ".webp");
+    await database.collection("projects").updateOne({ id: p.id }, { $set: { image: webpImage } });
+  }
+  await invalidateCache("projects:all");
+}
+
+/** Public portfolio grid, read by app/portfolio/page.tsx and rendered
+ *  through BusinessShowcase. Seeded once from lib/businessSites.ts (see
+ *  seedProjectsIfEmpty below) and then admin-owned from /dashboard.
+ *  Cached briefly since this is read on every portfolio/dashboard load
+ *  and rarely changes. */
 export async function getAllProjects(): Promise<Project[]> {
+  await fixLegacyProjectImageExtensions();
   return cacheWrap("projects:all", 60, async () => {
     const database = await getDb();
     return database
