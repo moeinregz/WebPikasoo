@@ -12,6 +12,16 @@ import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
 import { businessSites } from "@/lib/businessSites";
 import { getCurrentUser } from "@/lib/session";
 
+// Homepage previously had no metadata of its own and silently inherited
+// the generic root layout title/description for every visit — the single
+// highest-value page on the whole site had nothing tailored to it.
+export const metadata = {
+  title: "وب پیکاسو — طراحی سایت، توسعه نرم‌افزار و سئو",
+  description:
+    "وب پیکاسو، تیم طراحی و توسعه سایت و نرم‌افزار؛ پنل‌های مدیریتی، فروشگاه اینترنتی، وب اپلیکیشن و سئو حرفه‌ای برای کسب‌وکار شما.",
+  alternates: { canonical: "/" },
+};
+
 export default async function Home() {
   const isLoggedIn = !!(await getCurrentUser());
 
