@@ -1,6 +1,7 @@
 export type BusinessCategory =
   | "رستوران و کافه"
   | "فروشگاه و ای‌کامرس"
+  | "لوازم آرایشی و بهداشتی"
   | "پزشکی و کلینیک"
   | "املاک و مستغلات"
   | "آموزشی"
@@ -11,6 +12,7 @@ export type BusinessCategory =
 export const categories: BusinessCategory[] = [
   "رستوران و کافه",
   "فروشگاه و ای‌کامرس",
+  "لوازم آرایشی و بهداشتی",
   "پزشکی و کلینیک",
   "املاک و مستغلات",
   "آموزشی",
@@ -113,7 +115,7 @@ export const businessSites: BusinessSite[] = [
   {
     id: "divan-atr",
     name: "دیوان عطر",
-    category: "فروشگاه و ای‌کامرس",
+    category: "لوازم آرایشی و بهداشتی",
     desc: "فروشگاه عطر با هویت بصری شاعرانه؛ معرفی رایحه‌ها و داستان برند.",
     url: "/projects/divan-atr.html",
     image: "/screenshots/divan-atr.jpg",
@@ -121,7 +123,7 @@ export const businessSites: BusinessSite[] = [
   {
     id: "golgoon-cosmetics",
     name: "گلگون",
-    category: "فروشگاه و ای‌کامرس",
+    category: "لوازم آرایشی و بهداشتی",
     desc: "فروشگاه لوازم آرایشی؛ ویترین محصولات و پیشنهادهای فصلی.",
     url: "/projects/golgoon-cosmetics.html",
     image: "/screenshots/golgoon-cosmetics.jpg",
@@ -129,7 +131,7 @@ export const businessSites: BusinessSite[] = [
   {
     id: "negin-shop",
     name: "نگین شاپ",
-    category: "فروشگاه و ای‌کامرس",
+    category: "لوازم آرایشی و بهداشتی",
     desc: "فروشگاه لوازم آرایشی و بهداشتی با هویت بصری طلایی و مجلل؛ دسته‌بندی محصولات، فیلتر و انیمیشن‌های ظریف.",
     url: "/projects/negin-shop.html",
     image: "/screenshots/negin-shop.jpg",
