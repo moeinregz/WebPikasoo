@@ -26,7 +26,10 @@ export default async function BlogIndexPage() {
     <>
       <Nav isLoggedIn={isLoggedIn} />
 
-      <main className="mx-auto max-w-container px-6 py-16 lg:py-20">
+      {/* w-full needed — see the note in app/dashboard/page.tsx's <main>
+          about why a direct child of the flex-column <body> collapses to
+          its content width without an explicit width. */}
+      <main className="mx-auto w-full max-w-container px-6 py-16 lg:py-20">
         <div className="mb-12 text-center">
           <h1 className="font-display text-[32px] font-normal sm:text-[38px]">وبلاگ وب پیکاسو</h1>
           <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-dim">

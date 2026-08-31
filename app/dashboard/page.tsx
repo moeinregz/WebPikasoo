@@ -345,7 +345,19 @@ export default async function DashboardPage() {
   return (
     <>
       <Nav isLoggedIn />
-      <main className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+      {/* `w-full` is load-bearing here, not decorative: <main> is a *direct
+          child of <body>*, and body is `display:flex; flex-direction:column`
+          (globals.css, for the sticky-footer trick). Per the flexbox spec,
+          a flex item with auto margins on its cross axis (mx-auto = our
+          horizontal margins, since the cross axis is horizontal in a
+          column flex container) opts OUT of the default stretch behavior —
+          it shrink-wraps to its content's intrinsic width instead of
+          filling the row, no matter how wide the viewport is. That's what
+          was squeezing every dashboard panel (chat, orders, tickets, CRM...)
+          into a narrow column with a huge dead gap beside it on every
+          screen size. Setting width explicitly to 100% (capped by
+          max-w-[1440px]) sidesteps that shrink-to-fit path entirely. */}
+      <main className="mx-auto w-full max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 lg:mb-10">
           <div className="min-w-0">
             <Link

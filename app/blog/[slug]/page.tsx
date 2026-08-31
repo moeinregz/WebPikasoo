@@ -49,7 +49,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <>
       <Nav isLoggedIn={isLoggedIn} />
 
-      <main className="mx-auto max-w-[760px] px-6 py-14 lg:py-18">
+      {/* w-full needed — see the note in app/dashboard/page.tsx's <main>
+          about why a direct child of the flex-column <body> collapses to
+          its content width without an explicit width. */}
+      <main className="mx-auto w-full max-w-[760px] px-6 py-14 lg:py-18">
         <Link
           href="/blog"
           className="mb-8 inline-flex items-center gap-1.5 font-mono text-[12.5px] font-semibold text-dim transition hover:text-accent"
