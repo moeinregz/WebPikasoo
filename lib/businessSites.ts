@@ -52,7 +52,7 @@ export const businessSites: BusinessSite[] = [
     category: "رستوران و کافه",
     desc: "لندینگ اتمسفریک برای یک کافه محله‌ای؛ معرفی فضا، منوی آنلاین و رزرو میز.",
     url: "/projects/cafe-zemzeme.html",
-    image: "/screenshots/cafe-zemzeme.webp",
+    image: "/screenshots/cafe-zemzeme.jpg",
   },
   {
     id: "shahd-o-yakh",
@@ -60,7 +60,7 @@ export const businessSites: BusinessSite[] = [
     category: "رستوران و کافه",
     desc: "سایت رنگارنگ برای آبمیوه و بستنی‌فروشی؛ معرفی منو و شعبه‌ها.",
     url: "/projects/shahd-o-yakh.html",
-    image: "/screenshots/shahd-o-yakh.webp",
+    image: "/screenshots/shahd-o-yakh.jpg",
   },
   {
     id: "shirini-forushi",
@@ -68,7 +68,7 @@ export const businessSites: BusinessSite[] = [
     category: "رستوران و کافه",
     desc: "شیرینی‌سرای سنتی؛ نمایش محصولات، سفارش آنلاین و پک‌های هدیه.",
     url: "/projects/shirini-forushi.html",
-    image: "/screenshots/shirini-forushi.webp",
+    image: "/screenshots/shirini-forushi.jpg",
   },
   {
     id: "sholeh-fastfood",
@@ -76,7 +76,7 @@ export const businessSites: BusinessSite[] = [
     category: "رستوران و کافه",
     desc: "سایت پرانرژی فست‌فود؛ منوی تصویری، پیشنهادهای ویژه و سفارش آنلاین.",
     url: "/projects/sholeh-fastfood.html",
-    image: "/screenshots/sholeh-fastfood.webp",
+    image: "/screenshots/sholeh-fastfood.jpg",
   },
   {
     id: "simorgh-restaurant",
@@ -84,7 +84,7 @@ export const businessSites: BusinessSite[] = [
     category: "رستوران و کافه",
     desc: "رستوران سنتی ایرانی؛ معرفی فضا، منوی غذا و رزرو میز آنلاین.",
     url: "/projects/simorgh-restaurant.html",
-    image: "/screenshots/simorgh-restaurant.webp",
+    image: "/screenshots/simorgh-restaurant.jpg",
   },
   {
     id: "tanoor-bakery",
@@ -92,7 +92,7 @@ export const businessSites: BusinessSite[] = [
     category: "رستوران و کافه",
     desc: "نانوایی محله‌ای؛ معرفی محصولات روزانه و ساعات کاری.",
     url: "/projects/tanoor-bakery.html",
-    image: "/screenshots/tanoor-bakery.webp",
+    image: "/screenshots/tanoor-bakery.jpg",
   },
   {
     id: "boutique-laal",
@@ -100,7 +100,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "بوتیک لباس زنانه؛ ویترین محصولات با طراحی شیک و مینیمال.",
     url: "/projects/boutique-laal.html",
-    image: "/screenshots/boutique-laal.webp",
+    image: "/screenshots/boutique-laal.jpg",
   },
   {
     id: "chipset-store",
@@ -108,7 +108,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه تخصصی لپ‌تاپ و قطعات کامپیوتر؛ دسته‌بندی محصولات و مشخصات فنی.",
     url: "/projects/chipset-store.html",
-    image: "/screenshots/chipset-store.webp",
+    image: "/screenshots/chipset-store.jpg",
   },
   {
     id: "divan-atr",
@@ -116,7 +116,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه عطر با هویت بصری شاعرانه؛ معرفی رایحه‌ها و داستان برند.",
     url: "/projects/divan-atr.html",
-    image: "/screenshots/divan-atr.webp",
+    image: "/screenshots/divan-atr.jpg",
   },
   {
     id: "golgoon-cosmetics",
@@ -124,7 +124,15 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه لوازم آرایشی؛ ویترین محصولات و پیشنهادهای فصلی.",
     url: "/projects/golgoon-cosmetics.html",
-    image: "/screenshots/golgoon-cosmetics.webp",
+    image: "/screenshots/golgoon-cosmetics.jpg",
+  },
+  {
+    id: "negin-shop",
+    name: "نگین شاپ",
+    category: "فروشگاه و ای‌کامرس",
+    desc: "فروشگاه لوازم آرایشی و بهداشتی با هویت بصری طلایی و مجلل؛ دسته‌بندی محصولات، فیلتر و انیمیشن‌های ظریف.",
+    url: "/projects/negin-shop.html",
+    image: "/screenshots/negin-shop.jpg",
   },
   {
     id: "mobatech-store",
@@ -132,7 +140,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه موبایل و لوازم جانبی؛ مقایسه محصولات و مشخصات فنی.",
     url: "/projects/mobatech-store.html",
-    image: "/screenshots/mobatech-store.webp",
+    image: "/screenshots/mobatech-store.jpg",
   },
   {
     id: "rakhsh-showroom",
@@ -140,7 +148,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "نمایشگاه اختصاصی خودرو؛ گالری خودروها و فرم درخواست بازدید.",
     url: "/projects/rakhsh-showroom.html",
-    image: "/screenshots/rakhsh-showroom.webp",
+    image: "/screenshots/rakhsh-showroom.jpg",
   },
   {
     id: "saatkade",
@@ -148,7 +156,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه ساعت‌های مکانیکال و کلاسیک؛ ویترین لوکس محصولات.",
     url: "/projects/saatkade.html",
-    image: "/screenshots/saatkade.webp",
+    image: "/screenshots/saatkade.jpg",
   },
   {
     id: "sneaker-site",
@@ -156,7 +164,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه کفش‌های دویدن با طراحی اسپرت و پرحرکت؛ معرفی کالکشن جدید.",
     url: "/projects/sneaker-site.html",
-    image: "/screenshots/sneaker-site.webp",
+    image: "/screenshots/sneaker-site.jpg",
   },
   {
     id: "zarafshan",
@@ -164,7 +172,7 @@ export const businessSites: BusinessSite[] = [
     category: "فروشگاه و ای‌کامرس",
     desc: "فروشگاه طلا و جواهر؛ ویترین لوکس محصولات با طراحی مجلل.",
     url: "/projects/zarafshan.html",
-    image: "/screenshots/zarafshan.webp",
+    image: "/screenshots/zarafshan.jpg",
   },
   {
     id: "azmayeshgah-nabz",
@@ -172,7 +180,7 @@ export const businessSites: BusinessSite[] = [
     category: "پزشکی و کلینیک",
     desc: "آزمایشگاه تشخیص پزشکی؛ نوبت‌دهی آنلاین و معرفی خدمات آزمایشگاهی.",
     url: "/projects/azmayeshgah-nabz.html",
-    image: "/screenshots/azmayeshgah-nabz.webp",
+    image: "/screenshots/azmayeshgah-nabz.jpg",
   },
   {
     id: "clinic-mehregan",
@@ -180,7 +188,7 @@ export const businessSites: BusinessSite[] = [
     category: "پزشکی و کلینیک",
     desc: "کلینیک دامپزشکی؛ معرفی خدمات درمانی و نوبت‌دهی آنلاین.",
     url: "/projects/clinic-mehregan.html",
-    image: "/screenshots/clinic-mehregan.webp",
+    image: "/screenshots/clinic-mehregan.jpg",
   },
   {
     id: "physio-center",
@@ -188,7 +196,7 @@ export const businessSites: BusinessSite[] = [
     category: "پزشکی و کلینیک",
     desc: "مرکز فیزیوتراپی و توانبخشی؛ معرفی خدمات درمانی و رزرو جلسه.",
     url: "/projects/physio-center.html",
-    image: "/screenshots/physio-center.webp",
+    image: "/screenshots/physio-center.jpg",
   },
   {
     id: "sepid-dental",
@@ -196,7 +204,7 @@ export const businessSites: BusinessSite[] = [
     category: "پزشکی و کلینیک",
     desc: "کلینیک دندانپزشکی؛ معرفی خدمات و نوبت‌دهی آنلاین با طراحی تمیز.",
     url: "/projects/sepid-dental.html",
-    image: "/screenshots/sepid-dental.webp",
+    image: "/screenshots/sepid-dental.jpg",
   },
   {
     id: "zomorod-melk",
@@ -204,7 +212,7 @@ export const businessSites: BusinessSite[] = [
     category: "املاک و مستغلات",
     desc: "مشاور املاک لوکس؛ ویترین ملک‌های ویژه و فرم درخواست مشاوره.",
     url: "/projects/zomorod-melk.html",
-    image: "/screenshots/zomorod-melk.webp",
+    image: "/screenshots/zomorod-melk.jpg",
   },
   {
     id: "aamoozeshgah-nava",
@@ -212,7 +220,7 @@ export const businessSites: BusinessSite[] = [
     category: "آموزشی",
     desc: "آموزشگاه موسیقی؛ معرفی اساتید، دوره‌ها و ثبت‌نام آنلاین.",
     url: "/projects/aamoozeshgah-nava.html",
-    image: "/screenshots/aamoozeshgah-nava.webp",
+    image: "/screenshots/aamoozeshgah-nava.jpg",
   },
   {
     id: "zabankadeh",
@@ -220,7 +228,7 @@ export const businessSites: BusinessSite[] = [
     category: "آموزشی",
     desc: "آموزشگاه زبان‌های زنده دنیا؛ معرفی دوره‌ها، سطوح و ثبت‌نام آنلاین.",
     url: "/projects/zabankadeh.html",
-    image: "/screenshots/zabankadeh.webp",
+    image: "/screenshots/zabankadeh.jpg",
   },
   {
     id: "daftar-vekalat",
@@ -228,7 +236,7 @@ export const businessSites: BusinessSite[] = [
     category: "خدماتی",
     desc: "سایت رسمی و متین برای یک دفتر وکالت؛ معرفی حوزه‌های تخصصی و تماس.",
     url: "/projects/daftar-vekalat.html",
-    image: "/screenshots/daftar-vekalat.webp",
+    image: "/screenshots/daftar-vekalat.jpg",
   },
   {
     id: "jadehpeyma-car-rental",
@@ -236,7 +244,7 @@ export const businessSites: BusinessSite[] = [
     category: "خدماتی",
     desc: "سایت اجاره خودرو؛ لیست خودروها، تعرفه‌ها و فرم رزرو آنلاین.",
     url: "/projects/jadehpeyma-car-rental.html",
-    image: "/screenshots/jadehpeyma-car-rental.webp",
+    image: "/screenshots/jadehpeyma-car-rental.jpg",
   },
   {
     id: "karvan-bar",
@@ -244,7 +252,7 @@ export const businessSites: BusinessSite[] = [
     category: "خدماتی",
     desc: "شرکت حمل و نقل و باربری سراسری؛ معرفی خدمات و استعلام قیمت.",
     url: "/projects/karvan-bar.html",
-    image: "/screenshots/karvan-bar.webp",
+    image: "/screenshots/karvan-bar.jpg",
   },
   {
     id: "mana-studio",
@@ -252,7 +260,7 @@ export const businessSites: BusinessSite[] = [
     category: "خدماتی",
     desc: "طراحی و اجرای دکوراسیون داخلی؛ نمونه‌کارها و فرم درخواست مشاوره.",
     url: "/projects/mana-studio.html",
-    image: "/screenshots/mana-studio.webp",
+    image: "/screenshots/mana-studio.jpg",
   },
   {
     id: "pulad-gym",
@@ -260,7 +268,7 @@ export const businessSites: BusinessSite[] = [
     category: "خدماتی",
     desc: "باشگاه بدنسازی؛ معرفی امکانات، برنامه‌های تمرینی و ثبت‌نام آنلاین.",
     url: "/projects/pulad-gym.html",
-    image: "/screenshots/pulad-gym.webp",
+    image: "/screenshots/pulad-gym.jpg",
   },
   {
     id: "salmani-osta",
@@ -268,7 +276,7 @@ export const businessSites: BusinessSite[] = [
     category: "خدماتی",
     desc: "آرایشگاه مردانه؛ معرفی خدمات پیرایش و نوبت‌دهی آنلاین.",
     url: "/projects/salmani-osta.html",
-    image: "/screenshots/salmani-osta.webp",
+    image: "/screenshots/salmani-osta.jpg",
   },
   {
     id: "pars-tarash",
@@ -276,7 +284,7 @@ export const businessSites: BusinessSite[] = [
     category: "شرکتی و کسب‌وکار",
     desc: "شرکت ماشین‌سازی و تجهیزات صنعتی؛ معرفی محصولات و توانمندی‌های تولید.",
     url: "/projects/pars-tarash.html",
-    image: "/screenshots/pars-tarash.webp",
+    image: "/screenshots/pars-tarash.jpg",
   },
   {
     id: "parsgen-pharma",
@@ -284,7 +292,7 @@ export const businessSites: BusinessSite[] = [
     category: "شرکتی و کسب‌وکار",
     desc: "شرکت داروسازی؛ معرفی محصولات و حوزه‌های فعالیت با هویت علمی و معتبر.",
     url: "/projects/parsgen-pharma.html",
-    image: "/screenshots/parsgen-pharma.webp",
+    image: "/screenshots/parsgen-pharma.jpg",
   },
   {
     id: "hotel-bagh-shahi",
@@ -292,7 +300,7 @@ export const businessSites: BusinessSite[] = [
     category: "گردشگری و اقامتی",
     desc: "اقامتگاه پنج‌ستاره با معماری باغ ایرانی؛ معرفی اتاق‌ها و رزرو آنلاین.",
     url: "/projects/hotel-bagh-shahi.html",
-    image: "/screenshots/hotel-bagh-shahi.webp",
+    image: "/screenshots/hotel-bagh-shahi.jpg",
   },
   {
     id: "hotel-morvarid-khazar",
@@ -300,7 +308,7 @@ export const businessSites: BusinessSite[] = [
     category: "گردشگری و اقامتی",
     desc: "هتل بوتیک ساحلی؛ گالری تصاویر، امکانات و رزرو اتاق.",
     url: "/projects/hotel-morvarid-khazar.html",
-    image: "/screenshots/hotel-morvarid-khazar.webp",
+    image: "/screenshots/hotel-morvarid-khazar.jpg",
   },
   {
     id: "karvansara",
@@ -308,7 +316,7 @@ export const businessSites: BusinessSite[] = [
     category: "گردشگری و اقامتی",
     desc: "آژانس مسافرتی؛ معرفی تورهای داخلی و خارجی و رزرو آنلاین.",
     url: "/projects/karvansara.html",
-    image: "/screenshots/karvansara.webp",
+    image: "/screenshots/karvansara.jpg",
   },
   {
     id: "pargar-safar",
@@ -316,6 +324,6 @@ export const businessSites: BusinessSite[] = [
     category: "گردشگری و اقامتی",
     desc: "آژانس تخصصی تور و بلیط؛ جست‌وجوی سفر و پیشنهادهای ویژه.",
     url: "/projects/pargar-safar.html",
-    image: "/screenshots/pargar-safar.webp",
+    image: "/screenshots/pargar-safar.jpg",
   },
 ];
