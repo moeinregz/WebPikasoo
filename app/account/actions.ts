@@ -137,15 +137,25 @@ export async function createSupportTicket(
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
   }
 
-  revalidatePath("/account");
-  // Ticket form also lives on the public /contact page (TicketForm is
-  // reused there) — without revalidating that path too, the very first
-  // ticket a session submits from /contact can fall back to a full
-  // document reload to resync (losing the in-memory useFormState result,
-  // so the success modal never shows and the form just looks like it
-  // silently cleared). Once /contact has been revalidated once, later
-  // submissions patch in normally.
-  revalidatePath("/contact");
+  // Deliberately NOT calling revalidatePath here (this used to call
+  // revalidatePath("/account")) — that was the actual cause of the classic
+  // "first ticket submitted from /contact shows no confirmation" bug.
+  // Any revalidatePath() call inside a Server Action makes Next.js
+  // auto-refresh whatever route the user is CURRENTLY on too, not just the
+  // path you named. The first time that happens to a given route in a
+  // session, the refresh replaces the Client Component tree instead of
+  // patching it in place, which throws away whatever local React state
+  // (useFormState or plain useState — both) that component had just set
+  // in the same tick. TicketForm and the modal it renders got wiped out
+  // right as they were about to show. Confirmed end-to-end with a
+  // scripted browser submission before/after this change. sendTeamMessage
+  // (dashboard/actions.ts) never had this problem because it never calls
+  // revalidatePath either — it just re-fetches its own data manually,
+  // which is the safe pattern.
+  // The only cost of not revalidating: someone's own ticket list on
+  // /account can be up to ~30s stale after submitting from elsewhere
+  // (Next's default client router-cache window for dynamic routes) —
+  // trivial next to a confirmation that silently failed 100% of the time.
   return { ok: true, message: "تیکتت ثبت شد — به‌زودی جواب می‌دیم." };
 }
 

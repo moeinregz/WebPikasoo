@@ -56,7 +56,7 @@ export default function Pagination({
           className={`${btnBase} border border-ink/[0.16] text-dim hover:border-accent hover:text-accent`}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-3.5 w-3.5">
-            <path d="M9 6l6 6-6 6" />
+            <path d="M15 6l-6 6 6 6" />
           </svg>
         </button>
 
@@ -90,7 +90,7 @@ export default function Pagination({
           className={`${btnBase} border border-ink/[0.16] text-dim hover:border-accent hover:text-accent`}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-3.5 w-3.5">
-            <path d="M15 6l-6 6 6 6" />
+            <path d="M9 6l6 6-6 6" />
           </svg>
         </button>
       </div>

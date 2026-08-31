@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
-import { createSupportTicket, type AccountFormState } from "@/app/account/actions";
+import { useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { createSupportTicket } from "@/app/account/actions";
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
@@ -20,8 +20,6 @@ function TicketSubmitButton() {
   );
 }
 
-const initialTicketState: AccountFormState = null;
-
 /** A ready-to-drop-in "new support ticket" form — same server action
  *  (createSupportTicket) and styling used on the customer dashboard's
  *  tickets tab, factored out so the public contact page can offer the
@@ -33,24 +31,46 @@ const initialTicketState: AccountFormState = null;
  *  On success the form itself just clears and stays put — the confirmation
  *  is a centered modal notification ("تیکت شما با موفقیت ثبت شد"), the
  *  same pattern used for the order-success notification in PricingPlans,
- *  so it's impossible to miss and doesn't hide the rest of the page. */
+ *  so it's impossible to miss and doesn't hide the rest of the page.
+ *
+ *  Deliberately NOT using useFormState here (that was the original
+ *  implementation, and the bug report that led to this rewrite): this
+ *  action also calls revalidatePath() on the current route so /account's
+ *  ticket list stays fresh. The very first time a route gets revalidated
+ *  client-side in a session, Next.js's router cache has no existing entry
+ *  for it yet, so the resulting patch is a "harder" replace of that
+ *  Client Component boundary — which quietly remounts <TicketForm> with a
+ *  brand-new useFormState instance (reset to its initial state) at the
+ *  same moment the real action result comes back. The result lands on a
+ *  form that's already been thrown away, so the success modal never
+ *  shows, and it fixes itself on the next submit because that route now
+ *  has a cache entry. Confirmed by scripting an actual submit end-to-end
+ *  in a real browser and watching it happen.
+ *  Calling the server action directly (like TeamChat.tsx already does for
+ *  its own send button) and setting local state from the awaited result
+ *  sidesteps that entirely — the update no longer depends on this
+ *  component instance surviving a background router patch. */
 export default function TicketForm({ withHeading = true }: { withHeading?: boolean } = {}) {
-  const [state, formAction] = useFormState(createSupportTicket, initialTicketState);
+  const [error, setError] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    if (state?.ok) {
+  async function handleSubmit(formData: FormData) {
+    setError("");
+    const result = await createSupportTicket(null, formData);
+    if (result?.ok) {
       setShowSuccessModal(true);
       formRef.current?.reset();
+    } else if (result?.message) {
+      setError(result.message);
     }
-  }, [state]);
+  }
 
   return (
     <>
       <form
         ref={formRef}
-        action={formAction}
+        action={handleSubmit}
         className="relative overflow-hidden rounded-card border border-ink/[0.14] bg-surface/20 p-6"
       >
         <span
@@ -76,9 +96,7 @@ export default function TicketForm({ withHeading = true }: { withHeading?: boole
           />
         </div>
         <TicketSubmitButton />
-        {state && !state.ok && (
-          <p className="mt-3 text-sm text-dim">{state.message}</p>
-        )}
+        {error && <p className="mt-3 text-sm text-dim">{error}</p>}
       </form>
 
       {/* نوتیف وسط صفحه: تیکت با موفقیت ثبت شد — همون الگوی نوتیف موفقیت
