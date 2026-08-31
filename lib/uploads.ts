@@ -64,6 +64,74 @@ export async function saveBlogImage(file: File): Promise<string | null> {
   }
 }
 
+const MAX_PROJECT_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
+const MAX_PROJECT_HTML_BYTES = 15 * 1024 * 1024; // 15MB
+
+/** Saves a portfolio project's cover image to Vercel Blob and returns its
+ *  public URL. Returns null when no file was actually picked. Webp is the
+ *  recommended format (matches the rest of the site's image assets) but
+ *  any image type is accepted — we just store whatever was uploaded as-is,
+ *  we don't transcode. */
+export async function saveProjectImage(file: File): Promise<string | null> {
+  if (!file || file.size === 0) return null;
+  if (!file.type.startsWith("image/")) {
+    throw new Error("فقط فایل تصویری قابل قبوله (ترجیحاً WebP).");
+  }
+  if (file.size > MAX_PROJECT_IMAGE_BYTES) {
+    throw new Error("حجم عکس بیشتر از حد مجازه (حداکثر ۱۰ مگابایت).");
+  }
+
+  const filename = randomFilename(file.name, file.type, ".webp");
+
+  try {
+    const blob = await put(`projects/${filename}`, file, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: file.type,
+    });
+    return blob.url;
+  } catch (err) {
+    console.error("saveProjectImage (Vercel Blob) failed:", err);
+    throw new Error(
+      "آپلود عکس ناموفق بود — مطمئن شو متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم شده (به README.md نگاه کن)."
+    );
+  }
+}
+
+/** Saves an uploaded HTML file for a portfolio project (the "view it right
+ *  on our own site" option) to Vercel Blob and returns its public URL.
+ *  Content-type is forced to text/html regardless of what the browser
+ *  reported, so /portfolio/view/[id] can fetch it and serve it inline on
+ *  our own domain instead of the visitor bouncing to Blob's storage host. */
+export async function saveProjectHtmlFile(file: File): Promise<string | null> {
+  if (!file || file.size === 0) return null;
+
+  const looksHtml =
+    /\.html?$/i.test(file.name || "") || file.type === "text/html" || file.type === "application/xhtml+xml";
+  if (!looksHtml) {
+    throw new Error("فقط فایل HTML قابل قبوله (پسوند .html یا .htm).");
+  }
+  if (file.size > MAX_PROJECT_HTML_BYTES) {
+    throw new Error("حجم فایل بیشتر از حد مجازه (حداکثر ۱۵ مگابایت).");
+  }
+
+  const filename = randomFilename(file.name, "text/html", ".html");
+
+  try {
+    const blob = await put(`projects-html/${filename}`, file, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: "text/html; charset=utf-8",
+    });
+    return blob.url;
+  } catch (err) {
+    console.error("saveProjectHtmlFile (Vercel Blob) failed:", err);
+    throw new Error(
+      "آپلود فایل HTML ناموفق بود — مطمئن شو متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم شده (به README.md نگاه کن)."
+    );
+  }
+}
+
 export type SavedAttachment = { url: string; type: string; name: string };
 
 /** Saves a chat attachment (file upload or recorded voice note) to

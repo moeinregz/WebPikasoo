@@ -13,6 +13,7 @@ import {
   getAllCrmLeads,
   getUserPermissions,
   getAllBlogPosts,
+  getAllProjects,
 } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { toPersianDigits } from "@/lib/auth";
@@ -30,6 +31,7 @@ import UsersPanel from "./UsersPanel";
 import { AdminTasksPanel, MyTasksPanel } from "./TasksPanel";
 import OverviewPanel from "./OverviewPanel";
 import BlogPanel from "./BlogPanel";
+import ProjectsPanel from "./ProjectsPanel";
 import { formatDate } from "./format";
 
 export const metadata = {
@@ -77,6 +79,7 @@ export default async function DashboardPage() {
   const allTasks = isAdmin ? await getAllTasks() : [];
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
+  const projects = isAdmin || perms.projects ? await getAllProjects() : [];
   // Last message per ticket, for the one-line preview in the tickets list.
   const ticketLastMessages = await Promise.all(
     tickets.map(async (t) => {
@@ -325,6 +328,13 @@ export default async function DashboardPage() {
       id: "blog",
       label: `وبلاگ (${toPersianDigits(blogPosts.length)})`,
       panel: <BlogPanel posts={blogPosts} canDelete={isAdmin} />,
+    });
+  }
+  if (isAdmin || perms.projects) {
+    tabs.push({
+      id: "projects",
+      label: `نمونه‌کارها (${toPersianDigits(projects.length)})`,
+      panel: <ProjectsPanel projects={projects} />,
     });
   }
 

@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import BusinessShowcase from "@/components/BusinessShowcase";
 import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
 import { businessSites } from "@/lib/businessSites";
+import { projectViewUrl } from "@/lib/projectLink";
 import { getCurrentUser } from "@/lib/session";
 
 export const metadata = {
@@ -28,7 +29,7 @@ export default async function PortfolioPage() {
     name: p.name,
     category: p.category,
     desc: p.description,
-    url: p.url,
+    url: projectViewUrl(p),
     image: p.image,
   }));
 

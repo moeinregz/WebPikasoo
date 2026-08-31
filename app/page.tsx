@@ -10,6 +10,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
 import { businessSites } from "@/lib/businessSites";
+import { projectViewUrl } from "@/lib/projectLink";
 import { getCurrentUser } from "@/lib/session";
 
 // Homepage previously had no metadata of its own and silently inherited
@@ -42,7 +43,7 @@ export default async function Home() {
     name: p.name,
     category: p.category,
     desc: p.description,
-    url: p.url,
+    url: projectViewUrl(p),
     image: p.image,
   }));
 

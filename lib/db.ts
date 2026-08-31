@@ -357,6 +357,7 @@ export type UserPermissions = {
   orders: boolean;
   blog: boolean;
   crm: boolean;
+  projects: boolean;
 };
 
 const DEFAULT_DEVELOPER_PERMISSIONS: UserPermissions = {
@@ -367,11 +368,21 @@ const DEFAULT_DEVELOPER_PERMISSIONS: UserPermissions = {
   orders: false,
   blog: false,
   crm: false,
+  projects: false,
 };
 
 export function getUserPermissions(user: Pick<User, "role" | "permissions">): UserPermissions {
   if (user.role === "admin") {
-    return { tickets: true, users: true, team: true, chat: true, orders: true, blog: true, crm: true };
+    return {
+      tickets: true,
+      users: true,
+      team: true,
+      chat: true,
+      orders: true,
+      blog: true,
+      crm: true,
+      projects: true,
+    };
   }
   if (!user.permissions) return { ...DEFAULT_DEVELOPER_PERMISSIONS };
   try {
@@ -662,6 +673,8 @@ export async function getTeamMessages(limit = 200): Promise<TeamMessage[]> {
 // Portfolio projects (admin-manageable)
 // -----------------------------------------------------------------------
 
+export type ProjectLinkType = "url" | "html";
+
 export type Project = {
   id: number;
   created_at: string;
@@ -670,6 +683,11 @@ export type Project = {
   description: string;
   url: string;
   image: string;
+  // "url" (default, legacy rows too): `url` is an external link, opens on
+  // its own domain. "html": `url` points at an uploaded .html file in Blob
+  // storage — /portfolio/view/[id] fetches and serves it on our own
+  // domain instead of sending the visitor to the storage host directly.
+  linkType: ProjectLinkType;
 };
 
 export type NewProject = {
@@ -678,6 +696,7 @@ export type NewProject = {
   description?: string;
   url: string;
   image?: string;
+  linkType?: ProjectLinkType;
 };
 
 export async function createProject(data: NewProject): Promise<number> {
@@ -691,10 +710,23 @@ export async function createProject(data: NewProject): Promise<number> {
     description: data.description || "",
     url: data.url,
     image: data.image || "",
+    linkType: data.linkType || "url",
   });
   await invalidateCache("projects:all");
   return id;
 }
+
+/** Single project lookup, used by /portfolio/view/[id] to decide whether
+ *  to stream back the uploaded HTML file or redirect to an external URL. */
+export async function getProjectById(id: number): Promise<Project | null> {
+  const database = await getDb();
+  const project = await database
+    .collection<Project>("projects")
+    .findOne({ id }, { projection: { _id: 0 } });
+  return project ?? null;
+}
+
+export { projectViewUrl } from "@/lib/projectLink";
 
 // One-time (per cold start) fix for rows seeded before the site's local
 // screenshots/hero images were converted to WebP (see seedProjectsIfEmpty

@@ -43,7 +43,7 @@ import {
 } from "@/lib/db";
 import { verifyPassword, hashPassword, isValidPhone, normalizePhone, toPersianDigits } from "@/lib/auth";
 import { setSessionCookie, getCurrentUser, USER_COOKIE_NAME } from "@/lib/session";
-import { saveChatAttachment, saveBlogImage } from "@/lib/uploads";
+import { saveChatAttachment, saveBlogImage, saveProjectImage, saveProjectHtmlFile } from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
 import { cookies } from "next/headers";
 
@@ -205,6 +205,16 @@ async function requireBlogAccess() {
 async function requireCrmAccess() {
   const user = await getCurrentUser();
   if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.crm)) {
+    redirect("/dashboard");
+  }
+  return user;
+}
+
+/** Admin always qualifies; a developer only if an admin has granted them
+ *  the "projects" permission from the access tab. */
+async function requireProjectsAccess() {
+  const user = await getCurrentUser();
+  if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.projects)) {
     redirect("/dashboard");
   }
   return user;
@@ -421,6 +431,7 @@ export async function setUserPermissionsAction(formData: FormData) {
     orders: formData.get("perm_orders") === "on",
     blog: formData.get("perm_blog") === "on",
     crm: formData.get("perm_crm") === "on",
+    projects: formData.get("perm_projects") === "on",
   };
 
   await setUserPermissions(userId, permissions);
@@ -457,38 +468,73 @@ export async function createProjectAction(
   _prevState: ProjectFormState,
   formData: FormData
 ): Promise<ProjectFormState> {
-  await requireAdmin();
+  await requireProjectsAccess();
 
   const name = (formData.get("name") ?? "").toString().trim();
   const category = (formData.get("category") ?? "").toString().trim();
-  const url = (formData.get("url") ?? "").toString().trim();
-  const image = (formData.get("image") ?? "").toString().trim();
   const description = (formData.get("description") ?? "").toString().trim();
+  const siteUrl = (formData.get("siteUrl") ?? "").toString().trim();
 
-  if (!name || !category || !url) {
-    return { ok: false, message: "نام، دسته‌بندی و لینک سایت رو پر کن." };
+  if (!name || !category) {
+    return { ok: false, message: "عنوان و دسته‌بندی رو پر کن." };
+  }
+
+  // The "site" field is one of two things: an uploaded .html file (shown
+  // on our own domain via /portfolio/view/[id]) or a plain link that sends
+  // the visitor to that project's own domain. Exactly one is required.
+  const siteFile = formData.get("siteFile");
+  const hasSiteFile = siteFile instanceof File && siteFile.size > 0;
+
+  if (!hasSiteFile && !siteUrl) {
+    return { ok: false, message: "یا فایل HTML رو آپلود کن یا لینک سایت رو وارد کن." };
+  }
+  if (hasSiteFile && siteUrl) {
+    return { ok: false, message: "فقط یکی از این دو رو پر کن: فایل HTML یا لینک سایت، نه هر دو." };
   }
 
   try {
-    await createProject({ name, category, url, image, description });
+    let url: string;
+    let linkType: "url" | "html";
+    if (hasSiteFile) {
+      const savedHtml = await saveProjectHtmlFile(siteFile as File);
+      if (!savedHtml) {
+        return { ok: false, message: "آپلود فایل HTML ناموفق بود، دوباره امتحان کن." };
+      }
+      url = savedHtml;
+      linkType = "html";
+    } else {
+      url = siteUrl;
+      linkType = "url";
+    }
+
+    let image = "";
+    const imageFile = formData.get("image");
+    if (imageFile instanceof File && imageFile.size > 0) {
+      image = (await saveProjectImage(imageFile)) || "";
+    }
+
+    await createProject({ name, category, url, image, description, linkType });
   } catch (err) {
+    const message = err instanceof Error ? err.message : "یه مشکلی پیش اومد، دوباره امتحان کن.";
     console.error("createProjectAction failed:", err);
-    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
+    return { ok: false, message };
   }
 
   revalidatePath("/dashboard");
   revalidatePath("/");
-  return { ok: true, message: "پروژه اضافه شد." };
+  revalidatePath("/portfolio");
+  return { ok: true, message: "نمونه‌کار اضافه شد." };
 }
 
 export async function deleteProjectAction(formData: FormData) {
-  await requireAdmin();
+  await requireProjectsAccess();
   const id = Number(formData.get("projectId"));
   if (!id) return;
 
   await deleteProject(id);
   revalidatePath("/dashboard");
   revalidatePath("/");
+  revalidatePath("/portfolio");
 }
 
 // --- CRM: leads/phone numbers the team has sourced ---------------------------
