@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
@@ -93,6 +93,16 @@ function AddProjectForm() {
     setSiteUrlValue("");
   }
 
+  // Reset the form only once the save has actually succeeded — not the
+  // instant the button is clicked. Resetting immediately on click (the old
+  // behavior) wiped every field before the server had even responded, so a
+  // real validation/upload error never had a chance to be seen and it
+  // looked like submitting silently did nothing.
+  useEffect(() => {
+    if (state?.ok) resetForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
   if (!open) {
     return (
       <button
@@ -111,10 +121,7 @@ function AddProjectForm() {
   return (
     <form
       ref={formRef}
-      action={(fd) => {
-        formAction(fd);
-        resetForm();
-      }}
+      action={formAction}
       className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6"
     >
       <div className="mb-4 flex items-center justify-between">
@@ -202,7 +209,7 @@ function AddProjectForm() {
         </div>
       </div>
 
-      {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-dim"}`}>{state.message}</p>}
+      {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
     </form>
   );
