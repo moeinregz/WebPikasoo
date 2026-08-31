@@ -22,7 +22,7 @@ const WORK_HOURS = "شنبه تا پنجشنبه، 10 تا 16";
 const SHORT_ADDRESS = "استان البرز، کرج، اصفهانی ها، بلوار قدس، فاطمیه";
 // لینک موقعیت روی نقشه‌ی نشان و بله رو اینجا جایگزین کن.
 const NESHAN_MAP_LINK = "https://neshan.org";
-const BALAD_MAP_LINK = "https://balad.ir";
+const BALAD_MAP_LINK = "https://balad.ir/p/1gUvHjyBbJRwmm?preview=true#21.55/35.810534/51.00279";
 
 const socials = [
   {
