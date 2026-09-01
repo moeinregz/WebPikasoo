@@ -117,6 +117,10 @@ export default function TeamChat({
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<Blob[]>([]);
+  // Whether the list was scrolled near the bottom right before messages
+  // last changed. Kept in a ref (not state) because it's updated on every
+  // scroll event and shouldn't itself trigger a re-render.
+  const stickToBottomRef = useRef(true);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -126,8 +130,13 @@ export default function TeamChat({
     return () => clearInterval(interval);
   }, []);
 
+  // Only auto-scroll to the newest message if the reader was already near
+  // the bottom — otherwise the 4-second poll above kept yanking anyone
+  // scrolling up through history straight back down.
   useEffect(() => {
-    listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
+    if (stickToBottomRef.current) {
+      listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -188,6 +197,9 @@ export default function TeamChat({
     // Collapse the box back to one line after sending — otherwise it stays
     // stretched to whatever height the sent message had grown it to.
     if (messageInputRef.current) messageInputRef.current.style.height = "auto";
+    // Sending your own message should always jump to the bottom to show
+    // it, even if you'd scrolled up to read old messages first.
+    stickToBottomRef.current = true;
     const filePicked = pendingFile;
     pickFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -220,7 +232,17 @@ export default function TeamChat({
 
   return (
     <div className="flex h-[50vh] w-full max-h-[560px] min-h-[280px] flex-col overflow-hidden rounded-card border border-ink/[0.14] sm:h-[70vh] sm:min-h-[380px]">
-      <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-surface/20 p-3 sm:p-5">
+      <div
+        ref={listRef}
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+          // Small threshold so it still "sticks" even if you're a few
+          // pixels off the very bottom, not just exactly at it.
+          stickToBottomRef.current = distanceFromBottom < 80;
+        }}
+        className="flex-1 space-y-3 overflow-y-auto bg-surface/20 p-3 sm:p-5"
+      >
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center text-center text-dim">
             هنوز پیامی رد و بدل نشده — اولین نفر باش.
