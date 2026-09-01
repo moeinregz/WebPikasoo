@@ -18,6 +18,20 @@ import crypto from "crypto";
 //
 // See the "آپلود فایل (Vercel Blob)" section in README.md for full setup.
 
+/** Turns whatever @vercel/blob's put() threw into a message that says what
+ *  actually went wrong, instead of always blaming a missing token — a
+ *  wrong/expired token, a store that got disconnected, a network hiccup,
+ *  and a genuinely-missing token all look identical from the outside
+ *  otherwise, and guessing wrong wastes everyone's time debugging it. */
+function blobErrorMessage(err: unknown): string {
+  const raw = err instanceof Error ? err.message : String(err);
+  const looksLikeMissingToken = /no token found|missing.*token|BLOB_READ_WRITE_TOKEN/i.test(raw);
+  if (looksLikeMissingToken) {
+    return "آپلود ناموفق بود — متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم نشده (به README.md نگاه کن).";
+  }
+  return `آپلود ناموفق بود: ${raw}`;
+}
+
 const MAX_ATTACHMENT_BYTES = 15 * 1024 * 1024; // 15MB
 const MAX_BLOG_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
 
@@ -58,9 +72,7 @@ export async function saveBlogImage(file: File): Promise<string | null> {
     return blob.url;
   } catch (err) {
     console.error("saveBlogImage (Vercel Blob) failed:", err);
-    throw new Error(
-      "آپلود عکس ناموفق بود — مطمئن شو متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم شده (به README.md نگاه کن)."
-    );
+    throw new Error(blobErrorMessage(err));
   }
 }
 
@@ -92,9 +104,7 @@ export async function saveProjectImage(file: File): Promise<string | null> {
     return blob.url;
   } catch (err) {
     console.error("saveProjectImage (Vercel Blob) failed:", err);
-    throw new Error(
-      "آپلود عکس ناموفق بود — مطمئن شو متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم شده (به README.md نگاه کن)."
-    );
+    throw new Error(blobErrorMessage(err));
   }
 }
 
@@ -126,9 +136,7 @@ export async function saveProjectHtmlFile(file: File): Promise<string | null> {
     return blob.url;
   } catch (err) {
     console.error("saveProjectHtmlFile (Vercel Blob) failed:", err);
-    throw new Error(
-      "آپلود فایل HTML ناموفق بود — مطمئن شو متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم شده (به README.md نگاه کن)."
-    );
+    throw new Error(blobErrorMessage(err));
   }
 }
 
@@ -158,8 +166,6 @@ export async function saveChatAttachment(file: File): Promise<SavedAttachment | 
     };
   } catch (err) {
     console.error("saveChatAttachment (Vercel Blob) failed:", err);
-    throw new Error(
-      "آپلود فایل ناموفق بود — مطمئن شو متغیر محیطی BLOB_READ_WRITE_TOKEN تنظیم شده (به README.md نگاه کن)."
-    );
+    throw new Error(blobErrorMessage(err));
   }
 }
