@@ -114,6 +114,7 @@ export default function TeamChat({
 
   const listRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<Blob[]>([]);
 
@@ -184,6 +185,9 @@ export default function TeamChat({
 
     setError("");
     setText("");
+    // Collapse the box back to one line after sending — otherwise it stays
+    // stretched to whatever height the sent message had grown it to.
+    if (messageInputRef.current) messageInputRef.current.style.height = "auto";
     const filePicked = pendingFile;
     pickFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -311,14 +315,30 @@ export default function TeamChat({
             </svg>
           </button>
 
-          <input
+          <textarea
+            ref={messageInputRef}
             name="message"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+              // Auto-grow with content, up to a max height, then scroll.
+              const el = e.target;
+              el.style.height = "auto";
+              el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+            }}
+            onKeyDown={(e) => {
+              // Plain Enter inserts a newline (the textarea's normal
+              // behavior — nothing to do). Ctrl/Cmd+Enter is a quick way
+              // to send without reaching for the button.
+              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                e.currentTarget.form?.requestSubmit();
+              }
+            }}
             placeholder={recording ? "در حال ضبط..." : "پیامت رو بنویس..."}
-            autoComplete="off"
+            rows={1}
             disabled={recording}
-            className="w-0 min-w-0 flex-1 rounded-full border border-ink/[0.16] bg-surface/40 px-3.5 py-2.5 text-[14px] text-ink outline-none transition focus:border-accent disabled:opacity-60 sm:px-4"
+            className="w-0 min-w-0 flex-1 resize-none rounded-2xl border border-ink/[0.16] bg-surface/40 px-3.5 py-2.5 text-[14px] text-ink outline-none transition focus:border-accent disabled:opacity-60 sm:px-4"
           />
           <SendButton />
         </div>
