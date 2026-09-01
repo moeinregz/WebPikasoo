@@ -170,7 +170,15 @@ function AddProjectForm() {
           </p>
 
           <div className="mb-3">
-            {siteFileName ? (
+            <input
+              ref={siteFileRef}
+              type="file"
+              name="siteFile"
+              accept=".html,.htm,text/html"
+              onChange={handleSiteFileChange}
+              className={siteFileName ? "hidden" : fileInputClass}
+            />
+            {siteFileName && (
               <div className="mb-2 flex items-center justify-between gap-2 rounded-md border border-accent/25 bg-accent/10 px-3 py-2 text-[12.5px] text-accent">
                 <span className="truncate" dir="ltr">
                   {siteFileName}
@@ -179,15 +187,6 @@ function AddProjectForm() {
                   حذف
                 </button>
               </div>
-            ) : (
-              <input
-                ref={siteFileRef}
-                type="file"
-                name="siteFile"
-                accept=".html,.htm,text/html"
-                onChange={handleSiteFileChange}
-                className={fileInputClass}
-              />
             )}
           </div>
 
