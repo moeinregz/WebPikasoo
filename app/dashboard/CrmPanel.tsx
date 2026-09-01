@@ -94,23 +94,27 @@ export default function CrmPanel({
   const showCreator = Object.keys(creatorNames).length > 0 || canDelete;
   const calledCount = leads.filter((l) => l.called).length;
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "called" | "notCalled">("all");
   const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return leads;
-    return leads.filter(
-      (l) =>
+    return leads.filter((l) => {
+      if (statusFilter === "called" && !l.called) return false;
+      if (statusFilter === "notCalled" && l.called) return false;
+      if (!q) return true;
+      return (
         l.name.toLowerCase().includes(q) ||
         l.phone.includes(query.trim()) ||
         toPersianDigits(l.phone).includes(query.trim()) ||
         (l.note && l.note.toLowerCase().includes(q))
-    );
-  }, [leads, query]);
+      );
+    });
+  }, [leads, query, statusFilter]);
 
   useEffect(() => {
     setPage(1);
-  }, [query]);
+  }, [query, statusFilter]);
 
   const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
 
@@ -131,13 +135,40 @@ export default function CrmPanel({
         <>
           <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا یادداشت..." />
 
+          <div className="mb-4 flex flex-wrap gap-2">
+            {(
+              [
+                { key: "all", label: `همه (${toPersianDigits(leads.length)})` },
+                { key: "called", label: `زنگ زده شده (${toPersianDigits(calledCount)})` },
+                { key: "notCalled", label: `زنگ نزده (${toPersianDigits(leads.length - calledCount)})` },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setStatusFilter(tab.key)}
+                className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
+                  statusFilter === tab.key
+                    ? "border-accent bg-accent text-black"
+                    : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
           <p className="mb-4 font-mono text-[12.5px] text-dim">
             {toPersianDigits(calledCount)} از {toPersianDigits(leads.length)} تماس گرفته شده
           </p>
 
           {filtered.length === 0 ? (
             <div className="rounded-card border border-dashed border-ink/[0.2] p-6 sm:p-10 text-center text-dim">
-              نتیجه‌ای برای این جستجو پیدا نشد.
+              {statusFilter === "all"
+                ? "نتیجه‌ای برای این جستجو پیدا نشد."
+                : statusFilter === "called"
+                ? "هیچ شماره‌ای که زنگ زده شده باشه پیدا نشد."
+                : "هیچ شماره‌ی زنگ‌نزده‌ای پیدا نشد."}
             </div>
           ) : (
             <>
