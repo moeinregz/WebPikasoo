@@ -64,62 +64,72 @@ function AddLeadForm() {
   );
 }
 
-/** One click marks a lead called — same as it always worked. The result
- *  dropdown next to the badge is separate and optional, so it never blocks
- *  the quick "زنگ زدم" click. */
+/** Segmented two-tab control, same idea as the "همه/زنگ زده شده/زنگ نزده"
+ *  filter above: two options side by side, one click switches between
+ *  them, and whichever one is active gets the color. */
 function CallStatusCell({ lead }: { lead: Lead }) {
-  if (!lead.called) {
-    return (
-      <form action={markCrmCalledAction}>
-        <input type="hidden" name="leadId" value={lead.id} />
-        <MarkCalledButton />
-      </form>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-1.5">
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-[12.5px] font-bold text-accent">
-          زنگ زده شد ✓
-        </span>
+      <div className="inline-flex w-fit overflow-hidden rounded-full border border-ink/[0.16]">
         <form action={toggleCrmCalledAction}>
           <input type="hidden" name="leadId" value={lead.id} />
           <input type="hidden" name="called" value="0" />
-          <button type="submit" className="text-[11px] text-dim underline transition hover:text-ink">
-            لغو
-          </button>
+          <NotCalledTab active={!lead.called} />
+        </form>
+        <form action={markCrmCalledAction}>
+          <input type="hidden" name="leadId" value={lead.id} />
+          <CalledTab active={!!lead.called} />
         </form>
       </div>
-      <form action={setCrmCallResultAction}>
-        <input type="hidden" name="leadId" value={lead.id} />
-        <select
-          name="result"
-          defaultValue={lead.last_call_result || ""}
-          onChange={(e) => e.currentTarget.form?.requestSubmit()}
-          className="rounded-full border border-ink/[0.16] bg-surface/40 px-3 py-1 text-[11.5px] text-dim outline-none transition focus:border-accent"
-        >
-          <option value="">نتیجه‌ی تماس...</option>
-          {CRM_CALL_RESULT_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </form>
+
+      {!!lead.called && (
+        <form action={setCrmCallResultAction}>
+          <input type="hidden" name="leadId" value={lead.id} />
+          <select
+            name="result"
+            defaultValue={lead.last_call_result || ""}
+            onChange={(e) => e.currentTarget.form?.requestSubmit()}
+            className="rounded-full border border-ink/[0.16] bg-surface/40 px-3 py-1 text-[11.5px] text-dim outline-none transition focus:border-accent"
+          >
+            <option value="">نتیجه‌ی تماس...</option>
+            {CRM_CALL_RESULT_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </form>
+      )}
     </div>
   );
 }
 
-function MarkCalledButton() {
+function NotCalledTab({ active }: { active: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      disabled={pending}
-      className="rounded-full border border-ink/[0.2] px-3.5 py-1.5 text-[12.5px] font-bold text-dim transition hover:border-accent hover:text-accent disabled:opacity-60"
+      disabled={active || pending}
+      className={`px-3.5 py-1.5 text-[12px] font-bold transition disabled:cursor-default ${
+        active ? "bg-ink/[0.12] text-ink" : "text-dim hover:bg-ink/5 hover:text-ink"
+      }`}
     >
-      {pending ? "..." : "زنگ زده نشده"}
+      زنگ زده نشده
+    </button>
+  );
+}
+
+function CalledTab({ active }: { active: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={active || pending}
+      className={`px-3.5 py-1.5 text-[12px] font-bold transition disabled:cursor-default ${
+        active ? "bg-accent text-black" : "text-dim hover:bg-accent/10 hover:text-accent"
+      }`}
+    >
+      زنگ زده شد ✓
     </button>
   );
 }
