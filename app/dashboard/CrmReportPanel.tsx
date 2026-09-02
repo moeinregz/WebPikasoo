@@ -55,6 +55,18 @@ export default function CrmReportPanel({
   users: TeamMember[];
 }) {
   const [date, setDate] = useState(todayTehranKey());
+  // Each member's card starts collapsed (summary badges only); "گزارش کامل"
+  // expands that one card to show the actual calls/messages for the day.
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+
+  function toggleExpanded(userId: number) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(userId)) next.delete(userId);
+      else next.add(userId);
+      return next;
+    });
+  }
 
   const leadById = useMemo(() => new Map(leads.map((l) => [l.id, l])), [leads]);
   const channelById = useMemo(() => new Map(channels.map((c) => [c.id, c])), [channels]);
@@ -121,7 +133,10 @@ export default function CrmReportPanel({
           <input
             type="date"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(e) => {
+            setDate(e.target.value);
+            setExpanded(new Set());
+          }}
             className="rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-2.5 text-[14px] text-ink outline-none transition focus:border-accent"
           />
           <p className="mt-1.5 text-[12px] text-dim">{formatTehranDayKey(date)}</p>
@@ -148,11 +163,14 @@ export default function CrmReportPanel({
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {rows.map((r) => (
+          {rows.map((r) => {
+            const isExpanded = expanded.has(r.user.id);
+            const hasActivity = r.calls.length > 0 || r.messages.length > 0;
+            return (
             <div key={r.user.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-5">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <h3 className="font-display text-base font-normal">{r.user.name}</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full border border-ink/[0.16] px-3 py-1 font-mono text-[11.5px] text-dim">
                     {toPersianDigits(r.leadsCreated)} شماره ثبت کرد
                   </span>
@@ -165,12 +183,21 @@ export default function CrmReportPanel({
                   <span className="rounded-full border border-sky-500/25 bg-sky-500/10 px-3 py-1 font-mono text-[11.5px] text-sky-600">
                     {toPersianDigits(r.messagesSent)} پیام داد
                   </span>
+                  {hasActivity && (
+                    <button
+                      type="button"
+                      onClick={() => toggleExpanded(r.user.id)}
+                      className="rounded-full border border-ink/[0.2] px-3 py-1 font-mono text-[11.5px] text-ink transition hover:border-accent hover:text-accent"
+                    >
+                      {isExpanded ? "بستن جزئیات" : "گزارش کامل"}
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {r.calls.length === 0 && r.messages.length === 0 ? (
+              {!hasActivity ? (
                 <p className="text-[13px] text-dim/70">این روز تماس یا پیامی ثبت نکرده.</p>
-              ) : (
+              ) : !isExpanded ? null : (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <p className="mb-1.5 font-mono text-[11.5px] text-dim/70">تماس‌های CRM</p>
@@ -220,7 +247,8 @@ export default function CrmReportPanel({
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
