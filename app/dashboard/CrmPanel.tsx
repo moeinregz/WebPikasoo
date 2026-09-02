@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { createCrmLeadAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
@@ -135,14 +135,36 @@ function StatusDropdownButton({
   // bottom/edge the panel got clipped by that scroll container instead of
   // floating over the page. Fixed positioning (computed from the button's
   // real screen position) escapes that clipping entirely.
+  const menuRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
-  useEffect(() => {
-    if (!open) return;
+  // useLayoutEffect (not useEffect) so the flip/clamp math runs — and pos
+  // updates — before the browser paints; the panel is rendered off-screen
+  // and invisible until then, so there's no flash at the wrong spot.
+  useLayoutEffect(() => {
+    if (!open) {
+      setPos(null);
+      return;
+    }
     function updatePosition() {
-      const rect = wrapRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      setPos({ top: rect.bottom + 6, left: rect.left });
+      const btnRect = wrapRef.current?.getBoundingClientRect();
+      if (!btnRect) return;
+      const menuRect = menuRef.current?.getBoundingClientRect();
+      const menuHeight = menuRect?.height ?? 0;
+      const menuWidth = menuRect?.width ?? 192;
+
+      // Open upward when there isn't room below (e.g. the row is near the
+      // bottom of the screen) but there IS more room above.
+      const spaceBelow = window.innerHeight - btnRect.bottom;
+      const spaceAbove = btnRect.top;
+      const openUp = spaceBelow < menuHeight + 12 && spaceAbove > spaceBelow;
+      const top = openUp ? Math.max(8, btnRect.top - menuHeight - 6) : btnRect.bottom + 6;
+
+      // Keep it inside the viewport horizontally too (near the left/right edge).
+      const maxLeft = window.innerWidth - menuWidth - 8;
+      const left = Math.min(Math.max(btnRect.left, 8), Math.max(maxLeft, 8));
+
+      setPos({ top, left });
     }
     updatePosition();
     // capture:true so scrolling *inside* the table wrapper (not just the
@@ -174,9 +196,15 @@ function StatusDropdownButton({
         </svg>
       </button>
 
-      {open && pos && (
+      {open && (
         <div
-          style={{ position: "fixed", top: pos.top, left: pos.left }}
+          ref={menuRef}
+          style={{
+            position: "fixed",
+            top: pos ? pos.top : -9999,
+            left: pos ? pos.left : -9999,
+            visibility: pos ? "visible" : "hidden",
+          }}
           className="z-50 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl"
         >
           {STATUS_DROPDOWN_OPTIONS.map((opt) => (
