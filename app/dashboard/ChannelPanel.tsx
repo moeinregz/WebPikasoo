@@ -60,8 +60,8 @@ function AddChannelForm() {
       <h2 className="mb-4 font-display text-lg font-normal">افزودن پیج/کانال جدید</h2>
       <div className="grid gap-4 sm:grid-cols-3">
         <input name="pageName" required placeholder="نام پیج یا کانال" className={inputClass} />
-        <input name="businessName" required placeholder="نام کسب‌وکار" className={inputClass} />
-        <input name="note" placeholder="یادداشت — اسم کسب و کار یا پلتفرم" className={inputClass} />
+        <input name="businessName" required placeholder="کسب‌وکار" className={inputClass} />
+        <input name="note" placeholder="یادداشت — پلتفرم" className={inputClass} />
       </div>
       {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
