@@ -59,7 +59,7 @@ function AddChannelForm() {
     <form ref={formRef} action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
       <h2 className="mb-4 font-display text-lg font-normal">افزودن پیج/کانال جدید</h2>
       <div className="grid gap-4 sm:grid-cols-3">
-        <input name="pageName" required placeholder="نام پیج یا کانال" className={inputClass} />
+        <input name="pageName" required placeholder="آیدی پیج یا کانال" className={inputClass} />
         <input name="businessName" required placeholder="کسب‌وکار" className={inputClass} />
         <input name="note" placeholder="یادداشت — پلتفرم" className={inputClass} />
       </div>
