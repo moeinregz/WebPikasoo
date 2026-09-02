@@ -59,7 +59,7 @@ function AddChannelForm() {
     <form ref={formRef} action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
       <h2 className="mb-4 font-display text-lg font-normal">افزودن پیج/کانال جدید</h2>
       <div className="grid gap-4 sm:grid-cols-3">
-        <input name="pageName" required placeholder="آیدی پیج یا کانال" className={inputClass} />
+        <input name="pageName" required placeholder="نام پیج یا کانال" className={inputClass} />
         <input name="businessName" required placeholder="کسب‌وکار" className={inputClass} />
         <input name="note" placeholder="یادداشت — پلتفرم" className={inputClass} />
       </div>
@@ -128,6 +128,28 @@ function StatusDropdownButton({
   onChoose: (v: string) => void;
 }) {
   const { pending } = useFormStatus();
+  // Fixed positioning (computed from the button's real screen position)
+  // instead of `absolute` — the wrapper sits inside the table's
+  // `overflow-x-auto` scroll box, which was clipping the options panel on
+  // rows near the edge.
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function updatePosition() {
+      const rect = wrapRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setPos({ top: rect.bottom + 6, left: rect.left });
+    }
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [open, wrapRef]);
+
   return (
     <div ref={wrapRef} className="relative inline-block text-right">
       <button
@@ -146,8 +168,11 @@ function StatusDropdownButton({
         </svg>
       </button>
 
-      {open && (
-        <div className="absolute z-30 mt-1.5 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl">
+      {open && pos && (
+        <div
+          style={{ position: "fixed", top: pos.top, left: pos.left }}
+          className="z-50 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl"
+        >
           {STATUS_DROPDOWN_OPTIONS.map((opt) => (
             <button
               key={opt.value || "none"}

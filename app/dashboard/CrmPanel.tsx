@@ -130,6 +130,32 @@ function StatusDropdownButton({
   onChoose: (v: string) => void;
 }) {
   const { pending } = useFormStatus();
+  // The options panel used to be `absolute` inside the wrapper, which sits
+  // inside the table's `overflow-x-auto` scroll box — so on rows near the
+  // bottom/edge the panel got clipped by that scroll container instead of
+  // floating over the page. Fixed positioning (computed from the button's
+  // real screen position) escapes that clipping entirely.
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function updatePosition() {
+      const rect = wrapRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setPos({ top: rect.bottom + 6, left: rect.left });
+    }
+    updatePosition();
+    // capture:true so scrolling *inside* the table wrapper (not just the
+    // page) also repositions/tracks the button instead of leaving the
+    // panel floating over the wrong row.
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [open, wrapRef]);
+
   return (
     <div ref={wrapRef} className="relative inline-block text-right">
       <button
@@ -148,8 +174,11 @@ function StatusDropdownButton({
         </svg>
       </button>
 
-      {open && (
-        <div className="absolute z-30 mt-1.5 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl">
+      {open && pos && (
+        <div
+          style={{ position: "fixed", top: pos.top, left: pos.left }}
+          className="z-50 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl"
+        >
           {STATUS_DROPDOWN_OPTIONS.map((opt) => (
             <button
               key={opt.value || "none"}
