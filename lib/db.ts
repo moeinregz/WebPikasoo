@@ -868,21 +868,42 @@ export type CrmCallLog = {
  *  append-only log (rather than just a field on the lead) because the same
  *  lead can legitimately get called more than once over time, and the
  *  report needs to count and list every individual call, not just the
- *  lead's current status. */
-export async function logCrmCall(data: { leadId: number; userId: number; result: string }): Promise<number> {
+ *  lead's current status. Result is optional here — marking someone
+ *  "called" is a single click; the outcome is filled in afterwards (see
+ *  setLatestCrmCallResult) via a quick dropdown instead of blocking on it. */
+export async function logCrmCall(data: { leadId: number; userId: number; result?: string }): Promise<number> {
   const database = await getDb();
   const id = await nextId("crm_calls");
+  const result = data.result || "";
   await database.collection<CrmCallLog>("crm_calls").insertOne({
     id,
     lead_id: data.leadId,
     user_id: data.userId,
-    result: data.result,
+    result,
     created_at: nowStr(),
   });
   await database
     .collection("crm_leads")
-    .updateOne({ id: data.leadId }, { $set: { called: 1, last_call_result: data.result } });
+    .updateOne({ id: data.leadId }, { $set: { called: 1, last_call_result: result } });
   return id;
+}
+
+/** Updates the outcome of a lead's most recent call (falls back to just
+ *  the lead's denormalized field if it somehow has no call log yet). Used
+ *  by the result dropdown, which edits after the fact rather than
+ *  requiring the outcome up front. */
+export async function setLatestCrmCallResult(leadId: number, result: string): Promise<void> {
+  const database = await getDb();
+  const latest = await database
+    .collection<CrmCallLog>("crm_calls")
+    .find({ lead_id: leadId })
+    .sort({ created_at: -1, id: -1 })
+    .limit(1)
+    .toArray();
+  if (latest[0]) {
+    await database.collection("crm_calls").updateOne({ id: latest[0].id }, { $set: { result } });
+  }
+  await database.collection("crm_leads").updateOne({ id: leadId }, { $set: { last_call_result: result } });
 }
 
 export async function getAllCrmCallLogs(): Promise<CrmCallLog[]> {

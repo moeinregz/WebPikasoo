@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
-import { createCrmLeadAction, toggleCrmCalledAction, logCrmCallAction, deleteCrmLeadAction, type CrmFormState, type CrmCallFormState } from "./actions";
+import { createCrmLeadAction, toggleCrmCalledAction, markCrmCalledAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
+import { CRM_CALL_RESULT_OPTIONS } from "@/lib/crmReport";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
@@ -63,78 +64,21 @@ function AddLeadForm() {
   );
 }
 
-const callInitialState: CrmCallFormState = null;
-
-/** The "زنگ زده نشده" state expands into a small inline form asking for
- *  the call's result — recording that outcome is the whole point of this
- *  feature (it's what the daily activity report is built from), so we
- *  don't let marking something "called" skip past it. */
-function CallLogForm({ leadId }: { leadId: number }) {
-  const [state, formAction] = useFormState(logCrmCallAction, callInitialState);
-  const [open, setOpen] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (state?.ok) {
-      setOpen(false);
-      formRef.current?.reset();
-    }
-  }, [state]);
-
-  if (!open) {
+/** One click marks a lead called — same as it always worked. The result
+ *  dropdown next to the badge is separate and optional, so it never blocks
+ *  the quick "زنگ زدم" click. */
+function CallStatusCell({ lead }: { lead: Lead }) {
+  if (!lead.called) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="rounded-full border border-ink/[0.2] px-3.5 py-1.5 text-[12.5px] font-bold text-dim transition hover:border-accent hover:text-accent"
-      >
-        زنگ زده نشده
-      </button>
+      <form action={markCrmCalledAction}>
+        <input type="hidden" name="leadId" value={lead.id} />
+        <MarkCalledButton />
+      </form>
     );
   }
 
   return (
-    <form ref={formRef} action={formAction} className="flex min-w-[240px] flex-col gap-1.5">
-      <input type="hidden" name="leadId" value={leadId} />
-      <div className="flex flex-wrap items-center gap-1.5">
-        <input
-          name="result"
-          required
-          autoFocus
-          placeholder="نتیجه‌ی تماس..."
-          className="min-w-[180px] flex-1 rounded-full border border-ink/[0.2] bg-surface/40 px-3.5 py-1.5 text-[12.5px] text-ink outline-none focus:border-accent"
-        />
-        <LogCallSubmitButton />
-        <button type="button" onClick={() => setOpen(false)} className="text-[12px] text-dim hover:text-ink">
-          انصراف
-        </button>
-      </div>
-      {state && !state.ok && <p className="text-[11.5px] text-red-500">{state.message}</p>}
-    </form>
-  );
-}
-
-function LogCallSubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="flex-shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-[12.5px] font-bold text-black transition disabled:opacity-60"
-    >
-      {pending ? "..." : "ثبت زنگ"}
-    </button>
-  );
-}
-
-/** Already-called leads show the badge plus the recorded result, with a
- *  one-click "لغو" to undo an accidental mark (no result needed for that
- *  direction — it's just correcting a mistake, not a new call). */
-function CallStatusCell({ lead }: { lead: Lead }) {
-  if (!lead.called) return <CallLogForm leadId={lead.id} />;
-
-  return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-[12.5px] font-bold text-accent">
           زنگ زده شد ✓
@@ -147,8 +91,36 @@ function CallStatusCell({ lead }: { lead: Lead }) {
           </button>
         </form>
       </div>
-      {lead.last_call_result && <p className="max-w-[220px] text-[11.5px] text-dim">نتیجه: {lead.last_call_result}</p>}
+      <form action={setCrmCallResultAction}>
+        <input type="hidden" name="leadId" value={lead.id} />
+        <select
+          name="result"
+          defaultValue={lead.last_call_result || ""}
+          onChange={(e) => e.currentTarget.form?.requestSubmit()}
+          className="rounded-full border border-ink/[0.16] bg-surface/40 px-3 py-1 text-[11.5px] text-dim outline-none transition focus:border-accent"
+        >
+          <option value="">نتیجه‌ی تماس...</option>
+          {CRM_CALL_RESULT_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      </form>
     </div>
+  );
+}
+
+function MarkCalledButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="rounded-full border border-ink/[0.2] px-3.5 py-1.5 text-[12.5px] font-bold text-dim transition hover:border-accent hover:text-accent disabled:opacity-60"
+    >
+      {pending ? "..." : "زنگ زده نشده"}
+    </button>
   );
 }
 

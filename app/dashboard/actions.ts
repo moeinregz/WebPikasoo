@@ -23,6 +23,7 @@ import {
   getCrmLeadByPhone,
   setCrmLeadCalled,
   logCrmCall,
+  setLatestCrmCallResult,
   deleteCrmLead,
   createTask,
   setTaskStatus,
@@ -579,40 +580,35 @@ export async function toggleCrmCalledAction(formData: FormData) {
   const called = formData.get("called") === "1";
   if (!id) return;
 
-  // Only used to *undo* an accidental "called" mark (back to "0") — going
-  // the other way requires a call result, so it goes through
-  // logCrmCallAction instead, which is what actually records the activity
+  // Only used to *undo* an accidental "called" mark (back to "0") —
+  // marking it "called" in the first place goes through
+  // markCrmCalledAction below, which is what actually logs the activity
   // the daily report is built from.
   await setCrmLeadCalled(id, called);
   revalidatePath("/dashboard");
 }
 
-export type CrmCallFormState = { ok: boolean; message: string } | null;
-
-export async function logCrmCallAction(
-  _prevState: CrmCallFormState,
-  formData: FormData
-): Promise<CrmCallFormState> {
+/** One click, no typing — same as the original behavior. Logs a call
+ *  event (with no result yet) so it counts toward the daily report; the
+ *  actual outcome gets picked afterwards from the dropdown, which is
+ *  optional and never blocks marking someone as called. */
+export async function markCrmCalledAction(formData: FormData) {
   const currentUser = await requireCrmAccess();
   const leadId = Number(formData.get("leadId"));
-  const result = (formData.get("result") ?? "").toString().trim();
+  if (!leadId) return;
 
-  if (!leadId) {
-    return { ok: false, message: "لید نامعتبره." };
-  }
-  if (!result) {
-    return { ok: false, message: "نتیجه‌ی تماس رو بنویس." };
-  }
-
-  try {
-    await logCrmCall({ leadId, userId: currentUser.id, result });
-  } catch (err) {
-    console.error("logCrmCallAction failed:", err);
-    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
-  }
-
+  await logCrmCall({ leadId, userId: currentUser.id });
   revalidatePath("/dashboard");
-  return { ok: true, message: "زنگ ثبت شد." };
+}
+
+export async function setCrmCallResultAction(formData: FormData) {
+  await requireCrmAccess();
+  const leadId = Number(formData.get("leadId"));
+  const result = (formData.get("result") ?? "").toString();
+  if (!leadId) return;
+
+  await setLatestCrmCallResult(leadId, result);
+  revalidatePath("/dashboard");
 }
 
 /** Admin-only — a developer with the "crm" permission can add leads and

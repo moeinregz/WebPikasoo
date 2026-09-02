@@ -125,7 +125,7 @@ export default function CrmReportPanel({
                           {toPersianDigits(c.leadPhone)}
                         </span>
                       </div>
-                      <p className="text-dim">نتیجه: {c.result}</p>
+                      <p className="text-dim">نتیجه: {c.result || "ثبت نشده"}</p>
                     </li>
                   ))}
                 </ul>

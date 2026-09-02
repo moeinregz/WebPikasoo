@@ -16,6 +16,19 @@ export function todayTehranKey(): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tehran" }).format(new Date());
 }
 
+/** Quick pick-list for a call's outcome — a dropdown is faster than typing
+ *  and doesn't force the admin to stop and write a sentence just to mark
+ *  someone as called. */
+export const CRM_CALL_RESULT_OPTIONS = [
+  "پاسخ نداد",
+  "خاموش / در دسترس نبود",
+  "علاقه‌مند بود",
+  "علاقه نداشت",
+  "بعداً دوباره تماس بگیر",
+  "مشتری شد",
+  "شماره اشتباه",
+];
+
 /** Formats a "YYYY-MM-DD" key as a readable Persian-calendar date. */
 export function formatTehranDayKey(dayKey: string): string {
   const d = new Date(`${dayKey}T12:00:00Z`); // noon avoids any DST/rounding edge cases
