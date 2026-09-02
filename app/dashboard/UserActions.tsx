@@ -186,6 +186,10 @@ export default function UserActions({
             CRM
           </label>
           <label className="flex items-center gap-1.5">
+            <input type="checkbox" name="perm_channels" defaultChecked={permissions?.channels} />
+            پیام به کانال‌ها
+          </label>
+          <label className="flex items-center gap-1.5">
             <input type="checkbox" name="perm_blog" defaultChecked={permissions?.blog} />
             وبلاگ
           </label>

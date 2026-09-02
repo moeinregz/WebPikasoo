@@ -13,6 +13,7 @@ const PERMISSION_FIELDS: { key: keyof UserPermissions; name: string; label: stri
   { key: "chat", name: "perm_chat", label: "چت تیم" },
   { key: "blog", name: "perm_blog", label: "وبلاگ" },
   { key: "crm", name: "perm_crm", label: "CRM" },
+  { key: "channels", name: "perm_channels", label: "پیام به کانال‌ها" },
   { key: "projects", name: "perm_projects", label: "نمونه‌کارها" },
 ];
 

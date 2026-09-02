@@ -359,6 +359,7 @@ export type UserPermissions = {
   blog: boolean;
   crm: boolean;
   projects: boolean;
+  channels: boolean;
 };
 
 const DEFAULT_DEVELOPER_PERMISSIONS: UserPermissions = {
@@ -370,6 +371,7 @@ const DEFAULT_DEVELOPER_PERMISSIONS: UserPermissions = {
   blog: false,
   crm: false,
   projects: false,
+  channels: false,
 };
 
 export function getUserPermissions(user: Pick<User, "role" | "permissions">): UserPermissions {
@@ -383,6 +385,7 @@ export function getUserPermissions(user: Pick<User, "role" | "permissions">): Us
       blog: true,
       crm: true,
       projects: true,
+      channels: true,
     };
   }
   if (!user.permissions) return { ...DEFAULT_DEVELOPER_PERMISSIONS };
@@ -914,6 +917,122 @@ export async function getAllCrmCallLogs(): Promise<CrmCallLog[]> {
 export async function deleteCrmLead(id: number): Promise<void> {
   const database = await getDb();
   await database.collection("crm_leads").deleteOne({ id });
+}
+
+// -----------------------------------------------------------------------
+// Channel messages
+// -----------------------------------------------------------------------
+// Same shape/behavior as CRM leads above (see comments there for the
+// reasoning — day-deduped log, denormalized "latest result" on the row
+// itself), but for pages/channels the team messages instead of numbers
+// they call. Kept as its own pair of collections rather than reusing the
+// CRM ones since the fields differ (page/business name, not phone) and
+// the two pipelines are conceptually separate.
+
+export type ChannelLead = {
+  id: number;
+  created_at: string;
+  page_name: string;
+  business_name: string;
+  note: string;
+  messaged: number;
+  created_by: number | null;
+  // Result text from the most recent message — denormalized here the same
+  // way CrmLead.last_call_result is, so the list can show it without a
+  // join. Full history lives in channel_messages below.
+  last_message_result?: string;
+};
+
+export type NewChannelLead = { pageName: string; businessName: string; note?: string; createdBy?: number };
+
+export async function createChannelLead(data: NewChannelLead): Promise<number> {
+  const database = await getDb();
+  const id = await nextId("channel_leads");
+  await database.collection<ChannelLead>("channel_leads").insertOne({
+    id,
+    created_at: nowStr(),
+    page_name: data.pageName,
+    business_name: data.businessName,
+    note: data.note || "",
+    messaged: 0,
+    created_by: data.createdBy ?? null,
+  });
+  return id;
+}
+
+export async function getAllChannelLeads(): Promise<ChannelLead[]> {
+  const database = await getDb();
+  return database
+    .collection<ChannelLead>("channel_leads")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ created_at: -1, id: -1 })
+    .toArray();
+}
+
+export async function setChannelLeadMessaged(id: number, messaged: boolean): Promise<void> {
+  const database = await getDb();
+  await database.collection("channel_leads").updateOne({ id }, { $set: { messaged: messaged ? 1 : 0 } });
+}
+
+export type ChannelMessageLog = {
+  id: number;
+  channel_id: number;
+  user_id: number;
+  result: string;
+  created_at: string;
+};
+
+/** Same day-dedup rule as recordCrmCallResult: at most one log row per
+ *  channel per Tehran calendar day. Picking a different result later the
+ *  same day corrects that day's row instead of adding a duplicate; a
+ *  result picked on a new day (or the first ever for this channel) logs a
+ *  fresh row, which is what makes it show up under *that* day in the
+ *  report. */
+export async function recordChannelMessageResult(data: {
+  channelId: number;
+  userId: number;
+  result: string;
+}): Promise<void> {
+  const database = await getDb();
+  const latest = await database
+    .collection<ChannelMessageLog>("channel_messages")
+    .find({ channel_id: data.channelId })
+    .sort({ created_at: -1, id: -1 })
+    .limit(1)
+    .toArray();
+
+  const today = todayTehranKey();
+  if (latest[0] && tehranDayKey(latest[0].created_at) === today) {
+    await database
+      .collection("channel_messages")
+      .updateOne({ id: latest[0].id }, { $set: { result: data.result, user_id: data.userId } });
+  } else {
+    const id = await nextId("channel_messages");
+    await database.collection<ChannelMessageLog>("channel_messages").insertOne({
+      id,
+      channel_id: data.channelId,
+      user_id: data.userId,
+      result: data.result,
+      created_at: nowStr(),
+    });
+  }
+  await database
+    .collection("channel_leads")
+    .updateOne({ id: data.channelId }, { $set: { messaged: 1, last_message_result: data.result } });
+}
+
+export async function getAllChannelMessageLogs(): Promise<ChannelMessageLog[]> {
+  const database = await getDb();
+  return database
+    .collection<ChannelMessageLog>("channel_messages")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ created_at: -1, id: -1 })
+    .toArray();
+}
+
+export async function deleteChannelLead(id: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("channel_leads").deleteOne({ id });
 }
 
 // -----------------------------------------------------------------------

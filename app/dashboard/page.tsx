@@ -12,6 +12,8 @@ import {
   getTasksForUser,
   getAllCrmLeads,
   getAllCrmCallLogs,
+  getAllChannelLeads,
+  getAllChannelMessageLogs,
   getUserPermissions,
   getAllBlogPosts,
   getAllProjects,
@@ -27,6 +29,7 @@ import IdBadge from "./IdBadge";
 import AccessPanel from "./AccessPanel";
 import CrmPanel from "./CrmPanel";
 import CrmReportPanel from "./CrmReportPanel";
+import ChannelPanel from "./ChannelPanel";
 import OrdersPanel from "./OrdersPanel";
 import TicketsPanel from "./TicketsPanel";
 import UsersPanel from "./UsersPanel";
@@ -81,6 +84,10 @@ export default async function DashboardPage() {
   // Full call-outcome history, used to build the admin's daily activity
   // report — not needed (and not fetched) for non-admins.
   const crmCalls = isAdmin ? await getAllCrmCallLogs() : [];
+  // Same pattern as CRM leads above, for pages/channels the team messages.
+  const allChannelLeads = isAdmin || perms.channels ? await getAllChannelLeads() : [];
+  const channelLeads = isAdmin ? allChannelLeads : allChannelLeads.filter((c) => c.created_by === currentUser.id);
+  const channelMessages = isAdmin ? await getAllChannelMessageLogs() : [];
   const allTasks = isAdmin ? await getAllTasks() : [];
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
@@ -308,11 +315,29 @@ export default async function DashboardPage() {
       panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} creatorNames={creatorNames} />,
     });
   }
+  if (isAdmin || perms.channels) {
+    const channelCreatorNames = isAdmin
+      ? Object.fromEntries(teamMembers.map((u) => [u.id, u.name]))
+      : {};
+    tabs.push({
+      id: "channels",
+      label: `پیام به کانال‌ها (${toPersianDigits(channelLeads.length)})`,
+      panel: <ChannelPanel channels={channelLeads} canDelete={isAdmin} creatorNames={channelCreatorNames} />,
+    });
+  }
   if (isAdmin) {
     tabs.push({
       id: "crm-report",
       label: "گزارش فعالیت روزانه",
-      panel: <CrmReportPanel leads={allCrmLeads} calls={crmCalls} users={teamMembers.map((u) => ({ id: u.id, name: u.name }))} />,
+      panel: (
+        <CrmReportPanel
+          leads={allCrmLeads}
+          calls={crmCalls}
+          channels={allChannelLeads}
+          channelMessages={channelMessages}
+          users={teamMembers.map((u) => ({ id: u.id, name: u.name }))}
+        />
+      ),
     });
   }
   if (isAdmin) {

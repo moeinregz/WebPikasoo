@@ -24,6 +24,10 @@ import {
   setCrmLeadCalled,
   recordCrmCallResult,
   deleteCrmLead,
+  createChannelLead,
+  setChannelLeadMessaged,
+  recordChannelMessageResult,
+  deleteChannelLead,
   createTask,
   setTaskStatus,
   deleteTask,
@@ -206,6 +210,16 @@ async function requireBlogAccess() {
 async function requireCrmAccess() {
   const user = await getCurrentUser();
   if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.crm)) {
+    redirect("/dashboard");
+  }
+  return user;
+}
+
+/** Admin always qualifies; a developer only if an admin has granted them
+ *  the "channels" permission from the access tab. */
+async function requireChannelsAccess() {
+  const user = await getCurrentUser();
+  if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.channels)) {
     redirect("/dashboard");
   }
   return user;
@@ -433,6 +447,7 @@ export async function setUserPermissionsAction(formData: FormData) {
     blog: formData.get("perm_blog") === "on",
     crm: formData.get("perm_crm") === "on",
     projects: formData.get("perm_projects") === "on",
+    channels: formData.get("perm_channels") === "on",
   };
 
   await setUserPermissions(userId, permissions);
@@ -615,6 +630,63 @@ export async function deleteCrmLeadAction(formData: FormData) {
   if (!id) return;
 
   await deleteCrmLead(id);
+  revalidatePath("/dashboard");
+}
+
+// --- Channels: pages the team messages about a partnership/promotion --------
+
+export type ChannelFormState = { ok: boolean; message: string } | null;
+
+export async function createChannelLeadAction(
+  _prevState: ChannelFormState,
+  formData: FormData
+): Promise<ChannelFormState> {
+  const currentUser = await requireChannelsAccess();
+
+  const pageName = (formData.get("pageName") ?? "").toString().trim();
+  const businessName = (formData.get("businessName") ?? "").toString().trim();
+  const note = (formData.get("note") ?? "").toString().trim();
+
+  if (!pageName || !businessName) {
+    return { ok: false, message: "اسم پیج/کانال و اسم کسب‌وکار رو پر کن." };
+  }
+
+  try {
+    await createChannelLead({ pageName, businessName, note, createdBy: currentUser.id });
+  } catch (err) {
+    console.error("createChannelLeadAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+
+  revalidatePath("/dashboard");
+  return { ok: true, message: "ثبت شد." };
+}
+
+/** Same shape as setCrmCallResultAction: the dropdown's pick both sets the
+ *  outcome and marks the channel messaged in one action; blank reverts to
+ *  "not messaged"; recordChannelMessageResult handles the per-day dedup. */
+export async function setChannelResultAction(formData: FormData) {
+  const currentUser = await requireChannelsAccess();
+  const channelId = Number(formData.get("channelId"));
+  const result = (formData.get("result") ?? "").toString();
+  if (!channelId) return;
+
+  if (!result) {
+    await setChannelLeadMessaged(channelId, false);
+  } else {
+    await recordChannelMessageResult({ channelId, userId: currentUser.id, result });
+  }
+  revalidatePath("/dashboard");
+}
+
+/** Admin-only — a developer with the "channels" permission can add
+ *  channels and flip their status, but can't delete one. */
+export async function deleteChannelLeadAction(formData: FormData) {
+  await requireAdmin();
+  const id = Number(formData.get("channelId"));
+  if (!id) return;
+
+  await deleteChannelLead(id);
   revalidatePath("/dashboard");
 }
 
