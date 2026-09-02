@@ -21,10 +21,9 @@ import {
   setUserPermissions,
   createCrmLead,
   getCrmLeadByPhone,
-  setCrmLeadStatus,
+  setCrmLeadCalled,
+  logCrmCall,
   deleteCrmLead,
-  CRM_LEAD_STATUSES,
-  type CrmLeadStatus,
   createTask,
   setTaskStatus,
   deleteTask,
@@ -574,14 +573,46 @@ export async function createCrmLeadAction(
   return { ok: true, message: "شماره ثبت شد." };
 }
 
-export async function updateCrmLeadStatusAction(formData: FormData) {
+export async function toggleCrmCalledAction(formData: FormData) {
   await requireCrmAccess();
   const id = Number(formData.get("leadId"));
-  const status = (formData.get("status") ?? "").toString() as CrmLeadStatus;
-  if (!id || !CRM_LEAD_STATUSES.includes(status)) return;
+  const called = formData.get("called") === "1";
+  if (!id) return;
 
-  await setCrmLeadStatus(id, status);
+  // Only used to *undo* an accidental "called" mark (back to "0") — going
+  // the other way requires a call result, so it goes through
+  // logCrmCallAction instead, which is what actually records the activity
+  // the daily report is built from.
+  await setCrmLeadCalled(id, called);
   revalidatePath("/dashboard");
+}
+
+export type CrmCallFormState = { ok: boolean; message: string } | null;
+
+export async function logCrmCallAction(
+  _prevState: CrmCallFormState,
+  formData: FormData
+): Promise<CrmCallFormState> {
+  const currentUser = await requireCrmAccess();
+  const leadId = Number(formData.get("leadId"));
+  const result = (formData.get("result") ?? "").toString().trim();
+
+  if (!leadId) {
+    return { ok: false, message: "لید نامعتبره." };
+  }
+  if (!result) {
+    return { ok: false, message: "نتیجه‌ی تماس رو بنویس." };
+  }
+
+  try {
+    await logCrmCall({ leadId, userId: currentUser.id, result });
+  } catch (err) {
+    console.error("logCrmCallAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+
+  revalidatePath("/dashboard");
+  return { ok: true, message: "زنگ ثبت شد." };
 }
 
 /** Admin-only — a developer with the "crm" permission can add leads and

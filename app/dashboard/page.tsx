@@ -11,6 +11,7 @@ import {
   getAllTasks,
   getTasksForUser,
   getAllCrmLeads,
+  getAllCrmCallLogs,
   getUserPermissions,
   getAllBlogPosts,
   getAllProjects,
@@ -25,6 +26,7 @@ import UserActions from "./UserActions";
 import IdBadge from "./IdBadge";
 import AccessPanel from "./AccessPanel";
 import CrmPanel from "./CrmPanel";
+import CrmReportPanel from "./CrmReportPanel";
 import OrdersPanel from "./OrdersPanel";
 import TicketsPanel from "./TicketsPanel";
 import UsersPanel from "./UsersPanel";
@@ -76,6 +78,9 @@ export default async function DashboardPage() {
   // pipeline, not a shared pool visible to the whole team.
   const allCrmLeads = isAdmin || perms.crm ? await getAllCrmLeads() : [];
   const crmLeads = isAdmin ? allCrmLeads : allCrmLeads.filter((l) => l.created_by === currentUser.id);
+  // Full call-outcome history, used to build the admin's daily activity
+  // report — not needed (and not fetched) for non-admins.
+  const crmCalls = isAdmin ? await getAllCrmCallLogs() : [];
   const allTasks = isAdmin ? await getAllTasks() : [];
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
@@ -247,8 +252,8 @@ export default async function DashboardPage() {
             },
             crmLeads: {
               total: crmLeads.length,
-              called: crmLeads.filter((l) => l.status !== "not_called").length,
-              notCalled: crmLeads.filter((l) => l.status === "not_called").length,
+              called: crmLeads.filter((l) => l.called).length,
+              notCalled: crmLeads.filter((l) => !l.called).length,
             },
             tasks: {
               total: allTasks.length,
@@ -301,6 +306,13 @@ export default async function DashboardPage() {
       id: "crm",
       label: `CRM (${toPersianDigits(crmLeads.length)})`,
       panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} creatorNames={creatorNames} />,
+    });
+  }
+  if (isAdmin) {
+    tabs.push({
+      id: "crm-report",
+      label: "گزارش فعالیت روزانه",
+      panel: <CrmReportPanel leads={allCrmLeads} calls={crmCalls} users={teamMembers.map((u) => ({ id: u.id, name: u.name }))} />,
     });
   }
   if (isAdmin) {

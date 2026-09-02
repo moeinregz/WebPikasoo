@@ -3,9 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
-import { createCrmLeadAction, updateCrmLeadStatusAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
+import { createCrmLeadAction, toggleCrmCalledAction, logCrmCallAction, deleteCrmLeadAction, type CrmFormState, type CrmCallFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
-import type { CrmLeadStatus } from "@/lib/db";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
@@ -16,43 +15,11 @@ type Lead = {
   name: string;
   phone: string;
   note: string;
-  status: CrmLeadStatus;
+  called: number;
   created_at: string;
   created_by: number | null;
+  last_call_result?: string;
 };
-
-/** Label + color for each call-outcome status. Colors are picked to read
- *  clearly apart at a glance: gray (untouched), blue (done), amber
- *  (no answer), red (rejected), emerald (best outcome). */
-const STATUS_META: Record<CrmLeadStatus, { label: string; badge: string; dot: string }> = {
-  not_called: {
-    label: "زنگ نزده شده",
-    badge: "border-ink/[0.2] bg-ink/[0.04] text-dim",
-    dot: "bg-dim",
-  },
-  called: {
-    label: "زنگ زده شده",
-    badge: "border-accent/30 bg-accent/10 text-accent",
-    dot: "bg-accent",
-  },
-  rejected: {
-    label: "قبول نکرد",
-    badge: "border-red-500/30 bg-red-500/10 text-red-500",
-    dot: "bg-red-500",
-  },
-  no_answer: {
-    label: "پاسخ نداد",
-    badge: "border-amber-500/30 bg-amber-500/10 text-amber-500",
-    dot: "bg-amber-500",
-  },
-  site_confirmed: {
-    label: "تایید دیدن سایت",
-    badge: "border-emerald-500/30 bg-emerald-500/10 text-emerald-500",
-    dot: "bg-emerald-500",
-  },
-};
-
-const STATUS_ORDER: CrmLeadStatus[] = ["not_called", "called", "rejected", "no_answer", "site_confirmed"];
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
@@ -96,28 +63,91 @@ function AddLeadForm() {
   );
 }
 
-/** Dropdown that submits its own form on change. Must sit inside the
- *  <form action={updateCrmLeadStatusAction}> it belongs to so useFormStatus
- *  can dim it while the update round-trips. */
-function StatusSelect({ id, status }: { id: number; status: CrmLeadStatus }) {
-  const { pending } = useFormStatus();
-  const meta = STATUS_META[status];
-  return (
-    <div className="relative inline-flex">
-      <span className={`pointer-events-none absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full ${meta.dot}`} />
-      <select
-        name="status"
-        defaultValue={status}
-        disabled={pending}
-        onChange={(e) => e.currentTarget.form?.requestSubmit()}
-        className={`appearance-none rounded-full border py-1.5 pl-3 pr-7 text-[12.5px] font-bold outline-none transition disabled:opacity-60 ${meta.badge}`}
+const callInitialState: CrmCallFormState = null;
+
+/** The "زنگ زده نشده" state expands into a small inline form asking for
+ *  the call's result — recording that outcome is the whole point of this
+ *  feature (it's what the daily activity report is built from), so we
+ *  don't let marking something "called" skip past it. */
+function CallLogForm({ leadId }: { leadId: number }) {
+  const [state, formAction] = useFormState(logCrmCallAction, callInitialState);
+  const [open, setOpen] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state?.ok) {
+      setOpen(false);
+      formRef.current?.reset();
+    }
+  }, [state]);
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="rounded-full border border-ink/[0.2] px-3.5 py-1.5 text-[12.5px] font-bold text-dim transition hover:border-accent hover:text-accent"
       >
-        {STATUS_ORDER.map((s) => (
-          <option key={s} value={s} className="bg-canvas text-ink">
-            {STATUS_META[s].label}
-          </option>
-        ))}
-      </select>
+        زنگ زده نشده
+      </button>
+    );
+  }
+
+  return (
+    <form ref={formRef} action={formAction} className="flex min-w-[240px] flex-col gap-1.5">
+      <input type="hidden" name="leadId" value={leadId} />
+      <div className="flex flex-wrap items-center gap-1.5">
+        <input
+          name="result"
+          required
+          autoFocus
+          placeholder="نتیجه‌ی تماس..."
+          className="min-w-[180px] flex-1 rounded-full border border-ink/[0.2] bg-surface/40 px-3.5 py-1.5 text-[12.5px] text-ink outline-none focus:border-accent"
+        />
+        <LogCallSubmitButton />
+        <button type="button" onClick={() => setOpen(false)} className="text-[12px] text-dim hover:text-ink">
+          انصراف
+        </button>
+      </div>
+      {state && !state.ok && <p className="text-[11.5px] text-red-500">{state.message}</p>}
+    </form>
+  );
+}
+
+function LogCallSubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="flex-shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-[12.5px] font-bold text-black transition disabled:opacity-60"
+    >
+      {pending ? "..." : "ثبت زنگ"}
+    </button>
+  );
+}
+
+/** Already-called leads show the badge plus the recorded result, with a
+ *  one-click "لغو" to undo an accidental mark (no result needed for that
+ *  direction — it's just correcting a mistake, not a new call). */
+function CallStatusCell({ lead }: { lead: Lead }) {
+  if (!lead.called) return <CallLogForm leadId={lead.id} />;
+
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="rounded-full border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-[12.5px] font-bold text-accent">
+          زنگ زده شد ✓
+        </span>
+        <form action={toggleCrmCalledAction}>
+          <input type="hidden" name="leadId" value={lead.id} />
+          <input type="hidden" name="called" value="0" />
+          <button type="submit" className="text-[11px] text-dim underline transition hover:text-ink">
+            لغو
+          </button>
+        </form>
+      </div>
+      {lead.last_call_result && <p className="max-w-[220px] text-[11.5px] text-dim">نتیجه: {lead.last_call_result}</p>}
     </div>
   );
 }
@@ -135,22 +165,16 @@ export default function CrmPanel({
   creatorNames?: Record<number, string>;
 }) {
   const showCreator = Object.keys(creatorNames).length > 0 || canDelete;
-  const statusCounts = useMemo(() => {
-    const counts = { not_called: 0, called: 0, rejected: 0, no_answer: 0, site_confirmed: 0 } as Record<
-      CrmLeadStatus,
-      number
-    >;
-    for (const l of leads) counts[l.status]++;
-    return counts;
-  }, [leads]);
+  const calledCount = leads.filter((l) => l.called).length;
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | CrmLeadStatus>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "called" | "notCalled">("all");
   const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return leads.filter((l) => {
-      if (statusFilter !== "all" && l.status !== statusFilter) return false;
+      if (statusFilter === "called" && !l.called) return false;
+      if (statusFilter === "notCalled" && l.called) return false;
       if (!q) return true;
       return (
         l.name.toLowerCase().includes(q) ||
@@ -185,46 +209,39 @@ export default function CrmPanel({
           <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا یادداشت..." />
 
           <div className="mb-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setStatusFilter("all")}
-              className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
-                statusFilter === "all"
-                  ? "border-accent bg-accent text-black"
-                  : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
-              }`}
-            >
-              همه ({toPersianDigits(leads.length)})
-            </button>
-            {STATUS_ORDER.map((s) => {
-              const meta = STATUS_META[s];
-              const active = statusFilter === s;
-              return (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setStatusFilter(s)}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
-                    active ? meta.badge : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
-                  }`}
-                >
-                  <span className={`h-2 w-2 rounded-full ${meta.dot}`} />
-                  {meta.label} ({toPersianDigits(statusCounts[s])})
-                </button>
-              );
-            })}
+            {(
+              [
+                { key: "all", label: `همه (${toPersianDigits(leads.length)})` },
+                { key: "called", label: `زنگ زده شده (${toPersianDigits(calledCount)})` },
+                { key: "notCalled", label: `زنگ نزده (${toPersianDigits(leads.length - calledCount)})` },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setStatusFilter(tab.key)}
+                className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
+                  statusFilter === tab.key
+                    ? "border-accent bg-accent text-black"
+                    : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           <p className="mb-4 font-mono text-[12.5px] text-dim">
-            {toPersianDigits(statusCounts.called + statusCounts.site_confirmed)} از {toPersianDigits(leads.length)}{" "}
-            پیگیری موفق
+            {toPersianDigits(calledCount)} از {toPersianDigits(leads.length)} تماس گرفته شده
           </p>
 
           {filtered.length === 0 ? (
             <div className="rounded-card border border-dashed border-ink/[0.2] p-6 sm:p-10 text-center text-dim">
               {statusFilter === "all"
                 ? "نتیجه‌ای برای این جستجو پیدا نشد."
-                : `هیچ شماره‌ای با وضعیت «${STATUS_META[statusFilter].label}» پیدا نشد.`}
+                : statusFilter === "called"
+                ? "هیچ شماره‌ای که زنگ زده شده باشه پیدا نشد."
+                : "هیچ شماره‌ی زنگ‌نزده‌ای پیدا نشد."}
             </div>
           ) : (
             <>
@@ -249,10 +266,7 @@ export default function CrmPanel({
                       <p className="mt-2 font-mono text-[11.5px] text-dim/70">ثبت‌کننده: {creatorLabel(l.created_by)}</p>
                     )}
                     <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
-                      <form action={updateCrmLeadStatusAction}>
-                        <input type="hidden" name="leadId" value={l.id} />
-                        <StatusSelect id={l.id} status={l.status} />
-                      </form>
+                      <CallStatusCell lead={l} />
                       {canDelete && (
                         <form action={deleteCrmLeadAction}>
                           <input type="hidden" name="leadId" value={l.id} />
@@ -293,10 +307,7 @@ export default function CrmPanel({
                         </td>
                         <td className="px-5 py-3.5 text-dim">{l.note || "—"}</td>
                         <td className="px-5 py-3.5">
-                          <form action={updateCrmLeadStatusAction}>
-                            <input type="hidden" name="leadId" value={l.id} />
-                            <StatusSelect id={l.id} status={l.status} />
-                          </form>
+                          <CallStatusCell lead={l} />
                         </td>
                         {showCreator && (
                           <td className="px-5 py-3.5 font-mono text-[12.5px] text-dim">{creatorLabel(l.created_by)}</td>
