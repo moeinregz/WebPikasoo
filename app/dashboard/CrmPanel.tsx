@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
-import { createCrmLeadAction, toggleCrmCalledAction, markCrmCalledAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
+import { createCrmLeadAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
-import { CRM_CALL_RESULT_OPTIONS } from "@/lib/crmReport";
+import { CRM_CALL_RESULT_OPTIONS, getCrmResultColorClass } from "@/lib/crmReport";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
@@ -64,73 +64,38 @@ function AddLeadForm() {
   );
 }
 
-/** Segmented two-tab control, same idea as the "همه/زنگ زده شده/زنگ نزده"
- *  filter above: two options side by side, one click switches between
- *  them, and whichever one is active gets the color. */
+/** One control per lead: a colored dropdown that IS the status. Picking a
+ *  result marks the lead called and shows that result as the button's own
+ *  text/color (e.g. yellow "پاسخ نداد") — no separate "mark called" step.
+ *  Picking the blank option reverts to "زنگ زده نشده". */
 function CallStatusCell({ lead }: { lead: Lead }) {
+  const colorClass = lead.called ? getCrmResultColorClass(lead.last_call_result || "") : "border-ink/[0.2] text-dim";
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="inline-flex w-fit overflow-hidden rounded-full border border-ink/[0.16]">
-        <form action={toggleCrmCalledAction}>
-          <input type="hidden" name="leadId" value={lead.id} />
-          <input type="hidden" name="called" value="0" />
-          <NotCalledTab active={!lead.called} />
-        </form>
-        <form action={markCrmCalledAction}>
-          <input type="hidden" name="leadId" value={lead.id} />
-          <CalledTab active={!!lead.called} />
-        </form>
-      </div>
-
-      {!!lead.called && (
-        <form action={setCrmCallResultAction}>
-          <input type="hidden" name="leadId" value={lead.id} />
-          <select
-            name="result"
-            defaultValue={lead.last_call_result || ""}
-            onChange={(e) => e.currentTarget.form?.requestSubmit()}
-            className="rounded-full border border-ink/[0.16] bg-surface/40 px-3 py-1 text-[11.5px] text-dim outline-none transition focus:border-accent"
-          >
-            <option value="">نتیجه‌ی تماس...</option>
-            {CRM_CALL_RESULT_OPTIONS.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-        </form>
-      )}
-    </div>
+    <form action={setCrmCallResultAction}>
+      <input type="hidden" name="leadId" value={lead.id} />
+      <input type="hidden" name="wasCalled" value={lead.called ? "1" : "0"} />
+      <StatusSelect defaultValue={lead.called ? lead.last_call_result || "" : ""} colorClass={colorClass} />
+    </form>
   );
 }
 
-function NotCalledTab({ active }: { active: boolean }) {
+function StatusSelect({ defaultValue, colorClass }: { defaultValue: string; colorClass: string }) {
   const { pending } = useFormStatus();
   return (
-    <button
-      type="submit"
-      disabled={active || pending}
-      className={`px-3.5 py-1.5 text-[12px] font-bold transition disabled:cursor-default ${
-        active ? "bg-ink/[0.12] text-ink" : "text-dim hover:bg-ink/5 hover:text-ink"
-      }`}
+    <select
+      name="result"
+      defaultValue={defaultValue}
+      disabled={pending}
+      onChange={(e) => e.currentTarget.form?.requestSubmit()}
+      className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold outline-none transition disabled:opacity-60 ${colorClass}`}
     >
-      زنگ زده نشده
-    </button>
-  );
-}
-
-function CalledTab({ active }: { active: boolean }) {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={active || pending}
-      className={`px-3.5 py-1.5 text-[12px] font-bold transition disabled:cursor-default ${
-        active ? "bg-accent text-black" : "text-dim hover:bg-accent/10 hover:text-accent"
-      }`}
-    >
-      زنگ زده شد ✓
-    </button>
+      <option value="">زنگ زده نشده</option>
+      {CRM_CALL_RESULT_OPTIONS.map((opt) => (
+        <option key={opt.label} value={opt.label}>
+          {opt.label}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -149,14 +114,43 @@ export default function CrmPanel({
   const showCreator = Object.keys(creatorNames).length > 0 || canDelete;
   const calledCount = leads.filter((l) => l.called).length;
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "called" | "notCalled">("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
+
+  const filterTabs = useMemo(
+    () => [
+      { key: "all", label: `همه (${toPersianDigits(leads.length)})`, activeClass: "border-ink bg-ink text-canvas" },
+      {
+        key: "notCalled",
+        label: `زنگ نزده (${toPersianDigits(leads.length - calledCount)})`,
+        activeClass: "border-ink/60 bg-ink/[0.12] text-ink",
+      },
+      {
+        key: "called",
+        label: `زنگ زده شده (${toPersianDigits(calledCount)})`,
+        activeClass: "border-accent bg-accent text-black",
+      },
+      ...CRM_CALL_RESULT_OPTIONS.map((opt) => ({
+        key: opt.label,
+        label: `${opt.label} (${toPersianDigits(leads.filter((l) => l.called && l.last_call_result === opt.label).length)})`,
+        activeClass: opt.colorClass,
+      })),
+    ],
+    [leads, calledCount]
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return leads.filter((l) => {
-      if (statusFilter === "called" && !l.called) return false;
       if (statusFilter === "notCalled" && l.called) return false;
+      if (statusFilter === "called" && !l.called) return false;
+      if (
+        statusFilter !== "all" &&
+        statusFilter !== "notCalled" &&
+        statusFilter !== "called" &&
+        l.last_call_result !== statusFilter
+      )
+        return false;
       if (!q) return true;
       return (
         l.name.toLowerCase().includes(q) ||
@@ -191,20 +185,14 @@ export default function CrmPanel({
           <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا یادداشت..." />
 
           <div className="mb-4 flex flex-wrap gap-2">
-            {(
-              [
-                { key: "all", label: `همه (${toPersianDigits(leads.length)})` },
-                { key: "called", label: `زنگ زده شده (${toPersianDigits(calledCount)})` },
-                { key: "notCalled", label: `زنگ نزده (${toPersianDigits(leads.length - calledCount)})` },
-              ] as const
-            ).map((tab) => (
+            {filterTabs.map((tab) => (
               <button
                 key={tab.key}
                 type="button"
                 onClick={() => setStatusFilter(tab.key)}
                 className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
                   statusFilter === tab.key
-                    ? "border-accent bg-accent text-black"
+                    ? tab.activeClass
                     : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
                 }`}
               >
@@ -219,11 +207,7 @@ export default function CrmPanel({
 
           {filtered.length === 0 ? (
             <div className="rounded-card border border-dashed border-ink/[0.2] p-6 sm:p-10 text-center text-dim">
-              {statusFilter === "all"
-                ? "نتیجه‌ای برای این جستجو پیدا نشد."
-                : statusFilter === "called"
-                ? "هیچ شماره‌ای که زنگ زده شده باشه پیدا نشد."
-                : "هیچ شماره‌ی زنگ‌نزده‌ای پیدا نشد."}
+              نتیجه‌ای برای این فیلتر/جستجو پیدا نشد.
             </div>
           ) : (
             <>

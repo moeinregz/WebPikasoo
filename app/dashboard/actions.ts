@@ -580,34 +580,36 @@ export async function toggleCrmCalledAction(formData: FormData) {
   const called = formData.get("called") === "1";
   if (!id) return;
 
-  // Only used to *undo* an accidental "called" mark (back to "0") —
-  // marking it "called" in the first place goes through
-  // markCrmCalledAction below, which is what actually logs the activity
-  // the daily report is built from.
   await setCrmLeadCalled(id, called);
   revalidatePath("/dashboard");
 }
 
-/** One click, no typing — same as the original behavior. Logs a call
- *  event (with no result yet) so it counts toward the daily report; the
- *  actual outcome gets picked afterwards from the dropdown, which is
- *  optional and never blocks marking someone as called. */
-export async function markCrmCalledAction(formData: FormData) {
+/** One click, no typing — the dropdown's selected option is the call's
+ *  outcome and marks the lead called in the same action, so there's never
+ *  a separate "mark called" step to remember.
+ *
+ *  - Picking the blank option reverts to "not called" (correcting a
+ *    mis-click; nothing gets logged).
+ *  - Picking a result on a lead that wasn't called yet logs a brand-new
+ *    call (counts toward the daily report).
+ *  - Changing the result on a lead that's *already* called just edits
+ *    that same call's outcome — it doesn't log a second call, since
+ *    nothing new actually happened, they're just correcting what they
+ *    picked. */
+export async function setCrmCallResultAction(formData: FormData) {
   const currentUser = await requireCrmAccess();
   const leadId = Number(formData.get("leadId"));
-  if (!leadId) return;
-
-  await logCrmCall({ leadId, userId: currentUser.id });
-  revalidatePath("/dashboard");
-}
-
-export async function setCrmCallResultAction(formData: FormData) {
-  await requireCrmAccess();
-  const leadId = Number(formData.get("leadId"));
   const result = (formData.get("result") ?? "").toString();
+  const wasCalled = formData.get("wasCalled") === "1";
   if (!leadId) return;
 
-  await setLatestCrmCallResult(leadId, result);
+  if (!result) {
+    await setCrmLeadCalled(leadId, false);
+  } else if (wasCalled) {
+    await setLatestCrmCallResult(leadId, result);
+  } else {
+    await logCrmCall({ leadId, userId: currentUser.id, result });
+  }
   revalidatePath("/dashboard");
 }
 

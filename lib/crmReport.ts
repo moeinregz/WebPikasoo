@@ -18,16 +18,26 @@ export function todayTehranKey(): string {
 
 /** Quick pick-list for a call's outcome — a dropdown is faster than typing
  *  and doesn't force the admin to stop and write a sentence just to mark
- *  someone as called. */
-export const CRM_CALL_RESULT_OPTIONS = [
-  "پاسخ نداد",
-  "خاموش / در دسترس نبود",
-  "علاقه‌مند بود",
-  "علاقه نداشت",
-  "بعداً دوباره تماس بگیر",
-  "مشتری شد",
-  "شماره اشتباه",
+ *  someone as called. Each option carries its own color so the button (and
+ *  the matching filter tab) visually says what happened at a glance. */
+export type CrmCallResultOption = { label: string; colorClass: string };
+
+export const CRM_CALL_RESULT_OPTIONS: CrmCallResultOption[] = [
+  { label: "پاسخ نداد", colorClass: "border-yellow-500/40 bg-yellow-500/15 text-yellow-600" },
+  { label: "خاموش / در دسترس نبود", colorClass: "border-yellow-500/40 bg-yellow-500/15 text-yellow-600" },
+  { label: "علاقه‌مند بود", colorClass: "border-emerald-500/40 bg-emerald-500/15 text-emerald-600" },
+  { label: "علاقه نداشت", colorClass: "border-red-500/40 bg-red-500/15 text-red-500" },
+  { label: "بعداً دوباره تماس بگیر", colorClass: "border-sky-500/40 bg-sky-500/15 text-sky-600" },
+  { label: "مشتری شد", colorClass: "border-accent/40 bg-accent/15 text-accent" },
+  { label: "شماره اشتباه", colorClass: "border-ink/[0.25] bg-ink/10 text-dim" },
 ];
+
+/** Tailwind classes for a given result label, falling back to a neutral
+ *  color for anything not in the fixed list (shouldn't normally happen
+ *  since results are chosen from the dropdown, not typed freely). */
+export function getCrmResultColorClass(result: string): string {
+  return CRM_CALL_RESULT_OPTIONS.find((o) => o.label === result)?.colorClass || "border-ink/[0.2] text-dim";
+}
 
 /** Formats a "YYYY-MM-DD" key as a readable Persian-calendar date. */
 export function formatTehranDayKey(dayKey: string): string {
