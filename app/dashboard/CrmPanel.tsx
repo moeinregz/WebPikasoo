@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { createCrmLeadAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
-import { CRM_CALL_RESULT_OPTIONS, getCrmResultColorClass } from "@/lib/crmReport";
+import { CRM_CALL_RESULT_OPTIONS, CRM_NOT_CALLED_OPTION } from "@/lib/crmReport";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
@@ -64,38 +64,107 @@ function AddLeadForm() {
   );
 }
 
+// The dropdown's own option list: "not called" first, then the three call
+// outcomes — these are the exact four states the CRM tracks, so this list
+// and the filter tabs below both come from the same source.
+const STATUS_DROPDOWN_OPTIONS = [{ label: CRM_NOT_CALLED_OPTION.label, value: "", colorClass: CRM_NOT_CALLED_OPTION.colorClass }].concat(
+  CRM_CALL_RESULT_OPTIONS.map((opt) => ({ label: opt.label, value: opt.label, colorClass: opt.colorClass }))
+);
+
 /** One control per lead: a colored dropdown that IS the status. Picking a
  *  result marks the lead called and shows that result as the button's own
  *  text/color (e.g. yellow "پاسخ نداد") — no separate "mark called" step.
- *  Picking the blank option reverts to "زنگ زده نشده". */
+ *  Picking "زنگ نزده" reverts to not-called.
+ *
+ *  Custom-built instead of a native <select> — a plain <select> opens the
+ *  browser's own flat white list ("paper"), which can't carry the colors
+ *  that make each status recognizable at a glance. This renders its own
+ *  panel of colored option pills instead. */
 function CallStatusCell({ lead }: { lead: Lead }) {
-  const colorClass = lead.called ? getCrmResultColorClass(lead.last_call_result || "") : "border-ink/[0.2] text-dim";
+  const formRef = useRef<HTMLFormElement>(null);
+  const [value, setValue] = useState(lead.called ? lead.last_call_result || "" : "");
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setValue(lead.called ? lead.last_call_result || "" : "");
+  }, [lead.called, lead.last_call_result]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onDocClick(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [open]);
+
+  const current = STATUS_DROPDOWN_OPTIONS.find((o) => o.value === value) ?? STATUS_DROPDOWN_OPTIONS[0];
+
+  function choose(v: string) {
+    setValue(v);
+    setOpen(false);
+    requestAnimationFrame(() => formRef.current?.requestSubmit());
+  }
+
   return (
-    <form action={setCrmCallResultAction}>
+    <form ref={formRef} action={setCrmCallResultAction} className="inline-block">
       <input type="hidden" name="leadId" value={lead.id} />
-      <input type="hidden" name="wasCalled" value={lead.called ? "1" : "0"} />
-      <StatusSelect defaultValue={lead.called ? lead.last_call_result || "" : ""} colorClass={colorClass} />
+      <input type="hidden" name="result" value={value} />
+      <StatusDropdownButton wrapRef={wrapRef} open={open} setOpen={setOpen} current={current} onChoose={choose} />
     </form>
   );
 }
 
-function StatusSelect({ defaultValue, colorClass }: { defaultValue: string; colorClass: string }) {
+function StatusDropdownButton({
+  wrapRef,
+  open,
+  setOpen,
+  current,
+  onChoose,
+}: {
+  wrapRef: RefObject<HTMLDivElement>;
+  open: boolean;
+  setOpen: (v: boolean) => void;
+  current: { label: string; value: string; colorClass: string };
+  onChoose: (v: string) => void;
+}) {
   const { pending } = useFormStatus();
   return (
-    <select
-      name="result"
-      defaultValue={defaultValue}
-      disabled={pending}
-      onChange={(e) => e.currentTarget.form?.requestSubmit()}
-      className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold outline-none transition disabled:opacity-60 ${colorClass}`}
-    >
-      <option value="">زنگ زده نشده</option>
-      {CRM_CALL_RESULT_OPTIONS.map((opt) => (
-        <option key={opt.label} value={opt.label}>
-          {opt.label}
-        </option>
-      ))}
-    </select>
+    <div ref={wrapRef} className="relative inline-block text-right">
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() => setOpen(!open)}
+        className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold outline-none transition disabled:opacity-60 ${current.colorClass}`}
+      >
+        {current.label}
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          className={`h-3 w-3 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+        >
+          <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute z-30 mt-1.5 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl">
+          {STATUS_DROPDOWN_OPTIONS.map((opt) => (
+            <button
+              key={opt.value || "none"}
+              type="button"
+              onClick={() => onChoose(opt.value)}
+              className={`mb-1 flex w-full items-center justify-between rounded-xl border px-3.5 py-2 text-[12.5px] font-bold transition last:mb-0 ${opt.colorClass} ${
+                opt.value === current.value ? "brightness-110" : "opacity-70 hover:opacity-100"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -117,18 +186,16 @@ export default function CrmPanel({
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
 
+  // Exactly the four statuses the CRM tracks — nothing else. There's no
+  // "همه"/"all" button among them; clicking whichever tab is already
+  // active toggles it back off (see the button below), which is how you
+  // get back to the unfiltered list.
   const filterTabs = useMemo(
     () => [
-      { key: "all", label: `همه (${toPersianDigits(leads.length)})`, activeClass: "border-ink bg-ink text-canvas" },
       {
         key: "notCalled",
-        label: `زنگ نزده (${toPersianDigits(leads.length - calledCount)})`,
-        activeClass: "border-ink/60 bg-ink/[0.12] text-ink",
-      },
-      {
-        key: "called",
-        label: `زنگ زده شده (${toPersianDigits(calledCount)})`,
-        activeClass: "border-accent bg-accent text-black",
+        label: `${CRM_NOT_CALLED_OPTION.label} (${toPersianDigits(leads.length - calledCount)})`,
+        activeClass: CRM_NOT_CALLED_OPTION.colorClass,
       },
       ...CRM_CALL_RESULT_OPTIONS.map((opt) => ({
         key: opt.label,
@@ -143,11 +210,9 @@ export default function CrmPanel({
     const q = query.trim().toLowerCase();
     return leads.filter((l) => {
       if (statusFilter === "notCalled" && l.called) return false;
-      if (statusFilter === "called" && !l.called) return false;
       if (
         statusFilter !== "all" &&
         statusFilter !== "notCalled" &&
-        statusFilter !== "called" &&
         l.last_call_result !== statusFilter
       )
         return false;
@@ -189,7 +254,7 @@ export default function CrmPanel({
               <button
                 key={tab.key}
                 type="button"
-                onClick={() => setStatusFilter(tab.key)}
+                onClick={() => setStatusFilter((prev) => (prev === tab.key ? "all" : tab.key))}
                 className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
                   statusFilter === tab.key
                     ? tab.activeClass

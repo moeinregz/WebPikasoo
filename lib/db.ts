@@ -1,5 +1,6 @@
 import { MongoClient, Db } from "mongodb";
 import { cacheWrap, invalidateCache } from "@/lib/redis";
+import { tehranDayKey, todayTehranKey } from "@/lib/crmReport";
 
 // MongoDB Atlas storage. This is the async, serverless-friendly
 // replacement for the old file-based SQLite database — it works on
@@ -863,47 +864,42 @@ export type CrmCallLog = {
   created_at: string;
 };
 
-/** Records one call outcome — used both to flip the lead's "called" flag
- *  and to build the per-user daily activity report. Kept as its own
- *  append-only log (rather than just a field on the lead) because the same
- *  lead can legitimately get called more than once over time, and the
- *  report needs to count and list every individual call, not just the
- *  lead's current status. Result is optional here — marking someone
- *  "called" is a single click; the outcome is filled in afterwards (see
- *  setLatestCrmCallResult) via a quick dropdown instead of blocking on it. */
-export async function logCrmCall(data: { leadId: number; userId: number; result?: string }): Promise<number> {
-  const database = await getDb();
-  const id = await nextId("crm_calls");
-  const result = data.result || "";
-  await database.collection<CrmCallLog>("crm_calls").insertOne({
-    id,
-    lead_id: data.leadId,
-    user_id: data.userId,
-    result,
-    created_at: nowStr(),
-  });
-  await database
-    .collection("crm_leads")
-    .updateOne({ id: data.leadId }, { $set: { called: 1, last_call_result: result } });
-  return id;
-}
-
-/** Updates the outcome of a lead's most recent call (falls back to just
- *  the lead's denormalized field if it somehow has no call log yet). Used
- *  by the result dropdown, which edits after the fact rather than
- *  requiring the outcome up front. */
-export async function setLatestCrmCallResult(leadId: number, result: string): Promise<void> {
+/** Records a call outcome for the daily activity report — but only ever
+ *  keeps ONE entry per lead per Tehran calendar day. If the lead's most
+ *  recent call already happened today, this just edits that entry's
+ *  result (and who touched it), since picking a different outcome later
+ *  the same day is a correction, not a second call. Only when today has no
+ *  entry yet (first call of the day, or the lead's last call was on an
+ *  earlier day) does it insert a new log row — that's what makes it show
+ *  up under *today* in the report instead of silently rewriting an older
+ *  day's entry. */
+export async function recordCrmCallResult(data: { leadId: number; userId: number; result: string }): Promise<void> {
   const database = await getDb();
   const latest = await database
     .collection<CrmCallLog>("crm_calls")
-    .find({ lead_id: leadId })
+    .find({ lead_id: data.leadId })
     .sort({ created_at: -1, id: -1 })
     .limit(1)
     .toArray();
-  if (latest[0]) {
-    await database.collection("crm_calls").updateOne({ id: latest[0].id }, { $set: { result } });
+
+  const today = todayTehranKey();
+  if (latest[0] && tehranDayKey(latest[0].created_at) === today) {
+    await database
+      .collection("crm_calls")
+      .updateOne({ id: latest[0].id }, { $set: { result: data.result, user_id: data.userId } });
+  } else {
+    const id = await nextId("crm_calls");
+    await database.collection<CrmCallLog>("crm_calls").insertOne({
+      id,
+      lead_id: data.leadId,
+      user_id: data.userId,
+      result: data.result,
+      created_at: nowStr(),
+    });
   }
-  await database.collection("crm_leads").updateOne({ id: leadId }, { $set: { last_call_result: result } });
+  await database
+    .collection("crm_leads")
+    .updateOne({ id: data.leadId }, { $set: { called: 1, last_call_result: data.result } });
 }
 
 export async function getAllCrmCallLogs(): Promise<CrmCallLog[]> {

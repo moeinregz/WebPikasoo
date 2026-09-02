@@ -19,24 +19,32 @@ export function todayTehranKey(): string {
 /** Quick pick-list for a call's outcome — a dropdown is faster than typing
  *  and doesn't force the admin to stop and write a sentence just to mark
  *  someone as called. Each option carries its own color so the button (and
- *  the matching filter tab) visually says what happened at a glance. */
+ *  the matching filter tab) visually says what happened at a glance.
+ *
+ *  This is the full/final set of outcomes on purpose — kept short so the
+ *  filter tabs stay to exactly these plus "not called yet" (see
+ *  NOT_CALLED_OPTION below). */
 export type CrmCallResultOption = { label: string; colorClass: string };
 
 export const CRM_CALL_RESULT_OPTIONS: CrmCallResultOption[] = [
   { label: "پاسخ نداد", colorClass: "border-yellow-500/40 bg-yellow-500/15 text-yellow-600" },
-  { label: "خاموش / در دسترس نبود", colorClass: "border-yellow-500/40 bg-yellow-500/15 text-yellow-600" },
-  { label: "علاقه‌مند بود", colorClass: "border-emerald-500/40 bg-emerald-500/15 text-emerald-600" },
-  { label: "علاقه نداشت", colorClass: "border-red-500/40 bg-red-500/15 text-red-500" },
-  { label: "بعداً دوباره تماس بگیر", colorClass: "border-sky-500/40 bg-sky-500/15 text-sky-600" },
-  { label: "مشتری شد", colorClass: "border-accent/40 bg-accent/15 text-accent" },
-  { label: "شماره اشتباه", colorClass: "border-ink/[0.25] bg-ink/10 text-dim" },
+  { label: "قبول برای دیدن", colorClass: "border-emerald-500/40 bg-emerald-500/15 text-emerald-600" },
+  { label: "قبول نکرد", colorClass: "border-red-500/40 bg-red-500/15 text-red-500" },
 ];
+
+/** The lead hasn't been called yet — not one of the outcomes above (there's
+ *  no call to have an outcome), but styled the same way so it can sit
+ *  alongside them in the status dropdown and the filter tabs. */
+export const CRM_NOT_CALLED_OPTION: CrmCallResultOption = {
+  label: "زنگ نزده",
+  colorClass: "border-gray-400/40 bg-gray-400/15 text-gray-500",
+};
 
 /** Tailwind classes for a given result label, falling back to a neutral
  *  color for anything not in the fixed list (shouldn't normally happen
  *  since results are chosen from the dropdown, not typed freely). */
 export function getCrmResultColorClass(result: string): string {
-  return CRM_CALL_RESULT_OPTIONS.find((o) => o.label === result)?.colorClass || "border-ink/[0.2] text-dim";
+  return CRM_CALL_RESULT_OPTIONS.find((o) => o.label === result)?.colorClass || CRM_NOT_CALLED_OPTION.colorClass;
 }
 
 /** Formats a "YYYY-MM-DD" key as a readable Persian-calendar date. */

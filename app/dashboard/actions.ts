@@ -22,8 +22,7 @@ import {
   createCrmLead,
   getCrmLeadByPhone,
   setCrmLeadCalled,
-  logCrmCall,
-  setLatestCrmCallResult,
+  recordCrmCallResult,
   deleteCrmLead,
   createTask,
   setTaskStatus,
@@ -590,25 +589,20 @@ export async function toggleCrmCalledAction(formData: FormData) {
  *
  *  - Picking the blank option reverts to "not called" (correcting a
  *    mis-click; nothing gets logged).
- *  - Picking a result on a lead that wasn't called yet logs a brand-new
- *    call (counts toward the daily report).
- *  - Changing the result on a lead that's *already* called just edits
- *    that same call's outcome — it doesn't log a second call, since
- *    nothing new actually happened, they're just correcting what they
- *    picked. */
+ *  - Otherwise it's handed to recordCrmCallResult, which only logs a new
+ *    entry in the daily report if today doesn't already have one for this
+ *    lead — picking a different result later the same day just corrects
+ *    today's entry instead of adding a duplicate. */
 export async function setCrmCallResultAction(formData: FormData) {
   const currentUser = await requireCrmAccess();
   const leadId = Number(formData.get("leadId"));
   const result = (formData.get("result") ?? "").toString();
-  const wasCalled = formData.get("wasCalled") === "1";
   if (!leadId) return;
 
   if (!result) {
     await setCrmLeadCalled(leadId, false);
-  } else if (wasCalled) {
-    await setLatestCrmCallResult(leadId, result);
   } else {
-    await logCrmCall({ leadId, userId: currentUser.id, result });
+    await recordCrmCallResult({ leadId, userId: currentUser.id, result });
   }
   revalidatePath("/dashboard");
 }
