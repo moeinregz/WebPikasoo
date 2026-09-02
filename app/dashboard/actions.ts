@@ -21,8 +21,10 @@ import {
   setUserPermissions,
   createCrmLead,
   getCrmLeadByPhone,
-  setCrmLeadCalled,
+  setCrmLeadStatus,
   deleteCrmLead,
+  CRM_LEAD_STATUSES,
+  type CrmLeadStatus,
   createTask,
   setTaskStatus,
   deleteTask,
@@ -572,13 +574,13 @@ export async function createCrmLeadAction(
   return { ok: true, message: "شماره ثبت شد." };
 }
 
-export async function toggleCrmCalledAction(formData: FormData) {
+export async function updateCrmLeadStatusAction(formData: FormData) {
   await requireCrmAccess();
   const id = Number(formData.get("leadId"));
-  const called = formData.get("called") === "1";
-  if (!id) return;
+  const status = (formData.get("status") ?? "").toString() as CrmLeadStatus;
+  if (!id || !CRM_LEAD_STATUSES.includes(status)) return;
 
-  await setCrmLeadCalled(id, called);
+  await setCrmLeadStatus(id, status);
   revalidatePath("/dashboard");
 }
 

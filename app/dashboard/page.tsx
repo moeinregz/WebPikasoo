@@ -247,8 +247,8 @@ export default async function DashboardPage() {
             },
             crmLeads: {
               total: crmLeads.length,
-              called: crmLeads.filter((l) => l.called).length,
-              notCalled: crmLeads.filter((l) => !l.called).length,
+              called: crmLeads.filter((l) => l.status !== "not_called").length,
+              notCalled: crmLeads.filter((l) => l.status === "not_called").length,
             },
             tasks: {
               total: allTasks.length,

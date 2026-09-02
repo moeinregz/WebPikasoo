@@ -795,8 +795,20 @@ export async function seedProjectsIfEmpty(seed: NewProject[]): Promise<void> {
 // -----------------------------------------------------------------------
 // CRM leads
 // -----------------------------------------------------------------------
-// Phone numbers the team has sourced/found, with a simple "called yet?"
-// flag the admin can flip from the CRM tab.
+// Phone numbers the team has sourced/found, with a call-status flag the
+// admin can update from the CRM tab.
+
+/** The five call-outcome states a lead can be in. "not_called" is the
+ *  default for a freshly-added lead. */
+export type CrmLeadStatus = "not_called" | "called" | "rejected" | "no_answer" | "site_confirmed";
+
+export const CRM_LEAD_STATUSES: CrmLeadStatus[] = [
+  "not_called",
+  "called",
+  "rejected",
+  "no_answer",
+  "site_confirmed",
+];
 
 export type CrmLead = {
   id: number;
@@ -804,7 +816,7 @@ export type CrmLead = {
   name: string;
   phone: string;
   note: string;
-  called: number;
+  status: CrmLeadStatus;
   created_by: number | null;
 };
 
@@ -819,7 +831,7 @@ export async function createCrmLead(data: NewCrmLead): Promise<number> {
     name: data.name,
     phone: data.phone,
     note: data.note || "",
-    called: 0,
+    status: "not_called",
     created_by: data.createdBy ?? null,
   });
   return id;
@@ -834,21 +846,33 @@ export async function getCrmLeadByPhone(phone: string): Promise<CrmLead | undefi
   const lead = await database
     .collection<CrmLead>("crm_leads")
     .findOne({ phone }, { projection: { _id: 0 } });
-  return lead ?? undefined;
+  return lead ? normalizeCrmLead(lead) : undefined;
+}
+
+/** Older documents in the collection may still carry the previous boolean
+ *  `called` field instead of `status` (from before the multi-status CRM
+ *  update). Map those on the way out so the rest of the app never has to
+ *  care which shape a given record was stored in. */
+function normalizeCrmLead(lead: CrmLead & { called?: number }): CrmLead {
+  if (!lead.status) {
+    lead.status = lead.called ? "called" : "not_called";
+  }
+  return lead;
 }
 
 export async function getAllCrmLeads(): Promise<CrmLead[]> {
   const database = await getDb();
-  return database
+  const leads = await database
     .collection<CrmLead>("crm_leads")
     .find({}, { projection: { _id: 0 } })
     .sort({ created_at: -1, id: -1 })
     .toArray();
+  return leads.map(normalizeCrmLead);
 }
 
-export async function setCrmLeadCalled(id: number, called: boolean): Promise<void> {
+export async function setCrmLeadStatus(id: number, status: CrmLeadStatus): Promise<void> {
   const database = await getDb();
-  await database.collection("crm_leads").updateOne({ id }, { $set: { called: called ? 1 : 0 } });
+  await database.collection("crm_leads").updateOne({ id }, { $set: { status }, $unset: { called: "" } });
 }
 
 export async function deleteCrmLead(id: number): Promise<void> {
