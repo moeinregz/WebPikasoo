@@ -879,6 +879,24 @@ export async function setCrmLeadCalled(id: number, called: boolean): Promise<voi
   await database.collection("crm_leads").updateOne({ id }, { $set: { called: called ? 1 : 0 } });
 }
 
+/** Lets the classification fields (added after leads already existed) be
+ *  filled in / corrected on an existing lead, the same way they're set
+ *  when adding a new one. Only ever touches the three fields passed in —
+ *  never name/phone/called/etc — and only the ones actually provided, so a
+ *  partial edit can't blank out a field the caller didn't mean to touch. */
+export async function updateCrmLead(
+  id: number,
+  data: { businessArea?: string; businessType?: string; problemStatus?: string }
+): Promise<void> {
+  const database = await getDb();
+  const set: Record<string, string> = {};
+  if (data.businessArea !== undefined) set.business_area = data.businessArea;
+  if (data.businessType !== undefined) set.business_type = data.businessType;
+  if (data.problemStatus !== undefined) set.problem_status = data.problemStatus;
+  if (Object.keys(set).length === 0) return;
+  await database.collection("crm_leads").updateOne({ id }, { $set: set });
+}
+
 export type CrmCallLog = {
   id: number;
   lead_id: number;

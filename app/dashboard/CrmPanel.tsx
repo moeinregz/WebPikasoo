@@ -3,7 +3,14 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
-import { createCrmLeadAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
+import {
+  createCrmLeadAction,
+  setCrmCallResultAction,
+  deleteCrmLeadAction,
+  updateCrmLeadAction,
+  type CrmFormState,
+  type CrmEditFormState,
+} from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 import {
   CRM_CALL_RESULT_OPTIONS,
@@ -84,6 +91,77 @@ function AddLeadForm() {
       </div>
       {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
+    </form>
+  );
+}
+
+function SaveEditButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+    >
+      {pending ? "در حال ذخیره..." : "ذخیره"}
+    </button>
+  );
+}
+
+const editInputClass =
+  "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-3 py-2 text-[13px] text-ink outline-none transition focus:border-accent focus:bg-surface/70";
+
+/** Owner-only: lets business area/type and problem status be filled in or
+ *  corrected on a lead that already exists — same three fields as
+ *  AddLeadForm, just pre-filled and submitted through updateCrmLeadAction
+ *  instead of createCrmLeadAction. Rendered in place of the normal
+ *  display for exactly one lead at a time (see `editingId` below). */
+function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
+  const [state, formAction] = useFormState(updateCrmLeadAction, null as CrmEditFormState);
+
+  useEffect(() => {
+    if (state?.ok) onDone();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
+  return (
+    <form action={formAction} className="flex flex-col gap-2">
+      <input type="hidden" name="leadId" value={lead.id} />
+      <div className="grid gap-2 sm:grid-cols-3">
+        <input
+          name="businessArea"
+          defaultValue={lead.business_area}
+          placeholder="منطقه‌ی کسب‌وکار"
+          className={editInputClass}
+        />
+        <select name="businessType" defaultValue={lead.business_type} className={editInputClass}>
+          <option value="">نوع کسب‌وکار</option>
+          {BUSINESS_CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <select name="problemStatus" defaultValue={lead.problem_status} className={editInputClass}>
+          <option value="">وضعیت مشکل</option>
+          {CRM_PROBLEM_STATUS_OPTIONS.map((o) => (
+            <option key={o.label} value={o.label}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      {state && !state.ok && <p className="text-[12.5px] text-red-500">{state.message}</p>}
+      <div className="flex items-center gap-2">
+        <SaveEditButton />
+        <button
+          type="button"
+          onClick={onDone}
+          className="rounded-full border border-ink/[0.18] px-4 py-1.5 text-[12.5px] font-bold text-dim transition hover:border-accent hover:text-accent"
+        >
+          انصراف
+        </button>
+      </div>
     </form>
   );
 }
@@ -252,10 +330,16 @@ function StatusDropdownButton({
 export default function CrmPanel({
   leads,
   canDelete = false,
+  canEdit = false,
   creatorNames = {},
 }: {
   leads: Lead[];
   canDelete?: boolean;
+  /** Owner-only: shows a "ویرایش" button per lead for filling in/correcting
+   *  business area/type and problem status after the fact. Separate from
+   *  canDelete — set specifically for the one main-admin account (see
+   *  MAIN_ADMIN_PHONE), not every admin. */
+  canEdit?: boolean;
   /** Admin-only: maps a lead's created_by user id to a display name, so
    *  the admin can see who sourced each lead. Empty for non-admins, who
    *  only ever see their own leads anyway (filtered server-side). */
@@ -265,6 +349,8 @@ export default function CrmPanel({
   const calledCount = leads.filter((l) => l.called).length;
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  // At most one lead being edited at a time.
+  const [editingId, setEditingId] = useState<number | null>(null);
   // "" for both means no filter applied — kept separate from the call-status
   // tabs above since these two are independent axes (a lead can be
   // "no website" + "not called" at the same time).
@@ -420,37 +506,54 @@ export default function CrmPanel({
                       </Link>
                       {l.business_area && <p className="mt-1 text-[12.5px] text-dim">{l.business_area}</p>}
                     </div>
-                    {(l.business_type || l.problem_status) && (
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {l.business_type && (
-                          <span className="rounded-full border border-ink/[0.16] bg-surface/40 px-2.5 py-1 text-[11.5px] font-semibold text-dim">
-                            {l.business_type}
-                          </span>
-                        )}
-                        {l.problem_status && (
-                          <span className={`rounded-full border px-2.5 py-1 text-[11.5px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
-                            {l.problem_status}
-                          </span>
-                        )}
+                    {editingId === l.id ? (
+                      <div className="mt-3 border-t border-ink/10 pt-3">
+                        <EditLeadFields lead={l} onDone={() => setEditingId(null)} />
                       </div>
+                    ) : (
+                      <>
+                        {(l.business_type || l.problem_status) && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {l.business_type && (
+                              <span className="rounded-full border border-ink/[0.16] bg-surface/40 px-2.5 py-1 text-[11.5px] font-semibold text-dim">
+                                {l.business_type}
+                              </span>
+                            )}
+                            {l.problem_status && (
+                              <span className={`rounded-full border px-2.5 py-1 text-[11.5px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
+                                {l.problem_status}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {showCreator && (
+                          <p className="mt-2 font-mono text-[11.5px] text-dim/70">ثبت‌کننده: {creatorLabel(l.created_by)}</p>
+                        )}
+                        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
+                          <CallStatusCell lead={l} />
+                          {canEdit && (
+                            <button
+                              type="button"
+                              onClick={() => setEditingId(l.id)}
+                              className="rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+                            >
+                              ویرایش
+                            </button>
+                          )}
+                          {canDelete && (
+                            <form action={deleteCrmLeadAction}>
+                              <input type="hidden" name="leadId" value={l.id} />
+                              <button
+                                type="submit"
+                                className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+                              >
+                                حذف
+                              </button>
+                            </form>
+                          )}
+                        </div>
+                      </>
                     )}
-                    {showCreator && (
-                      <p className="mt-2 font-mono text-[11.5px] text-dim/70">ثبت‌کننده: {creatorLabel(l.created_by)}</p>
-                    )}
-                    <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
-                      <CallStatusCell lead={l} />
-                      {canDelete && (
-                        <form action={deleteCrmLeadAction}>
-                          <input type="hidden" name="leadId" value={l.id} />
-                          <button
-                            type="submit"
-                            className="rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
-                          >
-                            حذف
-                          </button>
-                        </form>
-                      )}
-                    </div>
                   </div>
                 ))}
               </div>
@@ -467,6 +570,7 @@ export default function CrmPanel({
                       <th className="px-5 py-3.5 font-semibold">وضعیت مشکل</th>
                       <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
                       {showCreator && <th className="px-5 py-3.5 font-semibold">ثبت‌کننده</th>}
+                      {canEdit && <th className="px-5 py-3.5 font-semibold"></th>}
                       {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
                     </tr>
                   </thead>
@@ -479,22 +583,43 @@ export default function CrmPanel({
                             {toPersianDigits(l.phone)}
                           </Link>
                         </td>
-                        <td className="px-5 py-3.5 text-dim">{l.business_area || "—"}</td>
-                        <td className="px-5 py-3.5 text-dim">{l.business_type || "—"}</td>
-                        <td className="px-5 py-3.5">
-                          {l.problem_status ? (
-                            <span className={`rounded-full border px-3 py-1 text-[12px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
-                              {l.problem_status}
-                            </span>
-                          ) : (
-                            <span className="text-dim">—</span>
-                          )}
-                        </td>
+                        {editingId === l.id ? (
+                          <td className="px-5 py-3.5" colSpan={3}>
+                            <EditLeadFields lead={l} onDone={() => setEditingId(null)} />
+                          </td>
+                        ) : (
+                          <>
+                            <td className="px-5 py-3.5 text-dim">{l.business_area || "—"}</td>
+                            <td className="px-5 py-3.5 text-dim">{l.business_type || "—"}</td>
+                            <td className="px-5 py-3.5">
+                              {l.problem_status ? (
+                                <span className={`rounded-full border px-3 py-1 text-[12px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
+                                  {l.problem_status}
+                                </span>
+                              ) : (
+                                <span className="text-dim">—</span>
+                              )}
+                            </td>
+                          </>
+                        )}
                         <td className="px-5 py-3.5">
                           <CallStatusCell lead={l} />
                         </td>
                         {showCreator && (
                           <td className="px-5 py-3.5 font-mono text-[12.5px] text-dim">{creatorLabel(l.created_by)}</td>
+                        )}
+                        {canEdit && (
+                          <td className="px-5 py-3.5">
+                            {editingId !== l.id && (
+                              <button
+                                type="button"
+                                onClick={() => setEditingId(l.id)}
+                                className="rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+                              >
+                                ویرایش
+                              </button>
+                            )}
+                          </td>
                         )}
                         {canDelete && (
                           <td className="px-5 py-3.5">

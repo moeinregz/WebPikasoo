@@ -19,6 +19,7 @@ import {
   getAllProjects,
 } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
+import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
 import { toPersianDigits } from "@/lib/auth";
 import DashboardTabs, { type DashboardTab } from "./DashboardTabs";
 import StaffLoginForm from "./StaffLoginForm";
@@ -312,7 +313,7 @@ export default async function DashboardPage() {
     tabs.push({
       id: "crm",
       label: `CRM (${toPersianDigits(crmLeads.length)})`,
-      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} creatorNames={creatorNames} />,
+      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} canEdit={currentUser.phone === MAIN_ADMIN_PHONE} creatorNames={creatorNames} />,
     });
   }
   if (isAdmin || perms.channels) {

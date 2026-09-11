@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
 import {
   getUserByPhone,
   getUserById,
@@ -24,6 +25,7 @@ import {
   setCrmLeadCalled,
   recordCrmCallResult,
   deleteCrmLead,
+  updateCrmLead,
   createChannelLead,
   setChannelLeadMessaged,
   recordChannelMessageResult,
@@ -210,6 +212,18 @@ async function requireBlogAccess() {
 async function requireCrmAccess() {
   const user = await getCurrentUser();
   if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.crm)) {
+    redirect("/dashboard");
+  }
+  return user;
+}
+
+// The one account allowed to edit an existing lead's classification
+// (business area/type, problem status) after the fact — deliberately
+// narrower than "admin": there can be more than one admin account, but
+// this stays locked to a single phone number regardless of role.
+async function requireCrmOwner() {
+  const user = await requireCrmAccess();
+  if (user.phone !== MAIN_ADMIN_PHONE) {
     redirect("/dashboard");
   }
   return user;
@@ -588,6 +602,36 @@ export async function createCrmLeadAction(
 
   revalidatePath("/dashboard");
   return { ok: true, message: "شماره ثبت شد." };
+}
+
+export type CrmEditFormState = { ok: boolean; message: string } | null;
+
+/** Owner-only: fixes up an existing lead's business area/type and problem
+ *  status — the fields added after some leads were already in the system,
+ *  so old entries can be brought up to date the same way new ones are
+ *  filled in. Never touches name/phone/call status. */
+export async function updateCrmLeadAction(
+  _prevState: CrmEditFormState,
+  formData: FormData
+): Promise<CrmEditFormState> {
+  await requireCrmOwner();
+
+  const id = Number(formData.get("leadId"));
+  if (!id) return { ok: false, message: "شناسه‌ی لید نامعتبره." };
+
+  const businessArea = (formData.get("businessArea") ?? "").toString().trim();
+  const businessType = (formData.get("businessType") ?? "").toString().trim();
+  const problemStatus = (formData.get("problemStatus") ?? "").toString().trim();
+
+  try {
+    await updateCrmLead(id, { businessArea, businessType, problemStatus });
+  } catch (err) {
+    console.error("updateCrmLeadAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+
+  revalidatePath("/dashboard");
+  return { ok: true, message: "به‌روزرسانی شد." };
 }
 
 export async function toggleCrmCalledAction(formData: FormData) {
