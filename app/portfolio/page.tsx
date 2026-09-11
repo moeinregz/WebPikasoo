@@ -43,7 +43,7 @@ export default async function PortfolioPage() {
           straight with the filter/grid. Every indexable page needs exactly
           one h1 that states what the page is; this is that one. */}
       <div className="mx-auto max-w-container px-6 pt-14 text-center sm:pt-20">
-        <h1 className="font-display text-[32px] font-normal sm:text-[40px]">نمونه‌کارها</h1>
+        <h1 className="font-display text-[32px] font-normal sm:text-[40px]">نمونه‌کارهای وب پیکاسو</h1>
         <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-dim">
           گالری سایت‌های کسب‌وکاری که طراحی و توسعه داده‌ایم.
         </p>
