@@ -11,6 +11,8 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "وبلاگ — وب پیکاسو",
   description: "مقاله‌ها و یادداشت‌های تیم وب پیکاسو درباره‌ی طراحی سایت، توسعه و کسب‌وکار آنلاین.",
+  alternates: { canonical: "/blog" },
+  openGraph: { url: "/blog", title: "وبلاگ — وب پیکاسو", description: "مقاله‌ها و یادداشت‌های تیم وب پیکاسو درباره‌ی طراحی سایت، توسعه و کسب‌وکار آنلاین." },
 };
 
 function formatDate(iso: string) {

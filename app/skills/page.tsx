@@ -6,6 +6,8 @@ import { getCurrentUser } from "@/lib/session";
 export const metadata = {
   title: "مهارت‌های فنی — وب پیکاسو",
   description: "فهرست کامل تکنولوژی‌ها و ابزارهایی که تیم وب پیکاسو باهاشون کار می‌کنه.",
+  alternates: { canonical: "/skills" },
+  openGraph: { url: "/skills", title: "مهارت‌های فنی — وب پیکاسو", description: "فهرست کامل تکنولوژی‌ها و ابزارهایی که تیم وب پیکاسو باهاشون کار می‌کنه." },
 };
 
 export default async function SkillsPage() {

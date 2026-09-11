@@ -12,6 +12,7 @@ import {
   type BlogFormState,
 } from "./actions";
 import { slugify } from "@/lib/slug";
+import { renderBlogContent } from "@/lib/blogContent";
 
 export type BlogPost = {
   id: number;
@@ -305,6 +306,21 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
         متن رو انتخاب کن، «لینک» رو بزن، آدرس رو توی همون کادر بنویس و «اعمال لینک» رو بزن. بدون انتخاب متن، یه نمونه‌ی
         آماده اضافه می‌شه که می‌تونی جاش رو عوض کنی. برای تیتر هم از H2 تا H6 رو داری — هرچی عدد کوچیک‌تر، تیتر بزرگ‌تره.
       </p>
+
+      {/* Live preview: runs the exact same renderer the public /blog/[slug]
+       *  page uses (renderBlogContent), so "## عنوان" shows up here as a
+       *  real, large <h2> — not the raw "##" text — and matches pixel-for-
+       *  pixel what visitors will actually see once the post is saved. */}
+      <div className="mt-3">
+        <p className="mb-1.5 text-[12.5px] font-semibold text-dim">پیش‌نمایش زنده</p>
+        <div className="max-h-[420px] overflow-y-auto rounded-[10px] border border-ink/[0.16] bg-canvas px-5 py-4">
+          {value.trim() === "" ? (
+            <p className="text-[13px] text-dim/60">هرچی بالا بنویسی، اینجا دقیقاً همون‌طوری که توی صفحه‌ی مقاله دیده می‌شه نمایش داده می‌شه.</p>
+          ) : (
+            <article className="text-[16px] leading-[1.9] text-ink/90">{renderBlogContent(value)}</article>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

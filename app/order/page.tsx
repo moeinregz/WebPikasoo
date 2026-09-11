@@ -8,6 +8,13 @@ export const metadata = {
   title: "ثبت سفارش — وب پیکاسو",
   description:
     "پلن‌ها و قیمت‌های شروع وب پیکاسو برای سئو، طراحی سایت وردپرسی، سایت کدنویسی اختصاصی و توسعه نرم‌افزار / پنل مدیریت — سفارش با یه کلیک.",
+  alternates: { canonical: "/order" },
+  openGraph: {
+    url: "/order",
+    title: "ثبت سفارش — وب پیکاسو",
+    description:
+      "پلن‌ها و قیمت‌های شروع وب پیکاسو برای سئو، طراحی سایت وردپرسی، سایت کدنویسی اختصاصی و توسعه نرم‌افزار / پنل مدیریت — سفارش با یه کلیک.",
+  },
 };
 
 export default async function OrderPage({
@@ -34,6 +41,11 @@ export default async function OrderPage({
       <section className="relative overflow-hidden py-16 sm:py-20">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <div className="relative z-[1] mx-auto max-w-container px-6">
+          {/* This page had no <h1> at all — the first heading was this h2.
+              Every indexable page needs exactly one h1 stating the page's
+              topic, so that's added here and the existing line becomes the
+              (correctly nested) h2 subheading under it. */}
+          <h1 className="sr-only">ثبت سفارش — پلن‌ها و قیمت‌های وب پیکاسو</h1>
           <Reveal className="mb-12 text-center">
             <h2 className="font-display text-[26px] font-normal sm:text-[32px]">پلن‌ها و قیمت‌ها</h2>
             <p className="mx-auto mt-2.5 max-w-[54ch] text-[14.5px] text-dim">

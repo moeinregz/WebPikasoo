@@ -30,12 +30,36 @@ function decodeSlugParam(raw: string): string {
   }
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://webpikaso.ir";
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await getPublishedBlogPostBySlug(decodeSlugParam(params.slug));
-  if (!post) return { title: "مقاله پیدا نشد — وب پیکاسو" };
+  const slug = decodeSlugParam(params.slug);
+  const post = await getPublishedBlogPostBySlug(slug);
+  if (!post) return { title: "مقاله پیدا نشد — وب پیکاسو", robots: { index: false, follow: true } };
+  const url = `/blog/${encodeURIComponent(post.slug)}`;
   return {
     title: `${post.title} — وبلاگ وب پیکاسو`,
     description: post.excerpt || undefined,
+    // Without this, every post inherited the root layout's canonical of
+    // "/" (the homepage) — Google would treat every article as a
+    // duplicate of the homepage instead of indexing it on its own.
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      url,
+      title: post.title,
+      description: post.excerpt || undefined,
+      publishedTime: new Date(post.created_at.replace(" ", "T") + "Z").toISOString(),
+      modifiedTime: new Date(post.updated_at.replace(" ", "T") + "Z").toISOString(),
+      authors: post.author_name ? [post.author_name] : undefined,
+      images: post.cover_image ? [{ url: post.cover_image }] : undefined,
+    },
+    twitter: {
+      card: post.cover_image ? "summary_large_image" : "summary",
+      title: post.title,
+      description: post.excerpt || undefined,
+      images: post.cover_image ? [post.cover_image] : undefined,
+    },
   };
 }
 
@@ -45,8 +69,29 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   if (!post) notFound();
 
+  const postUrl = `${siteUrl}/blog/${encodeURIComponent(post.slug)}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+    headline: post.title,
+    description: post.excerpt || undefined,
+    image: post.cover_image ? [post.cover_image] : undefined,
+    datePublished: new Date(post.created_at.replace(" ", "T") + "Z").toISOString(),
+    dateModified: new Date(post.updated_at.replace(" ", "T") + "Z").toISOString(),
+    author: { "@type": post.author_name ? "Person" : "Organization", name: post.author_name || "وب پیکاسو" },
+    publisher: {
+      "@type": "Organization",
+      name: "وب پیکاسو",
+      logo: { "@type": "ImageObject", url: `${siteUrl}/logo.webp` },
+    },
+  };
+
   return (
     <>
+      {/* Article structured data — lets Google show this post as a rich
+          result (author, date, image) instead of a plain blue link. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav isLoggedIn={isLoggedIn} />
 
       {/* w-full needed — see the note in app/dashboard/page.tsx's <main>

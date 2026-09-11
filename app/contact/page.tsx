@@ -11,6 +11,8 @@ import { getCurrentUser } from "@/lib/session";
 export const metadata = {
   title: "تماس با ما — وب پیکاسو",
   description: "راه‌های ارتباط با تیم وب پیکاسو — واتساپ، تلگرام، تماس مستقیم یا فرم درخواست پروژه.",
+  alternates: { canonical: "/contact" },
+  openGraph: { url: "/contact", title: "تماس با ما — وب پیکاسو", description: "راه‌های ارتباط با تیم وب پیکاسو — واتساپ، تلگرام، تماس مستقیم یا فرم درخواست پروژه." },
 };
 
 type SocialLink = { href: string; label: string; value: string; icon: ReactNode };

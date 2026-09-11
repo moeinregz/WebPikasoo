@@ -10,6 +10,12 @@ import { getCurrentUser } from "@/lib/session";
 export const metadata = {
   title: "درباره ما — وب پیکاسو",
   description: "درباره‌ی تیم وب پیکاسو — چرا کسب‌وکارت رو باید به ما بسپاری.",
+  // Root layout sets a global alternates.canonical of "/" — without this
+  // override every page silently inherits that and reports itself as a
+  // duplicate of the homepage to Google. Same fix applied on every other
+  // static page below.
+  alternates: { canonical: "/about" },
+  openGraph: { url: "/about", title: "درباره ما — وب پیکاسو", description: "درباره‌ی تیم وب پیکاسو — چرا کسب‌وکارت رو باید به ما بسپاری." },
 };
 
 type Feature = { title: string; desc: string; icon: ReactNode };
