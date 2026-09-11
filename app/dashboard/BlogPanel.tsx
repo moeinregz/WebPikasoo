@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {
   createBlogPostAction,
@@ -12,7 +12,7 @@ import {
   type BlogFormState,
 } from "./actions";
 import { slugify } from "@/lib/slug";
-import { renderBlogContent } from "@/lib/blogContent";
+import { renderBlogContent, HEADING_CLASS, BLOG_CLASSES } from "@/lib/blogContent";
 
 export type BlogPost = {
   id: number;
@@ -96,62 +96,183 @@ const TOOLBAR_BUTTON_CLASS =
 
 const HEADING_LEVELS = [2, 3, 4, 5, 6] as const;
 
-/** Body-text editor for the article's full content: a plain textarea plus a
- *  toolbar that inserts a small, purpose-built syntax (## .. ###### headings,
- *  "- " list items, [text](url) links, ![alt](url) images) at the cursor —
- *  matching exactly what lib/blogContent.tsx knows how to render on the
- *  public article page. The image button uploads right away (via Vercel
- *  Blob) and drops the resulting URL in, so a full illustrated article can
- *  be written and previewed here without ever leaving this form. */
-function ContentEditor({ defaultValue }: { defaultValue?: string }) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+/** Converts one inline-level DOM node's children into our stored markdown-
+ *  lite text — only `<a href>` becomes `[text](url)` and `<br>` becomes a
+ *  line break; anything else (bold/italic the browser may insert on paste,
+ *  stray spans, etc.) is unwrapped down to plain text, since that's all
+ *  lib/blogContent.tsx's renderer understands. */
+function inlineToMarkdown(el: Node): string {
+  let out = "";
+  el.childNodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      out += node.textContent ?? "";
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const child = node as HTMLElement;
+    const tag = child.tagName.toLowerCase();
+    if (tag === "br") {
+      out += "\n";
+      return;
+    }
+    if (tag === "a") {
+      out += `[${child.textContent ?? ""}](${child.getAttribute("href") ?? ""})`;
+      return;
+    }
+    out += inlineToMarkdown(child);
+  });
+  return out;
+}
+
+/** Walks the editor's actual DOM (after the admin has typed/inserted things
+ *  directly into it) and turns it back into the same markdown-lite string
+ *  lib/blogContent.tsx parses — the format saved to the database never
+ *  changes, only how the admin edits it does. */
+function domToMarkdown(root: HTMLElement): string {
+  const blocks: string[] = [];
+  root.childNodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent?.trim();
+      if (text) blocks.push(text);
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const el = node as HTMLElement;
+    const tag = el.tagName.toLowerCase();
+
+    const headingLevel = /^h([2-6])$/.exec(tag)?.[1];
+    if (headingLevel) {
+      blocks.push(`${"#".repeat(Number(headingLevel))} ${inlineToMarkdown(el).trim()}`);
+      return;
+    }
+    if (tag === "ul" || tag === "ol") {
+      const items = Array.from(el.children)
+        .filter((li) => li.tagName === "LI")
+        .map((li) => `- ${inlineToMarkdown(li).trim()}`);
+      if (items.length) blocks.push(items.join("\n"));
+      return;
+    }
+    if (tag === "img") {
+      const img = el as HTMLImageElement;
+      blocks.push(`![${img.alt || ""}](${img.getAttribute("src") || ""})`);
+      return;
+    }
+    if (tag === "br") return;
+    const text = inlineToMarkdown(el);
+    if (text.trim()) blocks.push(text);
+  });
+  return blocks.join("\n\n");
+}
+
+/** Live, WYSIWYG body-text editor: instead of a raw textarea (which used
+ *  to show literal "## عنوان" text) plus a separate preview underneath,
+ *  this IS the preview — a single contentEditable surface where the
+ *  toolbar inserts real <h2>..<h6>/<ul>/<a>/<img> elements styled with the
+ *  exact same classes the public article page uses, so a heading looks
+ *  genuinely big the moment it's inserted, not as markdown syntax. Typing
+ *  and every toolbar action re-serialize the live DOM back into the small
+ *  markdown-lite string (domToMarkdown, above) that's actually submitted
+ *  in the hidden "content" field and that lib/blogContent.tsx renders on
+ *  the public page — so the stored format, and that renderer, don't
+ *  change at all; only how the admin edits it does. */
+function ContentEditorImpl({ defaultValue }: { defaultValue?: string }) {
+  const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState(defaultValue ?? "");
+  const [markdown, setMarkdown] = useState(defaultValue ?? "");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
-  // Selected text (or the cursor position, if nothing was selected) captured
-  // the moment "لینک" is clicked — kept around so the mini URL-entry panel
-  // below the toolbar knows exactly what to wrap once the admin confirms.
-  const [linkDraft, setLinkDraft] = useState<{ start: number; end: number; text: string } | null>(null);
+  // A cloned Range (not plain offsets — contentEditable positions are DOM
+  // nodes, not string indices) captured the moment "لینک" is clicked, so
+  // the mini URL-entry panel below the toolbar knows exactly what to wrap
+  // once the admin confirms, even after focus has moved to its input.
+  const [linkDraft, setLinkDraft] = useState<{ range: Range; text: string } | null>(null);
   const [linkUrl, setLinkUrl] = useState("");
 
-  /** Inserts a standalone block (heading/list/image) on its own line,
-   *  making sure there's a blank line before and after it so it never
-   *  merges into a neighboring paragraph. */
-  function insertBlock(text: string) {
-    const el = textareaRef.current;
-    if (!el) return;
-    const start = el.selectionStart;
-    const needsLeadingBreak = start > 0 && value[start - 1] !== "\n";
-    const before = (needsLeadingBreak ? "\n\n" : "") + text + "\n\n";
-    const next = value.slice(0, start) + before + value.slice(start);
-    setValue(next);
-    const cursor = start + before.length;
-    requestAnimationFrame(() => {
-      el.focus();
-      el.setSelectionRange(cursor, cursor);
-    });
+  // Renders the post's existing content (edit mode) into real DOM once on
+  // mount, via the exact same renderer the public page uses — frozen
+  // because ContentEditorImpl is wrapped in React.memo(..., () => true)
+  // below, so React never re-renders (and never touches) this subtree
+  // again after mount; from here on the browser owns these nodes.
+  const initialContent = useState(() => defaultValue ?? "")[0];
+
+  function syncFromDom() {
+    const editor = editorRef.current;
+    if (!editor) return;
+    setMarkdown(domToMarkdown(editor));
+  }
+
+  /** Inserts a freshly created element right after whichever top-level
+   *  block the cursor is currently in (or at the end, if the editor's
+   *  empty / nothing's focused yet), then selects `focusTarget` so typing
+   *  immediately replaces the placeholder text. */
+  function insertElementAtCursor(el: HTMLElement, focusTarget: HTMLElement = el) {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.focus();
+    const sel = window.getSelection();
+
+    let anchor: Node | null =
+      sel && sel.rangeCount > 0 && editor.contains(sel.anchorNode) ? sel.getRangeAt(0).startContainer : null;
+    if (anchor === editor) anchor = null;
+    while (anchor && anchor.parentNode !== editor) anchor = anchor.parentNode;
+
+    if (anchor) {
+      anchor.parentNode?.insertBefore(el, anchor.nextSibling);
+    } else {
+      editor.appendChild(el);
+    }
+
+    const newRange = document.createRange();
+    if (focusTarget.tagName === "IMG") {
+      newRange.setStartAfter(focusTarget);
+      newRange.collapse(true);
+    } else {
+      newRange.selectNodeContents(focusTarget);
+    }
+    sel?.removeAllRanges();
+    sel?.addRange(newRange);
+    syncFromDom();
   }
 
   function handleHeading(level: (typeof HEADING_LEVELS)[number]) {
-    insertBlock(`${"#".repeat(level)} عنوان بخش`);
+    const el = document.createElement(`h${level}`);
+    el.className = HEADING_CLASS[level];
+    el.textContent = "عنوان بخش";
+    insertElementAtCursor(el);
   }
 
   function handleList() {
-    insertBlock("- مورد اول\n- مورد دوم\n- مورد سوم");
+    const ul = document.createElement("ul");
+    ul.className = BLOG_CLASSES.list;
+    const items = ["مورد اول", "مورد دوم", "مورد سوم"];
+    let firstLi: HTMLLIElement | null = null;
+    for (const text of items) {
+      const li = document.createElement("li");
+      li.textContent = text;
+      ul.appendChild(li);
+      if (!firstLi) firstLi = li;
+    }
+    insertElementAtCursor(ul, firstLi ?? ul);
   }
 
-  /** Opens the mini link panel, remembering exactly which range of text
-   *  (or, with nothing selected, just the cursor spot) it should wrap once
-   *  a URL is entered — matches the "link" button's old wrapSelection
-   *  behavior but defers the actual insertion until the URL is confirmed. */
+  /** Opens the mini link panel, remembering the exact live Range it should
+   *  wrap once a URL is entered — cloned because the Range object itself
+   *  would otherwise keep tracking (and shifting with) later edits. */
   function handleLinkClick() {
-    const el = textareaRef.current;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const text = value.slice(start, end) || "متن لینک";
-    setLinkDraft({ start, end, text });
+    const editor = editorRef.current;
+    const sel = window.getSelection();
+    let range: Range;
+    if (sel && sel.rangeCount > 0 && editor && editor.contains(sel.anchorNode)) {
+      range = sel.getRangeAt(0).cloneRange();
+    } else if (editor) {
+      range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+    } else {
+      return;
+    }
+    const text = range.toString() || "متن لینک";
+    setLinkDraft({ range, text });
     setLinkUrl("");
   }
 
@@ -159,24 +280,33 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
     if (!linkDraft) return;
     const url = linkUrl.trim();
     if (!url) return;
-    const { start, end, text } = linkDraft;
-    const markdown = `[${text}](${url})`;
-    const next = value.slice(0, start) + markdown + value.slice(end);
-    setValue(next);
-    const cursor = start + markdown.length;
+    const { range, text } = linkDraft;
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.className = BLOG_CLASSES.link;
+    a.textContent = text;
+    range.deleteContents();
+    range.insertNode(a);
+
+    const sel = window.getSelection();
+    const newRange = document.createRange();
+    newRange.setStartAfter(a);
+    newRange.collapse(true);
+    sel?.removeAllRanges();
+    sel?.addRange(newRange);
+
     setLinkDraft(null);
     setLinkUrl("");
-    requestAnimationFrame(() => {
-      const el = textareaRef.current;
-      el?.focus();
-      el?.setSelectionRange(cursor, cursor);
-    });
+    syncFromDom();
+    editorRef.current?.focus();
   }
 
   function cancelLink() {
     setLinkDraft(null);
     setLinkUrl("");
-    textareaRef.current?.focus();
+    editorRef.current?.focus();
   }
 
   function handleImageClick() {
@@ -196,7 +326,11 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
       fd.set("image", file);
       const result = await uploadBlogContentImageAction(fd);
       if (result.ok && result.url) {
-        insertBlock(`![توضیح تصویر](${result.url})`);
+        const img = document.createElement("img");
+        img.src = result.url;
+        img.alt = "توضیح تصویر";
+        img.className = BLOG_CLASSES.image;
+        insertElementAtCursor(img, img);
       } else {
         setUploadError(result.message || "آپلود تصویر ناموفق بود.");
       }
@@ -291,39 +425,42 @@ function ContentEditor({ defaultValue }: { defaultValue?: string }) {
 
       {uploadError && <p className="mb-2 text-[12px] text-red-500">{uploadError}</p>}
 
-      <textarea
-        ref={textareaRef}
-        name="content"
-        required
-        rows={14}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="متن کامل مقاله... برای تیتر/لیست/لینک/عکس از دکمه‌های بالا استفاده کن."
-        className={`${inputClass} resize-y leading-relaxed`}
+      {/* This div IS the editor AND the preview at once — whatever's typed
+       *  or inserted here renders at full, real size immediately (a real
+       *  <h2>, not "## عنوان"), because it's genuinely the same markup
+       *  the public article page renders, not a separate preview of it. */}
+      <div
+        ref={editorRef}
+        contentEditable
+        suppressContentEditableWarning
+        onInput={syncFromDom}
+        onBlur={syncFromDom}
         dir="rtl"
-      />
+        data-placeholder="متن کامل مقاله... برای تیتر/لیست/لینک/عکس از دکمه‌های بالا استفاده کن. Enter پاراگراف جدید می‌سازه، Shift+Enter فقط خط جدید."
+        className={`${inputClass} min-h-[260px] resize-y leading-relaxed empty:before:pointer-events-none empty:before:text-dim/60 empty:before:content-[attr(data-placeholder)]`}
+      >
+        {renderBlogContent(initialContent)}
+      </div>
+
+      {/* Kept as a plain hidden field so the surrounding <form>'s FormData
+       *  still submits "content" exactly like before — its value is just
+       *  kept in sync with the contentEditable div above instead of being
+       *  the thing the admin types into directly. */}
+      <input type="hidden" name="content" value={markdown} />
+
       <p className="mt-1 text-[12px] text-dim/70">
         متن رو انتخاب کن، «لینک» رو بزن، آدرس رو توی همون کادر بنویس و «اعمال لینک» رو بزن. بدون انتخاب متن، یه نمونه‌ی
         آماده اضافه می‌شه که می‌تونی جاش رو عوض کنی. برای تیتر هم از H2 تا H6 رو داری — هرچی عدد کوچیک‌تر، تیتر بزرگ‌تره.
       </p>
-
-      {/* Live preview: runs the exact same renderer the public /blog/[slug]
-       *  page uses (renderBlogContent), so "## عنوان" shows up here as a
-       *  real, large <h2> — not the raw "##" text — and matches pixel-for-
-       *  pixel what visitors will actually see once the post is saved. */}
-      <div className="mt-3">
-        <p className="mb-1.5 text-[12.5px] font-semibold text-dim">پیش‌نمایش زنده</p>
-        <div className="max-h-[420px] overflow-y-auto rounded-[10px] border border-ink/[0.16] bg-canvas px-5 py-4">
-          {value.trim() === "" ? (
-            <p className="text-[13px] text-dim/60">هرچی بالا بنویسی، اینجا دقیقاً همون‌طوری که توی صفحه‌ی مقاله دیده می‌شه نمایش داده می‌شه.</p>
-          ) : (
-            <article className="text-[16px] leading-[1.9] text-ink/90">{renderBlogContent(value)}</article>
-          )}
-        </div>
-      </div>
     </div>
   );
 }
+
+// React never re-renders this after its first mount (comparator always
+// returns "props are equal") — the contentEditable div's DOM is handed
+// off to the browser on mount and must never be touched by React again,
+// or the admin's live edits could be clobbered mid-typing.
+const ContentEditor = memo(ContentEditorImpl, () => true);
 
 function RemoveImageButton({ onClick, title }: { onClick: () => void; title: string }) {
   return (

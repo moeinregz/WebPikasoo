@@ -82,12 +82,24 @@ function toBlocks(content: string): Block[] {
 // (28px/34px) but still bigger than the body text (16px/leading-[1.9]) down
 // through h5. h6 is deliberately styled as a small uppercase label rather
 // than shrinking below body text, which would be unreadable.
-const HEADING_CLASS: Record<2 | 3 | 4 | 5 | 6, string> = {
+// Exported so BlogPanel's live WYSIWYG editor can use the exact same
+// classes when it creates real <h2>..<h6> DOM nodes — the editor and the
+// published page must always render headings identically, from one source.
+export const HEADING_CLASS: Record<2 | 3 | 4 | 5 | 6, string> = {
   2: "mb-4 mt-10 font-display text-[26px] font-semibold leading-snug text-ink sm:text-[30px]",
   3: "mb-3.5 mt-8 font-display text-[22px] font-semibold leading-snug text-ink sm:text-[25px]",
   4: "mb-3 mt-7 font-display text-[19px] font-semibold leading-snug text-ink sm:text-[21px]",
   5: "mb-2.5 mt-6 text-[17px] font-bold leading-snug text-ink sm:text-[18px]",
   6: "mb-2 mt-5 text-[14px] font-bold uppercase tracking-wide leading-snug text-ink/65 sm:text-[14.5px]",
+};
+
+// Same idea for the other block/inline types — one shared set of classes
+// used by both the public article renderer below and the admin editor.
+export const BLOG_CLASSES = {
+  list: "my-5 list-disc space-y-2 pr-6 marker:text-accent",
+  link: "text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent",
+  image: "my-6 w-full h-auto rounded-card border border-ink/[0.14]",
+  paragraph: "my-5 text-[16px] leading-[1.9] text-ink/90",
 };
 
 // Custom inline text-size wrapper the editor's "بزرگ‌نمایی متن" tool inserts
