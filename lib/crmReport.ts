@@ -47,6 +47,34 @@ export function getCrmResultColorClass(result: string): string {
   return CRM_CALL_RESULT_OPTIONS.find((o) => o.label === result)?.colorClass || CRM_NOT_CALLED_OPTION.colorClass;
 }
 
+/** Pick-list for what's wrong with the lead's current site — the "note"
+ *  field used to hold this as free text, but a fixed set is faster to fill
+ *  in and (unlike free text) can actually be filtered on. Each option
+ *  carries its own color, same pattern as CRM_CALL_RESULT_OPTIONS above,
+ *  so the field reads as a colored badge in the table and its filter. */
+export type CrmProblemStatusOption = { label: string; colorClass: string };
+
+export const CRM_PROBLEM_STATUS_OPTIONS: CrmProblemStatusOption[] = [
+  { label: "سایت نداره", colorClass: "border-red-500/40 bg-red-500/15 text-red-500" },
+  { label: "نیاز به بهینه‌سازی سایت", colorClass: "border-orange-500/40 bg-orange-500/15 text-orange-600" },
+  { label: "نیاز به سئو", colorClass: "border-sky-500/40 bg-sky-500/15 text-sky-600" },
+];
+
+/** No problem status chosen yet — styled neutrally, same idea as
+ *  CRM_NOT_CALLED_OPTION, so it can sit in the filter row next to the
+ *  real options without looking like a fourth real status. */
+export const CRM_NO_PROBLEM_STATUS_OPTION: CrmProblemStatusOption = {
+  label: "مشخص نشده",
+  colorClass: "border-gray-400/40 bg-gray-400/15 text-gray-500",
+};
+
+/** Tailwind classes for a given problem-status label, falling back to the
+ *  neutral "not set" color for anything not in the fixed list (empty
+ *  string, or an older lead saved before this field existed). */
+export function getCrmProblemStatusColorClass(status: string): string {
+  return CRM_PROBLEM_STATUS_OPTIONS.find((o) => o.label === status)?.colorClass || CRM_NO_PROBLEM_STATUS_OPTION.colorClass;
+}
+
 /** Formats a "YYYY-MM-DD" key as a readable Persian-calendar date. */
 export function formatTehranDayKey(dayKey: string): string {
   const d = new Date(`${dayKey}T12:00:00Z`); // noon avoids any DST/rounding edge cases

@@ -807,7 +807,14 @@ export type CrmLead = {
   created_at: string;
   name: string;
   phone: string;
-  note: string;
+  // Which BusinessCategory (see lib/businessSites.ts) the lead's business
+  // falls under, and what's wrong with their current site (see
+  // CRM_PROBLEM_STATUS_OPTIONS in lib/crmReport.ts) — both chosen from a
+  // fixed list, not free text, so they're filterable. Replaces the old
+  // free-text "note" field. Optional/"" for leads added before this field
+  // existed, or left unset.
+  business_type: string;
+  problem_status: string;
   called: number;
   created_by: number | null;
   // Result text from the most recent call — denormalized onto the lead so
@@ -816,7 +823,7 @@ export type CrmLead = {
   last_call_result?: string;
 };
 
-export type NewCrmLead = { name: string; phone: string; note?: string; createdBy?: number };
+export type NewCrmLead = { name: string; phone: string; businessType?: string; problemStatus?: string; createdBy?: number };
 
 export async function createCrmLead(data: NewCrmLead): Promise<number> {
   const database = await getDb();
@@ -826,7 +833,8 @@ export async function createCrmLead(data: NewCrmLead): Promise<number> {
     created_at: nowStr(),
     name: data.name,
     phone: data.phone,
-    note: data.note || "",
+    business_type: data.businessType || "",
+    problem_status: data.problemStatus || "",
     called: 0,
     created_by: data.createdBy ?? null,
   });

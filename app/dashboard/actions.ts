@@ -565,7 +565,8 @@ export async function createCrmLeadAction(
 
   const name = (formData.get("name") ?? "").toString().trim();
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
-  const note = (formData.get("note") ?? "").toString().trim();
+  const businessType = (formData.get("businessType") ?? "").toString().trim();
+  const problemStatus = (formData.get("problemStatus") ?? "").toString().trim();
 
   if (!name || !phoneRaw) {
     return { ok: false, message: "نام و شماره تماس رو پر کن." };
@@ -578,7 +579,7 @@ export async function createCrmLeadAction(
   }
 
   try {
-    await createCrmLead({ name, phone, note, createdBy: currentUser.id });
+    await createCrmLead({ name, phone, businessType, problemStatus, createdBy: currentUser.id });
   } catch (err) {
     console.error("createCrmLeadAction failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };

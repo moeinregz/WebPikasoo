@@ -5,7 +5,13 @@ import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { createCrmLeadAction, setCrmCallResultAction, deleteCrmLeadAction, type CrmFormState } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
-import { CRM_CALL_RESULT_OPTIONS, CRM_NOT_CALLED_OPTION } from "@/lib/crmReport";
+import {
+  CRM_CALL_RESULT_OPTIONS,
+  CRM_NOT_CALLED_OPTION,
+  CRM_PROBLEM_STATUS_OPTIONS,
+  getCrmProblemStatusColorClass,
+} from "@/lib/crmReport";
+import { categories as BUSINESS_CATEGORIES } from "@/lib/businessSites";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
@@ -15,7 +21,8 @@ type Lead = {
   id: number;
   name: string;
   phone: string;
-  note: string;
+  business_type: string;
+  problem_status: string;
   called: number;
   created_at: string;
   created_by: number | null;
@@ -53,10 +60,25 @@ function AddLeadForm() {
   return (
     <form ref={formRef} action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
       <h2 className="mb-4 font-display text-lg font-normal">افزودن شماره‌ی جدید به CRM</h2>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <input name="name" required placeholder="نام / نام کسب‌وکار" className={inputClass} />
         <input name="phone" required dir="ltr" placeholder="شماره تماس" className={inputClass} />
-        <input name="note" placeholder="یادداشت (اختیاری)" className={inputClass} />
+        <select name="businessType" defaultValue="" className={inputClass}>
+          <option value="">نوع کسب‌وکار (اختیاری)</option>
+          {BUSINESS_CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <select name="problemStatus" defaultValue="" className={inputClass}>
+          <option value="">وضعیت مشکل (اختیاری)</option>
+          {CRM_PROBLEM_STATUS_OPTIONS.map((o) => (
+            <option key={o.label} value={o.label}>
+              {o.label}
+            </option>
+          ))}
+        </select>
       </div>
       {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
@@ -241,6 +263,11 @@ export default function CrmPanel({
   const calledCount = leads.filter((l) => l.called).length;
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  // "" for both means no filter applied — kept separate from the call-status
+  // tabs above since these two are independent axes (a lead can be
+  // "no website" + "not called" at the same time).
+  const [businessTypeFilter, setBusinessTypeFilter] = useState<string>("");
+  const [problemStatusFilter, setProblemStatusFilter] = useState<string>("");
   const [page, setPage] = useState(1);
 
   // Exactly the four statuses the CRM tracks — nothing else. There's no
@@ -273,19 +300,20 @@ export default function CrmPanel({
         l.last_call_result !== statusFilter
       )
         return false;
+      if (businessTypeFilter && l.business_type !== businessTypeFilter) return false;
+      if (problemStatusFilter && l.problem_status !== problemStatusFilter) return false;
       if (!q) return true;
       return (
         l.name.toLowerCase().includes(q) ||
         l.phone.includes(query.trim()) ||
-        toPersianDigits(l.phone).includes(query.trim()) ||
-        (l.note && l.note.toLowerCase().includes(q))
+        toPersianDigits(l.phone).includes(query.trim())
       );
     });
-  }, [leads, query, statusFilter]);
+  }, [leads, query, statusFilter, businessTypeFilter, problemStatusFilter]);
 
   useEffect(() => {
     setPage(1);
-  }, [query, statusFilter]);
+  }, [query, statusFilter, businessTypeFilter, problemStatusFilter]);
 
   const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
 
@@ -304,7 +332,7 @@ export default function CrmPanel({
         </div>
       ) : (
         <>
-          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا یادداشت..." />
+          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام یا شماره..." />
 
           <div className="mb-4 flex flex-wrap gap-2">
             {filterTabs.map((tab) => (
@@ -321,6 +349,45 @@ export default function CrmPanel({
                 {tab.label}
               </button>
             ))}
+          </div>
+
+          <div className="mb-4 flex flex-wrap gap-2">
+            <select
+              value={businessTypeFilter}
+              onChange={(e) => setBusinessTypeFilter(e.target.value)}
+              className="rounded-full border border-ink/[0.18] bg-canvas px-4 py-1.5 text-[12.5px] font-bold text-dim outline-none transition hover:border-accent hover:text-accent focus:border-accent"
+            >
+              <option value="">همه‌ی دسته‌های کسب‌وکار</option>
+              {BUSINESS_CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            <select
+              value={problemStatusFilter}
+              onChange={(e) => setProblemStatusFilter(e.target.value)}
+              className="rounded-full border border-ink/[0.18] bg-canvas px-4 py-1.5 text-[12.5px] font-bold text-dim outline-none transition hover:border-accent hover:text-accent focus:border-accent"
+            >
+              <option value="">همه‌ی وضعیت‌های مشکل</option>
+              {CRM_PROBLEM_STATUS_OPTIONS.map((o) => (
+                <option key={o.label} value={o.label}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+            {(businessTypeFilter || problemStatusFilter) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setBusinessTypeFilter("");
+                  setProblemStatusFilter("");
+                }}
+                className="rounded-full border border-ink/[0.18] px-4 py-1.5 text-[12.5px] font-bold text-dim transition hover:border-accent hover:text-accent"
+              >
+                پاک کردن فیلتر
+              </button>
+            )}
           </div>
 
           <p className="mb-4 font-mono text-[12.5px] text-dim">
@@ -349,7 +416,20 @@ export default function CrmPanel({
                         {toPersianDigits(l.phone)}
                       </Link>
                     </div>
-                    {l.note && <p className="mt-2 text-[13px] text-dim">{l.note}</p>}
+                    {(l.business_type || l.problem_status) && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {l.business_type && (
+                          <span className="rounded-full border border-ink/[0.16] bg-surface/40 px-2.5 py-1 text-[11.5px] font-semibold text-dim">
+                            {l.business_type}
+                          </span>
+                        )}
+                        {l.problem_status && (
+                          <span className={`rounded-full border px-2.5 py-1 text-[11.5px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
+                            {l.problem_status}
+                          </span>
+                        )}
+                      </div>
+                    )}
                     {showCreator && (
                       <p className="mt-2 font-mono text-[11.5px] text-dim/70">ثبت‌کننده: {creatorLabel(l.created_by)}</p>
                     )}
@@ -378,7 +458,8 @@ export default function CrmPanel({
                     <tr className="bg-navy text-alabaster">
                       <th className="px-5 py-3.5 font-semibold">نام</th>
                       <th className="px-5 py-3.5 font-semibold">شماره</th>
-                      <th className="px-5 py-3.5 font-semibold">یادداشت</th>
+                      <th className="px-5 py-3.5 font-semibold">نوع کسب‌وکار</th>
+                      <th className="px-5 py-3.5 font-semibold">وضعیت مشکل</th>
                       <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
                       {showCreator && <th className="px-5 py-3.5 font-semibold">ثبت‌کننده</th>}
                       {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
@@ -393,7 +474,16 @@ export default function CrmPanel({
                             {toPersianDigits(l.phone)}
                           </Link>
                         </td>
-                        <td className="px-5 py-3.5 text-dim">{l.note || "—"}</td>
+                        <td className="px-5 py-3.5 text-dim">{l.business_type || "—"}</td>
+                        <td className="px-5 py-3.5">
+                          {l.problem_status ? (
+                            <span className={`rounded-full border px-3 py-1 text-[12px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
+                              {l.problem_status}
+                            </span>
+                          ) : (
+                            <span className="text-dim">—</span>
+                          )}
+                        </td>
                         <td className="px-5 py-3.5">
                           <CallStatusCell lead={l} />
                         </td>
