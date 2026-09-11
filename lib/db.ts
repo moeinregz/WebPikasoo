@@ -807,6 +807,10 @@ export type CrmLead = {
   created_at: string;
   name: string;
   phone: string;
+  // Free-text area/neighborhood/city the business is in — typed, not
+  // chosen from a list, since locations are too varied (and too granular)
+  // for a fixed set the way business_type and problem_status are.
+  business_area: string;
   // Which BusinessCategory (see lib/businessSites.ts) the lead's business
   // falls under, and what's wrong with their current site (see
   // CRM_PROBLEM_STATUS_OPTIONS in lib/crmReport.ts) — both chosen from a
@@ -823,7 +827,14 @@ export type CrmLead = {
   last_call_result?: string;
 };
 
-export type NewCrmLead = { name: string; phone: string; businessType?: string; problemStatus?: string; createdBy?: number };
+export type NewCrmLead = {
+  name: string;
+  phone: string;
+  businessArea?: string;
+  businessType?: string;
+  problemStatus?: string;
+  createdBy?: number;
+};
 
 export async function createCrmLead(data: NewCrmLead): Promise<number> {
   const database = await getDb();
@@ -833,6 +844,7 @@ export async function createCrmLead(data: NewCrmLead): Promise<number> {
     created_at: nowStr(),
     name: data.name,
     phone: data.phone,
+    business_area: data.businessArea || "",
     business_type: data.businessType || "",
     problem_status: data.problemStatus || "",
     called: 0,

@@ -565,6 +565,7 @@ export async function createCrmLeadAction(
 
   const name = (formData.get("name") ?? "").toString().trim();
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
+  const businessArea = (formData.get("businessArea") ?? "").toString().trim();
   const businessType = (formData.get("businessType") ?? "").toString().trim();
   const problemStatus = (formData.get("problemStatus") ?? "").toString().trim();
 
@@ -579,7 +580,7 @@ export async function createCrmLeadAction(
   }
 
   try {
-    await createCrmLead({ name, phone, businessType, problemStatus, createdBy: currentUser.id });
+    await createCrmLead({ name, phone, businessArea, businessType, problemStatus, createdBy: currentUser.id });
   } catch (err) {
     console.error("createCrmLeadAction failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };

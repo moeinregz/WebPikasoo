@@ -21,6 +21,7 @@ type Lead = {
   id: number;
   name: string;
   phone: string;
+  business_area: string;
   business_type: string;
   problem_status: string;
   called: number;
@@ -60,9 +61,10 @@ function AddLeadForm() {
   return (
     <form ref={formRef} action={formAction} className="mb-6 rounded-card border border-ink/[0.14] bg-surface/20 p-6">
       <h2 className="mb-4 font-display text-lg font-normal">افزودن شماره‌ی جدید به CRM</h2>
-      <div className="grid gap-4 sm:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-5">
         <input name="name" required placeholder="نام / نام کسب‌وکار" className={inputClass} />
         <input name="phone" required dir="ltr" placeholder="شماره تماس" className={inputClass} />
+        <input name="businessArea" placeholder="منطقه‌ی کسب‌وکار (اختیاری)" className={inputClass} />
         <select name="businessType" defaultValue="" className={inputClass}>
           <option value="">نوع کسب‌وکار (اختیاری)</option>
           {BUSINESS_CATEGORIES.map((c) => (
@@ -306,7 +308,8 @@ export default function CrmPanel({
       return (
         l.name.toLowerCase().includes(q) ||
         l.phone.includes(query.trim()) ||
-        toPersianDigits(l.phone).includes(query.trim())
+        toPersianDigits(l.phone).includes(query.trim()) ||
+        (l.business_area && l.business_area.toLowerCase().includes(q))
       );
     });
   }, [leads, query, statusFilter, businessTypeFilter, problemStatusFilter]);
@@ -332,7 +335,7 @@ export default function CrmPanel({
         </div>
       ) : (
         <>
-          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام یا شماره..." />
+          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا منطقه..." />
 
           <div className="mb-4 flex flex-wrap gap-2">
             {filterTabs.map((tab) => (
@@ -415,6 +418,7 @@ export default function CrmPanel({
                       >
                         {toPersianDigits(l.phone)}
                       </Link>
+                      {l.business_area && <p className="mt-1 text-[12.5px] text-dim">{l.business_area}</p>}
                     </div>
                     {(l.business_type || l.problem_status) && (
                       <div className="mt-2 flex flex-wrap gap-1.5">
@@ -458,6 +462,7 @@ export default function CrmPanel({
                     <tr className="bg-navy text-alabaster">
                       <th className="px-5 py-3.5 font-semibold">نام</th>
                       <th className="px-5 py-3.5 font-semibold">شماره</th>
+                      <th className="px-5 py-3.5 font-semibold">منطقه</th>
                       <th className="px-5 py-3.5 font-semibold">نوع کسب‌وکار</th>
                       <th className="px-5 py-3.5 font-semibold">وضعیت مشکل</th>
                       <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
@@ -474,6 +479,7 @@ export default function CrmPanel({
                             {toPersianDigits(l.phone)}
                           </Link>
                         </td>
+                        <td className="px-5 py-3.5 text-dim">{l.business_area || "—"}</td>
                         <td className="px-5 py-3.5 text-dim">{l.business_type || "—"}</td>
                         <td className="px-5 py-3.5">
                           {l.problem_status ? (
