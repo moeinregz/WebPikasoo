@@ -150,7 +150,15 @@ export default function Services() {
               انیمیشنی که با اسکرول به داخل ویوپورت شمردن رو شروع می‌کنن،
               و یه نمودار SVG با خط درخشان + نقطه‌ای که دائم روی مسیرش
               حرکت می‌کنه. */}
-          <div className="seo-hero relative mb-6 overflow-hidden rounded-card border border-white/10 bg-black/40 p-6 backdrop-blur-xl sm:p-9">
+          {/* Fixed opaque dark background (not bg-black/40) — a semi-
+              transparent black blends with whatever's BEHIND it, so in
+              light mode (white canvas) it rendered as a washed-out gray
+              box instead of the intended dark glass panel, and the
+              white/45–white/70 text above lost most of its contrast
+              against that gray. A solid dark color stays dark regardless
+              of theme, matching the other "always dark" panels in this
+              codebase (Contact's CTA, the laptop mockup, etc). */}
+          <div className="seo-hero relative mb-6 overflow-hidden rounded-card border border-white/10 bg-[#0a0a0c] p-6 sm:p-9">
             <div className="relative z-[1] flex flex-col gap-9 lg:flex-row lg:items-center">
               <div className="flex-1">
                 <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">

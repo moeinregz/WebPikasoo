@@ -71,8 +71,13 @@ export default function Trust() {
           </div>
         </Reveal>
 
-        {/* پنل تیره‌ی آماری — همون حس ترمینال هیرو و پنل سئوی بخش مهارت‌ها */}
-        <Reveal className="mb-8 overflow-hidden rounded-card border border-white/10 bg-black/40 p-6 backdrop-blur-xl sm:p-9">
+        {/* پنل تیره‌ی آماری — همون حس ترمینال هیرو و پنل سئوی بخش مهارت‌ها.
+            رنگ پس‌زمینه عمداً یه مقدار ثابت (bg-[#0a0a0c]) هست، نه
+            bg-black/40 — چون شفافیت با پس‌زمینه‌ی خودِ صفحه ترکیب می‌شه؛
+            تو حالت تاریک (canvas مشکی) فرقی نمی‌کرد، ولی تو حالت روشن
+            (canvas سفید) نتیجه‌ش یه جعبه‌ی خاکستری کم‌رنگ بود که متن
+            سفید/۴۵ تا سفید/۷۰ داخلش عملاً کم‌کنتراست و به‌سختی خونا می‌شد. */}
+        <Reveal className="mb-8 overflow-hidden rounded-card border border-white/10 bg-[#0a0a0c] p-6 sm:p-9">
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4">
             <div>
               <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
