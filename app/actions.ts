@@ -35,27 +35,16 @@ export async function submitInquiry(
     return { ok: true, message: "درخواستت با موفقیت ثبت شد — به‌زودی جواب می‌دیم." };
   }
 
-  // Submitting a project request requires an account — this is enforced
-  // here server-side (not just hidden in the UI) so the form can't be
-  // posted to directly while logged out.
+  // درخواست مشاوره‌ی رایگان نباید مشروط به داشتن حساب کاربری باشه — این
+  // خودش یه مانع اضافه‌ی بی‌دلیل جلوی اولین قدم (کم‌ریسک‌ترین قدم) کاربره.
+  // اگه کاربر لاگین باشه، درخواست به حسابش لینک می‌شه (برای دیدن تو
+  // /account)؛ در غیر این صورت هم به‌عنوان مهمون ثبت می‌شه.
   const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    return {
-      ok: false,
-      message: "برای ثبت درخواست پروژه اول باید وارد حساب کاربریت بشی.",
-    };
-  }
 
   // Stops someone (or a stuck double-click) from firing the same request
-  // over and over — one project request per account per minute.
-  const allowed = await allowAndCooldown(`inquiry:${currentUser.id}`, SUBMIT_COOLDOWN_MS);
-  if (!allowed) {
-    return {
-      ok: false,
-      message: "همین الان یه درخواست ثبت کردی — یه دقیقه صبر کن و دوباره امتحان کن.",
-    };
-  }
-
+  // over and over. Keyed by account id when logged in, otherwise by the
+  // phone number they entered (falls back to name) so anonymous
+  // submissions still get a per-person cooldown instead of none at all.
   const name = (formData.get("name") ?? "").toString().trim();
   const email = (formData.get("email") ?? "").toString().trim();
   const phone = (formData.get("phone") ?? "").toString().trim();
@@ -65,9 +54,19 @@ export async function submitInquiry(
   const budget = budgetOption === "دلخواه" && budgetCustom ? `دلخواه — ${budgetCustom}` : budgetOption;
   const message = (formData.get("message") ?? "").toString().trim();
 
-  // Email is optional now — only validated (not required) if provided.
-  if (!name || !message) {
-    return { ok: false, message: "لطفاً نام و توضیح پروژه رو پر کن." };
+  const cooldownKey = currentUser ? `inquiry:${currentUser.id}` : `inquiry:guest:${phone || name}`;
+  const allowed = await allowAndCooldown(cooldownKey, SUBMIT_COOLDOWN_MS);
+  if (!allowed) {
+    return {
+      ok: false,
+      message: "همین الان یه درخواست ثبت کردی — یه دقیقه صبر کن و دوباره امتحان کن.",
+    };
+  }
+
+  // نام، شماره تماس و توضیح کوتاه — کمترین اطکاک برای شروع؛ ایمیل و بودجه
+  // اختیاری‌ان و فقط وقتی وارد بشن اعتبارسنجی می‌شن.
+  if (!name || !phone || !message) {
+    return { ok: false, message: "لطفاً نام، شماره تماس و توضیح کوتاه پروژه رو پر کن." };
   }
   if (email && !EMAIL_PATTERN.test(email)) {
     return { ok: false, message: "ایمیلی که وارد کردی معتبر نیست." };
@@ -77,9 +76,17 @@ export async function submitInquiry(
   }
 
   try {
-    // Link the request to their account so it shows up under
-    // "پروژه‌های درخواستی" on their /account dashboard.
-    await insertInquiry({ name, email, phone, projectType, budget, message, userId: currentUser.id });
+    // وقتی لاگین باشه به حسابش لینک می‌شه (برای دیدن تو /account)،
+    // وگرنه به‌عنوان درخواست مهمون ثبت می‌شه — بدون نیاز به ثبت‌نام.
+    await insertInquiry({
+      name,
+      email,
+      phone,
+      projectType,
+      budget,
+      message,
+      userId: currentUser?.id,
+    });
     return {
       ok: true,
       message: "درخواستت با موفقیت ثبت شد — به‌زودی جواب می‌دیم.",
@@ -98,13 +105,13 @@ export async function submitInquiry(
 // being confused with a stuck request. Backed by Redis, same as above.
 const PLAN_ORDER_COOLDOWN_MS = 10_000;
 
-/** Fired straight from a plan card's "سفارش این پلن" button (see
- *  PricingPlans.tsx) — no form to fill. Requires login (checked here,
- *  server-side, same as submitInquiry) and, when logged in, builds the
- *  order entirely from the account's own name/phone plus the clicked
- *  plan's details, then saves it as a normal inquiry so it shows up
- *  under "سفارش‌ها" in /dashboard exactly like a contact-form submission
- *  would. */
+/** Fired from a plan card's "درخواست مشاوره برای این پلن" button (see
+ *  PricingPlans.tsx). This is a lead request, not a real checkout — so it
+ *  never requires an account. When logged in, name/phone are taken from
+ *  the account automatically; when logged out, the caller collects just
+ *  name + phone in a tiny inline modal (no registration) and passes them
+ *  in directly. Either way it's saved as a normal inquiry, same as the
+ *  contact form. */
 export async function submitPlanOrder(input: {
   categoryLabel: string;
   categoryProjectType: string;
@@ -112,27 +119,30 @@ export async function submitPlanOrder(input: {
   planPrice: string;
   planUnit: string;
   planFeatures: string[];
+  guestName?: string;
+  guestPhone?: string;
 }): Promise<PlanOrderState> {
   const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    return {
-      ok: false,
-      message: "برای ثبت سفارش اول باید وارد حساب کاربریت بشی.",
-    };
+  const name = currentUser?.name || (input.guestName ?? "").trim();
+  const phone = currentUser?.phone || (input.guestPhone ?? "").trim();
+
+  if (!name || !phone) {
+    return { ok: false, message: "لطفاً اسم و شماره تماس رو وارد کن." };
   }
 
   // A double-click (or a resubmit while the first request is still in
   // flight) hits this before the insert below — we pretend success
   // instead of erroring, since the first click already placed the order.
-  const allowed = await allowAndCooldown(`plan-order:${currentUser.id}`, PLAN_ORDER_COOLDOWN_MS);
+  const cooldownKey = currentUser ? `plan-order:${currentUser.id}` : `plan-order:guest:${phone}`;
+  const allowed = await allowAndCooldown(cooldownKey, PLAN_ORDER_COOLDOWN_MS);
   if (!allowed) {
-    return { ok: true, message: "خرید شما با موفقیت انجام شد." };
+    return { ok: true, message: "درخواست شما با موفقیت ثبت شد." };
   }
 
   const { categoryLabel, categoryProjectType, planName, planPrice, planUnit, planFeatures } = input;
   const budget = `${planPrice} ${planUnit}`.trim();
   const message = [
-    `سفارش پلن «${planName}» از دسته‌ی «${categoryLabel}»`,
+    `درخواست مشاوره برای پلن «${planName}» از دسته‌ی «${categoryLabel}»`,
     "",
     "امکانات پلن:",
     ...planFeatures.map((f) => `- ${f}`),
@@ -140,14 +150,14 @@ export async function submitPlanOrder(input: {
 
   try {
     await insertInquiry({
-      name: currentUser.name,
-      phone: currentUser.phone,
+      name,
+      phone,
       projectType: categoryProjectType,
       budget,
       message,
-      userId: currentUser.id,
+      userId: currentUser?.id,
     });
-    return { ok: true, message: "خرید شما با موفقیت انجام شد." };
+    return { ok: true, message: "درخواست شما با موفقیت ثبت شد." };
   } catch (err) {
     console.error("submitPlanOrder failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد. دوباره امتحان کن یا از واتساپ پیام بده." };

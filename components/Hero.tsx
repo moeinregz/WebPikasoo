@@ -48,19 +48,22 @@ export default function Hero() {
           </Reveal>
           <Reveal delay={160}>
             <p className="mb-8 max-w-[52ch] text-[15.5px] text-dim sm:text-[18px]">
-               وب پیکاسو؛ یه تیم 10 نفره‌ی توسعه‌ی نرم‌افزار. با توسعه {" "}
-              <b className="font-semibold text-ink"> پنل های مدیریت،
-              فروشگاه آنلاین ، سیستم فاکتوردهی و نرم افزار های مختلف</b>  — چیزی که واقعاً تو کسب‌وکارت اجرا می‌شه، نه
-              فقط تو دمو خوب به‌نظر می‌رسه.
+              برای کسب‌وکارت{" "}
+              <b className="font-semibold text-ink">
+                پنل مدیریت، فروشگاه آنلاین، سیستم فاکتوردهی و نرم‌افزار اختصاصی
+              </b>{" "}
+              می‌سازیم — چیزی که واقعاً تو کسب‌وکارت اجرا می‌شه و مشتری جذب می‌کنه، نه فقط تو دمو
+              خوب به‌نظر می‌رسه. یه تیم ۱۰ نفره پشت هر پروژه‌ست، یعنی هم سرعت داری هم پشتیبانی
+              واقعی.
             </p>
           </Reveal>
 
 <Reveal delay={210}>
   <div className="my-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
     {[
-  { t: "بدون هزینه پنهان", d: "همه‌چیز شفاف از ابتدا" },
-  { t: "سایت نتیجه‌محور", d: "سریع، حرفه‌ای و قابل رشد" },
-  { t: "پشتیبانی واقعی", d: "بعد از تحویل تنها نیستید" },
+  { t: "بدون هزینه پنهان", d: "قیمت و امکانات از اول شفافه" },
+  { t: "سایت نتیجه‌محور", d: "برای فروش و مشتری بیشتر، نه فقط ظاهر" },
+  { t: "پشتیبانی واقعی", d: "بعد از تحویل هم تنها نیستی" },
 ].map((f) => (
       <div
         key={f.t}
@@ -78,23 +81,28 @@ export default function Hero() {
 </Reveal>
 
           <Reveal delay={260}>
+            {/* اولین قدم، اولین قدم واقعیه، نه «ثبت سفارش» — یعنی یه
+                کم‌ریسک‌ترین کاری که بازدیدکننده می‌تونه بکنه (مشاوره‌ی
+                رایگان)، نه یه تعهد پولی. CTA دوم هم به‌جای «نمونه‌کارها»ی
+                عمومی، مستقیم روی نمونه‌کارهای شبیه کسب‌وکار خودش تمرکز داره. */}
             <div className="flex flex-wrap gap-3.5">
               <a
-                href="#showcase"
+                href="#lead-form"
                 className="inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3.5 text-[15px] font-bold text-canvas shadow-glow-soft transition hover:-translate-y-0.5"
               >
-                مشاهده‌ی نمونه‌کارها
+                مشاوره رایگان پروژه من
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
               <a
-                href="/order"
+                href="#showcase"
                 className="inline-flex items-center gap-2 rounded-lg border-2 border-ink/15 px-6 py-[13px] text-[15px] font-bold text-ink transition hover:border-accent hover:text-accent"
               >
-                ثبت سفارش 
+                نمونه‌کارهای مشابه کسب‌وکارم
               </a>
             </div>
+            <p className="mt-3.5 font-mono text-[12.5px] text-dim">بدون تعهد — فقط ۱۵ دقیقه گفتگو درباره‌ی کسب‌وکارت</p>
           </Reveal>
         </div>
 

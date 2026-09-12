@@ -2,11 +2,14 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Trust from "@/components/Trust";
+import Problems from "@/components/Problems";
 import BusinessShowcase from "@/components/BusinessShowcase";
 import Testimonials from "@/components/Testimonials";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import PricingPlans from "@/components/PricingPlans";
+import Guarantee from "@/components/Guarantee";
+import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -49,14 +52,25 @@ export default async function Home() {
     image: p.image,
   }));
 
+  // ترتیب صفحه‌ی اصلی عمداً دنبال یه مسیر فروش/اعتمادسازی مشخصه:
+  //
+  //   Hero → Trust (اعداد واقعی + چرا ما) → Problems (مشکل/راه‌حل)
+  //   → نمونه‌کارها (Case Studies) → Services → Process
+  //   → Testimonials → Pricing/Offer → Guarantee → FAQ → Final CTA → Contact
+  //
+  // یعنی اول نتیجه و اعتماد رو نشون می‌دیم، بعد مشکل بازدیدکننده رو تو
+  // کلماتِ خودش می‌گیم، بعد نمونه‌کار و روش کار رو می‌بینه، بعد قیمت و
+  // ضمانت و جواب اعتراض‌های رایج (FAQ)، و آخر سر یه CTA نهایی قبل از
+  // فرم تماس — دقیقاً همون لحظه‌ای که تصمیم گرفته شده.
   return (
     <>
       <Nav isLoggedIn={isLoggedIn} />
       <Hero />
       <Marquee />
+      <Trust />
+      <Problems />
       <BusinessShowcase sites={projects} />
       <Services />
-      <Trust />
       <Process />
       <Testimonials />
 
@@ -80,8 +94,12 @@ export default async function Home() {
         </div>
       </section>
 
+      <Guarantee />
+      <FAQ />
+
       <Contact />
       <Footer />
     </>
   );
 }
+

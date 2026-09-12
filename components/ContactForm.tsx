@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { submitInquiry, type InquiryFormState } from "@/app/actions";
 
@@ -8,16 +7,6 @@ const initialState: InquiryFormState = null;
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.14] bg-surface/60 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:shadow-glow";
-
-const budgetOptions = [
-  "کمتر از ۵ میلیون تومان",
-  "۵ تا ۲۰ میلیون تومان",
-  "۲۰ تا ۵۰ میلیون تومان",
-  "۵۰ تا ۱۰۰ میلیون تومان",
-  "۱۰۰ تا ۲۰۰ میلیون تومان",
-  "بیشتر از ۲۰۰ میلیون تومان",
-  "دلخواه",
-];
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -27,7 +16,7 @@ function SubmitButton() {
       disabled={pending}
       className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-[15px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
     >
-      {pending ? "در حال ارسال..." : "ارسال درخواست"}
+      {pending ? "در حال ارسال..." : "دریافت مشاوره رایگان"}
       {!pending && (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
           <path d="M5 12h14M13 6l6 6-6 6" />
@@ -42,9 +31,14 @@ const projectTypeOptions = [
   "سایت کدنویسی اختصاصی",
   "وب‌سایت وردپرسی",
   "سئو",
+  "نمی‌دانم چه راهکاری نیاز دارم",
   "سایر",
 ];
 
+// فرم عمداً کوتاهه: فقط اسم + شماره تماس + نوع پروژه + یه توضیح کوتاه —
+// هر فیلد اضافه یعنی افت نرخ تکمیل فرم. ایمیل و بودجه‌ی تقریبی حذف شدن؛
+// این‌ها رو تو همون تماس اول تلفنی می‌پرسیم، نه قبل از اینکه کاربر اصلاً
+// اعتماد کنه اطلاعاتش رو بده.
 export default function ContactForm({
   defaultName,
   defaultPhone,
@@ -57,7 +51,6 @@ export default function ContactForm({
   defaultMessage?: string;
 } = {}) {
   const [state, formAction] = useFormState(submitInquiry, initialState);
-  const [budget, setBudget] = useState("");
 
   // Once the request is saved successfully, swap the whole form out for a
   // confirmation message instead of leaving the (now-empty) form sitting
@@ -71,10 +64,9 @@ export default function ContactForm({
             <path d="M20 6 9 17l-5-5" />
           </svg>
         </span>
-        <p className="text-lg font-semibold text-ink">ممنون، سفارشت ثبت شد!</p>
+        <p className="text-lg font-semibold text-ink">ممنون، درخواستت ثبت شد!</p>
         <p className="max-w-sm text-[14.5px] leading-relaxed text-dim">
-          به‌زودی باهات تماس می‌گیریم. لازم نیست دوباره فرم رو پر کنی — درخواستت رو تو حساب
-          کاربریت هم می‌تونی ببینی.
+          به‌زودی باهات تماس می‌گیریم — بدون هیچ تعهدی. لازم نیست دوباره فرم رو پر کنی.
         </p>
       </div>
     );
@@ -94,57 +86,44 @@ export default function ContactForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <input name="name" required defaultValue={defaultName} placeholder="اسمت" className={inputClass} />
-        <input type="email" name="email" placeholder="ایمیل (دلخواه)" className={inputClass} dir="ltr" />
         <input
           name="phone"
+          required
           defaultValue={defaultPhone}
-          placeholder="شماره تماس (اختیاری)"
+          placeholder="شماره موبایل"
           className={inputClass}
           dir="ltr"
         />
-        <select name="projectType" defaultValue={defaultProjectType || ""} className={inputClass}>
-          <option value="" disabled>
-            نوع پروژه
-          </option>
-          {projectTypeOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
       </div>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <select
-          name="budget"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          className={inputClass}
-        >
-          <option value="">بودجه‌ی تقریبی (اختیاری)</option>
-          {budgetOptions.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </select>
-        {budget === "دلخواه" && (
-          <input
-            name="budgetCustom"
-            placeholder="بودجه‌ت رو بگو یا هرچی مدنظرته توضیح بده"
-            className={inputClass}
-          />
-        )}
-      </div>
+      <select
+        name="projectType"
+        required
+        defaultValue={defaultProjectType || ""}
+        className={`${inputClass} mt-4`}
+      >
+        <option value="" disabled>
+          نوع پروژه
+        </option>
+        {projectTypeOptions.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
 
       <textarea
         name="message"
         required
-        rows={5}
+        rows={4}
         defaultValue={defaultMessage}
-        placeholder="پروژه‌ت رو برامون توضیح بده — چی می‌خوای بسازی، چه امکاناتی لازم داره..."
+        placeholder="یه توضیح کوتاه از پروژه‌ت — همین کافیه، بقیه‌ش رو تو تماس می‌پرسیم."
         className={`${inputClass} mt-4 resize-none`}
       />
+
+      <p className="mt-3 text-[12.5px] text-dim">
+        بدون تعهد — فقط یه گفتگوی کوتاه برای شناخت نیازت.
+      </p>
 
       <div className="mt-5 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
         <SubmitButton />

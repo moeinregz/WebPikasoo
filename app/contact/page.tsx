@@ -156,33 +156,13 @@ export default async function ContactPage() {
         <div className="relative z-[1] mx-auto max-w-[760px] px-6">
           <Reveal className="rounded-card border border-ink/10 bg-surface/50 p-6 text-right sm:p-9">
             <h2 className="mb-2 font-display text-2xl font-normal sm:text-[28px]">
-              یا فرم درخواست پروژه رو پر کن
+              یا مشاوره‌ی رایگان پروژه‌ت رو رزرو کن
             </h2>
             <p className="mb-7 text-sm text-dim">
-              هرچی دقیق‌تر بنویسی، سریع‌تر می‌تونیم یه جواب درست بهت بدیم — نوع پروژه، بودجه‌ی
-              تقریبی و توضیح کوتاه کافیه.
+              بدون تعهد، بدون نیاز به ثبت‌نام — فقط اسمت، شماره‌ت و یه توضیح کوتاه؛ بقیه رو تو تماس
+              می‌پرسیم.
             </p>
-            {user ? (
-              <ContactForm defaultName={user.name} defaultPhone={user.phone} />
-            ) : (
-              <div className="flex flex-col items-start gap-4 rounded-[14px] border border-dashed border-ink/[0.2] bg-surface/40 p-6 text-right sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-ink">
-                    برای ثبت درخواست پروژه اول باید وارد حساب کاربریت بشی.
-                  </p>
-                  <p className="mt-1 text-sm text-dim">
-                    یه حساب بساز یا وارد شو — چند ثانیه‌ای تمومه، بعدش می‌تونی درخواستت رو بفرستی و
-                    پیگیرش باشی.
-                  </p>
-                </div>
-                <Link
-                  href="/account"
-                  className="inline-flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-[14.5px] font-bold text-canvas transition hover:-translate-y-0.5 sm:w-auto"
-                >
-                  ورود / ثبت‌نام
-                </Link>
-              </div>
-            )}
+            <ContactForm defaultName={user?.name} defaultPhone={user?.phone} />
           </Reveal>
         </div>
       </section>

@@ -208,7 +208,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              گالری سایت‌های کسب‌وکار
+              نمونه‌کارهایی شبیه کسب‌وکار شما
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               نمونه‌سایت‌هایی که برای انواع کسب‌وکارها ساخته شده — از دسته‌بندی‌ها انتخاب کن یا

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 import Reveal from "./Reveal";
 import ContactForm from "./ContactForm";
 import { getCurrentUser } from "@/lib/session";
@@ -83,9 +82,10 @@ export default async function Contact() {
           <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[32px] font-normal leading-[1.35] sm:text-[42px] lg:text-[58px]">
             بیا یه چیز خفن با هم بسازیم.
           </h2>
-          <p className="mx-auto mb-10 max-w-[48ch] text-base text-white/60">
+          <p className="mx-auto mb-3 max-w-[48ch] text-base text-white/60">
             برای پنل مدیریت، فروشگاه آنلاین، یا هر ایده‌ای که تو سرته، پیام بده — سریع جواب می‌دیم.
           </p>
+          <p className="mx-auto mb-10 font-mono text-[12.5px] text-white/40">بدون تعهد، بدون هزینه</p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="https://wa.me/989965745535"
@@ -107,33 +107,17 @@ export default async function Contact() {
           </div>
         </Reveal>
 
-        <Reveal className="mx-auto mt-14 max-w-[720px] rounded-card border border-ink/10 bg-surface/50 p-6 text-right sm:p-9">
+        <Reveal
+          id="lead-form"
+          className="mx-auto mt-14 max-w-[720px] scroll-mt-[90px] rounded-card border border-ink/10 bg-surface/50 p-6 text-right sm:p-9"
+        >
           <h3 className="mb-2 font-display text-2xl font-normal">
-            یا فرم درخواست پروژه رو پر کن
+            یا مشاوره‌ی رایگان پروژه‌ت رو رزرو کن
           </h3>
           <p className="mb-7 text-sm text-dim">
-            هرچی دقیق‌تر بنویسی، سریع‌تر می‌تونیم یه جواب درست بهت بدیم.
+            بدون تعهد، بدون نیاز به ثبت‌نام — فقط اسمت، شماره‌ت و یه توضیح کوتاه؛ بقیه رو تو تماس می‌پرسیم.
           </p>
-          {user ? (
-            <ContactForm defaultName={user.name} defaultPhone={user.phone} />
-          ) : (
-            <div className="flex flex-col items-start gap-4 rounded-[14px] border border-dashed border-ink/[0.2] bg-surface/40 p-6 text-right sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm font-semibold text-ink">
-                  برای ثبت درخواست پروژه اول باید وارد حساب کاربریت بشی.
-                </p>
-                <p className="mt-1 text-sm text-dim">
-                  یه حساب بساز یا وارد شو — چند ثانیه‌ای تمومه، بعدش می‌تونی درخواستت رو بفرستی و پیگیرش باشی.
-                </p>
-              </div>
-              <Link
-                href="/account"
-                className="inline-flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-[14.5px] font-bold text-canvas transition hover:-translate-y-0.5 sm:w-auto"
-              >
-                ورود / ثبت‌نام
-              </Link>
-            </div>
-          )}
+          <ContactForm defaultName={user?.name} defaultPhone={user?.phone} />
         </Reveal>
 
         <Reveal className="mx-auto my-16 flex max-w-[420px] items-center gap-4 font-mono text-xs font-bold text-dim before:h-px before:flex-1 before:bg-ink/10 before:content-[''] after:h-px after:flex-1 after:bg-ink/10 after:content-['']">

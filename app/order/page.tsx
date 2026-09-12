@@ -27,7 +27,7 @@ export default async function OrderPage({
 
   // وقتی از /account (بعد از ورود/ثبت‌نام) با همین دو پارامتر برگرده اینجا،
   // PricingPlans خودش تشخیص می‌ده و همون پلن رو خودکار سفارش می‌ده — دیگه
-  // لازم نیست کاربر دوباره روی «سفارش این پلن» کلیک کنه.
+  // لازم نیست کاربر دوباره روی «درخواست مشاوره برای این پلن» کلیک کنه.
   const category = searchParams?.category;
   const plan = searchParams?.plan;
 
@@ -36,8 +36,8 @@ export default async function OrderPage({
       <Nav isLoggedIn={isLoggedIn} />
 
       {/* پلن‌ها بر اساس نوع خدمت — سئو، وردپرس، کدنویسی اختصاصی، نرم‌افزار/پنل مدیریت.
-          روی «سفارش این پلن» که بزنی، اگه وارد حساب باشی، سفارش با اسم و شماره‌ی
-          حساب خودت مستقیم برای ما ثبت می‌شه — دیگه فرم جداگونه‌ای لازم نیست. */}
+          روی «درخواست مشاوره برای این پلن» که بزنی، بدون نیاز به ثبت‌نام یا لاگین
+          درخواستت مستقیم برای ما ثبت می‌شه. */}
       <section className="relative overflow-hidden py-16 sm:py-20">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <div className="relative z-[1] mx-auto max-w-container px-6">
@@ -51,7 +51,7 @@ export default async function OrderPage({
             <p className="mx-auto mt-2.5 max-w-[54ch] text-[14.5px] text-dim">
               یه دسته رو انتخاب کن و از بین ۳ پلن، اونی که به کارت میاد رو بردار — قیمت‌ها تقریبی و
               برای شروع مذاکره‌ن، بعد از شنیدن نیاز دقیقت یه پیشنهاد مکتوب و قطعی بهت می‌دیم. روی
-              «سفارش این پلن» بزن تا مستقیم برامون ثبت بشه.
+              «درخواست مشاوره برای این پلن» بزن، بدون نیاز به ثبت‌نام، تا مستقیم برامون ثبت بشه.
             </p>
           </Reveal>
 

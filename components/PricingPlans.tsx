@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import Link from "next/link";
 import Reveal from "./Reveal";
 import { submitPlanOrder } from "@/app/actions";
 
@@ -247,17 +246,18 @@ export default function PricingPlans({
   // فقط یه‌بار، برای جلوگیری از ثبت تکراری اگه کامپوننت دوباره رندر بشه.
   const autoOrderFired = useRef(false);
 
-  // وقتی کاربر لاگین نیست و روی «سفارش این پلن» می‌زنه، به‌جای فرستادن سفارش
-  // یه پیام وسط صفحه نشون داده می‌شه که باید اول ثبت‌نام/ورود کنه. همین پلن
-  // اینجا نگه داشته می‌شه تا لینک ورود/ثبت‌نام دقیقاً برای همین پلن باشه.
-  const [loginPromptPlan, setLoginPromptPlan] = useState<{ cat: Category; plan: Plan } | null>(
+  // وقتی کاربر لاگین نیست و روی «درخواست این پلن» می‌زنه، هیچ ثبت‌نامی
+  // لازم نیست — فقط یه مودال کوچیک اسم + شماره می‌گیره (Micro-Commitment)
+  // و همون‌جا درخواست ثبت می‌شه.
+  const [guestPromptPlan, setGuestPromptPlan] = useState<{ cat: Category; plan: Plan } | null>(
     null
   );
-  // بعد از ثبت موفق سفارش (چه با کلیک مستقیم، چه خودکار بعد از برگشت از
-  // ورود/ثبت‌نام) یه نوتیف وسط صفحه نشون داده می‌شه.
+  const [guestName, setGuestName] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  // بعد از ثبت موفق درخواست یه نوتیف وسط صفحه نشون داده می‌شه.
   const [successPlan, setSuccessPlan] = useState<{ cat: Category; plan: Plan } | null>(null);
 
-  function placeOrder(c: Category, p: Plan) {
+  function placeOrder(c: Category, p: Plan, guest?: { name: string; phone: string }) {
     const key = planKey(c.slug, p.name);
     setStatuses((s) => ({ ...s, [key]: "sending" }));
     startTransition(async () => {
@@ -268,6 +268,8 @@ export default function PricingPlans({
         planPrice: p.price,
         planUnit: p.unit,
         planFeatures: p.features,
+        guestName: guest?.name,
+        guestPhone: guest?.phone,
       });
       if (result?.ok) {
         setStatuses((s) => ({ ...s, [key]: "sent" }));
@@ -279,8 +281,19 @@ export default function PricingPlans({
     });
   }
 
-  // برگشت از /account بعد از ورود یا ثبت‌نام: همون پلنی که قبل از رفتن به
-  // صفحه‌ی ورود زده بود رو خودکار سفارش بده، بدون نیاز به کلیک دوباره.
+  function submitGuestOrder() {
+    if (!guestPromptPlan || !guestName.trim() || !guestPhone.trim()) return;
+    placeOrder(guestPromptPlan.cat, guestPromptPlan.plan, {
+      name: guestName.trim(),
+      phone: guestPhone.trim(),
+    });
+    setGuestPromptPlan(null);
+    setGuestName("");
+    setGuestPhone("");
+  }
+
+  // برگشت از /account بعد از ورود یا ثبت‌نام (لینک قدیمی‌تر که هنوز ممکنه
+  // جایی استفاده بشه): همون پلن رو خودکار درخواست بده.
   useEffect(() => {
     if (autoOrderFired.current) return;
     if (!isLoggedIn || !autoOrderCategory || !autoOrderPlan) return;
@@ -370,14 +383,14 @@ export default function PricingPlans({
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 flex-shrink-0">
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
-                    سفارش شما ثبت شد
+                    درخواستت ثبت شد
                   </div>
                 ) : (
                   <button
                     type="button"
                     disabled={status === "sending" || isPending}
                     onClick={() =>
-                      isLoggedIn ? placeOrder(cat, p) : setLoginPromptPlan({ cat, plan: p })
+                      isLoggedIn ? placeOrder(cat, p) : setGuestPromptPlan({ cat, plan: p })
                     }
                     className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-bold transition disabled:pointer-events-none disabled:opacity-60 ${
                       p.highlight
@@ -386,7 +399,7 @@ export default function PricingPlans({
                     }`}
                     style={p.highlight ? { background: cat.color } : undefined}
                   >
-                    {status === "sending" ? "در حال ثبت سفارش..." : "سفارش این پلن"}
+                    {status === "sending" ? "در حال ثبت..." : "درخواست مشاوره برای این پلن"}
                   </button>
                 )}
 
@@ -401,52 +414,68 @@ export default function PricingPlans({
         })}
       </div>
 
-      {/* پیام وسط صفحه: کاربر لاگین نیست و روی «سفارش این پلن» زده — باید
-          اول ثبت‌نام/ورود کنه، بعد خودکار برمی‌گرده همینجا و سفارشش ثبت می‌شه. */}
-      {loginPromptPlan && (
+      {/* مودال کوچیک: کاربر لاگین نیست و روی «درخواست مشاوره برای این پلن»
+          زده — به‌جای اجبار به ثبت‌نام، فقط اسم + شماره می‌گیریم و همون‌جا
+          درخواست ثبت می‌شه. کمترین اطکاک ممکن. */}
+      {guestPromptPlan && (
         <div
           className="fixed inset-0 z-[70] flex items-center justify-center bg-black/55 p-5 backdrop-blur-sm"
-          onClick={() => setLoginPromptPlan(null)}
+          onClick={() => setGuestPromptPlan(null)}
         >
           <div
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[380px] rounded-card border border-ink/10 bg-canvas p-7 text-center shadow-2xl"
+            className="w-full max-w-[380px] rounded-card border border-ink/10 bg-canvas p-7 text-right shadow-2xl"
           >
             <div
               className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
-              style={{ background: `${loginPromptPlan.cat.color}18` }}
+              style={{ background: `${guestPromptPlan.cat.color}18` }}
             >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke={loginPromptPlan.cat.color}
+                stroke={guestPromptPlan.cat.color}
                 strokeWidth={2}
                 className="h-6 w-6"
               >
-                <path d="M12 15v2M6 10V8a6 6 0 1112 0v2M5 10h14a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9a1 1 0 011-1z" />
+                <path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.8 8.8 0 0 1-3.9-.9L3 20l1.1-4.5A8.4 8.4 0 0 1 12.6 3a8.4 8.4 0 0 1 8.4 8.5Z" />
               </svg>
             </div>
-            <h4 className="mb-2 font-display text-lg font-normal">برای ثبت سفارش باید ثبت‌نام کنی</h4>
-            <p className="mb-6 text-[13.5px] leading-relaxed text-dim">
-              پلن «{loginPromptPlan.plan.name}» از دسته‌ی {loginPromptPlan.cat.label} رو انتخاب کردی.
-              اول وارد حساب شو یا ثبت‌نام کن، خودکار برمی‌گردی همینجا و همین سفارش برات ثبت می‌شه.
+            <h4 className="mb-1.5 text-center font-display text-lg font-normal">
+              اسم و شماره‌ت رو بگو، همین‌جا هماهنگ می‌کنیم
+            </h4>
+            <p className="mb-5 text-center text-[13px] leading-relaxed text-dim">
+              پلن «{guestPromptPlan.plan.name}» از دسته‌ی {guestPromptPlan.cat.label} — بدون تعهد،
+              بدون نیاز به ثبت‌نام.
             </p>
-            <div className="flex flex-col gap-2.5 sm:flex-row-reverse">
-              <Link
-                href={`/account?next=${encodeURIComponent(
-                  `/order?category=${encodeURIComponent(loginPromptPlan.cat.slug)}&plan=${encodeURIComponent(
-                    loginPromptPlan.plan.name
-                  )}`
-                )}`}
-                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-3 text-[13.5px] font-bold text-canvas transition hover:-translate-y-0.5"
-              >
-                ورود / ثبت‌نام
-              </Link>
+            <div className="flex flex-col gap-3">
+              <input
+                value={guestName}
+                onChange={(e) => setGuestName(e.target.value)}
+                placeholder="اسمت"
+                className="w-full rounded-[10px] border border-ink/[0.14] bg-surface/60 px-4 py-3 text-[14px] text-ink outline-none transition focus:border-accent"
+              />
+              <input
+                value={guestPhone}
+                onChange={(e) => setGuestPhone(e.target.value)}
+                placeholder="شماره موبایل"
+                dir="ltr"
+                className="w-full rounded-[10px] border border-ink/[0.14] bg-surface/60 px-4 py-3 text-[14px] text-ink outline-none transition focus:border-accent"
+              />
+            </div>
+            <div className="mt-5 flex flex-col gap-2.5 sm:flex-row-reverse">
               <button
                 type="button"
-                onClick={() => setLoginPromptPlan(null)}
+                disabled={!guestName.trim() || !guestPhone.trim()}
+                onClick={submitGuestOrder}
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-3 text-[13.5px] font-bold text-canvas transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+              >
+                ثبت درخواست
+              </button>
+              <button
+                type="button"
+                onClick={() => setGuestPromptPlan(null)}
                 className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-ink/15 px-4 py-3 text-[13.5px] font-bold text-dim transition hover:border-ink/25 hover:text-ink"
               >
                 انصراف
@@ -479,9 +508,10 @@ export default function PricingPlans({
                 <path d="M20 6 9 17l-5-5" />
               </svg>
             </div>
-            <h4 className="mb-2 font-display text-lg font-normal">سفارش شما با موفقیت ثبت شد</h4>
+            <h4 className="mb-2 font-display text-lg font-normal">درخواستت با موفقیت ثبت شد</h4>
             <p className="mb-6 text-[13.5px] leading-relaxed text-dim">
-              سفارش پلن «{successPlan.plan.name}» ثبت شد. تیم وب پیکاسو به‌زودی باهات تماس می‌گیره.
+              درخواست مشاوره برای پلن «{successPlan.plan.name}» ثبت شد. بدون تعهد — تیم وب پیکاسو
+              به‌زودی باهات تماس می‌گیره.
             </p>
             <button
               type="button"

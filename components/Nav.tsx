@@ -11,7 +11,7 @@ import { logout } from "@/app/account/actions";
 const links = [
   { href: "/", label: "خانه" },
   { href: "/portfolio", label: "نمونه‌کارها" },
-  { href: "/order", label: "ثبت سفارش" },
+  { href: "/#lead-form", label: "مشاوره رایگان" },
   { href: "/blog", label: "وبلاگ" },
   { href: "/about", label: "درباره ما" },
   { href: "/contact", label: "تماس با ما" },

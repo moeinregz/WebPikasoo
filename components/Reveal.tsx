@@ -8,6 +8,7 @@ type RevealProps = {
   className?: string;
   style?: CSSProperties;
   delay?: number;
+  id?: string;
 };
 
 export default function Reveal({
@@ -16,6 +17,7 @@ export default function Reveal({
   className = "",
   style,
   delay = 0,
+  id,
 }: RevealProps) {
   const [node, setNode] = useState<Element | null>(null);
   // پیش‌فرض «دیده‌شده» — سرور و همون اولین رندر همیشه محتوا رو کامل و
@@ -55,6 +57,7 @@ export default function Reveal({
   return (
     <Tag
       ref={setNode}
+      id={id}
       style={{ ...style, transitionDelay: visible ? `${delay}ms` : "0ms" }}
       className={[
         "transition-all duration-700 ease-out",
