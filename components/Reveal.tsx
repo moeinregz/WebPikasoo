@@ -60,9 +60,9 @@ export default function Reveal({
       id={id}
       style={{ ...style, transitionDelay: visible ? `${delay}ms` : "0ms" }}
       className={[
-        "transition-all duration-700 ease-out",
-        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:blur-none motion-reduce:opacity-100",
-        visible ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-7 blur-[6px]",
+        "transition-all duration-500 ease-out",
+        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-7",
         className,
       ].join(" ")}
     >
