@@ -11,10 +11,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${siteUrl}/about`, changeFrequency: "monthly", priority: 0.7 },
-    // ۲ از ۹ صفحه‌ی کلاستر لندینگ سئو («طراحی سایت» پیلار اصلی)؛ بقیه به
+    // ۳ از ۹ صفحه‌ی کلاستر لندینگ سئو («طراحی سایت» پیلار اصلی)؛ بقیه به
     // همین ترتیب اینجا اضافه می‌شن.
     { url: `${siteUrl}/website-design`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${siteUrl}/store-design`, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${siteUrl}/corporate-design`, changeFrequency: "monthly", priority: 0.85 },
     { url: `${siteUrl}/portfolio`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${siteUrl}/skills`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${siteUrl}/blog`, changeFrequency: "daily", priority: 0.8 },
