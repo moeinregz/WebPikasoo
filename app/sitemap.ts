@@ -11,11 +11,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${siteUrl}/about`, changeFrequency: "monthly", priority: 0.7 },
-    // ۳ از ۹ صفحه‌ی کلاستر لندینگ سئو («طراحی سایت» پیلار اصلی)؛ بقیه به
-    // همین ترتیب اینجا اضافه می‌شن.
+    // ۹ از ۹ صفحه‌ی کلاستر لندینگ سئو («طراحی سایت» پیلار اصلی) — کلاستر
+    // کامل شد.
     { url: `${siteUrl}/website-design`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${siteUrl}/store-design`, changeFrequency: "monthly", priority: 0.85 },
     { url: `${siteUrl}/corporate-design`, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${siteUrl}/custom-design`, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${siteUrl}/wordpress-design`, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${siteUrl}/website-price`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${siteUrl}/design-company`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${siteUrl}/seo-services`, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${siteUrl}/cheap-design`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${siteUrl}/portfolio`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${siteUrl}/skills`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${siteUrl}/blog`, changeFrequency: "daily", priority: 0.8 },
