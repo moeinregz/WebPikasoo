@@ -32,7 +32,16 @@ export default function Reveal({
     if (!node) return;
 
     const rect = node.getBoundingClientRect();
-    const alreadyInView = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+    // قبلاً اگه المان کاملاً از بالای صفحه رد شده بود (rect.bottom <= 0) —
+    // که دقیقاً همون اتفاقیه که با لینک‌های anchor مثل /#lead-form می‌افته،
+    // چون مرورگر مستقیم اسکرول می‌کنه پایین‌تر و این باکس بالاتر از
+    // ویوپورت جا می‌مونه — این شرط false می‌شد، یعنی opacity-0 ست می‌شد و
+    // منتظر IntersectionObserver می‌موند؛ ولی چون کاربر معمولاً برنمی‌گرده
+    // بالا اسکرول کنه، اون المان برای همیشه محو/بریده باقی می‌موند. حالا
+    // فقط چک می‌کنیم که المان از پایین ویوپورت رد نشده باشه — یعنی «هنوز
+    // نرسیده به دیدرس از پایین» — چه بالای صفحه رد شده باشه چه همین الان
+    // دیده بشه، هر دو حالت بلافاصله نمایش داده می‌شن.
+    const alreadyInView = rect.top < window.innerHeight * 0.9;
     if (alreadyInView) {
       setVisible(true);
       return;
