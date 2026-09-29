@@ -140,6 +140,37 @@ export async function saveProjectHtmlFile(file: File): Promise<string | null> {
   }
 }
 
+/** Saves an HTML file for an admin-only private preview (see
+ *  createPrivateSite in lib/db.ts) to Vercel Blob and returns its URL.
+ *  Same rules as saveProjectHtmlFile, just stored under its own prefix so
+ *  it's never mixed up with public portfolio files. */
+export async function savePrivateSiteHtmlFile(file: File): Promise<string | null> {
+  if (!file || file.size === 0) return null;
+
+  const looksHtml =
+    /\.html?$/i.test(file.name || "") || file.type === "text/html" || file.type === "application/xhtml+xml";
+  if (!looksHtml) {
+    throw new Error("فقط فایل HTML قابل قبوله (پسوند .html یا .htm).");
+  }
+  if (file.size > MAX_PROJECT_HTML_BYTES) {
+    throw new Error("حجم فایل بیشتر از حد مجازه (حداکثر ۱۵ مگابایت).");
+  }
+
+  const filename = randomFilename(file.name, "text/html", ".html");
+
+  try {
+    const blob = await put(`private-sites/${filename}`, file, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: "text/html; charset=utf-8",
+    });
+    return blob.url;
+  } catch (err) {
+    console.error("savePrivateSiteHtmlFile (Vercel Blob) failed:", err);
+    throw new Error(blobErrorMessage(err));
+  }
+}
+
 export type SavedAttachment = { url: string; type: string; name: string };
 
 /** Saves a chat attachment (file upload or recorded voice note) to

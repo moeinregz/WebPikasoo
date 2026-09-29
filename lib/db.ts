@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import crypto from "crypto";
 import { cacheWrap, invalidateCache } from "@/lib/redis";
 import { tehranDayKey, todayTehranKey } from "@/lib/crmReport";
 
@@ -794,6 +795,63 @@ export async function seedProjectsIfEmpty(seed: NewProject[]): Promise<void> {
   for (const item of seed) {
     await createProject(item);
   }
+}
+
+// -----------------------------------------------------------------------
+// Private site previews (admin-only)
+// -----------------------------------------------------------------------
+// HTML sites the admin uploads just to send someone a link ("look at the
+// demo I built for you"). Deliberately a separate collection from
+// `projects`, so these never show up in the homepage/portfolio showcase or
+// in the نمونه‌کارها tab. Each one gets a random unguessable token used in
+// the public URL (/preview/[token]) instead of a sequential id, so nobody
+// can walk through other people's previews by counting up.
+
+export type PrivateSite = {
+  id: number;
+  created_at: string;
+  token: string;
+  name: string;
+  note: string;
+  // Vercel Blob URL of the uploaded .html file.
+  url: string;
+};
+
+export async function createPrivateSite(data: { name: string; note?: string; url: string }): Promise<PrivateSite> {
+  const database = await getDb();
+  const id = await nextId("private_sites");
+  const doc: PrivateSite = {
+    id,
+    created_at: nowStr(),
+    token: crypto.randomBytes(9).toString("base64url"),
+    name: data.name,
+    note: data.note || "",
+    url: data.url,
+  };
+  await database.collection<PrivateSite>("private_sites").insertOne({ ...doc });
+  return doc;
+}
+
+export async function getAllPrivateSites(): Promise<PrivateSite[]> {
+  const database = await getDb();
+  return database
+    .collection<PrivateSite>("private_sites")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ created_at: -1, id: -1 })
+    .toArray();
+}
+
+export async function getPrivateSiteByToken(token: string): Promise<PrivateSite | null> {
+  const database = await getDb();
+  const site = await database
+    .collection<PrivateSite>("private_sites")
+    .findOne({ token }, { projection: { _id: 0 } });
+  return site ?? null;
+}
+
+export async function deletePrivateSite(id: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("private_sites").deleteOne({ id });
 }
 
 // -----------------------------------------------------------------------

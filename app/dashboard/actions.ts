@@ -38,6 +38,8 @@ import {
   setInquiryStatus,
   createProject,
   deleteProject,
+  createPrivateSite,
+  deletePrivateSite,
   createBlogPost,
   updateBlogPost,
   deleteBlogPost,
@@ -50,7 +52,7 @@ import {
 } from "@/lib/db";
 import { verifyPassword, hashPassword, isValidPhone, normalizePhone, toPersianDigits } from "@/lib/auth";
 import { setSessionCookie, getCurrentUser, USER_COOKIE_NAME } from "@/lib/session";
-import { saveChatAttachment, saveBlogImage, saveProjectImage, saveProjectHtmlFile } from "@/lib/uploads";
+import { saveChatAttachment, saveBlogImage, saveProjectImage, saveProjectHtmlFile, savePrivateSiteHtmlFile } from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
 import { cookies } from "next/headers";
 
@@ -565,6 +567,45 @@ export async function deleteProjectAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/");
   revalidatePath("/portfolio");
+}
+
+// --- Private site previews (admin only, NOT shown in the portfolio) --------
+
+export type PrivateSiteFormState = { ok: boolean; message: string; link?: string } | null;
+
+export async function createPrivateSiteAction(
+  _prevState: PrivateSiteFormState,
+  formData: FormData
+): Promise<PrivateSiteFormState> {
+  await requireAdmin();
+
+  const name = (formData.get("name") ?? "").toString().trim();
+  const note = (formData.get("note") ?? "").toString().trim();
+  const file = formData.get("siteFile");
+
+  if (!name) return { ok: false, message: "یه اسم برای این سایت بنویس (فقط برای خودته)." };
+  if (!(file instanceof File) || file.size === 0) {
+    return { ok: false, message: "فایل HTML رو انتخاب کن." };
+  }
+
+  try {
+    const url = await savePrivateSiteHtmlFile(file);
+    if (!url) return { ok: false, message: "آپلود فایل ناموفق بود، دوباره امتحان کن." };
+    const site = await createPrivateSite({ name, note, url });
+    revalidatePath("/dashboard");
+    return { ok: true, message: "سایت آپلود شد. لینکش آماده‌ست.", link: `/preview/${site.token}` };
+  } catch (err) {
+    console.error("createPrivateSiteAction failed:", err);
+    return { ok: false, message: err instanceof Error ? err.message : "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+}
+
+export async function deletePrivateSiteAction(formData: FormData) {
+  await requireAdmin();
+  const id = Number(formData.get("siteId"));
+  if (!id) return;
+  await deletePrivateSite(id);
+  revalidatePath("/dashboard");
 }
 
 // --- CRM: leads/phone numbers the team has sourced ---------------------------

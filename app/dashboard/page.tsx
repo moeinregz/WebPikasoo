@@ -17,6 +17,7 @@ import {
   getUserPermissions,
   getAllBlogPosts,
   getAllProjects,
+  getAllPrivateSites,
 } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
@@ -38,6 +39,7 @@ import { AdminTasksPanel, MyTasksPanel } from "./TasksPanel";
 import OverviewPanel from "./OverviewPanel";
 import BlogPanel from "./BlogPanel";
 import ProjectsPanel from "./ProjectsPanel";
+import PrivateSitesPanel from "./PrivateSitesPanel";
 import { formatDate } from "./format";
 
 export const metadata = {
@@ -93,6 +95,8 @@ export default async function DashboardPage() {
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
   const projects = isAdmin || perms.projects ? await getAllProjects() : [];
+  // Admin-only: sites uploaded just to share a private link (never public).
+  const privateSites = isAdmin ? await getAllPrivateSites() : [];
   // Last message per ticket, for the one-line preview in the tickets list.
   const ticketLastMessages = await Promise.all(
     tickets.map(async (t) => {
@@ -375,6 +379,13 @@ export default async function DashboardPage() {
       panel: <ProjectsPanel projects={projects} />,
     });
   }
+  if (isAdmin) {
+    tabs.push({
+      id: "private-sites",
+      label: `سایت‌های خصوصی (${toPersianDigits(privateSites.length)})`,
+      panel: <PrivateSitesPanel sites={privateSites} />,
+    });
+  }
 
   // Nobody's been granted anything yet — shouldn't normally happen (every
   // developer defaults to team+chat) but guard against an empty tab bar.
@@ -404,8 +415,8 @@ export default async function DashboardPage() {
           was squeezing every dashboard panel (chat, orders, tickets, CRM...)
           into a narrow column with a huge dead gap beside it on every
           screen size. Setting width explicitly to 100% (capped by
-          max-w-[1440px]) sidesteps that shrink-to-fit path entirely. */}
-      <main className="mx-auto w-full max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+          max-w-[1680px]) sidesteps that shrink-to-fit path entirely. */}
+      <main className="mx-auto w-full max-w-[1680px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 lg:mb-10">
           <div className="min-w-0">
             <Link

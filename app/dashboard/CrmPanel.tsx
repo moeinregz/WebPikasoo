@@ -253,7 +253,7 @@ function StatusDropdownButton({
       if (!btnRect) return;
       const menuRect = menuRef.current?.getBoundingClientRect();
       const menuHeight = menuRect?.height ?? 0;
-      const menuWidth = menuRect?.width ?? 192;
+      const menuWidth = menuRect?.width ?? 224;
 
       // Open upward when there isn't room below (e.g. the row is near the
       // bottom of the screen) but there IS more room above.
@@ -286,7 +286,7 @@ function StatusDropdownButton({
         type="button"
         disabled={pending}
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold outline-none transition disabled:opacity-60 ${current.colorClass}`}
+        className={`flex min-w-[9.5rem] items-center justify-between gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-[12.5px] font-bold leading-none outline-none transition disabled:opacity-60 ${current.colorClass}`}
       >
         {current.label}
         <svg
@@ -307,14 +307,14 @@ function StatusDropdownButton({
             left: pos ? pos.left : -9999,
             visibility: pos ? "visible" : "hidden",
           }}
-          className="z-50 w-48 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl"
+          className="z-50 w-56 rounded-2xl border border-ink/[0.14] bg-canvas p-1.5 shadow-2xl"
         >
           {STATUS_DROPDOWN_OPTIONS.map((opt) => (
             <button
               key={opt.value || "none"}
               type="button"
               onClick={() => onChoose(opt.value)}
-              className={`mb-1 flex w-full items-center justify-between rounded-xl border px-3.5 py-2 text-[12.5px] font-bold transition last:mb-0 ${opt.colorClass} ${
+              className={`mb-1 flex w-full items-center justify-between whitespace-nowrap rounded-xl border px-4 py-2.5 text-[12.5px] font-bold leading-none transition last:mb-0 ${opt.colorClass} ${
                 opt.value === current.value ? "brightness-110" : "opacity-70 hover:opacity-100"
               }`}
             >
@@ -429,7 +429,7 @@ export default function CrmPanel({
                 key={tab.key}
                 type="button"
                 onClick={() => setStatusFilter((prev) => (prev === tab.key ? "all" : tab.key))}
-                className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
+                className={`whitespace-nowrap rounded-full border px-4 py-2 text-[12.5px] font-bold transition ${
                   statusFilter === tab.key
                     ? tab.activeClass
                     : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
@@ -492,7 +492,7 @@ export default function CrmPanel({
               {/* Card list — phones/tablets. A side-scrolling table is
                   unusable with one thumb, so below the desktop breakpoint
                   each lead gets its own stacked card instead. */}
-              <div className="flex flex-col gap-3 lg:hidden">
+              <div className="flex flex-col gap-3 xl:hidden">
                 {paged.map((l) => (
                   <div key={l.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
                     <div className="min-w-0">
@@ -520,7 +520,7 @@ export default function CrmPanel({
                               </span>
                             )}
                             {l.problem_status && (
-                              <span className={`rounded-full border px-2.5 py-1 text-[11.5px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
+                              <span className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-[11.5px] font-bold leading-none ${getCrmProblemStatusColorClass(l.problem_status)}`}>
                                 {l.problem_status}
                               </span>
                             )}
@@ -558,42 +558,44 @@ export default function CrmPanel({
                 ))}
               </div>
 
-              {/* Table — desktop only. */}
-              <div className="hidden overflow-x-auto rounded-card border border-ink/[0.14] lg:block">
-                <table className="w-full min-w-[560px] border-collapse text-right text-[14px]">
+              {/* Table — wide desktop only (xl+). Between lg and xl the dashboard
+                  sidebar eats ~280px, which left the status columns too narrow
+                  and made their pills wrap/split — cards fit that width better. */}
+              <div className="hidden overflow-x-auto rounded-card border border-ink/[0.14] xl:block">
+                <table className="w-full min-w-[960px] border-collapse text-right text-[14px]">
                   <thead>
                     <tr className="bg-navy text-alabaster">
-                      <th className="px-5 py-3.5 font-semibold">نام</th>
-                      <th className="px-5 py-3.5 font-semibold">شماره</th>
-                      <th className="px-5 py-3.5 font-semibold">منطقه</th>
-                      <th className="px-5 py-3.5 font-semibold">نوع کسب‌وکار</th>
-                      <th className="px-5 py-3.5 font-semibold">وضعیت مشکل</th>
-                      <th className="px-5 py-3.5 font-semibold">وضعیت تماس</th>
-                      {showCreator && <th className="px-5 py-3.5 font-semibold">ثبت‌کننده</th>}
-                      {canEdit && <th className="px-5 py-3.5 font-semibold"></th>}
-                      {canDelete && <th className="px-5 py-3.5 font-semibold"></th>}
+                      <th className="whitespace-nowrap px-4 py-3.5 font-semibold">نام</th>
+                      <th className="whitespace-nowrap px-4 py-3.5 font-semibold">شماره</th>
+                      <th className="whitespace-nowrap px-4 py-3.5 font-semibold">منطقه</th>
+                      <th className="whitespace-nowrap px-4 py-3.5 font-semibold">نوع کسب‌وکار</th>
+                      <th className="whitespace-nowrap px-4 py-3.5 font-semibold">وضعیت مشکل</th>
+                      <th className="whitespace-nowrap px-4 py-3.5 font-semibold">وضعیت تماس</th>
+                      {showCreator && <th className="whitespace-nowrap px-4 py-3.5 font-semibold">ثبت‌کننده</th>}
+                      {canEdit && <th className="whitespace-nowrap px-4 py-3.5 font-semibold"></th>}
+                      {canDelete && <th className="whitespace-nowrap px-4 py-3.5 font-semibold"></th>}
                     </tr>
                   </thead>
                   <tbody>
                     {paged.map((l, i) => (
                       <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
-                        <td className="px-5 py-3.5 font-semibold">{l.name}</td>
-                        <td className="px-5 py-3.5 font-mono" dir="ltr">
+                        <td className="min-w-[10rem] px-4 py-3.5 font-semibold">{l.name}</td>
+                        <td className="px-4 py-3.5 font-mono" dir="ltr">
                           <Link href={`tel:${l.phone}`} className="hover:text-accent">
                             {toPersianDigits(l.phone)}
                           </Link>
                         </td>
                         {editingId === l.id ? (
-                          <td className="px-5 py-3.5" colSpan={3}>
+                          <td className="px-4 py-3.5" colSpan={3}>
                             <EditLeadFields lead={l} onDone={() => setEditingId(null)} />
                           </td>
                         ) : (
                           <>
-                            <td className="px-5 py-3.5 text-dim">{l.business_area || "—"}</td>
-                            <td className="px-5 py-3.5 text-dim">{l.business_type || "—"}</td>
-                            <td className="px-5 py-3.5">
+                            <td className="min-w-[9rem] px-4 py-3.5 text-dim">{l.business_area || "—"}</td>
+                            <td className="whitespace-nowrap px-4 py-3.5 text-dim">{l.business_type || "—"}</td>
+                            <td className="whitespace-nowrap px-4 py-3.5">
                               {l.problem_status ? (
-                                <span className={`rounded-full border px-3 py-1 text-[12px] font-bold ${getCrmProblemStatusColorClass(l.problem_status)}`}>
+                                <span className={`inline-block whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[12px] font-bold leading-none ${getCrmProblemStatusColorClass(l.problem_status)}`}>
                                   {l.problem_status}
                                 </span>
                               ) : (
@@ -602,14 +604,14 @@ export default function CrmPanel({
                             </td>
                           </>
                         )}
-                        <td className="px-5 py-3.5">
+                        <td className="whitespace-nowrap px-4 py-3.5">
                           <CallStatusCell lead={l} />
                         </td>
                         {showCreator && (
-                          <td className="px-5 py-3.5 font-mono text-[12.5px] text-dim">{creatorLabel(l.created_by)}</td>
+                          <td className="px-4 py-3.5 font-mono text-[12.5px] text-dim">{creatorLabel(l.created_by)}</td>
                         )}
                         {canEdit && (
-                          <td className="px-5 py-3.5">
+                          <td className="px-4 py-3.5">
                             {editingId !== l.id && (
                               <button
                                 type="button"
@@ -622,7 +624,7 @@ export default function CrmPanel({
                           </td>
                         )}
                         {canDelete && (
-                          <td className="px-5 py-3.5">
+                          <td className="px-4 py-3.5">
                             <form action={deleteCrmLeadAction}>
                               <input type="hidden" name="leadId" value={l.id} />
                               <button
