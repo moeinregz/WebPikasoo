@@ -54,6 +54,9 @@ import { verifyPassword, hashPassword, isValidPhone, normalizePhone, toPersianDi
 import { setSessionCookie, getCurrentUser, USER_COOKIE_NAME } from "@/lib/session";
 import { saveChatAttachment, saveBlogImage, saveProjectImage, saveProjectHtmlFile, savePrivateSiteHtmlFile } from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
+import { getTrade } from "@/lib/siteTemplates/trades";
+import { pickTemplate } from "@/lib/siteTemplates";
+import { renderSite, toEn, HEX_COLOR } from "@/lib/siteTemplates/generate";
 import { cookies } from "next/headers";
 
 export type DashboardFormState = {
@@ -596,6 +599,74 @@ export async function createPrivateSiteAction(
     return { ok: true, message: "سایت آپلود شد. لینکش آماده‌ست.", link: `/preview/${site.token}` };
   } catch (err) {
     console.error("createPrivateSiteAction failed:", err);
+    return { ok: false, message: err instanceof Error ? err.message : "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+}
+
+/** Builds a demo site from one of the pre-made templates of the chosen trade
+ *  (brand, address, 1–3 phones, optional hours, optional colors), stores it
+ *  as a private site and returns its /preview link. Costs no AI tokens. */
+export async function generateSiteAction(
+  _prevState: PrivateSiteFormState,
+  formData: FormData
+): Promise<PrivateSiteFormState> {
+  await requireAdmin();
+
+  const str = (key: string) => (formData.get(key) ?? "").toString().trim();
+  const trade = getTrade(str("trade"));
+  const brand = str("brand");
+  const address = str("address");
+  const hours = str("hours");
+  const phones = formData
+    .getAll("phone")
+    .map((v) => v.toString().trim())
+    .filter(Boolean)
+    .slice(0, 3);
+  const primary = str("color1");
+  const secondary = str("color2");
+
+  if (!trade) return { ok: false, message: "صنف رو انتخاب کن." };
+  if (!brand) return { ok: false, message: "اسم برند رو بنویس." };
+  if (brand.length > 80 || address.length > 300 || hours.length > 200) {
+    return { ok: false, message: "یکی از فیلدها خیلی طولانیه." };
+  }
+  if (!address) return { ok: false, message: "آدرس رو بنویس." };
+  if (phones.length === 0) return { ok: false, message: "حداقل یک شماره تماس وارد کن." };
+  if (phones.some((p) => !/^[0-9+\-\s()]{5,20}$/.test(toEn(p)))) {
+    return { ok: false, message: "یکی از شماره‌ها معتبر نیست." };
+  }
+  if ((primary && !HEX_COLOR.test(primary)) || (secondary && !HEX_COLOR.test(secondary))) {
+    return { ok: false, message: "رنگ نامعتبره." };
+  }
+
+  const template = pickTemplate(trade.id, str("template") || undefined);
+  if (!template) {
+    return { ok: false, message: `برای صنف «${trade.label}» هنوز قالبی اضافه نشده.` };
+  }
+
+  try {
+    const { html, unknown } = renderSite(template, trade, {
+      brand,
+      address,
+      phones,
+      hours,
+      primary: primary || undefined,
+      secondary: secondary || undefined,
+    });
+    if (unknown.length) console.warn(`generateSiteAction: unknown placeholders in ${template.id}:`, unknown);
+
+    const url = await savePrivateSiteHtmlFile(new File([html], "site.html", { type: "text/html" }));
+    if (!url) return { ok: false, message: "ذخیره‌ی فایل ناموفق بود، دوباره امتحان کن." };
+
+    const site = await createPrivateSite({
+      name: `${brand} (${trade.label})`,
+      note: `از قالب «${template.label}» ساخته شد`,
+      url,
+    });
+    revalidatePath("/dashboard");
+    return { ok: true, message: "سایت ساخته شد. لینکش آماده‌ست.", link: `/preview/${site.token}` };
+  } catch (err) {
+    console.error("generateSiteAction failed:", err);
     return { ok: false, message: err instanceof Error ? err.message : "یه مشکلی پیش اومد، دوباره امتحان کن." };
   }
 }

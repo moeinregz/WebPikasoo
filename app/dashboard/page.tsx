@@ -40,6 +40,8 @@ import OverviewPanel from "./OverviewPanel";
 import BlogPanel from "./BlogPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
+import SiteGeneratorPanel from "./SiteGeneratorPanel";
+import { templateOptions } from "@/lib/siteTemplates";
 import { formatDate } from "./format";
 
 export const metadata = {
@@ -377,6 +379,13 @@ export default async function DashboardPage() {
       id: "projects",
       label: `نمونه‌کارها (${toPersianDigits(projects.length)})`,
       panel: <ProjectsPanel projects={projects} />,
+    });
+  }
+  if (isAdmin) {
+    tabs.push({
+      id: "site-generator",
+      label: "ساخت سایت از قالب",
+      panel: <SiteGeneratorPanel templates={templateOptions()} />,
     });
   }
   if (isAdmin) {

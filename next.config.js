@@ -40,6 +40,13 @@ const nextConfig = {
   // stop re-requesting them on every visit. Anything dynamic (pages, API
   // routes, server actions) is left alone — Next's defaults already avoid
   // caching those.
+  // Site-generator templates (lib/siteTemplates/templates/*.template.html)
+  // are imported as plain strings.
+  webpack(config) {
+    config.module.rules.push({ test: /\.template\.html$/, type: "asset/source" });
+    return config;
+  },
+
   async headers() {
     const immutable = { key: "Cache-Control", value: "public, max-age=31536000, immutable" };
     return [

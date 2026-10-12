@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{brand}} | {{trade}}</title>
+<style>
+:root{--brown:#6F4E37;--cream:#F5ECE0;--ink:#2B1D14;--caramel:#D9822B}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Tahoma,sans-serif;line-height:1.9;padding:32px}
+h1{color:var(--brown)} a{color:var(--caramel)}
+</style>
+</head>
+<body>
+<h1>{{brand}}</h1>
+<p>{{address}} — <a href="{{map_url}}">مسیریابی</a></p>
+<!--if:hours--><p>ساعت کاری: {{hours}}</p><!--/if:hours-->
+<!--each:phones--><p><a href="{{phone_href}}">{{phone}}</a></p><!--/each:phones-->
+</body>
+</html>
