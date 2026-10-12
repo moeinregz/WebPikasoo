@@ -1,4 +1,5 @@
 import type { SiteTemplate } from "./generate";
+import cafeAdra from "./templates/cafe-adra.template.html";
 
 // ---------------------------------------------------------------------------
 // Template registry. To add a template: put the HTML in ./templates as
@@ -9,6 +10,15 @@ import type { SiteTemplate } from "./generate";
 // ---------------------------------------------------------------------------
 
 export const TEMPLATES: SiteTemplate[] = [
+  {
+    id: "cafe-adra",
+    trade: "cafe",
+    label: "کافه — رنگارنگ و شاد (آدرا)",
+    html: cafeAdra,
+    // Colors are derived inside the template with {{c:...}} expressions, so
+    // no CSS-variable mapping is needed here.
+    vars: {},
+  },
   // {
   //   id: "cafe-1",
   //   trade: "cafe",

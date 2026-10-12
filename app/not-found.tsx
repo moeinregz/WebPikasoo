@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "صفحه پیدا نشد",
@@ -10,23 +8,26 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <Container className="flex flex-col items-center gap-4 py-24 text-center">
-      <span aria-hidden="true" className="text-h1">
-        🍯
-      </span>
-      <p className="text-h1 text-brand-red">۴۰۴</p>
-      <h1 className="text-h2 text-text-primary">صفحه‌ای که دنبالش بودید پیدا نشد</h1>
-      <p className="max-w-[44ch] text-body text-text-secondary">
+    <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center gap-4 px-6 py-24 text-center">
+      <p className="font-display text-7xl text-accent">۴۰۴</p>
+      <h1 className="font-display text-2xl text-ink">صفحه‌ای که دنبالش بودید پیدا نشد</h1>
+      <p className="max-w-[44ch] text-[15px] leading-relaxed text-dim">
         ممکن است آدرس را اشتباه وارد کرده باشید یا این صفحه حذف یا جابه‌جا شده باشد.
       </p>
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Link href="/">
-          <Button variant="primary">بازگشت به صفحه اصلی</Button>
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+        <Link
+          href="/"
+          className="rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5"
+        >
+          بازگشت به صفحه اصلی
         </Link>
-        <Link href="/shop">
-          <Button variant="secondary">رفتن به فروشگاه</Button>
+        <Link
+          href="/contact"
+          className="rounded-full border border-ink/[0.18] px-6 py-3 text-[14.5px] font-semibold text-ink transition hover:border-accent hover:text-accent"
+        >
+          تماس با ما
         </Link>
       </div>
-    </Container>
+    </main>
   );
 }

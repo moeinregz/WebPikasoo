@@ -1,0 +1,12 @@
+app/admin/(protected)/products/page.tsx
+app/api/admin/products/[id]/route.ts
+app/api/admin/products/route.ts
+app/api/admin/uploads/route.ts
+app/product/[slug]/page.tsx
+components/admin/ProductForm.tsx
+components/home/FeaturedProducts.tsx
+components/product/ProductGallery.tsx
+components/product/RelatedProducts.tsx
+components/shop/ProductGrid.tsx
+components/ui/ProductCard.tsx
+lib/server/productImages.ts

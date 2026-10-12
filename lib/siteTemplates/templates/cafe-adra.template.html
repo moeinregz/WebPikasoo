@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{brand}} | قهوه، شیرینی و صبحانه</title>
+<meta name="description" content="{{brand}}؛ قهوه‌ی تازه‌آسیاب، شیرینی و یه گوشه‌ی دنج. {{address}}">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --espresso:{{c:text}}; --milk:{{c:bg}}; --saffron:{{c:mix(secondary,bg,0.25)}}; --tomato:{{c:mix(accent,black,0.4)}};
+  --hero:{{c:mix(secondary,bg,0.25)}}; --hero-ink:{{c:ink(mix(secondary,bg,0.25))}}; --hero-accent:{{c:pref(mix(secondary,bg,0.25),3,mix(accent,black,0.4),text,bg)}};
+  --band:{{c:text}};
+  --about:{{c:mix(primary,black,0.3)}}; --about-ink:{{c:ink(mix(primary,black,0.3))}};
+  --menu:{{c:mix(secondary,bg,0.55)}}; --menu-ink:{{c:ink(mix(secondary,bg,0.55))}};
+  --space:{{c:primary}}; --space-ink:{{c:ink(primary)}};
+  --review:{{c:mix(secondary,white,0.45)}}; --review-ink:{{c:ink(mix(secondary,white,0.45))}};
+  --contact:{{c:mix(accent,black,0.4)}}; --contact-ink:{{c:ink(mix(accent,black,0.4))}};
+  --foot:{{c:text}}; --foot-ink:{{c:bg}};
+  --t1:{{c:mix(bg,white,0.35)}}; --t2:{{c:mix(secondary,bg,0.25)}}; --t3:{{c:mix(accent,bg,0.5)}}; --t4:{{c:mix(secondary,white,0.45)}};
+  --display:'Lalezar','Vazirmatn',Tahoma,sans-serif;
+  --body:'Vazirmatn',Tahoma,'Segoe UI',system-ui,sans-serif;
+  --safe-t:env(safe-area-inset-top,0px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --hero:{{c:mix(mix(secondary,bg,0.25),black,0.12)}}; --hero-ink:{{c:ink(mix(mix(secondary,bg,0.25),black,0.12))}}; --hero-accent:{{c:pref(mix(mix(secondary,bg,0.25),black,0.12),3,mix(accent,black,0.4),text,bg)}};
+    --about:{{c:mix(mix(primary,black,0.3),black,0.25)}}; --about-ink:{{c:ink(mix(mix(primary,black,0.3),black,0.25))}};
+    --menu:{{c:mix(mix(secondary,bg,0.55),black,0.15)}}; --menu-ink:{{c:ink(mix(mix(secondary,bg,0.55),black,0.15))}};
+    --space:{{c:mix(primary,black,0.3)}}; --space-ink:{{c:ink(mix(primary,black,0.3))}};
+    --review:{{c:mix(mix(secondary,white,0.45),black,0.2)}}; --review-ink:{{c:ink(mix(mix(secondary,white,0.45),black,0.2))}};
+    --contact:{{c:mix(mix(accent,black,0.4),black,0.18)}}; --contact-ink:{{c:ink(mix(mix(accent,black,0.4),black,0.18))}};
+    --t1:{{c:mix(mix(bg,white,0.35),black,0.1)}}; --t2:{{c:mix(mix(secondary,bg,0.25),black,0.1)}}; --t3:{{c:mix(mix(accent,bg,0.5),black,0.18)}}; --t4:{{c:mix(mix(secondary,white,0.45),black,0.15)}};
+  }
+}
+:root[data-theme="dark"]{
+  --hero:{{c:mix(mix(secondary,bg,0.25),black,0.12)}}; --hero-ink:{{c:ink(mix(mix(secondary,bg,0.25),black,0.12))}}; --hero-accent:{{c:pref(mix(mix(secondary,bg,0.25),black,0.12),3,mix(accent,black,0.4),text,bg)}};
+  --about:{{c:mix(mix(primary,black,0.3),black,0.25)}}; --about-ink:{{c:ink(mix(mix(primary,black,0.3),black,0.25))}};
+  --menu:{{c:mix(mix(secondary,bg,0.55),black,0.15)}}; --menu-ink:{{c:ink(mix(mix(secondary,bg,0.55),black,0.15))}};
+  --space:{{c:mix(primary,black,0.3)}}; --space-ink:{{c:ink(mix(primary,black,0.3))}};
+  --review:{{c:mix(mix(secondary,white,0.45),black,0.2)}}; --review-ink:{{c:ink(mix(mix(secondary,white,0.45),black,0.2))}};
+  --contact:{{c:mix(mix(accent,black,0.4),black,0.18)}}; --contact-ink:{{c:ink(mix(mix(accent,black,0.4),black,0.18))}};
+  --t1:{{c:mix(mix(bg,white,0.35),black,0.1)}}; --t2:{{c:mix(mix(secondary,bg,0.25),black,0.1)}}; --t3:{{c:mix(mix(accent,bg,0.5),black,0.18)}}; --t4:{{c:mix(mix(secondary,white,0.45),black,0.15)}};
+}
+*{box-sizing:border-box;margin:0}
+html{
+  scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);
+  -webkit-text-size-adjust:100%;
+  background:linear-gradient(var(--hero),var(--hero)) top/100% 50vh no-repeat, var(--foot);
+}
+html.menu-open{overflow:hidden}
+body{
+  background:var(--foot); color:var(--foot-ink);
+  font-family:var(--body); line-height:1.8; font-size:16px;
+  overflow-x:hidden; overflow-x:clip;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid currentColor;outline-offset:3px;border-radius:8px}
+.wrap{width:min(1120px,calc(100% - 44px));margin-inline:auto}
+.sec{position:relative;padding:84px 0 70px}
+h1,h2,h3{font-family:var(--display);font-weight:400}
+h2{font-size:clamp(36px,9vw,66px);line-height:1.25}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 28px;border-radius:999px;font:700 16px var(--body);text-decoration:none;cursor:pointer;transition:transform .2s ease,background .2s ease}
+.btn:active{transform:scale(.95)}
+.btn-dark{background:var(--espresso);color:var(--milk)}
+.btn-line{border:2.5px solid currentColor;background:transparent}
+.btn-milk{background:var(--milk);color:var(--tomato)}
+.edge{height:14px;background:var(--to)}
+.edge::before{content:"";display:block;height:14px;background:radial-gradient(circle at 14px 0,var(--from) 13.5px,transparent 14px) 0 0/28px 14px repeat-x}
+
+/* ---------- header ---------- */
+.hdr{position:fixed;inset-inline:10px;top:calc(10px + env(safe-area-inset-top,0px));z-index:200;height:56px;border-radius:999px;background:var(--espresso);color:var(--milk);display:flex;align-items:center;justify-content:space-between;padding:0 20px 0 7px;box-shadow:0 8px 26px rgba(20,8,2,.35);max-width:1120px;margin-inline:auto}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;font:400 27px/1 var(--display)}
+.logo svg{width:30px;height:30px}
+.nav{display:none;gap:4px}
+.nav a{padding:6px 15px;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;transition:background .2s}
+.nav a:hover{background:rgba(255,243,220,.16)}
+.acts{display:flex;align-items:center;gap:8px}
+.ic{width:42px;height:42px;border-radius:50%;background:var(--saffron);color:var(--espresso);display:grid;place-items:center;border:0;cursor:pointer}
+.ic svg{width:21px;height:21px}
+.burger{flex-direction:column;gap:5px}
+.burger{display:flex;align-items:center;justify-content:center}
+.burger i{display:block;width:20px;height:2.5px;background:var(--espresso);border-radius:2px;transition:transform .35s ease,opacity .2s}
+.menu-open .burger i:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-open .burger i:nth-child(2){opacity:0}
+.menu-open .burger i:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* ---------- fullscreen menu ---------- */
+.ov{position:fixed;inset:0;z-index:150;background:var(--espresso);display:flex;flex-direction:column;padding-top:calc(env(safe-area-inset-top,0px) + 78px);overflow:hidden;visibility:hidden;transition:visibility 0s .8s}
+.menu-open .ov{visibility:visible;transition-delay:0s}
+.ov .row{flex:1;min-height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;text-decoration:none;background:var(--bg);color:var(--ink);font:400 clamp(40px,12vw,70px)/1 var(--display);transform:translateX(var(--from));transition:transform .6s cubic-bezier(.7,0,.2,1) calc(var(--i)*70ms)}
+.menu-open .ov .row{transform:none}
+.ov .row i{font-style:normal;font-size:.8em;display:inline-block;animation:bob 3s ease-in-out infinite}
+.ov .row:active{filter:brightness(.92)}
+.ov-foot{flex:none;padding:14px 26px calc(14px + env(safe-area-inset-bottom,0px));color:var(--milk);display:flex;flex-direction:column;gap:2px;font-size:14px}
+.ov-foot a{font:400 28px/1.3 var(--display);text-decoration:none;color:var(--saffron)}
+.fab{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;width:58px;height:58px;border-radius:50%;background:var(--tomato);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px rgba(0,0,0,.35);text-decoration:none}
+.fab svg{width:26px;height:26px}
+.fab::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--tomato);animation:ring 2s ease-out infinite}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:var(--hero);color:var(--hero-ink);min-height:100vh;min-height:100svh;padding:calc(56px + 10px + 48px) 0 56px;display:flex;align-items:center}
+.hero .wrap{position:relative;z-index:1;display:grid;gap:14px;align-items:center}
+.hero h1{font-size:clamp(84px,27vw,200px);line-height:.95;display:flex;flex-wrap:wrap;gap:0 .22em}
+.hero h1 span{display:inline-block;animation:rise .9s cubic-bezier(.2,.9,.3,1.25) both}
+.hero h1 span:nth-child(2){animation-delay:.14s;color:var(--hero-accent)}
+.lead{font-size:clamp(17px,4.4vw,22px);font-weight:500;max-width:30ch;animation:rise .8s .4s both}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;animation:rise .8s .55s both}
+.hero-art{width:min(86vw,440px);margin-inline:auto;animation:rise 1s .25s cubic-bezier(.2,.9,.3,1.1) both}
+.hero-art svg{width:100%;height:auto;display:block;overflow:visible}
+.cup{animation:bob 4.5s ease-in-out infinite}
+.steam{fill:none;stroke:{{c:bg}};stroke-width:9;stroke-linecap:round;stroke-dasharray:70 200;animation:steam 3.2s ease-in-out infinite;opacity:.9}
+.steam:nth-of-type(2){animation-delay:.6s}.steam:nth-of-type(3){animation-delay:1.2s}
+.spark{transform-box:fill-box;transform-origin:center;animation:twinkle 2.4s ease-in-out infinite}
+.beans{position:absolute;inset:0;pointer-events:none;z-index:0}
+.bean{position:absolute;top:-80px;left:var(--x);width:var(--s);height:calc(var(--s)*1.5);color:{{c:mix(text,primary,0.35)}};--cut:{{c:mix(secondary,bg,0.25)}};opacity:.85;animation:fall var(--d) linear var(--dl) infinite}
+.bean svg{width:100%;height:100%;display:block}
+
+/* ---------- marquee ---------- */
+.band{background:var(--band);color:var(--milk);overflow:hidden;direction:ltr;padding:10px 0}
+.track{display:flex;width:max-content;animation:slide 30s linear infinite;font:400 30px/1.5 var(--display);white-space:nowrap}
+.track span{padding:0 18px;direction:rtl}
+.track b{color:var(--saffron);font-weight:400}
+
+/* ---------- about ---------- */
+.about{background:var(--about);color:var(--about-ink)}
+.about-head{position:relative;display:grid;gap:18px;padding-inline-start:0}
+.about-head h2{max-width:14ch}
+.badge{position:absolute;top:-6px;left:-4px;width:96px;height:96px;rotate:-10deg}
+.spin{transform-origin:70px 70px;animation:spin 16s linear infinite}
+.about-text{font-size:17.5px;max-width:46ch;margin-top:22px;opacity:.95}
+.swipe{display:inline-flex;gap:8px;margin-top:22px;font-size:14px;font-weight:700;color:var(--saffron)}
+.swipe span{display:inline-block;animation:nudge 1.4s ease-in-out infinite}
+.story{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px 22px 34px;margin-inline:-22px;scrollbar-width:none}
+.story::-webkit-scrollbar,.gal::-webkit-scrollbar,.tabs::-webkit-scrollbar,.revs::-webkit-scrollbar{display:none}
+.card{flex:0 0 78%;scroll-snap-align:center;background:var(--bg);color:{{c:text}};border-radius:36px 36px 36px 10px;padding:26px 24px 30px;min-height:262px;rotate:var(--r);display:flex;flex-direction:column;gap:8px}
+.card:nth-child(2){border-radius:36px 36px 10px 36px}
+.card .emo{font-size:60px;line-height:1;display:inline-block;animation:bob 3.4s ease-in-out infinite;align-self:flex-start}
+.card h3{font-size:30px;line-height:1.2}
+.card p{font-size:16px;line-height:1.75}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.chips span{border:2px solid rgba(255,243,220,.5);border-radius:999px;padding:4px 16px;font-size:14.5px}
+
+/* ---------- menu ---------- */
+.menu{background:var(--menu);color:var(--menu-ink)}
+.menu-head p{max-width:40ch;margin-top:10px;font-size:17px}
+.tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);z-index:20;display:flex;gap:10px;overflow-x:auto;padding:12px 22px;margin:22px -22px 0;background:var(--menu);scrollbar-width:none}
+.tab{flex:none;min-height:46px;padding:0 20px;border-radius:999px;border:2.5px solid var(--espresso);background:transparent;color:var(--espresso);font:700 15px var(--body);cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.tab[aria-selected="true"]{background:var(--espresso);color:var(--milk);transform:translateY(-2px)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:18px 0 10px}
+.tile{position:relative;background:var(--bg);color:{{c:text}};padding:16px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:240px;border-radius:32px 32px 32px 10px;animation:pop .55s cubic-bezier(.2,.9,.3,1.3) both;transition:transform .2s}
+.tile:nth-child(even){border-radius:32px 32px 10px 32px}
+.tile:active{transform:scale(.96) rotate(-1deg)}
+.tile .ew{width:76px;height:76px;border-radius:50% 46% 54% 50%;background:rgba(255,255,255,.55);display:grid;place-items:center;font-size:40px;animation:bob 3.4s ease-in-out infinite}
+.tile h3{font-size:25px;line-height:1.2;margin-top:4px}
+.tile p{font-size:13.5px;line-height:1.65;opacity:.88;flex:1}
+.price{background:var(--espresso);color:var(--milk);border-radius:999px;padding:3px 13px;font-weight:700;font-size:14.5px}
+.price small{font-weight:400;font-size:11px;opacity:.8;margin-inline-start:3px}
+.tag{position:absolute;top:12px;inset-inline-end:10px;background:var(--tomato);color:#fff;font-size:12px;font-weight:700;padding:1px 11px;border-radius:999px;rotate:8deg}
+.menu-cta{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* ---------- space ---------- */
+.space{background:var(--space);color:var(--space-ink)}
+.space p.sub{max-width:40ch;margin-top:10px;font-size:17px}
+.gal{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:28px 22px 36px;margin-inline:-22px;scrollbar-width:none}
+.shot{position:relative;flex:0 0 72%;aspect-ratio:4/5;border-radius:150px 150px 26px 26px;overflow:hidden;scroll-snap-align:center;background:{{c:text}}}
+.shot svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.shot figcaption{position:absolute;inset-inline:0;bottom:0;padding:54px 20px 20px;background:linear-gradient(transparent,rgba(20,10,5,.82));color:{{c:bg}};display:flex;flex-direction:column;line-height:1.5}
+.shot b{font:400 26px/1.2 var(--display)}
+.shot span{font-size:14px;opacity:.9}
+.rain{animation:rain 1.1s linear infinite}
+.swing{animation:swing 3.6s ease-in-out infinite;transform-origin:0 0}
+.sway{animation:sway 4s ease-in-out infinite}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 3s ease-in-out infinite}
+.sm{fill:none;stroke:{{c:bg}};stroke-width:5;stroke-linecap:round;stroke-dasharray:40 100;animation:steam 3s ease-in-out infinite}
+
+/* ---------- reviews ---------- */
+.reviews{background:var(--review);color:var(--review-ink)}
+.rate{display:inline-flex;align-items:center;gap:10px;margin-top:12px;font-weight:700;font-size:17px}
+.rate b{color:{{c:mix(accent,black,0.2)}};letter-spacing:2px;font-size:22px}
+.revs{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:26px 22px 36px;margin-inline:-22px;scrollbar-width:none}
+.rev{flex:0 0 80%;scroll-snap-align:center;background:var(--bg);border-radius:30px 30px 30px 8px;padding:24px 22px;position:relative;display:flex;flex-direction:column;gap:12px;color:{{c:text}};rotate:var(--r)}
+.rev:nth-child(even){border-radius:30px 30px 8px 30px}
+.rev::before{content:"”";position:absolute;top:2px;inset-inline-start:16px;font:400 90px/1 var(--display);opacity:.22}
+.rev .st{color:{{c:mix(accent,black,0.2)}};letter-spacing:3px;font-size:18px}
+.rev p{font-size:16px;line-height:1.85;position:relative}
+.who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:400 22px var(--display);background:{{c:text}};color:{{c:bg}}}
+.who b{display:block;line-height:1.3}.who small{opacity:.7}
+
+/* ---------- contact ---------- */
+.contact{background:var(--contact);color:var(--contact-ink)}
+.contact .wrap{display:grid;gap:34px}
+.contact h2{max-width:11ch}
+.info{display:grid;gap:18px;margin-top:22px}
+.info div{display:flex;gap:14px;align-items:flex-start;font-size:17px}
+.info .ei{flex:none;width:46px;height:46px;border-radius:50%;background:rgba(255,243,220,.18);display:grid;place-items:center;font-size:22px}
+.info a.num{font:400 clamp(34px,9vw,46px)/1.1 var(--display);text-decoration:none;display:block;direction:ltr;text-align:right;unicode-bidi:plaintext}
+.info small{display:block;opacity:.8;font-size:14px}
+.contact .cta{animation:none}
+.map{width:100%;height:auto;display:block;border-radius:30px;box-shadow:0 18px 40px rgba(60,10,0,.35)}
+.map text{font-family:var(--body)}
+.pin{animation:bob 2.2s ease-in-out infinite}
+
+/* ---------- footer ---------- */
+.foot{background:var(--foot);color:var(--foot-ink);padding:44px 0 50px;text-align:center}
+.foot .big{font:400 44px/1.2 var(--display);color:var(--saffron)}
+.foot p{opacity:.8;font-size:15px}
+
+/* ---------- reveal ---------- */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+/* ---------- keyframes ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(44px)}to{opacity:1;transform:none}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes steam{0%{stroke-dashoffset:70;opacity:0}30%{opacity:.95}100%{stroke-dashoffset:-130;opacity:0}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0);opacity:.5}50%{transform:scale(1.15) rotate(20deg);opacity:1}}
+@keyframes fall{from{transform:translateY(0) rotate(0)}to{transform:translateY(130vh) rotate(320deg)}}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-9px)}}
+@keyframes pop{from{opacity:0;transform:scale(.82) translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ring{from{transform:scale(1);opacity:.8}to{transform:scale(1.7);opacity:0}}
+@keyframes rain{from{transform:translateY(-40px)}to{transform:translateY(260px)}}
+@keyframes swing{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-5deg)}}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+/* ---------- larger screens ---------- */
+@media (min-width:700px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .revs{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin:0;padding:34px 0}
+  .rev{flex:none}
+  .badge{width:130px;height:130px;left:0}
+}
+@media (min-width:900px){
+  .nav{display:flex}
+  .burger,.ov,.fab{display:none}
+  .hdr{padding:0 22px 0 7px}
+  .hero .wrap{grid-template-columns:1.1fr .9fr;gap:40px}
+  .hero-art{width:min(100%,480px)}
+  .story{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin:0;padding:34px 0 10px}
+  .swipe{display:none}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .gal{display:grid;grid-template-columns:repeat(5,1fr);overflow:visible;margin:0;padding:34px 0}
+  .shot{flex:none;border-radius:120px 120px 22px 22px}
+  .shot:nth-child(even){margin-top:36px}
+  .tabs{margin-inline:0;padding-inline:0}
+  .contact .wrap{grid-template-columns:1fr 1fr;align-items:center;gap:60px}
+  .about-head{max-width:760px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .js .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="bean" viewBox="0 0 40 60"><ellipse cx="20" cy="30" rx="16" ry="26" fill="currentColor"/><path d="M20 6C8 22 32 38 20 54" fill="none" stroke="var(--cut)" stroke-width="4" stroke-linecap="round"/></symbol>
+  <symbol id="phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.6 3.6a1 1 0 01-.25 1z"/></symbol>
+</svg>
+
+<!-- Header -->
+<header class="hdr">
+  <a class="logo" href="#top" aria-label="{{brand}}">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 12h19v6a9 9 0 01-9 9h-1a9 9 0 01-9-9z" fill="{{c:bg}}"/><path d="M24 14h2a3.5 3.5 0 010 7h-2.5" fill="none" stroke="{{c:bg}}" stroke-width="2.5"/><path d="M11 9c-2-2 2-3 0-6M17 9c-2-2 2-3 0-6" fill="none" stroke="{{c:mix(secondary,bg,0.25)}}" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>{{brand}}</span>
+  </a>
+  <nav class="nav" aria-label="پیوندها">
+    <a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#space">فضای کافه</a><a href="#reviews">نظرات</a><a href="#contact">تماس</a>
+  </nav>
+  <div class="acts">
+    <a class="ic" href="{{phone_href}}" aria-label="تماس با {{brand}}"><svg><use href="#phone"/></svg></a>
+    <button class="ic burger" id="burger" aria-label="باز کردن منو" aria-expanded="false" aria-controls="ov"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<!-- Fullscreen mobile menu -->
+<nav class="ov" id="ov" aria-label="منوی اصلی" inert>
+  <a class="row" href="#about" style="--i:0;--bg:{{c:mix(secondary,bg,0.25)}};--ink:{{c:ink(mix(secondary,bg,0.25))}};--from:105%"><span>درباره ما</span><i>☕</i></a>
+  <a class="row" href="#menu" style="--i:1;--bg:{{c:mix(secondary,bg,0.55)}};--ink:{{c:ink(mix(secondary,bg,0.55))}};--from:-105%"><span>منو</span><i>🍰</i></a>
+  <a class="row" href="#space" style="--i:2;--bg:{{c:primary}};--ink:{{c:ink(primary)}};--from:105%"><span>فضای کافه</span><i>🪴</i></a>
+  <a class="row" href="#reviews" style="--i:3;--bg:{{c:mix(secondary,white,0.45)}};--ink:{{c:ink(mix(secondary,white,0.45))}};--from:-105%"><span>نظرات</span><i>💬</i></a>
+  <a class="row" href="#contact" style="--i:4;--bg:{{c:mix(accent,black,0.4)}};--ink:{{c:ink(mix(accent,black,0.4))}};--from:105%"><span>تماس و آدرس</span><i>📍</i></a>
+  <div class="ov-foot">
+    <!--each:phones--><a href="{{phone_href}}">{{phone}}</a><!--/each:phones-->
+    <span>{{address}}</span>
+    <!--if:hours--><span>{{hours}}</span><!--/if:hours-->
+  </div>
+</nav>
+
+<a class="fab" href="{{phone_href}}" aria-label="تماس با {{brand}}"><svg><use href="#phone"/></svg></a>
+
+<main>
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="beans" aria-hidden="true" id="beans"></div>
+  <div class="wrap">
+    <div>
+      <h1><span>{{brand_first}}</span><!--if:brand_rest--><span>{{brand_rest}}</span><!--/if:brand_rest--></h1>
+      <p class="lead">قهوه‌ی تازه‌آسیاب، شیرینی و یه گوشه‌ی دنج برای یه استراحت خوب.</p>
+      <div class="cta">
+        <a class="btn btn-dark" href="#menu">دیدن منو</a>
+        <a class="btn btn-line" href="{{phone_href}}">تماس با کافه</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 400 400" role="img" aria-label="فنجان قهوه با بخار">
+        <defs><clipPath id="cupClip"><path d="M90 170H310V220C310 290 270 322 200 322C130 322 90 290 90 220Z"/></clipPath></defs>
+        <circle cx="200" cy="215" r="172" fill="{{c:mix(secondary,bg,0.55)}}"/>
+        <g class="cup">
+          <ellipse cx="200" cy="330" rx="152" ry="28" fill="{{c:text}}" opacity=".18"/>
+          <ellipse cx="200" cy="318" rx="150" ry="28" fill="{{c:bg}}"/>
+          <ellipse cx="200" cy="312" rx="112" ry="17" fill="{{c:mix(bg,secondary,0.3)}}"/>
+          <path d="M306 192C368 184 368 274 298 268" fill="none" stroke="{{c:text}}" stroke-width="28" stroke-linecap="round"/>
+          <path d="M306 192C368 184 368 274 298 268" fill="none" stroke="{{c:bg}}" stroke-width="15" stroke-linecap="round"/>
+          <path d="M90 170H310V220C310 290 270 322 200 322C130 322 90 290 90 220Z" fill="{{c:bg}}" stroke="{{c:text}}" stroke-width="6" stroke-linejoin="round"/>
+          <g clip-path="url(#cupClip)"><rect x="80" y="214" width="240" height="26" fill="{{c:mix(accent,black,0.4)}}"/><rect x="80" y="246" width="240" height="8" fill="{{c:mix(secondary,bg,0.25)}}"/></g>
+          <ellipse cx="200" cy="170" rx="110" ry="21" fill="{{c:mix(text,primary,0.35)}}" stroke="{{c:text}}" stroke-width="6"/>
+          <path d="M200 181C182 171 182 158 191 158C196 158 200 161 200 165C200 161 204 158 209 158C218 158 218 171 200 181Z" fill="{{c:mix(bg,secondary,0.15)}}"/>
+          <path class="steam" d="M160 130C138 108 182 88 160 58"/>
+          <path class="steam" d="M200 124C178 100 222 80 200 48"/>
+          <path class="steam" d="M240 130C218 108 262 88 240 58"/>
+        </g>
+        <path class="spark" d="M62 96l6 16 16 6-16 6-6 16-6-16-16-6 16-6z" fill="{{c:bg}}"/>
+        <path class="spark" style="animation-delay:.8s" d="M338 70l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="{{c:mix(secondary,bg,0.25)}}"/>
+        <path class="spark" style="animation-delay:1.5s" d="M352 300l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="{{c:bg}}"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="edge" style="--from:var(--hero);--to:var(--band)"></div>
+<div class="band" aria-hidden="true"><div class="track" id="track"></div></div>
+<div class="edge" style="--from:var(--band);--to:var(--about)"></div>
+
+<!-- About -->
+<section class="sec about" id="about">
+  <div class="wrap">
+    <div class="about-head rv">
+      <h2>{{brand}}؛ یه گوشه‌ی دنج برای یه استراحت خوب</h2>
+      <svg class="badge" viewBox="0 0 140 140" aria-hidden="true">
+        <defs><path id="circ" d="M70 70m-52 0a52 52 0 1 1 104 0a52 52 0 1 1-104 0"/></defs>
+        <circle cx="70" cy="70" r="68" fill="{{c:mix(secondary,bg,0.25)}}"/>
+        <g class="spin"><text font-family="Lalezar,Vazirmatn,sans-serif" font-size="14" fill="{{c:text}}" style="direction:ltr"><textPath href="#circ" textLength="322" lengthAdjust="spacing">COFFEE • COZY CAFÉ • COFFEE • </textPath></text></g>
+        <text x="70" y="86" text-anchor="middle" font-size="40">☕</text>
+      </svg>
+    </div>
+    <p class="about-text rv">یه کافه‌ی کوچیک باز کردیم که بوی قهوه‌ش از همون دم در می‌رسه. اینجا قهوه رو تازه آسیاب می‌کنیم، شیرینی‌ها رو با دقت انتخاب می‌کنیم و می‌خوایم هر مهمون حس کنه وقت داره؛ چه برای کار، چه یه قرار دو نفره.</p>
+    <div class="chips rv" style="margin-top:22px"><span>🪴 فضای دنج</span><span>☕ قهوه‌ی تازه‌آسیاب</span><span>🍰 شیرینی و صبحانه</span></div>
+    <p class="swipe"><span>👈</span> بکشید تا بقیه رو ببینید</p>
+    <div class="story rv">
+      <article class="card" style="--bg:{{c:mix(secondary,bg,0.25)}};--r:-2deg"><span class="emo">☕</span><h3>قهوه‌ی تازه‌آسیاب</h3><p>هر فنجون از دونه‌های تازه‌آسیاب‌شده دم می‌شه؛ غلیظ، خوش‌عطر و گرم.</p></article>
+      <article class="card" style="--bg:{{c:mix(secondary,bg,0.55)}};--r:1.6deg"><span class="emo">🥐</span><h3>شیرینی و صبحانه</h3><p>از کروسان صبحگاهی تا چیزکیک عصرونه؛ همه‌چی برای یه وقفه‌ی شیرین.</p></article>
+      <article class="card" style="--bg:{{c:bg}};--r:-1.2deg"><span class="emo">🪴</span><h3>یه گوشه‌ی دنج</h3><p>نور گرم، گل و گیاه و صندلی‌های راحت؛ برای کتاب، لپ‌تاپ یا گپ با دوست.</p></article>
+    </div>
+  </div>
+</section>
+
+<div class="edge" style="--from:var(--about);--to:var(--menu)"></div>
+
+<!-- Menu -->
+<section class="sec menu" id="menu">
+  <div class="wrap">
+    <div class="menu-head rv">
+      <h2>منوی {{brand}}</h2>
+      <p>یه دسته رو انتخاب کن و ببین امروز چی دلت می‌خواد.</p>
+    </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="دسته‌بندی منو"></div>
+    <div class="grid" id="grid" role="tabpanel"></div>
+    <div class="menu-cta">
+      <a class="btn btn-dark" href="{{phone_href}}">تماس با کافه</a>
+    </div>
+  </div>
+</section>
+
+<div class="edge" style="--from:var(--menu);--to:var(--space)"></div>
+
+<!-- Space -->
+<section class="sec space" id="space">
+  <div class="wrap">
+    <div class="rv">
+      <h2>فضای کافه</h2>
+      <p class="sub">نور گرم، صدای دم‌کردن قهوه و کلی گوشه‌ی دنج. یه نگاه بنداز.</p>
+    </div>
+    <div class="gal rv">
+
+      <figure class="shot" aria-label="پنجره‌ی بارونی">
+        <svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="300" height="375" fill="#1F4356"/>
+          <defs><clipPath id="win"><path d="M50 220V115a100 100 0 0 1 200 0V220z"/></clipPath></defs>
+          <path d="M50 220V115a100 100 0 0 1 200 0V220z" fill="#2E6A86"/>
+          <g clip-path="url(#win)" stroke="#BFE3F2" stroke-width="3" stroke-linecap="round">
+            <line class="rain" x1="70" y1="0" x2="66" y2="18"/><line class="rain" style="animation-delay:-.3s" x1="100" y1="0" x2="96" y2="22"/><line class="rain" style="animation-delay:-.7s" x1="130" y1="0" x2="126" y2="16"/><line class="rain" style="animation-delay:-.2s" x1="165" y1="0" x2="161" y2="20"/><line class="rain" style="animation-delay:-.9s" x1="195" y1="0" x2="191" y2="18"/><line class="rain" style="animation-delay:-.5s" x1="225" y1="0" x2="221" y2="22"/><line class="rain" style="animation-delay:-.1s" x1="85" y1="60" x2="81" y2="78"/><line class="rain" style="animation-delay:-.6s" x1="210" y1="70" x2="206" y2="88"/>
+          </g>
+          <path d="M50 220V115a100 100 0 0 1 200 0V220zM150 15V220M50 130H250" fill="none" stroke="{{c:mix(bg,secondary,0.12)}}" stroke-width="7"/>
+          <rect y="285" width="300" height="90" fill="{{c:mix(text,primary,0.55)}}"/>
+          <path d="M110 302h70v22a35 30 0 0 1-70 0z" fill="{{c:bg}}"/>
+          <path d="M180 308h8a12 12 0 010 24h-8" fill="none" stroke="{{c:bg}}" stroke-width="7"/>
+          <ellipse cx="145" cy="302" rx="35" ry="7" fill="{{c:mix(text,primary,0.35)}}"/>
+          <path class="sm" d="M134 292c-8-10 8-16 0-28"/><path class="sm" style="animation-delay:.8s" d="M156 292c-8-10 8-16 0-28"/>
+        </svg>
+        <figcaption><b>پنجره‌ی بارونی</b><span>قهوه‌ی داغ، صدای بارون</span></figcaption>
+      </figure>
+
+      <figure class="shot" aria-label="گوشه‌ی کتاب">
+        <svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="300" height="375" fill="{{c:mix(accent,bg,0.25)}}"/>
+          <rect x="28" y="36" width="244" height="214" rx="6" fill="{{c:mix(text,primary,0.55)}}"/>
+          <rect x="38" y="46" width="224" height="62" fill="{{c:mix(text,primary,0.35)}}"/><rect x="38" y="118" width="224" height="62" fill="{{c:mix(text,primary,0.35)}}"/><rect x="38" y="190" width="224" height="50" fill="{{c:mix(text,primary,0.35)}}"/>
+          <g><rect x="46" y="54" width="16" height="54" fill="{{c:mix(accent,black,0.4)}}"/><rect x="64" y="62" width="14" height="46" fill="{{c:primary}}"/><rect x="80" y="50" width="18" height="58" fill="{{c:mix(secondary,bg,0.55)}}"/><rect x="100" y="66" width="14" height="42" fill="{{c:bg}}"/><rect x="116" y="56" width="16" height="52" fill="{{c:mix(accent,bg,0.5)}}"/><rect x="180" y="60" width="18" height="48" fill="{{c:primary}}"/><rect x="200" y="52" width="14" height="56" fill="{{c:mix(accent,black,0.4)}}"/><rect x="216" y="64" width="18" height="44" fill="{{c:mix(secondary,bg,0.25)}}"/></g>
+          <g><rect x="48" y="128" width="18" height="52" fill="{{c:bg}}"/><rect x="68" y="122" width="14" height="58" fill="{{c:mix(accent,black,0.4)}}"/><rect x="84" y="134" width="16" height="46" fill="{{c:primary}}"/><rect x="150" y="126" width="16" height="54" fill="{{c:mix(secondary,bg,0.55)}}"/><rect x="168" y="132" width="18" height="48" fill="{{c:mix(accent,bg,0.5)}}"/><rect x="230" y="124" width="16" height="56" fill="{{c:mix(secondary,bg,0.25)}}"/></g>
+          <circle cx="220" cy="214" r="18" fill="{{c:mix(secondary,bg,0.55)}}"/><path d="M60 240h60v-22a30 22 0 0 0-60 0z" fill="{{c:bg}}"/>
+          <rect x="24" y="285" width="140" height="90" rx="28" fill="{{c:primary}}"/><rect x="12" y="300" width="34" height="75" rx="14" fill="{{c:mix(primary,black,0.35)}}"/><rect x="142" y="300" width="34" height="75" rx="14" fill="{{c:mix(primary,black,0.35)}}"/>
+          <path d="M206 330h56l-7 45h-42z" fill="#C8553D"/>
+          <g class="sway" style="transform-origin:234px 332px"><ellipse cx="220" cy="300" rx="11" ry="34" transform="rotate(-28 234 332)" fill="#2F6B4A"/><ellipse cx="234" cy="292" rx="11" ry="40" fill="#3C8459"/><ellipse cx="248" cy="300" rx="11" ry="34" transform="rotate(28 234 332)" fill="#2F6B4A"/></g>
+        </svg>
+        <figcaption><b>گوشه‌ی کتاب</b><span>برای خوندن و کار کردن</span></figcaption>
+      </figure>
+
+      <figure class="shot" aria-label="بار قهوه">
+        <svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="300" height="375" fill="#C8553D"/>
+          <g stroke="{{c:text}}" stroke-width="3"><line x1="70" y1="0" x2="70" y2="40"/><line x1="150" y1="0" x2="150" y2="30"/><line x1="230" y1="0" x2="230" y2="40"/></g>
+          <path d="M42 68A28 28 0 0 1 98 68Z" fill="{{c:mix(secondary,bg,0.25)}}"/><path d="M122 58A28 28 0 0 1 178 58Z" fill="{{c:mix(secondary,bg,0.25)}}"/><path d="M202 68A28 28 0 0 1 258 68Z" fill="{{c:mix(secondary,bg,0.25)}}"/>
+          <circle cx="70" cy="74" r="7" fill="{{c:bg}}"/><circle cx="150" cy="64" r="7" fill="{{c:bg}}"/><circle cx="230" cy="74" r="7" fill="{{c:bg}}"/>
+          <rect x="95" y="175" width="110" height="80" rx="8" fill="#D8D2C4"/><rect x="105" y="158" width="90" height="20" rx="6" fill="#B8B2A4"/>
+          <circle cx="150" cy="198" r="9" fill="{{c:bg}}" stroke="{{c:text}}" stroke-width="3"/>
+          <rect x="120" y="222" width="20" height="14" rx="3" fill="{{c:text}}"/><rect x="160" y="222" width="20" height="14" rx="3" fill="{{c:text}}"/>
+          <path class="sm" d="M126 212c-6-8 6-12 0-22"/><path class="sm" style="animation-delay:1s" d="M174 212c-6-8 6-12 0-22"/>
+          <rect y="262" width="300" height="113" fill="{{c:text}}"/><rect y="256" width="300" height="12" fill="{{c:mix(secondary,bg,0.25)}}"/>
+          <path d="M22 256h26v-20a13 10 0 0 0-26 0z" fill="{{c:bg}}"/><path d="M60 256h26v-20a13 10 0 0 0-26 0z" fill="{{c:mix(secondary,bg,0.55)}}"/><path d="M228 256h26v-20a13 10 0 0 0-26 0z" fill="{{c:bg}}"/>
+          <rect x="30" y="290" width="240" height="10" rx="5" fill="{{c:mix(text,primary,0.35)}}"/><rect x="30" y="316" width="180" height="10" rx="5" fill="{{c:mix(text,primary,0.35)}}"/>
+        </svg>
+        <figcaption><b>بار قهوه</b><span>جایی که جادو اتفاق می‌افته</span></figcaption>
+      </figure>
+
+      <figure class="shot" aria-label="نور شبانه">
+        <svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><radialGradient id="glow"><stop offset="0" stop-color="{{c:mix(secondary,bg,0.25)}}" stop-opacity=".85"/><stop offset="1" stop-color="{{c:mix(secondary,bg,0.25)}}" stop-opacity="0"/></radialGradient></defs>
+          <rect width="300" height="375" fill="{{c:text}}"/>
+          <circle cx="240" cy="70" r="20" fill="{{c:bg}}" opacity=".9"/><circle cx="248" cy="64" r="18" fill="{{c:text}}"/>
+          <g transform="translate(70 0)"><g class="swing"><line x1="0" y1="0" x2="0" y2="110" stroke="{{c:bg}}" stroke-width="2"/><circle cy="150" r="75" fill="url(#glow)"/><path d="M-20 112h40l12 28h-64z" fill="{{c:mix(secondary,bg,0.25)}}"/><circle cy="146" r="8" fill="{{c:bg}}"/></g></g>
+          <g transform="translate(150 0)"><g class="swing" style="animation-delay:-1.2s"><line x1="0" y1="0" x2="0" y2="70" stroke="{{c:bg}}" stroke-width="2"/><circle cy="110" r="75" fill="url(#glow)"/><path d="M-20 72h40l12 28h-64z" fill="{{c:mix(secondary,bg,0.55)}}"/><circle cy="106" r="8" fill="{{c:bg}}"/></g></g>
+          <g transform="translate(230 0)"><g class="swing" style="animation-delay:-2.2s"><line x1="0" y1="0" x2="0" y2="130" stroke="{{c:bg}}" stroke-width="2"/><circle cy="170" r="75" fill="url(#glow)"/><path d="M-20 132h40l12 28h-64z" fill="{{c:mix(secondary,bg,0.25)}}"/><circle cy="166" r="8" fill="{{c:bg}}"/></g></g>
+          <rect y="300" width="300" height="75" fill="{{c:mix(text,primary,0.55)}}"/>
+          <path d="M70 310h56v20a28 22 0 0 1-56 0z" fill="{{c:bg}}"/><ellipse cx="98" cy="310" rx="28" ry="6" fill="{{c:mix(text,primary,0.35)}}"/>
+          <path d="M170 310h56v20a28 22 0 0 1-56 0z" fill="{{c:mix(secondary,bg,0.55)}}"/><ellipse cx="198" cy="310" rx="28" ry="6" fill="{{c:mix(text,primary,0.35)}}"/>
+          <path class="sm" d="M98 298c-7-9 7-14 0-24"/><path class="sm" style="animation-delay:1s" d="M198 298c-7-9 7-14 0-24"/>
+        </svg>
+        <figcaption><b>نور شبانه</b><span>چراغ‌های گرم، قرار دو نفره</span></figcaption>
+      </figure>
+
+      <figure class="shot" aria-label="گل و آفتاب">
+        <svg viewBox="0 0 300 375" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="300" height="375" fill="{{c:mix(accent,bg,0.5)}}"/>
+          <circle class="pulse" cx="222" cy="92" r="46" fill="{{c:mix(secondary,bg,0.25)}}"/><circle cx="222" cy="92" r="64" fill="{{c:mix(secondary,bg,0.25)}}" opacity=".28"/>
+          <rect y="300" width="300" height="75" fill="#E9D7B0"/><rect y="294" width="300" height="10" fill="#C9B487"/>
+          <g transform="translate(70 294)"><g class="sway" style="transform-origin:0 0"><path d="M0 0C-20-34-14-80 0-108C14-80 20-34 0 0z" fill="#2F6B4A"/><path d="M0 0C-44-14-70-44-72-74C-30-62-6-32 0 0z" fill="#3C8459"/><path d="M0 0C44-14 70-44 72-74C30-62 6-32 0 0z" fill="#3C8459"/></g></g>
+          <g transform="translate(160 294)"><g class="sway" style="transform-origin:0 0;animation-delay:-1.5s"><path d="M0 0C-16-28-12-64 0-86C12-64 16-28 0 0z" fill="#3C8459"/><path d="M0 0C-36-10-56-34-58-58C-24-48-4-26 0 0z" fill="#2F6B4A"/><path d="M0 0C36-10 56-34 58-58C24-48 4-26 0 0z" fill="#2F6B4A"/></g></g>
+          <g transform="translate(240 294)"><g class="sway" style="transform-origin:0 0;animation-delay:-3s"><path d="M0 0C-14-24-10-54 0-72C10-54 14-24 0 0z" fill="#2F6B4A"/><path d="M0 0C-30-8-46-28-48-48C-20-40-4-22 0 0z" fill="#3C8459"/></g></g>
+          <path d="M42 294h56l-6 50H48z" fill="#C8553D"/><path d="M132 294h56l-6 50h-44z" fill="{{c:mix(secondary,bg,0.55)}}"/><path d="M216 294h48l-5 44h-38z" fill="{{c:primary}}"/>
+        </svg>
+        <figcaption><b>گل و آفتاب</b><span>صبحونه‌ی آروم کنار پنجره</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<div class="edge" style="--from:var(--space);--to:var(--review)"></div>
+
+<!-- Reviews -->
+<section class="sec reviews" id="reviews">
+  <div class="wrap">
+    <div class="rv">
+      <h2>مهمون‌ها چی می‌گن</h2>
+      <div class="rate"><b>★★★★★</b><span>نظر مهمون‌های {{brand}}</span></div>
+    </div>
+    <div class="revs rv">
+      <article class="rev" style="--bg:{{c:bg}};--r:-1.2deg"><span class="st">★★★★★</span><p>لاته‌شون عالیه و فضاش آرومه. برای کار با لپ‌تاپ جای خیلی خوبیه.</p><div class="who"><span class="av">س</span><div><b>سارا ک.</b><small>مهمون همیشگی</small></div></div></article>
+      <article class="rev" style="--bg:{{c:mix(accent,bg,0.65)}};--r:1deg"><span class="st">★★★★★</span><p>چیزکیکشون رو حتماً امتحان کنید. کروسان صبح‌ها هم داغ و تازه‌ست.</p><div class="who"><span class="av">م</span><div><b>محمد ر.</b><small>عاشق شیرینی</small></div></div></article>
+      <article class="rev" style="--bg:{{c:mix(secondary,bg,0.7)}};--r:-.8deg"><span class="st">★★★★★</span><p>برای یه قرار دو نفره اومدیم. نور و موزیک و فضا همه‌چی دلچسب بود.</p><div class="who"><span class="av">ن</span><div><b>نازنین ا.</b><small>قرار دو نفره</small></div></div></article>
+      <article class="rev" style="--bg:{{c:mix(secondary,bg,0.6)}};--r:1.2deg"><span class="st">★★★★★</span><p>آمریکانوی خوش‌عطر و سرویس سریع. این محله یه همچین جایی می‌خواست.</p><div class="who"><span class="av">ا</span><div><b>امیرحسین ت.</b><small>قهوه‌باز</small></div></div></article>
+      <article class="rev" style="--bg:{{c:bg}};--r:-1deg"><span class="st">★★★★★</span><p>حس یه کافه‌ی دنج توی کوچه رو داره. حتماً دوباره میام.</p><div class="who"><span class="av">ا</span><div><b>الهام ش.</b><small>همسایه‌ی کافه</small></div></div></article>
+      <article class="rev" style="--bg:{{c:mix(accent,bg,0.65)}};--r:.8deg"><span class="st">★★★★★</span><p>تست آووکادوشون برای صبحونه توپ بود. قهوه‌ش هم کنارش عالی می‌شینه.</p><div class="who"><span class="av">پ</span><div><b>پویا م.</b><small>صبحونه‌خور</small></div></div></article>
+    </div>
+  </div>
+</section>
+
+<div class="edge" style="--from:var(--review);--to:var(--contact)"></div>
+
+<!-- Contact -->
+<section class="sec contact" id="contact">
+  <div class="wrap">
+    <div class="rv">
+      <h2>بیا یه قهوه بخوریم</h2>
+      <div class="info">
+        <div><span class="ei">📞</span><span><small>شماره‌ی تماس</small><!--each:phones--><a class="num" href="{{phone_href}}">{{phone}}</a><!--/each:phones--></span></div>
+        <div><span class="ei">📍</span><span><small>آدرس</small>{{address}}</span></div>
+        <!--if:hours--><div><span class="ei">🕒</span><span><small>ساعت کاری</small>{{hours}}</span></div><!--/if:hours-->
+      </div>
+      <div class="cta" style="margin-top:26px">
+        <a class="btn btn-milk" href="{{phone_href}}">تماس بگیرید</a>
+        <a class="btn btn-line" href="{{map_url}}" target="_blank" rel="noopener">مسیریابی روی نقشه</a>
+      </div>
+    </div>
+    <div class="rv">
+      <svg class="map" viewBox="0 0 320 260" role="img" aria-label="نقشه‌ی شماتیک محل {{brand}}">
+        <rect width="320" height="260" rx="30" fill="{{c:mix(bg,secondary,0.12)}}"/>
+        <g fill="{{c:mix(bg,secondary,0.3)}}"><rect x="14" y="14" width="80" height="86" rx="10"/><rect x="142" y="14" width="76" height="86" rx="10"/><rect x="264" y="14" width="44" height="86" rx="10"/><rect x="14" y="150" width="80" height="96" rx="10"/><rect x="142" y="150" width="76" height="96" rx="10"/><rect x="264" y="150" width="44" height="96" rx="10"/></g>
+        <g fill="#8CB07A"><circle cx="54" cy="57" r="16"/><circle cx="292" cy="196" r="12"/></g>
+        <g fill="{{c:mix(bg,white,0.5)}}"><rect y="108" width="320" height="34"/><rect x="104" width="30" height="260"/><rect x="226" width="30" height="260"/></g>
+                                <circle class="pulse" cx="180" cy="125" r="18" fill="{{c:mix(accent,black,0.4)}}" opacity=".25"/>
+        <g class="pin" transform="translate(180 125)"><path d="M0 0C-12-16-18-26-18-36a18 18 0 1 1 36 0C18-26 12-16 0 0z" fill="{{c:mix(accent,black,0.4)}}"/><circle cy="-36" r="7" fill="{{c:bg}}"/></g>
+        <rect x="60" y="34" width="240" height="30" rx="15" fill="{{c:text}}"/>
+        <text x="180" y="54" font-size="13" text-anchor="middle" fill="{{c:bg}}" font-weight="700">{{brand}}</text>
+      </svg>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="edge" style="--from:var(--contact);--to:var(--foot)"></div>
+<footer class="foot">
+  <div class="wrap">
+    <div class="big">{{brand}}</div>
+    <p>{{address}}<!--each:phones--> · {{phone}}<!--/each:phones--><!--if:hours--> · {{hours}}<!--/if:hours--></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var MENU=[
+    {id:'hot',n:'قهوه گرم',e:'☕',items:[
+      {n:'اسپرسو',d:'یه شات غلیظ و خوش‌عطر',p:95,e:'☕',b:1},
+      {n:'آمریکانو',d:'اسپرسو با آب داغ؛ سبک و روشن',p:110,e:'☕'},
+      {n:'کاپوچینو',d:'اسپرسو، شیر داغ و فوم پفکی',p:135,e:'☕',b:1},
+      {n:'لاته',d:'قهوه‌ی ملایم با شیر بخارداده',p:140,e:'🥛'},
+      {n:'موکا',d:'قهوه و شکلات با خامه‌ی روش',p:155,e:'🍫'},
+      {n:'قهوه ترک',d:'سنتی و دم‌کشیده روی حرارت ملایم',p:120,e:'☕'}]},
+    {id:'cold',n:'نوشیدنی سرد',e:'🧊',items:[
+      {n:'آیس لاته',d:'لاته‌ی خنک روی یخ',p:155,e:'🧊',b:1},
+      {n:'آیس آمریکانو',d:'تلخ و ترد؛ مخصوص روزهای گرم',p:120,e:'🧊'},
+      {n:'فراپه',d:'قهوه‌ی یخی، کوبیده و خامه‌ای',p:175,e:'🥤'},
+      {n:'لیموناد نعنا',d:'ترش، شیرین و خنک',p:110,e:'🍋'},
+      {n:'اسموتی توت',d:'توت، موز و ماست',p:165,e:'🍓'}]},
+    {id:'tea',n:'چای و دمنوش',e:'🍵',items:[
+      {n:'چای ماسالا',d:'چای و ادویه‌ی گرم با شیر',p:125,e:'🍵'},
+      {n:'دمنوش بهارنارنج',d:'آرام‌بخش و خوش‌بو',p:115,e:'🌼'},
+      {n:'چای سیاه',d:'دم‌کشیده و پررنگ، با نبات',p:80,e:'🍵'},
+      {n:'هات چاکلت',d:'شکلات داغ و غلیظ',p:145,e:'🍫',b:1}]},
+    {id:'sweet',n:'شیرینی',e:'🍰',items:[
+      {n:'چیزکیک',d:'نرم و خامه‌ای با سس میوه',p:185,e:'🍰',b:1},
+      {n:'تیرامیسو',d:'قهوه، ماسکارپونه و کاکائو',p:195,e:'🍰'},
+      {n:'کروسان',d:'کره‌ای و ترد، تازه از فر',p:110,e:'🥐'},
+      {n:'براونی',d:'شکلاتی و نمناک',p:160,e:'🍫'},
+      {n:'دونات',d:'لعاب‌دار و پفی',p:95,e:'🍩'}]},
+    {id:'food',n:'صبحانه',e:'🍳',items:[
+      {n:'املت',d:'گوجه، تخم‌مرغ و نون تازه',p:210,e:'🍳'},
+      {n:'تست آووکادو',d:'آووکادو و تخم‌مرغ روی نون تست',p:230,e:'🥑',b:1},
+      {n:'پنکیک',d:'با عسل و موز',p:220,e:'🥞'},
+      {n:'ساندویچ پنیر',d:'نون تست، پنیر و گوجه',p:175,e:'🥪'}]}
+  ];
+  var fa=function(n){return n.toLocaleString('fa-IR');};
+  var tabs=document.getElementById('tabs'),grid=document.getElementById('grid');
+  var cur=MENU[0].id;
+  function renderTabs(){
+    tabs.innerHTML=MENU.map(function(c){return '<button class="tab" role="tab" id="tab-'+c.id+'" aria-selected="'+(c.id===cur)+'" data-id="'+c.id+'">'+c.e+' '+c.n+'</button>';}).join('');
+  }
+  function renderGrid(){
+    var cat=MENU.filter(function(c){return c.id===cur;})[0];
+    var cols=['var(--t1)','var(--t2)','var(--t3)','var(--t4)'];
+    grid.setAttribute('aria-labelledby','tab-'+cur);
+    grid.innerHTML=cat.items.map(function(it,i){
+      return '<article class="tile" style="--bg:'+cols[i%4]+';animation-delay:'+(i*55)+'ms">'
+        +(it.b?'<span class="tag">محبوب</span>':'')
+        +'<div class="ew" style="animation-delay:-'+(i*0.5)+'s">'+it.e+'</div>'
+        +'<h3>'+it.n+'</h3><p>'+it.d+'</p>'
+        +'<div class="price">'+fa(it.p*1000)+'<small>تومان</small></div></article>';
+    }).join('');
+  }
+  tabs.addEventListener('click',function(e){
+    var b=e.target.closest('.tab'); if(!b) return;
+    cur=b.dataset.id; renderTabs(); renderGrid();
+    var nb=document.getElementById('tab-'+cur); if(nb&&nb.scrollIntoView){nb.scrollIntoView({inline:'center',block:'nearest'});}
+  });
+  renderTabs(); renderGrid();
+
+  // falling beans
+  var bp=[[8,26,9,-2],[22,20,12,-7],[36,32,10,-4],[50,22,13,-9],[62,28,9.5,-1],[74,18,11.5,-6],[86,30,10.5,-3],[94,22,12.5,-8],[14,16,14,-11],[44,14,15,-5]];
+  document.getElementById('beans').innerHTML=bp.map(function(b){
+    return '<span class="bean" style="--x:'+b[0]+'%;--s:'+b[1]+'px;--d:'+b[2]+'s;--dl:'+b[3]+'s"><svg><use href="#bean"/></svg></span>';
+  }).join('');
+
+  // marquee
+  var words=['قهوه‌ی تازه','شیرینی خانگی','چای و دمنوش','صبحانه','فضای دنج','قرار دو نفره'];
+  var one=words.map(function(w){return '<span>'+w+'</span><b>✦</b>';}).join('');
+  document.getElementById('track').innerHTML='<div style="display:flex">'+one+one+'</div><div style="display:flex">'+one+one+'</div>';
+
+  // fullscreen menu
+  var burger=document.getElementById('burger'),ov=document.getElementById('ov'),root=document.documentElement;
+  function setMenu(open){
+    root.classList.toggle('menu-open',open);
+    burger.setAttribute('aria-expanded',open?'true':'false');
+    burger.setAttribute('aria-label',open?'بستن منو':'باز کردن منو');
+    if(open){ov.removeAttribute('inert');}else{ov.setAttribute('inert','');}
+  }
+  burger.addEventListener('click',function(){setMenu(!root.classList.contains('menu-open'));});
+  ov.addEventListener('click',function(e){if(e.target.closest('a')){setMenu(false);}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){setMenu(false);}});
+  window.addEventListener('resize',function(){if(window.innerWidth>=900){setMenu(false);}});
+
+  // reveal on scroll
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    rv.forEach(function(el){io.observe(el);});
+  }else{rv.forEach(function(el){el.classList.add('in');});}
+})();
+</script>
+</body>
+</html>
