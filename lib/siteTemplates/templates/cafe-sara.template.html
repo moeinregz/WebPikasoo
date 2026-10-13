@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{brand}}</title>
+<meta name="description" content="{{brand}}؛ یه گوشه‌ی گرم برای قهوه، دسر و حرف‌های خوب. {{address}}">
+<meta name="theme-color" content="{{t:#2a1810}}">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ Tokens ============ */
+:root{
+  --f-body:'Vazirmatn',Tahoma,'Segoe UI',sans-serif;
+  --f-display:'Lalezar','Vazirmatn',Tahoma,sans-serif;
+
+  --hero-bg:{{t:#2a1810}};   --hero-fg:{{t:#fbf1df}};
+  --about-bg:{{t:#f4d78f}};  --about-fg:{{t:#3b2412}};
+  --menu-bg:{{t:#bfd8b8}};   --menu-fg:{{t:#1d3322}};
+  --amb-bg:{{t:#d9673f}};    --amb-fg:{{t:#fff3e6}};
+  --rev-bg:{{t:#f2bfca}};    --rev-fg:{{t:#4a1c2a}};
+  --con-bg:{{t:#1f5451}};    --con-fg:{{t:#e9f5f1}};
+  --foot-bg:{{t:#2a1810}};   --foot-fg:{{t:#e8d5b8}};
+
+  --gold:{{t:#ffcf70}};
+  --chip:rgba(255,255,255,.55);
+  --card:{{t:#fffaf0}};      --card-fg:{{t:#3b2412}};
+  --panel:rgba(255,255,255,.08);
+
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --about-bg:{{t:#3a2a12}}; --about-fg:{{t:#f7e2b0}};
+    --menu-bg:{{t:#1e3122}};  --menu-fg:{{t:#d8ebd0}};
+    --amb-bg:{{t:#7e3419}};   --amb-fg:{{t:#ffe9d8}};
+    --rev-bg:{{t:#4b2431}};   --rev-fg:{{t:#fbdfe5}};
+    --con-bg:{{t:#123634}};   --con-fg:{{t:#e2f2ee}};
+    --chip:rgba(255,255,255,.09);
+    --card:{{t:#3b2431}};     --card-fg:{{t:#fbdfe5}};
+  }
+}
+:root[data-theme="dark"]{
+  --about-bg:{{t:#3a2a12}}; --about-fg:{{t:#f7e2b0}};
+  --menu-bg:{{t:#1e3122}};  --menu-fg:{{t:#d8ebd0}};
+  --amb-bg:{{t:#7e3419}};   --amb-fg:{{t:#ffe9d8}};
+  --rev-bg:{{t:#4b2431}};   --rev-fg:{{t:#fbdfe5}};
+  --con-bg:{{t:#123634}};   --con-fg:{{t:#e2f2ee}};
+  --chip:rgba(255,255,255,.09);
+  --card:{{t:#3b2431}};     --card-fg:{{t:#fbdfe5}};
+}
+
+/* ============ Base ============ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:env(safe-area-inset-top,0px);
+  background:var(--hero-bg);
+}
+html.lock{overflow:hidden}
+body{
+  font-family:var(--f-body);
+  background:var(--hero-bg);
+  color:var(--hero-fg);
+  line-height:1.9;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+ul{list-style:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:8px}
+
+.wrap{max-width:1080px;margin:0 auto;position:relative;z-index:2}
+section{position:relative;overflow:hidden;padding:76px 20px 120px;background:var(--bg);color:var(--fg)}
+.wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:64px;display:block;color:var(--next);pointer-events:none;z-index:1}
+h2{font-family:var(--f-display);font-weight:400;font-size:clamp(2.4rem,10vw,3.8rem);line-height:1.2;margin-bottom:10px}
+.sub{max-width:34em;opacity:.85;font-size:1rem;margin-bottom:28px}
+
+/* scroll reveal */
+.js .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* ============ Header ============ */
+.top{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;
+  color:{{t:#fbf1df}};
+  transition:background .4s,backdrop-filter .4s;
+}
+.top.scrolled{background:{{t:rgba(42,24,16,.84)}};-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+body.menu-open .top{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:1.7rem;line-height:1}
+.brand span{display:inline-block;animation:sip 4s ease-in-out infinite;transform-origin:70% 90%}
+.burger{
+  width:46px;height:46px;border-radius:50%;
+  background:{{t:rgba(251,241,223,.12)}};border:1.5px solid {{t:rgba(251,241,223,.35)}};
+  display:grid;place-content:center;gap:5px;position:relative;
+}
+.burger i{display:block;width:20px;height:2.5px;border-radius:3px;background:{{t:#fbf1df}};transition:transform .45s cubic-bezier(.7,0,.2,1),opacity .3s}
+body.menu-open .burger i:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+body.menu-open .burger i:nth-child(2){opacity:0}
+body.menu-open .burger i:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* ============ Fullscreen menu ============ */
+.overlay{
+  position:fixed;top:0;bottom:0;left:0;right:0;z-index:50;
+  display:flex;flex-direction:column;
+  padding-top:calc(env(safe-area-inset-top,0px) + 66px);
+  background:{{t:#2a1810}};
+  visibility:hidden;pointer-events:none;
+  transition:visibility 0s .8s;
+}
+.overlay.open{visibility:visible;pointer-events:auto;transition-delay:0s}
+.bands{flex:1;display:flex;flex-direction:column;min-height:0}
+.band{
+  flex:1;min-height:0;display:flex;align-items:center;gap:16px;
+  padding:0 28px;background:var(--b);color:var(--t);
+  font-family:var(--f-display);font-size:clamp(1.9rem,8vw,3.2rem);line-height:1;
+  transform:translateX(var(--from,110%));
+  transition:transform .6s cubic-bezier(.7,0,.2,1);
+}
+.band:nth-child(even){--from:-110%}
+.overlay.open .band{transform:none;transition-delay:calc(var(--i)*70ms)}
+.band .e{margin-inline-start:auto;font-size:.95em;transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.band:hover .e,.band:active .e{transform:rotate(-14deg) scale(1.25)}
+.ov-foot{
+  flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 24px calc(env(safe-area-inset-bottom,0px) + 14px);
+  background:{{t:#2a1810}};color:{{t:#fbf1df}};font-size:.95rem;
+  transform:translateY(100%);transition:transform .6s cubic-bezier(.7,0,.2,1);
+}
+.overlay.open .ov-foot{transform:none;transition-delay:.45s}
+.ov-foot a{font-weight:700;background:var(--gold);color:{{t:#2a1810}};padding:8px 18px;border-radius:99px}
+
+/* ============ Hero ============ */
+.hero{
+  --bg:var(--hero-bg);--fg:var(--hero-fg);--next:var(--about-bg);
+  min-height:calc(100svh - env(safe-area-inset-top,0px));
+  background:radial-gradient(120% 70% at 50% 0%,{{t:#4b2b1b}} 0%,var(--hero-bg) 62%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:92px 22px 130px;
+}
+.lights{position:absolute;top:58px;left:0;right:0;display:flex;justify-content:space-around;padding:0 4px;z-index:2}
+.lights::before{content:"";position:absolute;left:-6%;right:-6%;top:-16px;height:36px;border-bottom:2px solid rgba(255,255,255,.22);border-radius:0 0 50% 50%}
+.lights i{width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:{{t:#ffd27a}};box-shadow:0 0 14px 4px {{t:rgba(255,190,80,.65)}};animation:twinkle 2.6s ease-in-out infinite}
+.lights i:nth-child(odd){margin-top:12px}
+.lights i:nth-child(3n){animation-delay:.6s}.lights i:nth-child(3n+1){animation-delay:1.3s}.lights i:nth-child(4n){animation-delay:1.9s}
+.bean{position:absolute;color:var(--c);opacity:.5;animation:floaty 8s ease-in-out infinite;animation-delay:var(--dl,0s)}
+.bean svg{width:100%;height:100%;display:block}
+.hero-inner{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center}
+.cup-wrap{position:relative;width:min(58vw,230px);margin-bottom:8px}
+.cup-wrap::before{content:"";position:absolute;inset:-18% -25% -6%;background:radial-gradient(closest-side,{{t:rgba(255,170,80,.32)}},transparent);animation:glow 4s ease-in-out infinite}
+.cup{position:relative;width:100%;display:block;animation:bob 5s ease-in-out infinite}
+.steam path{fill:none;stroke:{{t:#fbf1df}};stroke-width:5;stroke-linecap:round;opacity:0;transform-box:fill-box;transform-origin:center;animation:steam 3.6s ease-in-out infinite}
+.steam path:nth-child(2){animation-delay:1.2s}.steam path:nth-child(3){animation-delay:2.3s}
+.kicker{font-size:1.05rem;opacity:.85;animation:rise .9s .1s both}
+.hero h1{
+  font-family:var(--f-display);font-weight:400;font-size:clamp(4rem,22vw,7.4rem);line-height:1.05;
+  background:linear-gradient(90deg,{{t:#ffd27a}},{{t:#ff9f6b}},{{t:#ffe9c0}},{{t:#ffd27a}});background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:rise 1s .25s both,shine 7s linear infinite;
+}
+.tag{max-width:22em;font-size:1.08rem;opacity:.9;margin:6px 0 24px;animation:rise .9s .45s both}
+.cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:rise .9s .6s both}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:99px;font-weight:700;font-size:1rem;transition:transform .25s}
+.btn:active{transform:scale(.95)}
+.btn.primary{background:var(--gold);color:{{t:#2a1810}}}
+.btn.ghost{border:2px solid {{t:rgba(251,241,223,.5)}}}
+.status{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:7px 16px;border-radius:99px;background:{{t:rgba(251,241,223,.1)}};font-size:.92rem;animation:rise .9s .75s both}
+.status i,.open-status i{width:10px;height:10px;border-radius:50%;background:{{t:#6ee08c}};box-shadow:0 0 0 0 {{t:rgba(110,224,140,.7)}};animation:ping 2s infinite;flex:none}
+.status.closed i,.open-status.closed i{background:{{t:#ff8a6b}};animation:none}
+
+/* ribbon */
+.ribbon{
+  position:relative;z-index:5;direction:ltr;overflow:hidden;
+  margin:-30px -12px 0;transform:rotate(-2.2deg);
+  background:var(--gold);color:{{t:#2a1810}};padding:12px 0;
+  font-family:var(--f-display);font-size:1.35rem;
+}
+.ribbon .track{display:flex;width:max-content;animation:marq 24s linear infinite}
+.ribbon span{white-space:nowrap;padding:0 18px;direction:rtl}
+
+/* ============ About ============ */
+#about{--bg:var(--about-bg);--fg:var(--about-fg);--next:var(--menu-bg);padding-top:100px}
+.sticker{
+  position:absolute;top:26px;left:18px;width:84px;height:84px;border-radius:50%;
+  display:grid;place-items:center;font-size:2.2rem;background:{{t:#d9673f}};z-index:3;
+  box-shadow:0 0 0 6px #d9673f33;
+}
+.sticker::before{content:"";position:absolute;inset:-10px;border-radius:50%;border:2.5px dashed {{t:#d9673f}};animation:spin 18s linear infinite}
+.sticker span{animation:bob 3s ease-in-out infinite}
+.lead{font-size:1.12rem;max-width:34em;margin-bottom:30px}
+.snap{
+  display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:8px 20px 20px;margin:0 -20px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
+.snap::-webkit-scrollbar{display:none}
+.snap>*{flex:0 0 auto;scroll-snap-align:center}
+.pager{display:flex;justify-content:center;gap:8px;margin-top:2px}
+.pager i{width:8px;height:8px;border-radius:99px;background:currentColor;opacity:.28;transition:width .35s,opacity .35s;cursor:pointer}
+.pager i.on{width:28px;opacity:.85}
+.story{
+  width:min(78vw,290px);min-height:310px;padding:26px 24px;
+  background:var(--s);color:var(--st);
+  display:flex;flex-direction:column;
+  transform:scale(.93);transition:transform .5s cubic-bezier(.3,1.3,.5,1);
+}
+.story:nth-child(1){border-radius:34px 34px 34px 90px}
+.story:nth-child(2){border-radius:90px 34px 34px 34px}
+.story:nth-child(3){border-radius:34px 90px 34px 34px}
+.story:nth-child(4){border-radius:34px 34px 90px 34px}
+.story.active{transform:scale(1)}
+.story .big{font-size:3.6rem;line-height:1.1;margin-bottom:auto;display:inline-block}
+.story.active .big{animation:wiggle 1.2s .2s ease-in-out}
+.story h3{font-family:var(--f-display);font-weight:400;font-size:2rem;line-height:1.2;margin:18px 0 6px}
+.story p{font-size:.98rem;opacity:.92}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px}
+.fact{padding:14px 8px;text-align:center;font-weight:700;font-size:.9rem;line-height:1.5;border-radius:22px}
+.fact b{display:block;font-size:1.7rem;line-height:1.3}
+.fact:nth-child(1){background:{{t:#bfd8b8}};color:{{t:#1d3322}}}
+.fact:nth-child(2){background:{{t:#f2bfca}};color:{{t:#4a1c2a}};border-radius:22px 22px 22px 4px}
+.fact:nth-child(3){background:{{t:#1f5451}};color:{{t:#e9f5f1}}}
+
+/* ============ Menu ============ */
+#menu{--bg:var(--menu-bg);--fg:var(--menu-fg);--next:var(--amb-bg)}
+.sig{
+  width:min(70vw,250px);padding:22px 20px 20px;border-radius:30px;background:var(--k);color:{{t:#33190f}};position:relative;overflow:hidden;
+  transform:scale(.94);transition:transform .5s cubic-bezier(.3,1.3,.5,1);
+}
+.sig.active{transform:scale(1)}
+.sig .em{font-size:3.4rem;line-height:1.2;display:block;animation:bob 4s ease-in-out infinite}
+.sig h3{font-family:var(--f-display);font-weight:400;font-size:1.7rem;line-height:1.2;margin-top:8px}
+.sig p{font-size:.9rem;opacity:.85;min-height:3.4em}
+.sig .pr{display:inline-block;margin-top:10px;padding:2px 14px;border-radius:99px;background:{{t:#33190f}};color:var(--k);font-weight:800}
+.sig::after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.25);top:-40px;left:-40px}
+.menu-h{font-family:var(--f-display);font-size:1.7rem;margin:22px 0 4px}
+.chips{display:flex;gap:10px;overflow-x:auto;padding:6px 20px 16px;margin:0 -20px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;background:var(--chip);font-weight:700;transition:background .3s,color .3s,transform .3s}
+.chip.on{background:var(--menu-fg);color:var(--menu-bg);transform:scale(1.06)}
+.board{
+  background:{{t:#22321f}};color:{{t:#f4ecd8}};border:9px solid {{t:#8a5a3a}};border-radius:30px;
+  padding:6px 18px;box-shadow:0 24px 40px -14px rgba(0,0,0,.4),inset 0 0 44px rgba(0,0,0,.35);
+  max-width:640px;
+}
+.item{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1.5px dashed {{t:rgba(244,236,216,.22)}};animation:pop .55s cubic-bezier(.3,1.4,.5,1) both;animation-delay:calc(var(--i)*70ms)}
+.item:last-child{border-bottom:0}
+.ic{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;background:var(--c)}
+.txt b{display:block;font-size:1.05rem;line-height:1.5}
+.txt small{display:block;opacity:.68;font-size:.8rem;line-height:1.55}
+.price{font-family:var(--f-display);font-size:1.45rem;color:{{t:#ffd27a}};line-height:1.1;text-align:end}
+.price small{display:block;font-family:var(--f-body);font-size:.62rem;opacity:.7;color:{{t:#f4ecd8}}}
+.note{margin-top:14px;font-size:.85rem;opacity:.75}
+
+/* ============ Ambiance ============ */
+#amb{--bg:var(--amb-bg);--fg:var(--amb-fg);--next:var(--rev-bg)}
+.scene{
+  width:min(76vw,300px);aspect-ratio:3/4;border-radius:32px;overflow:hidden;position:relative;margin:0;
+  box-shadow:0 22px 40px -12px rgba(0,0,0,.45);
+  transform:scale(.93);transition:transform .5s cubic-bezier(.3,1.3,.5,1);
+}
+.scene:nth-child(even){border-radius:32px 32px 120px 32px}
+.scene:nth-child(odd){border-radius:120px 32px 32px 32px}
+.scene.active{transform:scale(1)}
+.scene svg{display:block;width:100%;height:100%}
+.scene figcaption{position:absolute;left:0;right:0;bottom:0;padding:50px 20px 20px;background:linear-gradient(transparent,{{t:rgba(20,8,4,.88)}});color:#fff}
+.scene figcaption b{display:block;font-family:var(--f-display);font-weight:400;font-size:1.6rem;line-height:1.3}
+.scene figcaption span{font-size:.88rem;opacity:.85}
+.tw{animation:twinkle 2.4s ease-in-out infinite}
+.tw:nth-of-type(2n){animation-delay:.8s}.tw:nth-of-type(3n){animation-delay:1.5s}
+.st{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:0;transform-box:fill-box;transform-origin:center;animation:steam 3.4s ease-in-out infinite}
+.st:nth-of-type(2){animation-delay:1.4s}
+
+/* ============ Reviews ============ */
+#rev{--bg:var(--rev-bg);--fg:var(--rev-fg);--next:var(--con-bg)}
+.rev{
+  width:min(82vw,330px);background:var(--card);color:var(--card-fg);padding:34px 24px 24px;position:relative;
+  border-radius:28px;box-shadow:0 14px 30px -14px {{t:rgba(74,28,42,.45)}};
+  transform:scale(.94);transition:transform .5s cubic-bezier(.3,1.3,.5,1);
+}
+.rev:nth-child(odd){border-radius:28px 28px 28px 6px}
+.rev:nth-child(even){border-radius:28px 28px 6px 28px}
+.rev.active{transform:scale(1)}
+.rev::before{content:"❝";position:absolute;top:8px;inset-inline-start:18px;font-size:2.4rem;line-height:1;color:{{t:#d9673f}};opacity:.55}
+.stars{color:{{t:#f2a900}};letter-spacing:3px;font-size:1.05rem}
+.rev p{margin:6px 0 16px;font-size:1rem}
+.who{display:flex;align-items:center;gap:10px;font-weight:700}
+.who small{display:block;font-weight:400;opacity:.65;line-height:1.4}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--c)}
+
+/* ============ Contact ============ */
+#contact{--bg:var(--con-bg);--fg:var(--con-fg);--next:var(--foot-bg);padding-bottom:130px}
+.grid{display:grid;gap:16px}
+@media(min-width:820px){.grid{grid-template-columns:1.2fr 1fr;align-items:start}.grid .hours{grid-row:span 2}}
+.panel{border-radius:30px;padding:24px 22px}
+.hours{background:var(--panel);border:1px solid rgba(255,255,255,.16)}
+.panel h3{font-family:var(--f-display);font-weight:400;font-size:1.7rem;line-height:1.3;margin-bottom:8px}
+.open-status{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:99px;background:rgba(255,255,255,.1);font-size:.92rem;margin-bottom:14px}
+.hours li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hours li:last-child{border-bottom:0}
+.hours li.today{background:{{t:rgba(255,207,112,.18)}};border-bottom-color:transparent;font-weight:700}
+.hours li.today em{font-style:normal;background:var(--gold);color:{{t:#2a1810}};font-size:.72rem;padding:1px 9px;border-radius:99px;margin-inline-start:8px}
+.call{background:var(--gold);color:{{t:#2a1810}};border-radius:30px 30px 8px 30px}
+.call .num{display:block;font-family:var(--f-display);font-size:clamp(2rem,9vw,2.8rem);line-height:1.3;direction:ltr;text-align:start;letter-spacing:1px}
+.call .btn{background:{{t:#2a1810}};color:var(--gold);margin-top:8px}
+.addr{background:{{t:#f2bfca}};color:{{t:#4a1c2a}};border-radius:8px 30px 30px 30px}
+.addr .btn{background:{{t:#4a1c2a}};color:{{t:#f2bfca}};margin-top:14px}
+
+/* ============ Footer ============ */
+footer{background:var(--foot-bg);color:var(--foot-fg);text-align:center;padding:26px 20px calc(96px + env(safe-area-inset-bottom,0px));font-size:.9rem}
+footer b{font-family:var(--f-display);font-weight:400;font-size:1.6rem;color:{{t:#fbf1df}};display:block}
+
+/* FAB */
+.fab{
+  position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;
+  width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;
+  background:{{t:#d9673f}};color:#fff;box-shadow:0 10px 24px rgba(0,0,0,.35);
+  transition:opacity .3s,transform .3s;
+}
+.fab::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid {{t:#d9673f}};animation:ring 2.4s ease-out infinite}
+body.menu-open .fab{opacity:0;pointer-events:none;transform:scale(.6)}
+
+/* ============ Keyframes ============ */
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes shine{to{background-position:300% 0}}
+@keyframes steam{0%{opacity:0;transform:translateY(20px) scaleY(.8)}30%{opacity:.75}100%{opacity:0;transform:translateY(-26px) scaleY(1.1)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes twinkle{0%,100%{opacity:1;filter:brightness(1)}50%{opacity:.4;filter:brightness(.7)}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-20px) rotate(calc(var(--r,0deg) + 28deg))}}
+@keyframes marq{to{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ping{70%{box-shadow:0 0 0 9px {{t:rgba(110,224,140,0)}}}100%{box-shadow:0 0 0 0 {{t:rgba(110,224,140,0)}}}}
+@keyframes ring{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.7);opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes sip{0%,70%,100%{transform:rotate(0)}80%{transform:rotate(-14deg)}90%{transform:rotate(6deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg) scale(1.1)}60%{transform:rotate(9deg) scale(1.05)}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .js .reveal{opacity:1!important;transform:none!important}
+  .steam path,.st{opacity:.5}
+}
+</style>
+</head>
+<body>
+
+<!-- shared svg defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="wvp" fill="currentColor" d="M0 44 C180 92 360 0 540 40 C720 80 900 8 1080 44 C1260 78 1350 40 1440 30 L1440 80 L0 80 Z"/>
+    <symbol id="bean" viewBox="0 0 40 60">
+      <ellipse cx="20" cy="30" rx="16" ry="27" fill="currentColor"/>
+      <path d="M20 5C6 22 34 38 20 55" fill="none" stroke="{{t:#2a1810}}" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- header -->
+<header class="top" id="top">
+  <a class="brand" href="#home" aria-label="{{brand}}"><span>☕</span>{{brand}}</a>
+  <button class="burger" id="burger" aria-label="باز کردن منوی سایت" aria-expanded="false" aria-controls="overlay"><i></i><i></i><i></i></button>
+</header>
+
+<!-- fullscreen menu -->
+<nav class="overlay" id="overlay" aria-label="منوی سایت" aria-hidden="true">
+  <div class="bands">
+    <a class="band" style="--i:0;--b:{{t:#3a2218}};--t:{{t:#fbf1df}}" href="#home"><span>خانه</span><span class="e">🏠</span></a>
+    <a class="band" style="--i:1;--b:{{t:#f4d78f}};--t:{{t:#3b2412}}" href="#about"><span>درباره ما</span><span class="e">💛</span></a>
+    <a class="band" style="--i:2;--b:{{t:#bfd8b8}};--t:{{t:#1d3322}}" href="#menu"><span>منو</span><span class="e">🍰</span></a>
+    <a class="band" style="--i:3;--b:{{t:#d9673f}};--t:{{t:#fff3e6}}" href="#amb"><span>فضای کافه</span><span class="e">🛋️</span></a>
+    <a class="band" style="--i:4;--b:{{t:#f2bfca}};--t:{{t:#4a1c2a}}" href="#rev"><span>نظرات مهمان‌ها</span><span class="e">⭐</span></a>
+    <a class="band" style="--i:5;--b:{{t:#1f5451}};--t:{{t:#e9f5f1}}" href="#contact"><span>تماس و ساعت کاری</span><span class="e">📞</span></a>
+  </div>
+  <div class="ov-foot">
+    <span>{{address}}</span>
+    <!--each:phones--><a href="{{phone_href}}" dir="ltr">{{phone}}</a><br><!--/each:phones-->
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="home" class="hero">
+  <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <div class="bean" style="width:26px;top:22%;right:8%;--c:{{t:#8b5a3a}};--r:20deg" aria-hidden="true"><svg><use href="#bean"/></svg></div>
+  <div class="bean" style="width:20px;top:34%;left:9%;--c:{{t:#a8703f}};--r:-30deg;--dl:1.2s" aria-hidden="true"><svg><use href="#bean"/></svg></div>
+  <div class="bean" style="width:32px;top:58%;right:6%;--c:{{t:#6b3f26}};--r:50deg;--dl:2.4s" aria-hidden="true"><svg><use href="#bean"/></svg></div>
+  <div class="bean" style="width:22px;top:66%;left:12%;--c:{{t:#c98a52}};--r:-10deg;--dl:.6s" aria-hidden="true"><svg><use href="#bean"/></svg></div>
+  <div class="bean" style="width:18px;top:16%;left:30%;--c:{{t:#8b5a3a}};--r:70deg;--dl:3s" aria-hidden="true"><svg><use href="#bean"/></svg></div>
+  <div class="bean" style="width:24px;top:80%;right:28%;--c:{{t:#a8703f}};--r:-60deg;--dl:1.8s" aria-hidden="true"><svg><use href="#bean"/></svg></div>
+
+  <div class="hero-inner">
+    <div class="cup-wrap">
+      <svg class="cup" viewBox="0 0 240 240" aria-hidden="true">
+        <g class="steam">
+          <path d="M92 84 C76 66 108 54 92 34 C84 24 94 14 98 6"/>
+          <path d="M122 84 C106 66 138 54 122 34 C114 24 124 14 128 6"/>
+          <path d="M152 84 C136 66 168 54 152 34 C144 24 154 14 158 6"/>
+        </g>
+        <ellipse cx="120" cy="212" rx="100" ry="18" fill="{{t:#fbf1df}}"/>
+        <ellipse cx="120" cy="208" rx="82" ry="11" fill="{{t:#e9d5b3}}"/>
+        <path d="M188 118 C232 112 232 178 184 176" fill="none" stroke="{{t:#d9673f}}" stroke-width="13" stroke-linecap="round"/>
+        <path d="M48 104 H192 V142 C192 190 160 210 120 210 C80 210 48 190 48 142 Z" fill="{{t:#d9673f}}"/>
+        <path d="M60 150 C62 182 86 200 120 200" fill="none" stroke="{{t:#f08a5d}}" stroke-width="7" stroke-linecap="round" opacity=".7"/>
+        <ellipse cx="120" cy="104" rx="72" ry="13" fill="{{t:#f3e3c3}}"/>
+        <ellipse cx="120" cy="105" rx="62" ry="9.5" fill="{{t:#6b3f26}}"/>
+        <path d="M120 111 C104 102 108 96 116 98 C118 99 119 100 120 102 C121 100 122 99 124 98 C132 96 136 102 120 111Z" fill="{{t:#f3e3c3}}"/>
+      </svg>
+    </div>
+    <p class="kicker">به کافه‌ی خودتون خوش اومدین</p>
+    <h1>{{brand}}</h1>
+    <p class="tag">یه گوشه‌ی گرم برای قهوه، دسر و حرف‌های خوب</p>
+    <div class="cta">
+      <a class="btn primary" href="#menu">🍰 دیدن منو</a>
+      <a class="btn ghost" href="{{phone_href}}">📞 تماس</a>
+    </div>
+    <!--if:hours--><div class="status"><i></i><span>{{hours}}</span></div><!--/if:hours-->
+  </div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><use href="#wvp"/></svg>
+</section>
+
+<div class="ribbon" aria-hidden="true">
+  <div class="track">
+    <span>{{brand}} ✦ قهوه ✦ دسر ✦ گفتگو ✦ آرامش ✦</span>
+    <span>{{brand}} ✦ قهوه ✦ دسر ✦ گفتگو ✦ آرامش ✦</span>
+    <span>{{brand}} ✦ قهوه ✦ دسر ✦ گفتگو ✦ آرامش ✦</span>
+    <span>{{brand}} ✦ قهوه ✦ دسر ✦ گفتگو ✦ آرامش ✦</span>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="sticker" aria-hidden="true"><span>☕</span></div>
+  <div class="wrap">
+    <h2 class="reveal">یه گوشه‌ی گرم وسط شهر</h2>
+    <p class="lead reveal" style="--d:.1s">{{brand}} یه پاتوق دنج تو دل شهره؛ جایی که بوی قهوه‌ی تازه، نور گرم و موزیک آروم دست به دست هم می‌دن تا یه عصر معمولی بشه خاطره. چه با دوستات قرار داشته باشی، چه با یه کتاب تنها بیای، همیشه یه میز گرم منتظرته.</p>
+
+    <div class="snap" id="stories">
+      <article class="story" style="--s:{{t:#3a2218}};--st:{{t:#fbf1df}}">
+        <span class="big">☕</span>
+        <h3>قهوه‌ی خوب</h3>
+        <p>از اسپرسوی غلیظ تا لاته‌ی ملایم؛ هر فنجون با حوصله دم می‌شه.</p>
+      </article>
+      <article class="story" style="--s:{{t:#8fbf94}};--st:{{t:#14301c}}">
+        <span class="big">🛋️</span>
+        <h3>فضای دنج</h3>
+        <p>نور گرم، صندلی‌های راحت و موزیک آروم؛ مخصوص ساعت‌های بی‌عجله.</p>
+      </article>
+      <article class="story" style="--s:{{t:#d9673f}};--st:{{t:#fff3e6}}">
+        <span class="big">🌙</span>
+        <h3>شب‌های بلند</h3>
+        <!--if:hours--><p>{{hours}}</p><!--/if:hours--><!--ifnot:hours--><p>تا دیروقت پذیرای شما هستیم.</p><!--/ifnot:hours-->
+      </article>
+      <article class="story" style="--s:{{t:#1f5451}};--st:{{t:#e9f5f1}}">
+        <span class="big">📍</span>
+        <h3>قلب شهر</h3>
+        <p>دسترسی راحت وسط شهر، برای قرار دوستانه، کاری یا یه وقت تنهایی.</p>
+      </article>
+    </div>
+    <div class="pager" id="storiesPager"></div>
+
+    <div class="facts">
+      <div class="fact reveal"><b>☕</b>قهوه‌ی تازه</div>
+      <div class="fact reveal" style="--d:.1s"><b>🍰</b>دسر خونگی</div>
+      <div class="fact reveal" style="--d:.2s"><b>📍</b>{{address}}</div>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><use href="#wvp"/></svg>
+</section>
+
+<!-- ============ MENU ============ -->
+<section id="menu">
+  <div class="wrap">
+    <h2 class="reveal">منوی {{brand}}</h2>
+    <p class="sub reveal" style="--d:.1s">از پیشنهادهای ما شروع کنید و بعد بین دسته‌ها بچرخید.</p>
+
+    <div class="snap" id="sigs">
+      <article class="sig" style="--k:{{t:#f2bfca}}"><span class="em">☕</span><h3>لاته مخصوص</h3><p>لاته‌ی مخصوص کافه با طعمی نرم و کرمی.</p><span class="pr">۱۸۵</span></article>
+      <article class="sig" style="--k:{{t:#f4d78f}}"><span class="em">🍓</span><h3>چیزکیک توت‌فرنگی</h3><p>خامه‌ای، خنک و با سس توت‌فرنگی.</p><span class="pr">۲۲۰</span></article>
+      <article class="sig" style="--k:{{t:#f0996f}}"><span class="em">🍫</span><h3>موکا کارامل</h3><p>قهوه، شکلات و کارامل در یک لیوان.</p><span class="pr">۱۹۵</span></article>
+      <article class="sig" style="--k:{{t:#fffaf0}}"><span class="em">🍋</span><h3>لیموناد نعنا</h3><p>خنک و شاداب برای عصرهای گرم.</p><span class="pr">۱۵۵</span></article>
+    </div>
+    <div class="pager" id="sigsPager"></div>
+
+    <h3 class="menu-h">همه‌ی منو</h3>
+    <div class="chips" id="chips" role="tablist" aria-label="دسته‌های منو"></div>
+    <div class="board"><ul id="menuList"></ul></div>
+    <p class="note">قیمت‌ها به هزار تومان است.</p>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><use href="#wvp"/></svg>
+</section>
+
+<!-- ============ AMBIANCE ============ -->
+<section id="amb">
+  <div class="wrap">
+    <h2 class="reveal">حال‌وهوای کافه</h2>
+    <p class="sub reveal" style="--d:.1s">از پنجره‌ی رو به خیابون تا نورهای گرم شب‌ها؛ بکشید و ببینید.</p>
+
+    <div class="snap" id="scenes">
+      <!-- window -->
+      <figure class="scene">
+        <svg viewBox="0 0 300 400" aria-hidden="true">
+          <rect width="300" height="400" fill="{{t:#3a2a4a}}"/>
+          <path d="M50 270 V140 A100 100 0 0 1 250 140 V270 Z" fill="{{t:#1c2a55}}"/>
+          <circle class="tw" cx="90" cy="100" r="2.5" fill="{{t:#ffe9a8}}"/><circle class="tw" cx="130" cy="70" r="2" fill="{{t:#ffe9a8}}"/>
+          <circle class="tw" cx="210" cy="150" r="2.5" fill="{{t:#ffe9a8}}"/><circle class="tw" cx="110" cy="170" r="2" fill="{{t:#ffe9a8}}"/>
+          <circle cx="195" cy="105" r="24" fill="{{t:#ffe9a8}}"/><circle cx="206" cy="98" r="22" fill="{{t:#1c2a55}}"/>
+          <path d="M50 270 V140 A100 100 0 0 1 250 140 V270 Z M150 40 V270 M50 180 H250" fill="none" stroke="{{t:#f3d9b1}}" stroke-width="8"/>
+          <rect x="32" y="268" width="236" height="16" rx="4" fill="{{t:#8a5a3a}}"/>
+          <rect x="66" y="232" width="38" height="36" rx="4" fill="{{t:#d9673f}}"/>
+          <path d="M85 232 C60 210 62 190 78 196 C82 176 96 176 92 200 C110 190 118 210 85 232Z" fill="{{t:#7fb069}}"/>
+          <path d="M190 240 h40 v14 c0 10 -8 14 -20 14 s-20 -4 -20 -14 z" fill="{{t:#fbf1df}}"/>
+          <path d="M230 244 c12 0 12 14 0 14" fill="none" stroke="{{t:#fbf1df}}" stroke-width="4"/>
+          <path class="st" d="M203 232 c-6 -8 6 -12 0 -22"/><path class="st" d="M218 232 c-6 -8 6 -12 0 -22"/>
+          <rect y="284" width="300" height="116" fill="{{t:#4a3022}}"/>
+        </svg>
+        <figcaption><b>کنار پنجره</b><span>یه میز دونفره با نگاه به خیابان</span></figcaption>
+      </figure>
+      <!-- books -->
+      <figure class="scene">
+        <svg viewBox="0 0 300 400" aria-hidden="true">
+          <rect width="300" height="400" fill="{{t:#2f4a3a}}"/>
+          <g fill="{{t:#1e3226}}"><rect x="20" y="118" width="260" height="10"/><rect x="20" y="228" width="260" height="10"/><rect x="20" y="338" width="260" height="10"/></g>
+          <g>
+            <rect x="34" y="52" width="22" height="66" fill="{{t:#d9673f}}"/><rect x="58" y="64" width="18" height="54" fill="{{t:#f4d78f}}"/><rect x="78" y="46" width="24" height="72" fill="{{t:#f2bfca}}"/>
+            <rect x="104" y="60" width="16" height="58" fill="{{t:#1f5451}}"/><rect x="122" y="50" width="22" height="68" fill="{{t:#fbf1df}}"/>
+            <rect x="34" y="162" width="20" height="66" fill="{{t:#f4d78f}}"/><rect x="56" y="150" width="24" height="78" fill="{{t:#d9673f}}"/><rect x="82" y="168" width="18" height="60" fill="{{t:#fbf1df}}"/>
+            <rect x="102" y="156" width="22" height="72" fill="{{t:#1f5451}}"/>
+            <rect x="34" y="272" width="24" height="66" fill="{{t:#f2bfca}}"/><rect x="60" y="284" width="18" height="54" fill="{{t:#fbf1df}}"/><rect x="80" y="266" width="26" height="72" fill="{{t:#d9673f}}"/>
+          </g>
+          <rect x="196" y="82" width="48" height="36" rx="4" fill="{{t:#d9673f}}"/>
+          <path d="M220 82 C196 58 198 40 214 46 C218 26 232 26 228 50 C246 40 254 62 220 82Z" fill="{{t:#7fb069}}"/>
+          <path d="M228 340 v-50 h6 v50" stroke="{{t:#f4d78f}}" stroke-width="5" fill="none"/>
+          <path d="M206 292 h56 l-12 -34 h-32 z" fill="{{t:#f4d78f}}"/>
+          <circle class="tw" cx="234" cy="286" r="26" fill="{{t:#ffd27a}}" opacity=".35"/>
+          <rect y="348" width="300" height="52" fill="{{t:#5a3a2a}}"/>
+        </svg>
+        <figcaption><b>گوشه‌ی کتاب</b><span>برای ساعت‌های آروم و بی‌عجله</span></figcaption>
+      </figure>
+      <!-- night lights -->
+      <figure class="scene">
+        <svg viewBox="0 0 300 400" aria-hidden="true">
+          <rect width="300" height="400" fill="{{t:#2a1810}}"/>
+          <path d="M-10 40 Q150 130 310 40" fill="none" stroke="{{t:#6b4a38}}" stroke-width="3"/>
+          <g fill="{{t:#ffd27a}}">
+            <circle class="tw" cx="30" cy="66" r="9"/><circle class="tw" cx="70" cy="90" r="9"/><circle class="tw" cx="112" cy="104" r="9"/>
+            <circle class="tw" cx="150" cy="108" r="9"/><circle class="tw" cx="188" cy="104" r="9"/><circle class="tw" cx="230" cy="90" r="9"/><circle class="tw" cx="270" cy="66" r="9"/>
+          </g>
+          <g fill="{{t:#ffd27a}}" opacity=".16"><circle cx="70" cy="90" r="26"/><circle cx="150" cy="108" r="30"/><circle cx="230" cy="90" r="26"/></g>
+          <ellipse cx="150" cy="300" rx="120" ry="30" fill="{{t:#ffb15e}}" opacity=".14"/>
+          <rect x="106" y="262" width="88" height="10" rx="5" fill="{{t:#8a5a3a}}"/><rect x="146" y="272" width="8" height="70" fill="{{t:#6b4a38}}"/><rect x="122" y="340" width="56" height="8" rx="4" fill="{{t:#6b4a38}}"/>
+          <path d="M50 250 h34 v54 h-8 v50 h-6 v-50 h-14 v50 h-6 v-50 h-8z" fill="{{t:#d9673f}}"/>
+          <path d="M216 250 h34 v54 h-8 v50 h-6 v-50 h-14 v50 h-6 v-50 h-8z" fill="{{t:#1f5451}}"/>
+          <path d="M118 262 h18 v-12 c0 -4 -18 -4 -18 0z" fill="{{t:#fbf1df}}"/><path d="M164 262 h18 v-12 c0 -4 -18 -4 -18 0z" fill="{{t:#fbf1df}}"/>
+          <path class="st" d="M127 246 c-5 -7 5 -10 0 -18"/>
+        </svg>
+        <figcaption><b>نورهای گرم شب</b><span>با روشن شدن چراغ‌ها، حال‌وهوا عوض می‌شه</span></figcaption>
+      </figure>
+      <!-- bar -->
+      <figure class="scene">
+        <svg viewBox="0 0 300 400" aria-hidden="true">
+          <rect width="300" height="400" fill="{{t:#7a3a25}}"/>
+          <g stroke="{{t:#f4d78f}}" stroke-width="3"><path d="M70 0 V70"/><path d="M150 0 V54"/><path d="M230 0 V70"/></g>
+          <g fill="{{t:#ffd27a}}"><path d="M48 96 a22 26 0 0 1 44 0z"/><path d="M128 80 a22 26 0 0 1 44 0z"/><path d="M208 96 a22 26 0 0 1 44 0z"/></g>
+          <g fill="{{t:#ffd27a}}" opacity=".22"><circle class="tw" cx="70" cy="110" r="34"/><circle class="tw" cx="150" cy="94" r="34"/><circle class="tw" cx="230" cy="110" r="34"/></g>
+          <rect x="40" y="188" width="150" height="86" rx="10" fill="{{t:#c9c3b8}}"/><rect x="52" y="200" width="126" height="18" rx="4" fill="#4a4540"/>
+          <circle cx="82" cy="244" r="11" fill="{{t:#2a2622}}"/><circle cx="146" cy="244" r="11" fill="{{t:#2a2622}}"/>
+          <rect x="106" y="252" width="16" height="22" fill="#4a4540"/>
+          <path class="st" d="M114 244 c-5 -7 5 -10 0 -18"/>
+          <path d="M214 232 h34 l-4 42 h-26z" fill="{{t:#fbf1df}}"/><path d="M214 232 h34 l-1 10 h-32z" fill="{{t:#d9673f}}"/>
+          <rect y="274" width="300" height="126" fill="{{t:#4a2214}}"/><rect y="274" width="300" height="14" fill="{{t:#8a5a3a}}"/>
+          <g fill="{{t:#2a1810}}" opacity=".5"><circle cx="70" cy="340" r="14"/><circle cx="150" cy="340" r="14"/><circle cx="230" cy="340" r="14"/></g>
+        </svg>
+        <figcaption><b>بار قهوه</b><span>جایی که فنجون‌ها یکی‌یکی آماده می‌شن</span></figcaption>
+      </figure>
+    </div>
+    <div class="pager" id="scenesPager"></div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><use href="#wvp"/></svg>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section id="rev">
+  <div class="wrap">
+    <h2 class="reveal">مهمون‌ها چی می‌گن؟</h2>
+    <p class="sub reveal" style="--d:.1s">نظرهای مهمان‌های {{brand}}.</p>
+
+    <div class="snap" id="revs">
+      <article class="rev" style="--c:{{t:#d9673f}}">
+        <div class="stars">★★★★★</div>
+        <p>قهوه‌شون عالیه و فضاش اونقدر آرومه که ساعت‌ها می‌شه نشست و کتاب خوند.</p>
+        <div class="who"><span class="av">م</span><div>مریم رضایی<small>مهمان همیشگی</small></div></div>
+      </article>
+      <article class="rev" style="--c:{{t:#1f5451}}">
+        <div class="stars">★★★★★</div>
+        <p>بعد از کار میام اینجا؛ نورپردازی شب‌هاش فوق‌العاده‌ست و لاته‌شون همیشه روی فرمه.</p>
+        <div class="who"><span class="av">ع</span><div>علی کریمی<small>مهمان شب‌ها</small></div></div>
+      </article>
+      <article class="rev" style="--c:{{t:#c98a52}}">
+        <div class="stars">★★★★★</div>
+        <p>چیزکیکشون رو حتماً امتحان کنید! برخورد پرسنل هم خیلی گرم و صمیمیه.</p>
+        <div class="who"><span class="av">ن</span><div>نازنین صادقی<small>عاشق دسر</small></div></div>
+      </article>
+      <article class="rev" style="--c:{{t:#7a5aa6}}">
+        <div class="stars">★★★★☆</div>
+        <p>برای قرار دوستانه جای مناسبیه و دسترسی بهش راحته.</p>
+        <div class="who"><span class="av">پ</span><div>پویا محمدی<small>قرارهای دوستانه</small></div></div>
+      </article>
+      <article class="rev" style="--c:{{t:#b8486a}}">
+        <div class="stars">★★★★★</div>
+        <p>جمعه‌ها از صبح باز بودنشون خیلی خوبه؛ برای یه قهوه‌ی آروم وسط آخر هفته.</p>
+        <div class="who"><span class="av">ن</span><div>ندا هاشمی<small>مهمان جمعه‌ها</small></div></div>
+      </article>
+    </div>
+    <div class="pager" id="revsPager"></div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><use href="#wvp"/></svg>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="wrap">
+    <h2 class="reveal">منتظرتونیم!</h2>
+    <p class="sub reveal" style="--d:.1s">هر وقت دلتون قهوه خواست، یه سر بیاید یا زنگ بزنید.</p>
+
+    <div class="grid">
+      <!--if:hours--><div class="panel hours reveal"> <h3>ساعت کاری</h3> <ul id="hours"><li><span>{{hours}}</span></li></ul> </div><!--/if:hours-->
+
+      <div class="panel call reveal" style="--d:.1s">
+        <h3>تماس بگیرید</h3>
+        <!--each:phones--><a class="num" href="{{phone_href}}">{{phone}}</a><br><!--/each:phones-->
+        <a class="btn" href="{{phone_href}}">📞 تماس با کافه</a>
+      </div>
+
+      <div class="panel addr reveal" style="--d:.2s">
+        <h3>آدرس</h3>
+        <p>{{address}}</p>
+        <a class="btn" id="mapLink" href="{{map_url}}" target="_blank" rel="noopener">📍 مسیریابی روی نقشه</a>
+      </div>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><use href="#wvp"/></svg>
+</section>
+
+<footer>
+  <b>{{brand}}</b> {{address}} · با عشق و یه فنجون قهوه ساخته شده
+<!--if:social-->
+<style>.sg-social{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:22px 16px 96px;font-family:inherit;color:inherit}.sg-social a{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1.5px solid currentColor;border-radius:999px;color:inherit;text-decoration:none;font-size:14px;font-weight:600;opacity:.92}.sg-social a:hover{opacity:1}.sg-social svg{width:18px;height:18px;fill:currentColor}</style>
+<div class="sg-social" dir="rtl"><!--if:instagram--><a href="{{instagram_href}}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.5 6a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>اینستاگرام</a><!--/if:instagram--><!--if:whatsapp--><a href="{{whatsapp_href}}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.25 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.57.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>واتساپ</a><!--/if:whatsapp--></div>
+<!--/if:social-->
+</footer>
+
+<a class="fab" href="{{phone_href}}" aria-label="تماس با {{brand}}">📞</a>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- Fullscreen menu ---------- */
+  var burger=document.getElementById('burger'),overlay=document.getElementById('overlay'),html=document.documentElement;
+  function setMenu(open){
+    document.body.classList.toggle('menu-open',open);
+    overlay.classList.toggle('open',open);
+    html.classList.toggle('lock',open);
+    burger.setAttribute('aria-expanded',open);
+    burger.setAttribute('aria-label',open?'بستن منوی سایت':'باز کردن منوی سایت');
+    overlay.setAttribute('aria-hidden',!open);
+  }
+  burger.addEventListener('click',function(){setMenu(!overlay.classList.contains('open'))});
+  overlay.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});
+
+  /* ---------- Header on scroll ---------- */
+  var top=document.getElementById('top');
+  function onScroll(){top.classList.toggle('scrolled',window.scrollY>40)}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* ---------- Scroll reveal ---------- */
+  var revealEls=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -6% 0px'});
+    revealEls.forEach(function(el){io.observe(el)});
+  }else{revealEls.forEach(function(el){el.classList.add('in')})}
+
+  /* ---------- Menu data (edit freely) ----------
+     هر آیتم: [نام, توضیح, قیمت به هزار تومان, ایموجی]
+     تمام اسم‌ها و قیمت‌ها نمونه هستند؛ با منوی واقعی جایگزین کنید. */
+  var MENU=[
+    {name:'قهوه گرم',icon:'☕',items:[
+      ['اسپرسو','شات غلیظ و خوش‌عطر','۱۱۰','☕'],
+      ['آمریکانو','اسپرسو با آب داغ، سبک و روشن','۱۲۰','🫖'],
+      ['کاپوچینو','اسپرسو، شیر و فوم مخملی','۱۶۵','☕'],
+      ['لاته','ملایم و کرمی با شیر بخارداده','۱۷۵','🥛'],
+      ['موکا','قهوه و شکلات داغ','۱۹۰','🍫'],
+      ['قهوه ترک','سنتی و پررنگ','۱۳۰','🫘']]},
+    {name:'نوشیدنی سرد',icon:'🧊',items:[
+      ['آیس لاته','لاته‌ی خنک با یخ','۱۹۰','🧊'],
+      ['آیس آمریکانو','تلخ و سرحال‌کننده','۱۴۰','🥤'],
+      ['فراپاچینو','قهوه‌ی یخی با خامه','۲۱۰','🍦'],
+      ['لیموناد نعنا','خنک و شاداب','۱۵۵','🍋'],
+      ['اسموتی توت‌فرنگی','میوه‌ی تازه و ماست','۲۰۰','🍓']]},
+    {name:'چای و دمنوش',icon:'🍵',items:[
+      ['چای ماسالا','چای ادویه‌دار با شیر','۱۵۰','🫖'],
+      ['چای سبز','ساده و سبک','۱۱۰','🍵'],
+      ['دمنوش بهارنارنج','آرامش‌بخش و معطر','۱۲۰','🌼'],
+      ['هات چاکلت','غلیظ و شیرین','۱۸۰','🍫']]},
+    {name:'دسر',icon:'🍰',items:[
+      ['چیزکیک','با سس توت‌فرنگی','۲۲۰','🍰'],
+      ['تیرامیسو','قهوه‌ای و خامه‌ای','۲۴۰','🍮'],
+      ['براونی','گرم، با یه اسکوپ بستنی','۱۹۰','🍫'],
+      ['کروسان شکلاتی','تازه و پفی','۱۶۰','🥐']]},
+    {name:'خوراکی',icon:'🥪',items:[
+      ['ساندویچ مرغ و پستو','نان تازه با سس پستو','۲۹۰','🥪'],
+      ['پنینی','پنیر پیتزا و قارچ','۲۷۰','🧀'],
+      ['سالاد سزار','کاهو، مرغ و پارمزان','۲۶۰','🥗']]}
+  ];
+  var COLORS=['{{t:#f2bfca}}','{{t:#f4d78f}}','{{t:#bfd8b8}}','{{t:#f0996f}}','{{t:#a6d5d1}}'];
+  var chips=document.getElementById('chips'),list=document.getElementById('menuList');
+  function showCat(i){
+    chips.querySelectorAll('.chip').forEach(function(c,k){c.classList.toggle('on',k===i);c.setAttribute('aria-selected',k===i)});
+    list.innerHTML=MENU[i].items.map(function(it,k){
+      return '<li class="item" style="--i:'+k+';--c:'+COLORS[k%COLORS.length]+'"><span class="ic" aria-hidden="true">'+it[3]+'</span>'
+        +'<div class="txt"><b>'+it[0]+'</b><small>'+it[1]+'</small></div>'
+        +'<div class="price">'+it[2]+'<small>هزار تومان</small></div></li>';
+    }).join('');
+  }
+  chips.innerHTML=MENU.map(function(m,i){return '<button class="chip" role="tab" data-i="'+i+'"><span aria-hidden="true">'+m.icon+'</span>'+m.name+'</button>'}).join('');
+  chips.addEventListener('click',function(e){
+    var b=e.target.closest('.chip');if(!b)return;
+    showCat(+b.dataset.i);
+    b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  });
+  showCat(0);
+
+  /* ---------- Carousels ---------- */
+  function carousel(id,auto){
+    var el=document.getElementById(id),pg=document.getElementById(id+'Pager');
+    if(!el)return;
+    var cards=[].slice.call(el.children),cur=0,paused=false,visible=false,pt;
+    pg.innerHTML=cards.map(function(){return '<i></i>'}).join('');
+    var dots=[].slice.call(pg.children);
+    function nearest(){
+      var r=el.getBoundingClientRect(),c=r.left+r.width/2,b=0,bd=1e9;
+      cards.forEach(function(k,i){var kr=k.getBoundingClientRect(),d=Math.abs(kr.left+kr.width/2-c);if(d<bd){bd=d;b=i}});
+      return b;
+    }
+    function mark(){
+      cur=nearest();
+      dots.forEach(function(d,i){d.classList.toggle('on',i===cur)});
+      cards.forEach(function(k,i){k.classList.toggle('active',i===cur)});
+    }
+    function go(i){
+      var r=el.getBoundingClientRect(),kr=cards[i].getBoundingClientRect();
+      el.scrollBy({left:(kr.left+kr.width/2)-(r.left+r.width/2),behavior:'smooth'});
+    }
+    el.addEventListener('scroll',function(){cancelAnimationFrame(pt);pt=requestAnimationFrame(mark)},{passive:true});
+    dots.forEach(function(d,i){d.addEventListener('click',function(){go(i)})});
+    mark();
+    if(auto){
+      if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:.5}).observe(el)}
+      var hold;function pause(){paused=true;clearTimeout(hold);hold=setTimeout(function(){paused=false},9000)}
+      el.addEventListener('pointerdown',pause);el.addEventListener('touchstart',pause,{passive:true});el.addEventListener('wheel',pause,{passive:true});
+      setInterval(function(){if(visible&&!paused&&!document.hidden)go((cur+1)%cards.length)},4200);
+    }
+  }
+  carousel('stories',false);
+  carousel('sigs',false);
+  carousel('scenes',false);
+  carousel('revs',true);
+
+  /* ---------- Map link ---------- */
+  
+})();
+</script>
+</body>
+</html>

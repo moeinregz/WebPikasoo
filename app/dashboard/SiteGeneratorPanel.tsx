@@ -5,7 +5,14 @@ import { useFormState, useFormStatus } from "react-dom";
 import { generateSiteAction, type PrivateSiteFormState } from "./actions";
 import { TRADES } from "@/lib/siteTemplates/trades";
 
-type TemplateOption = { id: string; trade: string; label: string };
+type TemplateOption = {
+  id: string;
+  trade: string;
+  label: string;
+  /** the template's own signature colors (null = it follows the trade palette) */
+  primary: string | null;
+  secondary: string | null;
+};
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
@@ -95,7 +102,7 @@ function ColorField({
             onChange={(e) => onChange(e.target.checked ? null : defaultColor)}
             className="h-4 w-4 accent-[var(--accent,#d4a857)]"
           />
-          رنگ پیش‌فرض صنف
+          رنگ پیش‌فرض قالب
         </label>
       </div>
     </div>
@@ -115,10 +122,16 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
   const [phones, setPhones] = useState<string[]>([""]);
   const [color1, setColor1] = useState<string | null>(null);
   const [color2, setColor2] = useState<string | null>(null);
+  const [instagram, setInstagram] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
 
   const trade = TRADES.find((t) => t.id === tradeId) ?? TRADES[0];
   const tradeTemplates = templates.filter((t) => t.trade === tradeId);
   const noTemplates = tradeTemplates.length === 0;
+  // Each template has its own signature colors; show those as the "default".
+  const shownTemplate = tradeTemplates.find((t) => t.id === templateId) ?? tradeTemplates[0];
+  const defaultPrimary = shownTemplate?.primary ?? trade.colors.primary;
+  const defaultSecondary = shownTemplate?.secondary ?? trade.colors.secondary;
 
   // Clear everything once a site was actually created; keep the input when it
   // failed so nothing typed gets lost.
@@ -130,6 +143,8 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
       setPhones([""]);
       setColor1(null);
       setColor2(null);
+      setInstagram("");
+      setWhatsapp("");
       setTemplateId("");
     }
   }, [state]);
@@ -267,18 +282,45 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
           />
         </div>
 
+        <div>
+          <label className={labelClass}>اینستاگرام (اختیاری)</label>
+          <input
+            name="instagram"
+            dir="ltr"
+            maxLength={100}
+            value={instagram}
+            onChange={(e) => setInstagram(e.target.value)}
+            placeholder="@cafe_omid"
+            className={`${inputClass} text-left`}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>واتساپ (اختیاری)</label>
+          <input
+            name="whatsapp"
+            inputMode="tel"
+            dir="ltr"
+            maxLength={20}
+            value={whatsapp}
+            onChange={(e) => setWhatsapp(e.target.value)}
+            placeholder="09123456789"
+            className={`${inputClass} text-left`}
+          />
+        </div>
+
         <ColorField
           label="رنگ اصلی (اختیاری)"
           name="color1"
           value={color1}
-          defaultColor={trade.colors.primary}
+          defaultColor={defaultPrimary}
           onChange={setColor1}
         />
         <ColorField
           label="رنگ دوم (اختیاری)"
           name="color2"
           value={color2}
-          defaultColor={trade.colors.secondary}
+          defaultColor={defaultSecondary}
           onChange={setColor2}
         />
       </div>

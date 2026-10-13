@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{brand}} | شستشوی تخصصی مبل، تشک و خوشخواب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:{{t:#0A2540}};
+    --navy-2:{{t:#123A63}};
+    --navy-3:{{t:#0E2F52}};
+    --plum:{{t:#38213C}};
+    --plum-2:{{t:#4A2A4E}};
+    --teal:{{t:#0F3A3B}};
+    --teal-2:{{t:#155150}};
+    --gold:{{t:#C9A227}};
+    --gold-soft:{{t:#E7C873}};
+    --gold-deep:{{t:#8C6D14}};
+    --cream:{{t:#F3ECDC}};
+    --white:{{t:#FBF8F2}};
+    --ink:{{t:#0D1420}};
+    --shadow-hard: {{t:rgba(4,10,20,.55)}};
+    --radius: 30px;
+    font-size: 16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x:hidden;
+    line-height:1.8;
+  }
+  h1,h2,h3, .display{
+    font-family:'Lalezar', 'Vazirmatn', sans-serif;
+    font-weight:400;
+    letter-spacing:.5px;
+  }
+  a{color:inherit; text-decoration:none;}
+  img,svg{display:block; max-width:100%;}
+  ul{list-style:none;}
+  .container{
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .puffy{
+    border-radius: var(--radius);
+    box-shadow:
+      10px 12px 0 var(--shadow-hard),
+      0 30px 50px -20px rgba(0,0,0,.6);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Lalezar', sans-serif;
+    font-size:1.15rem;
+    padding: 16px 34px;
+    border-radius: 100px;
+    cursor:pointer;
+    border:none;
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 6px 6px 0 var(--shadow-hard);
+  }
+  .btn:active{ transform: translateY(2px); box-shadow: 3px 3px 0 var(--shadow-hard);}
+  .btn-gold{ background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color:{{t:#2A1E04}};}
+  .btn-outline{ background:transparent; color:var(--white); border:2px solid rgba(255,255,255,.5); box-shadow:none;}
+  .btn-outline:active{transform:none;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position: fixed; inset: 0 0 auto 0;
+    z-index: 500;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 24px;
+    background: {{t:rgba(10,37,64,.75)}};
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Lalezar', sans-serif;
+    font-size:1.4rem;
+    color: var(--gold-soft);
+  }
+  .logo span{ color: var(--white); font-size:.85rem; font-family:'Vazirmatn'; display:block; opacity:.75; }
+  .logo-badge{
+    width:46px; height:46px; border-radius:14px;
+    background: linear-gradient(145deg, var(--gold-soft), var(--gold-deep));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 3px 3px 0 var(--shadow-hard);
+  }
+  nav.desktop-nav{ display:flex; gap:34px; font-size:1.02rem; }
+  nav.desktop-nav a{ position:relative; padding:4px 0; opacity:.9;}
+  nav.desktop-nav a:hover{ opacity:1; color: var(--gold-soft);}
+  .call-chip{
+    display:flex; align-items:center; gap:8px;
+    background: var(--gold);
+    color:{{t:#241a03}};
+    padding:10px 18px;
+    border-radius:100px;
+    font-family:'Lalezar';
+    font-size:1rem;
+    box-shadow: 4px 4px 0 var(--shadow-hard);
+  }
+  .burger{
+    width:52px; height:52px; border-radius:16px;
+    background: var(--navy-2);
+    border:1px solid rgba(255,255,255,.15);
+    display:none; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer; z-index:900;
+  }
+  .burger span{ width:24px; height:3px; background:var(--gold-soft); border-radius:3px; transition:.3s;}
+  .burger.open span:nth-child(1){ transform: translateY(9px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform: translateY(-9px) rotate(-45deg); }
+
+  .mobile-menu{
+    position:fixed; inset:0; z-index:800;
+    background:
+      radial-gradient(circle at 30% 20%, var(--navy-3), var(--navy) 70%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:26px;
+    transform: translateY(-110%);
+    transition: transform .55s cubic-bezier(.7,0,.2,1);
+  }
+  .mobile-menu.open{ transform: translateY(0); }
+  .mobile-menu a{
+    font-family:'Lalezar'; font-size:2rem; color:var(--white);
+    opacity:0; transform: translateY(24px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .mobile-menu.open a{ opacity:1; transform:translateY(0); }
+  .mobile-menu.open a:nth-child(1){ transition-delay:.12s;}
+  .mobile-menu.open a:nth-child(2){ transition-delay:.2s;}
+  .mobile-menu.open a:nth-child(3){ transition-delay:.28s;}
+  .mobile-menu.open a:nth-child(4){ transition-delay:.36s;}
+  .mobile-menu.open a:nth-child(5){ transition-delay:.44s;}
+  .mobile-menu.open a:nth-child(6){ transition-delay:.52s;}
+  .mobile-menu .mm-call{
+    margin-top:10px;
+  }
+  .mobile-menu .mm-bubbles span{
+    position:absolute; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.5), rgba(255,255,255,.05));
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    padding: 140px 24px 90px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%, var(--navy-3), transparent 60%),
+      linear-gradient(180deg, var(--navy), {{t:#071B30}} 100%);
+  }
+  .bubble{
+    position:absolute; border-radius:50%;
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.65), rgba(255,255,255,.06) 70%);
+    animation: rise linear infinite;
+    opacity:.8;
+  }
+  @keyframes rise{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0; }
+    10%{ opacity:.85; }
+    90%{ opacity:.5; }
+    100%{ transform: translateY(-115vh) translateX(var(--drift,20px)) scale(1.15); opacity:0; }
+  }
+  .hero-inner{ position:relative; z-index:5; max-width:800px; }
+  .eyebrow-chip{
+    display:inline-flex; align-items:center; gap:8px;
+    background: {{t:rgba(201,162,39,.14)}};
+    border:1px solid {{t:rgba(201,162,39,.5)}};
+    color: var(--gold-soft);
+    padding:9px 20px; border-radius:100px;
+    font-size:.9rem; margin-bottom:26px;
+  }
+  .hero h1{
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    line-height:1.25;
+    color: var(--white);
+    text-shadow: 4px 4px 0 rgba(0,0,0,.35);
+  }
+  .hero h1 em{ font-style:normal; color: var(--gold-soft); }
+  .hero p{
+    margin-top:22px; font-size:1.15rem; color: rgba(255,255,255,.82);
+    max-width: 560px; margin-left:auto; margin-right:auto;
+  }
+  .hero-actions{
+    margin-top:38px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+  }
+  .sofa-wrap{
+    margin: 56px auto 0; width: min(560px, 90vw); position:relative;
+  }
+  .sofa-wrap svg{ width:100%; height:auto; }
+  .foam-line{ animation: foam-pulse 3.4s ease-in-out infinite; transform-origin:center; }
+  @keyframes foam-pulse{ 0%,100%{ transform: scaleY(1);} 50%{ transform: scaleY(1.08) translateY(-3px);} }
+  .scroll-cue{
+    position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    color: rgba(255,255,255,.55); font-size:.8rem; z-index:5;
+  }
+  .scroll-cue .dot{
+    width:6px; height:6px; border-radius:50%; background: var(--gold-soft);
+    animation: bob 1.6s ease-in-out infinite;
+  }
+  @keyframes bob{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(10px);} }
+
+  /* ---------- STATS STRIP ---------- */
+  .stats-strip{
+    position:relative; z-index:4;
+    display:grid; grid-template-columns: repeat(4,1fr);
+    gap:18px;
+    max-width:1080px; margin: -60px auto 0; padding: 0 24px 0;
+  }
+  .stat-card{
+    background: var(--navy-2);
+    padding: 26px 14px; text-align:center;
+    border-radius:22px;
+  }
+  .stat-card .num{
+    font-family:'Lalezar'; font-size:2.1rem; color: var(--gold-soft);
+    display:block;
+  }
+  .stat-card .lab{ font-size:.82rem; color: rgba(255,255,255,.75); margin-top:4px; display:block;}
+
+  section{ padding: 110px 0 40px; position:relative; }
+  .section-tag{
+    display:inline-block; color: var(--gold-soft); font-size:.95rem;
+    background: rgba(255,255,255,.07); padding:7px 18px; border-radius:100px;
+    margin-bottom:16px;
+  }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 60px; }
+  .section-head h2{ font-size: clamp(2rem,4.6vw,2.9rem); }
+  .section-head p{ margin-top:14px; color: rgba(255,255,255,.75); font-size:1.05rem; }
+
+  /* ---------- SERVICES (plum) ---------- */
+  .section-plum{ background: linear-gradient(180deg, var(--plum), var(--plum-2)); }
+  .services-grid{
+    display:grid; grid-template-columns: repeat(2, 1fr); gap:26px;
+  }
+  .service-card{
+    background: var(--plum-2);
+    padding: 34px 28px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .service-icon{
+    width:60px; height:60px; border-radius:18px;
+    background: linear-gradient(145deg, var(--gold-soft), var(--gold-deep));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .service-card h3{ font-size:1.5rem; color:var(--white); }
+  .service-card p{ color: rgba(255,255,255,.78); font-size:.98rem; }
+  .service-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .service-tags span{
+    font-size:.78rem; background: rgba(255,255,255,.09); padding:6px 12px; border-radius:100px;
+    color: var(--gold-soft);
+  }
+
+  /* ---------- BENEFITS (teal) ---------- */
+  .section-teal{ background: linear-gradient(180deg, var(--teal), var(--teal-2)); }
+  .benefits-list{
+    display:grid; grid-template-columns: repeat(5, 1fr); gap:18px;
+  }
+  .benefit-card{
+    background: var(--teal-2);
+    padding: 30px 20px; text-align:center;
+  }
+  .benefit-num{
+    width:44px; height:44px; border-radius:50%;
+    background: var(--gold); color:{{t:#241a03}}; font-family:'Lalezar';
+    display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
+  }
+  .benefit-card h3{ font-size:1.05rem; font-family:'Vazirmatn'; font-weight:700; color:var(--white); margin-bottom:8px;}
+  .benefit-card p{ font-size:.85rem; color: rgba(255,255,255,.72); }
+
+  /* ---------- PROCESS / MACHINE (navy) ---------- */
+  .machine-block{
+    display:grid; grid-template-columns: 1fr 1fr; gap:50px; align-items:center;
+  }
+  .machine-visual{
+    background: var(--navy-2); padding: 40px; display:flex; align-items:center; justify-content:center;
+    min-height:320px;
+  }
+  .machine-copy h2{ font-size:clamp(1.9rem,4vw,2.6rem); margin-bottom:18px; }
+  .machine-copy p{ color: rgba(255,255,255,.78); margin-bottom:14px; }
+  .check-list li{ display:flex; gap:10px; align-items:flex-start; margin-bottom:12px; font-size:.98rem; color: rgba(255,255,255,.88);}
+  .check-list li b{ color: var(--gold-soft); }
+
+  /* ---------- ABOUT (gold/cream) ---------- */
+  .section-gold{
+    background: linear-gradient(165deg, var(--gold-soft) 0%, var(--gold) 55%, var(--gold-deep) 100%);
+    color: {{t:#241a03}};
+  }
+  .section-gold .section-tag{ background: {{t:rgba(36,26,3,.12)}}; color:{{t:#241a03}}; }
+  .section-gold .section-head p{ color:{{t:#4a3a10}}; }
+  .about-wrap{
+    display:grid; grid-template-columns: 1.1fr .9fr; gap:34px; align-items:stretch;
+  }
+  .about-card{
+    background: var(--cream); color: var(--ink);
+    padding: 40px 34px;
+  }
+  .about-card h3{ font-family:'Lalezar'; font-size:1.7rem; color: var(--navy); margin-bottom:14px; }
+  .about-card p{ color:{{t:#33291a}}; margin-bottom:14px; font-size:1rem; }
+  .about-signature{ font-family:'Lalezar'; font-size:1.2rem; color: var(--gold-deep); margin-top:18px; }
+  .areas-card{
+    background: var(--navy); color: var(--white);
+    padding: 36px 30px; display:flex; flex-direction:column; gap:18px;
+  }
+  .areas-card h3{ font-family:'Lalezar'; font-size:1.5rem; color: var(--gold-soft); }
+  .area-chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .area-chips span{
+    background: var(--navy-2); padding:9px 16px; border-radius:100px; font-size:.88rem;
+  }
+  .about-stats{ display:flex; gap:16px; margin-top:auto; padding-top:10px; border-top:1px solid rgba(255,255,255,.12); }
+  .about-stats div{ text-align:center; flex:1; }
+  .about-stats .num{ font-family:'Lalezar'; font-size:1.6rem; color: var(--gold-soft); display:block; }
+  .about-stats .lab{ font-size:.75rem; color: rgba(255,255,255,.7); }
+
+  /* ---------- TESTIMONIALS (navy-3) ---------- */
+  .section-navy3{ background: linear-gradient(180deg, {{t:#0E2F52}}, var(--navy)); }
+  .testi-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:24px; }
+  .testi-card{ background: var(--navy-2); padding:30px 26px; display:flex; flex-direction:column; gap:16px; }
+  .testi-stars{ color: var(--gold-soft); font-size:1.1rem; letter-spacing:3px; }
+  .testi-card p{ color: rgba(255,255,255,.85); font-size:.98rem; }
+  .testi-who{ display:flex; align-items:center; gap:12px; margin-top:auto; }
+  .testi-avatar{
+    width:44px; height:44px; border-radius:50%;
+    background: linear-gradient(145deg, var(--gold-soft), var(--gold-deep));
+    display:flex; align-items:center; justify-content:center; font-family:'Lalezar'; color:{{t:#241a03}};
+  }
+  .testi-who b{ display:block; font-size:.95rem; }
+  .testi-who span{ font-size:.78rem; color: rgba(255,255,255,.6); }
+
+  /* ---------- CTA ---------- */
+  .cta-block{
+    background: linear-gradient(120deg, var(--navy-2), var(--plum-2));
+    padding: 60px 40px; text-align:center;
+  }
+  .cta-block h2{ font-size: clamp(1.9rem,4.6vw,2.7rem); margin-bottom:14px; }
+  .cta-block p{ color: rgba(255,255,255,.8); margin-bottom:30px; }
+  .cta-actions{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+  footer{
+    background: {{t:#071A2D}};
+    padding: 60px 0 26px;
+    margin-top: 60px;
+  }
+  .footer-grid{ display:grid; grid-template-columns: 1.3fr 1fr 1fr; gap:40px; }
+  .footer-grid h4{ color: var(--gold-soft); font-family:'Lalezar'; font-size:1.15rem; margin-bottom:16px; }
+  .footer-grid p, .footer-grid li{ color: rgba(255,255,255,.65); font-size:.92rem; margin-bottom:8px; }
+  .foot-bottom{
+    text-align:center; margin-top:46px; padding-top:22px; border-top:1px solid rgba(255,255,255,.08);
+    color: rgba(255,255,255,.45); font-size:.82rem;
+  }
+
+  .reveal{ opacity:0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (max-width: 900px){
+    nav.desktop-nav, .call-chip{ display:none; }
+    .burger{ display:flex; }
+    .services-grid{ grid-template-columns: 1fr; }
+    .benefits-list{ grid-template-columns: repeat(2, 1fr); }
+    .machine-block{ grid-template-columns: 1fr; }
+    .about-wrap{ grid-template-columns: 1fr; }
+    .testi-grid{ grid-template-columns: 1fr; }
+    .stats-strip{ grid-template-columns: repeat(2,1fr); }
+    .footer-grid{ grid-template-columns:1fr; text-align:center; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 15c0-3 2-4 3-4h10c1 0 3 1 3 4v3H4v-3Z" stroke="{{t:#241a03}}" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 15v-3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="{{t:#241a03}}" stroke-width="1.6"/><circle cx="8" cy="20" r="1.3" fill="{{t:#241a03}}"/><circle cx="16" cy="20" r="1.3" fill="{{t:#241a03}}"/></svg>
+    </div>
+    <div>
+      {{brand}}
+      <span>لوکس، تمیز، مطمئن</span>
+    </div>
+  </div>
+  <nav class="desktop-nav">
+    <a href="#services">خدمات</a>
+    <a href="#process">روش کار</a>
+    <a href="#about">درباره ما</a>
+    <a href="#testimonials">نظرات مشتریان</a>
+    <a href="#contact">تماس</a>
+  </nav>
+  <!--each:phones--><a href="{{phone_href}}" class="call-chip">{{phone}}</a><br><!--/each:phones-->
+  <div class="burger" id="burger">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services">خدمات</a>
+  <a href="#process">روش کار</a>
+  <a href="#about">درباره ما</a>
+  <a href="#testimonials">نظرات مشتریان</a>
+  <a href="#contact">تماس با ما</a>
+  <a href="{{phone_href}}" class="call-chip mm-call">تماس فوری {{phone}}</a>
+</div>
+
+<section class="hero">
+  <div id="bubbleField"></div>
+  <div class="hero-inner">
+    <span class="eyebrow-chip">بالای ۱۰ سال سابقه در شستشوی مبلمان</span>
+    <h1>مبلمان‌تان را <em>به‌روز لوکس</em><br>می‌شوییم، نه فقط تمیز</h1>
+    <p>شستشو و لکه‌برداری تخصصی انواع مبل سلطنتی و راحتی، تشک و خوشخواب و موکت در محل، با دستگاه آلمانی و شامپو نانوی خارجی.</p>
+    <div class="hero-actions">
+      <a href="{{phone_href}}" class="btn btn-gold">تماس فوری برای نوبت‌دهی</a>
+      <a href="#services" class="btn btn-outline">دیدن خدمات</a>
+    </div>
+    <div class="sofa-wrap">
+      <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="200" cy="205" rx="150" ry="10" fill="rgba(0,0,0,.35)"/>
+        <path d="M60 190 L60 110 Q60 90 80 90 L100 90 Q100 60 130 60 L270 60 Q300 60 300 90 L320 90 Q340 90 340 110 L340 190 Z" fill="{{t:#E7C873}}"/>
+        <rect x="60" y="150" width="280" height="40" rx="14" fill="{{t:#C9A227}}"/>
+        <rect x="90" y="95" width="220" height="70" rx="16" fill="{{t:#F3ECDC}}"/>
+        <rect x="50" y="140" width="26" height="55" rx="10" fill="{{t:#8C6D14}}"/>
+        <rect x="324" y="140" width="26" height="55" rx="10" fill="{{t:#8C6D14}}"/>
+        <g class="foam-line">
+          <circle cx="120" cy="85" r="10" fill="#fff" opacity=".9"/>
+          <circle cx="145" cy="72" r="14" fill="#fff" opacity=".95"/>
+          <circle cx="175" cy="80" r="9" fill="#fff" opacity=".85"/>
+          <circle cx="230" cy="70" r="16" fill="#fff" opacity=".95"/>
+          <circle cx="265" cy="82" r="11" fill="#fff" opacity=".9"/>
+          <circle cx="290" cy="68" r="10" fill="#fff" opacity=".85"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>اسکرول کنید</span><span class="dot"></span></div>
+</section>
+
+<div class="stats-strip reveal">
+  <div class="stat-card"><span class="num">+۱۰</span><span class="lab">سال سابقه کاری</span></div>
+  <div class="stat-card"><span class="num">آلمانی</span><span class="lab">جدیدترین دستگاه خشک‌کن</span></div>
+  <div class="stat-card"><span class="num">نانو</span><span class="lab">شامپوی تخصصی خارجی</span></div>
+  <div class="stat-card"><span class="num">سریع</span><span class="lab">پاسخگویی و نوبت‌دهی</span></div>
+</div>
+
+<section id="services" class="section-plum">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">خدمات</span>
+      <h2>شستشویی که به بافت پارچه احترام می‌گذارد</h2>
+      <p>از مبل سلطنتی گرفته تا خوشخواب و موکت، هر پارچه با فرچه و شامپوی مخصوص خودش شسته می‌شود.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card puffy reveal">
+        <div class="service-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 15c0-3 2-4 3-4h10c1 0 3 1 3 4v3H4v-3Z" stroke="{{t:#241a03}}" stroke-width="1.6"/><path d="M6 15v-3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="{{t:#241a03}}" stroke-width="1.6"/></svg>
+        </div>
+        <h3>مبل سلطنتی و راحتی</h3>
+        <p>شستشو و لکه‌برداری انواع مبلمان با فرچه‌های مخصوص هر پارچه و شامپوی دگزافون و نانو، بدون آسیب به بافت.</p>
+        <div class="service-tags"><span>لکه‌بری قوی</span><span>کف کنترل‌شده</span><span>بدون آبریزی</span></div>
+      </div>
+      <div class="service-card puffy reveal">
+        <div class="service-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="9" width="18" height="9" rx="2" stroke="{{t:#241a03}}" stroke-width="1.6"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2" stroke="{{t:#241a03}}" stroke-width="1.6"/></svg>
+        </div>
+        <h3>تشک و خوشخواب</h3>
+        <p>شستشوی عمقی تشک و خوشخواب با شامپوی نانو برای رفع بوی بد و لکه‌های عمیق، مناسب برای خواب سالم‌تر.</p>
+        <div class="service-tags"><span>ضدحساسیت</span><span>خشک‌کن آلمانی</span></div>
+      </div>
+      <div class="service-card puffy reveal">
+        <div class="service-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="{{t:#241a03}}" stroke-width="1.6"/><path d="M4 9h16M9 4v16" stroke="{{t:#241a03}}" stroke-width="1.6"/></svg>
+        </div>
+        <h3>موکت و فرش چسبیده</h3>
+        <p>شستشوی موکت‌های خوشخواب و چسبیده به کف، همراه با براق‌سازی و کنترل کامل رطوبت باقی‌مانده.</p>
+        <div class="service-tags"><span>در محل</span><span>سریع خشک می‌شود</span></div>
+      </div>
+      <div class="service-card puffy reveal">
+        <div class="service-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="{{t:#241a03}}" stroke-width="1.6"/><path d="M9 12l2 2 4-4" stroke="{{t:#241a03}}" stroke-width="1.6"/></svg>
+        </div>
+        <h3>لکه‌برداری فوق‌تخصصی</h3>
+        <p>حذف لکه‌های سرسخت با روش ایمن برای رنگ و بافت پارچه، همراه با براق‌سازی نهایی مبل.</p>
+        <div class="service-tags"><span>بدون رنگ‌پریدگی</span><span>ماندگار</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process" class="section-teal">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">چرا ما؟</span>
+      <h2>۵ تضمینی که هر بار می‌دهیم</h2>
+    </div>
+    <div class="benefits-list">
+      <div class="benefit-card puffy reveal"><div class="benefit-num">۱</div><h3>حفظ لطافت پارچه</h3><p>نرمی و لطافت اولیه مبلمان شما حفظ می‌شود.</p></div>
+      <div class="benefit-card puffy reveal"><div class="benefit-num">۲</div><h3>رفع بوی بد</h3><p>بوی نامطبوع پارچه به‌طور کامل از بین می‌رود.</p></div>
+      <div class="benefit-card puffy reveal"><div class="benefit-num">۳</div><h3>لکه‌بری و براقی</h3><p>لکه‌های سرسخت پاک و پارچه براق می‌شود.</p></div>
+      <div class="benefit-card puffy reveal"><div class="benefit-num">۴</div><h3>کف کنترل‌شده</h3><p>شستشو بدون آبریزی و کاملاً تمیز انجام می‌شود.</p></div>
+      <div class="benefit-card puffy reveal"><div class="benefit-num">۵</div><h3>بدون آسیب به بافت</h3><p>هیچ آسیبی به بافت و ساختار پارچه وارد نمی‌شود.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="machine-block">
+      <div class="machine-visual puffy reveal">
+        <svg width="220" height="220" viewBox="0 0 220 220" fill="none">
+          <rect x="30" y="40" width="160" height="150" rx="20" fill="{{t:#0A2540}}"/>
+          <circle cx="110" cy="120" r="54" fill="{{t:#123A63}}" stroke="{{t:#E7C873}}" stroke-width="4"/>
+          <circle cx="110" cy="120" r="34" fill="{{t:#0A2540}}" stroke="{{t:#C9A227}}" stroke-width="3"/>
+          <circle cx="60" cy="60" r="6" fill="{{t:#E7C873}}"/>
+          <circle cx="80" cy="60" r="6" fill="{{t:#8C6D14}}"/>
+          <rect x="150" y="52" width="26" height="10" rx="5" fill="{{t:#E7C873}}"/>
+        </svg>
+      </div>
+      <div class="machine-copy reveal">
+        <span class="section-tag" style="background:rgba(255,255,255,.08)">تجهیزات</span>
+        <h2>دستگاه آلمانی، شامپوی خارجی، نتیجه‌ی حرفه‌ای</h2>
+        <p>مجهز به جدیدترین دستگاه آلمانی خشک‌کن و شامپوهای نانوی خارجی که خاصیت لکه‌برداری بالایی دارند.</p>
+        <ul class="check-list">
+          <li><b>✓</b> شامپوی نانو برای لکه‌برداری عمیق و ایمن</li>
+          <li><b>✓</b> کادری حرفه‌ای و مجرب با بالای ۱۰ سال سابقه</li>
+          <li><b>✓</b> سرویس‌دهی در سراسر شهر، شمال تا جنوب و شرق تا غرب</li>
+          <li><b>✓</b> پاسخگویی تلفنی سریع برای هماهنگی نوبت</li>
+        </ul>
+        <a href="{{phone_href}}" class="btn btn-gold" style="margin-top:10px;">رزرو نوبت شستشو</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section-gold">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">درباره ما</span>
+      <h2>یک تیم خانوادگی، یک تعهد ساده</h2>
+      <p>{{brand}} از دل محله‌های شهر شروع شد و امروز به یکی از قابل‌اعتمادترین نام‌ها در شستشوی مبلمان تبدیل شده.</p>
+    </div>
+    <div class="about-wrap">
+      <div class="about-card puffy reveal">
+        <h3>داستان ما</h3>
+        <p>بیش از ده سال است که در خانه‌های شهر، مبل، تشک و خوشخواب می‌شوییم. هر بار که وارد خانه‌ای می‌شویم، با مبلمان شما طوری رفتار می‌کنیم که انگار مال خودمان است؛ با احتیاط، با دقت و با شامپوهایی که به بافت پارچه آسیب نمی‌زنند.</p>
+        <p>تیم ما را کادری مجرب تشکیل داده که سال‌هاست کنار هم کار می‌کنند و دستگاه آلمانی و شامپوی نانو را به‌خوبی می‌شناسند تا بهترین نتیجه ممکن را برای شما رقم بزنند.</p>
+        <div class="about-signature">تیم {{brand}}</div>
+      </div>
+      <div class="areas-card puffy reveal">
+        <h3>محدوده سرویس‌دهی</h3>
+        <div class="area-chips"> <span>شمال شهر</span> <span>شرق شهر</span> <span>غرب شهر</span> <span>جنوب شهر</span> <span>مرکز شهر</span> <span>حومه</span> </div>
+        <p style="color:rgba(255,255,255,.75); font-size:.92rem;">در تمام این مناطق، تیم ما با تجهیزات کامل در محل شما حاضر می‌شود.</p>
+        <div class="about-stats">
+          <div><span class="num">۱۰+</span><span class="lab">سال سابقه</span></div>
+          <div><span class="num">۶</span><span class="lab">منطقه سرویس</span></div>
+          <div><span class="num">★</span><span class="lab">رضایت مشتری</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="section-navy3">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">نظرات مشتریان</span>
+      <h2>حرف مشتریانی که مبلشان را به ما سپردند</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card puffy reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>«مبل سلطنتی قدیمی مادرم رو شستن و مثل روز اول شده بود. خیلی تمیزکار و منظم بودن و خونه هم خیس نموند.»</p>
+        <div class="testi-who"><div class="testi-avatar">ر</div><div><b>رضا کریمی</b><span>ساکن شرق شهر</span></div></div>
+      </div>
+      <div class="testi-card puffy reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>«خوشخواب و موکت اتاق بچه‌ها رو شستن، بوی بدش کامل از بین رفت. خیلی سریع هم تا شب جواب دادن.»</p>
+        <div class="testi-who"><div class="testi-avatar">س</div><div><b>سارا محمدی</b><span>ساکن حومه</span></div></div>
+      </div>
+      <div class="testi-card puffy reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>«لکه‌ی قهوه رو که فکر می‌کردم دیگه پاک نمیشه، کامل برداشتن. قیمت هم منصفانه بود، حتماً بازم زنگ می‌زنم.»</p>
+        <div class="testi-who"><div class="testi-avatar">ا</div><div><b>امیر توکلی</b><span>ساکن غرب شهر</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="cta-block puffy reveal">
+      <h2>همین حالا نوبت شستشوی مبل‌تان را رزرو کنید</h2>
+      <p>پاسخگویی تلفنی سریع و سرویس‌دهی در سراسر شهر، شمال تا جنوب و شرق تا غرب.</p>
+      <div class="cta-actions">
+        <!--each:phones--><a href="{{phone_href}}" class="btn btn-gold">{{phone}}</a><br><!--/each:phones-->
+        <a href="#services" class="btn btn-outline">مشاهده خدمات</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>{{brand}}</h4>
+        <p>شستشوی تخصصی مبل، تشک و خوشخواب با دستگاه آلمانی و شامپوی نانوی خارجی، با بیش از ۱۰ سال سابقه در شهر.</p>
+      </div>
+      <div>
+        <h4>دسترسی سریع</h4>
+        <ul>
+          <li><a href="#services">خدمات</a></li>
+          <li><a href="#about">درباره ما</a></li>
+          <li><a href="#testimonials">نظرات مشتریان</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>تماس با ما</h4>
+        <p>تلفن: <!--each:phones--><a href="{{phone_href}}">{{phone}}</a><br><!--/each:phones--></p>
+        <p>آدرس: {{address}}</p> <!--if:hours--><p>ساعت پاسخگویی: {{hours}}</p><!--/if:hours-->
+      </div>
+    </div>
+    <div class="foot-bottom">© تمامی حقوق برای {{brand}} محفوظ است.</div>
+  </div>
+<!--if:social-->
+<style>.sg-social{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:22px 16px 96px;font-family:inherit;color:inherit}.sg-social a{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1.5px solid currentColor;border-radius:999px;color:inherit;text-decoration:none;font-size:14px;font-weight:600;opacity:.92}.sg-social a:hover{opacity:1}.sg-social svg{width:18px;height:18px;fill:currentColor}</style>
+<div class="sg-social" dir="rtl"><!--if:instagram--><a href="{{instagram_href}}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.5 6a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>اینستاگرام</a><!--/if:instagram--><!--if:whatsapp--><a href="{{whatsapp_href}}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.25 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.57.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>واتساپ</a><!--/if:whatsapp--></div>
+<!--/if:social-->
+</footer>
+
+<script>
+  // Hamburger toggle
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    menu.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+
+  // Bubble field generator
+  const field = document.getElementById('bubbleField');
+  const bubbleCount = window.innerWidth < 700 ? 14 : 24;
+  for(let i=0;i<bubbleCount;i++){
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 6 + Math.random()*22;
+    b.style.width = size+'px';
+    b.style.height = size+'px';
+    b.style.left = Math.random()*100+'%';
+    b.style.bottom = '-40px';
+    b.style.setProperty('--drift', (Math.random()*80-40)+'px');
+    b.style.animationDuration = (7 + Math.random()*8)+'s';
+    b.style.animationDelay = (Math.random()*8)+'s';
+    field.appendChild(b);
+  }
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {threshold:.15});
+  revealEls.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

@@ -1,31 +1,160 @@
 import type { SiteTemplate } from "./generate";
 import cafeAdra from "./templates/cafe-adra.template.html";
+import cafeSara from "./templates/cafe-sara.template.html";
+import fastfoodSimen from "./templates/fastfood-simen.template.html";
+import carpetMatin from "./templates/carpet-matin.template.html";
+import travelPargar from "./templates/travel-pargar.template.html";
+import gymPulad from "./templates/gym-pulad.template.html";
+import upholsteryFarshad from "./templates/upholstery-farshad.template.html";
+import movingKarvan from "./templates/moving-karvan.template.html";
+import fashionRococo from "./templates/fashion-rococo.template.html";
+import lawParsa from "./templates/law-parsa.template.html";
+import languageZabankadeh from "./templates/language-zabankadeh.template.html";
+import jewelryZarafshan from "./templates/jewelry-zarafshan.template.html";
+import watchSaatkade from "./templates/watch-saatkade.template.html";
+import cosmeticsGolgoon from "./templates/cosmetics-golgoon.template.html";
+import icecreamShahd from "./templates/icecream-shahd.template.html";
+import pastryZafaran from "./templates/pastry-zafaran.template.html";
+import musicNava from "./templates/music-nava.template.html";
+import realestateZomorod from "./templates/realestate-zomorod.template.html";
 
 // ---------------------------------------------------------------------------
 // Template registry. To add a template: put the HTML in ./templates as
-// `<name>.template.html` (see EXAMPLE.template.html for the placeholder
-// syntax), import it below and add an entry. `trade` must match an id in
-// ./trades.ts; `vars` maps the template's CSS variables to color roles so
-// the brand's colors (or the trade's defaults) can replace them.
+// `<name>.template.html` (placeholder syntax: see generate.ts and
+// EXAMPLE.template.html), import it here and add an entry.
+//  - `trade` must match an id in ./trades.ts
+//  - `palette` = the template's OWN signature colors. With no color chosen the
+//    template keeps its look; a chosen color re-themes the matching hue family.
+//    (Templates that derive everything from {{c:...}} expressions, like
+//    cafe-adra, take the trade's default palette instead and need no `palette`.)
 // ---------------------------------------------------------------------------
 
 export const TEMPLATES: SiteTemplate[] = [
   {
     id: "cafe-adra",
     trade: "cafe",
-    label: "کافه — رنگارنگ و شاد (آدرا)",
+    label: "کافه — رنگارنگ و شاد",
     html: cafeAdra,
-    // Colors are derived inside the template with {{c:...}} expressions, so
-    // no CSS-variable mapping is needed here.
-    vars: {},
   },
-  // {
-  //   id: "cafe-1",
-  //   trade: "cafe",
-  //   label: "کافه — گرم و کلاسیک",
-  //   html: cafe1,
-  //   vars: { "--brown": "primary", "--cream": "bg", "--ink": "text", "--caramel": "accent" },
-  // },
+  {
+    id: "cafe-sara",
+    trade: "cafe",
+    label: "کافه — گرم و دنج (سارا)",
+    html: cafeSara,
+    palette: { primary: "#d9673f", secondary: "#1f5451" },
+  },
+  {
+    id: "fastfood-simen",
+    trade: "fastfood",
+    label: "فست‌فود — آتشین و پرانرژی",
+    html: fastfoodSimen,
+    palette: { primary: "#e63329", secondary: "#f5a623" },
+  },
+  {
+    id: "carpet-matin",
+    trade: "carpet",
+    label: "فرش‌فروشی — شرابی و طلایی",
+    html: carpetMatin,
+    palette: { primary: "#6E1423", secondary: "#C39A4B" },
+  },
+  {
+    id: "travel-pargar",
+    trade: "travel",
+    label: "آژانس مسافرتی — سرمه‌ای و طلایی",
+    html: travelPargar,
+    palette: { primary: "#1B4A66", secondary: "#E3A857" },
+  },
+  {
+    id: "gym-pulad",
+    trade: "gym",
+    label: "باشگاه — تیره و پرانرژی",
+    html: gymPulad,
+    palette: { primary: "#ff4419", secondary: "#d7ff4a" },
+  },
+  {
+    id: "upholstery-farshad",
+    trade: "upholstery",
+    label: "مبل‌شویی — سرمه‌ای و طلایی",
+    html: upholsteryFarshad,
+    palette: { primary: "#0A2540", secondary: "#C9A227" },
+  },
+  {
+    id: "moving-karvan",
+    trade: "moving",
+    label: "باربری — زرد و نارنجی",
+    html: movingKarvan,
+    palette: { primary: "#FFC530", secondary: "#FF5A2A" },
+  },
+  {
+    id: "fashion-rococo",
+    trade: "fashion",
+    label: "لباس مردانه — سبز و طلایی",
+    html: fashionRococo,
+    palette: { primary: "#1e5b3f", secondary: "#c6a35f" },
+  },
+  {
+    id: "law-parsa",
+    trade: "law",
+    label: "دفتر وکالت — کلاسیک",
+    html: lawParsa,
+    palette: { primary: "#b8925a", secondary: "#16263d" },
+  },
+  {
+    id: "language-zabankadeh",
+    trade: "language",
+    label: "آموزشگاه زبان — پستی و گرم",
+    html: languageZabankadeh,
+    palette: { primary: "#E8A33D", secondary: "#1B2A4A" },
+  },
+  {
+    id: "jewelry-zarafshan",
+    trade: "jewelry",
+    label: "طلافروشی — مخملی و طلایی",
+    html: jewelryZarafshan,
+    palette: { primary: "#c9a13b", secondary: "#2a1014" },
+  },
+  {
+    id: "watch-saatkade",
+    trade: "watch",
+    label: "ساعت‌فروشی — لوکس تیره",
+    html: watchSaatkade,
+    palette: { primary: "#c9a24b", secondary: "#7a2e3a" },
+  },
+  {
+    id: "cosmetics-golgoon",
+    trade: "cosmetics",
+    label: "لوازم آرایشی — رز و طلایی",
+    html: cosmeticsGolgoon,
+    palette: { primary: "#C6455B", secondary: "#C9A15A" },
+  },
+  {
+    id: "icecream-shahd",
+    trade: "icecream",
+    label: "بستنی و آبمیوه — شاد و میوه‌ای",
+    html: icecreamShahd,
+    palette: { primary: "#FF4D6D", secondary: "#FF8A3D" },
+  },
+  {
+    id: "pastry-zafaran",
+    trade: "pastry",
+    label: "شیرینی‌فروشی — سنتی و طلایی",
+    html: pastryZafaran,
+    palette: { primary: "#C6942F", secondary: "#4A2020" },
+  },
+  {
+    id: "music-nava",
+    trade: "music",
+    label: "آموزشگاه موسیقی — شرابی و طلایی",
+    html: musicNava,
+    palette: { primary: "#742642", secondary: "#cf9c4f" },
+  },
+  {
+    id: "realestate-zomorod",
+    trade: "realestate",
+    label: "املاک — زمردی و طلایی",
+    html: realestateZomorod,
+    palette: { primary: "#155c42", secondary: "#c9a227" },
+  },
 ];
 
 export function templatesForTrade(tradeId: string): SiteTemplate[] {
@@ -42,5 +171,11 @@ export function pickTemplate(tradeId: string, templateId?: string): SiteTemplate
 
 /** Metadata only (safe to hand to a client component). */
 export function templateOptions() {
-  return TEMPLATES.map((t) => ({ id: t.id, trade: t.trade, label: t.label }));
+  return TEMPLATES.map((t) => ({
+    id: t.id,
+    trade: t.trade,
+    label: t.label,
+    primary: t.palette?.primary ?? null,
+    secondary: t.palette?.secondary ?? null,
+  }));
 }

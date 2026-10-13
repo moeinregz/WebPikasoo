@@ -23,6 +23,19 @@ export const TRADES: Trade[] = [
   { id: "shop", label: "فروشگاه", colors: { primary: "#2F4BD1", secondary: "#9AA9F0", accent: "#F2994A", bg: "#F7F8FD", text: "#171B33" } },
   { id: "law", label: "دفتر وکالت", colors: { primary: "#1E2A47", secondary: "#B8975A", accent: "#8C6D2F", bg: "#F6F4EF", text: "#171B2A" } },
   { id: "hotel", label: "هتل و اقامتگاه", colors: { primary: "#14532D", secondary: "#C8B273", accent: "#A67C37", bg: "#FAF8F1", text: "#1B2A20" } },
+  { id: "carpet", label: "فرش‌فروشی", colors: { primary: "#6E1423", secondary: "#C39A4B", accent: "#E1B866", bg: "#F6EFE6", text: "#2A1418" } },
+  { id: "travel", label: "آژانس مسافرتی و تور", colors: { primary: "#1B4A66", secondary: "#E3A857", accent: "#2C8DB8", bg: "#F3F7FA", text: "#12303F" } },
+  { id: "upholstery", label: "مبل‌شویی", colors: { primary: "#0A2540", secondary: "#C9A227", accent: "#2BB5A0", bg: "#F3ECDC", text: "#0D1420" } },
+  { id: "moving", label: "باربری و حمل‌ونقل", colors: { primary: "#FFC530", secondary: "#FF5A2A", accent: "#57666F", bg: "#F1ECDF", text: "#1B1811" } },
+  { id: "fashion", label: "لباس‌فروشی مردانه و بوتیک", colors: { primary: "#1E5B3F", secondary: "#C6A35F", accent: "#0F3B27", bg: "#F5F1E4", text: "#0B0F0C" } },
+  { id: "language", label: "آموزشگاه زبان", colors: { primary: "#E8A33D", secondary: "#1B2A4A", accent: "#C1443C", bg: "#F7F3E8", text: "#28241D" } },
+  { id: "jewelry", label: "طلافروشی و جواهر", colors: { primary: "#C9A13B", secondary: "#2A1014", accent: "#F2D98A", bg: "#120D09", text: "#F3EAD4" } },
+  { id: "watch", label: "ساعت‌فروشی", colors: { primary: "#C9A24B", secondary: "#7A2E3A", accent: "#E6C877", bg: "#0B0C0F", text: "#EFE9DB" } },
+  { id: "cosmetics", label: "لوازم آرایشی", colors: { primary: "#C6455B", secondary: "#C9A15A", accent: "#9E2F44", bg: "#FFF9F5", text: "#2B0F14" } },
+  { id: "icecream", label: "بستنی و آبمیوه‌فروشی", colors: { primary: "#FF4D6D", secondary: "#FF8A3D", accent: "#FFCB3C", bg: "#FFF6E8", text: "#3A1730" } },
+  { id: "pastry", label: "شیرینی‌فروشی", colors: { primary: "#C6942F", secondary: "#4A2020", accent: "#77875A", bg: "#FBF2E3", text: "#3A2418" } },
+  { id: "music", label: "آموزشگاه موسیقی", colors: { primary: "#742642", secondary: "#CF9C4F", accent: "#9C3A56", bg: "#FAF5E8", text: "#2A1710" } },
+  { id: "realestate", label: "مشاور املاک", colors: { primary: "#155C42", secondary: "#C9A227", accent: "#E4C97A", bg: "#FAF7EF", text: "#12140F" } },
 ];
 
 export function getTrade(id: string): Trade | undefined {

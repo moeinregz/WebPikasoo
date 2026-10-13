@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{brand}} | فروشگاه فرش دستباف و ماشینی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:{{t:#F4EBD9}};
+    --cream-2:{{t:#ECDEC0}};
+    --paper:{{t:#FBF6EC}};
+    --burgundy:{{t:#6E1423}};
+    --burgundy-dark:{{t:#450D16}};
+    --gold:{{t:#C39A4B}};
+    --gold-light:{{t:#E6C878}};
+    --ink:{{t:#241A14}};
+    --navy:{{t:#1D2733}};
+    --teal:{{t:#2E5B5E}};
+    --line:{{t:rgba(36,26,20,0.12)}};
+    --shadow:0 18px 40px -20px {{t:rgba(36,26,20,0.35)}};
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.75;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  section{position:relative;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  h1,h2,h3{font-weight:800; color:var(--burgundy-dark); letter-spacing:-0.01em;}
+
+  /* ---------- rug swatches (illustrated, not photographic) ---------- */
+  .rug{
+    position:relative;
+    border-radius:6px;
+    overflow:hidden;
+    aspect-ratio:3/4;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .rug::before{ /* border stripes */
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(0deg, var(--rug-b1) 0 6px, var(--rug-b2) 6px 10px) top/100% 20px no-repeat,
+      repeating-linear-gradient(0deg, var(--rug-b1) 0 6px, var(--rug-b2) 6px 10px) bottom/100% 20px no-repeat,
+      repeating-linear-gradient(90deg, var(--rug-b1) 0 6px, var(--rug-b2) 6px 10px) left/20px 100% no-repeat,
+      repeating-linear-gradient(90deg, var(--rug-b1) 0 6px, var(--rug-b2) 6px 10px) right/20px 100% no-repeat,
+      var(--rug-field);
+  }
+  .rug::after{ /* medallion */
+    content:"";
+    position:absolute; inset:22px;
+    background:
+      radial-gradient(circle at 50% 50%, var(--rug-m1) 0 8%, transparent 9%),
+      repeating-conic-gradient(from 0deg at 50% 50%, var(--rug-m2) 0 15deg, transparent 15deg 30deg),
+      radial-gradient(circle at 50% 50%, transparent 0 17%, var(--rug-m3) 17.5% 19%, transparent 19.5%),
+      radial-gradient(circle at 15% 12%, var(--rug-m3) 0 3%, transparent 3.5%),
+      radial-gradient(circle at 85% 12%, var(--rug-m3) 0 3%, transparent 3.5%),
+      radial-gradient(circle at 15% 88%, var(--rug-m3) 0 3%, transparent 3.5%),
+      radial-gradient(circle at 85% 88%, var(--rug-m3) 0 3%, transparent 3.5%);
+    opacity:0.9;
+  }
+  .rug-1{ --rug-field:{{t:#7A1626}}; --rug-b1:{{t:#F0DFAE}}; --rug-b2:{{t:#5B0F1B}}; --rug-m1:{{t:#F0DFAE}}; --rug-m2:{{t:#E7C36D}}; --rug-m3:{{t:#2D0A10}}; }
+  .rug-2{ --rug-field:{{t:#233B3D}}; --rug-b1:{{t:#D9A85B}}; --rug-b2:{{t:#16292B}}; --rug-m1:{{t:#D9A85B}}; --rug-m2:{{t:#3E6A6C}}; --rug-m3:{{t:#F4E3BB}}; }
+  .rug-3{ --rug-field:{{t:#2E2140}}; --rug-b1:{{t:#C9A15A}}; --rug-b2:{{t:#1C1530}}; --rug-m1:{{t:#EADFC2}}; --rug-m2:{{t:#7C5FA0}}; --rug-m3:{{t:#C9A15A}}; }
+  .rug-4{ --rug-field:{{t:#8C3A22}}; --rug-b1:{{t:#F1E2BE}}; --rug-b2:{{t:#5E2413}}; --rug-m1:{{t:#F1E2BE}}; --rug-m2:{{t:#C97E4B}}; --rug-m3:{{t:#3A140A}}; }
+  .rug-5{ --rug-field:{{t:#5B1420}}; --rug-b1:{{t:#E3C77F}}; --rug-b2:{{t:#3C0C14}}; --rug-m1:{{t:#E3C77F}}; --rug-m2:{{t:#8B2A38}}; --rug-m3:{{t:#241017}}; }
+  .rug-6{ --rug-field:{{t:#1E2A44}}; --rug-b1:{{t:#C9A15A}}; --rug-b2:{{t:#131C2E}}; --rug-m1:{{t:#E6C878}}; --rug-m2:{{t:#3C4E74}}; --rug-m3:{{t:#F4EBD9}}; }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  header::after{
+    content:"";
+    display:block;
+    height:4px;
+    background:repeating-linear-gradient(90deg, var(--burgundy) 0 18px, var(--gold) 18px 22px, var(--burgundy) 22px 40px);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .logo{
+    font-size:1.5rem; font-weight:900; color:var(--burgundy-dark);
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo span.mark{
+    width:34px; height:34px; border-radius:4px;
+    background:conic-gradient(from 45deg, var(--burgundy) 0 90deg, var(--gold) 90deg 180deg, var(--burgundy) 180deg 270deg, var(--gold) 270deg 360deg);
+    box-shadow:inset 0 0 0 2px var(--paper), inset 0 0 0 3px var(--gold);
+  }
+  nav.desktop-nav{display:none;}
+  @media (min-width:900px){
+    nav.desktop-nav{display:flex; gap:32px; font-weight:600; color:var(--navy);}
+    nav.desktop-nav a{position:relative; padding:4px 0;}
+    nav.desktop-nav a::after{
+      content:""; position:absolute; right:0; bottom:-2px; width:0; height:2px; background:var(--gold);
+      transition:width .25s ease;
+    }
+    nav.desktop-nav a:hover::after{width:100%;}
+  }
+  .call-btn{
+    display:none;
+  }
+  @media (min-width:900px){
+    .call-btn{
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--burgundy); color:var(--paper);
+      padding:10px 20px; border-radius:999px; font-weight:700; font-size:.92rem;
+      box-shadow:var(--shadow);
+    }
+  }
+
+  .burger{
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--line); background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  @media (min-width:900px){ .burger{display:none;} }
+  .burger span{
+    position:relative; width:20px; height:2px; background:var(--ink);
+    display:block;
+  }
+  .burger span::before, .burger span::after{
+    content:""; position:absolute; right:0; width:20px; height:2px; background:var(--ink);
+    transition:transform .25s ease, top .25s ease;
+  }
+  .burger span::before{ top:-6px; }
+  .burger span::after{ top:6px; }
+  .burger.open span{background:transparent;}
+  .burger.open span::before{ top:0; transform:rotate(45deg); }
+  .burger.open span::after{ top:0; transform:rotate(-45deg); }
+
+  .mobile-nav{
+    position:fixed; inset:0; z-index:60;
+    background:var(--burgundy-dark);
+    display:flex; flex-direction:column;
+    padding:28px;
+    transform:translateX(100%);
+    transition:transform .35s cubic-bezier(.65,0,.35,1);
+  }
+  .mobile-nav.open{transform:translateX(0);}
+  .mobile-nav .top-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:48px;}
+  .mobile-nav .top-row .logo{color:var(--gold-light);}
+  .mobile-nav .close-btn{
+    width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,0.25);
+    color:var(--paper); background:transparent; font-size:1.2rem; cursor:pointer;
+  }
+  .mobile-nav ul{display:flex; flex-direction:column; gap:6px;}
+  .mobile-nav a{
+    color:var(--cream); font-size:1.6rem; font-weight:800; padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    opacity:0; transform:translateY(14px);
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .mobile-nav.open a{opacity:1; transform:translateY(0);}
+  .mobile-nav.open li:nth-child(1) a{transition-delay:.08s;}
+  .mobile-nav.open li:nth-child(2) a{transition-delay:.14s;}
+  .mobile-nav.open li:nth-child(3) a{transition-delay:.20s;}
+  .mobile-nav.open li:nth-child(4) a{transition-delay:.26s;}
+  .mobile-nav.open li:nth-child(5) a{transition-delay:.32s;}
+  .mobile-nav .contact-mini{margin-top:auto; color:var(--gold-light); font-size:.95rem;}
+  .mobile-nav .contact-mini a{font-weight:700; display:block; margin-top:6px; opacity:1; transform:none; border:none; font-size:1rem;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:64px 0 80px;
+    background:
+      radial-gradient(circle at 90% 10%, {{t:rgba(195,154,75,0.18)}}, transparent 45%),
+      var(--cream);
+  }
+  .hero .wrap{
+    display:grid; grid-template-columns:1fr; gap:48px; align-items:center;
+  }
+  @media (min-width:920px){
+    .hero .wrap{grid-template-columns:1.05fr 0.95fr;}
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 4.4vw, 3.2rem);
+    line-height:1.32;
+    margin-bottom:22px;
+  }
+  .hero p.lead{
+    font-size:1.08rem; color:{{t:#4a3c30}}; max-width:46ch; margin-bottom:32px;
+  }
+  .hero .cta-row{display:flex; flex-wrap:wrap; gap:14px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 26px; border-radius:999px; font-weight:700; font-size:.98rem;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--burgundy); color:var(--paper); box-shadow:var(--shadow);}
+  .btn-outline{border:1.5px solid var(--burgundy); color:var(--burgundy-dark);}
+
+  .hero-art{
+    position:relative;
+    display:flex; justify-content:center;
+  }
+  .hero-rug{
+    width:min(360px, 78vw);
+    filter:drop-shadow(0 24px 34px {{t:rgba(36,26,20,0.35)}});
+    animation:hangSway 7s ease-in-out infinite;
+    transform-origin:top center;
+  }
+  @keyframes hangSway{
+    0%,100%{transform:rotate(-0.6deg);}
+    50%{transform:rotate(0.6deg);}
+  }
+  .fringe{
+    display:flex; justify-content:center; gap:5px; width:min(360px, 78vw); margin:0 auto;
+  }
+  .fringe span{
+    width:2px; height:26px;
+    background:linear-gradient(var(--gold), transparent);
+  }
+  .hero-tagline{
+    text-align:center; margin-top:18px; font-size:.85rem; color:{{t:#7a6a56}}; font-weight:600;
+  }
+
+  /* ---------- categories ---------- */
+  .cats{padding:10px 0 56px;}
+  .cats .row{
+    display:flex; gap:12px; overflow-x:auto; padding:6px 2px 14px;
+    scrollbar-width:thin;
+  }
+  .cat-chip{
+    flex:0 0 auto;
+    background:var(--paper); border:1px solid var(--line);
+    padding:12px 22px; border-radius:999px; font-weight:700; font-size:.92rem;
+    color:var(--navy);
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .cat-chip:hover{background:var(--burgundy); color:var(--paper); border-color:var(--burgundy);}
+
+  /* ---------- section heading ---------- */
+  .sec-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:20px;
+    margin-bottom:34px; flex-wrap:wrap;
+  }
+  .sec-head h2{font-size:clamp(1.5rem, 3vw, 2rem);}
+  .sec-head p{color:{{t:#6b5c4b}}; max-width:52ch; margin-top:8px;}
+
+  /* ---------- products ---------- */
+  .products{padding:20px 0 70px;}
+  .grid{
+    display:grid; gap:26px;
+    grid-template-columns:repeat(2, 1fr);
+  }
+  @media (min-width:680px){ .grid{grid-template-columns:repeat(3, 1fr);} }
+  @media (min-width:980px){ .grid{grid-template-columns:repeat(6, 1fr);} }
+  .card{
+    background:var(--paper);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    opacity:0; transform:translateY(18px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .card.in{opacity:1; transform:translateY(0);}
+  .card .info{padding:14px 14px 18px;}
+  .card .badge{
+    display:inline-block; font-size:.72rem; font-weight:700; color:var(--teal);
+    background:{{t:rgba(46,91,94,0.1)}}; padding:3px 9px; border-radius:999px; margin-bottom:8px;
+  }
+  .card h3{font-size:.95rem; color:var(--ink); font-weight:700; margin-bottom:6px;}
+  .card .price{color:var(--burgundy-dark); font-weight:800; font-size:.95rem;}
+  .card .price small{font-weight:500; font-size:.72rem; color:{{t:#8a7a68}};}
+
+  /* ---------- shipment strip ---------- */
+  .shipment{
+    padding:64px 0 74px;
+    background:var(--navy);
+    color:var(--cream);
+  }
+  .shipment .sec-head h2{color:var(--gold-light);}
+  .shipment .sec-head p{color:{{t:#c8c2b6}};}
+  .ship-row{
+    display:flex; gap:18px; overflow-x:auto; padding-bottom:10px;
+  }
+  .ship-item{flex:0 0 160px;}
+  .ship-item .rug{margin-bottom:10px;}
+  .ship-item .cap{font-size:.8rem; color:{{t:#c8c2b6}};}
+  .ship-item .cap strong{display:block; color:var(--cream); font-size:.85rem; margin-bottom:2px;}
+
+  /* ---------- about ---------- */
+  .about{padding:76px 0;}
+  .about .wrap{
+    display:grid; grid-template-columns:1fr; gap:44px;
+  }
+  @media (min-width:900px){ .about .wrap{grid-template-columns:0.9fr 1.1fr;} }
+  .about-copy p{color:{{t:#4a3c30}}; max-width:52ch; margin-top:16px;}
+  .stats{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:16px;
+  }
+  .stat{
+    border-right:3px solid var(--gold); padding-right:14px;
+  }
+  .stat b{display:block; font-size:1.5rem; color:var(--burgundy-dark); font-weight:800;}
+  .stat span{font-size:.82rem; color:{{t:#6b5c4b}};}
+  .about-visual{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
+  }
+  .about-visual .rug:nth-child(2){margin-top:22px;}
+  .about-visual .rug:nth-child(3){margin-top:-10px;}
+
+  /* ---------- contact ---------- */
+  .contact{
+    padding:70px 0 90px;
+    background:
+      repeating-linear-gradient(135deg, {{t:rgba(110,20,35,0.035)}} 0 12px, transparent 12px 24px),
+      var(--cream-2);
+  }
+  .contact .wrap{
+    display:grid; grid-template-columns:1fr; gap:36px;
+  }
+  @media (min-width:900px){ .contact .wrap{grid-template-columns:1fr 1fr;} }
+  .contact-card{
+    background:var(--paper); border-radius:14px; padding:34px;
+    box-shadow:var(--shadow);
+  }
+  .contact-card h3{font-size:1.3rem; margin-bottom:18px;}
+  .contact-line{
+    display:flex; gap:12px; padding:14px 0; border-top:1px solid var(--line);
+  }
+  .contact-line:first-of-type{border-top:none;}
+  .contact-line .ic{
+    width:38px; height:38px; border-radius:50%; background:{{t:rgba(110,20,35,0.08)}};
+    display:flex; align-items:center; justify-content:center; flex:0 0 38px;
+    color:var(--burgundy); font-weight:800;
+  }
+  .contact-line div b{display:block; margin-bottom:2px;}
+  .contact-line div span{color:{{t:#6b5c4b}}; font-size:.92rem;}
+  .contact-actions{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap;}
+  .map-frame{
+    border-radius:14px; overflow:hidden; box-shadow:var(--shadow); min-height:320px;
+    border:1px solid var(--line);
+  }
+  .map-frame iframe{width:100%; height:100%; min-height:320px; border:0; display:block;}
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--burgundy-dark); color:{{t:#d8c9b0}}; padding:40px 0 26px;
+  }
+  footer .wrap{
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px;
+    border-bottom:1px solid rgba(255,255,255,0.12); padding-bottom:26px;
+  }
+  footer .f-logo{font-size:1.25rem; font-weight:800; color:var(--gold-light); margin-bottom:8px;}
+  footer .f-col span{display:block; font-size:.88rem; margin-bottom:6px;}
+  footer .copyright{
+    text-align:center; font-size:.8rem; color:{{t:#a4927a}}; padding-top:18px;
+  }
+
+  .wa-float{
+    position:fixed; bottom:22px; left:22px; z-index:40;
+    width:56px; height:56px; border-radius:50%;
+    background:{{t:#25D366}}; color:#fff; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 22px -6px rgba(0,0,0,0.4); font-size:1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <a href="#home" class="logo"><span class="mark"></span>{{brand}}</a>
+    <nav class="desktop-nav">
+      <a href="#products">محصولات</a>
+      <a href="#categories">دسته‌بندی‌ها</a>
+      <a href="#shipment">محموله جدید</a>
+      <a href="#about">درباره ما</a>
+      <a href="#contact">تماس با ما</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <!--each:phones--><a class="call-btn" href="{{phone_href}}">{{phone}}</a><br><!--/each:phones-->
+      <button class="burger" id="burgerBtn" aria-label="باز کردن منو"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="top-row">
+    <span class="logo">{{brand}}</span>
+    <button class="close-btn" id="closeNavBtn" aria-label="بستن منو">✕</button>
+  </div>
+  <ul>
+    <li><a href="#home" class="nav-link">خانه</a></li>
+    <li><a href="#products" class="nav-link">محصولات</a></li>
+    <li><a href="#categories" class="nav-link">دسته‌بندی‌ها</a></li>
+    <li><a href="#shipment" class="nav-link">محموله جدید</a></li>
+    <li><a href="#about" class="nav-link">درباره ما</a></li>
+    <li><a href="#contact" class="nav-link">تماس با ما</a></li>
+  </ul>
+  <div class="contact-mini">
+    {{address}}
+    <!--each:phones--><a href="{{phone_href}}">{{phone}}</a><br><!--/each:phones-->
+  </div>
+</div>
+
+<main>
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div>
+        <h1>دستبافت‌هایی که با نسل‌ها زندگی می‌کنند</h1>
+        <p class="lead">{{brand}} بیش از سه دهه از دل کارگاه‌های نایین، کاشان، قم و تبریز، فرش‌های دستباف و ماشینی اصیل ایرانی را با تضمین اصالت به خانه‌ی شما می‌رساند.</p>
+        <div class="cta-row">
+          <a href="#products" class="btn btn-primary">مشاهده محصولات</a>
+          <a href="#contact" class="btn btn-outline">تماس با فروشگاه</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div>
+          <div class="rug rug-1 hero-rug" style="aspect-ratio:4/5;"></div>
+          <div class="fringe">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <p class="hero-tagline">فرش هریس، تمام پشم، گره دستباف</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cats" id="categories">
+    <div class="wrap">
+      <div class="row">
+        <a class="cat-chip" href="#products">قالیچه</a>
+        <a class="cat-chip" href="#products">۱٫۵ متری</a>
+        <a class="cat-chip" href="#products">۲ متری</a>
+        <a class="cat-chip" href="#products">۳ متری</a>
+        <a class="cat-chip" href="#products">۶ متری</a>
+        <a class="cat-chip" href="#products">دستباف تمام ابریشم</a>
+        <a class="cat-chip" href="#products">ماشینی طرح باستان</a>
+        <a class="cat-chip" href="#products">پادری</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="products" id="products">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2>محصولات فروشگاه</h2>
+          <p>گزیده‌ای از فرش‌های موجود در {{brand}}؛ از قالیچه‌های دستباف نایین تا فرش‌های تمام ابریشم قم.</p>
+        </div>
+      </div>
+      <div class="grid" id="productGrid">
+        <div class="card">
+          <div class="rug rug-1"></div>
+          <div class="info">
+            <span class="badge">دستباف</span>
+            <h3>فرش هریس کد ۶۱۲۱۰۳</h3>
+            <p class="price">۲۸۵،۰۰۰،۰۰۰ <small>ریال</small></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="rug rug-2"></div>
+          <div class="info">
+            <span class="badge">دستباف</span>
+            <h3>قالیچه دستباف نایین</h3>
+            <p class="price">۴۳۸،۰۰۰،۰۰۰ <small>ریال</small></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="rug rug-3"></div>
+          <div class="info">
+            <span class="badge">تمام ابریشم</span>
+            <h3>فرش ۸۰ رج تمام ابریشم قم</h3>
+            <p class="price">۳۹۸،۰۰۰،۰۰۰ <small>ریال</small></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="rug rug-4"></div>
+          <div class="info">
+            <span class="badge">ماشینی</span>
+            <h3>فرش آنتیک بافت سنقر</h3>
+            <p class="price">۱۲۵،۰۰۰،۰۰۰ <small>ریال</small></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="rug rug-5"></div>
+          <div class="info">
+            <span class="badge">دستباف</span>
+            <h3>فرش ترنجی کاظمی</h3>
+            <p class="price">۳۱۰،۰۰۰،۰۰۰ <small>ریال</small></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="rug rug-6"></div>
+          <div class="info">
+            <span class="badge">تمام ابریشم</span>
+            <h3>پادری تمام ابریشم مراغه</h3>
+            <p class="price">۹۸،۰۰۰،۰۰۰ <small>ریال</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shipment" id="shipment">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2>تازه از راه رسید</h2>
+          <p>نمونه‌ای از آخرین محموله‌ی {{brand}}، مستقیم از کارگاه‌های نایین و کاشان.</p>
+        </div>
+      </div>
+      <div class="ship-row">
+        <div class="ship-item">
+          <div class="rug rug-2"></div>
+          <div class="cap"><strong>محموله مرداد ۱۴۰۴</strong>۴۲ تخته فرش دستباف نایین</div>
+        </div>
+        <div class="ship-item">
+          <div class="rug rug-4"></div>
+          <div class="cap"><strong>محموله مرداد ۱۴۰۴</strong>۱۸ تخته فرش ماشینی طرح باستان</div>
+        </div>
+        <div class="ship-item">
+          <div class="rug rug-1"></div>
+          <div class="cap"><strong>محموله تیر ۱۴۰۴</strong>۲۶ تخته فرش هریس تمام پشم</div>
+        </div>
+        <div class="ship-item">
+          <div class="rug rug-6"></div>
+          <div class="cap"><strong>محموله تیر ۱۴۰۴</strong>۹ تخته تمام ابریشم مراغه</div>
+        </div>
+        <div class="ship-item">
+          <div class="rug rug-3"></div>
+          <div class="cap"><strong>محموله خرداد ۱۴۰۴</strong>۱۴ تخته دستباف قم</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="about-copy">
+        <h2>درباره {{brand}}</h2>
+        <p>{{brand}} از دل بازار فرش ایران شکل گرفت؛ جایی که هر گره یک قصه دارد. فرش‌های دستباف و ماشینی را مستقیم از بافنده‌ها و کارگاه‌های معتبر نایین، کاشان، قم، مشهد و تبریز گلچین می‌کنیم و با تضمین اصالت به دست شما می‌رسانیم.</p>
+        <p>در فروشگاه ما می‌توانید فرش را از نزدیک ببینید، رنگ و طرح را با فضای خانه‌تان بسنجید و با مشاوره‌ی تیم {{brand}} بهترین انتخاب را داشته باشید.</p>
+        <div class="stats">
+          <div class="stat"><b>+۳۰</b><span>سال تجربه</span></div>
+          <div class="stat"><b>+۲۰۰۰</b><span>طرح و رنگ</span></div>
+          <div class="stat"><b>۵</b><span>شهر تأمین‌کننده</span></div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="rug rug-5"></div>
+        <div class="rug rug-2"></div>
+        <div class="rug rug-6"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="contact-card">
+        <h3>اطلاعات تماس</h3>
+        <div class="contact-line">
+          <div class="ic">📍</div>
+          <div>
+            <b>آدرس فروشگاه</b>
+            <span>{{address}}</span>
+          </div>
+        </div>
+        <div class="contact-line">
+          <div class="ic">📞</div>
+          <div>
+            <b>شماره تماس</b>
+            <!--each:phones--><span dir="ltr" style="display:block; text-align:right;">{{phone}}</span><!--/each:phones-->
+          </div>
+        </div>
+        <!--if:hours--><div class="contact-line">
+          <div class="ic">🕒</div>
+          <div>
+            <b>ساعات کاری</b>
+            <span>{{hours}}</span>
+          </div>
+        </div><!--/if:hours-->
+        <div class="contact-actions">
+          <a href="{{phone_href}}" class="btn btn-primary">تماس بگیرید</a>
+          <!--if:whatsapp--><a href="{{whatsapp_href}}" target="_blank" class="btn btn-outline">پیام واتس‌اپ</a><!--/if:whatsapp-->
+        </div>
+      </div>
+      <div class="map-frame">
+        <iframe
+          src="https://www.google.com/maps?q={{map_q}}&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="نقشه فروشگاه {{brand}}"></iframe>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-col">
+      <div class="f-logo">{{brand}}</div>
+      <span>عرضه‌کننده‌ی فرش دستباف و ماشینی اصیل ایرانی</span>
+    </div>
+    <div class="f-col">
+      <span>{{address}}</span>
+    </div>
+    <div class="f-col">
+      <span dir="ltr" style="text-align:right;">{{phone}}</span>
+      <!--if:hours--><span>{{hours}}</span><!--/if:hours-->
+    </div>
+  </div>
+  <p class="copyright">© {{brand}} — تمامی حقوق محفوظ است.</p>
+<!--if:social-->
+<style>.sg-social{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:22px 16px 96px;font-family:inherit;color:inherit}.sg-social a{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1.5px solid currentColor;border-radius:999px;color:inherit;text-decoration:none;font-size:14px;font-weight:600;opacity:.92}.sg-social a:hover{opacity:1}.sg-social svg{width:18px;height:18px;fill:currentColor}</style>
+<div class="sg-social" dir="rtl"><!--if:instagram--><a href="{{instagram_href}}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.5 6a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>اینستاگرام</a><!--/if:instagram--></div>
+<!--/if:social-->
+</footer>
+<script>
+  var burger = document.getElementById('burgerBtn');
+  var closeBtn = document.getElementById('closeNavBtn');
+  var mobileNav = document.getElementById('mobileNav');
+
+  function openNav(){
+    mobileNav.classList.add('open');
+    burger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNav(){
+    mobileNav.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  burger.addEventListener('click', function(){
+    mobileNav.classList.contains('open') ? closeNav() : openNav();
+  });
+  closeBtn.addEventListener('click', closeNav);
+  document.querySelectorAll('.nav-link').forEach(function(l){
+    l.addEventListener('click', closeNav);
+  });
+
+  var cards = document.querySelectorAll('.card');
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e, i){
+        if(e.isIntersecting){
+          setTimeout(function(){ e.target.classList.add('in'); }, i * 70);
+          obs.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.15});
+    cards.forEach(function(c){ obs.observe(c); });
+  } else {
+    cards.forEach(function(c){ c.classList.add('in'); });
+  }
+</script>
+
+</body>
+</html>

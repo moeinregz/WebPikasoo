@@ -56,7 +56,13 @@ import { saveChatAttachment, saveBlogImage, saveProjectImage, saveProjectHtmlFil
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
 import { pickTemplate } from "@/lib/siteTemplates";
-import { renderSite, toEn, HEX_COLOR } from "@/lib/siteTemplates/generate";
+import {
+  renderSite,
+  toEn,
+  HEX_COLOR,
+  normalizeInstagram,
+  whatsappNumber,
+} from "@/lib/siteTemplates/generate";
 import { cookies } from "next/headers";
 
 export type DashboardFormState = {
@@ -624,6 +630,8 @@ export async function generateSiteAction(
     .slice(0, 3);
   const primary = str("color1");
   const secondary = str("color2");
+  const instagram = str("instagram");
+  const whatsapp = str("whatsapp");
 
   if (!trade) return { ok: false, message: "صنف رو انتخاب کن." };
   if (!brand) return { ok: false, message: "اسم برند رو بنویس." };
@@ -637,6 +645,12 @@ export async function generateSiteAction(
   }
   if ((primary && !HEX_COLOR.test(primary)) || (secondary && !HEX_COLOR.test(secondary))) {
     return { ok: false, message: "رنگ نامعتبره." };
+  }
+  if (instagram && !normalizeInstagram(instagram)) {
+    return { ok: false, message: "آیدی اینستاگرام معتبر نیست (مثلاً cafe_omid@ یا لینک پیج)." };
+  }
+  if (whatsapp && !whatsappNumber(whatsapp)) {
+    return { ok: false, message: "شماره‌ی واتساپ معتبر نیست." };
   }
 
   const template = pickTemplate(trade.id, str("template") || undefined);
@@ -652,6 +666,8 @@ export async function generateSiteAction(
       hours,
       primary: primary || undefined,
       secondary: secondary || undefined,
+      instagram: instagram || undefined,
+      whatsapp: whatsapp || undefined,
     });
     if (unknown.length) console.warn(`generateSiteAction: unknown placeholders in ${template.id}:`, unknown);
 
