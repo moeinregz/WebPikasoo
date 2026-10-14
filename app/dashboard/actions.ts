@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
 import { CRM_ACCEPT_RESULT } from "@/lib/crmReport";
 import { autoBuildSiteForLead } from "@/lib/crmSite";
+import { planCrmTypeMigration } from "@/lib/siteTemplates/crmMapping";
 import { buildPrivateSite } from "@/lib/siteTemplates/publish";
 import {
   getUserByPhone,
@@ -26,6 +27,9 @@ import {
   createCrmLead,
   getCrmLeadByPhone,
   getCrmLeadById,
+  getAllCrmLeads,
+  applyCrmTypeChanges,
+  undoCrmTypeMigration,
   setCrmLeadCalled,
   recordCrmCallResult,
   deleteCrmLead,
@@ -787,6 +791,44 @@ export async function createCrmLeadAction(
 
 export type CrmEditFormState = { ok: boolean; message: string } | null;
 
+export type CrmMigrationState = { ok: boolean; message: string } | null;
+
+/** One-time: move leads still on the 9 old categories onto the 23 trades
+ *  (main admin only). The plan is recomputed here from the DB — the client's
+ *  preview is never trusted. */
+export async function applyCrmTypeMigrationAction(
+  _prevState: CrmMigrationState,
+  formData: FormData
+): Promise<CrmMigrationState> {
+  await requireCrmOwner();
+  const spread = formData.get("spread") === "1";
+  try {
+    const leads = await getAllCrmLeads();
+    const changes = planCrmTypeMigration(leads, { spread });
+    const done = await applyCrmTypeChanges(changes);
+    revalidatePath("/dashboard");
+    return { ok: true, message: `${toPersianDigits(done)} لید به دسته‌ی جدیدشون منتقل شدن.` };
+  } catch (err) {
+    console.error("applyCrmTypeMigrationAction failed:", err);
+    return { ok: false, message: "انتقال انجام نشد، دوباره امتحان کن." };
+  }
+}
+
+export async function undoCrmTypeMigrationAction(
+  _prevState: CrmMigrationState,
+  _formData: FormData
+): Promise<CrmMigrationState> {
+  await requireCrmOwner();
+  try {
+    const done = await undoCrmTypeMigration();
+    revalidatePath("/dashboard");
+    return { ok: true, message: `دسته‌ی قبلیِ ${toPersianDigits(done)} لید برگشت.` };
+  } catch (err) {
+    console.error("undoCrmTypeMigrationAction failed:", err);
+    return { ok: false, message: "بازگردانی انجام نشد، دوباره امتحان کن." };
+  }
+}
+
 /** Owner-only: fixes up an existing lead's business area/type and problem
  *  status — the fields added after some leads were already in the system,
  *  so old entries can be brought up to date the same way new ones are
@@ -828,7 +870,9 @@ export async function updateCrmLeadAction(
   try {
     await updateCrmLead(id, {
       businessArea,
-      businessType,
+      // Only when it really changed: a changed type is final (the category
+      // migration's undo must not revert it), an untouched one is left alone.
+      businessType: businessType !== lead.business_type ? businessType : undefined,
       problemStatus,
       instagram: socials.instagram,
       whatsapp: socials.whatsapp,

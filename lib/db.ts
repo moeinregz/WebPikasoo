@@ -892,6 +892,9 @@ export type CrmLead = {
   // Token of the private site auto-generated when this lead was accepted
   // ("قبول برای دیدن"), so the same lead never gets a second site.
   site_token?: string;
+  // Set when the one-time category migration changed business_type: the value
+  // it had before, so the migration can be undone.
+  legacy_business_type?: string;
 };
 
 export type NewCrmLead = {
@@ -985,7 +988,11 @@ export async function updateCrmLead(
   const set: Record<string, string | string[]> = {};
   const unset: Record<string, ""> = {};
   if (data.businessArea !== undefined) set.business_area = data.businessArea;
-  if (data.businessType !== undefined) set.business_type = data.businessType;
+  if (data.businessType !== undefined) {
+    set.business_type = data.businessType;
+    // A hand-picked type is final: the migration's undo must never revert it.
+    unset.legacy_business_type = "";
+  }
   if (data.problemStatus !== undefined) set.problem_status = data.problemStatus;
   if (data.instagram !== undefined) {
     if (data.instagram) set.instagram = data.instagram;
@@ -1004,6 +1011,36 @@ export async function updateCrmLead(
   if (Object.keys(unset).length) update.$unset = unset;
   if (Object.keys(update).length === 0) return;
   await database.collection("crm_leads").updateOne({ id }, update);
+}
+
+/** Applies a category-migration plan. Only touches leads not already migrated
+ *  (so running it twice can't overwrite the saved original), and remembers each
+ *  lead's previous value in legacy_business_type. Returns how many changed. */
+export async function applyCrmTypeChanges(changes: { id: number; from: string; to: string }[]): Promise<number> {
+  if (changes.length === 0) return 0;
+  const database = await getDb();
+  const res = await database.collection("crm_leads").bulkWrite(
+    changes.map((c) => ({
+      updateOne: {
+        filter: { id: c.id, legacy_business_type: { $exists: false } },
+        update: { $set: { business_type: c.to, legacy_business_type: c.from } },
+      },
+    })),
+    { ordered: false }
+  );
+  return res.modifiedCount;
+}
+
+/** Puts every migrated lead's business_type back to what it was. */
+export async function undoCrmTypeMigration(): Promise<number> {
+  const database = await getDb();
+  const res = await database
+    .collection("crm_leads")
+    .updateMany({ legacy_business_type: { $exists: true } }, [
+      { $set: { business_type: "$legacy_business_type" } },
+      { $unset: "legacy_business_type" },
+    ]);
+  return res.modifiedCount;
 }
 
 export type CrmCallLog = {

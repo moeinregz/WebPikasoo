@@ -9,8 +9,11 @@ import {
   setCrmCallResultAction,
   deleteCrmLeadAction,
   updateCrmLeadAction,
+  applyCrmTypeMigrationAction,
+  undoCrmTypeMigrationAction,
   type CrmFormState,
   type CrmEditFormState,
+  type CrmMigrationState,
 } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 import {
@@ -20,8 +23,12 @@ import {
   CRM_PROBLEM_STATUS_OPTIONS,
   getCrmProblemStatusColorClass,
 } from "@/lib/crmReport";
-import { categories as BUSINESS_CATEGORIES } from "@/lib/businessSites";
-import { detectTrades } from "@/lib/siteTemplates/crmMapping";
+import {
+  CRM_BUSINESS_TYPES,
+  CRM_TYPE_GROUPS_LABELED,
+  detectTrades,
+  planCrmTypeMigration,
+} from "@/lib/siteTemplates/crmMapping";
 import { TRADES } from "@/lib/siteTemplates/trades";
 import { whatsappNumber } from "@/lib/siteTemplates/generate";
 import SearchInput from "./SearchInput";
@@ -44,6 +51,7 @@ type Lead = {
   instagram?: string;
   whatsapp?: string;
   site_token?: string;
+  legacy_business_type?: string;
 };
 
 const MAX_EXTRA_PHONES = 4;
@@ -65,6 +73,125 @@ function SubmitButton() {
 }
 
 const initialState: CrmFormState = null;
+
+/** The 23 business types in groups. `extra` = values not in the list (old
+ *  broad categories from before the list was expanded) — kept selectable so
+ *  an existing lead's type is never silently lost. */
+function BusinessTypeOptions({ extra = [] }: { extra?: string[] }) {
+  const legacy = extra.filter((t) => t && !CRM_BUSINESS_TYPES.includes(t));
+  return (
+    <>
+      {CRM_TYPE_GROUPS_LABELED.map((g) => (
+        <optgroup key={g.label} label={g.label}>
+          {g.types.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </optgroup>
+      ))}
+      {legacy.length > 0 && (
+        <optgroup label="دسته‌های قدیمی">
+          {legacy.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </optgroup>
+      )}
+    </>
+  );
+}
+
+/** Main admin only. Leads saved before the 23-type list still carry one of the
+ *  nine old broad categories; this previews and applies a one-time move onto
+ *  the 23 trades (by business name first, then spread across the old
+ *  category's trades). The previous value is kept per lead, so it's undoable. */
+function TypeMigrationCard({ leads }: { leads: Lead[] }) {
+  const [spread, setSpread] = useState(true);
+  const [applyState, applyAction] = useFormState(applyCrmTypeMigrationAction, null as CrmMigrationState);
+  const [undoState, undoAction] = useFormState(undoCrmTypeMigrationAction, null as CrmMigrationState);
+
+  const plan = useMemo(() => planCrmTypeMigration(leads, { spread }), [leads, spread]);
+  const migrated = leads.filter((l) => l.legacy_business_type !== undefined).length;
+  const legacyLeft = leads.filter((l) => l.business_type && !CRM_BUSINESS_TYPES.includes(l.business_type)).length;
+
+  const byHow = { name: 0, single: 0, spread: 0 };
+  const byType = new Map<string, number>();
+  for (const c of plan) {
+    byHow[c.how] += 1;
+    byType.set(c.to, (byType.get(c.to) ?? 0) + 1);
+  }
+  const rows = [...byType.entries()].sort((a, b) => b[1] - a[1]);
+
+  if (plan.length === 0 && migrated === 0 && legacyLeft === 0) return null;
+  const btn =
+    "rounded-full px-5 py-2.5 text-[13.5px] font-semibold transition hover:-translate-y-0.5 disabled:opacity-60";
+
+  return (
+    <div className="mb-6 rounded-card border border-accent/40 bg-accent/[0.06] p-5">
+      <h3 className="mb-1 font-display text-base font-normal">انتقال دسته‌های قدیمی به ۲۳ دسته‌ی جدید</h3>
+      <p className="mb-3 text-[12.5px] leading-relaxed text-dim">
+        {toPersianDigits(legacyLeft)} لید هنوز یکی از ۹ دسته‌ی قدیمی رو دارن. با انتقال، اگه اسم کسب‌وکار سرنخ داشته باشه
+        (مثلاً «کافه»، «دندان»، «املاک») دسته‌ی دقیقش رو می‌گیره؛ بقیه بین دسته‌های مرتبط پخش می‌شن. دسته‌ی قبلی هر لید
+        ذخیره می‌مونه و قابل بازگردانیه.
+      </p>
+
+      {plan.length > 0 && (
+        <>
+          <label className="mb-3 flex cursor-pointer items-center gap-2 text-[13px] text-dim">
+            <input type="checkbox" checked={spread} onChange={(e) => setSpread(e.target.checked)} className="h-4 w-4 accent-[var(--accent,#d4a857)]" />
+            لیدهایی که اسمشون سرنخ نداره هم بین دسته‌های مرتبط پخش بشن (وگرنه همون‌طور می‌مونن)
+          </label>
+          <p className="mb-2 text-[13px]">
+            پیش‌نمایش: <b>{toPersianDigits(plan.length)}</b> لید منتقل می‌شن — از روی اسم{" "}
+            <b>{toPersianDigits(byHow.name)}</b>، دسته‌ی تک‌صنفی <b>{toPersianDigits(byHow.single)}</b>، پخش‌شده{" "}
+            <b>{toPersianDigits(byHow.spread)}</b>.
+          </p>
+          <details className="mb-3 text-[12.5px] text-dim">
+            <summary className="cursor-pointer font-semibold">تعداد هر دسته بعد از انتقال</summary>
+            <ul className="mt-2 grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
+              {rows.map(([t, n]) => (
+                <li key={t} className="flex justify-between gap-3">
+                  <span>{t}</span>
+                  <span className="font-mono">{toPersianDigits(n)}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+          <form
+            action={applyAction}
+            onSubmit={(e) => {
+              if (!window.confirm(`دسته‌ی ${toPersianDigits(plan.length)} لید عوض می‌شه. ادامه بدم؟`)) e.preventDefault();
+            }}
+            className="inline-block"
+          >
+            <input type="hidden" name="spread" value={spread ? "1" : "0"} />
+            <button type="submit" className={`${btn} bg-accent text-black`}>
+              اعمال انتقال
+            </button>
+          </form>
+        </>
+      )}
+
+      {migrated > 0 && (
+        <form
+          action={undoAction}
+          onSubmit={(e) => {
+            if (!window.confirm(`دسته‌ی ${toPersianDigits(migrated)} لید به حالت قبل از انتقال برمی‌گرده. ادامه بدم؟`)) e.preventDefault();
+          }}
+          className="mr-2 inline-block"
+        >
+          <button type="submit" className={`${btn} border border-ink/[0.18] text-dim hover:border-accent hover:text-accent`}>
+            بازگردانی انتقال ({toPersianDigits(migrated)} لید)
+          </button>
+        </form>
+      )}
+      {applyState && <p className={`mt-3 text-sm ${applyState.ok ? "text-accent" : "text-red-500"}`}>{applyState.message}</p>}
+      {undoState && <p className={`mt-3 text-sm ${undoState.ok ? "text-accent" : "text-red-500"}`}>{undoState.message}</p>}
+    </div>
+  );
+}
 
 /** "Does this business have more numbers?" — any number of extra phone
  *  inputs (up to MAX_EXTRA_PHONES), all submitted as `extraPhone`. */
@@ -138,11 +265,7 @@ function AddLeadForm() {
         <input name="businessArea" placeholder="آدرس / منطقه‌ی کسب‌وکار (اختیاری)" className={inputClass} />
         <select name="businessType" defaultValue="" className={inputClass}>
           <option value="">نوع کسب‌وکار (اختیاری)</option>
-          {BUSINESS_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
+          <BusinessTypeOptions />
         </select>
         <select name="problemStatus" defaultValue="" className={inputClass}>
           <option value="">وضعیت مشکل (اختیاری)</option>
@@ -205,11 +328,7 @@ function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
         />
         <select name="businessType" defaultValue={lead.business_type} className={editInputClass}>
           <option value="">نوع کسب‌وکار</option>
-          {BUSINESS_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
+          <BusinessTypeOptions extra={[lead.business_type]} />
         </select>
         <select name="problemStatus" defaultValue={lead.problem_status} className={editInputClass}>
           <option value="">وضعیت مشکل</option>
@@ -333,7 +452,7 @@ function AcceptConfirmDialog({
       "صنف قالب",
       !canBuild ? (
         <span className="text-red-500">مشخص نیست</span>
-      ) : guess.source === "name" ? (
+      ) : tradeNames.length === 1 ? (
         tradeNames[0]
       ) : (
         <span>یکی از: {tradeNames.join("، ")}</span>
@@ -664,6 +783,7 @@ export default function CrmPanel({
 
   return (
     <div>
+      {canEdit && <TypeMigrationCard leads={leads} />}
       <AddLeadForm />
 
       {leads.length === 0 ? (
@@ -698,11 +818,7 @@ export default function CrmPanel({
               className="rounded-full border border-ink/[0.18] bg-canvas px-4 py-1.5 text-[12.5px] font-bold text-dim outline-none transition hover:border-accent hover:text-accent focus:border-accent"
             >
               <option value="">همه‌ی دسته‌های کسب‌وکار</option>
-              {BUSINESS_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
+              <BusinessTypeOptions extra={leads.map((l) => l.business_type)} />
             </select>
             <select
               value={problemStatusFilter}
