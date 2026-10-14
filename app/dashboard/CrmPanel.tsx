@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
@@ -9,11 +9,8 @@ import {
   setCrmCallResultAction,
   deleteCrmLeadAction,
   updateCrmLeadAction,
-  applyCrmTypeMigrationAction,
-  undoCrmTypeMigrationAction,
   type CrmFormState,
   type CrmEditFormState,
-  type CrmMigrationState,
 } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 import {
@@ -26,10 +23,7 @@ import {
 import {
   CRM_BUSINESS_TYPES,
   CRM_TYPE_GROUPS_LABELED,
-  detectTrades,
-  planCrmTypeMigration,
 } from "@/lib/siteTemplates/crmMapping";
-import { TRADES } from "@/lib/siteTemplates/trades";
 import { whatsappNumber } from "@/lib/siteTemplates/generate";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
@@ -100,96 +94,6 @@ function BusinessTypeOptions({ extra = [] }: { extra?: string[] }) {
         </optgroup>
       )}
     </>
-  );
-}
-
-/** Main admin only. Leads saved before the 23-type list still carry one of the
- *  nine old broad categories; this previews and applies a one-time move onto
- *  the 23 trades (by business name first, then spread across the old
- *  category's trades). The previous value is kept per lead, so it's undoable. */
-function TypeMigrationCard({ leads }: { leads: Lead[] }) {
-  const [spread, setSpread] = useState(true);
-  const [applyState, applyAction] = useFormState(applyCrmTypeMigrationAction, null as CrmMigrationState);
-  const [undoState, undoAction] = useFormState(undoCrmTypeMigrationAction, null as CrmMigrationState);
-
-  const plan = useMemo(() => planCrmTypeMigration(leads, { spread }), [leads, spread]);
-  const migrated = leads.filter((l) => l.legacy_business_type !== undefined).length;
-  const legacyLeft = leads.filter((l) => l.business_type && !CRM_BUSINESS_TYPES.includes(l.business_type)).length;
-
-  const byHow = { name: 0, single: 0, spread: 0 };
-  const byType = new Map<string, number>();
-  for (const c of plan) {
-    byHow[c.how] += 1;
-    byType.set(c.to, (byType.get(c.to) ?? 0) + 1);
-  }
-  const rows = [...byType.entries()].sort((a, b) => b[1] - a[1]);
-
-  if (plan.length === 0 && migrated === 0 && legacyLeft === 0) return null;
-  const btn =
-    "rounded-full px-5 py-2.5 text-[13.5px] font-semibold transition hover:-translate-y-0.5 disabled:opacity-60";
-
-  return (
-    <div className="mb-6 rounded-card border border-accent/40 bg-accent/[0.06] p-5">
-      <h3 className="mb-1 font-display text-base font-normal">انتقال دسته‌های قدیمی به ۲۳ دسته‌ی جدید</h3>
-      <p className="mb-3 text-[12.5px] leading-relaxed text-dim">
-        {toPersianDigits(legacyLeft)} لید هنوز یکی از ۹ دسته‌ی قدیمی رو دارن. با انتقال، اگه اسم کسب‌وکار سرنخ داشته باشه
-        (مثلاً «کافه»، «دندان»، «املاک») دسته‌ی دقیقش رو می‌گیره؛ بقیه بین دسته‌های مرتبط پخش می‌شن. دسته‌ی قبلی هر لید
-        ذخیره می‌مونه و قابل بازگردانیه.
-      </p>
-
-      {plan.length > 0 && (
-        <>
-          <label className="mb-3 flex cursor-pointer items-center gap-2 text-[13px] text-dim">
-            <input type="checkbox" checked={spread} onChange={(e) => setSpread(e.target.checked)} className="h-4 w-4 accent-[var(--accent,#d4a857)]" />
-            لیدهایی که اسمشون سرنخ نداره هم بین دسته‌های مرتبط پخش بشن (وگرنه همون‌طور می‌مونن)
-          </label>
-          <p className="mb-2 text-[13px]">
-            پیش‌نمایش: <b>{toPersianDigits(plan.length)}</b> لید منتقل می‌شن — از روی اسم{" "}
-            <b>{toPersianDigits(byHow.name)}</b>، دسته‌ی تک‌صنفی <b>{toPersianDigits(byHow.single)}</b>، پخش‌شده{" "}
-            <b>{toPersianDigits(byHow.spread)}</b>.
-          </p>
-          <details className="mb-3 text-[12.5px] text-dim">
-            <summary className="cursor-pointer font-semibold">تعداد هر دسته بعد از انتقال</summary>
-            <ul className="mt-2 grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
-              {rows.map(([t, n]) => (
-                <li key={t} className="flex justify-between gap-3">
-                  <span>{t}</span>
-                  <span className="font-mono">{toPersianDigits(n)}</span>
-                </li>
-              ))}
-            </ul>
-          </details>
-          <form
-            action={applyAction}
-            onSubmit={(e) => {
-              if (!window.confirm(`دسته‌ی ${toPersianDigits(plan.length)} لید عوض می‌شه. ادامه بدم؟`)) e.preventDefault();
-            }}
-            className="inline-block"
-          >
-            <input type="hidden" name="spread" value={spread ? "1" : "0"} />
-            <button type="submit" className={`${btn} bg-accent text-black`}>
-              اعمال انتقال
-            </button>
-          </form>
-        </>
-      )}
-
-      {migrated > 0 && (
-        <form
-          action={undoAction}
-          onSubmit={(e) => {
-            if (!window.confirm(`دسته‌ی ${toPersianDigits(migrated)} لید به حالت قبل از انتقال برمی‌گرده. ادامه بدم؟`)) e.preventDefault();
-          }}
-          className="mr-2 inline-block"
-        >
-          <button type="submit" className={`${btn} border border-ink/[0.18] text-dim hover:border-accent hover:text-accent`}>
-            بازگردانی انتقال ({toPersianDigits(migrated)} لید)
-          </button>
-        </form>
-      )}
-      {applyState && <p className={`mt-3 text-sm ${applyState.ok ? "text-accent" : "text-red-500"}`}>{applyState.message}</p>}
-      {undoState && <p className={`mt-3 text-sm ${undoState.ok ? "text-accent" : "text-red-500"}`}>{undoState.message}</p>}
-    </div>
   );
 }
 
@@ -303,10 +207,9 @@ function SaveEditButton() {
 const editInputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-3 py-2 text-[13px] text-ink outline-none transition focus:border-accent focus:bg-surface/70";
 
-/** Owner-only: lets business area/type and problem status be filled in or
- *  corrected on a lead that already exists — same three fields as
- *  AddLeadForm, just pre-filled and submitted through updateCrmLeadAction
- *  instead of createCrmLeadAction. Rendered in place of the normal
+/** Main-admin only: edits everything on an existing lead — name, phones,
+ *  area, type, problem status, Instagram, WhatsApp — pre-filled and
+ *  submitted through updateCrmLeadAction. Rendered in place of the normal
  *  display for exactly one lead at a time (see `editingId` below). */
 function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
   const [state, formAction] = useFormState(updateCrmLeadAction, null as CrmEditFormState);
@@ -319,6 +222,17 @@ function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <input type="hidden" name="leadId" value={lead.id} />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <input name="name" defaultValue={lead.name} placeholder="نام کسب‌وکار" required className={editInputClass} />
+        <input
+          name="phone"
+          dir="ltr"
+          defaultValue={lead.phone}
+          placeholder="شماره‌ی اصلی"
+          required
+          className={editInputClass}
+        />
+      </div>
       <div className="grid gap-2 sm:grid-cols-3">
         <input
           name="businessArea"
@@ -410,8 +324,7 @@ function LeadChips({ lead }: { lead: Lead }) {
   );
 }
 
-/** "Are you sure?" shown before a lead is set to «قبول برای دیدن». Confirming
- *  saves the status AND sends everything below to the site generator. */
+/** Plain confirmation shown before a lead is set to «قبول برای دیدن». */
 function AcceptConfirmDialog({
   lead,
   onConfirm,
@@ -421,11 +334,6 @@ function AcceptConfirmDialog({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
-  const guess = detectTrades(lead.name, lead.business_type);
-  const tradeNames = guess.tradeIds.map((id) => TRADES.find((t) => t.id === id)?.label ?? id);
-  const phones = [lead.phone, ...(lead.extra_phones ?? [])];
-  const canBuild = guess.source !== null;
-
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onCancel();
@@ -433,32 +341,6 @@ function AcceptConfirmDialog({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [onCancel]);
-
-  const rows: [string, ReactNode][] = [
-    ["نام", lead.name],
-    [
-      "شماره‌ها",
-      <span key="p" dir="ltr" className="inline-flex flex-col items-end font-mono">
-        {phones.map((p, i) => (
-          <span key={i}>{toPersianDigits(p)}</span>
-        ))}
-      </span>,
-    ],
-    ["آدرس / منطقه", lead.business_area || <span className="text-amber-500">ثبت نشده</span>],
-    ["اینستاگرام", lead.instagram ? <span dir="ltr">@{lead.instagram}</span> : <span className="text-dim">—</span>],
-    ["واتساپ", lead.whatsapp ? <span dir="ltr">{toPersianDigits(lead.whatsapp)}</span> : <span className="text-dim">—</span>],
-    ["نوع کسب‌وکار", lead.business_type || <span className="text-amber-500">ثبت نشده</span>],
-    [
-      "صنف قالب",
-      !canBuild ? (
-        <span className="text-red-500">مشخص نیست</span>
-      ) : tradeNames.length === 1 ? (
-        tradeNames[0]
-      ) : (
-        <span>یکی از: {tradeNames.join("، ")}</span>
-      ),
-    ],
-  ];
 
   return createPortal(
     <div
@@ -469,25 +351,11 @@ function AcceptConfirmDialog({
         if (e.target === e.currentTarget) onCancel();
       }}
     >
-      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-card border border-ink/[0.14] bg-canvas p-6 text-right shadow-2xl">
+      <div className="w-full max-w-sm rounded-card border border-ink/[0.14] bg-canvas p-6 text-right shadow-2xl">
         <h3 className="mb-2 font-display text-lg font-normal">مطمئنی؟</h3>
-        <p className="mb-4 text-[13.5px] leading-relaxed text-dim">
-          وضعیت روی «{CRM_ACCEPT_RESULT}» ثبت می‌شه و با اطلاعات زیر خودکار یه سایت از یک قالب تصادفی ساخته می‌شه؛ اسم و
-          لینکش هم تو چت تیم فرستاده می‌شه.
+        <p className="mb-5 text-[13.5px] leading-relaxed text-dim">
+          «{lead.name}» روی «{CRM_ACCEPT_RESULT}» ثبت بشه؟ سایتش ساخته می‌شه و لینکش تو چت تیم فرستاده می‌شه.
         </p>
-        <dl className="mb-4 divide-y divide-ink/10 rounded-xl border border-ink/[0.14] bg-surface/20 text-[13.5px]">
-          {rows.map(([k, v]) => (
-            <div key={k} className="flex items-start justify-between gap-4 px-4 py-2.5">
-              <dt className="shrink-0 text-dim">{k}</dt>
-              <dd className="min-w-0 break-words text-left font-semibold">{v}</dd>
-            </div>
-          ))}
-        </dl>
-        {!canBuild && (
-          <p className="mb-4 text-[12.5px] leading-relaxed text-red-500">
-            صنف این لید مشخص نیست؛ وضعیت ثبت می‌شه ولی سایتی ساخته نمی‌شه. (نوع کسب‌وکار رو تکمیل کن.)
-          </p>
-        )}
         <div className="flex flex-wrap items-center justify-end gap-2">
           <button
             type="button"
@@ -502,7 +370,7 @@ function AcceptConfirmDialog({
             autoFocus
             className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5"
           >
-            {canBuild ? "بله، مطمئنم — بساز" : "بله، فقط وضعیت ثبت شود"}
+            بله، ثبت کن
           </button>
         </div>
       </div>
@@ -783,7 +651,6 @@ export default function CrmPanel({
 
   return (
     <div>
-      {canEdit && <TypeMigrationCard leads={leads} />}
       <AddLeadForm />
 
       {leads.length === 0 ? (

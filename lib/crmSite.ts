@@ -37,6 +37,13 @@ export async function autoBuildSiteForLead(lead: CrmLead, userId: number): Promi
 
     const guess = detectTrades(lead.name, lead.business_type);
     const template = pickTemplateAmong(guess.tradeIds);
+    if (!template && guess.tradeIds.length > 0) {
+      await sendTeamMessage({
+        userId,
+        message: `⚠️ ${lead.name}\nسایت خودکار ساخته نشد: برای این صنف هنوز قالبی اضافه نشده.`,
+      });
+      return;
+    }
     if (!template) {
       await sendTeamMessage({
         userId,

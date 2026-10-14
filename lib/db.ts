@@ -969,13 +969,15 @@ export async function setCrmLeadCalled(id: number, called: boolean): Promise<voi
 
 /** Lets the classification fields (added after leads already existed) and
  *  the optional contact extras (extra numbers, Instagram, WhatsApp) be
- *  filled in / corrected on an existing lead. Never touches name/phone/
- *  called/etc, and only the fields actually provided — so a partial edit
+ *  filled in / corrected on an existing lead (including name and the primary
+ *  phone). Never touches called/results, and only the fields actually provided — so a partial edit
  *  can't blank out a field the caller didn't mean to touch. An empty
  *  instagram/whatsapp/extraPhones clears that field. */
 export async function updateCrmLead(
   id: number,
   data: {
+    name?: string;
+    phone?: string;
     businessArea?: string;
     businessType?: string;
     problemStatus?: string;
@@ -987,6 +989,8 @@ export async function updateCrmLead(
   const database = await getDb();
   const set: Record<string, string | string[]> = {};
   const unset: Record<string, ""> = {};
+  if (data.name !== undefined) set.name = data.name;
+  if (data.phone !== undefined) set.phone = data.phone;
   if (data.businessArea !== undefined) set.business_area = data.businessArea;
   if (data.businessType !== undefined) {
     set.business_type = data.businessType;
@@ -1011,36 +1015,6 @@ export async function updateCrmLead(
   if (Object.keys(unset).length) update.$unset = unset;
   if (Object.keys(update).length === 0) return;
   await database.collection("crm_leads").updateOne({ id }, update);
-}
-
-/** Applies a category-migration plan. Only touches leads not already migrated
- *  (so running it twice can't overwrite the saved original), and remembers each
- *  lead's previous value in legacy_business_type. Returns how many changed. */
-export async function applyCrmTypeChanges(changes: { id: number; from: string; to: string }[]): Promise<number> {
-  if (changes.length === 0) return 0;
-  const database = await getDb();
-  const res = await database.collection("crm_leads").bulkWrite(
-    changes.map((c) => ({
-      updateOne: {
-        filter: { id: c.id, legacy_business_type: { $exists: false } },
-        update: { $set: { business_type: c.to, legacy_business_type: c.from } },
-      },
-    })),
-    { ordered: false }
-  );
-  return res.modifiedCount;
-}
-
-/** Puts every migrated lead's business_type back to what it was. */
-export async function undoCrmTypeMigration(): Promise<number> {
-  const database = await getDb();
-  const res = await database
-    .collection("crm_leads")
-    .updateMany({ legacy_business_type: { $exists: true } }, [
-      { $set: { business_type: "$legacy_business_type" } },
-      { $unset: "legacy_business_type" },
-    ]);
-  return res.modifiedCount;
 }
 
 export type CrmCallLog = {

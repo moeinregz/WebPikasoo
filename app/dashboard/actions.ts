@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
 import { CRM_ACCEPT_RESULT } from "@/lib/crmReport";
 import { autoBuildSiteForLead } from "@/lib/crmSite";
-import { planCrmTypeMigration } from "@/lib/siteTemplates/crmMapping";
 import { buildPrivateSite } from "@/lib/siteTemplates/publish";
 import {
   getUserByPhone,
@@ -27,9 +26,6 @@ import {
   createCrmLead,
   getCrmLeadByPhone,
   getCrmLeadById,
-  getAllCrmLeads,
-  applyCrmTypeChanges,
-  undoCrmTypeMigration,
   setCrmLeadCalled,
   recordCrmCallResult,
   deleteCrmLead,
@@ -791,48 +787,8 @@ export async function createCrmLeadAction(
 
 export type CrmEditFormState = { ok: boolean; message: string } | null;
 
-export type CrmMigrationState = { ok: boolean; message: string } | null;
-
-/** One-time: move leads still on the 9 old categories onto the 23 trades
- *  (main admin only). The plan is recomputed here from the DB — the client's
- *  preview is never trusted. */
-export async function applyCrmTypeMigrationAction(
-  _prevState: CrmMigrationState,
-  formData: FormData
-): Promise<CrmMigrationState> {
-  await requireCrmOwner();
-  const spread = formData.get("spread") === "1";
-  try {
-    const leads = await getAllCrmLeads();
-    const changes = planCrmTypeMigration(leads, { spread });
-    const done = await applyCrmTypeChanges(changes);
-    revalidatePath("/dashboard");
-    return { ok: true, message: `${toPersianDigits(done)} لید به دسته‌ی جدیدشون منتقل شدن.` };
-  } catch (err) {
-    console.error("applyCrmTypeMigrationAction failed:", err);
-    return { ok: false, message: "انتقال انجام نشد، دوباره امتحان کن." };
-  }
-}
-
-export async function undoCrmTypeMigrationAction(
-  _prevState: CrmMigrationState,
-  _formData: FormData
-): Promise<CrmMigrationState> {
-  await requireCrmOwner();
-  try {
-    const done = await undoCrmTypeMigration();
-    revalidatePath("/dashboard");
-    return { ok: true, message: `دسته‌ی قبلیِ ${toPersianDigits(done)} لید برگشت.` };
-  } catch (err) {
-    console.error("undoCrmTypeMigrationAction failed:", err);
-    return { ok: false, message: "بازگردانی انجام نشد، دوباره امتحان کن." };
-  }
-}
-
-/** Owner-only: fixes up an existing lead's business area/type and problem
- *  status — the fields added after some leads were already in the system,
- *  so old entries can be brought up to date the same way new ones are
- *  filled in. Never touches name/phone/call status. */
+/** Main-admin only: edits every field of an existing lead — name, primary
+ *  and extra phones, area, type, problem status, Instagram, WhatsApp. */
 export async function updateCrmLeadAction(
   _prevState: CrmEditFormState,
   formData: FormData
@@ -842,11 +798,15 @@ export async function updateCrmLeadAction(
   const id = Number(formData.get("leadId"));
   if (!id) return { ok: false, message: "شناسه‌ی لید نامعتبره." };
 
+  const name = (formData.get("name") ?? "").toString().trim();
+  const phoneRaw = (formData.get("phone") ?? "").toString().trim();
   const businessArea = (formData.get("businessArea") ?? "").toString().trim();
   const businessType = (formData.get("businessType") ?? "").toString().trim();
   const problemStatus = (formData.get("problemStatus") ?? "").toString().trim();
   const instagramRaw = (formData.get("instagram") ?? "").toString().trim();
   const whatsappRaw = (formData.get("whatsapp") ?? "").toString().trim();
+
+  if (!name || !phoneRaw) return { ok: false, message: "نام و شماره‌ی اصلی نباید خالی باشه." };
 
   const lead = await getCrmLeadById(id);
   if (!lead) return { ok: false, message: "لید پیدا نشد." };
@@ -854,13 +814,16 @@ export async function updateCrmLeadAction(
   const socials = parseSocials(instagramRaw, whatsappRaw);
   if (!socials.ok) return { ok: false, message: socials.message };
 
-  // The primary number is never edited here; extras must not repeat it, and
-  // must not already belong to another lead.
-  const extraPhones = cleanPhones(formData.getAll("extraPhone").map((v) => v.toString())).filter((p) => p !== lead.phone);
-  if (extraPhones.length + 1 > CRM_MAX_PHONES) {
+  // Primary number first, then the extras (blank/duplicate numbers dropped).
+  const extraRaw = formData.getAll("extraPhone").map((v) => v.toString());
+  const all = cleanPhones([phoneRaw, ...extraRaw]);
+  if (all.length > CRM_MAX_PHONES) {
     return { ok: false, message: `حداکثر ${toPersianDigits(CRM_MAX_PHONES)} شماره برای هر لید.` };
   }
-  for (const p of extraPhones) {
+  const [phone, ...extraPhones] = all;
+
+  // None of the numbers may already belong to another lead.
+  for (const p of all) {
     const owner = await getCrmLeadByPhone(p);
     if (owner && owner.id !== id) {
       return { ok: false, message: `شماره‌ی ${toPersianDigits(p)} برای یه لید دیگه ثبت شده.` };
@@ -869,9 +832,10 @@ export async function updateCrmLeadAction(
 
   try {
     await updateCrmLead(id, {
+      name,
+      phone,
       businessArea,
-      // Only when it really changed: a changed type is final (the category
-      // migration's undo must not revert it), an untouched one is left alone.
+      // Only when it really changed, so an untouched type is left alone.
       businessType: businessType !== lead.business_type ? businessType : undefined,
       problemStatus,
       instagram: socials.instagram,
