@@ -17,6 +17,11 @@ import icecreamShahd from "./templates/icecream-shahd.template.html";
 import pastryZafaran from "./templates/pastry-zafaran.template.html";
 import musicNava from "./templates/music-nava.template.html";
 import realestateZomorod from "./templates/realestate-zomorod.template.html";
+import kebabBistoon from "./templates/kebab-bistoon.template.html";
+import restaurantTabarestan from "./templates/restaurant-tabarestan.template.html";
+import restaurantMadaen from "./templates/restaurant-madaen.template.html";
+import gardenWillow from "./templates/garden-willow.template.html";
+import gardenGilas from "./templates/garden-gilas.template.html";
 
 
 // ---------------------------------------------------------------------------
@@ -155,6 +160,41 @@ export const TEMPLATES: SiteTemplate[] = [
     label: "املاک — زمردی و طلایی",
     html: realestateZomorod,
     palette: { primary: "#155c42", secondary: "#c9a227" },
+  },
+  {
+    id: "restaurant-tabarestan",
+    trade: "restaurant",
+    label: "رستوران — آتشین و گرم (طبرستان)",
+    html: restaurantTabarestan,
+    palette: { primary: "#d9480f", secondary: "#1f4d3a" },
+  },
+  {
+    id: "restaurant-madaen",
+    trade: "restaurant",
+    label: "رستوران — شرقی و برنجی (مدائن)",
+    html: restaurantMadaen,
+    palette: { primary: "#8c1d36", secondary: "#c9a24f" },
+  },
+  {
+    id: "kebab-bistoon",
+    trade: "kebab",
+    label: "کبابی — قرمز و شاد (بیستون)",
+    html: kebabBistoon,
+    palette: { primary: "#c8102e", secondary: "#2a1233" },
+  },
+  {
+    id: "garden-willow",
+    trade: "garden",
+    label: "باغ رستوران — فانوس و سبز (بید مجنون)",
+    html: gardenWillow,
+    palette: { primary: "#f2a63b", secondary: "#1f3d2b" },
+  },
+  {
+    id: "garden-gilas",
+    trade: "garden",
+    label: "باغ رستوران — شب‌نشینی (گیلاس)",
+    html: gardenGilas,
+    palette: { primary: "#b01535", secondary: "#12392a" },
   },
 ];
 

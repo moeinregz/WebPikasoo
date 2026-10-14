@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{brand}}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;800;900&display=swap">
+<style>
+:root{--night:{{t:#0f1f17}};--moss:{{t:#1f3d2b}};--leaf:{{t:#6f9a54}};--amber:{{t:#f2a63b}};--ember:{{t:#d9552b}};--cream:{{t:#f6ecd6}};--wood:{{t:#7a4a28}};--ink:{{t:#fff8e8}};box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:var(--night);color:var(--ink);font-family:'Vazirmatn',Tahoma,sans-serif;line-height:1.9;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{line-height:1.4}
+h2{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900}
+section{padding:80px 20px;position:relative;overflow:hidden}
+.wrap{max-width:1100px;margin:auto;position:relative;z-index:2}
+/* nav */
+header{position:fixed;top:env(safe-area-inset-top,0px);inset-inline:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:{{t:rgba(15,31,23,.82)}};backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-size:1.2rem;color:var(--amber)}
+nav.d{display:flex;gap:22px;font-weight:500}
+nav.d a:hover{color:var(--amber)}
+.bg{display:none;width:44px;height:44px;border:0;border-radius:50%;background:var(--amber);cursor:pointer;position:relative;z-index:70}
+.bg i{position:absolute;inset-inline:12px;height:3px;background:var(--night);border-radius:3px;transition:.35s}
+.bg i:nth-child(1){top:14px}.bg i:nth-child(2){top:21px}.bg i:nth-child(3){top:28px}
+.bg.on i:nth-child(1){top:21px;transform:rotate(45deg)}
+.bg.on i:nth-child(2){opacity:0}
+.bg.on i:nth-child(3){top:21px;transform:rotate(-45deg)}
+.ov{position:fixed;inset:0;z-index:60;background:var(--ember);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;clip-path:circle(0 at calc(100% - 42px) 38px);transition:clip-path .6s cubic-bezier(.7,0,.2,1);padding:20px}
+.ov.on{clip-path:circle(150% at calc(100% - 42px) 38px)}
+.ov a{font-size:2.2rem;font-weight:900;color:var(--cream);opacity:0;transform:translateY(24px);transition:.4s}
+.ov.on a{opacity:1;transform:none}
+.ov.on a:nth-child(1){transition-delay:.25s}.ov.on a:nth-child(2){transition-delay:.32s}.ov.on a:nth-child(3){transition-delay:.39s}.ov.on a:nth-child(4){transition-delay:.46s}.ov.on a:nth-child(5){transition-delay:.53s}.ov.on a:nth-child(6){transition-delay:.6s}
+.ov small{margin-top:24px;color:var(--cream);opacity:.85}
+@media(max-width:760px){nav.d{display:none}.bg{display:block}}
+/* hero */
+.hero{min-height:100vh;display:flex;align-items:center;text-align:center;background:radial-gradient(ellipse at 50% 30%,{{t:#2c5a3a}} 0,var(--night) 70%);padding-top:110px}
+.hero h1{font-size:clamp(3rem,13vw,7rem);font-weight:900;color:var(--cream);text-shadow:0 0 40px {{t:rgba(242,166,59,.45)}}}
+.hero p{max-width:520px;margin:12px auto 28px;font-size:1.1rem;opacity:.9}
+.lamp{position:absolute;top:0;inset-inline-start:12%;width:2px;height:120px;background:var(--wood);transform-origin:top;animation:sw 5s ease-in-out infinite alternate}
+.lamp:after{content:"";position:absolute;bottom:-26px;left:-17px;width:36px;height:46px;border-radius:8px 8px 14px 14px;background:var(--amber);box-shadow:0 0 60px 24px {{t:rgba(242,166,59,.55)}};animation:fl 3s infinite}
+.lamp.b{inset-inline-start:auto;inset-inline-end:14%;height:80px;animation-delay:-2s}
+@keyframes sw{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+@keyframes fl{0%,100%{opacity:1}45%{opacity:.8}50%{opacity:1}70%{opacity:.88}}
+.leaf{position:absolute;top:-40px;width:14px;height:26px;background:var(--leaf);border-radius:0 100% 0 100%;opacity:.7;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(60px,110vh) rotate(540deg)}}
+.btn{display:inline-block;padding:13px 30px;border-radius:40px;font-weight:800;background:var(--amber);color:var(--night);margin:6px;transition:.25s;border:0;font-family:inherit;font-size:1rem;cursor:pointer}
+.btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 8px 24px {{t:rgba(242,166,59,.4)}}}
+.btn.o{background:transparent;color:var(--cream);border:2px solid var(--cream)}
+/* about */
+.about{background:var(--cream);color:{{t:#2a1c10}}}
+.about h2{color:var(--moss)}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.ph{position:relative;height:460px}
+.ph img{position:absolute;object-fit:cover;border-radius:22px;box-shadow:0 18px 40px rgba(0,0,0,.3)}
+.ph .a{width:68%;height:80%;top:0;inset-inline-start:0;transform:rotate(-3deg)}
+.ph .b{width:55%;height:55%;bottom:0;inset-inline-end:0;transform:rotate(4deg);border:6px solid var(--cream)}
+.st{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.st div{flex:1;min-width:90px;background:var(--moss);color:var(--cream);border-radius:16px;padding:12px;text-align:center}
+.st b{display:block;font-size:1.5rem;color:var(--amber)}
+@media(max-width:760px){
+.about{padding-top:60px}
+.ab{grid-template-columns:1fr}
+.ph{height:380px;order:-1}
+.about h2{font-size:2.2rem}
+.about p{font-size:1.05rem}
+.st div{background:var(--ember)}
+.st div:nth-child(2){background:var(--wood)}
+}
+/* menu */
+.menu{background:linear-gradient(180deg,var(--moss),{{t:#173022}})}
+.tabs{display:flex;gap:10px;overflow-x:auto;padding:18px 0;scroll-snap-type:x mandatory;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{scroll-snap-align:start;flex:none;padding:10px 24px;border-radius:30px;border:2px solid var(--amber);background:transparent;color:var(--amber);font-family:inherit;font-weight:800;cursor:pointer;font-size:1rem}
+.tab.on{background:var(--amber);color:var(--night)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.it{background:{{t:rgba(255,248,232,.08)}};border:1px solid {{t:rgba(242,166,59,.25)}};border-radius:20px;padding:20px;display:flex;gap:14px;align-items:flex-start;animation:pop .45s both}
+.it span.e{font-size:2.2rem;line-height:1}
+.it h3{font-size:1.1rem;color:var(--amber)}
+.it p{font-size:.9rem;opacity:.85;line-height:1.7}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(14px)}}
+/* ambience */
+.amb{background:var(--wood);color:var(--cream)}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:240px;gap:14px;margin-top:26px}
+.gal figure{position:relative;border-radius:20px;overflow:hidden;cursor:pointer}
+.gal figure:first-child{grid-row:span 2}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.gal figure:hover img{transform:scale(1.08)}
+.gal figcaption{position:absolute;bottom:0;inset-inline:0;padding:30px 16px 12px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-weight:500}
+@media(max-width:760px){.gal{grid-template-columns:1fr 1fr;grid-auto-rows:170px}.gal figure:first-child{grid-column:span 2;grid-row:span 1}}
+.fire{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px 4px var(--amber);animation:ff 7s ease-in-out infinite;opacity:0}
+@keyframes ff{0%,100%{opacity:0;transform:translate(0,0)}30%,70%{opacity:1}50%{transform:translate(40px,-60px)}}
+/* reviews */
+.rev{background:var(--ember);color:var(--cream)}
+.rs{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:24px 0 10px;scrollbar-width:none}
+.rs::-webkit-scrollbar{display:none}
+.rc{flex:0 0 min(320px,82%);scroll-snap-align:center;background:var(--cream);color:{{t:#2a1c10}};border-radius:22px;padding:24px}
+.rc:nth-child(even){background:var(--night);color:var(--cream)}
+.rc .s{color:var(--amber);letter-spacing:3px}
+.rc b{display:block;margin-top:10px}
+/* contact */
+.ct{background:var(--night);text-align:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:28px}
+.cd{background:var(--moss);border-radius:22px;padding:26px;transition:.3s}
+.cd:nth-child(2){background:var(--wood)}
+.cd:hover{transform:translateY(-6px)}
+.cd .e{font-size:2rem}
+footer{padding:22px;text-align:center;background:{{t:#091410}};font-size:.9rem;opacity:.9}
+.rv{opacity:0;transform:translateY(30px);transition:1s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.hero h1{font-size:clamp(2.4rem,10vw,5.5rem);overflow-wrap:anywhere}
+.logo{max-width:62vw;overflow:hidden;white-space:nowrap}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#top">🌿 {{brand}}</a>
+  <nav class="d"><a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#amb">محیط</a><a href="#rev">نظرات</a><a href="#ct">تماس</a></nav>
+  <button class="bg" id="bg" aria-label="منو"><i></i><i></i><i></i></button>
+</header>
+<div class="ov" id="ov">
+  <a href="#top">خانه</a><a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#amb">محیط رستوران</a><a href="#rev">نظرات</a><a href="#ct">تماس و آدرس</a>
+  <small><!--if:address-->{{address}}<!--/if:address--></small>
+</div>
+
+<section class="hero" id="top">
+  <div class="lamp"></div><div class="lamp b"></div>
+  <div class="wrap">
+    <h1>{{brand_first}}<br>{{brand_rest}}</h1>
+    <p>زیر سایه درختان، با نور فانوس و بوی غذای گرم، شبی دلنشین بسازید.</p>
+    <a class="btn" href="#menu">دیدن منو</a><a class="btn o" href="{{phone_href}}">رزرو میز</a>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap ab">
+    <div class="rv">
+      <h2>یک گوشه آرام در دل باغ</h2>
+      <p style="margin-top:14px">{{brand}}<!--if:address--> ({{address}})<!--/if:address--> جایی است که میز چوبی، سقف پوشیده از سبزی و چراغ‌های گرم کنار هم جمع شده‌اند. اینجا می‌توانید برای ناهار، شام یا یک دورهمی دوستانه بیایید و در فضای باز غذا بخورید.</p>
+      <p style="margin-top:10px">گوشه‌های دنج، نور گرم و سایه‌ی درختان، مهمان‌ها را به آرامش دعوت می‌کند.</p>
+      <div class="st"><div><b>🌳</b>فضای سبز</div><div><b>🏮</b>نور گرم</div><div><b>🍔</b>منوی متنوع</div></div>
+    </div>
+    <div class="ph rv"><img class="a" data-ph="1" alt="فضای باغ"><img class="b" data-ph="2" alt="فانوس"></div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <h2 class="rv">منوی رستوران</h2>
+    <p class="rv" style="opacity:.85">یک دسته را انتخاب کنید. برای قیمت‌ها و موجودی روز با رستوران تماس بگیرید.</p>
+    <div class="tabs" id="tabs"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="amb" id="amb">
+  <i class="fire" style="top:20%;left:10%"></i><i class="fire" style="top:60%;left:80%;animation-delay:-3s"></i><i class="fire" style="top:80%;left:30%;animation-delay:-5s"></i><i class="fire" style="top:30%;left:65%;animation-delay:-1s"></i>
+  <div class="wrap">
+    <h2 class="rv">فضای رستوران</h2>
+    <p class="rv">نگاهی به حیاط، میزهای چوبی و چراغ‌های شب.</p>
+    <div class="gal">
+      <figure><img data-ph="3" alt="حیاط باغ" style="object-position:50% 40%"><figcaption>حیاط باغ</figcaption></figure>
+      <figure><img data-ph="4" alt="حیاط شب"><figcaption>حیاط در شب</figcaption></figure>
+      <figure><img data-ph="5" alt="فانوس"><figcaption>فانوس ورودی</figcaption></figure>
+      <figure><img data-ph="6" alt="میزها" style="object-position:0 60%"><figcaption>میزهای چوبی</figcaption></figure>
+      <figure><img data-ph="7" alt="پرگولا" style="object-position:50% 0"><figcaption>سقف پرگولا</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="rev" id="rev">
+  <div class="wrap">
+    <h2 class="rv">نظر مهمان‌ها</h2>
+    <div class="rs">
+      <div class="rc"><div class="s">★★★★★</div><p>فضای حیاطش با اون چراغ‌ها شب‌ها فوق‌العاده‌ست. همبرگرشون هم عالی بود.</p><b>سارا م.</b></div>
+      <div class="rc"><div class="s">★★★★★</div><p>برای دورهمی دوستانه عالیه. سرو سریع بود و محیط خیلی آروم.</p><b>امیرحسین ر.</b></div>
+      <div class="rc"><div class="s">★★★★☆</div><p>حیاط و فضای سبزش خیلی جالبه. حتما دوباره میام.</p><b>نگار ک.</b></div>
+      <div class="rc"><div class="s">★★★★★</div><p>هوای باغ، میز چوبی و یه چای داغ. بهتر از این نمیشه.</p><b>مهدی ف.</b></div>
+    </div>
+    <p style="font-size:.8rem;opacity:.8;margin-top:8px">نمونه نظرات؛ بعد از دریافت نظرات واقعی مهمان‌ها جایگزین کنید.</p>
+  </div>
+</section>
+
+<section class="ct" id="ct">
+  <div class="wrap">
+    <h2 class="rv">ما را پیدا کنید</h2>
+    <div class="cards">
+      <!--each:phones--><a class="cd" href="{{phone_href}}"><div class="e">📞</div><h3>تلفن</h3><p dir="ltr">{{phone}}</p></a><!--/each:phones-->
+      <!--if:address--><a class="cd" href="{{map_url}}" target="_blank" rel="noopener"><div class="e">📍</div><h3>آدرس</h3><p>{{address}}</p></a><!--/if:address-->
+      <!--if:hours--><div class="cd"><div class="e">🕘</div><h3>ساعت کاری</h3><p>{{hours}}</p></div><!--/if:hours-->
+      <!--if:instagram--><a class="cd" href="{{instagram_href}}" target="_blank" rel="noopener"><div class="e">📸</div><h3>اینستاگرام</h3><p dir="ltr">{{instagram}}</p></a><!--/if:instagram-->
+    </div>
+    <a class="btn" style="margin-top:26px" href="{{phone_href}}">همین الان تماس بگیرید</a>
+  </div>
+</section>
+<footer>© {{brand}}</footer>
+
+<script>
+const M={"همبرگر":[["🍔","همبرگر کلاسیک","گوشت گاو، پنیر چدار، کاهو و سس مخصوص"],["🧀","چیز برگر","دو لایه پنیر ذوب‌شده"],["🍄","مشروم برگر","قارچ سوته و سس خامه‌ای"],["🌶️","اسپایسی برگر","فلفل هالوپینو و سس تند"]],
+"غذای اصلی":[["🍗","جوجه کباب","با برنج و گوجه کبابی"],["🥩","استیک","همراه سبزیجات گریل"],["🍝","پاستا","سس مخصوص سرآشپز"]],
+"پیش‌غذا":[["🍟","سیب‌زمینی سرخ‌کرده","ترد و داغ"],["🥗","سالاد فصل","سبزی تازه با سس لیمو"],["🍲","سوپ روز","طبق پیشنهاد آشپزخانه"]],
+"نوشیدنی":[["☕","قهوه و اسپرسو","دم‌آوری تازه"],["🍵","چای داغ","مناسب شب‌های سرد"],["🥤","نوشیدنی خنک","لیموناد و دوغ"]]};
+const T=document.getElementById('tabs'),G=document.getElementById('grid');
+function show(k){[...T.children].forEach(b=>b.classList.toggle('on',b.textContent===k));G.innerHTML=M[k].map((x,i)=>`<div class="it" style="animation-delay:${i*.07}s"><span class="e">${x[0]}</span><div><h3>${x[1]}</h3><p>${x[2]}</p></div></div>`).join('')}
+Object.keys(M).forEach(k=>{const b=document.createElement('button');b.className='tab';b.textContent=k;b.onclick=()=>show(k);T.appendChild(b)});
+show('همبرگر');
+
+/* placeholder pictures — real photos of the business can replace these later */
+const PH_C = ['{{t:#1f3d2b}}', '{{t:#f2a63b}}'];
+function phArt(k){
+  const f = 'rgba(255,255,255,.22)', s = 'rgba(255,255,255,.55)';
+  const a = {
+    1: `<path d="M80 420V250C80 170 150 150 180 80c30 70 100 90 100 170v170z" fill="none" stroke="${s}" stroke-width="5"/><path d="M120 420V260c0-50 40-65 60-105 20 40 60 55 60 105v160z" fill="${f}"/>`,
+    2: `<circle cx="180" cy="225" r="105" fill="${f}"/><circle cx="180" cy="225" r="70" fill="none" stroke="${s}" stroke-width="5"/><path d="M50 160v130M38 160v40M62 160v40M310 160v130" stroke="${s}" stroke-width="5" stroke-linecap="round"/>`,
+    3: `<rect x="60" y="210" width="240" height="22" rx="8" fill="${s}"/><path d="M90 232v110M270 232v110" stroke="${s}" stroke-width="8"/><path d="M110 170h40M210 170h40" stroke="${f}" stroke-width="30" stroke-linecap="round"/>`,
+    4: `<path d="M110 430V240c0-60 35-90 70-130 35 40 70 70 70 130v190z" fill="${f}"/><path d="M110 430V240c0-60 35-90 70-130 35 40 70 70 70 130v190" fill="none" stroke="${s}" stroke-width="5"/><circle cx="222" cy="300" r="7" fill="${s}"/>`,
+    5: `<path d="M40 60c40 30 40 150 0 210M320 60c-40 30-40 150 0 210" fill="none" stroke="${s}" stroke-width="12" stroke-linecap="round"/><circle cx="180" cy="200" r="70" fill="${f}"/>`,
+    6: `<path d="M180 120v110M130 230h100" stroke="${s}" stroke-width="6" stroke-linecap="round"/><circle cx="180" cy="130" r="44" fill="${f}"/>`,
+    7: `<rect x="70" y="110" width="220" height="190" rx="14" fill="${f}"/><circle cx="180" cy="205" r="52" fill="none" stroke="${s}" stroke-width="6"/><circle cx="262" cy="140" r="9" fill="${s}"/>`
+  };
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 450" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${PH_C[0]}"/><stop offset="1" stop-color="${PH_C[1]}"/></linearGradient></defs><rect width="360" height="450" fill="url(#g)"/>${a[k] || a[6]}</svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+document.querySelectorAll('img[data-ph]').forEach(i=>{i.src=phArt(+i.dataset.ph)});
+const bg=document.getElementById('bg'),ov=document.getElementById('ov');
+function tog(f){const o=f===undefined?!ov.classList.contains('on'):f;ov.classList.toggle('on',o);bg.classList.toggle('on',o);document.body.style.overflow=o?'hidden':''}
+bg.onclick=()=>tog();ov.querySelectorAll('a').forEach(a=>a.onclick=()=>tog(false));
+const h=document.querySelector('.hero');
+for(let i=0;i<14;i++){const l=document.createElement('i');l.className='leaf';l.style.left=Math.random()*100+'%';l.style.animationDuration=(9+Math.random()*9)+'s';l.style.animationDelay=(-Math.random()*14)+'s';h.appendChild(l)}
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.15});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+</script>
+</body>
+</html>

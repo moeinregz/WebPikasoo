@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{brand}}</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--red:{{t:#c8102e}};--plum:{{t:#2a1233}};--gold:{{t:#f2b632}};--cream:{{t:#fff5e6}};--ink:{{t:#1d1020}};--card:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--cream:{{t:#1a0e1f}};--ink:{{t:#fff5e6}};--card:{{t:#2a1633}}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cream:{{t:#1a0e1f}};--ink:{{t:#fff5e6}};--card:{{t:#2a1633}}}}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.9}
+header{position:fixed;top:env(safe-area-inset-top,0px);inset-inline:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:{{t:rgba(42,18,51,.92)}};backdrop-filter:blur(8px);color:#fff}
+.logo{font-weight:900;font-size:1.1rem;color:var(--gold)}
+nav.d a{color:#fff;text-decoration:none;margin-inline-start:18px;font-weight:600}
+nav.d{display:none}
+@media(min-width:800px){nav.d{display:block}.burger{display:none}}
+.burger{width:44px;height:44px;border:0;background:var(--red);border-radius:12px;cursor:pointer;display:grid;place-content:center;gap:5px}
+.burger i{display:block;width:22px;height:3px;background:#fff;border-radius:3px;transition:.3s}
+.burger.on i:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.on i:nth-child(2){opacity:0}
+.burger.on i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.overlay{position:fixed;inset:0;z-index:40;background:linear-gradient(160deg,var(--plum),var(--red));display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;transform:translateY(-100%);transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.overlay.on{transform:none}
+.overlay a{color:#fff;text-decoration:none;font-size:2rem;font-weight:900;opacity:0;transform:translateY(20px);transition:.4s}
+.overlay.on a{opacity:1;transform:none}
+.overlay.on a:nth-child(2){transition-delay:.1s}.overlay.on a:nth-child(3){transition-delay:.15s}.overlay.on a:nth-child(4){transition-delay:.2s}.overlay.on a:nth-child(5){transition-delay:.25s}.overlay.on a:nth-child(6){transition-delay:.3s}
+.overlay small{color:var(--gold);margin-top:20px}
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding:90px 20px 50px;color:#fff;background:radial-gradient(circle at 70% 20%,{{t:#8a1a4a}},transparent 50%),linear-gradient(160deg,var(--plum),{{t:#5b0f2a}} 60%,var(--red));position:relative;overflow:hidden}
+.hero h1{font-size:clamp(2.4rem,9vw,5rem);font-weight:900;line-height:1.3}
+.hero h1 span{color:var(--gold)}
+.hero p{max-width:520px;margin:12px auto 26px;opacity:.9}
+.btn{display:inline-block;padding:13px 28px;border-radius:50px;font-weight:800;text-decoration:none;margin:5px;transition:.3s}
+.b1{background:var(--gold);color:var(--plum)}.b2{border:2px solid #fff;color:#fff}
+.btn:hover{transform:translateY(-4px) scale(1.05)}
+.fl{position:absolute;font-size:2.4rem;animation:fly 7s ease-in-out infinite;opacity:.8}
+@keyframes fly{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-30px) rotate(15deg)}}
+.smoke{position:absolute;bottom:-40px;width:80px;height:160px;border-radius:50%;background:rgba(255,255,255,.12);filter:blur(22px);animation:sm 6s linear infinite}
+@keyframes sm{from{transform:translateY(0) scale(.6);opacity:.8}to{transform:translateY(-420px) scale(1.6);opacity:0}}
+section{padding:70px 20px}
+.w{max-width:1000px;margin:auto}
+h2{font-size:2rem;font-weight:900;text-align:center;margin-bottom:8px}
+.sub{text-align:center;opacity:.8;margin-bottom:34px}
+.s-about{background:var(--cream)}
+.s-menu{background:linear-gradient(180deg,{{t:#ffe9b8}},{{t:#ffd37a}});color:{{t:#2a1233}}}
+.s-env{background:var(--plum);color:#fff}
+.s-rev{background:linear-gradient(180deg,{{t:#ffd9de}},{{t:#ffb3bd}});color:{{t:#2a1233}}}
+.s-info{background:var(--red);color:#fff}
+.r{opacity:0;transform:translateY(40px);transition:1s}
+.r.in{opacity:1;transform:none}
+.about{display:grid;gap:22px;align-items:center}
+@media(min-width:800px){.about{grid-template-columns:1fr 1fr}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stats div{background:var(--card);border-radius:18px;padding:16px 6px;text-align:center;box-shadow:0 8px 20px #0002}
+.stats b{display:block;font-size:1.8rem;color:var(--red)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:18px;justify-content:center;flex-wrap:wrap}
+.tab{border:0;padding:10px 20px;border-radius:30px;background:#fff;font:inherit;font-weight:800;cursor:pointer;color:var(--plum)}
+.tab.on{background:var(--red);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.item{background:#fff;border-radius:22px;padding:18px;box-shadow:0 10px 24px #0002;transition:.3s;animation:pop .5s both}
+.item:hover{transform:translateY(-8px) rotate(-1deg)}
+.item .e{font-size:3rem}
+.item h3{font-size:1.1rem}
+.item p{font-size:.88rem;opacity:.8}
+@keyframes pop{from{opacity:0;transform:scale(.8)}}
+.env{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.ec{border-radius:24px;padding:26px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;transition:.4s;position:relative;overflow:hidden}
+.ec:hover{transform:scale(1.04)}
+.ec .e{position:absolute;top:10px;inset-inline-end:16px;font-size:4rem;opacity:.9}
+.ec h3{font-size:1.3rem}
+.e1{background:linear-gradient(135deg,{{t:#c8102e}},{{t:#ff5b6e}})}.e2{background:linear-gradient(135deg,{{t:#6a2c91}},{{t:#b05ee0}})}.e3{background:linear-gradient(135deg,{{t:#e08a00}},{{t:#ffd04a}});color:{{t:#2a1233}}}.e4{background:linear-gradient(135deg,{{t:#0f7b6c}},{{t:#44d1b4}})}
+.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.rc{background:#fff;border-radius:22px;padding:20px;box-shadow:0 10px 24px #0002}
+.rc .st{color:{{t:#f5a300}};letter-spacing:3px}
+.rc b{display:block;margin-top:8px}
+.hrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:20px 0}
+.hrs div{background:#ffffff22;border-radius:14px;padding:10px;text-align:center}
+.hrs span{display:block;font-weight:800}
+.call{font-size:1.8rem;font-weight:900;color:var(--gold);text-decoration:none;direction:ltr;display:inline-block}
+footer{background:var(--plum);color:#fff;text-align:center;padding:24px;font-size:.9rem}
+.fab{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));inset-inline-start:18px;z-index:30;background:var(--red);color:#fff;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;text-decoration:none;box-shadow:0 6px 18px #0006;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #c8102e99}100%{box-shadow:0 0 0 22px #c8102e00}}
+.logo{max-width:62vw;overflow:hidden;white-space:nowrap}
+.hero h1{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header><div class="logo">🔥 {{brand}}</div>
+<nav class="d"><a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#env">محیط</a><a href="#reviews">نظرات</a><a href="#contact">تماس</a></nav>
+<button class="burger" id="bg" aria-label="منو"><i></i><i></i><i></i></button></header>
+<div class="overlay" id="ov"><a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#env">محیط رستوران</a><a href="#reviews">نظرات</a><a href="#contact">تماس و آدرس</a><small><!--if:hours-->{{hours}}<!--/if:hours--><!--ifnot:hours-->{{address}}<!--/ifnot:hours--></small></div>
+
+<div class="hero">
+<span class="fl" style="top:18%;right:8%">🍢</span><span class="fl" style="top:30%;left:8%;animation-delay:1s">🍅</span><span class="fl" style="bottom:22%;right:14%;animation-delay:2s">🍚</span><span class="fl" style="bottom:30%;left:12%;animation-delay:3s">🌶️</span>
+<span class="smoke" style="right:20%"></span><span class="smoke" style="left:25%;animation-delay:2s"></span><span class="smoke" style="right:55%;animation-delay:4s"></span>
+<div style="position:relative">
+<div style="color:var(--gold);font-weight:700">{{address}}</div>
+<h1>{{brand_first}} <span>{{brand_rest}}</span></h1>
+<p>طعم اصیل کباب ذغالی، برنج ایرانی و صمیمیت یک سفره‌ی گرم<!--if:hours-->؛ {{hours}}<!--/if:hours-->.</p>
+<a class="btn b1" href="#menu">دیدن منو</a><a class="btn b2" href="{{phone_href}}">تماس بگیرید</a></div>
+</div>
+
+<section class="s-about" id="about"><div class="w about">
+<div class="r"><h2 style="text-align:right">درباره ما</h2><p>{{brand}} میزبان دوستداران کباب اصیل ایرانی است<!--if:address--> — {{address}}<!--/if:address-->. گوشت تازه، ذغال خوب و دست‌پخت باتجربه؛ همان چیزی که هر بار شما را به سفره‌ی ما برمی‌گرداند. چه ناهار سریع، چه دورهمی خانوادگی، اینجا جایتان گرم است.</p></div>
+<div class="stats r"><div><b>🔥</b>ذغالی واقعی</div><div><b>🥩</b>گوشت تازه</div><div><b>🍚</b>برنج ایرانی</div></div>
+</div></section>
+
+<section class="s-menu" id="menu"><div class="w">
+<h2 class="r">منوی کباب سرا</h2><p class="sub r">برای اطلاع از قیمت‌ها و موجودی روز تماس بگیرید</p>
+<div class="tabs" id="tabs"></div><div class="grid" id="grid"></div>
+</div></section>
+
+<section class="s-env" id="env"><div class="w">
+<h2 class="r">محیط رستوران</h2><p class="sub r">فضایی گرم و صمیمی با پذیرایی سریع</p>
+<div class="env">
+<div class="ec e1 r"><span class="e">🪑</span><h3>میزهای قرمز</h3><p>سالنی دنج با چیدمان راحت</p></div>
+<div class="ec e2 r"><span class="e">👨‍🍳</span><h3>آشپزخانه‌ی باز</h3><p>کباب‌ها جلوی چشم شما روی ذغال آماده می‌شوند</p></div>
+<div class="ec e3 r"><span class="e">🏪</span><h3>ورودی</h3><p>تابلو و ورودی {{brand}}؛ پیدا کردنش آسان است</p></div>
+<div class="ec e4 r"><span class="e">🥗</span><h3>سفره‌ی کامل</h3><p>نوشیدنی، سالاد و ترشی همراه هر سفارش</p></div>
+</div></div></section>
+
+<section class="s-rev" id="reviews"><div class="w">
+<h2 class="r">نظرات مشتریان</h2><p class="sub r">آنچه مهمانان ما می‌گویند</p>
+<div class="rv">
+<div class="rc r"><div class="st">★★★★★</div><p>کباب‌ها نرم و آبدار بود و برنج عالی. حتماً دوباره میام.</p><b>— علی م.</b></div>
+<div class="rc r"><div class="st">★★★★★</div><p>سرویس سریع و محیط تمیز. قیمت هم منصفانه بود.</p><b>— مریم ک.</b></div>
+<div class="rc r"><div class="st">★★★★☆</div><p>بهترین چنجه‌ی منطقه. ساعت ناهار شلوغه ولی می‌ارزه.</p><b>— رضا ح.</b></div>
+</div></div></section>
+
+<section class="s-info" id="contact"><div class="w" style="text-align:center">
+<h2 class="r">تماس و آدرس</h2>
+<!--if:address--><p>{{address}}</p><br><!--/if:address-->
+<!--each:phones--><a class="call" href="{{phone_href}}">{{phone}}</a><br><!--/each:phones-->
+<!--if:instagram--><p style="margin-top:10px"><a class="call" style="font-size:1.1rem" href="{{instagram_href}}" target="_blank" rel="noopener">{{instagram}}</a></p><!--/if:instagram-->
+<!--if:hours--><div class="hrs"><div style="grid-column:1/-1"><span>ساعت کاری</span>{{hours}}</div></div><!--/if:hours-->
+</div></section>
+<footer>© {{brand}} — همه‌ی حقوق محفوظ است</footer>
+<a class="fab" href="{{phone_href}}" aria-label="تماس">📞</a>
+
+<script>
+const M={"کباب‌ها":[["🍢","کباب کوبیده","گوشت گوسفندی تازه، ذغالی، با برنج و گوجه"],["🥩","جوجه کباب","سینه یا ران مرغ زعفرانی با برنج"],["🍖","کباب برگ","فیله‌ی نرم و آبدار با دنده‌ی ذغالی"],["🔥","چنجه","تکه‌های گوشت گوسفند، مزه‌دار و لطیف"]],
+"ترکیبی":[["🍱","سلطانی","یک سیخ برگ و یک سیخ کوبیده"],["🍛","وزیری","جوجه و کوبیده با برنج"],["🍽️","شیشلیک","دنده‌ی گوسفندی مزه‌دار"]],
+"مخلفات":[["🍚","برنج ایرانی","با کره و زعفران"],["🍅","گوجه و فلفل کبابی","همراه هر سفارش"],["🥗","سالاد شیرازی و ماست","تازه و خنک"]],
+"نوشیدنی":[["🥛","دوغ","دوغ محلی خنک"],["🥤","نوشابه","انواع نوشابه"],["🍵","چای","چای داغ بعد از غذا"]]};
+const tabs=document.getElementById('tabs'),grid=document.getElementById('grid');
+function show(k){[...tabs.children].forEach(b=>b.classList.toggle('on',b.dataset.k===k));grid.innerHTML=M[k].map((x,i)=>`<div class="item" style="animation-delay:${i*.08}s"><div class="e">${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p></div>`).join('')}
+Object.keys(M).forEach(k=>{const b=document.createElement('button');b.className='tab';b.textContent=k;b.dataset.k=k;b.onclick=()=>show(k);tabs.appendChild(b)});
+show("کباب‌ها");
+const bg=document.getElementById('bg'),ov=document.getElementById('ov');
+function t(f){bg.classList.toggle('on',f);ov.classList.toggle('on',f);document.body.style.overflow=f?'hidden':''}
+bg.onclick=()=>t(!ov.classList.contains('on'));
+ov.querySelectorAll('a').forEach(a=>a.onclick=()=>t(false));
+const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('in')),{threshold:.15});
+document.querySelectorAll('.r').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

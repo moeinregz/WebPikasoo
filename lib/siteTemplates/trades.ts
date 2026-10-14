@@ -15,6 +15,8 @@ export type Trade = {
 export const TRADES: Trade[] = [
   { id: "cafe", label: "کافه", colors: { primary: "#6F4E37", secondary: "#C8A27A", accent: "#D9822B", bg: "#F5ECE0", text: "#2B1D14" } },
   { id: "restaurant", label: "رستوران", colors: { primary: "#8B1E2D", secondary: "#D4A857", accent: "#C0392B", bg: "#FBF6EE", text: "#2A1A17" } },
+  { id: "kebab", label: "کبابی و کباب‌سرا", colors: { primary: "#C8102E", secondary: "#2A1233", accent: "#F2B632", bg: "#FFF5E6", text: "#1D1020" } },
+  { id: "garden", label: "باغ رستوران", colors: { primary: "#1F3D2B", secondary: "#F2A63B", accent: "#D8294B", bg: "#F6ECD6", text: "#2A1C10" } },
   { id: "fastfood", label: "فست‌فود", colors: { primary: "#E63B1F", secondary: "#FFC72C", accent: "#FF8A00", bg: "#FFF8EC", text: "#231A14" } },
   { id: "bakery", label: "نانوایی", colors: { primary: "#C17F2B", secondary: "#E8CD8A", accent: "#D6491C", bg: "#F6EFE0", text: "#2B1810" } },
   { id: "pastry", label: "شیرینی‌فروشی", colors: { primary: "#C6942F", secondary: "#4A2020", accent: "#77875A", bg: "#FBF2E3", text: "#3A2418" } },

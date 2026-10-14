@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{brand}}</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--fire:{{t:#d9480f}};--gold:{{t:#f2b134}};--forest:{{t:#1f4d3a}};--cream:{{t:#fff4e0}};--wine:{{t:#6b1d2a}};--ink:{{t:#1c1412}};--clay:{{t:#c2623a}};
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px;height:auto}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--ink);color:#fff;overflow-x:hidden;line-height:1.8}
+section{padding:70px 20px;position:relative;overflow:hidden}
+h2{font-size:2rem;font-weight:900;text-align:center;margin-bottom:8px}
+.sub{text-align:center;opacity:.8;margin-bottom:34px}
+.wrap{max-width:1000px;margin:auto}
+/* nav */
+header{position:fixed;top:env(safe-area-inset-top,0px);inset-inline:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:{{t:rgba(28,20,18,.82)}};backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-size:1.25rem;color:var(--gold)}
+.burger{width:44px;height:44px;border:0;background:var(--fire);border-radius:50%;cursor:pointer;display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;z-index:70;position:relative}
+.burger span{width:20px;height:2.5px;background:#fff;border-radius:2px;transition:.4s}
+.burger.on span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.desk{display:none;gap:22px}
+.desk a{color:#fff;text-decoration:none;font-weight:500}
+.desk a:hover{color:var(--gold)}
+@media(min-width:800px){.desk{display:flex}.burger{display:none}}
+#ov{position:fixed;inset:0;z-index:60;background:linear-gradient(160deg,var(--wine),var(--fire) 60%,var(--gold));display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;clip-path:circle(0 at calc(100% - 40px) 40px);transition:clip-path .7s cubic-bezier(.7,0,.2,1);height:100%}
+#ov.on{clip-path:circle(150% at calc(100% - 40px) 40px)}
+#ov a{color:#fff;text-decoration:none;font-size:2.2rem;font-weight:900;opacity:0;transform:translateY(30px);transition:.5s}
+#ov.on a{opacity:1;transform:none}
+#ov.on a:nth-child(1){transition-delay:.3s}#ov.on a:nth-child(2){transition-delay:.38s}#ov.on a:nth-child(3){transition-delay:.46s}#ov.on a:nth-child(4){transition-delay:.54s}#ov.on a:nth-child(5){transition-delay:.62s}#ov.on a:nth-child(6){transition-delay:.7s}
+#ov small{margin-top:20px;opacity:.9}
+/* hero */
+#home{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(circle at 50% 30%,{{t:#5a2a14}},var(--ink) 70%)}
+#home h1{font-size:clamp(2.8rem,11vw,5.5rem);font-weight:900;background:linear-gradient(90deg,var(--gold),#fff,var(--gold));background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
+@keyframes shine{to{background-position:-200% 0}}
+#home p{font-size:1.15rem;margin:10px 0 26px;opacity:.9}
+.btn{display:inline-block;padding:13px 28px;border-radius:40px;background:var(--fire);color:#fff;text-decoration:none;font-weight:700;margin:5px;border:2px solid var(--fire);transition:.3s}
+.btn.o{background:transparent;border-color:var(--gold);color:var(--gold)}
+.btn:hover{transform:scale(1.07)}
+.steam{position:absolute;bottom:18%;width:10px;height:90px;border-radius:50%;background:linear-gradient(transparent,rgba(255,255,255,.35));filter:blur(6px);animation:steam 4s infinite ease-in}
+@keyframes steam{0%{transform:translateY(0) scaleX(1);opacity:0}30%{opacity:.8}100%{transform:translateY(-150px) scaleX(3);opacity:0}}
+.fl{position:absolute;font-size:2.2rem;animation:float 7s infinite ease-in-out;opacity:.85}
+@keyframes float{50%{transform:translateY(-28px) rotate(14deg)}}
+.plate{font-size:5rem;animation:spin 9s linear infinite;display:inline-block;margin-bottom:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* marquee */
+.mq{background:var(--gold);color:var(--ink);font-weight:900;padding:12px 0;overflow:hidden;white-space:nowrap}
+.mq div{display:inline-block;animation:mq 22s linear infinite}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(50%)}}
+/* about */
+#about{background:var(--cream);color:var(--ink)}
+.ab{display:grid;gap:18px}
+@media(min-width:800px){.ab{grid-template-columns:1fr 1fr}}
+.card{background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.1);border-top:6px solid var(--fire)}
+.card:nth-child(2){border-color:var(--forest)}.card:nth-child(3){border-color:var(--gold)}
+.card .ic{font-size:2.6rem;display:block;animation:float 5s infinite}
+.card h3{margin:4px 0}
+.stats{display:flex;justify-content:space-around;margin-top:26px;text-align:center}
+.stats b{display:block;font-size:2.2rem;color:var(--fire)}
+/* menu */
+#menu{background:var(--forest)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}
+.tabs button{flex:none;padding:10px 20px;border-radius:30px;border:2px solid var(--gold);background:transparent;color:var(--gold);font:inherit;font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--gold);color:var(--ink)}
+.grid{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+.it{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.1);border-radius:20px;padding:14px;animation:pop .5s both}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(20px)}}
+.it .e{font-size:2.6rem;background:rgba(255,255,255,.15);border-radius:16px;width:68px;height:68px;display:grid;place-items:center;flex:none}
+.it h4{font-size:1.05rem}.it p{font-size:.85rem;opacity:.8;line-height:1.5}
+.it .pr{margin-inline-start:auto;color:var(--gold);font-weight:900;white-space:nowrap}
+/* showcase */
+#show{background:linear-gradient(135deg,var(--wine),{{t:#3b0f19}})}
+.sl{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 4px 18px;scrollbar-width:none}
+.sc{flex:0 0 78%;max-width:300px;scroll-snap-align:center;border-radius:26px;padding:26px 18px;text-align:center;min-height:300px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.sc .e{font-size:5rem;animation:float 4s infinite}
+.sc h3{margin:8px 0 4px}.sc .pr{font-weight:900;font-size:1.3rem}
+/* ambiance */
+#amb{background:var(--clay)}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g{border-radius:22px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;text-align:center;padding:12px;transition:.4s;position:relative;overflow:hidden}
+.g .e{font-size:3.2rem}.g:hover{transform:rotate(-2deg) scale(1.04)}
+.g.w{grid-column:span 2;min-height:190px}
+/* reviews */
+#rev{background:var(--gold);color:var(--ink)}
+.rv{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 16px;scrollbar-width:none}
+.rc{flex:0 0 82%;max-width:320px;scroll-snap-align:center;background:#fff;border-radius:22px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.rc .s{color:var(--fire);letter-spacing:3px}.rc b{display:block;margin-top:10px}
+/* contact */
+#contact{background:var(--ink);text-align:center}
+.ct{display:grid;gap:14px;max-width:600px;margin:auto}
+.ci{background:linear-gradient(135deg,{{t:rgba(217,72,15,.35)}},{{t:rgba(242,177,52,.15)}});border-radius:20px;padding:18px}
+.ci a{color:var(--gold);font-size:1.4rem;font-weight:900;text-decoration:none}
+footer{text-align:center;padding:18px;background:#000;font-size:.85rem;opacity:.8}
+.rv-in{opacity:0;transform:translateY(40px);transition:1s}
+.rv-in.v{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.logo{max-width:62vw;overflow:hidden;white-space:nowrap}
+#home h1{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🍽️ {{brand}}</div>
+  <nav class="desk"><a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#amb">محیط</a><a href="#rev">نظرات</a><a href="#contact">تماس</a></nav>
+  <button class="burger" id="bg" aria-label="منو"><span></span><span></span><span></span></button>
+</header>
+<div id="ov">
+  <a href="#home">🏠 خانه</a><a href="#about">📖 درباره ما</a><a href="#menu">🍔 منو</a><a href="#amb">✨ محیط</a><a href="#rev">⭐ نظرات</a><a href="#contact">📞 تماس</a>
+  <small><!--if:hours-->{{hours}}<!--/if:hours--><!--ifnot:hours-->{{address}}<!--/ifnot:hours--></small>
+</div>
+
+<section id="home">
+  <span class="fl" style="top:16%;right:8%">🍔</span><span class="fl" style="top:24%;left:8%;animation-delay:1s">🥗</span>
+  <span class="fl" style="bottom:22%;right:12%;animation-delay:2s">🍕</span><span class="fl" style="bottom:16%;left:10%;animation-delay:3s">🍖</span>
+  <span class="steam" style="right:42%"></span><span class="steam" style="right:50%;animation-delay:1.3s"></span><span class="steam" style="right:58%;animation-delay:2.6s"></span>
+  <div class="plate">🍽️</div>
+  <h1>{{brand}}</h1>
+  <p>طعم اصیل، در فضایی گرم و دلنشین</p>
+  <div><a class="btn" href="#menu">مشاهده منو</a><a class="btn o" href="{{phone_href}}">تماس و رزرو</a></div>
+</section>
+
+<div class="mq"><div>🍔 همبرگر ذغالی ✦ 🍖 کباب ✦ 🥗 سالاد ✦ 🍰 دسر ✦ ☕ نوشیدنی ✦ 🍔 همبرگر ذغالی ✦ 🍖 کباب ✦ 🥗 سالاد ✦ 🍰 دسر ✦ ☕ نوشیدنی ✦ 🍔 همبرگر ذغالی ✦ 🍖 کباب ✦ 🥗 سالاد ✦ 🍰 دسر ✦ ☕ نوشیدنی ✦ </div></div>
+
+<section id="about"><div class="wrap">
+  <h2 class="rv-in">درباره ما</h2><p class="sub rv-in">داستان ما</p>
+  <div class="ab">
+    <div class="card rv-in"><span class="ic">👨‍🍳</span><h3>طعم اصیل</h3><p>{{brand}} با مواد اولیه تازه و دستپخت سرآشپزهای ماهر، سفره‌ای رنگین از غذاهای ایرانی و فرنگی پیش روی شما می‌گذارد.</p></div>
+    <div class="card rv-in"><span class="ic">🌿</span><h3>فضای دلنشین</h3><p>فضایی راحت و آرام برای دورهمی‌های خانوادگی و دوستانه<!--if:address-->؛ {{address}}<!--/if:address-->.</p></div>
+    <div class="card rv-in"><span class="ic">🔥</span><h3>آتش و ذغال</h3><p>کباب‌ها و همبرگرهای ما روی ذغال واقعی پخته می‌شوند تا همان عطر و طعمی را بدهند که دوست دارید.</p></div>
+    <div class="card rv-in"><span class="ic">🎉</span><h3>مهمانی و مراسم</h3><p>برای تولد، دورهمی و مراسم‌های ویژه با ما تماس بگیرید تا بهترین فضا را برایتان آماده کنیم.</p></div>
+  </div>
+  <div class="stats rv-in"><div><b>🍽️</b>منوی متنوع</div><div><b>🔥</b>آتش و ذغال</div><div><b>⭐</b>مهمان‌نوازی</div></div>
+</div></section>
+
+<section id="menu"><div class="wrap">
+  <h2 class="rv-in">منوی رستوران</h2><p class="sub rv-in">دسته‌بندی را انتخاب کنید · برای اطلاع از قیمت روز تماس بگیرید</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section id="show"><div class="wrap">
+  <h2 class="rv-in">منوی ویژه</h2><p class="sub rv-in">پیشنهاد سرآشپز · بکشید و ببینید 👈</p>
+  <div class="sl" id="sl"></div>
+</div></section>
+
+<section id="amb"><div class="wrap">
+  <h2 class="rv-in">محیط رستوران</h2><p class="sub rv-in">فضایی که دوستش خواهید داشت</p>
+  <div class="gal">
+    <div class="g w rv-in" style="background:linear-gradient(135deg,{{t:#1f4d3a}},{{t:#3d8b66}})"><span class="e">🌳</span>حیاط و فضای سبز</div>
+    <div class="g rv-in" style="background:{{t:#6b1d2a}}"><span class="e">🕯️</span>سالن شاد و دنج</div>
+    <div class="g rv-in" style="background:{{t:#f2b134}};color:{{t:#1c1412}}"><span class="e">🔥</span>آتش و ذغال</div>
+    <div class="g rv-in" style="background:{{t:#1c1412}}"><span class="e">🌙</span>شب‌نشینی</div>
+    <div class="g rv-in" style="background:{{t:#d9480f}}"><span class="e">👨‍👩‍👧</span>نشیمن خانوادگی</div>
+    <div class="g w rv-in" style="background:linear-gradient(135deg,{{t:#4a2c82}},{{t:#c2623a}})"><span class="e">🎶</span>موسیقی و دورهمی</div>
+  </div>
+</div></section>
+
+<section id="rev"><div class="wrap">
+  <h2 class="rv-in">نظرات مشتریان</h2><p class="sub rv-in">آنچه مهمانان ما می‌گویند</p>
+  <div class="rv">
+    <div class="rc"><div class="s">★★★★★</div><p>همبرگرشون عالیه، گوشتش آبدار و نونش تازه. فضای رستوران هم فوق‌العاده‌ست.</p><b>— علی م.</b></div>
+    <div class="rc"><div class="s">★★★★★</div><p>برای دورهمی خانوادگی رفتیم، سرویس سریع و غذا داغ و خوشمزه بود.</p><b>— مریم ک.</b></div>
+    <div class="rc"><div class="s">★★★★★</div><p>کباب ذغالی‌شون بی‌نظیره و محیط شب‌ها خیلی دل‌انگیزه. حتماً دوباره میایم.</p><b>— رضا ش.</b></div>
+    <div class="rc"><div class="s">★★★★☆</div><p>منوی متنوع و قیمت مناسب. دسرها رو از دست ندید!</p><b>— سارا ن.</b></div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <h2 class="rv-in">تماس با ما</h2><p class="sub">منتظر شما هستیم</p>
+  <div class="ct">
+    <!--each:phones--><div class="ci">📞<br><a href="{{phone_href}}">{{phone}}</a></div><!--/each:phones-->
+    <!--if:address--><div class="ci">📍<br>{{address}}</div><!--/if:address-->
+    <!--if:hours--><div class="ci">🕘<br>{{hours}}</div><!--/if:hours-->
+    <!--if:instagram--><div class="ci">📸<br><a href="{{instagram_href}}" target="_blank" rel="noopener">{{instagram}}</a></div><!--/if:instagram-->
+  </div>
+</div></section>
+<footer>© {{brand}} · همه حقوق محفوظ است</footer>
+
+<script>
+const M={
+"🍔 همبرگر":[["🍔","همبرگر کلاسیک","گوشت ذغالی، کاهو، گوجه، سس مخصوص"],["🧀","چیزبرگر","دو لایه پنیر چدار"],["🌶️","همبرگر تند","هالوپینو و سس اسپایسی"],["🍟","سیب‌زمینی سرخ‌کرده","ترد و طلایی"]],
+"🍖 کباب":[["🍢","کباب کوبیده","دو سیخ با برنج و گوجه"],["🥩","جوجه کباب","زعفرانی با استخوان یا بی‌استخوان"],["🍖","شیشلیک","گوشت بره مخصوص"],["🍗","کباب برگ","فیله گوسفندی"]],
+"🥗 پیش‌غذا":[["🥗","سالاد سزار","مرغ گریل و پنیر پارمزان"],["🍄","قارچ سوخاری","با سس مخصوص"],["🥣","سوپ روز","طبق انتخاب سرآشپز"],["🧆","میرزاقاسمی","غذای اصیل شمالی"]],
+"🍰 دسر":[["🍰","چیزکیک","با سس توت‌فرنگی"],["🍫","براونی","گرم با بستنی"],["🍨","بستنی سنتی","زعفرانی"]],
+"☕ نوشیدنی":[["☕","قهوه اسپرسو","دبل"],["🍹","موهیتو","تازه و خنک"],["🍵","چای سنتی","استکانی با نبات"],["🥤","دوغ محلی","با نعنا"]]};
+const tabs=document.getElementById('tabs'),grid=document.getElementById('grid');
+function show(k){[...tabs.children].forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+grid.innerHTML=M[k].map((i,n)=>`<div class="it" style="animation-delay:${n*.08}s"><div class="e">${i[0]}</div><div><h4>${i[1]}</h4><p>${i[2]}</p></div></div>`).join('')}
+Object.keys(M).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.dataset.k=k;b.onclick=()=>show(k);tabs.appendChild(b)});
+show(Object.keys(M)[0]);
+const C=[["{{t:#d9480f}}","{{t:#f2b134}}"],["{{t:#1f4d3a}}","{{t:#3d8b66}}"],["{{t:#c2623a}}","{{t:#6b1d2a}}"],["{{t:#4a2c82}}","{{t:#9b4dca}}"]];
+document.getElementById('sl').innerHTML=[["🍔","همبرگر مخصوص"],["🥩","استیک گریل"],["🍢","کباب مخصوص"],["🍰","چیزکیک ویژه"]].map((s,i)=>`<div class="sc" style="background:linear-gradient(160deg,${C[i][0]},${C[i][1]})"><div class="e">${s[0]}</div><h3>${s[1]}</h3></div>`).join('');
+const bg=document.getElementById('bg'),ov=document.getElementById('ov');
+function tg(f){const o=f===undefined?!ov.classList.contains('on'):f;ov.classList.toggle('on',o);bg.classList.toggle('on',o);document.body.style.overflow=o?'hidden':''}
+bg.onclick=()=>tg();ov.querySelectorAll('a').forEach(a=>a.onclick=()=>tg(false));
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('v');io.unobserve(x.target)}}),{threshold:.15});
+document.querySelectorAll('.rv-in').forEach(e=>io.observe(e));
+</script>
+</body>
+</html>

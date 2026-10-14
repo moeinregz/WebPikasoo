@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{brand}}</title>
+<meta name="description" content="{{brand}} — باغ رستوران<!--if:address--> | {{address}}<!--/if:address-->">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --night:{{t:#0e1c15}};
+  --emerald:{{t:#12392a}};
+  --wine:{{t:#4a0c1c}};
+  --cherry:{{t:#b01535}};
+  --cherry-2:{{t:#d8294b}};
+  --gold:{{t:#d4ac55}};
+  --gold-soft:{{t:#f0d9a0}};
+  --cream:{{t:#fbf3e6}};
+  --paper:{{t:#fbf3e6}};
+  --ink:{{t:#2c1b1c}};
+  --blush:{{t:#f8dfe4}};
+  --blush-ink:{{t:#4b1a27}};
+  --card:#ffffff;
+  --display:'Aref Ruqaa','Vazirmatn',Georgia,serif;
+  --body:'Vazirmatn',Tahoma,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--paper:{{t:#1d1a16}};--ink:{{t:#f3e8d8}};--blush:{{t:#2b1319}};--blush-ink:{{t:#f8dfe4}};--card:{{t:#2a2420}}}
+}
+:root[data-theme="dark"]{--paper:{{t:#1d1a16}};--ink:{{t:#f3e8d8}};--blush:{{t:#2b1319}};--blush-ink:{{t:#f8dfe4}};--card:{{t:#2a2420}}}
+html{background:var(--night);scroll-behavior:smooth;scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;font-family:var(--body);background:var(--night);color:var(--cream);line-height:1.9;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+section{position:relative}
+
+/* ---------- header ---------- */
+.hdr{position:fixed;top:0;inset-inline:0;z-index:100;padding-top:env(safe-area-inset-top,0px);transition:background .35s,box-shadow .35s}
+.hdr.scrolled{background:{{t:rgba(14,28,21,.88)}};-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.hdr-in{height:64px;display:flex;align-items:center;justify-content:space-between;width:min(1120px,100% - 32px);margin-inline:auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.5rem;font-weight:700;color:var(--cream)}
+.brand svg{width:30px;height:30px}
+.nav{display:none;gap:26px;font-size:.95rem}
+.nav a{opacity:.85;position:relative;padding:4px 0}
+.nav a:hover{opacity:1;color:var(--gold-soft)}
+.hdr-call{display:none;background:var(--cherry);padding:8px 18px;border-radius:99px;font-weight:700;font-size:.9rem}
+.burger{width:46px;height:46px;border-radius:50%;border:1.5px solid {{t:rgba(240,217,160,.55)}};background:{{t:rgba(14,28,21,.35)}};position:relative;display:grid;place-items:center;color:var(--cream)}
+.burger span{position:absolute;width:20px;height:2px;background:currentColor;border-radius:2px;transition:transform .35s,opacity .25s,top .35s}
+.burger span:nth-child(1){top:16px}.burger span:nth-child(2){top:22px}.burger span:nth-child(3){top:28px}
+.menu-open .burger span:nth-child(1){top:22px;transform:rotate(45deg)}
+.menu-open .burger span:nth-child(2){opacity:0}
+.menu-open .burger span:nth-child(3){top:22px;transform:rotate(-45deg)}
+.menu-open{overflow:hidden}
+
+/* ---------- full-screen mobile drawer ---------- */
+.drawer{position:fixed;inset:0;z-index:90;background:radial-gradient(120% 90% at 100% 0%,{{t:#8c1230}} 0%,{{t:#4a0c1c}} 48%,{{t:#150a10}} 100%);clip-path:circle(0 at calc(100% - 39px) calc(39px + env(safe-area-inset-top,0px)));visibility:hidden;transition:clip-path .75s cubic-bezier(.7,0,.2,1),visibility 0s .75s;display:flex;flex-direction:column;padding:calc(96px + env(safe-area-inset-top,0px)) 28px calc(28px + env(safe-area-inset-bottom,0px));overflow:hidden}
+.menu-open .drawer{clip-path:circle(150% at calc(100% - 39px) calc(39px + env(safe-area-inset-top,0px)));visibility:visible;transition:clip-path .75s cubic-bezier(.7,0,.2,1),visibility 0s}
+.drawer-tree{position:absolute;left:-60px;bottom:-40px;width:340px;opacity:.28;pointer-events:none}
+.drawer nav{position:relative;display:flex;flex-direction:column;gap:2px}
+.drawer nav a{display:flex;align-items:center;gap:16px;font-family:var(--display);font-size:2rem;padding:8px 0;border-bottom:1px solid {{t:rgba(240,217,160,.18)}};opacity:0;transform:translateX(40px);transition:opacity .5s,transform .5s}
+.drawer nav a i{width:12px;height:12px;border-radius:50%;background:var(--cherry-2);box-shadow:0 0 0 4px {{t:rgba(216,41,75,.25)}};flex:none}
+.menu-open .drawer nav a{opacity:1;transform:none}
+.menu-open .drawer nav a:nth-child(1){transition-delay:.25s}
+.menu-open .drawer nav a:nth-child(2){transition-delay:.31s}
+.menu-open .drawer nav a:nth-child(3){transition-delay:.37s}
+.menu-open .drawer nav a:nth-child(4){transition-delay:.43s}
+.menu-open .drawer nav a:nth-child(5){transition-delay:.49s}
+.menu-open .drawer nav a:nth-child(6){transition-delay:.55s}
+.drawer-foot{position:relative;margin-top:auto;display:grid;gap:12px;opacity:0;transition:opacity .5s .65s}
+.menu-open .drawer-foot{opacity:1}
+.drawer-foot small{color:var(--gold-soft);font-size:.9rem}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 28px;border-radius:99px;font-weight:700;border:0;font-size:1rem;transition:transform .25s,box-shadow .25s,background .25s}
+.btn:hover{transform:translateY(-3px)}
+.btn-cherry{background:var(--cherry);color:#fff;box-shadow:0 10px 30px {{t:rgba(176,21,53,.45)}}}
+.btn-gold{background:var(--gold);color:{{t:#2a1d05}}}
+.btn-line{background:transparent;color:var(--cream);border:1.5px solid {{t:rgba(240,217,160,.6)}}}
+.btn svg{width:20px;height:20px}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;overflow:hidden;background:linear-gradient(180deg,{{t:#0a1410}} 0%,{{t:#10281d}} 55%,{{t:#1a3a28}} 100%);padding:110px 0 150px}
+.moon{position:absolute;top:14%;left:12%;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle at 35% 35%,{{t:#fff8e0}},{{t:#f1dba0}} 60%,{{t:#d9bd75}});box-shadow:0 0 70px 24px {{t:rgba(240,217,160,.28)}};animation:moonglow 6s ease-in-out infinite alternate}
+@keyframes moonglow{to{box-shadow:0 0 100px 40px {{t:rgba(240,217,160,.4)}}}}
+#petals{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.flies{position:absolute;inset:0;pointer-events:none;z-index:2}
+.flies span{position:absolute;width:5px;height:5px;border-radius:50%;background:{{t:#ffe9a8}};box-shadow:0 0 12px 4px {{t:rgba(255,226,140,.8)}};opacity:0;animation:fly var(--d) ease-in-out infinite;animation-delay:var(--dl)}
+@keyframes fly{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}50%{transform:translate(var(--x),var(--y));opacity:.8}80%{opacity:1}100%{opacity:0;transform:translate(calc(var(--x)*-.6),calc(var(--y)*1.5))}}
+.hero-tree{position:absolute;bottom:-6px;width:min(520px,95vw);z-index:1}
+.hero-tree.l{left:-14%}
+.hero-tree.r{right:-18%;transform:scaleX(-1);width:min(460px,86vw);opacity:.92}
+.hero-tree svg{width:100%;height:auto;display:block;overflow:visible}
+.canopy{animation:sway 7s ease-in-out infinite alternate;transform-origin:200px 300px}
+.cherry{animation:swing 3.4s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-1.4deg)}to{transform:rotate(1.4deg)}}
+@keyframes swing{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+.hero-body{position:relative;z-index:4;padding:0 20px}
+.hero-body .kicker{font-size:1.05rem;color:var(--gold-soft);letter-spacing:.02em;display:inline-flex;align-items:center;gap:10px}
+.hero-body .kicker::before,.hero-body .kicker::after{content:"";width:34px;height:1.5px;background:var(--gold)}
+.hero h1{font-family:var(--display);font-size:clamp(4.6rem,22vw,10rem);line-height:1.05;font-weight:700;color:var(--cream);text-shadow:0 0 40px {{t:rgba(216,41,75,.55)}},0 6px 30px rgba(0,0,0,.5);animation:rise 1.4s cubic-bezier(.2,.8,.2,1) both}
+.hero p.lead{max-width:34ch;margin:14px auto 30px;font-size:1.12rem;color:{{t:#e9e0cf}};animation:rise 1.4s .25s cubic-bezier(.2,.8,.2,1) both}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;animation:rise 1.4s .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(34px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.scroll-hint{position:absolute;bottom:22px;left:50%;translate:-50% 0;z-index:5;width:26px;height:42px;border:2px solid {{t:rgba(240,217,160,.6)}};border-radius:16px}
+.scroll-hint::after{content:"";position:absolute;top:8px;left:50%;width:4px;height:8px;margin-left:-2px;border-radius:3px;background:var(--gold);animation:wheel 1.8s infinite}
+@keyframes wheel{to{transform:translateY(14px);opacity:0}}
+
+/* ---------- marquee ---------- */
+.band{background:var(--cherry);color:#fff;overflow:hidden;padding:14px 0;white-space:nowrap;font-family:var(--display);font-size:1.4rem;transform:rotate(-1.2deg);margin:-14px -10px 0;position:relative;z-index:6;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.band-track{display:inline-flex;gap:34px;animation:marq 28s linear infinite;padding-inline-end:34px}
+.band b{color:var(--gold-soft);font-weight:400}
+@keyframes marq{to{transform:translateX(50%)}}
+
+/* ---------- generic section ---------- */
+.sec{padding:96px 0}
+.sec-head{text-align:center;margin-bottom:46px}
+.sec-head h2{font-family:var(--display);font-size:clamp(2.3rem,9vw,3.8rem);line-height:1.3;font-weight:700}
+.sec-head p{max-width:46ch;margin:8px auto 0;opacity:.85}
+.orn{display:block;width:150px;height:20px;margin:10px auto 0}
+
+.rv{opacity:1}
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+/* ---------- about ---------- */
+.about{background:var(--paper);color:var(--ink);overflow:hidden}
+.about::before{content:"";position:absolute;top:-80px;inset-inline:0;height:90px;background:var(--paper);border-radius:50% 50% 0 0/100% 100% 0 0}
+.about .sec-head h2{color:var(--cherry)}
+.about-grid{display:grid;gap:34px;align-items:center}
+.arch{position:relative;width:min(340px,82%);margin-inline:auto;aspect-ratio:3/4;border-radius:999px 999px 28px 28px;overflow:hidden;background:linear-gradient(180deg,{{t:#ffd7b8}} 0%,{{t:#f7a9b4}} 48%,{{t:#a85a78}} 100%);box-shadow:0 30px 60px -20px {{t:rgba(176,21,53,.5)}},0 0 0 8px var(--paper),0 0 0 10px var(--gold)}
+.arch .sun{position:absolute;top:18%;right:22%;width:70px;height:70px;border-radius:50%;background:{{t:#fff1c9}};box-shadow:0 0 50px 18px {{t:rgba(255,241,201,.7)}}}
+.arch .hill{position:absolute;bottom:0;inset-inline:0;height:34%;background:linear-gradient(180deg,{{t:#3d7a46}},{{t:#1d4a2c}})}
+.arch .tree{position:absolute;bottom:6%;left:50%;translate:-50% 0;width:128%}
+.arch .tree svg{width:100%;display:block}
+.badge{position:absolute;bottom:-14px;inset-inline-start:-6px;z-index:2;width:112px;height:112px;border-radius:50%;background:var(--cherry);color:#fff;display:grid;place-items:center;text-align:center;font-family:var(--display);font-size:1.15rem;line-height:1.35;box-shadow:0 14px 30px {{t:rgba(176,21,53,.45)}};border:3px dashed var(--gold-soft);animation:spin 24s linear infinite}
+.badge span{animation:spin 24s linear infinite reverse;display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.arch-wrap{position:relative;padding-bottom:16px}
+.about-text h3{font-family:var(--display);font-size:1.9rem;line-height:1.5;color:var(--cherry);margin-bottom:10px}
+.about-text p{margin-bottom:14px;font-size:1.04rem}
+.feats{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 24px;margin:34px -20px 0;scrollbar-width:none}
+.feats::-webkit-scrollbar{display:none}
+.feat{flex:0 0 72%;scroll-snap-align:center;border-radius:26px;padding:24px 20px;min-height:190px;color:#fff;position:relative;overflow:hidden;box-shadow:0 18px 30px -16px rgba(0,0,0,.45)}
+.feat .ic{font-size:2.3rem;display:block;margin-bottom:6px}
+.feat h4{font-family:var(--display);font-size:1.45rem;margin:0 0 4px}
+.feat p{font-size:.95rem;opacity:.92;line-height:1.8}
+.feat::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1);bottom:-60px;left:-40px}
+.f1{background:linear-gradient(145deg,{{t:#c01a3d}},{{t:#7d0f27}})}
+.f2{background:linear-gradient(145deg,{{t:#2c7a4f}},{{t:#123a29}})}
+.f3{background:linear-gradient(145deg,{{t:#e0b95f}},{{t:#a97d25}});color:{{t:#2a1d05}}}
+.f4{background:linear-gradient(145deg,{{t:#8e3a67}},{{t:#47163a}})}
+
+/* ---------- menu ---------- */
+.menu{background:radial-gradient(90% 60% at 80% 0%,{{t:#7a1230}} 0%,transparent 60%),var(--wine);overflow:hidden}
+.menu::before,.menu::after{content:"";position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,{{t:rgba(212,172,85,.14)}},transparent 70%);pointer-events:none}
+.menu::before{top:30%;left:-120px}.menu::after{bottom:0;right:-120px}
+.menu .sec-head h2{color:var(--gold-soft)}
+.tabs-wrap{position:sticky;top:calc(64px + env(safe-area-inset-top,0px));z-index:20;margin:0 -20px 28px;padding:10px 0;background:linear-gradient(180deg,var(--wine) 70%,transparent)}
+.tabs{display:flex;gap:10px;overflow-x:auto;padding:4px 20px;scrollbar-width:none;scroll-snap-type:x proximity}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;scroll-snap-align:center;display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:99px;border:1.5px solid {{t:rgba(240,217,160,.4)}};background:rgba(255,255,255,.04);color:var(--cream);font-weight:500;transition:background .3s,color .3s,transform .3s}
+.tab[aria-selected="true"]{background:var(--gold);color:{{t:#2a1d05}};border-color:var(--gold);font-weight:800;transform:scale(1.05)}
+.cat-hero{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:18px 20px;border-radius:24px;background:linear-gradient(120deg,{{t:rgba(212,172,85,.22)}},{{t:rgba(212,172,85,.05)}});border:1px solid {{t:rgba(240,217,160,.28)}}}
+.cat-hero .big{font-size:3rem;line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.4));animation:bob 3s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-6px) rotate(-5deg)}}
+.cat-hero h3{font-family:var(--display);font-size:1.8rem;color:var(--gold-soft);line-height:1.4}
+.cat-hero p{font-size:.92rem;opacity:.85;line-height:1.7}
+.items{display:grid;gap:14px;animation:panel .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes panel{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.item{display:flex;gap:14px;align-items:center;padding:16px;border-radius:22px;background:rgba(255,255,255,.06);border:1px solid {{t:rgba(240,217,160,.16)}};position:relative;transition:transform .3s,background .3s}
+.item:hover{transform:translateY(-4px);background:rgba(255,255,255,.1)}
+.item .em{flex:none;width:62px;height:62px;border-radius:20px;display:grid;place-items:center;font-size:1.9rem;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.item .tx{flex:1;min-width:0}
+.item h4{margin:0;font-size:1.08rem;font-weight:700;color:var(--cream)}
+.item p{font-size:.85rem;opacity:.75;line-height:1.7}
+.price{flex:none;text-align:center;color:var(--gold-soft);font-weight:800;font-size:1.15rem;line-height:1.2}
+.price small{display:block;font-size:.7rem;font-weight:400;opacity:.8}
+.star{position:absolute;top:-9px;inset-inline-end:16px;background:var(--cherry-2);color:#fff;font-size:.72rem;padding:1px 12px;border-radius:99px;font-weight:700}
+.menu-note{text-align:center;margin-top:26px;font-size:.88rem;opacity:.7}
+
+/* ---------- garden ---------- */
+.garden{background:radial-gradient(100% 70% at 20% 0%,{{t:#1f5a3f}} 0%,transparent 60%),var(--emerald);overflow:hidden}
+.garden .sec-head h2{color:{{t:#bff0cf}}}
+.gal{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 28px;margin:0 -20px;scrollbar-width:none}
+.gal::-webkit-scrollbar{display:none}
+.shot{flex:0 0 80%;scroll-snap-align:center;aspect-ratio:4/5;border-radius:30px;overflow:hidden;position:relative;box-shadow:0 24px 40px -18px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.12)}
+.shot svg{position:absolute;inset:0;width:100%;height:100%}
+.shot figcaption{position:absolute;inset-inline:0;bottom:0;padding:60px 20px 20px;background:linear-gradient(180deg,transparent,{{t:rgba(5,12,8,.86)}})}
+.shot figcaption b{font-family:var(--display);font-size:1.5rem;display:block;color:var(--cream);line-height:1.4}
+.shot figcaption span{font-size:.88rem;opacity:.85}
+.swipe{display:flex;justify-content:center;align-items:center;gap:8px;font-size:.85rem;opacity:.7;margin-top:6px}
+.twk{animation:tw 2.4s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.35}to{opacity:1}}
+.flick{transform-box:fill-box;transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(1,.88) skewX(-4deg)}to{transform:scale(.94,1.08) skewX(4deg)}}
+.swayy{transform-box:fill-box;transform-origin:50% 0;animation:swingl 3.6s ease-in-out infinite alternate}
+@keyframes swingl{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+.rip{transform-box:fill-box;transform-origin:center;animation:rip 3.4s ease-out infinite}
+@keyframes rip{from{transform:scale(.3);opacity:.9}to{transform:scale(1.5);opacity:0}}
+.spark{animation:spark 2.6s linear infinite}
+@keyframes spark{from{transform:translateY(0);opacity:1}to{transform:translateY(-90px);opacity:0}}
+
+/* ---------- reviews ---------- */
+.reviews{background:var(--blush);color:var(--blush-ink);overflow:hidden}
+.reviews .sec-head h2{color:var(--cherry)}
+.revs{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 20px 30px;margin:0 -20px;scrollbar-width:none}
+.revs::-webkit-scrollbar{display:none}
+.rev{flex:0 0 84%;scroll-snap-align:center;border-radius:28px;padding:26px 22px;background:var(--card);color:var(--ink);position:relative;box-shadow:0 20px 34px -22px {{t:rgba(120,20,50,.6)}}}
+.rev:nth-child(3n+2){background:linear-gradient(150deg,{{t:#b01535}},{{t:#6d0d23}});color:#fff}
+.rev:nth-child(3n){background:linear-gradient(150deg,{{t:#1f5a3f}},{{t:#0f2d20}});color:#fff}
+.rev::before{content:"”";position:absolute;top:-6px;inset-inline-start:18px;font-family:Georgia,serif;font-size:5.5rem;line-height:1;opacity:.18}
+.stars{color:var(--gold);letter-spacing:3px;font-size:1.1rem}
+.rev p{margin:8px 0 18px;font-size:1rem}
+.who{display:flex;align-items:center;gap:12px}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--gold);color:{{t:#2a1d05}}}
+.who b{display:block;line-height:1.4}.who small{opacity:.7}
+
+/* ---------- contact ---------- */
+.contact{background:radial-gradient(80% 60% at 0% 100%,{{t:rgba(176,21,53,.35)}},transparent 60%),{{t:#1a130b}};overflow:hidden}
+.contact .sec-head h2{color:var(--gold-soft)}
+.c-grid{display:grid;gap:18px}
+.c-card{border-radius:28px;padding:26px 22px;border:1px solid {{t:rgba(240,217,160,.25)}};background:rgba(255,255,255,.04)}
+.c-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.c-row .ic{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--cherry);font-size:1.2rem}
+.c-row b{display:block;color:var(--gold-soft)}
+.c-row a.num{font-size:1.5rem;font-weight:800;letter-spacing:.04em;direction:ltr;display:inline-block}
+.c-actions{display:grid;gap:10px;margin-top:8px}
+.pin-card{position:relative;min-height:260px;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,{{t:#27402f}},{{t:#0f2018}});border:1px solid {{t:rgba(240,217,160,.25)}}}
+.pin-card svg{position:absolute;inset:0;width:100%;height:100%}
+.pin-card .lab{position:absolute;inset-inline:16px;bottom:16px;padding:12px 16px;border-radius:18px;background:{{t:rgba(14,28,21,.82)}};-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.92rem}
+.pin{animation:pin 1.6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes pin{to{transform:translateY(-10px)}}
+footer{background:{{t:#0a0805}};padding:28px 0 calc(100px + env(safe-area-inset-bottom,0px));text-align:center;font-size:.88rem;color:{{t:#b9ae98}}}
+footer b{font-family:var(--display);font-size:1.3rem;color:var(--gold-soft);display:block}
+
+/* ---------- floating call (mobile) ---------- */
+.fab{position:fixed;z-index:80;inset-inline-start:16px;inset-inline-end:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;transition:opacity .3s,transform .3s}
+.fab a{pointer-events:auto;display:flex;align-items:center;gap:10px;background:var(--cherry);color:#fff;padding:13px 26px;border-radius:99px;font-weight:800;box-shadow:0 12px 30px {{t:rgba(176,21,53,.6)}},0 0 0 0 {{t:rgba(216,41,75,.6)}};animation:ring 2.4s infinite}
+@keyframes ring{70%{box-shadow:0 12px 30px {{t:rgba(176,21,53,.6)}},0 0 0 16px {{t:rgba(216,41,75,0)}}}100%{box-shadow:0 12px 30px {{t:rgba(176,21,53,.6)}},0 0 0 0 {{t:rgba(216,41,75,0)}}}}
+.menu-open .fab{opacity:0;transform:translateY(30px)}
+
+/* ---------- desktop ---------- */
+@media (min-width:860px){
+  .burger,.drawer,.fab{display:none}
+  .nav{display:flex}
+  .hdr-call{display:inline-block}
+  .about-grid{grid-template-columns:1fr 1fr;gap:70px}
+  .feats{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;padding:0;margin:56px 0 0}
+  .feat{flex:none}
+  .tabs-wrap{margin:0 0 28px}.tabs{justify-content:center;padding:4px 0}
+  .items{grid-template-columns:1fr 1fr;gap:18px}
+  .gal{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;padding:0;margin:0}
+  .shot{aspect-ratio:4/5}
+  .shot:nth-child(2),.shot:nth-child(5){transform:translateY(34px)}
+  .swipe{display:none}
+  .revs{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;padding:10px 0;margin:0}
+  .c-grid{grid-template-columns:1fr 1fr}
+  footer{padding-bottom:28px}
+  .hero-tree.l{left:-3%}.hero-tree.r{right:-3%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .js .rv{opacity:1;transform:none}
+}
+.hero h1{font-size:clamp(2.8rem,15vw,8rem);overflow-wrap:anywhere}
+.brand{max-width:62vw;overflow:hidden;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="hdr" id="hdr">
+  <div class="hdr-in">
+    <a href="#home" class="brand" aria-label="{{brand}}">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M22 4c-1 7-3 11-6 15M22 4c3 5 6 9 8 15" stroke="{{t:#7ac28f}}" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M22 4c4-1 8 0 10 2-3 2-7 2-10-2z" fill="{{t:#4fa56a}}"/><circle cx="14" cy="28" r="8" fill="{{t:#d8294b}}"/><circle cx="31" cy="28" r="8" fill="{{t:#b01535}}"/><circle cx="11.5" cy="25" r="2" fill="#fff" opacity=".6"/><circle cx="28.5" cy="25" r="2" fill="#fff" opacity=".5"/></svg>
+      {{brand}}
+    </a>
+    <nav class="nav" aria-label="منوی اصلی">
+      <a href="#about">درباره ما</a><a href="#menu">منو</a><a href="#garden">محیط باغ</a><a href="#reviews">نظرات</a><a href="#contact">تماس</a>
+    </nav>
+    <a class="hdr-call" href="{{phone_href}}">رزرو: {{phone}}</a>
+    <button class="burger" id="burger" aria-label="باز و بسته کردن منو" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============ FULL SCREEN MOBILE MENU ============ -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-tree" id="drawerTree"></div>
+  <nav aria-label="منوی موبایل">
+    <a href="#home"><i></i>خانه</a>
+    <a href="#about"><i></i>درباره ما</a>
+    <a href="#menu"><i></i>منوی غذا</a>
+    <a href="#garden"><i></i>محیط باغ</a>
+    <a href="#reviews"><i></i>نظرات مهمانان</a>
+    <a href="#contact"><i></i>تماس و آدرس</a>
+  </nav>
+  <div class="drawer-foot">
+    <a class="btn btn-gold" href="{{phone_href}}">📞 رزرو با تماس: {{phone}}</a>
+    <small><!--if:address-->{{address}}<!--/if:address--></small>
+  </div>
+</div>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="flies" id="flies" aria-hidden="true"></div>
+  <div class="hero-tree l" id="treeL" aria-hidden="true"></div>
+  <div class="hero-tree r" id="treeR" aria-hidden="true"></div>
+  <canvas id="petals" aria-hidden="true"></canvas>
+  <div class="hero-body">
+    <span class="kicker">باغ رستوران</span>
+    <h1>{{brand}}</h1>
+    <p class="lead">زیر شاخه‌های درختان، کنار آتش و عطر کباب زغالی؛ شبی که تا مدت‌ها یادتان می‌ماند.</p>
+    <div class="hero-cta">
+      <a class="btn btn-cherry" href="#menu">دیدن منو</a>
+      <a class="btn btn-line" href="{{phone_href}}">📞 {{phone}}</a>
+    </div>
+  </div>
+  <span class="scroll-hint" aria-hidden="true"></span>
+</section>
+
+<div class="band" aria-hidden="true">
+  <div class="band-track" id="band"></div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section class="sec about" id="about">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>درباره {{brand}}</h2>
+      <svg class="orn" viewBox="0 0 150 20" aria-hidden="true"><path d="M5 10h50M95 10h50" stroke="{{t:#d4ac55}}" stroke-width="1.5"/><circle cx="68" cy="10" r="5" fill="{{t:#b01535}}"/><circle cx="82" cy="10" r="5" fill="{{t:#d8294b}}"/></svg>
+    </div>
+    <div class="about-grid">
+      <div class="arch-wrap rv">
+        <div class="arch">
+          <div class="sun"></div>
+          <div class="hill"></div>
+          <div class="tree" id="archTree"></div>
+        </div>
+        <div class="badge"><span>باغ و<br>رستوران</span></div>
+      </div>
+      <div class="about-text rv">
+        <h3>جایی برای دور هم بودن، زیر سایه درختان</h3>
+        <p>{{brand}}<!--if:address--> ({{address}})<!--/if:address--> جایی است برای کسانی که غذای خوب را در فضای باز و سرسبز دوست دارند. از ناهار خانوادگی تا شب‌نشینی با دوستان، همه‌چیز اینجا با آرامش و حوصله سرو می‌شود.</p>
+        <p>منوی ما از کباب‌های زغالی و همبرگرهای مخصوص تا غذاهای اصیل ایرانی را شامل می‌شود و هر بشقاب با مواد اولیه تازه آماده می‌شود.</p>
+        <a class="btn btn-cherry" href="#garden">محیط باغ را ببینید</a>
+      </div>
+    </div>
+    <div class="feats rv">
+      <article class="feat f1"><span class="ic">🌳</span><h4>باغ و درختان</h4><p>درختان و فضای سبز، قاب همیشگی سفره شما.</p></article>
+      <article class="feat f2"><span class="ic">🔥</span><h4>کباب زغالی</h4><p>کباب و همبرگر روی آتش، با عطر و طعم واقعی.</p></article>
+      <article class="feat f3"><span class="ic">🌿</span><h4>فضای باز</h4><p>نشیمن‌های دنج برای خانواده و جمع دوستانه.</p></article>
+      <article class="feat f4"><span class="ic">✨</span><h4>شب‌های باغ</h4><p>نور ریسه‌ها و فانوس‌ها، حال‌وهوای شب‌نشینی.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENU ============ -->
+<section class="sec menu" id="menu">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>منوی {{brand}}</h2>
+      <p>دسته‌بندی را انتخاب کنید و منو را ورق بزنید.</p>
+    </div>
+    <div class="tabs-wrap"><div class="tabs" id="tabs" role="tablist" aria-label="دسته‌بندی منو"></div></div>
+    <div id="panel" role="tabpanel" aria-live="polite"></div>
+    <p class="menu-note">برای اطلاع از قیمت روز و موجودی تماس بگیرید.</p>
+  </div>
+</section>
+
+<!-- ============ GARDEN ============ -->
+<section class="sec garden" id="garden">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>محیط باغ رستوران</h2>
+      <p>از آلاچیق‌های سایه‌دار تا نور ریسه‌ها و آتش شبانه؛ گوشه‌ای از فضای باغ.</p>
+    </div>
+    <div class="gal rv" id="gal"></div>
+    <div class="swipe">← بکشید تا بقیه فضاها را ببینید</div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="sec reviews" id="reviews">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>مهمانان چه می‌گویند</h2>
+      <p>تجربه کسانی که شب و روزشان را در {{brand}} گذرانده‌اند.</p>
+    </div>
+    <div class="revs rv">
+      <article class="rev"><div class="stars">★★★★★</div><p>فضای باغ خیلی دلنشینه، شب‌ها با نور ریسه‌ها یه حس خاص داره. کباب‌ها هم عالی و داغ سرو شد.</p><div class="who"><span class="av">م</span><div><b>مریم رحیمی</b><small>شب‌نشینی خانوادگی</small></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>همبرگر مخصوصشون واقعاً حرف نداشت. محیط تمیز و سرسبز بود و پرسنل خوش‌برخورد.</p><div class="who"><span class="av">ع</span><div><b>علیرضا کاظمی</b><small>دورهمی دوستانه</small></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>برای تولد دوستم رزرو کردیم. فضا شیک و آرام بود و نوشیدنی‌هاشون عالی بود.</p><div class="who"><span class="av">ن</span><div><b>نگار صادقی</b><small>جشن تولد</small></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>جمعه‌ها که از شلوغی شهر خسته می‌شیم میایم اینجا. هوای باغ و غذای خوب، دقیقاً همون چیزی که لازم داشتیم.</p><div class="who"><span class="av">ح</span><div><b>حسین موسوی</b><small>ناهار جمعه</small></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>بچه‌ها حسابی لذت بردن و ما هم از آرامش باغ. حتماً دوباره میایم.</p><div class="who"><span class="av">س</span><div><b>سمیرا احمدی</b><small>سفر خانوادگی</small></div></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="sec contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>رزرو و راه ارتباطی</h2>
+      <p>برای رزرو میز و آلاچیق تماس بگیرید.</p>
+    </div>
+    <div class="c-grid">
+      <div class="c-card rv">
+        <!--each:phones--><div class="c-row"><span class="ic">📞</span><div><b>تلفن رزرو</b><a class="num" href="{{phone_href}}">{{phone}}</a></div></div><!--/each:phones-->
+        <!--if:address--><div class="c-row"><span class="ic">📍</span><div><b>آدرس</b>{{address}}</div></div><!--/if:address-->
+        <!--if:hours--><div class="c-row"><span class="ic">🕘</span><div><b>ساعت کاری</b>{{hours}}</div></div><!--/if:hours-->
+        <!--if:instagram--><div class="c-row"><span class="ic">📸</span><div><b>اینستاگرام</b><a class="num" style="font-size:1.1rem" href="{{instagram_href}}" target="_blank" rel="noopener">{{instagram}}</a></div></div><!--/if:instagram-->
+        <div class="c-actions">
+          <a class="btn btn-cherry" href="{{phone_href}}">📞 تماس برای رزرو</a>
+          <a class="btn btn-line" target="_blank" rel="noopener" href="{{map_url}}">🧭 مسیریابی روی نقشه</a>
+        </div>
+      </div>
+      <div class="pin-card rv">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="{{t:rgba(240,217,160,.09)}}"/></pattern></defs>
+          <rect width="400" height="300" fill="url(#grid)"/>
+          <path d="M-10 230C90 200 140 120 230 130S360 60 420 40" stroke="{{t:rgba(240,217,160,.4)}}" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M-10 230C90 200 140 120 230 130S360 60 420 40" stroke="{{t:#1a130b}}" stroke-width="2" stroke-dasharray="10 12" fill="none"/>
+          <circle cx="230" cy="130" r="46" fill="{{t:rgba(216,41,75,.18)}}"/>
+          <g class="pin"><path d="M230 132c-18-22-26-34-26-46a26 26 0 0152 0c0 12-8 24-26 46z" fill="{{t:#d8294b}}"/><circle cx="230" cy="86" r="10" fill="#fff"/></g>
+        </svg>
+        <div class="lab"><b>{{brand}}</b><!--if:address--><br>{{address}}<!--/if:address--></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <b>{{brand}}</b>
+  <!--if:address-->{{address}} · <!--/if:address-->{{phone}}
+</footer>
+
+<div class="fab"><a href="{{phone_href}}">📞 رزرو و تماس</a></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+function rng(seed){ let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+
+/* ---------- cherry tree illustration ---------- */
+function tree(seed, opts = {}){
+  const r = rng(seed);
+  const pinks = ['{{t:#f6c1cc}}','{{t:#f3a3b6}}','{{t:#ee86a0}}','{{t:#f9d6de}}','{{t:#e3607f}}'];
+  let canopy = '';
+  for(let i = 0; i < 46; i++){
+    const a = r() * Math.PI * 2, d = Math.sqrt(r());
+    const x = 200 + Math.cos(a) * d * 165, y = 190 + Math.sin(a) * d * 105;
+    canopy += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(16 + r() * 26).toFixed(1)}" fill="${pinks[Math.floor(r() * pinks.length)]}" opacity="${(.82 + r() * .18).toFixed(2)}"/>`;
+  }
+  let cherries = '';
+  if(!opts.noCherries){
+    for(let i = 0; i < 15; i++){
+      const x = 80 + r() * 240, y = 215 + r() * 55, dl = (r() * 3).toFixed(2);
+      cherries += `<g class="cherry" style="transform-origin:${x.toFixed(0)}px ${y.toFixed(0)}px;animation-delay:-${dl}s">
+        <path d="M${x.toFixed(0)} ${y.toFixed(0)}q-3 14-6 24M${x.toFixed(0)} ${y.toFixed(0)}q4 14 6 28" stroke="{{t:#5a8f3e}}" stroke-width="1.8" fill="none"/>
+        <circle cx="${(x - 6).toFixed(0)}" cy="${(y + 28).toFixed(0)}" r="8" fill="{{t:#c4163a}}"/><circle cx="${(x + 6).toFixed(0)}" cy="${(y + 32).toFixed(0)}" r="8" fill="{{t:#a3102f}}"/>
+        <circle cx="${(x - 9).toFixed(0)}" cy="${(y + 25).toFixed(0)}" r="2.2" fill="#fff" opacity=".55"/><circle cx="${(x + 3).toFixed(0)}" cy="${(y + 29).toFixed(0)}" r="2" fill="#fff" opacity=".45"/></g>`;
+    }
+  }
+  return `<svg viewBox="0 0 400 540" aria-hidden="true">
+    <g fill="none" stroke="{{t:#3a2217}}" stroke-linecap="round">
+      <path d="M200 540C198 450 190 400 172 345" stroke-width="30"/>
+      <path d="M180 380C230 350 270 320 305 275" stroke-width="12"/>
+      <path d="M176 345C146 305 156 262 190 222" stroke-width="12"/>
+      <path d="M200 340C240 305 252 255 232 215" stroke-width="10"/>
+      <path d="M172 360C130 340 110 300 100 270" stroke-width="9"/>
+    </g>
+    <g class="canopy">${canopy}${cherries}</g>
+  </svg>`;
+}
+
+/* ---------- inject trees ---------- */
+$('#treeL').innerHTML = tree(11);
+$('#treeR').innerHTML = tree(29);
+$('#archTree').innerHTML = tree(5);
+$('#drawerTree').innerHTML = tree(17, { noCherries: true });
+
+/* ---------- fireflies ---------- */
+(() => {
+  const box = $('#flies'), r = rng(77);
+  for(let i = 0; i < 20; i++){
+    const s = document.createElement('span');
+    s.style.cssText = `left:${(r() * 100).toFixed(1)}%;top:${(30 + r() * 62).toFixed(1)}%;--d:${(6 + r() * 7).toFixed(1)}s;--dl:-${(r() * 10).toFixed(1)}s;--x:${(r() * 80 - 40).toFixed(0)}px;--y:${(-20 - r() * 60).toFixed(0)}px`;
+    box.appendChild(s);
+  }
+})();
+
+/* ---------- falling petals ---------- */
+(() => {
+  const cv = $('#petals'), ctx = cv.getContext('2d');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let w, h, petals = [], run = true;
+  const colors = ['{{t:#f9d6de}}','{{t:#f6c1cc}}','{{t:#f3a3b6}}','{{t:#fde8ec}}'];
+  function size(){ const b = cv.parentElement.getBoundingClientRect(); const dpr = Math.min(devicePixelRatio || 1, 2); w = b.width; h = b.height; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function make(init){ return { x: Math.random() * w, y: init ? Math.random() * h : -20, s: 6 + Math.random() * 8, v: .5 + Math.random() * 1.1, sw: Math.random() * Math.PI * 2, sp: .01 + Math.random() * .02, rot: Math.random() * 6.28, rv: (Math.random() - .5) * .04, c: colors[Math.floor(Math.random() * colors.length)] }; }
+  function init(){ size(); const n = w < 600 ? 24 : 42; petals = Array.from({ length: n }, () => make(true)); }
+  function draw(){
+    if(!run) return requestAnimationFrame(draw);
+    ctx.clearRect(0, 0, w, h);
+    for(const p of petals){
+      p.y += p.v; p.sw += p.sp; p.x += Math.sin(p.sw) * .8 + .15; p.rot += p.rv;
+      if(p.y > h + 20 || p.x > w + 30){ Object.assign(p, make(false)); }
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.c; ctx.globalAlpha = .85;
+      ctx.beginPath(); ctx.ellipse(0, 0, p.s, p.s * .55, 0, 0, 6.28); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(p.s * .5, 0, p.s * .6, p.s * .35, .4, 0, 6.28); ctx.fill();
+      ctx.restore();
+    }
+    requestAnimationFrame(draw);
+  }
+  init(); draw();
+  addEventListener('resize', init);
+  new IntersectionObserver(e => run = e[0].isIntersecting).observe(cv.parentElement);
+})();
+
+/* ---------- marquee ---------- */
+(() => {
+  const words = ['کباب زغالی','همبرگر مخصوص','شربت خانگی','غذاهای ایرانی','شب‌های باغ','دورهمی خانوادگی'];
+  const one = words.map(w => `<span>${w}</span><b>🍒</b>`).join('');
+  $('#band').innerHTML = one + one + one + one;
+})();
+
+/* ---------- menu data (sample, edit freely) ---------- */
+const MENU = [
+  { id:'kebab', name:'کباب‌ها', em:'🍢', blurb:'روی زغال و با گوشت تازه؛ همراه برنج یا نان تازه.', c:['{{t:#c01a3d}}','{{t:#7d0f27}}'], items:[
+    ['کباب کوبیده','دو سیخ گوشت گوساله و گوسفندی با برنج و کره','',1],
+    ['جوجه کباب','سینه مرغ ترد و زعفرانی با برنج',''],
+    ['برگ ممتاز','فیله گوساله با ادویه مخصوص',''],
+    ['سلطانی','یک سیخ برگ و یک سیخ کوبیده',''],
+    ['بختیاری','جوجه کباب و برگ، همراه با گوجه و فلفل کبابی',''],
+    ['شیشلیک','دنده بره مزه‌دار شده، پخته روی زغال','']
+  ]},
+  { id:'burger', name:'همبرگر', em:'🍔', blurb:'نان تازه، گوشت خانگی و سس مخصوص باغ.', c:['{{t:#e0a53a}}','{{t:#9a5d10}}'], items:[
+    ['همبرگر مخصوص باغ','گوشت ۱۸۰ گرمی، پنیر چدار، قارچ و سس مخصوص','',1],
+    ['چیزبرگر','گوشت، دو لایه پنیر و خیارشور',''],
+    ['چیکن برگر','سینه مرغ سوخاری ترد با کاهو',''],
+    ['بیکن برگر','گوشت، بیکن و پیاز کاراملی','']
+  ]},
+  { id:'iran', name:'غذاهای ایرانی', em:'🍛', blurb:'طعم سفره‌های خانگی با دستپخت اصیل.', c:['{{t:#2c7a4f}}','{{t:#123a29}}'], items:[
+    ['زرشک‌پلو با مرغ','ران مرغ زعفرانی با زرشک و پسته','',1],
+    ['قرمه‌سبزی','با گوشت گوسفندی، سبزی معطر و لوبیا',''],
+    ['فسنجان','مرغ و گردوی چرخ‌کرده با رب انار',''],
+    ['باقالی‌پلو با ماهیچه','ماهیچه گوسفندی آرام‌پز',''],
+    ['دیزی سنگی','آبگوشت سنتی با نان تازه','']
+  ]},
+  { id:'starter', name:'پیش‌غذا', em:'🥗', blurb:'شروعی تازه و رنگارنگ برای سفره.', c:['{{t:#6aa84f}}','{{t:#2f6a2a}}'], items:[
+    ['سالاد شیرازی','خیار، گوجه و پیاز با آبلیمو',''],
+    ['ماست و خیار','ماست پرچرب با نعنا و گردو',''],
+    ['میرزاقاسمی','بادمجان کبابی با سیر و گوجه',''],
+    ['کشک بادمجان','با پیاز داغ و نعنا داغ',''],
+    ['زیتون پرورده','با انار، گردو و سیر','']
+  ]},
+  { id:'drink', name:'نوشیدنی', em:'🍹', blurb:'خنک و خوش‌رنگ، برای روزهای گرم.', c:['{{t:#d8294b}}','{{t:#8c1230}}'], items:[
+    ['شربت خانگی','نوشیدنی خانگی و خنک','',1],
+    ['لیموناد نعنا','لیمو، نعنا و یخ',''],
+    ['دوغ محلی','با نعنای خشک',''],
+    ['چای زعفرانی','دم‌کرده و معطر',''],
+    ['نوشابه','انواع نوشابه','']
+  ]},
+  { id:'dessert', name:'دسر', em:'🍰', blurb:'پایانی شیرین برای شب باغ.', c:['{{t:#8e3a67}}','{{t:#47163a}}'], items:[
+    ['کیک روز','کیک نرم با سس میوه','',1],
+    ['بستنی زعفرانی','با خامه و پسته',''],
+    ['فالوده شیرازی','با شربت لیمو و گلاب',''],
+    ['شله‌زرد','با دارچین و بادام','']
+  ]}
+];
+const tabs = $('#tabs'), panel = $('#panel');
+MENU.forEach((c, i) => {
+  const b = document.createElement('button');
+  b.className = 'tab'; b.role = 'tab'; b.id = 'tab-' + c.id;
+  b.setAttribute('aria-selected', i === 0);
+  b.innerHTML = `<span>${c.em}</span>${c.name}`;
+  b.onclick = () => show(i);
+  tabs.appendChild(b);
+});
+function show(i, first){
+  const c = MENU[i];
+  [...tabs.children].forEach((t, k) => t.setAttribute('aria-selected', k === i));
+  if(!first) tabs.children[i].scrollIntoView({ inline:'center', block:'nearest', behavior:'smooth' });
+  panel.innerHTML = `
+    <div class="cat-hero"><span class="big">${c.em}</span><div><h3>${c.name}</h3><p>${c.blurb}</p></div></div>
+    <div class="items">${c.items.map(it => `
+      <div class="item" style="--c1:${c.c[0]};--c2:${c.c[1]}">
+        ${it[3] ? '<span class="star">پیشنهاد ما</span>' : ''}
+        <div class="em">${c.em}</div>
+        <div class="tx"><h4>${it[0]}</h4><p>${it[1]}</p></div>
+        
+      </div>`).join('')}</div>`;
+}
+show(0, true);
+
+/* ---------- garden scenes (illustrations; swap with real photos any time) ---------- */
+const SCENES = [
+  { k:'lights',  t:'شب‌نشینی زیر ریسه‌ها', d:'نور گرم و آسمان پر ستاره', sky:['{{t:#1a1040}}','{{t:#6a2f73}}'] },
+  { k:'gazebo',  t:'آلاچیق‌های خانوادگی', d:'سایه، آرامش و حریم خصوصی', sky:['{{t:#ffd9b0}}','{{t:#f6a6b4}}'] },
+  { k:'pond',    t:'حوض و آبنما', d:'صدای آب در دل باغ', sky:['{{t:#bfe6e8}}','{{t:#f7d8e2}}'] },
+  { k:'fire',    t:'آتش و نشیمن شبانه', d:'گرمای دورهمی‌های پاییز و زمستان', sky:['{{t:#1b0f1f}}','{{t:#8a3030}}'] },
+  { k:'tables',  t:'میزهای سایه‌دار', d:'ناهار آفتابی زیر چتر درختان', sky:['{{t:#cfe9ff}}','{{t:#fbe3ea}}'] },
+  { k:'lanterns',t:'فانوس‌های باغ', d:'درخشش فانوس‌ها میان شاخه‌ها', sky:['{{t:#2a0f2a}}','{{t:#b03a54}}'] }
+];
+function blossomTrees(light){
+  const r = rng(light ? 3 : 9); let s = '';
+  [[70,0.9],[200,1.15],[330,.95]].forEach(([x,sc]) => {
+    s += `<rect x="${x-5*sc}" y="${230-10*sc}" width="${10*sc}" height="${70*sc}" fill="{{t:#3a2217}}"/>`;
+    for(let i = 0; i < 9; i++) s += `<circle cx="${(x + (r()-.5)*90*sc).toFixed(0)}" cy="${(200 - r()*55*sc).toFixed(0)}" r="${(24 + r()*20)*sc}" fill="${['{{t:#f6c1cc}}','{{t:#f3a3b6}}','{{t:#ee86a0}}','{{t:#f9d6de}}'][Math.floor(r()*4)]}" opacity=".95"/>`;
+  });
+  return s;
+}
+function scene(s, idx){
+  const id = 'sk' + idx, night = ['lights','fire','lanterns'].includes(s.k);
+  let el = '';
+  if(s.k === 'lights'){
+    [[70,.15],[110,.1]].forEach(([y0],ri) => {
+      const cy = y0 + 70;
+      el += `<path d="M-10 ${y0}Q200 ${cy} 410 ${y0}" stroke="{{t:#2a1b10}}" stroke-width="2" fill="none"/>`;
+      for(let i = 1; i < 14; i++){ const t = i/14, x = (1-t)*(1-t)*-10 + 2*(1-t)*t*200 + t*t*410, y = (1-t)*(1-t)*y0 + 2*(1-t)*t*cy + t*t*y0;
+        el += `<circle cx="${x}" cy="${y+6}" r="11" fill="{{t:#ffd36e}}" opacity=".25" class="twk" style="animation-delay:-${(i*.37+ri).toFixed(2)}s"/><circle cx="${x}" cy="${y+6}" r="4.5" fill="{{t:#ffe9a8}}" class="twk" style="animation-delay:-${(i*.37+ri).toFixed(2)}s"/>`; }
+    });
+    for(let i=0;i<22;i++) el += `<circle cx="${(i*53)%400}" cy="${(i*37)%90+8}" r="1.3" fill="#fff" class="twk" style="animation-delay:-${i*.3}s"/>`;
+    el += `<ellipse cx="200" cy="330" rx="120" ry="14" fill="rgba(0,0,0,.25)"/><rect x="110" y="298" width="180" height="10" rx="4" fill="{{t:#6b3d22}}"/><rect x="190" y="306" width="20" height="50" fill="{{t:#4a2916}}"/><circle cx="170" cy="290" r="6" fill="{{t:#ffe9a8}}" class="twk"/><circle cx="230" cy="290" r="6" fill="{{t:#ffe9a8}}" class="twk"/>`;
+  }
+  if(s.k === 'gazebo'){
+    el += `<ellipse cx="200" cy="340" rx="130" ry="14" fill="rgba(0,0,0,.2)"/><rect x="108" y="170" width="10" height="170" fill="{{t:#7a4a2a}}"/><rect x="282" y="170" width="10" height="170" fill="{{t:#7a4a2a}}"/><rect x="200" y="170" width="0" height="0"/><polygon points="80,175 200,100 320,175" fill="{{t:#a3122f}}"/><polygon points="80,175 200,100 200,175" fill="{{t:#c01a3d}}"/><rect x="96" y="172" width="208" height="9" fill="{{t:#5a3320}}"/>`;
+    for(let i=0;i<6;i++) el += `<path d="M${120+i*32} 181v${16+(i%2)*10}" stroke="{{t:#d4ac55}}" stroke-width="2"/><circle cx="${120+i*32}" cy="${200+(i%2)*10}" r="5" fill="{{t:#ffe9a8}}" class="twk" style="animation-delay:-${i*.4}s"/>`;
+    el += `<rect x="150" y="285" width="100" height="9" rx="3" fill="{{t:#f4e5cf}}"/><rect x="196" y="294" width="8" height="46" fill="{{t:#7a4a2a}}"/><circle cx="200" cy="278" r="7" fill="{{t:#d8294b}}"/>`;
+  }
+  if(s.k === 'pond'){
+    el += `<ellipse cx="200" cy="320" rx="165" ry="52" fill="{{t:#d7c8a8}}"/><ellipse cx="200" cy="320" rx="148" ry="42" fill="{{t:#4aa3b5}}"/><ellipse cx="200" cy="320" rx="148" ry="42" fill="{{t:#2c7f93}}" opacity=".5"/>`;
+    [0,1.1,2.2].forEach(d => el += `<ellipse class="rip" cx="200" cy="322" rx="70" ry="16" fill="none" stroke="{{t:#e8fbff}}" stroke-width="2" style="animation-delay:-${d}s"/>`);
+    el += `<rect x="192" y="260" width="16" height="60" fill="{{t:#c9bfa8}}"/>`;
+    el += `<path d="M200 262C170 250 150 270 140 316M200 262C230 250 250 270 260 316M200 262C200 240 200 230 200 218" stroke="{{t:#eaf9ff}}" stroke-width="3" fill="none" stroke-linecap="round" class="twk"/>`;
+  }
+  if(s.k === 'fire'){
+    el += `<ellipse cx="200" cy="335" rx="120" ry="16" fill="rgba(0,0,0,.35)"/><rect x="62" y="300" width="80" height="18" rx="8" fill="{{t:#6b3d22}}"/><rect x="258" y="300" width="80" height="18" rx="8" fill="{{t:#6b3d22}}"/><ellipse cx="200" cy="324" rx="52" ry="14" fill="{{t:#3a2e2a}}"/>`;
+    el += `<path class="flick" d="M200 320c-34-8-30-48-8-70 2 20 14 22 18 8 12 16 30 50-10 62z" fill="{{t:#ff7a1a}}"/><path class="flick" style="animation-delay:-.2s" d="M200 320c-18-4-18-26-4-40 2 12 10 12 12 4 8 12 14 34-8 36z" fill="{{t:#ffd45a}}"/>`;
+    for(let i=0;i<8;i++) el += `<circle class="spark" cx="${180+i*7}" cy="${270-(i%3)*8}" r="2" fill="{{t:#ffb347}}" style="animation-delay:-${i*.33}s"/>`;
+  }
+  if(s.k === 'tables'){
+    [[90,300,.85],[210,320,1.1],[320,298,.8]].forEach(([x,y,sc],i) => {
+      const c = ['{{t:#d8294b}}','{{t:#e0a53a}}','{{t:#2c7a4f}}'][i];
+      el += `<g transform="translate(${x} ${y}) scale(${sc})"><rect x="-2" y="-110" width="4" height="116" fill="{{t:#8a6a4a}}"/><path d="M-62 -102a62 52 0 01124 0z" fill="${c}"/><path d="M-62 -102a62 52 0 01124 0l-12 0a50 40 0 00-100 0z" fill="rgba(255,255,255,.18)"/><ellipse cx="0" cy="24" rx="48" ry="10" fill="{{t:#f4e5cf}}"/><rect x="-3" y="24" width="6" height="40" fill="{{t:#7a4a2a}}"/></g>`;
+    });
+    el += `<circle cx="330" cy="50" r="26" fill="{{t:#fff3c4}}" class="twk"/>`;
+  }
+  if(s.k === 'lanterns'){
+    [[50,60],[110,95],[170,55],[230,100],[290,60],[350,92]].forEach(([x,len],i) => {
+      el += `<g class="swayy" style="animation-delay:-${i*.6}s"><line x1="${x}" y1="0" x2="${x}" y2="${len+40}" stroke="{{t:#2a1b10}}" stroke-width="2"/><circle cx="${x}" cy="${len+72}" r="34" fill="{{t:#ffb347}}" opacity=".25" class="twk" style="animation-delay:-${i*.5}s"/><rect x="${x-14}" y="${len+40}" width="28" height="44" rx="10" fill="${['{{t:#e0a53a}}','{{t:#d8294b}}','{{t:#ffb347}}'][i%3]}"/><rect x="${x-14}" y="${len+36}" width="28" height="6" rx="3" fill="{{t:#5a3320}}"/><rect x="${x-14}" y="${len+82}" width="28" height="6" rx="3" fill="{{t:#5a3320}}"/></g>`;
+    });
+    el += `<rect x="130" y="305" width="140" height="10" rx="4" fill="{{t:#6b3d22}}"/><rect x="195" y="313" width="10" height="40" fill="{{t:#4a2916}}"/>`;
+  }
+  const hills = night ? ['{{t:#0d2a1b}}','{{t:#123a26}}'] : ['{{t:#6fb06b}}','{{t:#3d7a46}}'];
+  return `<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.sky[0]}"/><stop offset="1" stop-color="${s.sky[1]}"/></linearGradient></defs>
+    <rect width="400" height="500" fill="url(#${id})"/>
+    <g transform="translate(0 20)" opacity="${night ? .55 : 1}">${blossomTrees(night)}</g>
+    <path d="M0 270Q120 230 220 262T400 250V500H0z" fill="${hills[0]}"/>
+    <path d="M0 330Q140 300 250 325T400 315V500H0z" fill="${hills[1]}"/>
+    <g transform="translate(0 20)">${el}</g>
+  </svg>`;
+}
+$('#gal').innerHTML = SCENES.map((s, i) => `<figure class="shot" style="margin:0">${scene(s, i)}<figcaption><b>${s.t}</b><span>${s.d}</span></figcaption></figure>`).join('');
+
+/* ---------- header, drawer, reveal ---------- */
+const hdr = $('#hdr'), burger = $('#burger'), drawer = $('#drawer');
+const onScroll = () => hdr.classList.toggle('scrolled', scrollY > 30);
+addEventListener('scroll', onScroll, { passive:true }); onScroll();
+function setMenu(open){
+  document.documentElement.classList.toggle('menu-open', open);
+  document.body.classList.toggle('menu-open', open);
+  burger.setAttribute('aria-expanded', open);
+  drawer.setAttribute('aria-hidden', !open);
+}
+burger.onclick = () => setMenu(!document.body.classList.contains('menu-open'));
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+addEventListener('keydown', e => { if(e.key === 'Escape') setMenu(false); });
+addEventListener('resize', () => { if(innerWidth >= 860) setMenu(false); });
+
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold:.12 }) : null;
+document.querySelectorAll('.rv').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+</script>
+</body>
+</html>

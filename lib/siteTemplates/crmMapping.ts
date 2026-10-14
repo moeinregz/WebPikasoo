@@ -10,7 +10,7 @@ import { TRADES } from "./trades";
 
 /** The type picker in the CRM, grouped so 23 choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
-  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream"] },
+  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream"] },
   { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
   { label: "خدمات و شرکتی", tradeIds: ["upholstery", "moving", "realestate", "law"] },
@@ -62,8 +62,10 @@ const KEYWORDS: [string, string[]][] = [
   ["pastry", ["شیرینی", "قنادی", "شکلات"]],
   ["bakery", ["نانوایی", "نانوا"]],
   ["fastfood", ["فست", "برگر", "پیتزا", "ساندویچ", "سوخاری"]],
+  ["garden", ["باغ"]], // باغ رستوران، باغچه، باغ‌طور
+  ["kebab", ["کبابی", "چلوکبابی", "کباب‌سرا", "کبابسرا", "کباب سرا", "کباب"]],
   ["cafe", ["کافه", "قهوه", "کافی", "cafe", "coffee"]],
-  ["restaurant", ["رستوران", "کبابی", "چلوکبابی", "سفره", "غذا"]],
+  ["restaurant", ["رستوران", "سفره", "غذا"]],
   ["shop", ["فروشگاه", "شاپ", "مارکت"]],
 ];
 
@@ -94,9 +96,15 @@ export type TradeGuess = {
 export function detectTrades(name: string, businessType: string): TradeGuess {
   // An explicitly chosen trade always wins.
   const exact = TRADES.find((t) => t.label === businessType);
-  if (exact) return { tradeIds: [exact.id], source: "type" };
-
   const byName = tradeFromName(name);
+  if (exact) {
+    // A generic «رستوران» whose name says more (باغ رستوران، کبابی…) gets that trade.
+    if (exact.id === "restaurant" && (byName === "garden" || byName === "kebab")) {
+      return { tradeIds: [byName], source: "name" };
+    }
+    return { tradeIds: [exact.id], source: "type" };
+  }
+
   if (byName) return { tradeIds: [byName], source: "name" };
   const byCategory = CRM_CATEGORY_TRADES[businessType];
   if (byCategory?.length) return { tradeIds: byCategory, source: "category" };
