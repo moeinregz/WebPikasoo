@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { createPortal } from "react-dom";
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import {
@@ -13,12 +14,16 @@ import {
 } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 import {
+  CRM_ACCEPT_RESULT,
   CRM_CALL_RESULT_OPTIONS,
   CRM_NOT_CALLED_OPTION,
   CRM_PROBLEM_STATUS_OPTIONS,
   getCrmProblemStatusColorClass,
 } from "@/lib/crmReport";
 import { categories as BUSINESS_CATEGORIES } from "@/lib/businessSites";
+import { detectTrades } from "@/lib/siteTemplates/crmMapping";
+import { TRADES } from "@/lib/siteTemplates/trades";
+import { whatsappNumber } from "@/lib/siteTemplates/generate";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
@@ -35,7 +40,13 @@ type Lead = {
   created_at: string;
   created_by: number | null;
   last_call_result?: string;
+  extra_phones?: string[];
+  instagram?: string;
+  whatsapp?: string;
+  site_token?: string;
 };
+
+const MAX_EXTRA_PHONES = 4;
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
@@ -55,14 +66,67 @@ function SubmitButton() {
 
 const initialState: CrmFormState = null;
 
+/** "Does this business have more numbers?" — any number of extra phone
+ *  inputs (up to MAX_EXTRA_PHONES), all submitted as `extraPhone`. */
+function ExtraPhoneFields({
+  initial = [],
+  inputCls,
+  small = false,
+}: {
+  initial?: string[];
+  inputCls: string;
+  small?: boolean;
+}) {
+  const [phones, setPhones] = useState<string[]>(initial);
+  return (
+    <div className="flex flex-col gap-2">
+      {phones.map((p, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <input
+            name="extraPhone"
+            dir="ltr"
+            inputMode="tel"
+            value={p}
+            onChange={(e) => setPhones((prev) => prev.map((x, j) => (j === i ? e.target.value : x)))}
+            placeholder="شماره‌ی دیگر"
+            className={inputCls}
+          />
+          <button
+            type="button"
+            onClick={() => setPhones((prev) => prev.filter((_, j) => j !== i))}
+            className="whitespace-nowrap rounded-full border border-red-500/30 px-3 py-1.5 text-[12px] font-semibold text-red-500/90 transition hover:bg-red-500/10"
+          >
+            حذف
+          </button>
+        </div>
+      ))}
+      {phones.length < MAX_EXTRA_PHONES && (
+        <button
+          type="button"
+          onClick={() => setPhones((prev) => [...prev, ""])}
+          className={`self-start font-semibold text-accent transition hover:underline ${small ? "text-[12.5px]" : "text-[13px]"}`}
+        >
+          + شماره‌ی دیگر
+        </button>
+      )}
+    </div>
+  );
+}
+
 function AddLeadForm() {
   const [state, formAction] = useFormState(createCrmLeadAction, initialState);
   const formRef = useRef<HTMLFormElement>(null);
+  // Bumped after a successful add so the (stateful) extra-phone inputs
+  // remount empty along with the form reset.
+  const [resetKey, setResetKey] = useState(0);
 
   // Clear the fields after a successful add, so registering several
   // numbers in a row doesn't leave the previous one's info sitting there.
   useEffect(() => {
-    if (state?.ok) formRef.current?.reset();
+    if (state?.ok) {
+      formRef.current?.reset();
+      setResetKey((k) => k + 1);
+    }
   }, [state]);
 
   return (
@@ -71,7 +135,7 @@ function AddLeadForm() {
       <div className="grid gap-4 sm:grid-cols-5">
         <input name="name" required placeholder="نام / نام کسب‌وکار" className={inputClass} />
         <input name="phone" required dir="ltr" placeholder="شماره تماس" className={inputClass} />
-        <input name="businessArea" placeholder="منطقه‌ی کسب‌وکار (اختیاری)" className={inputClass} />
+        <input name="businessArea" placeholder="آدرس / منطقه‌ی کسب‌وکار (اختیاری)" className={inputClass} />
         <select name="businessType" defaultValue="" className={inputClass}>
           <option value="">نوع کسب‌وکار (اختیاری)</option>
           {BUSINESS_CATEGORIES.map((c) => (
@@ -88,6 +152,11 @@ function AddLeadForm() {
             </option>
           ))}
         </select>
+      </div>
+      <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        <ExtraPhoneFields key={resetKey} inputCls={inputClass} />
+        <input name="instagram" dir="ltr" placeholder="اینستاگرام (اختیاری) — @name" className={inputClass} />
+        <input name="whatsapp" dir="ltr" inputMode="tel" placeholder="واتساپ (اختیاری)" className={inputClass} />
       </div>
       {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
@@ -151,6 +220,17 @@ function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
           ))}
         </select>
       </div>
+      <div className="grid gap-2 sm:grid-cols-3">
+        <ExtraPhoneFields initial={lead.extra_phones ?? []} inputCls={editInputClass} small />
+        <input
+          name="instagram"
+          dir="ltr"
+          defaultValue={lead.instagram ? `@${lead.instagram}` : ""}
+          placeholder="اینستاگرام — @name"
+          className={editInputClass}
+        />
+        <input name="whatsapp" dir="ltr" defaultValue={lead.whatsapp ?? ""} placeholder="واتساپ" className={editInputClass} />
+      </div>
       {state && !state.ok && <p className="text-[12.5px] text-red-500">{state.message}</p>}
       <div className="flex items-center gap-2">
         <SaveEditButton />
@@ -163,6 +243,152 @@ function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
         </button>
       </div>
     </form>
+  );
+}
+
+/** Primary number first, then any extra numbers — one tap-to-call link each. */
+function PhoneLinks({ lead, className = "" }: { lead: Lead; className?: string }) {
+  const all = [lead.phone, ...(lead.extra_phones ?? [])];
+  return (
+    <div className={`flex flex-col items-start gap-0.5 ${className}`} dir="ltr">
+      {all.map((p, i) => (
+        <Link
+          key={`${p}-${i}`}
+          href={`tel:${p}`}
+          className={`font-mono text-[13px] hover:text-accent ${i === 0 ? "" : "text-dim"}`}
+        >
+          {toPersianDigits(p)}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+/** Instagram / WhatsApp / generated-site shortcuts, shown only when present. */
+function LeadChips({ lead }: { lead: Lead }) {
+  const wa = lead.whatsapp ? whatsappNumber(lead.whatsapp) : null;
+  if (!lead.instagram && !wa && !lead.site_token) return null;
+  const chip =
+    "rounded-full border border-ink/[0.16] bg-surface/40 px-2.5 py-1 text-[11.5px] font-semibold text-dim transition hover:border-accent hover:text-accent";
+  return (
+    <div className="mt-1.5 flex flex-wrap gap-1.5 font-normal">
+      {lead.instagram && (
+        <a href={`https://instagram.com/${lead.instagram}`} target="_blank" rel="noopener noreferrer" dir="ltr" className={chip}>
+          📷 @{lead.instagram}
+        </a>
+      )}
+      {wa && lead.whatsapp && (
+        <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" dir="ltr" className={chip}>
+          💬 {toPersianDigits(lead.whatsapp)}
+        </a>
+      )}
+      {lead.site_token && (
+        <a href={`/preview/${lead.site_token}`} target="_blank" rel="noopener noreferrer" className={chip}>
+          🌐 سایت ساخته‌شده
+        </a>
+      )}
+    </div>
+  );
+}
+
+/** "Are you sure?" shown before a lead is set to «قبول برای دیدن». Confirming
+ *  saves the status AND sends everything below to the site generator. */
+function AcceptConfirmDialog({
+  lead,
+  onConfirm,
+  onCancel,
+}: {
+  lead: Lead;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const guess = detectTrades(lead.name, lead.business_type);
+  const tradeNames = guess.tradeIds.map((id) => TRADES.find((t) => t.id === id)?.label ?? id);
+  const phones = [lead.phone, ...(lead.extra_phones ?? [])];
+  const canBuild = guess.source !== null;
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onCancel();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onCancel]);
+
+  const rows: [string, ReactNode][] = [
+    ["نام", lead.name],
+    [
+      "شماره‌ها",
+      <span key="p" dir="ltr" className="inline-flex flex-col items-end font-mono">
+        {phones.map((p, i) => (
+          <span key={i}>{toPersianDigits(p)}</span>
+        ))}
+      </span>,
+    ],
+    ["آدرس / منطقه", lead.business_area || <span className="text-amber-500">ثبت نشده</span>],
+    ["اینستاگرام", lead.instagram ? <span dir="ltr">@{lead.instagram}</span> : <span className="text-dim">—</span>],
+    ["واتساپ", lead.whatsapp ? <span dir="ltr">{toPersianDigits(lead.whatsapp)}</span> : <span className="text-dim">—</span>],
+    ["نوع کسب‌وکار", lead.business_type || <span className="text-amber-500">ثبت نشده</span>],
+    [
+      "صنف قالب",
+      !canBuild ? (
+        <span className="text-red-500">مشخص نیست</span>
+      ) : guess.source === "name" ? (
+        tradeNames[0]
+      ) : (
+        <span>یکی از: {tradeNames.join("، ")}</span>
+      ),
+    ],
+  ];
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4"
+      role="dialog"
+      aria-modal="true"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onCancel();
+      }}
+    >
+      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-card border border-ink/[0.14] bg-canvas p-6 text-right shadow-2xl">
+        <h3 className="mb-2 font-display text-lg font-normal">مطمئنی؟</h3>
+        <p className="mb-4 text-[13.5px] leading-relaxed text-dim">
+          وضعیت روی «{CRM_ACCEPT_RESULT}» ثبت می‌شه و با اطلاعات زیر خودکار یه سایت از یک قالب تصادفی ساخته می‌شه؛ اسم و
+          لینکش هم تو چت تیم فرستاده می‌شه.
+        </p>
+        <dl className="mb-4 divide-y divide-ink/10 rounded-xl border border-ink/[0.14] bg-surface/20 text-[13.5px]">
+          {rows.map(([k, v]) => (
+            <div key={k} className="flex items-start justify-between gap-4 px-4 py-2.5">
+              <dt className="shrink-0 text-dim">{k}</dt>
+              <dd className="min-w-0 break-words text-left font-semibold">{v}</dd>
+            </div>
+          ))}
+        </dl>
+        {!canBuild && (
+          <p className="mb-4 text-[12.5px] leading-relaxed text-red-500">
+            صنف این لید مشخص نیست؛ وضعیت ثبت می‌شه ولی سایتی ساخته نمی‌شه. (نوع کسب‌وکار رو تکمیل کن.)
+          </p>
+        )}
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-full border border-ink/[0.18] px-5 py-2.5 text-[13.5px] font-bold text-dim transition hover:border-accent hover:text-accent"
+          >
+            انصراف
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            autoFocus
+            className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5"
+          >
+            {canBuild ? "بله، مطمئنم — بساز" : "بله، فقط وضعیت ثبت شود"}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
   );
 }
 
@@ -186,6 +412,10 @@ function CallStatusCell({ lead }: { lead: Lead }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [value, setValue] = useState(lead.called ? lead.last_call_result || "" : "");
   const [open, setOpen] = useState(false);
+  // «قبول برای دیدن» needs an "are you sure?" first; `confirmed` is what tells
+  // the server the dialog was approved (only then does it build the site).
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -204,17 +434,36 @@ function CallStatusCell({ lead }: { lead: Lead }) {
   const current = STATUS_DROPDOWN_OPTIONS.find((o) => o.value === value) ?? STATUS_DROPDOWN_OPTIONS[0];
 
   function choose(v: string) {
-    setValue(v);
     setOpen(false);
+    if (v === CRM_ACCEPT_RESULT && value !== CRM_ACCEPT_RESULT) {
+      // Nothing is saved until the dialog is confirmed.
+      setConfirmOpen(true);
+      return;
+    }
+    setConfirmed(false);
+    setValue(v);
+    requestAnimationFrame(() => formRef.current?.requestSubmit());
+  }
+
+  function confirmAccept() {
+    setConfirmOpen(false);
+    setConfirmed(true);
+    setValue(CRM_ACCEPT_RESULT);
     requestAnimationFrame(() => formRef.current?.requestSubmit());
   }
 
   return (
-    <form ref={formRef} action={setCrmCallResultAction} className="inline-block">
-      <input type="hidden" name="leadId" value={lead.id} />
-      <input type="hidden" name="result" value={value} />
-      <StatusDropdownButton wrapRef={wrapRef} open={open} setOpen={setOpen} current={current} onChoose={choose} />
-    </form>
+    <>
+      <form ref={formRef} action={setCrmCallResultAction} className="inline-block">
+        <input type="hidden" name="leadId" value={lead.id} />
+        <input type="hidden" name="result" value={value} />
+        {confirmed && <input type="hidden" name="confirm" value="1" />}
+        <StatusDropdownButton wrapRef={wrapRef} open={open} setOpen={setOpen} current={current} onChoose={choose} />
+      </form>
+      {confirmOpen && (
+        <AcceptConfirmDialog lead={lead} onConfirm={confirmAccept} onCancel={() => setConfirmOpen(false)} />
+      )}
+    </>
   );
 }
 
@@ -288,7 +537,7 @@ function StatusDropdownButton({
         onClick={() => setOpen(!open)}
         className={`flex min-w-[9.5rem] items-center justify-between gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-[12.5px] font-bold leading-none outline-none transition disabled:opacity-60 ${current.colorClass}`}
       >
-        {current.label}
+        {pending && current.value === CRM_ACCEPT_RESULT ? "در حال ساخت سایت..." : current.label}
         <svg
           viewBox="0 0 20 20"
           fill="none"
@@ -395,6 +644,8 @@ export default function CrmPanel({
         l.name.toLowerCase().includes(q) ||
         l.phone.includes(query.trim()) ||
         toPersianDigits(l.phone).includes(query.trim()) ||
+        (l.extra_phones ?? []).some((p) => p.includes(query.trim()) || toPersianDigits(p).includes(query.trim())) ||
+        (l.instagram ?? "").toLowerCase().includes(q.replace(/^@/, "")) ||
         (l.business_area && l.business_area.toLowerCase().includes(q))
       );
     });
@@ -497,14 +748,9 @@ export default function CrmPanel({
                   <div key={l.id} className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
                     <div className="min-w-0">
                       <p className="font-semibold text-[14.5px]">{l.name}</p>
-                      <Link
-                        href={`tel:${l.phone}`}
-                        dir="ltr"
-                        className="mt-1 inline-block font-mono text-[13px] text-dim hover:text-accent"
-                      >
-                        {toPersianDigits(l.phone)}
-                      </Link>
+                      <PhoneLinks lead={l} className="mt-1" />
                       {l.business_area && <p className="mt-1 text-[12.5px] text-dim">{l.business_area}</p>}
+                      <LeadChips lead={l} />
                     </div>
                     {editingId === l.id ? (
                       <div className="mt-3 border-t border-ink/10 pt-3">
@@ -579,11 +825,12 @@ export default function CrmPanel({
                   <tbody>
                     {paged.map((l, i) => (
                       <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
-                        <td className="min-w-[10rem] px-4 py-3.5 font-semibold">{l.name}</td>
-                        <td className="px-4 py-3.5 font-mono" dir="ltr">
-                          <Link href={`tel:${l.phone}`} className="hover:text-accent">
-                            {toPersianDigits(l.phone)}
-                          </Link>
+                        <td className="min-w-[10rem] px-4 py-3.5 font-semibold">
+                          {l.name}
+                          <LeadChips lead={l} />
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <PhoneLinks lead={l} />
                         </td>
                         {editingId === l.id ? (
                           <td className="px-4 py-3.5" colSpan={3}>

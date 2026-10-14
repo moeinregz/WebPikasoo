@@ -32,6 +32,11 @@ export const CRM_CALL_RESULT_OPTIONS: CrmCallResultOption[] = [
   { label: "قبول نکرد", colorClass: "border-red-500/40 bg-red-500/15 text-red-500" },
 ];
 
+/** The outcome that means "the business agreed to look at a demo site".
+ *  Setting it (after a confirmation) auto-builds a site from the lead's
+ *  data and posts the link to the team chat. */
+export const CRM_ACCEPT_RESULT = "قبول برای دیدن";
+
 /** The lead hasn't been called yet — not one of the outcomes above (there's
  *  no call to have an outcome), but styled the same way so it can sit
  *  alongside them in the status dropdown and the filter tabs. */

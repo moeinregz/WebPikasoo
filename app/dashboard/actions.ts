@@ -3,6 +3,9 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
+import { CRM_ACCEPT_RESULT } from "@/lib/crmReport";
+import { autoBuildSiteForLead } from "@/lib/crmSite";
+import { buildPrivateSite } from "@/lib/siteTemplates/publish";
 import {
   getUserByPhone,
   getUserById,
@@ -22,6 +25,7 @@ import {
   setUserPermissions,
   createCrmLead,
   getCrmLeadByPhone,
+  getCrmLeadById,
   setCrmLeadCalled,
   recordCrmCallResult,
   deleteCrmLead,
@@ -57,7 +61,6 @@ import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
 import { pickTemplate } from "@/lib/siteTemplates";
 import {
-  renderSite,
   toEn,
   HEX_COLOR,
   normalizeInstagram,
@@ -659,25 +662,18 @@ export async function generateSiteAction(
   }
 
   try {
-    const { html, unknown } = renderSite(template, trade, {
-      brand,
-      address,
-      phones,
-      hours,
-      primary: primary || undefined,
-      secondary: secondary || undefined,
-      instagram: instagram || undefined,
-      whatsapp: whatsapp || undefined,
-    });
-    if (unknown.length) console.warn(`generateSiteAction: unknown placeholders in ${template.id}:`, unknown);
-
-    const url = await savePrivateSiteHtmlFile(new File([html], "site.html", { type: "text/html" }));
-    if (!url) return { ok: false, message: "ذخیره‌ی فایل ناموفق بود، دوباره امتحان کن." };
-
-    const site = await createPrivateSite({
-      name: `${brand} (${trade.label})`,
-      note: `از قالب «${template.label}» ساخته شد`,
-      url,
+    const { site } = await buildPrivateSite({
+      template,
+      input: {
+        brand,
+        address,
+        phones,
+        hours,
+        primary: primary || undefined,
+        secondary: secondary || undefined,
+        instagram: instagram || undefined,
+        whatsapp: whatsapp || undefined,
+      },
     });
     revalidatePath("/dashboard");
     return { ok: true, message: "سایت ساخته شد. لینکش آماده‌ست.", link: `/preview/${site.token}` };
@@ -699,6 +695,41 @@ export async function deletePrivateSiteAction(formData: FormData) {
 
 export type CrmFormState = { ok: boolean; message: string } | null;
 
+/** Most numbers a single lead can hold (the primary one + extras). */
+const CRM_MAX_PHONES = 5;
+
+/** Trims, normalizes, de-duplicates (order kept) and drops blanks. */
+function cleanPhones(raw: string[]): string[] {
+  const out: string[] = [];
+  for (const r of raw) {
+    const t = r.trim();
+    if (!t) continue;
+    const p = isValidPhone(t) ? normalizePhone(t) : t;
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
+/** Validates the optional Instagram / WhatsApp inputs shared by the add and
+ *  edit forms. Returns the values to store (instagram as a bare handle). */
+function parseSocials(
+  instagramRaw: string,
+  whatsappRaw: string
+): { ok: true; instagram: string; whatsapp: string } | { ok: false; message: string } {
+  let instagram = "";
+  if (instagramRaw) {
+    const handle = normalizeInstagram(instagramRaw);
+    if (!handle) return { ok: false, message: "آیدی اینستاگرام معتبر نیست (مثلاً cafe_omid@ یا لینک پیج)." };
+    instagram = handle;
+  }
+  let whatsapp = "";
+  if (whatsappRaw) {
+    if (!whatsappNumber(whatsappRaw)) return { ok: false, message: "شماره‌ی واتساپ معتبر نیست." };
+    whatsapp = isValidPhone(whatsappRaw) ? normalizePhone(whatsappRaw) : whatsappRaw;
+  }
+  return { ok: true, instagram, whatsapp };
+}
+
 export async function createCrmLeadAction(
   _prevState: CrmFormState,
   formData: FormData
@@ -707,22 +738,44 @@ export async function createCrmLeadAction(
 
   const name = (formData.get("name") ?? "").toString().trim();
   const phoneRaw = (formData.get("phone") ?? "").toString().trim();
+  const extraRaw = formData.getAll("extraPhone").map((v) => v.toString());
   const businessArea = (formData.get("businessArea") ?? "").toString().trim();
   const businessType = (formData.get("businessType") ?? "").toString().trim();
   const problemStatus = (formData.get("problemStatus") ?? "").toString().trim();
+  const instagramRaw = (formData.get("instagram") ?? "").toString().trim();
+  const whatsappRaw = (formData.get("whatsapp") ?? "").toString().trim();
 
   if (!name || !phoneRaw) {
     return { ok: false, message: "نام و شماره تماس رو پر کن." };
   }
 
-  const phone = isValidPhone(phoneRaw) ? normalizePhone(phoneRaw) : phoneRaw;
+  const all = cleanPhones([phoneRaw, ...extraRaw]);
+  if (all.length > CRM_MAX_PHONES) {
+    return { ok: false, message: `حداکثر ${toPersianDigits(CRM_MAX_PHONES)} شماره برای هر لید.` };
+  }
+  const [phone, ...extraPhones] = all;
 
-  if (await getCrmLeadByPhone(phone)) {
-    return { ok: false, message: "شماره تکراریه — این شماره قبلاً تو CRM ثبت شده." };
+  const socials = parseSocials(instagramRaw, whatsappRaw);
+  if (!socials.ok) return { ok: false, message: socials.message };
+
+  for (const p of all) {
+    if (await getCrmLeadByPhone(p)) {
+      return { ok: false, message: `شماره‌ی ${toPersianDigits(p)} تکراریه — قبلاً تو CRM ثبت شده.` };
+    }
   }
 
   try {
-    await createCrmLead({ name, phone, businessArea, businessType, problemStatus, createdBy: currentUser.id });
+    await createCrmLead({
+      name,
+      phone,
+      extraPhones,
+      instagram: socials.instagram,
+      whatsapp: socials.whatsapp,
+      businessArea,
+      businessType,
+      problemStatus,
+      createdBy: currentUser.id,
+    });
   } catch (err) {
     console.error("createCrmLeadAction failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
@@ -750,9 +803,37 @@ export async function updateCrmLeadAction(
   const businessArea = (formData.get("businessArea") ?? "").toString().trim();
   const businessType = (formData.get("businessType") ?? "").toString().trim();
   const problemStatus = (formData.get("problemStatus") ?? "").toString().trim();
+  const instagramRaw = (formData.get("instagram") ?? "").toString().trim();
+  const whatsappRaw = (formData.get("whatsapp") ?? "").toString().trim();
+
+  const lead = await getCrmLeadById(id);
+  if (!lead) return { ok: false, message: "لید پیدا نشد." };
+
+  const socials = parseSocials(instagramRaw, whatsappRaw);
+  if (!socials.ok) return { ok: false, message: socials.message };
+
+  // The primary number is never edited here; extras must not repeat it, and
+  // must not already belong to another lead.
+  const extraPhones = cleanPhones(formData.getAll("extraPhone").map((v) => v.toString())).filter((p) => p !== lead.phone);
+  if (extraPhones.length + 1 > CRM_MAX_PHONES) {
+    return { ok: false, message: `حداکثر ${toPersianDigits(CRM_MAX_PHONES)} شماره برای هر لید.` };
+  }
+  for (const p of extraPhones) {
+    const owner = await getCrmLeadByPhone(p);
+    if (owner && owner.id !== id) {
+      return { ok: false, message: `شماره‌ی ${toPersianDigits(p)} برای یه لید دیگه ثبت شده.` };
+    }
+  }
 
   try {
-    await updateCrmLead(id, { businessArea, businessType, problemStatus });
+    await updateCrmLead(id, {
+      businessArea,
+      businessType,
+      problemStatus,
+      instagram: socials.instagram,
+      whatsapp: socials.whatsapp,
+      extraPhones,
+    });
   } catch (err) {
     console.error("updateCrmLeadAction failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
@@ -786,7 +867,14 @@ export async function setCrmCallResultAction(formData: FormData) {
   const currentUser = await requireCrmAccess();
   const leadId = Number(formData.get("leadId"));
   const result = (formData.get("result") ?? "").toString();
+  // The panel only sends confirm=1 after the "are you sure?" dialog for
+  // "قبول برای دیدن" was approved — that is what unlocks the auto site build.
+  const confirmed = formData.get("confirm") === "1";
   if (!leadId) return;
+
+  // Read BEFORE recording, so we know whether the lead was already accepted
+  // (re-submitting the same status must not build a second site).
+  const before = result === CRM_ACCEPT_RESULT ? await getCrmLeadById(leadId) : undefined;
 
   if (!result) {
     await setCrmLeadCalled(leadId, false);
@@ -794,6 +882,11 @@ export async function setCrmCallResultAction(formData: FormData) {
     await recordCrmCallResult({ leadId, userId: currentUser.id, result });
   }
   revalidatePath("/dashboard");
+
+  if (confirmed && before && !(before.called && before.last_call_result === CRM_ACCEPT_RESULT)) {
+    await autoBuildSiteForLead(before, currentUser.id);
+    revalidatePath("/dashboard");
+  }
 }
 
 /** Admin-only — a developer with the "crm" permission can add leads and

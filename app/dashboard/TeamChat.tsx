@@ -6,6 +6,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTeamMessagesAction, sendTeamMessageAction, deleteTeamMessageAction } from "./actions";
 
+/** Turns http(s) links inside a chat message into clickable anchors (React
+ *  elements only — the text is never injected as HTML). */
+function linkify(text: string) {
+  return text.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+    /^https?:\/\//.test(part) ? (
+      <a
+        key={i}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        dir="ltr"
+        className="break-all font-semibold underline underline-offset-2"
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    )
+  );
+}
+
 type Message = {
   id: number;
   user_id: number;
@@ -263,7 +284,7 @@ export default function TeamChat({
                     {roleLabel[m.user_role] && <span>· {roleLabel[m.user_role]}</span>}
                     <span>· {formatTime(m.created_at)}</span>
                   </div>
-                  {m.message && <p className="whitespace-pre-wrap text-[14px] leading-relaxed">{m.message}</p>}
+                  {m.message && <p className="whitespace-pre-wrap text-[14px] leading-relaxed">{linkify(m.message)}</p>}
                   {m.attachment_url && (
                     <Attachment url={m.attachment_url} type={m.attachment_type} name={m.attachment_name} />
                   )}

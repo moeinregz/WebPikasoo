@@ -883,11 +883,23 @@ export type CrmLead = {
   // the main CRM list can show it without a join. The full history of
   // every call (for the daily activity report) lives in crm_calls below.
   last_call_result?: string;
+  // Optional contact extras. `phone` stays the primary number (and what the
+  // duplicate check / tel: links key on); anyone with more numbers keeps the
+  // rest in extra_phones. Instagram is stored as a bare handle (no "@").
+  extra_phones?: string[];
+  instagram?: string;
+  whatsapp?: string;
+  // Token of the private site auto-generated when this lead was accepted
+  // ("قبول برای دیدن"), so the same lead never gets a second site.
+  site_token?: string;
 };
 
 export type NewCrmLead = {
   name: string;
   phone: string;
+  extraPhones?: string[];
+  instagram?: string;
+  whatsapp?: string;
   businessArea?: string;
   businessType?: string;
   problemStatus?: string;
@@ -907,6 +919,9 @@ export async function createCrmLead(data: NewCrmLead): Promise<number> {
     problem_status: data.problemStatus || "",
     called: 0,
     created_by: data.createdBy ?? null,
+    ...(data.extraPhones && data.extraPhones.length ? { extra_phones: data.extraPhones } : {}),
+    ...(data.instagram ? { instagram: data.instagram } : {}),
+    ...(data.whatsapp ? { whatsapp: data.whatsapp } : {}),
   });
   return id;
 }
@@ -914,13 +929,25 @@ export async function createCrmLead(data: NewCrmLead): Promise<number> {
 /** Looks up an existing lead by phone — used to reject duplicates before
  *  insert. Expects the same normalized/trimmed form the caller is about to
  *  store, so it catches the common case (same number typed twice) without
- *  trying to fuzzy-match every possible formatting variant. */
+ *  trying to fuzzy-match every possible formatting variant. Matches a
+ *  lead's primary number or any of its extra numbers. */
 export async function getCrmLeadByPhone(phone: string): Promise<CrmLead | undefined> {
   const database = await getDb();
   const lead = await database
     .collection<CrmLead>("crm_leads")
-    .findOne({ phone }, { projection: { _id: 0 } });
+    .findOne({ $or: [{ phone }, { extra_phones: phone }] }, { projection: { _id: 0 } });
   return lead ?? undefined;
+}
+
+export async function getCrmLeadById(id: number): Promise<CrmLead | undefined> {
+  const database = await getDb();
+  const lead = await database.collection<CrmLead>("crm_leads").findOne({ id }, { projection: { _id: 0 } });
+  return lead ?? undefined;
+}
+
+export async function setCrmLeadSite(id: number, siteToken: string): Promise<void> {
+  const database = await getDb();
+  await database.collection("crm_leads").updateOne({ id }, { $set: { site_token: siteToken } });
 }
 
 export async function getAllCrmLeads(): Promise<CrmLead[]> {
@@ -937,22 +964,46 @@ export async function setCrmLeadCalled(id: number, called: boolean): Promise<voi
   await database.collection("crm_leads").updateOne({ id }, { $set: { called: called ? 1 : 0 } });
 }
 
-/** Lets the classification fields (added after leads already existed) be
- *  filled in / corrected on an existing lead, the same way they're set
- *  when adding a new one. Only ever touches the three fields passed in —
- *  never name/phone/called/etc — and only the ones actually provided, so a
- *  partial edit can't blank out a field the caller didn't mean to touch. */
+/** Lets the classification fields (added after leads already existed) and
+ *  the optional contact extras (extra numbers, Instagram, WhatsApp) be
+ *  filled in / corrected on an existing lead. Never touches name/phone/
+ *  called/etc, and only the fields actually provided — so a partial edit
+ *  can't blank out a field the caller didn't mean to touch. An empty
+ *  instagram/whatsapp/extraPhones clears that field. */
 export async function updateCrmLead(
   id: number,
-  data: { businessArea?: string; businessType?: string; problemStatus?: string }
+  data: {
+    businessArea?: string;
+    businessType?: string;
+    problemStatus?: string;
+    instagram?: string;
+    whatsapp?: string;
+    extraPhones?: string[];
+  }
 ): Promise<void> {
   const database = await getDb();
-  const set: Record<string, string> = {};
+  const set: Record<string, string | string[]> = {};
+  const unset: Record<string, ""> = {};
   if (data.businessArea !== undefined) set.business_area = data.businessArea;
   if (data.businessType !== undefined) set.business_type = data.businessType;
   if (data.problemStatus !== undefined) set.problem_status = data.problemStatus;
-  if (Object.keys(set).length === 0) return;
-  await database.collection("crm_leads").updateOne({ id }, { $set: set });
+  if (data.instagram !== undefined) {
+    if (data.instagram) set.instagram = data.instagram;
+    else unset.instagram = "";
+  }
+  if (data.whatsapp !== undefined) {
+    if (data.whatsapp) set.whatsapp = data.whatsapp;
+    else unset.whatsapp = "";
+  }
+  if (data.extraPhones !== undefined) {
+    if (data.extraPhones.length) set.extra_phones = data.extraPhones;
+    else unset.extra_phones = "";
+  }
+  const update: Record<string, unknown> = {};
+  if (Object.keys(set).length) update.$set = set;
+  if (Object.keys(unset).length) update.$unset = unset;
+  if (Object.keys(update).length === 0) return;
+  await database.collection("crm_leads").updateOne({ id }, update);
 }
 
 export type CrmCallLog = {
