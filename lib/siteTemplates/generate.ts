@@ -1,5 +1,15 @@
 import type { ColorRole, RoleColors, Trade } from "./trades";
 
+/** A spot in a template where a real photo belongs. The admin uploads one per
+ *  slot in the «سایت‌های خصوصی» tab; until then the template shows its own
+ *  placeholder art. Template code reads them from the `{{images_json}}` object. */
+export type ImageSlot = {
+  key: string; // [a-z_]+ — the property name in {{images_json}}
+  label: string; // what it is, shown on the upload card
+  hint?: string; // where it appears / what kind of photo works best
+  ratio: string; // "4:5" — the shape the photo is cropped to
+};
+
 export type SiteTemplate = {
   id: string;
   trade: string; // Trade.id
@@ -12,6 +22,8 @@ export type SiteTemplate = {
    *  chosen). When the admin picks a color, every color in the template that
    *  belongs to the same hue family is re-themed toward it ({{t:#hex}}). */
   palette?: { primary: string; secondary?: string };
+  /** Photo spots (see ImageSlot). Omit when the template needs no photos. */
+  images?: ImageSlot[];
 };
 
 export type SiteInput = {
@@ -23,7 +35,27 @@ export type SiteInput = {
   secondary?: string; // optional #hex — falls back to the trade default
   instagram?: string; // optional: @name, name or profile URL
   whatsapp?: string; // optional: phone number
+  /** slot key → https URL of an uploaded photo (see ImageSlot) */
+  images?: Record<string, string>;
 };
+
+const SI_MARK = /\/\*SI\*\/[\s\S]*?\/\*SI_END\*\//;
+
+/** JSON for the `{{images_json}}` placeholder: only valid slot keys with plain
+ *  https URLs, and `<` escaped so it can never close the surrounding <script>. */
+function imagesJson(images?: Record<string, string>): string {
+  const clean: Record<string, string> = {};
+  for (const [k, v] of Object.entries(images ?? {})) {
+    if (/^[a-z_]+$/.test(k) && /^https:\/\/[^\s"'<>\\]+$/.test(v)) clean[k] = v;
+  }
+  return JSON.stringify(clean).replace(/</g, "\\u003c");
+}
+
+/** `{{images_json}}` is rendered as a marked block so that photos uploaded
+ *  LATER can be swapped in when the page is served — no re-render needed. */
+export function injectSiteImages(html: string, images?: Record<string, string>): string {
+  return html.replace(SI_MARK, () => `/*SI*/${imagesJson(images)}/*SI_END*/`);
+}
 
 export const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
@@ -374,6 +406,7 @@ export function renderSite(
     instagram_href: esc(igHandle ? `https://instagram.com/${igHandle}` : ""),
     whatsapp: esc(toFa(present.whatsapp)),
     whatsapp_href: esc(waNumber ? `https://wa.me/${waNumber}` : ""),
+    images_json: `/*SI*/${imagesJson(input.images)}/*SI_END*/`,
     color_primary: colors.primary,
     color_secondary: colors.secondary,
     color_accent: colors.accent,

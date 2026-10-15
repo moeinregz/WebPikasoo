@@ -25,6 +25,7 @@ export async function buildPrivateSite(args: {
     name: `${input.brand.trim()} (${trade.label})`,
     note: args.note ?? `از قالب «${template.label}» ساخته شد`,
     url,
+    template_id: template.id,
   });
   return { site, trade, template };
 }

@@ -41,7 +41,7 @@ import BlogPanel from "./BlogPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
-import { templateOptions } from "@/lib/siteTemplates";
+import { imageSlotsFor, templateOptions } from "@/lib/siteTemplates";
 import { formatDate } from "./format";
 
 export const metadata = {
@@ -392,7 +392,19 @@ export default async function DashboardPage() {
     tabs.push({
       id: "private-sites",
       label: `سایت‌های خصوصی (${toPersianDigits(privateSites.length)})`,
-      panel: <PrivateSitesPanel sites={privateSites} />,
+      panel: (
+        <PrivateSitesPanel
+          sites={privateSites.map((s) => ({
+            id: s.id,
+            token: s.token,
+            name: s.name,
+            note: s.note,
+            created_at: s.created_at,
+            images: s.images,
+            slots: imageSlotsFor(s.template_id),
+          }))}
+        />
+      ),
     });
   }
 

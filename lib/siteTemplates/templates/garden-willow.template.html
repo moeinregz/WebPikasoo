@@ -143,7 +143,7 @@ footer{padding:22px;text-align:center;background:{{t:#091410}};font-size:.9rem;o
       <p style="margin-top:10px">گوشه‌های دنج، نور گرم و سایه‌ی درختان، مهمان‌ها را به آرامش دعوت می‌کند.</p>
       <div class="st"><div><b>🌳</b>فضای سبز</div><div><b>🏮</b>نور گرم</div><div><b>🍔</b>منوی متنوع</div></div>
     </div>
-    <div class="ph rv"><img class="a" data-ph="1" alt="فضای باغ"><img class="b" data-ph="2" alt="فانوس"></div>
+    <div class="ph rv"><img class="a" data-ph="1" data-slot="about_main" alt="فضای باغ"><img class="b" data-ph="2" data-slot="about_small" alt="فانوس"></div>
   </div>
 </section>
 
@@ -162,11 +162,11 @@ footer{padding:22px;text-align:center;background:{{t:#091410}};font-size:.9rem;o
     <h2 class="rv">فضای رستوران</h2>
     <p class="rv">نگاهی به حیاط، میزهای چوبی و چراغ‌های شب.</p>
     <div class="gal">
-      <figure><img data-ph="3" alt="حیاط باغ" style="object-position:50% 40%"><figcaption>حیاط باغ</figcaption></figure>
-      <figure><img data-ph="4" alt="حیاط شب"><figcaption>حیاط در شب</figcaption></figure>
-      <figure><img data-ph="5" alt="فانوس"><figcaption>فانوس ورودی</figcaption></figure>
-      <figure><img data-ph="6" alt="میزها" style="object-position:0 60%"><figcaption>میزهای چوبی</figcaption></figure>
-      <figure><img data-ph="7" alt="پرگولا" style="object-position:50% 0"><figcaption>سقف پرگولا</figcaption></figure>
+      <figure><img data-ph="3" data-slot="yard" alt="حیاط باغ"><figcaption>حیاط باغ</figcaption></figure>
+      <figure><img data-ph="4" data-slot="night" alt="حیاط شب"><figcaption>حیاط در شب</figcaption></figure>
+      <figure><img data-ph="5" data-slot="entrance" alt="فانوس"><figcaption>فانوس ورودی</figcaption></figure>
+      <figure><img data-ph="6" data-slot="tables" alt="میزها"><figcaption>میزهای چوبی</figcaption></figure>
+      <figure><img data-ph="7" data-slot="roof" alt="پرگولا"><figcaption>سقف پرگولا</figcaption></figure>
     </div>
   </div>
 </section>
@@ -224,7 +224,8 @@ function phArt(k){
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 450" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${PH_C[0]}"/><stop offset="1" stop-color="${PH_C[1]}"/></linearGradient></defs><rect width="360" height="450" fill="url(#g)"/>${a[k] || a[6]}</svg>`;
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
-document.querySelectorAll('img[data-ph]').forEach(i=>{i.src=phArt(+i.dataset.ph)});
+const SI = {{images_json}}; /* photos uploaded for this site */
+document.querySelectorAll('img[data-ph]').forEach(i=>{i.src=SI[i.dataset.slot]||phArt(+i.dataset.ph)});
 const bg=document.getElementById('bg'),ov=document.getElementById('ov');
 function tog(f){const o=f===undefined?!ov.classList.contains('on'):f;ov.classList.toggle('on',o);bg.classList.toggle('on',o);document.body.style.overflow=o?'hidden':''}
 bg.onclick=()=>tog();ov.querySelectorAll('a').forEach(a=>a.onclick=()=>tog(false));

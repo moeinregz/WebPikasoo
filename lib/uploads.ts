@@ -1,4 +1,4 @@
-import { put } from "@vercel/blob";
+import { del, put } from "@vercel/blob";
 import crypto from "crypto";
 
 // Files (blog cover images, team-chat attachments/voice notes) are stored
@@ -168,6 +168,49 @@ export async function savePrivateSiteHtmlFile(file: File): Promise<string | null
   } catch (err) {
     console.error("savePrivateSiteHtmlFile (Vercel Blob) failed:", err);
     throw new Error(blobErrorMessage(err));
+  }
+}
+
+const MAX_SITE_IMAGE_BYTES = 4 * 1024 * 1024; // Vercel caps a request body at ~4.5MB
+
+/** Saves a photo for one image slot of a private site (see ImageSlot in
+ *  lib/siteTemplates/generate.ts) to Vercel Blob and returns its URL. The
+ *  dashboard shrinks photos in the browser first, so this is just the
+ *  server-side safety net: real JPEG/PNG/WebP content only, 4MB at most. */
+export async function savePrivateSiteImage(file: File): Promise<string> {
+  if (!file || file.size === 0) throw new Error("عکسی انتخاب نشده.");
+  if (file.size > MAX_SITE_IMAGE_BYTES) throw new Error("حجم عکس بعد از فشرده‌سازی هم بیشتر از ۴ مگابایته؛ یه عکس کم‌حجم‌تر انتخاب کن.");
+
+  const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  const isJpeg = head[0] === 0xff && head[1] === 0xd8 && head[2] === 0xff;
+  const isPng = head[0] === 0x89 && head[1] === 0x50 && head[2] === 0x4e && head[3] === 0x47;
+  const isWebp =
+    head[0] === 0x52 && head[1] === 0x49 && head[2] === 0x46 && head[3] === 0x46 &&
+    head[8] === 0x57 && head[9] === 0x45 && head[10] === 0x42 && head[11] === 0x50;
+  if (!isJpeg && !isPng && !isWebp) throw new Error("فقط عکس JPG، PNG یا WebP قابل قبوله.");
+  const type = isJpeg ? "image/jpeg" : isPng ? "image/png" : "image/webp";
+  const ext = isJpeg ? ".jpg" : isPng ? ".png" : ".webp";
+
+  const filename = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${ext}`;
+  try {
+    const blob = await put(`private-sites/img/${filename}`, file, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: type,
+    });
+    return blob.url;
+  } catch (err) {
+    console.error("savePrivateSiteImage (Vercel Blob) failed:", err);
+    throw new Error(blobErrorMessage(err));
+  }
+}
+
+/** Best-effort removal of a Blob file we no longer reference. Never throws. */
+export async function deleteBlobQuietly(url: string): Promise<void> {
+  try {
+    await del(url);
+  } catch (err) {
+    console.error("deleteBlobQuietly failed:", err);
   }
 }
 

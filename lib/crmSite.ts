@@ -4,7 +4,7 @@
 import { headers } from "next/headers";
 import { sendTeamMessage, setCrmLeadSite, type CrmLead } from "@/lib/db";
 import { detectTrades } from "@/lib/siteTemplates/crmMapping";
-import { pickTemplateAmong } from "@/lib/siteTemplates";
+import { imageSlotsFor, pickTemplateAmong } from "@/lib/siteTemplates";
 import { normalizeInstagram, whatsappNumber } from "@/lib/siteTemplates/generate";
 import { buildPrivateSite } from "@/lib/siteTemplates/publish";
 
@@ -69,7 +69,13 @@ export async function autoBuildSiteForLead(lead: CrmLead, userId: number): Promi
     });
 
     await setCrmLeadSite(lead.id, site.token);
-    await sendTeamMessage({ userId, message: `${lead.name}\n${siteOrigin()}/preview/${site.token}` });
+    const needsPhotos = imageSlotsFor(template.id).length > 0;
+    await sendTeamMessage({
+      userId,
+      message:
+        `${lead.name}\n${siteOrigin()}/preview/${site.token}` +
+        (needsPhotos ? "\n📷 این قالب جای عکس داره؛ از تب «سایت‌های خصوصی» عکس‌هاش رو آپلود کنید." : ""),
+    });
   } catch (err) {
     console.error("autoBuildSiteForLead failed:", err);
     try {

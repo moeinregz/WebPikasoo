@@ -1,4 +1,4 @@
-import type { SiteTemplate } from "./generate";
+import type { ImageSlot, SiteTemplate } from "./generate";
 import cafeAdra from "./templates/cafe-adra.template.html";
 import cafeSara from "./templates/cafe-sara.template.html";
 import fastfoodSimen from "./templates/fastfood-simen.template.html";
@@ -54,6 +54,9 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "fastfood",
     label: "فست‌فود — آتشین و پرانرژی",
     html: fastfoodSimen,
+    images: [
+      { key: "about", label: "عکس درباره‌ی ما", hint: "پیتزا یا غذای شاخص. اگه چیزی آپلود نکنی همون عکس نمونه نمایش داده می‌شه", ratio: "4:5" },
+    ],
     palette: { primary: "#e63329", secondary: "#f5a623" },
   },
   {
@@ -173,6 +176,13 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "restaurant",
     label: "رستوران — شرقی و برنجی (مدائن)",
     html: restaurantMadaen,
+    images: [
+      { key: "hall", label: "سالن اصلی", hint: "نمای اصلی بالای صفحه و گالری — یک عکس عمودی از سالن", ratio: "4:5" },
+      { key: "dish", label: "غذای شاخص", hint: "بخش «غذای ویژه» — نمای نزدیک از بهترین غذای منو", ratio: "1:1" },
+      { key: "table", label: "سالن دورهمی", hint: "گالری — میز بلند یا سالن پذیرایی گروهی", ratio: "4:5" },
+      { key: "entrance", label: "ورودی", hint: "بخش درباره‌ما و گالری — در یا نمای ورودی", ratio: "3:4" },
+      { key: "lounge", label: "سالن دوم", hint: "دایره‌ی کوچک بخش درباره‌ما و گالری", ratio: "1:1" },
+    ],
     palette: { primary: "#8c1d36", secondary: "#c9a24f" },
   },
   {
@@ -187,6 +197,15 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "garden",
     label: "باغ رستوران — فانوس و سبز (بید مجنون)",
     html: gardenWillow,
+    images: [
+      { key: "about_main", label: "عکس اصلی درباره‌ی ما", hint: "بخش «درباره»، قاب بزرگ — فضای کلی باغ", ratio: "4:5" },
+      { key: "about_small", label: "عکس کوچک درباره‌ی ما", hint: "بخش «درباره»، قاب کوچک — یک جزئیات جذاب", ratio: "1:1" },
+      { key: "yard", label: "گالری — حیاط باغ", hint: "قاب بلند و بزرگ گالری", ratio: "3:4" },
+      { key: "night", label: "گالری — حیاط در شب", hint: "نورپردازی شب", ratio: "4:3" },
+      { key: "entrance", label: "گالری — ورودی و فانوس", hint: "ورودی یا فانوس‌ها", ratio: "4:3" },
+      { key: "tables", label: "گالری — میزها", hint: "چیدمان میز و صندلی", ratio: "4:3" },
+      { key: "roof", label: "گالری — سقف و نورپردازی", hint: "پرگولا یا سقف", ratio: "4:3" },
+    ],
     palette: { primary: "#f2a63b", secondary: "#1f3d2b" },
   },
   {
@@ -215,6 +234,11 @@ export function pickTemplateAmong(tradeIds: string[]): SiteTemplate | null {
   const list = TEMPLATES.filter((t) => tradeIds.includes(t.trade));
   if (list.length === 0) return null;
   return list[Math.floor(Math.random() * list.length)];
+}
+
+/** The photo spots of a template (empty when it needs none). */
+export function imageSlotsFor(templateId?: string | null): ImageSlot[] {
+  return TEMPLATES.find((t) => t.id === templateId)?.images ?? [];
 }
 
 /** Metadata only (safe to hand to a client component). */

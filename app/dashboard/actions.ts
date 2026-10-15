@@ -44,6 +44,8 @@ import {
   deleteProject,
   createPrivateSite,
   deletePrivateSite,
+  getPrivateSiteById,
+  setPrivateSiteImage,
   createBlogPost,
   updateBlogPost,
   deleteBlogPost,
@@ -56,10 +58,18 @@ import {
 } from "@/lib/db";
 import { verifyPassword, hashPassword, isValidPhone, normalizePhone, toPersianDigits } from "@/lib/auth";
 import { setSessionCookie, getCurrentUser, USER_COOKIE_NAME } from "@/lib/session";
-import { saveChatAttachment, saveBlogImage, saveProjectImage, saveProjectHtmlFile, savePrivateSiteHtmlFile } from "@/lib/uploads";
+import {
+  saveChatAttachment,
+  saveBlogImage,
+  saveProjectImage,
+  saveProjectHtmlFile,
+  savePrivateSiteHtmlFile,
+  savePrivateSiteImage,
+  deleteBlobQuietly,
+} from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
-import { pickTemplate } from "@/lib/siteTemplates";
+import { imageSlotsFor, pickTemplate } from "@/lib/siteTemplates";
 import {
   toEn,
   HEX_COLOR,
@@ -676,7 +686,13 @@ export async function generateSiteAction(
       },
     });
     revalidatePath("/dashboard");
-    return { ok: true, message: "سایت ساخته شد. لینکش آماده‌ست.", link: `/preview/${site.token}` };
+    return {
+      ok: true,
+      message:
+        "سایت ساخته شد. لینکش آماده‌ست." +
+        (imageSlotsFor(template.id).length > 0 ? " این قالب جای عکس داره؛ از تب «سایت‌های خصوصی» عکس‌هاش رو آپلود کن." : ""),
+      link: `/preview/${site.token}`,
+    };
   } catch (err) {
     console.error("generateSiteAction failed:", err);
     return { ok: false, message: err instanceof Error ? err.message : "یه مشکلی پیش اومد، دوباره امتحان کن." };
@@ -687,8 +703,63 @@ export async function deletePrivateSiteAction(formData: FormData) {
   await requireAdmin();
   const id = Number(formData.get("siteId"));
   if (!id) return;
+  const site = await getPrivateSiteById(id);
   await deletePrivateSite(id);
+  // The uploaded photos belong to this site only — don't leave them orphaned.
+  for (const url of Object.values(site?.images ?? {})) await deleteBlobQuietly(url);
   revalidatePath("/dashboard");
+}
+
+export type SiteImageResult = { ok: boolean; message: string; url?: string };
+
+/** Uploads (or replaces) the photo for one image slot of a template-built
+ *  private site. The browser already shrank the photo; this validates it,
+ *  stores it and records it on the site — /preview/<token> picks it up on the
+ *  next load, so nothing is re-rendered. */
+export async function uploadPrivateSiteImageAction(formData: FormData): Promise<SiteImageResult> {
+  await requireAdmin();
+  const id = Number(formData.get("siteId"));
+  const key = (formData.get("key") ?? "").toString();
+  const file = formData.get("image");
+
+  const site = id ? await getPrivateSiteById(id) : null;
+  if (!site) return { ok: false, message: "سایت پیدا نشد." };
+  if (!imageSlotsFor(site.template_id).some((s) => s.key === key)) {
+    return { ok: false, message: "این جای عکس برای این سایت تعریف نشده." };
+  }
+  if (!(file instanceof File) || file.size === 0) return { ok: false, message: "عکسی انتخاب نشده." };
+
+  try {
+    const url = await savePrivateSiteImage(file);
+    const previous = site.images?.[key];
+    await setPrivateSiteImage(id, key, url);
+    if (previous) await deleteBlobQuietly(previous);
+    revalidatePath("/dashboard");
+    return { ok: true, message: "عکس ذخیره شد.", url };
+  } catch (err) {
+    console.error("uploadPrivateSiteImageAction failed:", err);
+    return { ok: false, message: err instanceof Error ? err.message : "آپلود ناموفق بود، دوباره امتحان کن." };
+  }
+}
+
+/** Takes a slot's photo away again (the template's placeholder returns). */
+export async function removePrivateSiteImageAction(formData: FormData): Promise<SiteImageResult> {
+  await requireAdmin();
+  const id = Number(formData.get("siteId"));
+  const key = (formData.get("key") ?? "").toString();
+  const site = id ? await getPrivateSiteById(id) : null;
+  if (!site) return { ok: false, message: "سایت پیدا نشد." };
+  const previous = site.images?.[key];
+  if (!previous) return { ok: true, message: "عکسی برای حذف نبود." };
+  try {
+    await setPrivateSiteImage(id, key, null);
+    await deleteBlobQuietly(previous);
+    revalidatePath("/dashboard");
+    return { ok: true, message: "عکس حذف شد." };
+  } catch (err) {
+    console.error("removePrivateSiteImageAction failed:", err);
+    return { ok: false, message: "حذف ناموفق بود، دوباره امتحان کن." };
+  }
 }
 
 // --- CRM: leads/phone numbers the team has sourced ---------------------------

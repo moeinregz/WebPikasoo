@@ -516,7 +516,8 @@ function phArt(k){
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 450" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${PH_C[0]}"/><stop offset="1" stop-color="${PH_C[1]}"/></linearGradient></defs><rect width="360" height="450" fill="url(#g)"/>${a[k] || a[6]}</svg>`;
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
-const IMG = {"1": phArt(1), "2": phArt(2), "3": phArt(3), "4": phArt(4), "5": phArt(5)};
+const SI = {{images_json}}; /* photos uploaded for this site: hall, dish, table, entrance, lounge */
+const IMG = {"1": SI.hall || phArt(1), "2": SI.dish || phArt(2), "3": SI.table || phArt(3), "4": SI.entrance || phArt(4), "5": SI.lounge || phArt(5)};
 document.querySelectorAll('img[data-img]').forEach(i => i.src = IMG[i.dataset.img]);
 
 /* header */

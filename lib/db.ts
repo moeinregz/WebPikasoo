@@ -815,9 +815,20 @@ export type PrivateSite = {
   note: string;
   // Vercel Blob URL of the uploaded .html file.
   url: string;
+  // Set for sites built from a template (lets the dashboard know which photo
+  // spots the site has, see ImageSlot in lib/siteTemplates/generate.ts).
+  template_id?: string;
+  // Photos uploaded for those spots: slot key → Vercel Blob URL. They are
+  // swapped into the page when /preview/<token> is served.
+  images?: Record<string, string>;
 };
 
-export async function createPrivateSite(data: { name: string; note?: string; url: string }): Promise<PrivateSite> {
+export async function createPrivateSite(data: {
+  name: string;
+  note?: string;
+  url: string;
+  template_id?: string;
+}): Promise<PrivateSite> {
   const database = await getDb();
   const id = await nextId("private_sites");
   const doc: PrivateSite = {
@@ -827,6 +838,7 @@ export async function createPrivateSite(data: { name: string; note?: string; url
     name: data.name,
     note: data.note || "",
     url: data.url,
+    ...(data.template_id ? { template_id: data.template_id } : {}),
   };
   await database.collection<PrivateSite>("private_sites").insertOne({ ...doc });
   return doc;
@@ -847,6 +859,23 @@ export async function getPrivateSiteByToken(token: string): Promise<PrivateSite 
     .collection<PrivateSite>("private_sites")
     .findOne({ token }, { projection: { _id: 0 } });
   return site ?? null;
+}
+
+export async function getPrivateSiteById(id: number): Promise<PrivateSite | null> {
+  const database = await getDb();
+  const site = await database
+    .collection<PrivateSite>("private_sites")
+    .findOne({ id }, { projection: { _id: 0 } });
+  return site ?? null;
+}
+
+/** Sets (url) or clears (null) the photo for one slot of a private site. */
+export async function setPrivateSiteImage(id: number, key: string, url: string | null): Promise<void> {
+  if (!/^[a-z_]+$/.test(key)) throw new Error("bad image key");
+  const database = await getDb();
+  await database
+    .collection("private_sites")
+    .updateOne({ id }, url ? { $set: { [`images.${key}`]: url } } : { $unset: { [`images.${key}`]: "" } });
 }
 
 export async function deletePrivateSite(id: number): Promise<void> {

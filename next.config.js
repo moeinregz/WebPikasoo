@@ -2,6 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  experimental: {
+    // Template-site photos are uploaded through a server action (already shrunk in
+    // the browser). The default 1MB cap is too small; Vercel itself caps at ~4.5MB.
+    serverActions: { bodySizeLimit: "4.5mb" },
+  },
+
   // ---------------------------------------------------------------------
   // Image optimization
   // ---------------------------------------------------------------------
