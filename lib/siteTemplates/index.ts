@@ -19,6 +19,7 @@ import musicNava from "./templates/music-nava.template.html";
 import realestateZomorod from "./templates/realestate-zomorod.template.html";
 import kebabBistoon from "./templates/kebab-bistoon.template.html";
 import restaurantEmber from "./templates/restaurant-ember.template.html";
+import dentalNora from "./templates/dental-nora.template.html";
 import restaurantMadaen from "./templates/restaurant-madaen.template.html";
 import gardenWillow from "./templates/garden-willow.template.html";
 import gardenGilas from "./templates/garden-gilas.template.html";
@@ -163,6 +164,13 @@ export const TEMPLATES: SiteTemplate[] = [
     label: "املاک — زمردی و طلایی",
     html: realestateZomorod,
     palette: { primary: "#155c42", secondary: "#c9a227" },
+  },
+  {
+    id: "dental-nora",
+    trade: "dental",
+    label: "دندانپزشکی — سینمایی و تعاملی",
+    html: dentalNora,
+    palette: { primary: "#0F766E" },
   },
   {
     id: "restaurant-ember",

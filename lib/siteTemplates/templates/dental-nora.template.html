@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{{brand}}</title>
+<meta name="description" content="{{brand}} — {{trade}}<!--if:address--> | {{address}}<!--/if:address-->">
+<meta name="theme-color" content="{{t:#061416}}">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{--font:'Vazirmatn';--font-en:'Montserrat'}
+/* ===== tokens ===== */
+:root{color-scheme:light dark;
+--bg:{{t:#F5F8F8}};--sf:#FFFFFF;--tint:{{t:#E9F2F1}};--ink:{{t:#0B1F22}};--mu:{{t:#506569}};--bd:{{t:#D9E4E4}};--bd2:{{t:#BCCFCF}};
+--pr:{{t:#0F766E}};--pr-h:{{t:#0B5F58}};--on:#FFFFFF;--er:#B42318;
+--sh:0 1px 2px {{t:rgba(11,31,34,.05)}},0 12px 32px -16px {{t:rgba(11,31,34,.18)}};
+--ring:0 0 0 3px color-mix(in srgb,var(--pr) 30%,transparent)}
+@media(prefers-color-scheme:dark){:root{--bg:{{t:#0A1416}};--sf:{{t:#101C1F}};--tint:{{t:#0D1A1D}};--ink:{{t:#E7F0F0}};--mu:{{t:#97AEB0}};--bd:{{t:#1E3135}};--bd2:{{t:#2D474C}};
+--pr:{{t:#4FD1C0}};--pr-h:{{t:#7BE0D2}};--on:{{t:#04201D}};--er:#F97066;--sh:none}}
+.dk{--bg:{{t:#0A2427}};--sf:{{t:#0F2F32}};--ink:{{t:#EAF4F3}};--mu:{{t:#9FBEC0}};--bd:rgba(255,255,255,.14);--bd2:rgba(255,255,255,.28);--pr:{{t:#5EEAD4}};--pr-h:{{t:#99F6E4}};--on:{{t:#04201D}};--er:#FDA29B;--tint:{{t:#12383B}};background:var(--bg);color:var(--ink)}
+
+/* ===== base ===== */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}.lenis.lenis-stopped{overflow:hidden}.lenis [data-lenis-prevent]{overscroll-behavior:contain}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font),Vazirmatn,Tahoma,sans-serif;font-size:16.5px;line-height:1.9;overflow-x:clip;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p{margin:0}h1,h2,h3{text-wrap:balance}p{text-wrap:pretty}
+h1{font-size:clamp(34px,5.2vw,58px);line-height:1.35;font-weight:800}
+h2{font-size:clamp(26px,3.6vw,38px);line-height:1.45;font-weight:700}
+h3{font-size:19px;line-height:1.6;font-weight:700}
+::selection{background:var(--pr);color:var(--on)}
+:focus-visible{outline:2px solid var(--pr);outline-offset:3px;border-radius:6px}
+.w{max-width:1160px;margin-inline:auto;padding-inline:clamp(18px,4vw,32px)}
+.band{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--bd);scroll-margin-top:68px}
+.band.sf{background:var(--sf)}.band.tint{background:var(--tint)}
+.sh{max-width:620px;margin-bottom:clamp(28px,4vw,48px)}
+.sub{color:var(--mu);margin-top:10px;max-width:56ch}
+
+/* ===== buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border:1px solid transparent;border-radius:12px;background:var(--pr);color:var(--on);font:inherit;font-weight:700;cursor:pointer;white-space:nowrap;transition:background-color .2s,border-color .2s,color .2s,transform .15s}
+.btn:hover{background:var(--pr-h)}.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.o{background:transparent;color:var(--ink);border-color:var(--bd2)}.btn.o:hover{border-color:var(--pr);color:var(--pr)}
+.btn.big{min-height:52px;padding:0 28px}
+.spin{width:16px;height:16px;border:2px solid currentColor;border-inline-end-color:transparent;border-radius:50%;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* ===== loading: skeleton ===== */
+.skl{display:block;border-radius:10px;background:linear-gradient(90deg,var(--tint) 30%,var(--bd) 50%,var(--tint) 70%);background-size:220% 100%;animation:shim 1.4s ease-in-out infinite}
+@keyframes shim{from{background-position:100% 0}to{background-position:-100% 0}}
+.skp{padding-top:calc(68px + 64px)}
+.skg{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.skc{display:grid;gap:16px}
+
+/* ===== chrome ===== */
+.sbar{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;background:var(--pr);transform:scaleX(0);transform-origin:right}
+.hd{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid transparent;color:var(--ink);transition:background-color .25s,border-color .25s,transform .45s cubic-bezier(.7,0,.2,1)}
+.hd.up{transform:translateY(-100%)}
+.hd.dark{--bg:{{t:#061416}};--ink:{{t:#EAF4F3}};--mu:{{t:#9FBEC0}};--bd:rgba(255,255,255,.14);--bd2:rgba(255,255,255,.28);--pr:{{t:#5EEAD4}};--pr-h:{{t:#99F6E4}};--on:{{t:#04201D}}}
+.hd.sc{background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-color:var(--bd)}
+.hd .w{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.logo .mk{width:36px;height:36px;border-radius:10px;background:var(--pr);display:grid;place-items:center}
+.mk svg{width:18px;fill:var(--on)}
+.logo b{display:block;font-size:19px;line-height:1.2;font-weight:800}
+.logo small{display:block;font-size:11px;color:var(--mu);line-height:1.4}
+.hd nav{display:flex;gap:28px;font-size:14.5px;font-weight:500}
+.hd nav a{color:var(--mu);transition:color .2s}.hd nav a:hover{color:var(--ink)}
+.hb{display:flex;gap:8px;align-items:center}.hb .btn{min-height:42px;padding:0 18px}
+
+/* ===== booking ===== */
+.bkg{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(32px,5vw,64px);align-items:start}
+.bs{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:18px;counter-reset:s}
+.bs li{display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:start;counter-increment:s}
+.bs li:before{content:counter(s,persian);width:32px;height:32px;border-radius:50%;border:1px solid var(--bd2);display:grid;place-items:center;font-size:13.5px;font-weight:700;color:var(--pr);background:var(--sf)}
+.bs b{display:block;line-height:1.6}.bs span{color:var(--mu);font-size:14.5px;line-height:1.7}
+#book{background:var(--sf);border:1px solid var(--bd);border-radius:24px;padding:clamp(20px,3vw,32px);box-shadow:var(--sh)}
+.stepin{animation:sin .4s cubic-bezier(.2,.7,.2,1)}@keyframes sin{from{opacity:0;transform:translateX(-14px)}}
+.steps{display:flex;gap:6px;margin-bottom:24px}
+.steps i{flex:1;height:4px;border-radius:4px;background:var(--bd);transition:background-color .35s}.steps i.on{background:var(--pr)}
+.lbl{display:block;font-weight:700;margin:14px 0 12px;font-size:17px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.opt{display:grid;gap:2px;align-content:center;min-height:52px;border:1px solid var(--bd2);border-radius:12px;padding:10px 14px;cursor:pointer;background:transparent;font:inherit;color:inherit;text-align:center;transition:border-color .2s,background-color .2s}
+.opt:hover:not(:disabled){border-color:var(--pr)}
+.opt.sel{border-color:var(--pr);background:var(--tint);box-shadow:inset 0 0 0 1px var(--pr);font-weight:700}
+.opt:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+.opt.sk{border-color:transparent;color:transparent;text-decoration:none;opacity:1;background:linear-gradient(90deg,var(--tint) 30%,var(--bd) 50%,var(--tint) 70%);background-size:220% 100%;animation:shim 1.4s ease-in-out infinite}
+.opt small{color:var(--mu);font-size:12.5px;line-height:1.5}
+.days{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;margin-bottom:8px;scrollbar-width:thin}.days .opt{min-width:80px;flex:none}.days .opt b{font-size:22px;line-height:1.3}
+input,textarea{width:100%;font:inherit;padding:13px 16px;border-radius:12px;border:1px solid var(--bd2);background:var(--bg);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+input::placeholder,textarea::placeholder{color:var(--mu)}
+input:focus,textarea:focus{outline:0;border-color:var(--pr);box-shadow:var(--ring)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nav{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+.sum{border-radius:14px;padding:6px 18px;border:1px solid var(--bd);background:var(--bg)}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--bd)}.sum div:first-child{border-top:0}
+.sum span{color:var(--mu)}
+.err{color:var(--er);margin:10px 0 0;min-height:1.9em;font-size:14.5px}
+.ok{text-align:center;padding:10px 0}
+.ok h2{margin-bottom:6px}
+.ck{width:76px;height:76px;border-radius:50%;background:var(--pr);color:var(--on);display:grid;place-items:center;margin:0 auto 18px;animation:pop .5s cubic-bezier(.3,1.4,.5,1)}
+.ck svg{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .6s .25s ease forwards}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.code{display:flex;font-size:28px;font-weight:800;letter-spacing:3px;color:var(--pr);direction:ltr;justify-content:center}
+
+/* ===== floating contact (desktop) ===== */
+.fab{position:fixed;left:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:45;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.fab-btn{display:flex;align-items:center;gap:10px;min-height:48px;border:0;cursor:pointer;font:inherit;font-weight:700;padding:0 20px;border-radius:12px;background:var(--pr);color:var(--on);box-shadow:0 4px 14px {{t:rgba(11,31,34,.22)}};transition:background-color .2s}
+.fab-btn:hover{background:var(--pr-h)}.fab-btn svg{width:18px;height:18px;fill:currentColor}
+.fab-menu{display:grid;gap:8px;opacity:0;transform:translateY(8px);pointer-events:none;visibility:hidden;transition:opacity .2s,transform .2s,visibility 0s .2s}
+.fab.open .fab-menu{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition:opacity .2s,transform .2s}
+.fab-menu a{display:flex;align-items:center;min-height:44px;padding:0 18px;border-radius:12px;background:var(--sf);border:1px solid var(--bd2);font-weight:600;white-space:nowrap;box-shadow:var(--sh);transition:border-color .2s,color .2s}
+.fab-menu a:hover{border-color:var(--pr);color:var(--pr)}
+
+/* ===== mobile nav ===== */
+.burger{display:none;position:relative;width:44px;height:44px;flex:none;padding:0;border-radius:12px;border:1px solid var(--bd2);background:transparent;color:var(--ink);cursor:pointer}
+.burger i{position:absolute;left:12px;right:12px;height:2px;border-radius:2px;background:currentColor;transition:top .3s,transform .3s,opacity .2s}
+.burger i:nth-child(1){top:15px}.burger i:nth-child(2){top:21px}.burger i:nth-child(3){top:27px}
+.burger.open i:nth-child(1){top:21px;transform:rotate(45deg)}.burger.open i:nth-child(2){opacity:0}.burger.open i:nth-child(3){top:21px;transform:rotate(-45deg)}
+.mnav{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top,0px)) 20px calc(22px + env(safe-area-inset-bottom,0px));background:var(--bg);color:var(--ink);overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .3s,transform .3s,visibility 0s .3s}
+.mnav.open{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s}
+.mtop{display:flex;align-items:center;justify-content:space-between;height:44px}
+.mbrand b{display:block;font-size:21px;font-weight:800;line-height:1.3}.mbrand small{font-size:12px;color:var(--mu)}
+.mlinks{display:grid;margin:28px 0 auto}
+.mlinks a{padding:16px 0;font-size:24px;font-weight:700;border-bottom:1px solid var(--bd);opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s,color .2s}
+.mlinks a:active{color:var(--pr)}
+.mnav.open .mlinks a,.mnav.open .mact{opacity:1;transform:none;transition-delay:calc(.08s + var(--i,0)*.05s)}
+.mact{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px;opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s}
+.mact .big{grid-column:1/-1}
+.bar{display:none}
+
+
+/* ===== loader (cinematic) ===== */
+.ld{display:none}
+.js:not(.seen) .ld{display:block;position:fixed;inset:0;z-index:300;color:{{t:#EAF4F3}}}
+.ld-a,.ld-b{position:absolute;left:0;right:0;height:50.5%;background:{{t:#061416}}}
+.ld-a{top:0}.ld-b{bottom:0}
+.ld-c{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px}
+.ld-svg{width:84px;overflow:visible}
+.ld-n{font-size:clamp(56px,10vw,104px);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.ld-w{font-size:15px;color:{{t:#9FBEC0}};letter-spacing:0}
+.ld-ln{width:160px;height:2px;background:rgba(255,255,255,.14);overflow:hidden;margin-top:6px}
+.ld-ln i{display:block;height:100%;background:{{t:#5EEAD4}};transform:scaleX(0);transform-origin:right}
+
+/* ===== cursor ===== */
+.cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid var(--pr);border-radius:50%;pointer-events:none;z-index:250;opacity:0;transition:width .3s,height .3s,margin .3s,background-color .3s,opacity .3s}
+.fine .cur{opacity:.9}
+.cur.big{width:64px;height:64px;margin:-32px 0 0 -32px;background:color-mix(in srgb,var(--pr) 16%,transparent)}
+
+/* ===== initial states (only when motion is on) ===== */
+.motion:not(.ready) .hw>span{visibility:hidden;animation:vis 0s 6s forwards}@keyframes vis{to{visibility:visible}}
+.motion [data-hi]{opacity:0;transform:translateY(24px)}
+.motion [data-fade]{opacity:0;transform:translateY(28px)}
+.motion [data-hi],.motion [data-fade]{animation:force .01s 7s forwards}@keyframes force{to{opacity:1;transform:none}}
+.sw{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.14em;margin-bottom:-.14em;margin-inline-end:.2em}
+.sw>span{display:inline-block}
+.sx{display:inline-block;margin-inline-end:.2em}
+
+/* ===== 1 hero: whitening lens ===== */
+.hero{position:relative;height:210svh}
+.hero-pin{--x:50%;--y:50%;--r:0px;position:sticky;top:0;height:100svh;overflow:hidden;background:{{t:#0a1517}}}
+.hl{position:absolute;inset:0}
+.hl-b{--ink:#8aa0a3;--mu:#5d7275;--pr:{{t:#6a8b8c}};--bd2:{{t:#2b3e41}};background:{{t:#0a1517}};color:var(--ink)}
+.hl-a{--ink:{{t:#0B1F22}};--mu:{{t:#4a6064}};--pr:{{t:#0F766E}};--bd2:{{t:#BCCFCF}};background:{{t:#F3FBF9}};color:var(--ink);clip-path:circle(var(--r) at var(--x) var(--y))}
+.hl-u{--pr:{{t:#0F766E}};--pr-h:{{t:#0B5F58}};--on:#fff;z-index:4}
+.hero-in{height:100%;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:clamp(24px,5vw,72px);padding-top:68px}
+.hero-txt>*{max-width:640px}
+.tag{display:inline-flex;align-items:center;gap:8px;padding:4px 14px;border:1px solid var(--bd2);border-radius:99px;font-size:13.5px;font-weight:500;color:var(--mu)}
+.tag:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pr)}
+.hero .h1{display:block;font-size:clamp(40px,6.8vw,88px);line-height:1.25;font-weight:800;margin:22px 0 18px}
+.hw{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.16em;margin-bottom:-.16em;margin-inline-end:.22em}
+.hw>span{display:inline-block}
+.lead{color:var(--mu);font-size:18px;max-width:50ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn.k{background:{{t:#0B1F22}};color:#fff;border-color:rgba(255,255,255,.3)}.btn.k:hover{background:{{t:#163236}}}
+.hero-art{display:grid;place-items:center}
+.hero-art svg{width:min(100%,clamp(220px,34vw,460px));height:auto;overflow:visible}
+.m-a .hero-art:before{content:"";position:absolute;width:min(78%,520px);aspect-ratio:1;border-radius:50%;border:1px solid var(--bd2);z-index:-1}
+.m-a .hero-art{position:relative}
+.m-u .tag,.m-u .h1,.m-u .lead{color:transparent;-webkit-text-fill-color:transparent;border-color:transparent}
+.m-u .tag:before{background:transparent}
+.m-b .cta,.m-a .cta{visibility:hidden}
+.lens{position:absolute;z-index:3;left:var(--x);top:var(--y);width:calc(var(--r)*2);height:calc(var(--r)*2);transform:translate(-50%,-50%);border:1.5px solid rgba(255,255,255,.55);border-radius:50%;pointer-events:none}
+.lens-t{position:absolute;left:50%;top:calc(100% + 12px);transform:translateX(-50%);white-space:nowrap;font-size:13px;color:{{t:#EAF4F3}};padding:2px 14px;border:1px solid rgba(255,255,255,.28);border-radius:99px;background:{{t:rgba(6,20,22,.6)}};transition:opacity .4s}
+.lens-t b{font-weight:500}.lens-t .t2{display:none}
+@media(pointer:coarse){.lens-t .t1{display:none}.lens-t .t2{display:inline}}
+.moved .lens-t{opacity:0}
+.hint{position:absolute;z-index:5;bottom:24px;left:50%;width:24px;height:42px;margin-left:-12px;border:1.5px solid #fff;border-radius:14px;mix-blend-mode:difference}
+.hint i{display:block;width:3px;height:8px;border-radius:3px;background:#fff;margin:7px auto;animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{60%{transform:translateY(14px);opacity:0}}
+html:not(.motion) .hd.dark{--bg:{{t:#F5F8F8}};--ink:{{t:#0B1F22}};--mu:{{t:#506569}};--bd:{{t:#D9E4E4}};--bd2:{{t:#BCCFCF}};--pr:{{t:#0F766E}};--pr-h:{{t:#0B5F58}};--on:#fff}
+html:not(.motion) .hero{height:auto}
+html:not(.motion) .hero-pin{position:relative}
+html:not(.motion) .hl-b,html:not(.motion) .lens{display:none}
+html:not(.motion) .hl-a{clip-path:none}
+
+/* ticker */
+.tkw{position:relative;z-index:3;margin-top:-22px;padding-block:10px;overflow:hidden}
+.tk{position:relative;overflow:hidden;background:var(--pr);color:var(--on);transform:rotate(-1.2deg);margin-inline:-3%;padding:12px 0}
+.tk-in{display:flex;width:max-content}
+.tk-in span{display:flex;align-items:center;gap:28px;padding-inline-end:28px;font-size:clamp(20px,3vw,34px);font-weight:800;white-space:nowrap}
+.tk-in i{width:10px;height:10px;background:currentColor;transform:rotate(45deg)}
+
+/* ===== 2 statement ===== */
+.stmt{padding:clamp(96px,14vw,180px) 0 clamp(64px,9vw,112px)}
+.stmt-t{max-width:980px;margin:0 auto;text-align:center;font-size:clamp(30px,5.4vw,66px);font-weight:800;line-height:1.6}
+.stats{display:flex;justify-content:center;margin-top:clamp(40px,6vw,72px)}
+.stats>div{padding-inline:clamp(18px,4vw,48px);border-inline-start:1px solid var(--bd2);text-align:center}
+.stats>div:first-child{border-inline-start:0}
+.stats b{display:block;font-size:clamp(34px,5vw,56px);line-height:1.3;font-weight:800;color:var(--pr)}
+.stats i{font-style:normal}.stats span{font-size:14px;color:var(--mu)}
+
+/* ===== 3 services: click to play the treatment ===== */
+.sv{border-top:1px solid var(--bd)}
+.sv-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,72px);align-items:center;padding-block:clamp(64px,9vw,112px)}
+.sv-txt h2{max-width:11em}
+.sv-list{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid var(--bd)}
+.sv-list li{border-bottom:1px solid var(--bd)}
+.sv-t{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:16px 4px;background:none;border:0;color:var(--mu);font:inherit;text-align:start;cursor:pointer;transition:color .25s,padding .3s}
+.sv-t b{display:block;font-size:20px;line-height:1.5;color:inherit}
+.sv-t small{display:block;font-size:14px;color:var(--mu)}
+.sv-t:hover{color:var(--ink)}
+.sv-t:after{content:"+";flex:none;font-size:26px;font-weight:300;line-height:1;transition:transform .3s,color .3s}
+.on .sv-t{color:var(--ink);padding-inline-start:12px}
+.on .sv-t:after{transform:rotate(45deg);color:var(--pr)}
+.sv-pg{position:absolute;inset-inline:0;bottom:-1px;height:2px;background:var(--pr);transform:scaleX(0);transform-origin:right}
+.sv-x{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,.7,.2,1)}
+.sv-x>div{overflow:hidden}
+.on .sv-x{grid-template-rows:1fr}
+html:not(.motion) .sv-x{grid-template-rows:1fr}
+.how{display:block;max-width:46ch;margin:4px 12px 0;font-size:14.5px;opacity:.9;padding-inline-start:12px;border-inline-start:2px solid var(--pr)}
+.ln{display:inline-block;margin:10px 12px 18px;font-weight:700;color:var(--pr)}.ln:hover{text-decoration:underline;text-underline-offset:5px}
+.sv-stage{position:relative;border:1px solid var(--bd);border-radius:28px;background:var(--sf);padding:clamp(12px,2.4vw,28px)}
+.sv-stage svg{display:block;width:100%;height:auto;overflow:visible}
+.sv-wire{stroke-dasharray:1;stroke-dashoffset:1}
+.sv-re{position:absolute;top:14px;inset-inline-start:14px;min-height:34px;padding:0 14px;border-radius:99px;border:1px solid var(--bd2);background:transparent;color:var(--ink);font:inherit;font-size:13px;cursor:pointer;transition:border-color .2s,color .2s}
+.sv-re:hover{border-color:var(--pr);color:var(--pr)}
+
+/* ===== 4 why (pinned storytelling) ===== */
+.wy{background:var(--sf);border-top:1px solid var(--bd)}
+.wy-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,88px);align-items:center;padding-block:clamp(64px,9vw,112px)}
+.motion .wy-in{min-height:100svh;padding-block:80px}
+.wy-stage{position:relative;display:grid;place-items:center;aspect-ratio:1;width:100%;max-width:460px;margin:auto}
+.wy-ring{position:absolute;inset:2%;border-radius:50%;border:1.5px dashed var(--bd2);animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wy-svg{width:52%;overflow:visible}
+.wy-dots{position:absolute;bottom:-2%;display:flex;gap:4px;z-index:2}
+.wy-dots button{width:34px;height:20px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+.wy-dots button:before{content:"";position:absolute;left:0;right:0;top:8px;height:4px;border-radius:4px;background:var(--bd2);transition:background-color .3s,transform .3s}
+.wy-dots button.on:before{background:var(--pr)}.wy-dots button:hover:before{transform:scaleY(1.8)}
+.wy-list{position:relative;margin:clamp(24px,4vw,40px) 0}
+.motion .wy-list{min-height:230px}
+.wy-ch{margin-bottom:28px}.motion .wy-ch{position:absolute;inset:0;margin:0}
+.wy-n{display:block;font-size:clamp(54px,8vw,92px);line-height:1.1;font-weight:800;color:var(--pr)}
+.wy-ch h3{font-size:clamp(22px,3vw,30px);margin-top:6px}
+.wy-ch p{color:var(--mu);margin-top:6px;max-width:48ch}
+
+/* ===== 5 smile (pinned scrub) ===== */
+.sm{border-top:1px solid var(--bd)}
+.sm-in{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,64px);align-items:center;padding-block:clamp(64px,9vw,112px)}
+.motion .sm-in{min-height:100svh;padding-block:80px}
+.sm-in .btn{margin-top:26px}
+.ba{position:relative;aspect-ratio:400/220;border-radius:24px;overflow:hidden;background:var(--tint);border:1px solid var(--bd);user-select:none;touch-action:pan-y;will-change:transform}
+.ba:has(.rg:focus-visible){outline:2px solid var(--pr);outline-offset:3px}
+.ba-l{position:absolute;inset:0;min-height:0;display:block}.ba-l.a{clip-path:inset(0 calc(100% - var(--p)*1%) 0 0)}
+.ba .ba-svg{width:100%;height:100%;display:block;border:0}
+.tg{position:absolute;top:14px;padding:2px 14px;border-radius:99px;background:{{t:rgba(6,20,22,.72)}};color:#fff;font-size:13px;font-weight:700;z-index:2}.tg.l{left:14px}.tg.r{right:14px}
+.hn{position:absolute;top:0;bottom:0;left:calc(var(--p)*1%);width:2px;margin-left:-1px;background:#fff;z-index:3;pointer-events:none}
+.hn i{position:absolute;top:50%;left:50%;width:46px;height:46px;margin:-23px;border-radius:50%;background:#fff;color:{{t:#061416}};display:grid;place-items:center;font-style:normal;font-weight:800;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.rg{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:4;padding:0;border:0}
+
+/* ===== 6/7 contact + footer ===== */
+.cta-row{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(28px,4vw,48px)}.cta-row .sh{margin:0}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ci{display:block;border:1px solid var(--bd);border-radius:18px;padding:26px;transition:border-color .2s,background-color .2s}
+a.ci:hover{border-color:var(--pr);background:rgba(255,255,255,.04)}
+.ci small{display:block;color:var(--mu);font-size:13.5px;margin-bottom:6px}
+.ci p{margin-bottom:18px}
+.ph{font-size:28px;font-weight:800;color:var(--pr);line-height:1.5}
+.ftbig{direction:ltr;overflow:hidden;text-align:center;margin-top:clamp(40px,7vw,88px);font-family:var(--font-en),Montserrat,sans-serif;font-weight:800;font-size:clamp(90px,26vw,380px);line-height:.9;letter-spacing:.04em;color:transparent;-webkit-text-stroke:1.5px var(--bd2);user-select:none}
+.fl{display:inline-block}
+.ft{padding-top:24px;color:var(--mu);font-size:13.5px;text-align:center;line-height:2}
+
+/* ===== responsive ===== */
+@media(max-width:900px){
+.hd nav,.hide,.fab{display:none}.burger{display:block}
+.wy-in,.sm-in,.bkg,.skg,.info,.sv-in,.hero-in{grid-template-columns:1fr}
+.hero-in{align-content:center;gap:16px;padding-top:76px}
+.hero-art{order:-1}.hero-art svg{width:auto;height:min(30svh,230px)}
+.hero .h1{font-size:clamp(34px,10vw,52px);margin:14px 0 12px}
+.lead{font-size:16px}.cta{margin-top:18px}
+.sv-stage{order:-1}
+.wy-stage{max-width:230px}.wy-in{gap:20px}.motion .wy-list{min-height:250px}
+.motion .sm-in{align-content:center;gap:28px}
+.bar{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--bd)}
+.ft{padding-bottom:84px}
+}
+@media(max-width:560px){
+.row{grid-template-columns:1fr}
+.stats>div{padding-inline:14px}
+.nav .btn{padding:0 16px}
+}
+@media(prefers-reduced-motion:reduce){
+*,*:before,*:after{animation:none!important;transition:none!important}
+html{scroll-behavior:auto}
+.cur{display:none}
+.ck svg{stroke-dashoffset:0!important}
+.sx{opacity:1!important}
+}
+
+/* ===== sparkles on the "after" smile ===== */
+.spk-w{opacity:clamp(0,calc((var(--p) - 45)/35),1)}
+.spk{transform-box:fill-box;transform-origin:center;animation:tw 2.4s ease-in-out infinite}
+@keyframes tw{0%,100%{transform:scale(.5) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+
+/* ===== rail: progress + skip for locked sections ===== */
+.rail{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:48;display:flex;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:14px;background:{{t:#061416}};color:{{t:#EAF4F3}};border:1px solid rgba(255,255,255,.16);font-size:13.5px;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility 0s .3s}
+.rail.on{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s}
+.rail-ring{width:30px;height:30px;transform:rotate(-90deg);fill:none;stroke-width:3}
+.rail-ring circle{stroke:rgba(255,255,255,.18)}
+.rail-ring .rail-v{stroke:{{t:#5EEAD4}};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--rp,0))}
+.rail-t{font-weight:700}
+.rail-skip{min-height:34px;padding:0 14px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:transparent;color:inherit;font:inherit;font-size:13px;cursor:pointer;transition:background-color .2s,border-color .2s}
+.rail-skip:hover{background:rgba(255,255,255,.1);border-color:{{t:#5EEAD4}}}
+@media(max-width:900px){.rail{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:12px}}
+@media(prefers-reduced-motion:reduce){.rail{display:none}}
+
+/* ===== blog (public) ===== */
+.bl{min-height:100svh;display:flex;flex-direction:column}.bl main{flex:1}
+.bh{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.bh-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.bh nav{display:flex;align-items:center;gap:22px;font-size:14.5px;font-weight:500}
+.bh nav a:not(.btn){color:var(--mu)}.bh nav a:not(.btn):hover{color:var(--ink)}
+.bh .btn{min-height:42px;padding:0 18px}
+.bl-hero{padding:clamp(48px,8vw,96px) 0 clamp(24px,4vw,40px);background:var(--sf);border-bottom:1px solid var(--bd)}
+.bl-hero h1{font-size:clamp(32px,5vw,56px);line-height:1.4;font-weight:800}
+.bl-search{display:flex;gap:10px;margin-top:22px;max-width:520px}.bl-search input{flex:1}
+.bl-cats{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border:1px solid var(--bd2);border-radius:99px;font-size:13px;line-height:1;color:var(--mu);background:transparent;transition:border-color .2s,color .2s,background-color .2s}
+a.chip:hover{border-color:var(--pr);color:var(--pr)}.chip.on{border-color:var(--pr);color:var(--pr);background:var(--tint)}.chip small{opacity:.7}
+.bl-list{padding-block:clamp(32px,5vw,56px)}
+.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pc{display:flex;flex-direction:column;background:var(--sf);border:1px solid var(--bd);border-radius:20px;overflow:hidden;transition:border-color .25s,transform .25s}
+.pc:hover{border-color:var(--pr);transform:translateY(-3px)}
+.pc-cover{display:block;aspect-ratio:16/10;background:var(--tint);overflow:hidden}
+.pc-cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.pc:hover .pc-cover img{transform:scale(1.04)}
+.pc-ph{display:grid;place-items:center;height:100%}.pc-ph svg{width:56px;fill:var(--bd2)}
+.pc-body{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:20px;flex:1}
+.pc-body h3{font-size:19px;line-height:1.7}.pc-body h3 a:hover{color:var(--pr)}
+.pc-body p{color:var(--mu);font-size:14.5px;line-height:1.9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pc-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mu);margin-top:auto}
+.pc.big{flex-direction:row;margin-bottom:24px}
+.pc.big .pc-cover{flex:0 0 55%;aspect-ratio:auto;min-height:320px}
+.pc.big .pc-body{padding:clamp(22px,4vw,44px);justify-content:center}
+.pc.big h3{font-size:clamp(22px,3vw,32px)}.pc.big p{font-size:16px;-webkit-line-clamp:4}
+.pager{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:36px;color:var(--mu)}
+.bl-empty{display:grid;justify-items:center;gap:14px;padding:80px 0;text-align:center}
+.bf{border-top:1px solid var(--bd);padding:32px 0;color:var(--mu);font-size:13.5px;text-align:center;line-height:2}.bf a:hover{color:var(--pr)}
+
+.art-draft{background:#fff4d6;color:#5a4310;padding:10px 20px;text-align:center;font-size:14px}.art-draft a{text-decoration:underline}
+.art-head{max-width:860px;padding-top:clamp(36px,6vw,72px)}
+.crumbs{font-size:13.5px;color:var(--mu)}.crumbs a:hover{color:var(--pr)}
+.art-head h1{font-size:clamp(28px,4.4vw,48px);line-height:1.5;font-weight:800;margin:14px 0}
+.art-lead{font-size:18px;color:var(--mu);margin-bottom:16px;max-width:60ch}
+.art-cover{max-width:980px;margin-top:28px}
+.art-cover img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:22px;background:var(--tint)}
+.art-body{max-width:760px;padding-block:32px 56px}
+.prose{font-size:18px;line-height:2.1}
+.prose>*+*{margin-top:1.1em}
+.prose h2{font-size:28px;line-height:1.6;margin-top:1.8em;font-weight:800}
+.prose h3{font-size:22px;line-height:1.7;margin-top:1.5em}
+.prose a{color:var(--pr);text-decoration:underline;text-underline-offset:4px}
+.prose ul,.prose ol{padding-inline-start:1.4em}.prose li+li{margin-top:.4em}
+.prose blockquote{margin-inline:0;padding:14px 20px;border-inline-start:4px solid var(--pr);background:var(--tint);border-radius:12px}
+.prose img{display:block;max-width:100%;height:auto;margin-inline:auto;border-radius:16px}
+.prose hr{border:0;border-top:1px solid var(--bd2);margin-block:2em}
+.prose figure{margin:0}.prose figcaption{font-size:14px;color:var(--mu);text-align:center}
+.art-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.art-share{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:28px;padding-top:20px;border-top:1px solid var(--bd);font-size:14.5px}
+.art-share a{color:var(--pr)}.art-share a:hover{text-decoration:underline}
+.art-cta{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:36px;padding:26px;border:1px solid var(--bd);border-radius:20px;background:var(--tint)}
+.art-cta p{color:var(--mu);font-size:14.5px}
+.art-rel{padding-bottom:72px}.art-rel h2{margin-bottom:22px}
+@media(max-width:900px){.bgrid{grid-template-columns:1fr 1fr}.pc.big{flex-direction:column}.pc.big .pc-cover{flex:none;aspect-ratio:16/10;min-height:0}.bh nav a:not(.btn){display:none}}
+@media(max-width:600px){.bgrid{grid-template-columns:1fr}.bl-search{flex-direction:column}}
+
+
+.logo{min-width:0}.logo>span{min-width:0}.logo b,.logo small{overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+.ftbig{font-family:var(--font),Vazirmatn,Tahoma,sans-serif;direction:rtl;font-size:clamp(52px,15vw,220px);line-height:1.3;letter-spacing:0;color:var(--bd);-webkit-text-stroke:0;padding-inline:12px;overflow-wrap:anywhere}
+.ftbig .fl{display:block}
+.ld-w{font-size:clamp(15px,4vw,22px);text-align:center;padding-inline:16px}
+.hero .h1{overflow-wrap:anywhere}
+</style>
+<script>var d=document.documentElement;d.classList.add('js');if(!matchMedia('(prefers-reduced-motion:reduce)').matches)d.classList.add('motion');try{if(sessionStorage.getItem(('seen:'+location.pathname))==='1')d.classList.add('seen')}catch(e){}if('scrollRestoration' in history)history.scrollRestoration='manual';scrollTo({top:0,left:0,behavior:'instant'})</script>
+</head>
+<body>
+
+<div class="ld" aria-hidden="true"><div class="ld-a"></div><div class="ld-b"></div><div class="ld-c">
+<svg viewBox="0 0 100 110" class="ld-svg"><defs><clipPath id="ldc"><rect class="ld-clip" x="0" y="110" width="100" height="110"/></clipPath></defs><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="{{t:#5EEAD4}}" clip-path="url(#ldc)"/><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="none" stroke="{{t:#5EEAD4}}" stroke-width="2.4" stroke-linejoin="round"/></svg>
+<b class="ld-n">۰</b><span class="ld-w">{{brand}}</span><div class="ld-ln"><i></i></div></div></div>
+
+<div class="sbar" aria-hidden="true"></div><div class="cur" aria-hidden="true"></div>
+<div class="rail" role="group" aria-label="پیشرفت این بخش"><svg viewBox="0 0 36 36" class="rail-ring" aria-hidden="true"><circle cx="18" cy="18" r="15"/><circle class="rail-v" cx="18" cy="18" r="15" pathLength="1"/></svg><span class="rail-t"></span><button type="button" class="rail-skip">رد شدن</button></div>
+
+<div class="fab"><div class="fab-menu"><a href="{{phone_href}}">تماس تلفنی</a><!--if:whatsapp--><a href="{{whatsapp_href}}" target="_blank" rel="noopener noreferrer">واتساپ</a><!--/if:whatsapp--><a href="#book">دریافت نوبت</a></div>
+<button class="fab-btn" type="button" aria-expanded="false" aria-label="راه‌های ارتباط"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg><span>تماس با ما</span></button></div>
+
+<header class="hd dark"><div class="w">
+<a href="#" class="logo" aria-label="{{brand}}"><i class="mk"><svg viewBox="0 0 100 110" aria-hidden="true"><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z"/></svg></i><span><b>{{brand}}</b><small>{{trade}}</small></span></a>
+<nav aria-label="منوی اصلی"><a href="#services">خدمات</a><a href="#why">چرا ما</a><a href="#smile">طراحی لبخند</a><a href="#steps">مراحل نوبت‌گیری</a><a href="#blog">وبلاگ</a><a href="#contact">آدرس</a></nav>
+<div class="hb"><a class="btn o hide" href="{{phone_href}}">تماس</a><a class="btn" data-mag href="#book">دریافت نوبت</a><button class="burger" type="button" aria-label="باز کردن منو" aria-expanded="false"><i></i><i></i><i></i></button></div></div></header>
+
+<div class="mnav" aria-hidden="true"><div class="mtop"><span class="mbrand"><b>{{brand}}</b><small>{{trade}}</small></span><button class="burger open" type="button" aria-label="بستن منو" aria-expanded="false"><i></i><i></i><i></i></button></div>
+<nav class="mlinks"><a href="#services" style="--i:0">خدمات</a><a href="#why" style="--i:1">چرا ما</a><a href="#smile" style="--i:2">طراحی لبخند</a><a href="#steps" style="--i:3">مراحل نوبت‌گیری</a><a href="#blog" style="--i:4">وبلاگ</a><a href="#contact" style="--i:5">آدرس و تماس</a></nav>
+<div class="mact" style="--i:6"><a class="btn o" href="{{phone_href}}">تماس</a><!--if:whatsapp--><a class="btn o" href="{{whatsapp_href}}" target="_blank" rel="noopener noreferrer">واتساپ</a><!--/if:whatsapp--><a class="btn big" href="#book">دریافت نوبت آنلاین</a></div></div>
+
+<main>
+<section class="hero" id="top"><div class="hero-pin">
+<div class="hl hl-b" aria-hidden="true"><div class="w hero-in m-b"><div class="hero-txt"><span class="tag" data-hi>نوبت‌دهی آنلاین</span><div class="h1"><span class="hw"><span>{{brand_first}}</span></span><span class="hw"><span>{{brand_rest}}</span></span><span class="hw"><span>لبخندتان</span></span><span class="hw"><span>را</span></span><span class="hw"><span>روشن‌تر</span></span><span class="hw"><span>می‌کند</span></span></div><p class="lead" data-hi>{{brand}}؛ خدمات تخصصی، محیطی آرام و نوبت‌گیری سریع، بدون انتظار در خط تلفن.</p><div class="cta" data-hi><a class="btn big" data-mag href="#book">همین حالا نوبت بگیرید</a><a class="btn k big" data-mag href="#contact">آدرس کلینیک</a></div></div><div class="hero-art" data-hi><svg viewBox="-6 -6 112 122" aria-hidden="true"><defs><linearGradient id="tgb" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#cdbb7a"/><stop offset="1" stop-color="#8d7b3d"/></linearGradient></defs><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="url(#tgb)"/><ellipse cx="35" cy="40" rx="7" ry="9.1" fill="#5a4310" opacity=".3"/><ellipse cx="62" cy="30" rx="5" ry="6.5" fill="#5a4310" opacity=".3"/><ellipse cx="52" cy="62" rx="8" ry="10.4" fill="#5a4310" opacity=".3"/><ellipse cx="28" cy="70" rx="5" ry="6.5" fill="#5a4310" opacity=".3"/></svg></div></div></div>
+<div class="hl hl-a" aria-hidden="true"><div class="w hero-in m-a"><div class="hero-txt"><span class="tag" data-hi>نوبت‌دهی آنلاین</span><div class="h1"><span class="hw"><span>{{brand_first}}</span></span><span class="hw"><span>{{brand_rest}}</span></span><span class="hw"><span>لبخندتان</span></span><span class="hw"><span>را</span></span><span class="hw"><span>روشن‌تر</span></span><span class="hw"><span>می‌کند</span></span></div><p class="lead" data-hi>{{brand}}؛ خدمات تخصصی، محیطی آرام و نوبت‌گیری سریع، بدون انتظار در خط تلفن.</p><div class="cta" data-hi><a class="btn big" data-mag href="#book">همین حالا نوبت بگیرید</a><a class="btn k big" data-mag href="#contact">آدرس کلینیک</a></div></div><div class="hero-art" data-hi><svg viewBox="-6 -6 112 122" aria-hidden="true"><defs><linearGradient id="tga" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="{{t:#d3f0ea}}"/></linearGradient></defs><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" transform="translate(4 5)" fill="{{t:#cfe5e1}}"/><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="url(#tga)"/><path d="M26 26C28 17 38 13 47 15" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="22" cy="36" r="2.2" fill="#fff"/><path class="spk" style="animation-delay:-0s" fill="{{t:#0F766E}}" d="M88 7L90.5 13.5L97 16L90.5 18.5L88 25L85.5 18.5L79 16L85.5 13.5Z"/><path class="spk" style="animation-delay:-0.8s" fill="{{t:#0F766E}}" d="M8 51.7L9.75 56.25L14.3 58L9.75 59.75L8 64.3L6.25 59.75L1.7 58L6.25 56.25Z"/><path class="spk" style="animation-delay:-1.6s" fill="{{t:#0F766E}}" d="M92 62.8L94 68L99.2 70L94 72L92 77.2L90 72L84.8 70L90 68Z"/></svg></div></div></div>
+<div class="lens" aria-hidden="true"><span class="lens-t"><b class="t1">ماوس را حرکت دهید</b><b class="t2">انگشت را روی صفحه بکشید</b></span></div>
+<div class="hl hl-u"><div class="w hero-in m-u"><div class="hero-txt"><span class="tag" data-hi>نوبت‌دهی آنلاین</span><h1 class="h1"><span class="hw"><span>{{brand_first}}</span></span><span class="hw"><span>{{brand_rest}}</span></span><span class="hw"><span>لبخندتان</span></span><span class="hw"><span>را</span></span><span class="hw"><span>روشن‌تر</span></span><span class="hw"><span>می‌کند</span></span></h1><p class="lead" data-hi>{{brand}}؛ خدمات تخصصی، محیطی آرام و نوبت‌گیری سریع، بدون انتظار در خط تلفن.</p><div class="cta" data-hi><a class="btn big" data-mag href="#book">همین حالا نوبت بگیرید</a><a class="btn k big" data-mag href="#contact">آدرس کلینیک</a></div></div><div class="hero-art" data-hi><svg viewBox="-6 -6 112 122" aria-hidden="true"></svg></div></div></div>
+<a class="hint" href="#services" aria-label="پایین"><i></i></a></div></section>
+
+<div class="tkw" aria-hidden="true"><div class="tk"><div class="tk-in"><span>زیبایی و لمینت<i></i></span><span>ایمپلنت<i></i></span><span>جرم‌گیری و بلیچینگ<i></i></span><span>ترمیم و عصب‌کشی<i></i></span><span>ارتودنسی<i></i></span><span>روکش و پروتز<i></i></span><span>زیبایی و لمینت<i></i></span><span>ایمپلنت<i></i></span><span>جرم‌گیری و بلیچینگ<i></i></span><span>ترمیم و عصب‌کشی<i></i></span><span>ارتودنسی<i></i></span><span>روکش و پروتز<i></i></span></div></div></div>
+
+<section class="stmt"><div class="w"><p class="stmt-t" data-words>{{brand}}؛ جایی که هر لبخند، روشن‌تر و درخشان‌تر می‌شود</p>
+<div class="stats" data-fade><div><b><i data-count="6">۶</i></b><span>خدمت تخصصی</span></div><div><b><i data-count="4">۴</i></b><span>قدم تا ثبت نوبت</span></div><div><b><i data-count="3">۳</i></b><span>دقیقه تا ثبت نوبت</span></div></div></div></section>
+
+<section id="services" class="sv dk"><div class="w sv-in"><div class="sv-txt"><h2 data-split>ببینید درمان چطور انجام می‌شود</h2>
+<p class="sub" data-fade>روی هر خدمت کلیک کنید تا درمانش را روی دندان‌ها ببینید.</p><ul class="sv-list"><li class="on"><button type="button" class="sv-t" aria-pressed="true"><span><b>زیبایی و لمینت</b><small>طراحی لبخند و لمینت سرامیکی</small></span><i class="sv-pg"></i></button><div class="sv-x"><div><span class="how">پوسته‌ی نازک سرامیکی روی دندان‌ها نشانده می‌شود تا لبخند یکدست و روشن شود.</span><a href="#book" class="ln">دریافت نوبت</a></div></div></li><li class=""><button type="button" class="sv-t" aria-pressed="false"><span><b>ایمپلنت</b><small>جایگزینی دندان از دست رفته</small></span><i class="sv-pg"></i></button><div class="sv-x"><div><span class="how">ریشه‌ی تیتانیومی جایگزین دندان از دست‌رفته می‌شود و روکش روی آن قرار می‌گیرد.</span><a href="#book" class="ln">دریافت نوبت</a></div></div></li><li class=""><button type="button" class="sv-t" aria-pressed="false"><span><b>جرم‌گیری و بلیچینگ</b><small>سفیدکردن و پاکسازی حرفه‌ای</small></span><i class="sv-pg"></i></button><div class="sv-x"><div><span class="how">لکه‌ها و جرم برداشته می‌شود و رنگ دندان‌ها چند درجه روشن‌تر می‌شود.</span><a href="#book" class="ln">دریافت نوبت</a></div></div></li><li class=""><button type="button" class="sv-t" aria-pressed="false"><span><b>ترمیم و عصب‌کشی</b><small>درمان پوسیدگی و ریشه</small></span><i class="sv-pg"></i></button><div class="sv-x"><div><span class="how">پوسیدگی تمیز می‌شود و محل آن با ماده‌ی همرنگ دندان پر می‌شود.</span><a href="#book" class="ln">دریافت نوبت</a></div></div></li><li class=""><button type="button" class="sv-t" aria-pressed="false"><span><b>ارتودنسی</b><small>اصلاح ردیف دندان‌ها</small></span><i class="sv-pg"></i></button><div class="sv-x"><div><span class="how">براکت و سیم، دندان‌ها را به‌تدریج هم‌ردیف و مرتب می‌کنند.</span><a href="#book" class="ln">دریافت نوبت</a></div></div></li><li class=""><button type="button" class="sv-t" aria-pressed="false"><span><b>روکش و پروتز</b><small>بازسازی دندان آسیب‌دیده</small></span><i class="sv-pg"></i></button><div class="sv-x"><div><span class="how">دندان آسیب‌دیده آماده می‌شود و با یک روکش کامل بازسازی می‌شود.</span><a href="#book" class="ln">دریافت نوبت</a></div></div></li></ul></div>
+<div class="sv-stage"><svg viewBox="0 0 640 330" role="img" aria-label="نمایش زنده‌ی درمان‌ها روی قوس دندانی"><defs><clipPath id="tclip"><path d="M-15.8 0Q0 -8 15.8 0C22 19.8 22.9 46.2 20.2 59.4Q18.5 66 13.2 66L-13.2 66Q-18.5 66 -20.2 59.4C-22.9 46.2 -22 19.8 -15.8 0Z" transform="translate(96.3 95) rotate(11.8)"/><path d="M-16.6 0Q0 -8 16.6 0C23 21 23.9 49 21.2 63Q19.3 70 13.8 70L-13.8 70Q-19.3 70 -21.2 63C-23.9 49 -23 21 -16.6 0Z" transform="translate(141.9 109.6) rotate(9.5)"/><path d="M-17.3 0Q0 -8 17.3 0C24 25.8 25 60.2 22.1 77.4Q20.2 86 14.4 86L-14.4 86Q-20.2 86 -22.1 77.4C-25 60.2 -24 25.8 -17.3 0Z" transform="translate(189.4 121.3) rotate(7.1)"/><path d="M-17.3 0Q0 -8 17.3 0C24 24 25 56 22.1 72Q20.2 80 14.4 80L-14.4 80Q-20.2 80 -22.1 72C-25 56 -24 24 -17.3 0Z" transform="translate(237.8 129.6) rotate(4.5)"/><path d="M-20.9 0Q0 -8 20.9 0C29 27.6 30.2 64.4 26.7 82.8Q24.4 92 17.4 92L-17.4 92Q-24.4 92 -26.7 82.8C-30.2 64.4 -29 27.6 -20.9 0Z" transform="translate(291 134.3) rotate(1.6)"/><path d="M-20.9 0Q0 -8 20.9 0C29 27.6 30.2 64.4 26.7 82.8Q24.4 92 17.4 92L-17.4 92Q-24.4 92 -26.7 82.8C-30.2 64.4 -29 27.6 -20.9 0Z" transform="translate(349 134.3) rotate(-1.6)"/><path d="M-17.3 0Q0 -8 17.3 0C24 24 25 56 22.1 72Q20.2 80 14.4 80L-14.4 80Q-20.2 80 -22.1 72C-25 56 -24 24 -17.3 0Z" transform="translate(402.2 129.6) rotate(-4.5)"/><path d="M-17.3 0Q0 -8 17.3 0C24 25.8 25 60.2 22.1 77.4Q20.2 86 14.4 86L-14.4 86Q-20.2 86 -22.1 77.4C-25 60.2 -24 25.8 -17.3 0Z" transform="translate(450.6 121.3) rotate(-7.1)"/><path d="M-16.6 0Q0 -8 16.6 0C23 21 23.9 49 21.2 63Q19.3 70 13.8 70L-13.8 70Q-19.3 70 -21.2 63C-23.9 49 -23 21 -16.6 0Z" transform="translate(498.1 109.6) rotate(-9.5)"/><path d="M-15.8 0Q0 -8 15.8 0C22 19.8 22.9 46.2 20.2 59.4Q18.5 66 13.2 66L-13.2 66Q-18.5 66 -20.2 59.4C-22.9 46.2 -22 19.8 -15.8 0Z" transform="translate(543.7 95) rotate(-11.8)"/></clipPath></defs><g id="th0" transform="translate(96.3 95) rotate(11.8)"><g class="ti"><g class="tb"><path class="tt" d="M-15.8 0Q0 -8 15.8 0C22 19.8 22.9 46.2 20.2 59.4Q18.5 66 13.2 66L-13.2 66Q-18.5 66 -20.2 59.4C-22.9 46.2 -22 19.8 -15.8 0Z" fill="#E9DFBE"/><path class="tg" d="M-12.3 7.9Q-14.1 33 -8.8 52.8L-3.5 52.8Q-7 33 -6.2 9.9Z" fill="#fff" opacity=".4"/><path class="to" d="M-15.8 0Q0 -8 15.8 0C22 19.8 22.9 46.2 20.2 59.4Q18.5 66 13.2 66L-13.2 66Q-18.5 66 -20.2 59.4C-22.9 46.2 -22 19.8 -15.8 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><rect class="br" x="-6" y="23.7" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th1" transform="translate(141.9 109.6) rotate(9.5)"><g class="ti"><g class="tb"><path class="tt" d="M-16.6 0Q0 -8 16.6 0C23 21 23.9 49 21.2 63Q19.3 70 13.8 70L-13.8 70Q-19.3 70 -21.2 63C-23.9 49 -23 21 -16.6 0Z" fill="#EDE4C6"/><path class="tg" d="M-12.9 8.4Q-14.7 35 -9.2 56L-3.7 56Q-7.4 35 -6.4 10.5Z" fill="#fff" opacity=".4"/><path class="to" d="M-16.6 0Q0 -8 16.6 0C23 21 23.9 49 21.2 63Q19.3 70 13.8 70L-13.8 70Q-19.3 70 -21.2 63C-23.9 49 -23 21 -16.6 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><rect class="br" x="-6" y="25.5" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th2" transform="translate(189.4 121.3) rotate(7.1)"><g class="ti"><g class="tb"><path class="tt" d="M-17.3 0Q0 -8 17.3 0C24 25.8 25 60.2 22.1 77.4Q20.2 86 14.4 86L-14.4 86Q-20.2 86 -22.1 77.4C-25 60.2 -24 25.8 -17.3 0Z" fill="#E4D8AE"/><path class="tg" d="M-13.4 10.3Q-15.4 43 -9.6 68.8L-3.8 68.8Q-7.7 43 -6.7 12.9Z" fill="#fff" opacity=".4"/><path class="to" d="M-17.3 0Q0 -8 17.3 0C24 25.8 25 60.2 22.1 77.4Q20.2 86 14.4 86L-14.4 86Q-20.2 86 -22.1 77.4C-25 60.2 -24 25.8 -17.3 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><path class="vs" d="M-18.7 0Q0 -8 18.7 0C25.9 27.1 27 63.2 23.8 81.3Q21.8 90.3 15.6 90.3L-15.6 90.3Q-21.8 90.3 -23.8 81.3C-27 63.2 -25.9 27.1 -18.7 0Z" fill="#fff" stroke="{{t:#BDEBE3}}" stroke-width="1.5" opacity="0"/><rect class="br" x="-6" y="32.7" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th3" transform="translate(237.8 129.6) rotate(4.5)"><g class="ti"><g class="tb"><path class="tt" d="M-17.3 0Q0 -8 17.3 0C24 24 25 56 22.1 72Q20.2 80 14.4 80L-14.4 80Q-20.2 80 -22.1 72C-25 56 -24 24 -17.3 0Z" fill="#ECE3C4"/><path class="tg" d="M-13.4 9.6Q-15.4 40 -9.6 64L-3.8 64Q-7.7 40 -6.7 12Z" fill="#fff" opacity=".4"/><path class="to" d="M-17.3 0Q0 -8 17.3 0C24 24 25 56 22.1 72Q20.2 80 14.4 80L-14.4 80Q-20.2 80 -22.1 72C-25 56 -24 24 -17.3 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><path class="vs" d="M-18.7 0Q0 -8 18.7 0C25.9 25.2 27 58.8 23.8 75.6Q21.8 84 15.6 84L-15.6 84Q-21.8 84 -23.8 75.6C-27 58.8 -25.9 25.2 -18.7 0Z" fill="#fff" stroke="{{t:#BDEBE3}}" stroke-width="1.5" opacity="0"/><rect class="br" x="-6" y="30" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th4" transform="translate(291 134.3) rotate(1.6)"><g class="ti"><g class="tb"><path class="tt" d="M-20.9 0Q0 -8 20.9 0C29 27.6 30.2 64.4 26.7 82.8Q24.4 92 17.4 92L-17.4 92Q-24.4 92 -26.7 82.8C-30.2 64.4 -29 27.6 -20.9 0Z" fill="#E8DDB6"/><path class="tg" d="M-16.2 11Q-18.6 46 -11.6 73.6L-4.6 73.6Q-9.3 46 -8.1 13.8Z" fill="#fff" opacity=".4"/><path class="to" d="M-20.9 0Q0 -8 20.9 0C29 27.6 30.2 64.4 26.7 82.8Q24.4 92 17.4 92L-17.4 92Q-24.4 92 -26.7 82.8C-30.2 64.4 -29 27.6 -20.9 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><path class="vs" d="M-22.6 0Q0 -8 22.6 0C31.3 29 32.6 67.6 28.8 86.9Q26.3 96.6 18.8 96.6L-18.8 96.6Q-26.3 96.6 -28.8 86.9C-32.6 67.6 -31.3 29 -22.6 0Z" fill="#fff" stroke="{{t:#BDEBE3}}" stroke-width="1.5" opacity="0"/><rect class="br" x="-6" y="35.4" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th5" transform="translate(349 134.3) rotate(-1.6)"><g class="ti"><g class="tb"><path class="tt" d="M-20.9 0Q0 -8 20.9 0C29 27.6 30.2 64.4 26.7 82.8Q24.4 92 17.4 92L-17.4 92Q-24.4 92 -26.7 82.8C-30.2 64.4 -29 27.6 -20.9 0Z" fill="#E9DFBE"/><path class="tg" d="M-16.2 11Q-18.6 46 -11.6 73.6L-4.6 73.6Q-9.3 46 -8.1 13.8Z" fill="#fff" opacity=".4"/><path class="to" d="M-20.9 0Q0 -8 20.9 0C29 27.6 30.2 64.4 26.7 82.8Q24.4 92 17.4 92L-17.4 92Q-24.4 92 -26.7 82.8C-30.2 64.4 -29 27.6 -20.9 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><path class="vs" d="M-22.6 0Q0 -8 22.6 0C31.3 29 32.6 67.6 28.8 86.9Q26.3 96.6 18.8 96.6L-18.8 96.6Q-26.3 96.6 -28.8 86.9C-32.6 67.6 -31.3 29 -22.6 0Z" fill="#fff" stroke="{{t:#BDEBE3}}" stroke-width="1.5" opacity="0"/><path class="cr" d="M-21.7 0Q0 -8 21.7 0C30.2 28.2 31.4 65.7 27.7 84.5Q25.3 93.84 18.1 93.84L-18.1 93.84Q-25.3 93.84 -27.7 84.5C-31.4 65.7 -30.2 28.2 -21.7 0Z" fill="#fff" stroke="#E3B94E" stroke-width="2.4" opacity="0"/><rect class="br" x="-6" y="35.4" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th6" transform="translate(402.2 129.6) rotate(-4.5)"><g class="ti"><g class="tb"><path class="tt" d="M-17.3 0Q0 -8 17.3 0C24 24 25 56 22.1 72Q20.2 80 14.4 80L-14.4 80Q-20.2 80 -22.1 72C-25 56 -24 24 -17.3 0Z" fill="#EDE4C6"/><path class="tg" d="M-13.4 9.6Q-15.4 40 -9.6 64L-3.8 64Q-7.7 40 -6.7 12Z" fill="#fff" opacity=".4"/><path class="to" d="M-17.3 0Q0 -8 17.3 0C24 24 25 56 22.1 72Q20.2 80 14.4 80L-14.4 80Q-20.2 80 -22.1 72C-25 56 -24 24 -17.3 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><path class="vs" d="M-18.7 0Q0 -8 18.7 0C25.9 25.2 27 58.8 23.8 75.6Q21.8 84 15.6 84L-15.6 84Q-21.8 84 -23.8 75.6C-27 58.8 -25.9 25.2 -18.7 0Z" fill="#fff" stroke="{{t:#BDEBE3}}" stroke-width="1.5" opacity="0"/><circle class="cv" cx="4.8" cy="40" r="8" fill="#5b4521" opacity="0"/><rect class="br" x="-6" y="30" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th7" transform="translate(450.6 121.3) rotate(-7.1)"><g class="ti"><g class="tb"><path class="tt" d="M-17.3 0Q0 -8 17.3 0C24 25.8 25 60.2 22.1 77.4Q20.2 86 14.4 86L-14.4 86Q-20.2 86 -22.1 77.4C-25 60.2 -24 25.8 -17.3 0Z" fill="#E4D8AE"/><path class="tg" d="M-13.4 10.3Q-15.4 43 -9.6 68.8L-3.8 68.8Q-7.7 43 -6.7 12.9Z" fill="#fff" opacity=".4"/><path class="to" d="M-17.3 0Q0 -8 17.3 0C24 25.8 25 60.2 22.1 77.4Q20.2 86 14.4 86L-14.4 86Q-20.2 86 -22.1 77.4C-25 60.2 -24 25.8 -17.3 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><path class="vs" d="M-18.7 0Q0 -8 18.7 0C25.9 27.1 27 63.2 23.8 81.3Q21.8 90.3 15.6 90.3L-15.6 90.3Q-21.8 90.3 -23.8 81.3C-27 63.2 -25.9 27.1 -18.7 0Z" fill="#fff" stroke="{{t:#BDEBE3}}" stroke-width="1.5" opacity="0"/><rect class="br" x="-6" y="32.7" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th8" transform="translate(498.1 109.6) rotate(-9.5)"><g class="ti"><g class="tb"><path class="tt" d="M-16.6 0Q0 -8 16.6 0C23 21 23.9 49 21.2 63Q19.3 70 13.8 70L-13.8 70Q-19.3 70 -21.2 63C-23.9 49 -23 21 -16.6 0Z" fill="#ECE3C4"/><path class="tg" d="M-12.9 8.4Q-14.7 35 -9.2 56L-3.7 56Q-7.4 35 -6.4 10.5Z" fill="#fff" opacity=".4"/><path class="to" d="M-16.6 0Q0 -8 16.6 0C23 21 23.9 49 21.2 63Q19.3 70 13.8 70L-13.8 70Q-19.3 70 -21.2 63C-23.9 49 -23 21 -16.6 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><rect class="br" x="-6" y="25.5" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><g id="th9" transform="translate(543.7 95) rotate(-11.8)"><g class="ti"><g class="tb"><path class="tt" d="M-15.8 0Q0 -8 15.8 0C22 19.8 22.9 46.2 20.2 59.4Q18.5 66 13.2 66L-13.2 66Q-18.5 66 -20.2 59.4C-22.9 46.2 -22 19.8 -15.8 0Z" fill="#E8DDB6"/><path class="tg" d="M-12.3 7.9Q-14.1 33 -8.8 52.8L-3.5 52.8Q-7 33 -6.2 9.9Z" fill="#fff" opacity=".4"/><path class="to" d="M-15.8 0Q0 -8 15.8 0C22 19.8 22.9 46.2 20.2 59.4Q18.5 66 13.2 66L-13.2 66Q-18.5 66 -20.2 59.4C-22.9 46.2 -22 19.8 -15.8 0Z" fill="none" stroke="{{t:rgba(11,31,34,.25)}}" stroke-width="1.2"/></g><rect class="br" x="-6" y="23.7" width="12" height="12" rx="3" fill="{{t:#E6EFF0}}" stroke="{{t:#7E979C}}" stroke-width="1.2" opacity="0"/></g></g><path id="wire" class="sv-wire" d="M90.2 124L136.7 140.7L184.6 159.8L235 165.5L289.9 175.7L350.1 175.7L405 165.5L455.4 159.8L503.3 140.7L549.8 124" pathLength="1" fill="none" stroke="{{t:#C7D6D9}}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M45 58.5L70 69L95 78.5L120 87L145 94.5L170 101L195 106.5L220 111L245 114.5L270 117L295 118.5L320 119L345 118.5L370 117L395 114.5L420 111L445 106.5L470 101L495 94.5L520 87L545 78.5L570 69L595 58.5" fill="none" stroke="#C24D66" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/><path d="M45 49.5L70 60L95 69.5L120 78L145 85.5L170 92L195 97.5L220 102L245 105.5L270 108L295 109.5L320 110L345 109.5L370 108L395 105.5L420 102L445 97.5L470 92L495 85.5L520 78L545 69.5L570 60L595 49.5" fill="none" stroke="#DA6F85" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/><g transform="translate(237.8 113.6)"><g id="scw" opacity="0"><rect x="-8" y="-30" width="16" height="58" rx="3" fill="{{t:#A9BEC2}}"/><path d="M-8 -20H8" stroke="{{t:#6E8A90}}" stroke-width="2"/><path d="M-8 -10H8" stroke="{{t:#6E8A90}}" stroke-width="2"/><path d="M-8 0H8" stroke="{{t:#6E8A90}}" stroke-width="2"/><path d="M-8 10H8" stroke="{{t:#6E8A90}}" stroke-width="2"/><path d="M-8 20H8" stroke="{{t:#6E8A90}}" stroke-width="2"/><rect x="-11" y="-42" width="22" height="12" rx="3" fill="{{t:#8EA7AC}}"/></g></g><path class="sp" d="M150 86.8L153.6 96.4L163.2 100L153.6 103.6L150 113.2L146.4 103.6L136.8 100L146.4 96.4Z" fill="#fff" opacity="0"/><path class="sp" d="M250 68.1L252.7 75.3L259.9 78L252.7 80.7L250 87.9L247.3 80.7L240.1 78L247.3 75.3Z" fill="#fff" opacity="0"/><path class="sp" d="M330 60.1L332.7 67.3L339.9 70L332.7 72.7L330 79.9L327.3 72.7L320.1 70L327.3 67.3Z" fill="#fff" opacity="0"/><path class="sp" d="M410 64.8L413.6 74.4L423.2 78L413.6 81.6L410 91.2L406.4 81.6L396.8 78L406.4 74.4Z" fill="#fff" opacity="0"/><path class="sp" d="M500 90.1L502.7 97.3L509.9 100L502.7 102.7L500 109.9L497.3 102.7L490.1 100L497.3 97.3Z" fill="#fff" opacity="0"/><path class="sp" d="M215 245.1L217.7 252.3L224.9 255L217.7 257.7L215 264.9L212.3 257.7L205.1 255L212.3 252.3Z" fill="#fff" opacity="0"/><path class="sp" d="M320 254.8L323.6 264.4L333.2 268L323.6 271.6L320 281.2L316.4 271.6L306.8 268L316.4 264.4Z" fill="#fff" opacity="0"/><path class="sp" d="M430 245.1L432.7 252.3L439.9 255L432.7 257.7L430 264.9L427.3 257.7L420.1 255L427.3 252.3Z" fill="#fff" opacity="0"/><g clip-path="url(#tclip)"><rect class="wipe" x="-90" y="60" width="64" height="260" fill="#fff" opacity="0" transform="skewX(-16)"/></g></svg><button type="button" class="sv-re">پخش دوباره</button></div></div></section>
+
+<section id="why" class="wy"><div class="w wy-in"><div class="wy-stage"><div class="wy-ring" aria-hidden="true"></div>
+<svg viewBox="0 0 100 110" class="wy-svg" aria-hidden="true"><defs><clipPath id="wyc"><rect x="0" y="110" width="100" height="110"/></clipPath></defs><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="var(--bd)"/><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="var(--pr)" clip-path="url(#wyc)"/><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z" fill="none" stroke="var(--pr)" stroke-width="1.6" stroke-linejoin="round"/></svg>
+<div class="wy-dots"><button type="button" aria-label="مرحله ۱: معاینه و مشاوره" class="on"></button><button type="button" aria-label="مرحله ۲: برنامه‌ی درمان شفاف" class=""></button><button type="button" aria-label="مرحله ۳: درمان در آرامش" class=""></button><button type="button" aria-label="مرحله ۴: لبخندی طبیعی" class=""></button><button type="button" aria-label="مرحله ۵: ارتباط و نوبت بعدی" class=""></button></div></div>
+<div class="wy-txt"><h2 data-split>مسیر یک لبخند، قدم‌به‌قدم</h2><div class="wy-list"><div class="wy-ch"><b class="wy-n">۱</b><h3>معاینه و مشاوره</h3><p>پیش از هر اقدامی، با دقت گوش می‌دهیم و وضعیت دندان‌هایتان را بررسی می‌کنیم.</p></div><div class="wy-ch"><b class="wy-n">۲</b><h3>برنامه‌ی درمان شفاف</h3><p>مراحل و گزینه‌های درمان را روشن توضیح می‌دهیم تا با آگاهی تصمیم بگیرید.</p></div><div class="wy-ch"><b class="wy-n">۳</b><h3>درمان در آرامش</h3><p>فضایی آرام و برنامه‌ریزی دقیق، تا درمان تجربه‌ای راحت باشد.</p></div><div class="wy-ch"><b class="wy-n">۴</b><h3>لبخندی طبیعی</h3><p>هدف ما نتیجه‌ای است که با چهره‌ی شما هماهنگ باشد و سلامت دندان‌ها را حفظ کند.</p></div><div class="wy-ch"><b class="wy-n">۵</b><h3>ارتباط و نوبت بعدی</h3><p>بعد از درمان هم در دسترس هستید؛ نوبت آنلاین، تماس و واتساپ.</p></div></div><a class="btn" data-mag href="#book">دریافت نوبت</a></div></div></section>
+
+<section id="smile" class="sm dk"><div class="w sm-in"><div><h2 data-split>تفاوت یک لبخند را ببینید</h2>
+<p class="sub">اسکرول کنید تا لبخند روشن‌تر شود، یا دستگیره را خودتان بکشید. (تصویر گرافیکی نمونه، نه نتیجه‌ی بیمار)</p><a class="btn" data-mag href="#book">مشاوره‌ی لبخند بگیرید</a></div><div class="ba" dir="ltr" data-ba style="--p:50"><div class="ba-l"><svg viewBox="0 0 400 220" class="ba-svg" aria-hidden="true"><defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eadc9c"/><stop offset="1" stop-color="#bf9f45"/></linearGradient></defs><path d="M20 70Q200 -10 380 70Q380 190 200 205Q20 190 20 70Z" fill="#a14258"/><path d="M50 85Q200 20 350 85Q340 170 200 185Q60 170 50 85Z" fill="#3b0f1c"/><rect x="62" y="90" width="34" height="52" rx="14" fill="url(#gb)" transform="rotate(-7 79 90)"/><rect x="98" y="76.2857" width="34" height="55.9184" rx="14" fill="url(#gb)" transform="rotate(-5 115 76.2857)"/><rect x="134" y="67.1429" width="34" height="58.5306" rx="14" fill="url(#gb)" transform="rotate(-3 151 67.1429)"/><rect x="170" y="62.5714" width="34" height="59.8367" rx="14" fill="url(#gb)" transform="rotate(-1 187 62.5714)"/><rect x="206" y="62.5714" width="34" height="59.8367" rx="14" fill="url(#gb)" transform="rotate(1 223 62.5714)"/><rect x="242" y="67.1429" width="34" height="58.5306" rx="14" fill="url(#gb)" transform="rotate(3 259 67.1429)"/><rect x="278" y="76.2857" width="34" height="55.9184" rx="14" fill="url(#gb)" transform="rotate(5 295 76.2857)"/><rect x="314" y="90" width="34" height="52" rx="14" fill="url(#gb)" transform="rotate(7 331 90)"/><ellipse cx="98" cy="100" rx="9" ry="12" fill="#7a5a14" opacity=".25"/><ellipse cx="170" cy="92" rx="9" ry="12" fill="#7a5a14" opacity=".25"/><ellipse cx="236" cy="104" rx="9" ry="12" fill="#7a5a14" opacity=".25"/><ellipse cx="300" cy="98" rx="9" ry="12" fill="#7a5a14" opacity=".25"/></svg></div><div class="ba-l a"><svg viewBox="0 0 400 220" class="ba-svg" aria-hidden="true"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="{{t:#d4f4ee}}"/></linearGradient></defs><path d="M20 70Q200 -10 380 70Q380 190 200 205Q20 190 20 70Z" fill="#a14258"/><path d="M50 85Q200 20 350 85Q340 170 200 185Q60 170 50 85Z" fill="#3b0f1c"/><rect x="62" y="90" width="34" height="52" rx="14" fill="url(#ga)" transform="rotate(-7 79 90)"/><rect x="98" y="76.2857" width="34" height="55.9184" rx="14" fill="url(#ga)" transform="rotate(-5 115 76.2857)"/><rect x="134" y="67.1429" width="34" height="58.5306" rx="14" fill="url(#ga)" transform="rotate(-3 151 67.1429)"/><rect x="170" y="62.5714" width="34" height="59.8367" rx="14" fill="url(#ga)" transform="rotate(-1 187 62.5714)"/><rect x="206" y="62.5714" width="34" height="59.8367" rx="14" fill="url(#ga)" transform="rotate(1 223 62.5714)"/><rect x="242" y="67.1429" width="34" height="58.5306" rx="14" fill="url(#ga)" transform="rotate(3 259 67.1429)"/><rect x="278" y="76.2857" width="34" height="55.9184" rx="14" fill="url(#ga)" transform="rotate(5 295 76.2857)"/><rect x="314" y="90" width="34" height="52" rx="14" fill="url(#ga)" transform="rotate(7 331 90)"/><g class="spk-w" transform="translate(96 70) scale(1)"><path class="spk" style="animation-delay:-0s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z" fill="#fff"/></g><g class="spk-w" transform="translate(200 40) scale(1.3)"><path class="spk" style="animation-delay:-0.5s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z" fill="#fff"/></g><g class="spk-w" transform="translate(304 70) scale(1)"><path class="spk" style="animation-delay:-1s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z" fill="#fff"/></g><g class="spk-w" transform="translate(150 160) scale(0.8)"><path class="spk" style="animation-delay:-1.5s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z" fill="#fff"/></g><g class="spk-w" transform="translate(262 158) scale(0.8)"><path class="spk" style="animation-delay:-2s" d="M0-12L3-3 12 0 3 3 0 12-3 3-12 0-3-3Z" fill="#fff"/></g></svg></div><span class="tg l">بعد</span><span class="tg r">قبل</span><div class="hn"><i>⇆</i></div><input class="rg" type="range" min="0" max="100" value="50" aria-label="مقایسه قبل و بعد"></div></div></section>
+
+<section id="blog" class="band"><div class="w"><div class="cta-row"><div class="sh"><h2 data-split>تازه‌ترین مقاله‌های وبلاگ</h2>
+<p class="sub" data-fade>نکته‌هایی ساده درباره‌ی سلامت دهان و دندان و زیبایی لبخند.</p></div><a class="btn o" href="#blog">همه‌ی مقاله‌ها</a></div>
+<div class="bgrid" data-fade><article class="pc"><a href="#blog" class="pc-cover" tabindex="-1"><span class="pc-ph" aria-hidden="true"><svg viewBox="0 0 100 110"><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z"/></svg></span></a><div class="pc-body"><span class="chip">مراقبت روزانه</span><h3><a href="#blog">پنج عادت ساده برای حفظ سلامت لثه</a></h3><p>نکته‌هایی کوتاه درباره‌ی مسواک، نخ دندان و مراجعه‌ی منظم که در روزمره‌تان جا می‌گیرد.</p><div class="pc-meta"><span>۱۸ مهر ۱۴۰۵</span><span>۴ دقیقه مطالعه</span></div></div></article><article class="pc"><a href="#blog" class="pc-cover" tabindex="-1"><span class="pc-ph" aria-hidden="true"><svg viewBox="0 0 100 110"><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z"/></svg></span></a><div class="pc-body"><span class="chip">زیبایی</span><h3><a href="#blog">لمینت چیست و برای چه کسانی مناسب است؟</a></h3><p>مروری ساده بر مراحل طراحی لبخند و پرسش‌هایی که پیش از شروع باید بپرسید.</p><div class="pc-meta"><span>۹ مهر ۱۴۰۵</span><span>۶ دقیقه مطالعه</span></div></div></article><article class="pc"><a href="#blog" class="pc-cover" tabindex="-1"><span class="pc-ph" aria-hidden="true"><svg viewBox="0 0 100 110"><path d="M50 8C36 2 12 6 12 34c0 16 8 24 10 42 2 16 8 30 14 30 8 0 8-24 14-24s6 24 14 24c6 0 12-14 14-30 2-18 10-26 10-42C88 6 64 2 50 8z"/></svg></span></a><div class="pc-body"><span class="chip">ایمپلنت</span><h3><a href="#blog">پیش از ایمپلنت چه چیزهایی را باید بدانید؟</a></h3><p>از معاینه‌ی اولیه تا دوره‌ی بعد از جراحی؛ مسیر کلی کاشت دندان به زبان ساده.</p><div class="pc-meta"><span>۲ مهر ۱۴۰۵</span><span>۵ دقیقه مطالعه</span></div></div></article></div></div></section>
+
+<section id="steps" class="band tint"><div class="w bkg"><div><h2 data-split>نوبت خود را همین حالا بگیرید</h2>
+<p class="sub" data-fade>نوبت‌گیری در چهار قدم ساده؛ درخواست را آماده کنید و با یک لمس برای کلینیک بفرستید.</p><ol class="bs"><li data-fade="0"><div><b>انتخاب خدمت</b><span>مشاوره، جرم‌گیری، ایمپلنت، لمینت و ...</span></div></li><li data-fade="0.08"><div><b>روز و ساعت</b><span>یکی از ساعت‌های پیشنهادی را انتخاب کنید</span></div></li><li data-fade="0.16"><div><b>مشخصات شما</b><span>فقط نام و شماره موبایل</span></div></li><li data-fade="0.24"><div><!--if:whatsapp--><b>تایید با واتساپ</b><span>درخواست را با یک لمس برای منشی بفرستید</span><!--/if:whatsapp--><!--ifnot:whatsapp--><b>تایید تلفنی</b><span>برای قطعی‌شدن نوبت با کلینیک تماس بگیرید</span><!--/ifnot:whatsapp--></div></li></ol></div>
+<div id="book"></div></div></section>
+
+<div class="dk"><section id="contact" class="band" style="border-top:0"><div class="w">
+<div class="cta-row"><div class="sh"><h2 data-split>تماس و آدرس</h2><p class="sub" data-fade>برای نوبت یا مشاوره با ما در ارتباط باشید</p></div><a class="btn big" data-mag href="#book">دریافت نوبت</a></div>
+<div class="info" data-fade>
+<!--if:address--><div class="ci"><small>آدرس</small><p>{{address}}</p><a class="btn o" target="_blank" rel="noopener noreferrer" href="{{map_url}}">مسیریابی</a></div><!--/if:address-->
+<!--each:phones--><a class="ci" href="{{phone_href}}"><small>تماس<!--if:whatsapp--> / واتساپ<!--/if:whatsapp--></small><span class="ph" dir="ltr">{{phone}}</span></a><!--/each:phones-->
+<!--if:hours--><div class="ci"><small>ساعت کاری</small><p>{{hours}}</p></div><!--/if:hours-->
+<!--if:instagram--><a class="ci" target="_blank" rel="noopener noreferrer" href="{{instagram_href}}"><small>اینستاگرام</small><span class="ph" dir="ltr">{{instagram}}</span></a><!--/if:instagram-->
+</div></div>
+<div class="ftbig" aria-hidden="true"><span class="fl">{{brand}}</span></div>
+<footer class="ft w">© {{brand}} · {{trade}}<!--if:address--> · {{address}}<!--/if:address--></footer></section></div>
+</main>
+<div class="bar"><a class="btn o" href="{{phone_href}}">تماس</a><a class="btn" href="#book">دریافت نوبت</a></div>
+
+<script>document.querySelectorAll(".hw").forEach(function(h){if(!h.textContent.trim())h.remove()})</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(function(){
+if(!window.gsap||!window.ScrollTrigger||!window.Lenis){document.documentElement.classList.remove("js","motion");var l=document.querySelector(".ld");if(l)l.remove();return;}
+gsap.registerPlugin(ScrollTrigger);
+const fa = (n) => String(n).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const q = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp01 = gsap.utils.clamp(0, 1);
+
+// شکستن متن به کلمه (نه حرف؛ حروف فارسی به‌هم می‌چسبند)
+function splitWords(el, cls) {
+  if (el.dataset.sp) return;
+  el.dataset.sp = '1';
+  const nodes = [];
+  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  while (w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach((n) => {
+    const f = document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach((p) => {
+      if (!p.trim()) { f.append(p); return; }
+      const o = document.createElement('span'); o.className = cls;
+      const i = document.createElement('span'); i.textContent = p;
+      o.append(i); f.append(o);
+    });
+    n.replaceWith(f);
+  });
+}
+
+
+    const H = document.documentElement;
+    if (matchMedia('(prefers-reduced-motion:reduce)').matches) { H.classList.remove('motion'); return; }
+
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    q('[data-split]').forEach((el) => splitWords(el, 'sw'));
+    q('[data-words]').forEach((el) => splitWords(el, 'sx'));
+
+    // ---------- اسکرول نرم ----------
+    const lenis = new Lenis({ duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), touchMultiplier: 1.4 });
+    window.__lenis = lenis;
+    lenis.on('scroll', ScrollTrigger.update);
+    const tick = (t) => lenis.raf(t * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    if (H.classList.contains('js') && !H.classList.contains('seen') && !window.__noraIntro) lenis.stop();
+
+    const cleanups = [];
+    const ease3 = (t) => 1 - Math.pow(1 - t, 3);
+
+    const rail = q('.rail')[0], railT = q('.rail-t')[0], railSkip = q('.rail-skip')[0];
+    let activePin = null;
+
+    // «ریل راهنما»: وقتی صفحه روی یک بخش قفل است، درصد پیشرفت و دکمه‌ی «رد شدن» نشان می‌دهد
+    const watch = (pin, label) => ScrollTrigger.create({
+      start: () => pin.start, end: () => pin.end,
+      onToggle: (s) => {
+        if (s.isActive) { activePin = pin; railT.textContent = label; rail.classList.add('on'); }
+        else if (activePin === pin) { activePin = null; rail.classList.remove('on'); }
+      },
+      onUpdate: (s) => { if (activePin === pin) rail.style.setProperty('--rp', s.progress.toFixed(3)); },
+    });
+    const onSkip = () => { if (activePin) lenis.scrollTo(activePin.end + 6, { duration: 1.3, easing: ease3 }); };
+    railSkip.addEventListener('click', onSkip);
+    cleanups.push(() => railSkip.removeEventListener('click', onSkip));
+
+    // مغناطیس نقاط توقف: بعد از ایستادن اسکرول، نزدیک‌ترین «مرحله» را می‌گیرد
+    const addSnap = (pin, pts) => {
+      let tmr;
+      const on = () => {
+        clearTimeout(tmr);
+        if (!pin.isActive) return;
+        tmr = setTimeout(() => {
+          if (!pin.isActive) return;
+          const p = pin.progress;
+          if (p < 0.03 || p > 0.97) return;
+          let best = pts[0];
+          pts.forEach((x) => { if (Math.abs(x - p) < Math.abs(best - p)) best = x; });
+          if (Math.abs(best - p) < 0.004) return;
+          lenis.scrollTo(pin.start + best * (pin.end - pin.start), { duration: 0.8, easing: ease3 });
+        }, 140);
+      };
+      lenis.on('scroll', on);
+      cleanups.push(() => { clearTimeout(tmr); lenis.off('scroll', on); });
+    };
+
+    // ورود نرم به بخش‌های قفل‌شونده: قبل از قفل شدن، کم‌کم بزرگ و پررنگ می‌شوند
+    const enter = (sel) => {
+      const el = q(sel)[0];
+      if (!el) return;
+      gsap.fromTo(el, { scale: 0.95, opacity: 0.25 }, {
+        scale: 1, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'top top', scrub: true },
+      });
+    };
+    const splitIn = (el, trig) => {
+      const w = q('.sw>span', el);
+      gsap.set(w, { yPercent: 115 });
+      gsap.to(w, { yPercent: 0, duration: 1.1, ease: 'expo.out', stagger: 0.07, scrollTrigger: { trigger: trig, start: trig === el ? 'top 88%' : 'top 60%', once: true } });
+    };
+
+    const ctx = gsap.context(() => {
+      const hd = q('.hd')[0], bar = q('.sbar')[0];
+
+      lenis.on('scroll', (l) => {
+        if (bar) bar.style.transform = `scaleX(${l.progress || 0})`;
+        hd?.classList.toggle('sc', l.scroll > 12);
+        if (l.direction === 1 && l.scroll > 500) hd?.classList.add('up');
+        else if (l.direction === -1) hd?.classList.remove('up');
+      });
+      // ================= ۱) هیرو: عدسی روشن‌کننده =================
+      gsap.set('.hw>span', { yPercent: 115 });
+      const hero = q('.hero')[0], pin = q('.hero-pin')[0];
+      const L = { x: innerWidth * 0.5, y: innerHeight * 0.5, k: 0 };
+      let prog = 0, moved = false, introTl = null, roam = null;
+      const R0 = () => Math.max(96, Math.min(190, innerWidth * 0.14));
+      const MAXR = () => Math.hypot(innerWidth, innerHeight) * 1.02;
+      const apply = () => {
+        const e = ease3(clamp01(prog / 0.7));
+        pin.style.setProperty('--x', L.x.toFixed(1) + 'px');
+        pin.style.setProperty('--y', L.y.toFixed(1) + 'px');
+        pin.style.setProperty('--r', gsap.utils.interpolate(R0() * L.k, MAXR(), e).toFixed(1) + 'px');
+      };
+      gsap.ticker.add(apply); cleanups.push(() => gsap.ticker.remove(apply));
+
+      const xTo = gsap.quickTo(L, 'x', { duration: 0.5, ease: 'power3' });
+      const yTo = gsap.quickTo(L, 'y', { duration: 0.5, ease: 'power3' });
+      const onMove = (e) => {
+        const r = pin.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;
+        xTo(e.clientX - r.left); yTo(e.clientY - r.top);
+        if (!moved) { moved = true; pin.classList.add('moved'); introTl?.kill(); roam?.kill(); }
+      };
+      hero.addEventListener('pointermove', onMove, { passive: true });
+      hero.addEventListener('pointerdown', onMove, { passive: true });
+      cleanups.push(() => { hero.removeEventListener('pointermove', onMove); hero.removeEventListener('pointerdown', onMove); });
+
+      // اسکرول: عدسی بزرگ می‌شود تا کل صفحه روشن شود؛ رنگ هدر هم همراهش عوض می‌شود
+      ScrollTrigger.create({
+        trigger: hero, start: 'top top', end: 'bottom bottom', scrub: true,
+        onUpdate: (s) => { prog = s.progress; hd?.classList.toggle('dark', prog < 0.45); },
+      });
+
+      const heroIntro = () => {
+        const pr = pin.getBoundingClientRect();
+        const h1 = q('.m-u .h1', pin)[0].getBoundingClientRect();
+        const art = q('.m-u .hero-art', pin)[0].getBoundingClientRect();
+        const tx = h1.left + h1.width * 0.5 - pr.left, ty = h1.top + h1.height * 0.5 - pr.top;
+        const ax = art.left + art.width / 2 - pr.left, ay = art.top + art.height / 2 - pr.top;
+        if (!moved) { L.x = tx; L.y = ty; }
+        introTl = gsap.timeline({ delay: 0.15 });
+        introTl.to(L, { k: 1, duration: 1.2, ease: 'back.out(1.5)' });
+        if (!moved) introTl.to(L, { x: ax, y: ay, duration: 1.7, ease: 'power2.inOut' }, '+=0.2');
+        if (matchMedia('(pointer:coarse)').matches) {
+          introTl.add(() => {
+            const go = () => {
+              const r = pin.getBoundingClientRect();
+              roam = gsap.to(L, { x: gsap.utils.random(r.width * 0.15, r.width * 0.85), y: gsap.utils.random(r.height * 0.2, r.height * 0.8), duration: 2.6, ease: 'sine.inOut', onComplete: go });
+            };
+            go();
+          });
+        }
+      };
+      const intro = () => {
+        H.classList.add('ready');
+        lenis.start();
+        const tl = gsap.timeline();
+        tl.to('.hw>span', { yPercent: 0, duration: 1.25, ease: 'expo.out', stagger: 0.08 });
+        ['.hero .tag', '.hero .lead', '.hero .cta', '.hero .hero-art'].forEach((sel, i) => {
+          tl.to(sel, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.35 + i * 0.12);
+        });
+        heroIntro();
+        setTimeout(() => ScrollTrigger.refresh(), 120);
+      };
+      if (window.__noraIntro) intro();
+      else { window.addEventListener('nora:intro', intro, { once: true }); cleanups.push(() => window.removeEventListener('nora:intro', intro)); }
+
+      // ================= نوار متحرک =================
+      const tk = q('.tk-in')[0];
+      if (tk) {
+        const tw = gsap.to(tk, { xPercent: 50, duration: 30, ease: 'none', repeat: -1 });
+        ScrollTrigger.create({
+          trigger: '.tk', start: 'top bottom', end: 'bottom top',
+          onUpdate: (s) => tw.timeScale(1 + Math.min(7, Math.abs(s.getVelocity()) / 350)),
+        });
+        const decay = () => { const t = tw.timeScale(); if (t > 1) tw.timeScale(Math.max(1, t * 0.94)); };
+        gsap.ticker.add(decay); cleanups.push(() => gsap.ticker.remove(decay));
+      }
+
+      // ================= ۲) بیانیه =================
+      const sx = q('.stmt .sx');
+      if (sx.length) {
+        gsap.fromTo(sx, { opacity: 0.14 }, {
+          opacity: 1, stagger: 0.12, ease: 'none',
+          scrollTrigger: { trigger: '.stmt-t', start: 'top 78%', end: 'bottom 52%', scrub: true },
+        });
+      }
+      q('[data-count]').forEach((el) => {
+        const to = +el.dataset.count, pre = el.dataset.pre || '', o = { v: 0 };
+        gsap.to(o, {
+          v: to, duration: 1.8, ease: 'power3.out',
+          onUpdate: () => { el.textContent = pre + fa(Math.round(o.v)); },
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+        });
+      });
+
+      // ================= ۳) خدمات: کلیک روی هر خدمت → اجرای انیمیشن همان درمان =================
+      const sv = q('.sv')[0];
+      if (sv) {
+        const items = q('.sv-list li', sv), btns = q('.sv-t', sv), pgs = q('.sv-pg', sv);
+        const svg = q('.sv-stage svg', sv)[0], stage = q('.sv-stage', sv)[0], replay = q('.sv-re', sv)[0];
+        const E = (sel) => q(sel, sv);
+        const ti = (i) => sv.querySelector(`#th${i} .ti`);
+        const allTi = E('.ti');
+        splitIn(q('h2', sv)[0], sv);
+
+        // برگرداندن همه‌چیز به حالت پایه (قبل از اجرای هر درمان)
+        const base = () => {
+          gsap.set(allTi, { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1 });
+          gsap.set(E('.tt'), { clearProps: 'fill' });
+          gsap.set(E('.vs'), { y: -70, opacity: 0 });
+          gsap.set(E('.cv'), { clearProps: 'fill,stroke,strokeWidth' });
+          gsap.set(E('.cv'), { scale: 0, opacity: 0 });
+          gsap.set('#scw', { y: 110, opacity: 0 });
+          gsap.set(E('.cr'), { y: -120, opacity: 0 });
+          gsap.set(E('.br'), { scale: 0, opacity: 0 });
+          gsap.set(E('.sp'), { scale: 0, opacity: 0 });
+          gsap.set(E('.wipe'), { x: -120, opacity: 0 });
+          gsap.set('#wire', { strokeDashoffset: 1, opacity: 1 });
+          gsap.set('#th5 .tb', { scaleX: 1, scaleY: 1 });
+        };
+        base();
+
+        const CK = [[-5, 4, -9], [4, -5, 8], [-8, 6, -12], [5, -3, 10], [-3, 4, -6], [6, -4, 9], [-5, 5, -10], [7, -6, 12], [-4, 3, -8], [5, -2, 7]];
+        const mk = () => gsap.timeline({ paused: true, defaults: { ease: 'power2.out' } });
+        const dim = (tl, keep, end) => {
+          const o = allTi.filter((_, k) => k !== keep);
+          tl.to(o, { opacity: 0.28, duration: 0.2 }, 0).to(o, { opacity: 1, duration: 0.35 }, end);
+        };
+        const tls = [];
+
+        // ۱) لمینت
+        tls.push(mk()
+          .to(E('.vs'), { y: 0, opacity: 1, duration: 0.7, stagger: { each: 0.1, from: 'center' }, ease: 'power3.out' }, 0.1)
+          .to(E('.sp'), { scale: 1, opacity: 1, duration: 0.2, stagger: 0.05 }, 1.0)
+          .to(E('.sp'), { scale: 0.3, opacity: 0, duration: 0.2, stagger: 0.05 }, 1.5));
+
+        // ۲) ایمپلنت
+        { const tl = mk();
+          tl.to(ti(3), { y: 70, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0.2)
+            .to('#scw', { y: 0, opacity: 1, duration: 0.6 }, 0.7)
+            .fromTo(ti(3), { y: -90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'bounce.out' }, 1.5)
+            .to('#scw', { opacity: 0, duration: 0.25 }, 2.1)
+            .to(E('.sp'), { scale: 1, opacity: 1, duration: 0.2, stagger: 0.05 }, 2.2)
+            .to(E('.sp'), { scale: 0.3, opacity: 0, duration: 0.2, stagger: 0.05 }, 2.7);
+          dim(tl, 3, 2.3); tls.push(tl); }
+
+        // ۳) جرم‌گیری و بلیچینگ
+        tls.push(mk()
+          .fromTo(E('.wipe'), { x: -120, opacity: 0.65 }, { x: 800, opacity: 0.65, duration: 1.1, ease: 'power1.inOut' }, 0)
+          .to(E('.tt'), { fill: '#FFFFFF', duration: 0.5, stagger: { each: 0.08 }, ease: 'none' }, 0.1)
+          .to(E('.wipe'), { opacity: 0, duration: 0.1 }, 1.1)
+          .to(E('.sp'), { scale: 1, opacity: 1, duration: 0.2, stagger: 0.07 }, 0.9)
+          .to(E('.sp'), { scale: 0.3, opacity: 0, duration: 0.2, stagger: 0.07 }, 1.7));
+
+        // ۴) ترمیم و عصب‌کشی
+        { const tl = mk();
+          tl.to(ti(6), { scale: 1.12, duration: 0.35 }, 0.05)
+            .to(E('.cv'), { scale: 1, opacity: 1, duration: 0.3 }, 0.45)
+            .to(E('.cv'), { fill: '#FFFFFF', stroke: '{{t:#8fd5c8}}', strokeWidth: 2, duration: 0.5 }, 1.3)
+            .to(ti(6), { scale: 1, duration: 0.3 }, 2.0);
+          dim(tl, 6, 2.0); tls.push(tl); }
+
+        // ۵) ارتودنسی
+        tls.push(mk()
+          .to(allTi, { x: (k) => CK[k][0], y: (k) => CK[k][1], rotation: (k) => CK[k][2], duration: 0.25, ease: 'none' }, 0)
+          .to(E('.br'), { scale: 1, opacity: 1, duration: 0.3, stagger: 0.05, ease: 'back.out(2)' }, 0.35)
+          .to(allTi, { x: 0, y: 0, rotation: 0, duration: 0.7, stagger: 0.04, ease: 'power3.inOut' }, 1.2)
+          .to('#wire', { strokeDashoffset: 0, duration: 0.6, ease: 'none' }, 2.2));
+
+        // ۶) روکش و پروتز
+        { const tl = mk();
+          tl.to('#th5 .tb', { scaleX: 0.7, scaleY: 0.92, duration: 0.4 }, 0.25)
+            .to('#th5 .tt', { fill: '#CBBE96', duration: 0.4 }, 0.25)
+            .to(E('.cr'), { y: 0, opacity: 1, duration: 0.8, ease: 'bounce.out' }, 1.0);
+          dim(tl, 5, 2.0); tls.push(tl); }
+
+        // نوار پیشرفتِ ردیف فعال
+        tls.forEach((tl, i) => tl.eventCallback('onUpdate', () => { pgs[i].style.transform = `scaleX(${tl.progress()})`; }));
+
+        let cur = 0, sw = null;
+        const mobile = () => matchMedia('(max-width: 900px)').matches;
+        const select = (i, scroll) => {
+          sw?.kill();
+          tls.forEach((t) => t.pause());
+          cur = i;
+          items.forEach((li, k) => {
+            li.classList.toggle('on', k === i);
+            btns[k].setAttribute('aria-pressed', String(k === i));
+            gsap.set(pgs[k], { scaleX: 0 });
+          });
+          if (scroll && mobile()) lenis.scrollTo(stage, { offset: -80, duration: 0.8 });
+          sw = gsap.timeline()
+            .to(svg, { opacity: 0, duration: 0.15 })
+            .add(base)
+            .to(svg, { opacity: 1, duration: 0.2 })
+            .add(() => tls[i].restart());
+        };
+        const offs = btns.map((b, i) => {
+          const f = () => select(i, true);
+          b.addEventListener('click', f); return () => b.removeEventListener('click', f);
+        });
+        const again = () => select(cur, false);
+        replay.addEventListener('click', again);
+        cleanups.push(() => { offs.forEach((f) => f()); replay.removeEventListener('click', again); sw?.kill(); tls.forEach((t) => t.kill()); });
+
+        // اولین بار که بخش دیده شد، اولین درمان خودکار پخش می‌شود تا کاربر بفهمد چه خبر است
+        ScrollTrigger.create({ trigger: stage, start: 'top 70%', once: true, onEnter: () => select(0, false) });
+      }
+
+      // ================= ۴) چرا ما =================
+      const wy = q('.wy')[0];
+      if (wy) {
+        const chs = q('.wy-ch', wy), dots = q('.wy-dots button', wy), clip = q('#wyc rect', wy)[0], N = chs.length;
+        const D = N - 1 + 0.4;                                             // طول کل تایم‌لاین
+        const pts = chs.map((_, i) => (i === 0 ? 0 : (i + 0.3) / D));      // نقاط توقف هر مرحله
+        splitIn(q('h2', wy)[0], wy);
+        enter('.wy-in');
+        gsap.set(chs, { autoAlpha: 0, y: 40 });
+        gsap.set(chs[0], { autoAlpha: 1, y: 0 });
+        const mm = gsap.matchMedia();
+        mm.add({ desk: '(min-width: 901px)', mob: '(max-width: 900px)' }, (c) => {
+          const len = c.conditions.desk ? N * 55 : N * 42;
+          const tl = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: wy, start: 'top top', end: '+=' + len + '%', pin: true, scrub: true, anticipatePin: 1,
+              onUpdate: (s) => {
+                const i = Math.min(N - 1, Math.round(s.progress * D - 0.3));
+                dots.forEach((d, k) => d.classList.toggle('on', k <= Math.max(0, i)));
+              },
+            },
+          });
+          tl.fromTo(clip, { attr: { y: 110 } }, { attr: { y: 4 }, duration: D }, 0);
+          for (let i = 1; i < N; i++) {
+            tl.to(chs[i - 1], { autoAlpha: 0, y: -40, duration: 0.4 }, i - 0.45)
+              .to(chs[i], { autoAlpha: 1, y: 0, duration: 0.4 }, i - 0.2);
+          }
+          const pin = tl.scrollTrigger;
+          const w = watch(pin, 'چرا ما');
+          addSnap(pin, pts);
+          // کلیک روی نقطه‌ها: پرش نرم به همان مرحله
+          const offs = dots.map((d, i) => {
+            const f = () => lenis.scrollTo(pin.start + pts[i] * (pin.end - pin.start), { duration: 1, easing: ease3 });
+            d.addEventListener('click', f); return () => d.removeEventListener('click', f);
+          });
+          return () => { w.kill(); offs.forEach((f) => f()); };
+        });
+        cleanups.push(() => mm.revert());
+      }
+
+      // ================= ۵) طراحی لبخند =================
+      const sm = q('section.sm')[0];
+      if (sm) {
+        const ba = q('[data-ba]', sm)[0], inp = q('input', ba)[0], o = { p: 6 };
+        splitIn(q('h2', sm)[0], sm);
+        enter('.sm-in');
+        ba.style.setProperty('--p', 6); inp.value = 6;
+        gsap.set(ba, { scale: 0.88 });
+        const mm = gsap.matchMedia();
+        mm.add({ desk: '(min-width: 901px)', mob: '(max-width: 900px)' }, (c) => {
+          const tl = gsap.timeline({
+            scrollTrigger: { trigger: sm, start: 'top top', end: '+=' + (c.conditions.desk ? 130 : 95) + '%', pin: true, scrub: true, anticipatePin: 1 },
+          });
+          tl.to(ba, { scale: 1, duration: 0.25, ease: 'power2.out' }, 0)
+            .fromTo(o, { p: 6 }, {
+              p: 94, duration: 1, ease: 'none',
+              onUpdate: () => { ba.style.setProperty('--p', o.p.toFixed(1)); inp.value = o.p; },
+            }, 0.1);
+          const w = watch(tl.scrollTrigger, 'طراحی لبخند');
+          return () => w.kill();
+        });
+        cleanups.push(() => mm.revert());
+      }
+
+      // ================= بقیه‌ی تیترها و محتوا (بعد از قفل‌ها ساخته می‌شوند تا موقعیتشان درست محاسبه شود) =================
+      q('[data-split]').forEach((el) => { if (!el.closest('.hs,.wy,.sm')) splitIn(el, el); });
+      q('[data-fade]').forEach((el) => {
+        gsap.to(el, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: +el.dataset.fade || 0, scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
+      });
+
+      // ================= ۶) فرم نوبت =================
+      const book = q('#book')[0];
+      if (book) {
+        gsap.fromTo(book,
+          { clipPath: 'inset(14% 12% 14% 12% round 48px)', y: 60 },
+          { clipPath: 'inset(0% 0% 0% 0% round 24px)', y: 0, duration: 1.3, ease: 'expo.out', clearProps: 'clipPath',
+            scrollTrigger: { trigger: book, start: 'top 85%', once: true } });
+      }
+
+      // ================= ۷) فوتر =================
+      const fl = q('.ftbig .fl');
+      if (fl.length) {
+        gsap.fromTo(fl, { yPercent: 105 }, {
+          yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: 0.09,
+          scrollTrigger: { trigger: '.ftbig', start: 'top 96%', once: true },
+        });
+      }
+
+      // ================= نشانگر موس + دکمه‌های مغناطیسی =================
+      if (matchMedia('(pointer:fine)').matches) {
+        H.classList.add('fine');
+        const cur = q('.cur')[0];
+        const xt = gsap.quickTo(cur, 'x', { duration: 0.35, ease: 'power3' });
+        const yt = gsap.quickTo(cur, 'y', { duration: 0.35, ease: 'power3' });
+        const mv = (e) => { xt(e.clientX); yt(e.clientY); };
+        const ov = (e) => cur.classList.toggle('big', !!e.target.closest?.('a,button,input,[data-cur]'));
+        addEventListener('pointermove', mv, { passive: true });
+        addEventListener('pointerover', ov, { passive: true });
+        cleanups.push(() => { removeEventListener('pointermove', mv); removeEventListener('pointerover', ov); H.classList.remove('fine'); });
+        q('[data-mag]').forEach((b) => {
+          const x = gsap.quickTo(b, 'x', { duration: 0.4, ease: 'power3' });
+          const y = gsap.quickTo(b, 'y', { duration: 0.4, ease: 'power3' });
+          b.addEventListener('pointermove', (e) => {
+            const r = b.getBoundingClientRect();
+            x((e.clientX - r.left - r.width / 2) * 0.3); y((e.clientY - r.top - r.height / 2) * 0.4);
+          });
+          b.addEventListener('pointerleave', () => { x(0); y(0); });
+        });
+      }
+    });
+
+    // ---------- لینک‌های درون‌صفحه‌ای ----------
+    const onClick = (e) => {
+      const a = e.target.closest?.('a[href^="#"]');
+      if (!a || e.defaultPrevented) return;
+      const id = a.getAttribute('href');
+      e.preventDefault();
+      if (id === '#') lenis.scrollTo(0, { duration: 1.6 });
+      else { const t = document.querySelector(id); if (t) lenis.scrollTo(t, { offset: -64, duration: 1.8 }); }
+    };
+    document.addEventListener('click', onClick);
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    const onLoad = () => ScrollTrigger.refresh();
+    addEventListener('load', onLoad);
+
+    return () => {
+      removeEventListener('load', onLoad);
+      document.removeEventListener('click', onClick);
+      cleanups.forEach((f) => f());
+      ctx.revert();
+      gsap.ticker.remove(tick);
+      lenis.destroy();
+      delete window.__lenis;
+    };
+
+})();
+</script>
+<script>
+/* ===== لودر سینمایی ===== */
+(function () {
+  var H = document.documentElement, el = document.querySelector('.ld');
+  var fire = function () { window.__noraIntro = true; window.dispatchEvent(new Event('nora:intro')); };
+  var seen = false; try { seen = sessionStorage.getItem(('seen:'+location.pathname)) === '1'; } catch (e) {}
+  if (!el || !window.gsap || seen || matchMedia('(prefers-reduced-motion:reduce)').matches) {
+    H.classList.add('ready'); if (el) el.remove(); fire(); return;
+  }
+  var fa = function (n) { return String(n).replace(/\d/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'[d]; }); };
+  document.body.style.overflow = 'hidden';
+  var st = { v: 0 }, num = el.querySelector('.ld-n'), rect = el.querySelector('.ld-clip'), line = el.querySelector('.ld-ln i');
+  var render = function () {
+    num.textContent = fa(Math.round(st.v));
+    rect.setAttribute('y', String(110 - 1.1 * st.v));
+    line.style.transform = 'scaleX(' + st.v / 100 + ')';
+  };
+  gsap.from('.ld-c > *', { y: 24, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out' });
+  gsap.to(st, { v: 88, duration: 1.8, ease: 'power2.out', onUpdate: render });
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  Promise.all([wait(1700), (document.fonts && document.fonts.ready) || Promise.resolve()]).then(function () {
+    gsap.to(st, { v: 100, duration: 0.5, ease: 'power1.inOut', overwrite: true, onUpdate: render, onComplete: function () {
+      var tl = gsap.timeline({ onComplete: function () {
+        document.body.style.overflow = '';
+        try { sessionStorage.setItem(('seen:'+location.pathname), '1'); } catch (e) {}
+        el.remove();
+      } });
+      tl.to('.ld-c', { y: -40, opacity: 0, duration: 0.5, ease: 'power2.in' })
+        .to('.ld-a', { yPercent: -100, duration: 1.1, ease: 'expo.inOut' }, '>-0.05')
+        .to('.ld-b', { yPercent: 100, duration: 1.1, ease: 'expo.inOut' }, '<')
+        .add(fire, '<+0.35');
+    } });
+  });
+})();
+
+/* ===== منوی موبایل ===== */
+(function () {
+  var nav = document.querySelector('.mnav'); if (!nav) return;
+  var burgers = [].slice.call(document.querySelectorAll('.burger'));
+  var set = function (v) {
+    nav.classList.toggle('open', v); nav.setAttribute('aria-hidden', String(!v));
+    burgers.forEach(function (b) { b.setAttribute('aria-expanded', String(v)); });
+    document.body.style.overflow = v ? 'hidden' : '';
+    if (window.__lenis) { v ? window.__lenis.stop() : window.__lenis.start(); }
+  };
+  burgers.forEach(function (b) { b.addEventListener('click', function () { set(!nav.classList.contains('open')); }); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  nav.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]'); if (!a) return;
+    e.preventDefault(); set(false);
+    var t = document.querySelector(a.getAttribute('href'));
+    setTimeout(function () {
+      if (window.__lenis && t) window.__lenis.scrollTo(t, { offset: -64, duration: 1.6 });
+      else if (t) t.scrollIntoView({ behavior: 'smooth' });
+    }, 60);
+  });
+})();
+
+/* ===== دکمه‌ی شناور تماس ===== */
+(function () {
+  var fab = document.querySelector('.fab'); if (!fab) return;
+  var btn = fab.querySelector('.fab-btn'), label = btn.innerHTML;
+  var set = function (v) {
+    fab.classList.toggle('open', v); btn.setAttribute('aria-expanded', String(v));
+    btn.innerHTML = v ? '<span>بستن</span>' : label;
+  };
+  btn.addEventListener('click', function () { set(!fab.classList.contains('open')); });
+  fab.querySelector('.fab-menu').addEventListener('click', function () { set(false); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  addEventListener('pointerdown', function (e) { if (!e.target.closest('.fab')) set(false); });
+})();
+
+/* ===== مقایسه‌ی قبل و بعد (کشیدن دستگیره) ===== */
+document.querySelectorAll('.ba .rg').forEach(function (r) {
+  r.addEventListener('input', function () { r.closest('.ba').style.setProperty('--p', r.value); });
+});
+
+/* ===== فرم نوبت‌دهی (نسخه‌ی نمایشی؛ چیزی ذخیره نمی‌شود) ===== */
+(function () {
+  var root = document.getElementById('book'); if (!root) return;
+  var TEL = '{{phone_href}}', WA = '{{wa:}}', HAS_WA = /^https:\/\/wa\.me\//.test(WA);
+  var SERV = [['مشاوره و معاینه', 30], ['جرم‌گیری و بلیچینگ', 45], ['ترمیم / عصب‌کشی', 60], ['لمینت و زیبایی', 60], ['ایمپلنت', 60], ['ارتودنسی', 45]];
+  var TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30'];
+  var fa = function (n) { return String(n).replace(/\d/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'[d]; }); };
+  var toEn = function (s) { return s.replace(/[۰-۹]/g, function (c) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(c); }); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var key = function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+  var jf = function (d, o) { return new Intl.DateTimeFormat('fa-IR-u-ca-persian', o).format(d); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var nowHHMM = function () { var n = new Date(); return pad(n.getHours()) + ':' + pad(n.getMinutes()); };
+
+  var days = (function () {
+    var out = [], now = new Date();
+    for (var i = 0; out.length < 10; i++) {
+      var x = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      if (i === 0 && now.getHours() >= 18) continue;
+      if (x.getDay() === 5) continue;
+      out.push(x);
+    }
+    return out;
+  })();
+  // ساعت‌های «پر» برای نمایش: برای هر روز یکسان و ثابت
+  var takenFor = function (d) {
+    var h = 0, k = key(d); for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) >>> 0;
+    return TIMES.filter(function (_, i) { return ((h >>> (i * 2)) & 3) === 0; });
+  };
+
+  var S = { step: 0, sv: null, day: null, tm: null, name: '', phone: '', note: '', ls: false, err: '', busy: false, done: null };
+  var first = true;
+
+  function view() {
+    var h = '';
+    if (S.step === 4 && S.done) {
+      var D = S.done;
+      var msg = 'سلام، درخواست نوبت:\nنام: ' + D.name + '\nخدمت: ' + D.service + '\nتاریخ: ' + D.dateLabel + '\nساعت: ' + fa(D.time) + '\nکد پیگیری: ' + D.code;
+      return '<div class="ok"><div class="ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
+        '<h2>نوبت شما ثبت شد</h2><p class="sub">' + esc(D.name) + ' عزیز، نوبت ' + esc(D.service) + ' در <b>' + esc(D.dateLabel) + '</b> ساعت <b>' + fa(D.time) + '</b></p>' +
+        '<div class="sum" style="display:inline-block;min-width:240px"><span>کد پیگیری</span><div class="code">' + D.code + '</div></div>' +
+        '<p class="sub" style="margin-top:16px">' + (HAS_WA ? 'برای قطعی‌شدن، درخواست را با یک لمس برای منشی کلینیک بفرستید:' : 'برای قطعی‌شدن نوبت، با کلینیک تماس بگیرید:') + '</p>' +
+        '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">' + (HAS_WA ? '<a class="btn" target="_blank" rel="noopener noreferrer" href="' + WA + '?text=' + encodeURIComponent(msg) + '">ارسال از طریق واتساپ</a>' : '') +
+        '<a class="btn' + (HAS_WA ? ' o' : '') + '" href="' + TEL + '">تماس با کلینیک</a></div>' +
+        '<p style="margin-top:20px"><a href="#" data-act="reset" style="color:var(--pr);font-weight:700;text-decoration:underline;text-underline-offset:5px">ثبت نوبت جدید</a></p>' +
+        '<p style="font-size:13px;color:var(--mu);margin-top:14px">نسخه‌ی نمایشی؛ نوبت واقعی ثبت نشد.</p></div>';
+    }
+    var bars = [0, 1, 2, 3].map(function (i) { return '<i class="' + (i <= S.step ? 'on' : '') + '"></i>'; }).join('');
+    var body = '';
+    if (S.step === 0) {
+      body = '<b class="lbl">۱. نوع خدمت را انتخاب کنید</b><div class="opts">' + SERV.map(function (s, i) {
+        return '<button type="button" class="opt ' + (S.sv === i ? 'sel' : '') + '" data-sv="' + i + '">' + s[0] + '<small>' + fa(s[1]) + ' دقیقه</small></button>';
+      }).join('') + '</div>';
+    } else if (S.step === 1) {
+      body = '<b class="lbl">۲. روز مراجعه</b><div class="days">' + days.map(function (d, i) {
+        return '<button type="button" class="opt ' + (S.day === i ? 'sel' : '') + '" data-day="' + i + '"><small>' + jf(d, { weekday: 'short' }) + '</small><b>' + jf(d, { day: 'numeric' }) + '</b><small>' + jf(d, { month: 'short' }) + '</small></button>';
+      }).join('') + '</div>';
+      if (S.day !== null) {
+        var taken = takenFor(days[S.day]), today = key(days[S.day]) === key(new Date());
+        body += '<b class="lbl">ساعت مراجعه</b><div class="opts">' + TIMES.map(function (t) {
+          var dis = S.ls || taken.indexOf(t) > -1 || (today && t <= nowHHMM());
+          return '<button type="button" class="opt ' + (S.tm === t ? 'sel' : '') + ' ' + (S.ls ? 'sk' : '') + '" data-tm="' + t + '"' + (dis ? ' disabled' : '') + '>' + fa(t) + '</button>';
+        }).join('') + '</div>';
+      }
+    } else if (S.step === 2) {
+      body = '<b class="lbl">۳. مشخصات شما</b><div class="row"><div><input id="bk-name" placeholder="نام و نام خانوادگی" value="' + esc(S.name) + '"></div>' +
+        '<div><input id="bk-phone" type="tel" inputmode="tel" dir="ltr" style="text-align:right" placeholder="شماره موبایل (09xxxxxxxxx)" value="' + esc(S.phone) + '"></div></div><br>' +
+        '<textarea id="bk-note" rows="3" placeholder="توضیحات یا مشکل شما (اختیاری)">' + esc(S.note) + '</textarea>';
+    } else {
+      body = '<b class="lbl">۴. بررسی و تایید نهایی</b><div class="sum">' +
+        '<div><span>بیمار</span><b>' + esc(S.name.trim()) + '</b></div>' +
+        '<div><span>موبایل</span><b dir="ltr">' + fa(toEn(S.phone.trim())) + '</b></div>' +
+        '<div><span>خدمت</span><b>' + esc(SERV[S.sv][0]) + '</b></div>' +
+        '<div><span>تاریخ</span><b>' + jf(days[S.day], { weekday: 'long', day: 'numeric', month: 'long' }) + '</b></div>' +
+        '<div><span>ساعت</span><b>' + fa(S.tm) + '</b></div></div>';
+    }
+    var canNext = [S.sv !== null, S.tm !== null, true, true][S.step];
+    return '<div class="steps">' + bars + '</div><div class="' + (first ? '' : 'stepin') + '">' + body + '</div>' +
+      '<p class="err" role="alert">' + esc(S.err) + '</p>' +
+      '<div class="nav"><button type="button" class="btn o" data-act="back"' + (S.step ? '' : ' style="visibility:hidden"') + '>قبلی</button>' +
+      '<button type="button" class="btn" data-act="next"' + (!canNext || S.busy ? ' disabled' : '') + '>' + (S.busy ? '<i class="spin" aria-hidden="true"></i>' : '') +
+      (S.step === 3 ? (S.busy ? 'در حال ثبت…' : 'تایید و ثبت نوبت') : 'ادامه') + '</button></div>' +
+      '<p style="font-size:13px;color:var(--mu);margin-top:14px">نسخه‌ی نمایشی؛ اطلاعات ذخیره یا ارسال نمی‌شود.</p>';
+  }
+
+  function render(scroll) {
+    root.innerHTML = view(); first = false;
+    if (scroll) {
+      if (window.__lenis) window.__lenis.scrollTo(root, { offset: -110 });
+      else root.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+  function next() {
+    S.err = '';
+    if (S.step === 2) {
+      var ph = toEn(S.phone.trim());
+      if (S.name.trim().length < 3) { S.err = 'لطفاً نام خود را وارد کنید'; return render(); }
+      if (!/^09\d{9}$/.test(ph)) { S.err = 'شماره موبایل معتبر نیست (مثال: 09123456789)'; return render(); }
+    }
+    if (S.step === 3) {
+      S.busy = true; render();
+      return setTimeout(function () {
+        var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', code = 'NV-';
+        for (var i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+        S.done = { code: code, name: S.name.trim(), service: SERV[S.sv][0], dateLabel: jf(days[S.day], { weekday: 'long', day: 'numeric', month: 'long' }), time: S.tm };
+        S.busy = false; S.step = 4; render(true);
+      }, 900);
+    }
+    S.step++; render(true);
+  }
+
+  root.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-sv],[data-day],[data-tm],[data-act]'); if (!t) return;
+    if (t.hasAttribute('data-sv')) { S.sv = +t.dataset.sv; return render(); }
+    if (t.hasAttribute('data-day')) {
+      S.day = +t.dataset.day; S.tm = null; S.ls = true; render();
+      return setTimeout(function () { S.ls = false; render(); }, 450); // شبیه‌سازی خواندن ساعت‌های پر
+    }
+    if (t.hasAttribute('data-tm')) { S.tm = t.dataset.tm; return render(); }
+    var a = t.dataset.act;
+    if (a === 'next') return next();
+    if (a === 'back') { S.err = ''; S.step--; return render(true); }
+    if (a === 'reset') { e.preventDefault(); S = { step: 0, sv: null, day: null, tm: null, name: S.name, phone: S.phone, note: '', ls: false, err: '', busy: false, done: null }; render(); }
+  });
+  root.addEventListener('input', function (e) {
+    if (e.target.id === 'bk-name') S.name = e.target.value;
+    if (e.target.id === 'bk-phone') S.phone = e.target.value;
+    if (e.target.id === 'bk-note') S.note = e.target.value;
+  });
+  render();
+})();
+
+</script>
+</body>
+</html>
