@@ -69,7 +69,7 @@ import {
 } from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
-import { imageSlotsFor, pickTemplate } from "@/lib/siteTemplates";
+import { imageSlotsFor, pickTemplate, templateIdOfSite } from "@/lib/siteTemplates";
 import {
   toEn,
   HEX_COLOR,
@@ -724,7 +724,7 @@ export async function uploadPrivateSiteImageAction(formData: FormData): Promise<
 
   const site = id ? await getPrivateSiteById(id) : null;
   if (!site) return { ok: false, message: "سایت پیدا نشد." };
-  if (!imageSlotsFor(site.template_id).some((s) => s.key === key)) {
+  if (!imageSlotsFor(templateIdOfSite(site)).some((s) => s.key === key)) {
     return { ok: false, message: "این جای عکس برای این سایت تعریف نشده." };
   }
   if (!(file instanceof File) || file.size === 0) return { ok: false, message: "عکسی انتخاب نشده." };

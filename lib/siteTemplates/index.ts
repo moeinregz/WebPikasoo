@@ -18,7 +18,7 @@ import pastryZafaran from "./templates/pastry-zafaran.template.html";
 import musicNava from "./templates/music-nava.template.html";
 import realestateZomorod from "./templates/realestate-zomorod.template.html";
 import kebabBistoon from "./templates/kebab-bistoon.template.html";
-import restaurantTabarestan from "./templates/restaurant-tabarestan.template.html";
+import restaurantEmber from "./templates/restaurant-ember.template.html";
 import restaurantMadaen from "./templates/restaurant-madaen.template.html";
 import gardenWillow from "./templates/garden-willow.template.html";
 import gardenGilas from "./templates/garden-gilas.template.html";
@@ -165,11 +165,23 @@ export const TEMPLATES: SiteTemplate[] = [
     palette: { primary: "#155c42", secondary: "#c9a227" },
   },
   {
-    id: "restaurant-tabarestan",
+    id: "restaurant-ember",
     trade: "restaurant",
-    label: "رستوران — آتشین و گرم (طبرستان)",
-    html: restaurantTabarestan,
-    palette: { primary: "#d9480f", secondary: "#1f4d3a" },
+    label: "رستوران — مدرن و رنگارنگ",
+    html: restaurantEmber,
+    palette: { primary: "#e4572e", secondary: "#1f6f5c" },
+    images: [
+      { key: "hero", label: "غذای شاخص (بالای صفحه)", hint: "قاب گرد بزرگ بالای صفحه — بهترین غذای رستوران، نمای نزدیک", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "قاب قوسی بخش درباره — آشپزخانه، سرآشپز یا نمای اصلی رستوران", ratio: "4:5" },
+      { key: "dish1", label: "پیشنهاد سرآشپز ۱", hint: "کارت اول بخش پیشنهاد سرآشپز — نمای نزدیک غذا", ratio: "4:5" },
+      { key: "dish2", label: "پیشنهاد سرآشپز ۲", hint: "کارت دوم بخش پیشنهاد سرآشپز", ratio: "4:5" },
+      { key: "dish3", label: "پیشنهاد سرآشپز ۳", hint: "کارت سوم بخش پیشنهاد سرآشپز", ratio: "4:5" },
+      { key: "env1", label: "فضا — سالن اصلی", hint: "قاب بزرگ گالری فضای رستوران", ratio: "1:1" },
+      { key: "env2", label: "فضا — گوشه‌ی دنج", hint: "گالری فضای رستوران", ratio: "4:5" },
+      { key: "env3", label: "فضا — نور و جزئیات", hint: "گالری فضای رستوران", ratio: "4:5" },
+      { key: "env4", label: "فضا — میز و چیدمان", hint: "گالری فضای رستوران", ratio: "4:5" },
+      { key: "env5", label: "فضا — پذیرایی", hint: "گالری فضای رستوران", ratio: "4:5" },
+    ],
   },
   {
     id: "restaurant-madaen",
@@ -234,6 +246,14 @@ export function pickTemplateAmong(tradeIds: string[]): SiteTemplate | null {
   const list = TEMPLATES.filter((t) => tradeIds.includes(t.trade));
   if (list.length === 0) return null;
   return list[Math.floor(Math.random() * list.length)];
+}
+
+/** Which template a private site came from. Sites built before the template id
+ *  was stored are recognised by the «label» their note always contains. */
+export function templateIdOfSite(site: { template_id?: string; note?: string }): string | undefined {
+  if (site.template_id) return site.template_id;
+  const label = site.note?.match(/«([^»]+)»/)?.[1];
+  return label ? TEMPLATES.find((tpl) => tpl.label === label)?.id : undefined;
 }
 
 /** The photo spots of a template (empty when it needs none). */

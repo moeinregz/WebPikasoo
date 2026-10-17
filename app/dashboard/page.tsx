@@ -41,7 +41,7 @@ import BlogPanel from "./BlogPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
-import { imageSlotsFor, templateOptions } from "@/lib/siteTemplates";
+import { imageSlotsFor, templateIdOfSite, templateOptions } from "@/lib/siteTemplates";
 import { formatDate } from "./format";
 
 export const metadata = {
@@ -401,7 +401,7 @@ export default async function DashboardPage() {
             note: s.note,
             created_at: s.created_at,
             images: s.images,
-            slots: imageSlotsFor(s.template_id),
+            slots: imageSlotsFor(templateIdOfSite(s)),
           }))}
         />
       ),

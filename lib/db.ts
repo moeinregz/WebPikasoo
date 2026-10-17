@@ -871,7 +871,7 @@ export async function getPrivateSiteById(id: number): Promise<PrivateSite | null
 
 /** Sets (url) or clears (null) the photo for one slot of a private site. */
 export async function setPrivateSiteImage(id: number, key: string, url: string | null): Promise<void> {
-  if (!/^[a-z_]+$/.test(key)) throw new Error("bad image key");
+  if (!/^[a-z][a-z0-9_]*$/.test(key)) throw new Error("bad image key");
   const database = await getDb();
   await database
     .collection("private_sites")

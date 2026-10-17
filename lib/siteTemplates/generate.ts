@@ -4,7 +4,7 @@ import type { ColorRole, RoleColors, Trade } from "./trades";
  *  slot in the «سایت‌های خصوصی» tab; until then the template shows its own
  *  placeholder art. Template code reads them from the `{{images_json}}` object. */
 export type ImageSlot = {
-  key: string; // [a-z_]+ — the property name in {{images_json}}
+  key: string; // [a-z][a-z0-9_]* — the property name in {{images_json}}
   label: string; // what it is, shown on the upload card
   hint?: string; // where it appears / what kind of photo works best
   ratio: string; // "4:5" — the shape the photo is cropped to
@@ -46,7 +46,7 @@ const SI_MARK = /\/\*SI\*\/[\s\S]*?\/\*SI_END\*\//;
 function imagesJson(images?: Record<string, string>): string {
   const clean: Record<string, string> = {};
   for (const [k, v] of Object.entries(images ?? {})) {
-    if (/^[a-z_]+$/.test(k) && /^https:\/\/[^\s"'<>\\]+$/.test(v)) clean[k] = v;
+    if (/^[a-z][a-z0-9_]*$/.test(k) && /^https:\/\/[^\s"'<>\\]+$/.test(v)) clean[k] = v;
   }
   return JSON.stringify(clean).replace(/</g, "\\u003c");
 }
