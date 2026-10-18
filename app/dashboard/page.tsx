@@ -3,6 +3,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import {
   getAllInquiries,
+  inquiriesVisibleTo,
   getAllUsers,
   getAllTickets,
   getTicketMessages,
@@ -74,7 +75,11 @@ export default async function DashboardPage() {
   const isAdmin = currentUser.role === "admin";
   const perms = currentUser.permissions; // admins: everything true
 
-  const inquiries = isAdmin || perms.orders ? await getAllInquiries() : [];
+  // Contact-form inquiries are shared; a manual order is only ever visible to
+  // the staff member who registered it (and admins).
+  const inquiries = isAdmin || perms.orders
+    ? inquiriesVisibleTo(await getAllInquiries(), { id: currentUser.id, isAdmin })
+    : [];
   const tickets = isAdmin || perms.tickets ? await getAllTickets() : [];
   const customers = isAdmin || perms.users ? await getAllUsers() : [];
   const developers = await getUsersByRole("developer");
@@ -121,7 +126,19 @@ export default async function DashboardPage() {
     </div>
   );
 
-  const ordersPanel = <OrdersPanel inquiries={inquiries} isAdmin={isAdmin} />;
+  // Names for the "registered by" label an admin sees on manual orders.
+  const staffNames: Record<number, string> = {};
+  for (const m of teamMembers) staffNames[m.id] = m.title ? `${m.name} (${m.title})` : m.name;
+
+  const ordersPanel = (
+    <OrdersPanel
+      inquiries={inquiries}
+      isAdmin={isAdmin}
+      currentUserId={currentUser.id}
+      canCreate={isAdmin || perms.orders}
+      staffNames={staffNames}
+    />
+  );
 
   const ticketsPanel = (
     <TicketsPanel tickets={tickets} ticketLastMessages={ticketLastMessages} isAdmin={isAdmin} />

@@ -107,6 +107,27 @@ export type Inquiry = {
   message: string;
   user_id: number | null;
   status: "new" | "followed_up";
+  /** "site" (the public contact form — also what every older record is) or
+   *  "manual" (an order a sales expert registered by hand after taking it
+   *  outside the site). Manual orders are private to whoever registered
+   *  them (see inquiriesVisibleTo). */
+  source?: "site" | "manual";
+  /** Staff id of whoever registered a manual order. */
+  created_by?: number | null;
+  // ---- details only manual orders carry ----
+  business_name?: string;
+  phone2?: string;
+  city?: string;
+  instagram?: string;
+  /** How the order reached us: phone, WhatsApp, Instagram, in person… */
+  channel?: string;
+  agreed_price?: string;
+  deposit?: string;
+  payment_status?: "unpaid" | "deposit" | "paid";
+  /** Free text (e.g. a Jalali date) — when it must be delivered. */
+  delivery_date?: string;
+  /** Internal notes, never shown to the customer. */
+  notes?: string;
 };
 
 export type NewInquiry = {
@@ -138,6 +159,84 @@ export async function insertInquiry(data: NewInquiry): Promise<void> {
     user_id: data.userId ?? null,
     status: "new",
   });
+}
+
+/** Everything a manual order records (name, phone and `message` — the order
+ *  description — are required, the rest optional). */
+export type ManualOrderData = {
+  name: string;
+  phone: string;
+  message: string;
+  email?: string;
+  businessName?: string;
+  phone2?: string;
+  city?: string;
+  instagram?: string;
+  channel?: string;
+  projectType?: string;
+  agreedPrice?: string;
+  deposit?: string;
+  paymentStatus?: "unpaid" | "deposit" | "paid";
+  deliveryDate?: string;
+  notes?: string;
+};
+
+function manualFields(data: ManualOrderData) {
+  return {
+    name: data.name,
+    email: data.email || "",
+    phone: data.phone,
+    project_type: data.projectType || null,
+    message: data.message,
+    business_name: data.businessName || "",
+    phone2: data.phone2 || "",
+    city: data.city || "",
+    instagram: data.instagram || "",
+    channel: data.channel || "",
+    agreed_price: data.agreedPrice || "",
+    deposit: data.deposit || "",
+    payment_status: data.paymentStatus || "unpaid",
+    delivery_date: data.deliveryDate || "",
+    notes: data.notes || "",
+  };
+}
+
+/** Registers an order taken outside the site, owned by one staff member. */
+export async function insertManualOrder(data: ManualOrderData, createdBy: number): Promise<void> {
+  const database = await getDb();
+  const id = await nextId("inquiries");
+  await database.collection<Inquiry>("inquiries").insertOne({
+    id,
+    created_at: nowStr(),
+    budget: null,
+    user_id: null,
+    status: "new",
+    source: "manual",
+    created_by: createdBy,
+    ...manualFields(data),
+  } as Inquiry);
+}
+
+export async function getInquiryById(id: number): Promise<Inquiry | null> {
+  const database = await getDb();
+  const inq = await database.collection<Inquiry>("inquiries").findOne({ id }, { projection: { _id: 0 } });
+  return inq ?? null;
+}
+
+/** Edits a manual order in place — never changes who owns it. */
+export async function updateManualOrder(id: number, data: ManualOrderData): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection<Inquiry>("inquiries")
+    .updateOne({ id, source: "manual" }, { $set: manualFields(data) });
+}
+
+/** Contact-form inquiries are visible to everyone with orders access (as
+ *  before). A manual order is visible ONLY to the staff member who
+ *  registered it — and to admins, who oversee everything. */
+export function inquiriesVisibleTo(list: Inquiry[], viewer: { id: number; isAdmin: boolean }): Inquiry[] {
+  if (viewer.isAdmin) return list;
+  return list.filter((i) => i.source !== "manual" || i.created_by === viewer.id);
 }
 
 export async function getAllInquiries(): Promise<Inquiry[]> {

@@ -45,6 +45,9 @@ import {
   createPrivateSite,
   deletePrivateSite,
   getPrivateSiteById,
+  getInquiryById,
+  insertManualOrder,
+  updateManualOrder,
   setPrivateSiteImage,
   createBlogPost,
   updateBlogPost,
@@ -70,6 +73,7 @@ import {
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
 import { imageSlotsFor, pickTemplate, templateIdOfSite } from "@/lib/siteTemplates";
+import type { ManualOrderData } from "@/lib/db";
 import {
   toEn,
   HEX_COLOR,
@@ -493,25 +497,144 @@ export async function setUserPermissionsAction(formData: FormData) {
 }
 
 // --- Orders ("سفارش‌ها" — the homepage contact-form inquiries) ---------------
-// Admin-only: mark one followed-up (or back to new), or remove it entirely.
+// --- Orders -----------------------------------------------------------------
+
+/** Admin always qualifies; a developer only with the "orders" permission. */
+async function requireOrdersAccess() {
+  const user = await getCurrentUser();
+  if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.orders)) {
+    redirect("/dashboard");
+  }
+  return user;
+}
+
+/** Who may change an existing order: an admin (any), or the staff member who
+ *  registered a manual order (only their own). Contact-form inquiries stay
+ *  admin-only, exactly as before. */
+async function requireOrderManager(id: number) {
+  const user = await requireOrdersAccess();
+  const inq = await getInquiryById(id);
+  if (!inq) return { user, inq: null };
+  const ownsIt = inq.source === "manual" && inq.created_by === user.id;
+  if (user.role !== "admin" && !ownsIt) redirect("/dashboard");
+  return { user, inq };
+}
 
 export async function markInquiryFollowedUpAction(formData: FormData) {
-  await requireAdmin();
   const id = Number(formData.get("inquiryId"));
-  const status = formData.get("status") === "followed_up" ? "followed_up" : "new";
   if (!id) return;
+  const { inq } = await requireOrderManager(id);
+  if (!inq) return;
+  const status = formData.get("status") === "followed_up" ? "followed_up" : "new";
 
   await setInquiryStatus(id, status);
   revalidatePath("/dashboard");
 }
 
 export async function deleteInquiryAction(formData: FormData) {
-  await requireAdmin();
   const id = Number(formData.get("inquiryId"));
   if (!id) return;
+  const { inq } = await requireOrderManager(id);
+  if (!inq) return;
 
   await deleteInquiry(id);
   revalidatePath("/dashboard");
+}
+
+export type ManualOrderFormState = { ok: boolean; message: string } | null;
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PAYMENT_STATUSES = ["unpaid", "deposit", "paid"] as const;
+
+/** Reads + validates the manual-order form (shared by create and edit). */
+function parseManualOrder(formData: FormData): { ok: true; data: ManualOrderData } | { ok: false; message: string } {
+  const get = (k: string) => (formData.get(k) ?? "").toString().trim();
+  const name = get("name");
+  const phoneRaw = get("phone");
+  const message = get("message");
+  const email = get("email");
+  const phone2Raw = get("phone2");
+
+  if (!name || !phoneRaw || !message) {
+    return { ok: false, message: "نام مشتری، شماره‌ی تماس و شرح سفارش اجباریه." };
+  }
+  if (!isValidPhone(phoneRaw)) return { ok: false, message: "شماره‌ی تماس معتبر نیست." };
+  if (phone2Raw && !isValidPhone(phone2Raw)) return { ok: false, message: "شماره‌ی دوم معتبر نیست." };
+  if (email && !EMAIL_PATTERN.test(email)) return { ok: false, message: "ایمیل معتبر نیست." };
+
+  const limits: [string, number][] = [
+    [name, 120], [get("businessName"), 160], [email, 160], [get("city"), 80], [get("instagram"), 120],
+    [get("channel"), 60], [get("projectType"), 120], [get("agreedPrice"), 80], [get("deposit"), 80],
+    [get("deliveryDate"), 60], [message, 4000], [get("notes"), 4000],
+  ];
+  if (limits.some(([v, max]) => v.length > max)) return { ok: false, message: "یکی از فیلدها خیلی طولانیه." };
+
+  const ps = get("paymentStatus");
+  const paymentStatus = (PAYMENT_STATUSES as readonly string[]).includes(ps)
+    ? (ps as (typeof PAYMENT_STATUSES)[number])
+    : "unpaid";
+
+  return {
+    ok: true,
+    data: {
+      name,
+      phone: normalizePhone(phoneRaw),
+      message,
+      email,
+      businessName: get("businessName"),
+      phone2: phone2Raw ? normalizePhone(phone2Raw) : "",
+      city: get("city"),
+      instagram: get("instagram"),
+      channel: get("channel"),
+      projectType: get("projectType"),
+      agreedPrice: get("agreedPrice"),
+      deposit: get("deposit"),
+      paymentStatus,
+      deliveryDate: get("deliveryDate"),
+      notes: get("notes"),
+    },
+  };
+}
+
+/** A sales expert (or admin) registers an order taken outside the site. It is
+ *  stored against their account and shown only to them (and admins). */
+export async function createManualOrderAction(
+  _prevState: ManualOrderFormState,
+  formData: FormData
+): Promise<ManualOrderFormState> {
+  const user = await requireOrdersAccess();
+  const parsed = parseManualOrder(formData);
+  if (!parsed.ok) return { ok: false, message: parsed.message };
+
+  try {
+    await insertManualOrder(parsed.data, user.id);
+  } catch (err) {
+    console.error("createManualOrderAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+  revalidatePath("/dashboard");
+  return { ok: true, message: "سفارش ثبت شد." };
+}
+
+export async function updateManualOrderAction(
+  _prevState: ManualOrderFormState,
+  formData: FormData
+): Promise<ManualOrderFormState> {
+  const id = Number(formData.get("inquiryId"));
+  if (!id) return { ok: false, message: "شناسه‌ی سفارش نامعتبره." };
+  const { inq } = await requireOrderManager(id);
+  if (!inq || inq.source !== "manual") return { ok: false, message: "سفارش پیدا نشد." };
+
+  const parsed = parseManualOrder(formData);
+  if (!parsed.ok) return { ok: false, message: parsed.message };
+  try {
+    await updateManualOrder(id, parsed.data);
+  } catch (err) {
+    console.error("updateManualOrderAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
+  }
+  revalidatePath("/dashboard");
+  return { ok: true, message: "سفارش به‌روزرسانی شد." };
 }
 
 // --- Portfolio projects (admin-manageable, shown in the homepage showcase) --
