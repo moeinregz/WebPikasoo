@@ -15,6 +15,7 @@ const PERMISSION_FIELDS: { key: keyof UserPermissions; name: string; label: stri
   { key: "crm", name: "perm_crm", label: "CRM" },
   { key: "channels", name: "perm_channels", label: "پیام به کانال‌ها" },
   { key: "projects", name: "perm_projects", label: "نمونه‌کارها" },
+  { key: "attendance", name: "perm_attendance", label: "ورود و خروج و گزارش کار" },
 ];
 
 function SaveButton() {

@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import { DEFAULT_WORK_HOURS, nowUtcStr, sessionMinutes, tehranDay, tehranToUtc, utcToMs } from "./attendance";
 import crypto from "crypto";
 import { cacheWrap, invalidateCache } from "@/lib/redis";
 import { tehranDayKey, todayTehranKey } from "@/lib/crmReport";
@@ -460,6 +461,8 @@ export type UserPermissions = {
   crm: boolean;
   projects: boolean;
   channels: boolean;
+  /** Clock in/out + sending daily work reports to the admin. */
+  attendance: boolean;
 };
 
 const DEFAULT_DEVELOPER_PERMISSIONS: UserPermissions = {
@@ -472,6 +475,7 @@ const DEFAULT_DEVELOPER_PERMISSIONS: UserPermissions = {
   crm: false,
   projects: false,
   channels: false,
+  attendance: true,
 };
 
 export function getUserPermissions(user: Pick<User, "role" | "permissions">): UserPermissions {
@@ -486,6 +490,7 @@ export function getUserPermissions(user: Pick<User, "role" | "permissions">): Us
       crm: true,
       projects: true,
       channels: true,
+      attendance: true,
     };
   }
   if (!user.permissions) return { ...DEFAULT_DEVELOPER_PERMISSIONS };
@@ -1576,4 +1581,249 @@ export async function getPublishedBlogPostBySlug(slug: string): Promise<BlogPost
     const [withAuthor] = await attachAuthorNames([post]);
     return withAuthor;
   });
+}
+
+// -----------------------------------------------------------------------
+// Attendance (ورود و خروج) + daily work reports
+// -----------------------------------------------------------------------
+
+export type AttendanceRecord = {
+  id: number;
+  user_id: number;
+  /** Tehran calendar day this shift belongs to, "YYYY-MM-DD". */
+  day: string;
+  /** UTC "YYYY-MM-DD HH:MM:SS", like every other timestamp in the app. */
+  check_in: string;
+  check_out: string | null;
+  /** Set when a forgotten clock-out was closed automatically at end of day. */
+  auto_closed?: boolean;
+  /** Admin who last corrected this record by hand, if any. */
+  edited_by?: number | null;
+};
+
+export type WorkHours = { start: string; end: string };
+
+export async function getWorkHours(): Promise<WorkHours> {
+  const database = await getDb();
+  const doc: any = await database.collection("settings").findOne({ _id: "work_hours" as unknown as any });
+  if (doc?.start && doc?.end) return { start: doc.start, end: doc.end };
+  return { ...DEFAULT_WORK_HOURS };
+}
+
+export async function setWorkHours(hours: WorkHours): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection("settings")
+    .updateOne({ _id: "work_hours" as unknown as any }, { $set: { start: hours.start, end: hours.end } }, { upsert: true });
+}
+
+export async function getOpenAttendance(userId: number): Promise<AttendanceRecord | null> {
+  const database = await getDb();
+  const rec = await database
+    .collection<AttendanceRecord>("attendance")
+    .find({ user_id: userId, check_out: null }, { projection: { _id: 0 } })
+    .sort({ check_in: -1 })
+    .limit(1)
+    .toArray();
+  return rec[0] ?? null;
+}
+
+/** A forgotten clock-out from an earlier day is closed at that day's official
+ *  end (never later than "now"), flagged so an admin can correct it. */
+async function closeStale(open: AttendanceRecord, workEnd: string): Promise<void> {
+  const database = await getDb();
+  const endUtc = tehranToUtc(open.day, workEnd);
+  const checkOut = utcToMs(endUtc) > utcToMs(open.check_in) ? endUtc : open.check_in;
+  await database
+    .collection<AttendanceRecord>("attendance")
+    .updateOne({ id: open.id }, { $set: { check_out: checkOut, auto_closed: true } });
+}
+
+export type ClockResult = { ok: boolean; message: string };
+
+export async function clockIn(userId: number): Promise<ClockResult> {
+  const database = await getDb();
+  const today = tehranDay();
+  const open = await getOpenAttendance(userId);
+  if (open && open.day === today) {
+    return { ok: false, message: "ورود امروز قبلاً ثبت شده و هنوز خروج نزدید." };
+  }
+  if (open) await closeStale(open, (await getWorkHours()).end);
+  const id = await nextId("attendance");
+  await database.collection<AttendanceRecord>("attendance").insertOne({
+    id,
+    user_id: userId,
+    day: today,
+    check_in: nowUtcStr(),
+    check_out: null,
+  });
+  return { ok: true, message: "ورود ثبت شد. روز خوبی داشته باشید!" };
+}
+
+export async function clockOut(userId: number): Promise<ClockResult> {
+  const database = await getDb();
+  const open = await getOpenAttendance(userId);
+  if (!open) return { ok: false, message: "ورود بازی ثبت نشده؛ اول «ثبت ورود» بزنید." };
+  if (open.day !== tehranDay()) {
+    await closeStale(open, (await getWorkHours()).end);
+    return {
+      ok: true,
+      message: "خروج روز قبل ثبت نشده بود؛ به‌صورت خودکار تا پایان ساعت کاری بسته شد (مدیر می‌تونه اصلاحش کنه).",
+    };
+  }
+  await database.collection<AttendanceRecord>("attendance").updateOne({ id: open.id }, { $set: { check_out: nowUtcStr() } });
+  return { ok: true, message: "خروج ثبت شد. خسته نباشید!" };
+}
+
+export async function getAttendanceForUser(userId: number, fromDay: string): Promise<AttendanceRecord[]> {
+  const database = await getDb();
+  return database
+    .collection<AttendanceRecord>("attendance")
+    .find({ user_id: userId, day: { $gte: fromDay } }, { projection: { _id: 0 } })
+    .sort({ check_in: -1 })
+    .toArray();
+}
+
+export async function getAttendanceSince(fromDay: string): Promise<AttendanceRecord[]> {
+  const database = await getDb();
+  return database
+    .collection<AttendanceRecord>("attendance")
+    .find({ day: { $gte: fromDay } }, { projection: { _id: 0 } })
+    .sort({ check_in: -1 })
+    .toArray();
+}
+
+export async function getAttendanceById(id: number): Promise<AttendanceRecord | null> {
+  const database = await getDb();
+  return (await database.collection<AttendanceRecord>("attendance").findOne({ id }, { projection: { _id: 0 } })) ?? null;
+}
+
+/** Admin adds a missed shift by hand. */
+export async function insertAttendanceManual(
+  userId: number,
+  day: string,
+  checkIn: string,
+  checkOut: string | null,
+  editedBy: number
+): Promise<void> {
+  const database = await getDb();
+  const id = await nextId("attendance");
+  await database
+    .collection<AttendanceRecord>("attendance")
+    .insertOne({ id, user_id: userId, day, check_in: checkIn, check_out: checkOut, edited_by: editedBy });
+}
+
+/** Admin corrects a record's day / times (a blank check-out leaves it open). */
+export async function updateAttendance(
+  id: number,
+  data: { day: string; checkIn: string; checkOut: string | null },
+  editedBy: number
+): Promise<void> {
+  const database = await getDb();
+  await database.collection<AttendanceRecord>("attendance").updateOne(
+    { id },
+    { $set: { day: data.day, check_in: data.checkIn, check_out: data.checkOut, edited_by: editedBy, auto_closed: false } }
+  );
+}
+
+export async function deleteAttendance(id: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("attendance").deleteOne({ id });
+}
+
+/** Re-exported so callers don't need a second import for one tiny helper. */
+export { sessionMinutes };
+
+export type WorkReport = {
+  id: number;
+  user_id: number;
+  /** The Tehran day the report is about, "YYYY-MM-DD". */
+  day: string;
+  created_at: string;
+  updated_at: string;
+  summary: string;
+  calls: string;
+  orders: string;
+  revenue: string;
+  issues: string;
+  tomorrow: string;
+  status: "new" | "read";
+  /** The admin's reply, shown to the sender. */
+  feedback: string;
+  feedback_at: string | null;
+};
+
+export type WorkReportData = {
+  day: string;
+  summary: string;
+  calls: string;
+  orders: string;
+  revenue: string;
+  issues: string;
+  tomorrow: string;
+};
+
+export async function insertWorkReport(userId: number, data: WorkReportData): Promise<void> {
+  const database = await getDb();
+  const id = await nextId("work_reports");
+  const now = nowUtcStr();
+  await database.collection<WorkReport>("work_reports").insertOne({
+    id,
+    user_id: userId,
+    created_at: now,
+    updated_at: now,
+    status: "new",
+    feedback: "",
+    feedback_at: null,
+    ...data,
+  });
+}
+
+export async function getWorkReportById(id: number): Promise<WorkReport | null> {
+  const database = await getDb();
+  return (await database.collection<WorkReport>("work_reports").findOne({ id }, { projection: { _id: 0 } })) ?? null;
+}
+
+/** The sender may edit a report until the admin has read it. */
+export async function updateWorkReport(id: number, data: WorkReportData): Promise<void> {
+  const database = await getDb();
+  await database.collection<WorkReport>("work_reports").updateOne({ id }, { $set: { ...data, updated_at: nowUtcStr() } });
+}
+
+export async function deleteWorkReport(id: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("work_reports").deleteOne({ id });
+}
+
+export async function getWorkReportsForUser(userId: number): Promise<WorkReport[]> {
+  const database = await getDb();
+  return database
+    .collection<WorkReport>("work_reports")
+    .find({ user_id: userId }, { projection: { _id: 0 } })
+    .sort({ day: -1, id: -1 })
+    .limit(120)
+    .toArray();
+}
+
+export async function getAllWorkReports(): Promise<WorkReport[]> {
+  const database = await getDb();
+  return database
+    .collection<WorkReport>("work_reports")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ day: -1, id: -1 })
+    .limit(400)
+    .toArray();
+}
+
+export async function setWorkReportStatus(id: number, status: "new" | "read"): Promise<void> {
+  const database = await getDb();
+  await database.collection<WorkReport>("work_reports").updateOne({ id }, { $set: { status } });
+}
+
+/** Saving feedback also marks the report as read. */
+export async function setWorkReportFeedback(id: number, feedback: string): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection<WorkReport>("work_reports")
+    .updateOne({ id }, { $set: { feedback, feedback_at: feedback ? nowUtcStr() : null, status: "read" } });
 }

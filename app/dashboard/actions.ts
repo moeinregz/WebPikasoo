@@ -46,6 +46,19 @@ import {
   deletePrivateSite,
   getPrivateSiteById,
   getInquiryById,
+  clockIn,
+  clockOut,
+  getAttendanceById,
+  insertAttendanceManual,
+  updateAttendance,
+  deleteAttendance,
+  setWorkHours,
+  insertWorkReport,
+  updateWorkReport,
+  deleteWorkReport,
+  getWorkReportById,
+  setWorkReportStatus,
+  setWorkReportFeedback,
   insertManualOrder,
   updateManualOrder,
   setPrivateSiteImage,
@@ -73,7 +86,8 @@ import {
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
 import { imageSlotsFor, pickTemplate, templateIdOfSite } from "@/lib/siteTemplates";
-import type { ManualOrderData } from "@/lib/db";
+import type { ManualOrderData, WorkReportData } from "@/lib/db";
+import { isDayString, isTimeString, shiftDay, tehranDay, tehranToUtc } from "@/lib/attendance";
 import {
   toEn,
   HEX_COLOR,
@@ -490,6 +504,7 @@ export async function setUserPermissionsAction(formData: FormData) {
     crm: formData.get("perm_crm") === "on",
     projects: formData.get("perm_projects") === "on",
     channels: formData.get("perm_channels") === "on",
+    attendance: formData.get("perm_attendance") === "on",
   };
 
   await setUserPermissions(userId, permissions);
@@ -635,6 +650,190 @@ export async function updateManualOrderAction(
   }
   revalidatePath("/dashboard");
   return { ok: true, message: "سفارش به‌روزرسانی شد." };
+}
+
+// --- Attendance (ورود و خروج) + daily work reports --------------------------
+
+/** Staff (not customers) with the "attendance" permission. */
+async function requireAttendanceAccess() {
+  const user = await getCurrentUser();
+  if (!user || !user.isStaff || !(user.role === "admin" || user.permissions.attendance)) {
+    redirect("/dashboard");
+  }
+  return user;
+}
+
+export type ClockState = { ok: boolean; message: string } | null;
+
+export async function clockInAction(_prev: ClockState, _formData: FormData): Promise<ClockState> {
+  const user = await requireAttendanceAccess();
+  try {
+    const res = await clockIn(user.id);
+    revalidatePath("/dashboard");
+    return res;
+  } catch (err) {
+    console.error("clockInAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کنید." };
+  }
+}
+
+export async function clockOutAction(_prev: ClockState, _formData: FormData): Promise<ClockState> {
+  const user = await requireAttendanceAccess();
+  try {
+    const res = await clockOut(user.id);
+    revalidatePath("/dashboard");
+    return res;
+  } catch (err) {
+    console.error("clockOutAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کنید." };
+  }
+}
+
+export type AttendanceFormState = { ok: boolean; message: string } | null;
+
+/** Admin: set the official work hours (used for the late / early flags). */
+export async function setWorkHoursAction(_prev: AttendanceFormState, formData: FormData): Promise<AttendanceFormState> {
+  await requireAdmin();
+  const start = (formData.get("start") ?? "").toString();
+  const end = (formData.get("end") ?? "").toString();
+  if (!isTimeString(start) || !isTimeString(end)) return { ok: false, message: "ساعت‌ها معتبر نیستن." };
+  if (start >= end) return { ok: false, message: "ساعت پایان باید بعد از ساعت شروع باشه." };
+  await setWorkHours({ start, end });
+  revalidatePath("/dashboard");
+  return { ok: true, message: "ساعت کاری ذخیره شد." };
+}
+
+/** Admin: add a missed shift by hand, or correct an existing record. */
+export async function saveAttendanceAction(_prev: AttendanceFormState, formData: FormData): Promise<AttendanceFormState> {
+  const admin = await requireAdmin();
+  const id = Number(formData.get("recordId")) || 0;
+  const day = (formData.get("day") ?? "").toString();
+  const inTime = (formData.get("checkIn") ?? "").toString();
+  const outTime = (formData.get("checkOut") ?? "").toString();
+
+  if (!isDayString(day) || day > shiftDay(tehranDay(), 1)) return { ok: false, message: "تاریخ معتبر نیست." };
+  if (!isTimeString(inTime)) return { ok: false, message: "ساعت ورود معتبر نیست." };
+  if (outTime && !isTimeString(outTime)) return { ok: false, message: "ساعت خروج معتبر نیست." };
+  const checkIn = tehranToUtc(day, inTime);
+  const checkOut = outTime ? tehranToUtc(day, outTime) : null;
+  if (checkOut && checkOut <= checkIn) return { ok: false, message: "ساعت خروج باید بعد از ورود باشه." };
+
+  try {
+    if (id) {
+      if (!(await getAttendanceById(id))) return { ok: false, message: "رکورد پیدا نشد." };
+      await updateAttendance(id, { day, checkIn, checkOut }, admin.id);
+    } else {
+      const userId = Number(formData.get("userId"));
+      if (!userId) return { ok: false, message: "کارشناس رو انتخاب کنید." };
+      await insertAttendanceManual(userId, day, checkIn, checkOut, admin.id);
+    }
+  } catch (err) {
+    console.error("saveAttendanceAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کنید." };
+  }
+  revalidatePath("/dashboard");
+  return { ok: true, message: id ? "رکورد اصلاح شد." : "رکورد اضافه شد." };
+}
+
+export async function deleteAttendanceAction(formData: FormData) {
+  await requireAdmin();
+  const id = Number(formData.get("recordId"));
+  if (!id) return;
+  await deleteAttendance(id);
+  revalidatePath("/dashboard");
+}
+
+export type ReportFormState = { ok: boolean; message: string } | null;
+
+const toEnDigits = (v: string) => v.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+
+function parseWorkReport(formData: FormData): { ok: true; data: WorkReportData } | { ok: false; message: string } {
+  const get = (k: string) => (formData.get(k) ?? "").toString().trim();
+  const today = tehranDay();
+  const day = get("day") || today;
+  const summary = get("summary");
+
+  if (!isDayString(day)) return { ok: false, message: "تاریخ گزارش معتبر نیست." };
+  if (day > today) return { ok: false, message: "برای روزهای آینده نمی‌شه گزارش ثبت کرد." };
+  if (day < shiftDay(today, -14)) return { ok: false, message: "گزارش برای بیش از ۱۴ روز پیش قابل ثبت نیست." };
+  if (summary.length < 10) return { ok: false, message: "لطفاً شرح کارهای انجام‌شده رو کمی کامل‌تر بنویسید." };
+
+  const calls = toEnDigits(get("calls"));
+  const orders = toEnDigits(get("orders"));
+  if ((calls && !/^\d{1,5}$/.test(calls)) || (orders && !/^\d{1,5}$/.test(orders))) {
+    return { ok: false, message: "تعداد تماس و سفارش باید عدد باشه." };
+  }
+  const revenue = get("revenue"), issues = get("issues"), tomorrow = get("tomorrow");
+  if (summary.length > 4000 || issues.length > 4000 || tomorrow.length > 4000 || revenue.length > 80) {
+    return { ok: false, message: "یکی از فیلدها خیلی طولانیه." };
+  }
+  return { ok: true, data: { day, summary, calls, orders, revenue, issues, tomorrow } };
+}
+
+/** A staff member sends today's (or a recent day's) work report to the admin. */
+export async function submitWorkReportAction(_prev: ReportFormState, formData: FormData): Promise<ReportFormState> {
+  const user = await requireAttendanceAccess();
+  const parsed = parseWorkReport(formData);
+  if (!parsed.ok) return { ok: false, message: parsed.message };
+  try {
+    await insertWorkReport(user.id, parsed.data);
+  } catch (err) {
+    console.error("submitWorkReportAction failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کنید." };
+  }
+  revalidatePath("/dashboard");
+  return { ok: true, message: "گزارش برای مدیر ارسال شد." };
+}
+
+/** The sender can fix or withdraw a report only until the admin has read it. */
+async function requireOwnUnreadReport(id: number) {
+  const user = await requireAttendanceAccess();
+  const report = await getWorkReportById(id);
+  if (!report || report.user_id !== user.id || report.status !== "new") return { user, report: null };
+  return { user, report };
+}
+
+export async function updateWorkReportAction(_prev: ReportFormState, formData: FormData): Promise<ReportFormState> {
+  const id = Number(formData.get("reportId"));
+  if (!id) return { ok: false, message: "گزارش پیدا نشد." };
+  const { report } = await requireOwnUnreadReport(id);
+  if (!report) return { ok: false, message: "این گزارش دیگه قابل ویرایش نیست (مدیر خونده)." };
+  const parsed = parseWorkReport(formData);
+  if (!parsed.ok) return { ok: false, message: parsed.message };
+  await updateWorkReport(id, parsed.data);
+  revalidatePath("/dashboard");
+  return { ok: true, message: "گزارش به‌روزرسانی شد." };
+}
+
+export async function deleteWorkReportAction(formData: FormData) {
+  const id = Number(formData.get("reportId"));
+  if (!id) return;
+  const user = await requireAttendanceAccess();
+  const report = await getWorkReportById(id);
+  if (!report) return;
+  // Admin may remove any report; a sender only their own unread one.
+  if (user.role !== "admin" && !(report.user_id === user.id && report.status === "new")) return;
+  await deleteWorkReport(id);
+  revalidatePath("/dashboard");
+}
+
+export async function markWorkReportAction(formData: FormData) {
+  await requireAdmin();
+  const id = Number(formData.get("reportId"));
+  if (!id) return;
+  await setWorkReportStatus(id, formData.get("status") === "new" ? "new" : "read");
+  revalidatePath("/dashboard");
+}
+
+export async function saveReportFeedbackAction(_prev: ReportFormState, formData: FormData): Promise<ReportFormState> {
+  await requireAdmin();
+  const id = Number(formData.get("reportId"));
+  const feedback = (formData.get("feedback") ?? "").toString().trim();
+  if (!id || feedback.length > 2000) return { ok: false, message: "بازخورد معتبر نیست." };
+  if (!(await getWorkReportById(id))) return { ok: false, message: "گزارش پیدا نشد." };
+  await setWorkReportFeedback(id, feedback);
+  revalidatePath("/dashboard");
+  return { ok: true, message: feedback ? "بازخورد ذخیره شد." : "بازخورد پاک شد." };
 }
 
 // --- Portfolio projects (admin-manageable, shown in the homepage showcase) --

@@ -19,6 +19,12 @@ import {
   getAllBlogPosts,
   getAllProjects,
   getAllPrivateSites,
+  getWorkHours,
+  getOpenAttendance,
+  getAttendanceForUser,
+  getAttendanceSince,
+  getWorkReportsForUser,
+  getAllWorkReports,
 } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
@@ -43,6 +49,11 @@ import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
 import { imageSlotsFor, templateIdOfSite, templateOptions } from "@/lib/siteTemplates";
+import AttendancePanel from "./AttendancePanel";
+import AdminAttendancePanel from "./AdminAttendancePanel";
+import WorkReportPanel from "./WorkReportPanel";
+import AdminReportsPanel from "./AdminReportsPanel";
+import { shiftDay, tehranDay } from "@/lib/attendance";
 import { formatDate } from "./format";
 
 export const metadata = {
@@ -125,6 +136,16 @@ export default async function DashboardPage() {
       <UsersPanel customers={customers} isAdmin={isAdmin} />
     </div>
   );
+
+  // Attendance + work reports: staff see their own, the admin sees everyone's.
+  const canAttend = isAdmin || perms.attendance;
+  const workHours = canAttend ? await getWorkHours() : { start: "09:00", end: "17:00" };
+  const todayDay = tehranDay();
+  const myOpenShift = canAttend && !isAdmin ? await getOpenAttendance(currentUser.id) : null;
+  const myAttendance = canAttend && !isAdmin ? await getAttendanceForUser(currentUser.id, shiftDay(todayDay, -45)) : [];
+  const myReports = canAttend && !isAdmin ? await getWorkReportsForUser(currentUser.id) : [];
+  const allAttendance = isAdmin ? await getAttendanceSince(shiftDay(todayDay, -120)) : [];
+  const allReports = isAdmin ? await getAllWorkReports() : [];
 
   // Names for the "registered by" label an admin sees on manual orders.
   const staffNames: Record<number, string> = {};
@@ -375,6 +396,31 @@ export default async function DashboardPage() {
       id: "my-tasks",
       label: `تسک‌های من (${toPersianDigits(myTasks.filter((t) => t.status === "open").length)})`,
       panel: <MyTasksPanel tasks={myTasks} />,
+    });
+  }
+  if (isAdmin) {
+    const staffList = developers.map((d) => ({ id: d.id, name: d.name, title: d.title ?? "" }));
+    const unread = allReports.filter((r) => r.status === "new").length;
+    tabs.push({
+      id: "attendance",
+      label: "حضور و غیاب",
+      panel: <AdminAttendancePanel records={allAttendance} staff={staffList} workHours={workHours} />,
+    });
+    tabs.push({
+      id: "work-reports",
+      label: unread ? `گزارش‌های کاری (${toPersianDigits(unread)} جدید)` : "گزارش‌های کاری",
+      panel: <AdminReportsPanel reports={allReports} staff={staffList} />,
+    });
+  } else if (perms.attendance) {
+    tabs.push({
+      id: "attendance",
+      label: myOpenShift ? "ورود و خروج 🟢" : "ورود و خروج",
+      panel: <AttendancePanel open={myOpenShift} records={myAttendance} workHours={workHours} />,
+    });
+    tabs.push({
+      id: "work-reports",
+      label: `گزارش کار (${toPersianDigits(myReports.length)})`,
+      panel: <WorkReportPanel reports={myReports} />,
     });
   }
   if (isAdmin || perms.chat) {
