@@ -25,6 +25,7 @@ import {
   getAttendanceSince,
   getWorkReportsForUser,
   getAllWorkReports,
+  getWorkStatsForUser,
 } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
@@ -144,6 +145,9 @@ export default async function DashboardPage() {
   const myOpenShift = canAttend && !isAdmin ? await getOpenAttendance(currentUser.id) : null;
   const myAttendance = canAttend && !isAdmin ? await getAttendanceForUser(currentUser.id, shiftDay(todayDay, -45)) : [];
   const myReports = canAttend && !isAdmin ? await getWorkReportsForUser(currentUser.id) : [];
+  // CRM activity per day (the report form shows it, so nobody has to count).
+  const reportDays = Array.from({ length: 15 }, (_, i) => shiftDay(todayDay, -i));
+  const myStatsByDay = canAttend && !isAdmin ? await getWorkStatsForUser(currentUser.id, reportDays) : {};
   const allAttendance = isAdmin ? await getAttendanceSince(shiftDay(todayDay, -120)) : [];
   const allReports = isAdmin ? await getAllWorkReports() : [];
 
@@ -420,7 +424,7 @@ export default async function DashboardPage() {
     tabs.push({
       id: "work-reports",
       label: `گزارش کار (${toPersianDigits(myReports.length)})`,
-      panel: <WorkReportPanel reports={myReports} />,
+      panel: <WorkReportPanel reports={myReports} statsByDay={myStatsByDay} />,
     });
   }
   if (isAdmin || perms.chat) {

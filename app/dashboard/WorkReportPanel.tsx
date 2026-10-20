@@ -5,7 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { submitWorkReportAction, updateWorkReportAction, deleteWorkReportAction, type ReportFormState } from "./actions";
 import { fmtDateTime, fmtDay, tehranDay } from "@/lib/attendance";
 import { Badge } from "./AttendancePanel";
-import type { WorkReport } from "@/lib/db";
+import type { WorkReport, WorkStats } from "@/lib/db";
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-3.5 py-2.5 text-[14px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
@@ -24,12 +24,44 @@ function SubmitButton({ label }: { label: string }) {
   );
 }
 
+/** What the CRM says this person did that day — counted by the server, so the
+ *  sender never has to count calls or registered numbers by hand. */
+export function StatsChips({ stats }: { stats: WorkStats }) {
+  const fa = (n: number) => n.toLocaleString("fa-IR");
+  const main: [string, number, string][] = [
+    ["📞 تماس گرفته‌شده", stats.calls, "border-accent/30 bg-accent/10 text-accent"],
+    ["➕ شماره‌ی ثبت‌شده", stats.leads, "border-ink/[0.2] bg-canvas/40 text-ink"],
+    ["✅ قبول برای دیدن", stats.accepted, "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"],
+    ["⏰ پیگیری انجام‌شده", stats.followups, "border-amber-500/40 bg-amber-500/10 text-amber-600"],
+    ["🤝 سفارش ثبت‌شده", stats.orders, "border-violet-500/30 bg-violet-500/10 text-violet-500"],
+  ];
+  const results = Object.entries(stats.byResult).sort((a, b) => b[1] - a[1]);
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-2">
+        {main.map(([label, n, cls]) => (
+          <span key={label} className={`rounded-lg border px-3 py-1.5 text-[12.5px] font-semibold ${cls}`}>
+            {label}: <b className="text-[14px]">{fa(n)}</b>
+          </span>
+        ))}
+      </div>
+      {results.length > 0 && (
+        <p className="text-[12px] leading-relaxed text-dim">
+          نتیجه‌ی تماس‌ها: {results.map(([r, n]) => `${r} ${fa(n)}`).join(" · ")}
+        </p>
+      )}
+    </div>
+  );
+}
+
 /** Write (or edit) a work report for the admin. */
-function ReportForm({ report, onDone }: { report?: WorkReport; onDone?: () => void }) {
+function ReportForm({ report, onDone, statsByDay }: { report?: WorkReport; onDone?: () => void; statsByDay: Record<string, WorkStats> }) {
   const editing = !!report;
   const [state, action] = useFormState<ReportFormState, FormData>(editing ? updateWorkReportAction : submitWorkReportAction, null);
   const ref = useRef<HTMLFormElement>(null);
   const today = tehranDay();
+  const [day, setDay] = useState(report?.day ?? today);
+  const stats = statsByDay[day] ?? (report && report.day === day ? report.stats : undefined);
 
   useEffect(() => {
     if (state?.ok) {
@@ -58,18 +90,21 @@ function ReportForm({ report, onDone }: { report?: WorkReport; onDone?: () => vo
         )}
       </div>
 
+      <div className="mb-4 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.05] p-3.5">
+        <p className="mb-2 text-[12.5px] font-bold text-emerald-600">
+          📊 آمار خودکار شما در {fmtDay(day, false)} — لازم نیست چیزی بشمارید؛ همین‌ها همراه گزارش برای مدیر ارسال می‌شه
+        </p>
+        {stats ? (
+          <StatsChips stats={stats} />
+        ) : (
+          <p className="text-[12.5px] text-dim">برای این تاریخ آماری پیدا نشد.</p>
+        )}
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <label className={labelClass}>تاریخ گزارش</label>
-          <input type="date" name="day" defaultValue={report?.day ?? today} max={today} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>تعداد تماس‌ها</label>
-          <input name="calls" inputMode="numeric" defaultValue={report?.calls} placeholder="مثلاً ۴۰" className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>تعداد سفارش / قرارداد</label>
-          <input name="orders" inputMode="numeric" defaultValue={report?.orders} placeholder="مثلاً ۲" className={inputClass} />
+          <input type="date" name="day" value={day} onChange={(e) => e.target.value && setDay(e.target.value)} max={today} className={inputClass} />
         </div>
         <div>
           <label className={labelClass}>مبلغ فروش</label>
@@ -112,12 +147,13 @@ function ReportForm({ report, onDone }: { report?: WorkReport; onDone?: () => vo
 
 export function ReportBody({ r }: { r: WorkReport }) {
   const chips = [
-    r.calls && `📞 ${Number(r.calls).toLocaleString("fa-IR")} تماس`,
-    r.orders && `🤝 ${Number(r.orders).toLocaleString("fa-IR")} سفارش/قرارداد`,
+    !r.stats && r.calls && `📞 ${Number(r.calls).toLocaleString("fa-IR")} تماس`,
+    !r.stats && r.orders && `🤝 ${Number(r.orders).toLocaleString("fa-IR")} سفارش/قرارداد`,
     r.revenue && `💰 ${r.revenue}`,
   ].filter(Boolean) as string[];
   return (
     <div className="space-y-3">
+      {r.stats && <StatsChips stats={r.stats} />}
       {chips.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {chips.map((c) => (
@@ -145,7 +181,7 @@ export function ReportBody({ r }: { r: WorkReport }) {
 }
 
 /** The staff member's own reports: write a new one, see history + the admin's feedback. */
-export default function WorkReportPanel({ reports }: { reports: WorkReport[] }) {
+export default function WorkReportPanel({ reports, statsByDay }: { reports: WorkReport[]; statsByDay: Record<string, WorkStats> }) {
   const [creating, setCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -167,7 +203,7 @@ export default function WorkReportPanel({ reports }: { reports: WorkReport[] }) 
         )}
       </div>
 
-      {creating && <ReportForm onDone={() => setCreating(false)} />}
+      {creating && <ReportForm statsByDay={statsByDay} onDone={() => setCreating(false)} />}
 
       {reports.length === 0 && !creating ? (
         <div className="rounded-card border border-dashed border-ink/[0.2] p-8 sm:p-12 text-center text-dim">
@@ -177,7 +213,7 @@ export default function WorkReportPanel({ reports }: { reports: WorkReport[] }) 
         <div className="flex flex-col gap-4">
           {reports.map((r) =>
             editingId === r.id ? (
-              <ReportForm key={r.id} report={r} onDone={() => setEditingId(null)} />
+              <ReportForm key={r.id} report={r} statsByDay={statsByDay} onDone={() => setEditingId(null)} />
             ) : (
               <article
                 key={r.id}

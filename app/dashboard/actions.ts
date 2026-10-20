@@ -46,6 +46,9 @@ import {
   deletePrivateSite,
   getPrivateSiteById,
   getInquiryById,
+  getWorkStatsForUser,
+  setCrmLeadFollowup,
+  setCrmLeadNote,
   clockIn,
   clockOut,
   getAttendanceById,
@@ -745,7 +748,6 @@ export async function deleteAttendanceAction(formData: FormData) {
 
 export type ReportFormState = { ok: boolean; message: string } | null;
 
-const toEnDigits = (v: string) => v.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
 function parseWorkReport(formData: FormData): { ok: true; data: WorkReportData } | { ok: false; message: string } {
   const get = (k: string) => (formData.get(k) ?? "").toString().trim();
@@ -758,16 +760,12 @@ function parseWorkReport(formData: FormData): { ok: true; data: WorkReportData }
   if (day < shiftDay(today, -14)) return { ok: false, message: "گزارش برای بیش از ۱۴ روز پیش قابل ثبت نیست." };
   if (summary.length < 10) return { ok: false, message: "لطفاً شرح کارهای انجام‌شده رو کمی کامل‌تر بنویسید." };
 
-  const calls = toEnDigits(get("calls"));
-  const orders = toEnDigits(get("orders"));
-  if ((calls && !/^\d{1,5}$/.test(calls)) || (orders && !/^\d{1,5}$/.test(orders))) {
-    return { ok: false, message: "تعداد تماس و سفارش باید عدد باشه." };
-  }
   const revenue = get("revenue"), issues = get("issues"), tomorrow = get("tomorrow");
   if (summary.length > 4000 || issues.length > 4000 || tomorrow.length > 4000 || revenue.length > 80) {
     return { ok: false, message: "یکی از فیلدها خیلی طولانیه." };
   }
-  return { ok: true, data: { day, summary, calls, orders, revenue, issues, tomorrow } };
+  // calls / orders are counted by the server from the CRM (see getWorkStatsForUser).
+  return { ok: true, data: { day, summary, calls: "", orders: "", revenue, issues, tomorrow } };
 }
 
 /** A staff member sends today's (or a recent day's) work report to the admin. */
@@ -776,7 +774,8 @@ export async function submitWorkReportAction(_prev: ReportFormState, formData: F
   const parsed = parseWorkReport(formData);
   if (!parsed.ok) return { ok: false, message: parsed.message };
   try {
-    await insertWorkReport(user.id, parsed.data);
+    const stats = (await getWorkStatsForUser(user.id, [parsed.data.day]))[parsed.data.day];
+    await insertWorkReport(user.id, parsed.data, stats);
   } catch (err) {
     console.error("submitWorkReportAction failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کنید." };
@@ -800,7 +799,8 @@ export async function updateWorkReportAction(_prev: ReportFormState, formData: F
   if (!report) return { ok: false, message: "این گزارش دیگه قابل ویرایش نیست (مدیر خونده)." };
   const parsed = parseWorkReport(formData);
   if (!parsed.ok) return { ok: false, message: parsed.message };
-  await updateWorkReport(id, parsed.data);
+  const stats = (await getWorkStatsForUser(report.user_id, [parsed.data.day]))[parsed.data.day];
+  await updateWorkReport(id, parsed.data, stats);
   revalidatePath("/dashboard");
   return { ok: true, message: "گزارش به‌روزرسانی شد." };
 }
@@ -1288,6 +1288,34 @@ export async function setCrmCallResultAction(formData: FormData) {
     await autoBuildSiteForLead(before, currentUser.id);
     revalidatePath("/dashboard");
   }
+}
+
+export type CrmNoteState = { ok: boolean; message: string } | null;
+
+/** A free-text note on a lead. Deliberately separate from everything the
+ *  site builder reads — saving a note never touches (or triggers) a site. */
+export async function saveCrmLeadNoteAction(_prev: CrmNoteState, formData: FormData): Promise<CrmNoteState> {
+  await requireCrmAccess();
+  const id = Number(formData.get("leadId"));
+  const note = (formData.get("note") ?? "").toString().trim();
+  if (!id) return { ok: false, message: "شناسه‌ی لید نامعتبره." };
+  if (note.length > 3000) return { ok: false, message: "یادداشت خیلی طولانیه (حداکثر ۳۰۰۰ کاراکتر)." };
+  if (!(await getCrmLeadById(id))) return { ok: false, message: "لید پیدا نشد." };
+  await setCrmLeadNote(id, note);
+  revalidatePath("/dashboard");
+  return { ok: true, message: note ? "یادداشت ذخیره شد." : "یادداشت پاک شد." };
+}
+
+/** Ticks (or unticks) the follow-up of a lead that accepted the demo. */
+export async function toggleCrmFollowupAction(formData: FormData) {
+  const user = await requireCrmAccess();
+  const id = Number(formData.get("leadId"));
+  const done = formData.get("done") === "1";
+  if (!id) return;
+  const lead = await getCrmLeadById(id);
+  if (!lead || !(lead.called && lead.last_call_result === CRM_ACCEPT_RESULT)) return;
+  await setCrmLeadFollowup(id, done, user.id);
+  revalidatePath("/dashboard");
 }
 
 /** Admin-only — a developer with the "crm" permission can add leads and

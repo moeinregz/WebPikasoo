@@ -30,12 +30,18 @@ export const CRM_CALL_RESULT_OPTIONS: CrmCallResultOption[] = [
   { label: "پاسخ نداد", colorClass: "border-yellow-500/40 bg-yellow-500/15 text-yellow-600" },
   { label: "قبول برای دیدن", colorClass: "border-emerald-500/40 bg-emerald-500/15 text-emerald-600" },
   { label: "قبول نکرد", colorClass: "border-red-500/40 bg-red-500/15 text-red-500" },
+  { label: "سایت دارد", colorClass: "border-indigo-500/40 bg-indigo-500/15 text-indigo-500" },
+  { label: "شماره اشتباه است", colorClass: "border-rose-400/40 bg-rose-400/15 text-rose-500" },
 ];
 
 /** The outcome that means "the business agreed to look at a demo site".
  *  Setting it (after a confirmation) auto-builds a site from the lead's
  *  data and posts the link to the team chat. */
 export const CRM_ACCEPT_RESULT = "قبول برای دیدن";
+
+/** Filter key for accepted leads whose follow-up (after the demo link was
+ *  sent) hasn't been ticked off yet. */
+export const CRM_NEED_FOLLOWUP_KEY = "needFollowup";
 
 /** The lead hasn't been called yet — not one of the outcomes above (there's
  *  no call to have an outcome), but styled the same way so it can sit

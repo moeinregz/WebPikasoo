@@ -9,12 +9,16 @@ import {
   setCrmCallResultAction,
   deleteCrmLeadAction,
   updateCrmLeadAction,
+  saveCrmLeadNoteAction,
+  toggleCrmFollowupAction,
+  type CrmNoteState,
   type CrmFormState,
   type CrmEditFormState,
 } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
 import {
   CRM_ACCEPT_RESULT,
+  CRM_NEED_FOLLOWUP_KEY,
   CRM_CALL_RESULT_OPTIONS,
   CRM_NOT_CALLED_OPTION,
   CRM_PROBLEM_STATUS_OPTIONS,
@@ -46,7 +50,13 @@ type Lead = {
   whatsapp?: string;
   site_token?: string;
   legacy_business_type?: string;
+  note?: string;
+  accepted_at?: string;
+  followup_done?: boolean;
+  followup_done_at?: string;
 };
+
+const needsFollowup = (l: Lead) => !!l.called && l.last_call_result === CRM_ACCEPT_RESULT && !l.followup_done;
 
 const MAX_EXTRA_PHONES = 4;
 
@@ -319,6 +329,97 @@ function LeadChips({ lead }: { lead: Lead }) {
         <a href={`/preview/${lead.site_token}`} target="_blank" rel="noopener noreferrer" className={chip}>
           🌐 سایت ساخته‌شده
         </a>
+      )}
+    </div>
+  );
+}
+
+/** Per-lead extras that have nothing to do with the site builder:
+ *  - for leads that accepted the demo («قبول برای دیدن»): a «پیگیری» tick — it
+ *    stays unticked (a reminder) until you've followed up after sending the
+ *    site, then you tick it;
+ *  - a free-text note. */
+function LeadExtras({ lead }: { lead: Lead }) {
+  const accepted = !!lead.called && lead.last_call_result === CRM_ACCEPT_RESULT;
+  const [editing, setEditing] = useState(false);
+  const [state, action] = useFormState<CrmNoteState, FormData>(saveCrmLeadNoteAction, null);
+  useEffect(() => {
+    if (state?.ok) setEditing(false);
+  }, [state]);
+
+  const done = !!lead.followup_done;
+  let days: number | null = null;
+  if (accepted && lead.accepted_at) {
+    days = Math.max(0, Math.floor((Date.now() - new Date(lead.accepted_at.replace(" ", "T") + "Z").getTime()) / 86400000));
+  }
+  const small =
+    "rounded-full border border-ink/[0.16] bg-surface/40 px-2.5 py-1 text-[11.5px] font-semibold text-dim transition hover:border-accent hover:text-accent";
+
+  return (
+    <div className="mt-2 space-y-2 font-normal">
+      {accepted && (
+        <form action={toggleCrmFollowupAction}>
+          <input type="hidden" name="leadId" value={lead.id} />
+          <input type="hidden" name="done" value={done ? "0" : "1"} />
+          <button
+            type="submit"
+            title={done ? "برای برگرداندن به «پیگیری نشده» کلیک کنید" : "بعد از پیگیری، تیک بزنید"}
+            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] font-bold transition ${
+              done
+                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
+                : "border-amber-500/50 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className={`grid h-4 w-4 place-items-center rounded-[5px] border-2 text-[11px] leading-none ${
+                done ? "border-emerald-500 bg-emerald-500 text-white" : "border-amber-500"
+              }`}
+            >
+              {done ? "✓" : ""}
+            </span>
+            {done ? "پیگیری شد" : "پیگیری"}
+            {!done && days !== null && (
+              <span className="font-normal opacity-80" suppressHydrationWarning>
+                · {days === 0 ? "امروز قبول کرد" : `${toPersianDigits(days)} روز پیش قبول کرد`}
+              </span>
+            )}
+          </button>
+        </form>
+      )}
+
+      {editing ? (
+        <form action={action} className="rounded-lg border border-accent/30 bg-canvas/40 p-2.5">
+          <input type="hidden" name="leadId" value={lead.id} />
+          <textarea
+            name="note"
+            rows={3}
+            autoFocus
+            defaultValue={lead.note ?? ""}
+            placeholder="یادداشت درباره‌ی این کسب‌وکار..."
+            className="w-full resize-y rounded-[8px] border border-ink/[0.16] bg-surface/40 px-3 py-2 text-[13px] leading-relaxed text-ink outline-none transition focus:border-accent"
+          />
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <button type="submit" className="rounded-full bg-accent px-4 py-1.5 text-[12px] font-bold text-black">
+              ذخیره
+            </button>
+            <button type="button" onClick={() => setEditing(false)} className={small}>
+              انصراف
+            </button>
+            {state && !state.ok && <span className="text-[12px] font-semibold text-red-500">{state.message}</span>}
+          </div>
+        </form>
+      ) : lead.note ? (
+        <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2">
+          <p className="whitespace-pre-wrap break-words text-[12.5px] leading-relaxed text-ink/85">📝 {lead.note}</p>
+          <button type="button" onClick={() => setEditing(true)} className="mt-1 text-[11.5px] font-semibold text-dim transition hover:text-accent">
+            ویرایش یادداشت
+          </button>
+        </div>
+      ) : (
+        <button type="button" onClick={() => setEditing(true)} className={small}>
+          📝 یادداشت
+        </button>
       )}
     </div>
   );
@@ -601,6 +702,11 @@ export default function CrmPanel({
   const filterTabs = useMemo(
     () => [
       {
+        key: CRM_NEED_FOLLOWUP_KEY,
+        label: `⏰ نیاز به پیگیری (${toPersianDigits(leads.filter(needsFollowup).length)})`,
+        activeClass: "border-amber-500/50 bg-amber-500/15 text-amber-600",
+      },
+      {
         key: "notCalled",
         label: `${CRM_NOT_CALLED_OPTION.label} (${toPersianDigits(leads.length - calledCount)})`,
         activeClass: CRM_NOT_CALLED_OPTION.colorClass,
@@ -617,10 +723,12 @@ export default function CrmPanel({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return leads.filter((l) => {
+      if (statusFilter === CRM_NEED_FOLLOWUP_KEY && !needsFollowup(l)) return false;
       if (statusFilter === "notCalled" && l.called) return false;
       if (
         statusFilter !== "all" &&
         statusFilter !== "notCalled" &&
+        statusFilter !== CRM_NEED_FOLLOWUP_KEY &&
         l.last_call_result !== statusFilter
       )
         return false;
@@ -633,6 +741,7 @@ export default function CrmPanel({
         toPersianDigits(l.phone).includes(query.trim()) ||
         (l.extra_phones ?? []).some((p) => p.includes(query.trim()) || toPersianDigits(p).includes(query.trim())) ||
         (l.instagram ?? "").toLowerCase().includes(q.replace(/^@/, "")) ||
+        (l.note ?? "").toLowerCase().includes(q) ||
         (l.business_area && l.business_area.toLowerCase().includes(q))
       );
     });
@@ -660,6 +769,19 @@ export default function CrmPanel({
       ) : (
         <>
           <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام، شماره یا منطقه..." />
+
+          {statusFilter !== CRM_NEED_FOLLOWUP_KEY && leads.some(needsFollowup) && (
+            <button
+              type="button"
+              onClick={() => setStatusFilter(CRM_NEED_FOLLOWUP_KEY)}
+              className="mb-4 flex w-full items-center justify-between gap-3 rounded-card border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-right text-[13.5px] font-semibold text-amber-700 transition hover:bg-amber-500/15"
+            >
+              <span>
+                ⏰ {toPersianDigits(leads.filter(needsFollowup).length)} کسب‌وکار «قبول برای دیدن» رو زدن و هنوز پیگیری نشدن
+              </span>
+              <span className="text-[12px] underline underline-offset-4">نمایش</span>
+            </button>
+          )}
 
           <div className="mb-4 flex flex-wrap gap-2">
             {filterTabs.map((tab) => (
@@ -734,6 +856,7 @@ export default function CrmPanel({
                       <PhoneLinks lead={l} className="mt-1" />
                       {l.business_area && <p className="mt-1 text-[12.5px] text-dim">{l.business_area}</p>}
                       <LeadChips lead={l} />
+                      <LeadExtras lead={l} />
                     </div>
                     {editingId === l.id ? (
                       <div className="mt-3 border-t border-ink/10 pt-3">
@@ -808,9 +931,10 @@ export default function CrmPanel({
                   <tbody>
                     {paged.map((l, i) => (
                       <tr key={l.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
-                        <td className="min-w-[10rem] px-4 py-3.5 font-semibold">
+                        <td className="min-w-[15rem] px-4 py-3.5 font-semibold">
                           {l.name}
                           <LeadChips lead={l} />
+                          <LeadExtras lead={l} />
                         </td>
                         <td className="px-4 py-3.5">
                           <PhoneLinks lead={l} />

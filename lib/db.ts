@@ -2,7 +2,7 @@ import { MongoClient, Db } from "mongodb";
 import { DEFAULT_WORK_HOURS, nowUtcStr, sessionMinutes, tehranDay, tehranToUtc, utcToMs } from "./attendance";
 import crypto from "crypto";
 import { cacheWrap, invalidateCache } from "@/lib/redis";
-import { tehranDayKey, todayTehranKey } from "@/lib/crmReport";
+import { CRM_ACCEPT_RESULT, tehranDayKey, todayTehranKey } from "@/lib/crmReport";
 
 // MongoDB Atlas storage. This is the async, serverless-friendly
 // replacement for the old file-based SQLite database — it works on
@@ -1028,6 +1028,15 @@ export type CrmLead = {
   // Set when the one-time category migration changed business_type: the value
   // it had before, so the migration can be undone.
   legacy_business_type?: string;
+  /** Free-text internal note about this lead. Purely for the team — it is
+   *  never read by the site builder / template generator. */
+  note?: string;
+  /** When the lead last became «قبول برای دیدن» (the demo link was sent). */
+  accepted_at?: string;
+  /** The follow-up after sending the demo has been done (ticked). */
+  followup_done?: boolean;
+  followup_done_at?: string;
+  followup_by?: number | null;
 };
 
 export type NewCrmLead = {
@@ -1169,6 +1178,8 @@ export type CrmCallLog = {
  *  day's entry. */
 export async function recordCrmCallResult(data: { leadId: number; userId: number; result: string }): Promise<void> {
   const database = await getDb();
+  const lead = await database.collection<CrmLead>("crm_leads").findOne({ id: data.leadId }, { projection: { last_call_result: 1, called: 1 } });
+  const newlyAccepted = data.result === CRM_ACCEPT_RESULT && !(lead?.called && lead?.last_call_result === CRM_ACCEPT_RESULT);
   const latest = await database
     .collection<CrmCallLog>("crm_calls")
     .find({ lead_id: data.leadId })
@@ -1194,6 +1205,31 @@ export async function recordCrmCallResult(data: { leadId: number; userId: number
   await database
     .collection("crm_leads")
     .updateOne({ id: data.leadId }, { $set: { called: 1, last_call_result: data.result } });
+  // A fresh «قبول برای دیدن»: remember when, and start a new (unticked) follow-up.
+  if (newlyAccepted) {
+    await database.collection("crm_leads").updateOne(
+      { id: data.leadId },
+      { $set: { accepted_at: nowStr(), followup_done: false }, $unset: { followup_done_at: "", followup_by: "" } }
+    );
+  }
+}
+
+/** Ticks / unticks the follow-up of an accepted lead. */
+export async function setCrmLeadFollowup(id: number, done: boolean, userId: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("crm_leads").updateOne(
+    { id },
+    done
+      ? { $set: { followup_done: true, followup_done_at: nowStr(), followup_by: userId } }
+      : { $set: { followup_done: false }, $unset: { followup_done_at: "", followup_by: "" } }
+  );
+}
+
+/** Saves (or clears, when empty) the lead's note. Kept apart from
+ *  updateCrmLead on purpose: notes are independent of the site builder. */
+export async function setCrmLeadNote(id: number, note: string): Promise<void> {
+  const database = await getDb();
+  await database.collection("crm_leads").updateOne({ id }, note ? { $set: { note } } : { $unset: { note: "" } });
 }
 
 export async function getAllCrmCallLogs(): Promise<CrmCallLog[]> {
@@ -1747,6 +1783,9 @@ export type WorkReport = {
   revenue: string;
   issues: string;
   tomorrow: string;
+  /** Counted by the server from the CRM when the report is sent, so the
+   *  sender never has to count anything by hand. */
+  stats?: WorkStats;
   status: "new" | "read";
   /** The admin's reply, shown to the sender. */
   feedback: string;
@@ -1763,7 +1802,7 @@ export type WorkReportData = {
   tomorrow: string;
 };
 
-export async function insertWorkReport(userId: number, data: WorkReportData): Promise<void> {
+export async function insertWorkReport(userId: number, data: WorkReportData, stats: WorkStats): Promise<void> {
   const database = await getDb();
   const id = await nextId("work_reports");
   const now = nowUtcStr();
@@ -1775,6 +1814,7 @@ export async function insertWorkReport(userId: number, data: WorkReportData): Pr
     status: "new",
     feedback: "",
     feedback_at: null,
+    stats,
     ...data,
   });
 }
@@ -1785,9 +1825,9 @@ export async function getWorkReportById(id: number): Promise<WorkReport | null> 
 }
 
 /** The sender may edit a report until the admin has read it. */
-export async function updateWorkReport(id: number, data: WorkReportData): Promise<void> {
+export async function updateWorkReport(id: number, data: WorkReportData, stats: WorkStats): Promise<void> {
   const database = await getDb();
-  await database.collection<WorkReport>("work_reports").updateOne({ id }, { $set: { ...data, updated_at: nowUtcStr() } });
+  await database.collection<WorkReport>("work_reports").updateOne({ id }, { $set: { ...data, stats, updated_at: nowUtcStr() } });
 }
 
 export async function deleteWorkReport(id: number): Promise<void> {
@@ -1826,4 +1866,73 @@ export async function setWorkReportFeedback(id: number, feedback: string): Promi
   await database
     .collection<WorkReport>("work_reports")
     .updateOne({ id }, { $set: { feedback, feedback_at: feedback ? nowUtcStr() : null, status: "read" } });
+}
+
+/** What a sales expert did on one day, counted from the CRM. */
+export type WorkStats = {
+  /** Numbers (leads) they registered in the CRM that day. */
+  leads: number;
+  /** Calls they made (one per lead per day, as in the CRM report). */
+  calls: number;
+  /** Of those calls, how many ended as «قبول برای دیدن». */
+  accepted: number;
+  /** Follow-ups they ticked off. */
+  followups: number;
+  /** Manual orders (خارج از سایت) they registered. */
+  orders: number;
+  /** Calls per outcome, e.g. { "پاسخ نداد": 12, "سایت دارد": 3 }. */
+  byResult: Record<string, number>;
+};
+
+const emptyStats = (): WorkStats => ({ leads: 0, calls: 0, accepted: 0, followups: 0, orders: 0, byResult: {} });
+
+/** Counts one staff member's CRM activity for each of the given Tehran days
+ *  ("YYYY-MM-DD"). Days with no activity come back as zeros. */
+export async function getWorkStatsForUser(userId: number, days: string[]): Promise<Record<string, WorkStats>> {
+  const database = await getDb();
+  const out: Record<string, WorkStats> = Object.fromEntries(days.map((d) => [d, emptyStats()]));
+  if (days.length === 0) return out;
+  const first = days.reduce((a, b) => (a < b ? a : b));
+  // Cheap pre-filter by creation time (UTC), then bucket by Tehran day.
+  const sinceUtc = new Date(`${first}T00:00:00+03:30`).toISOString().slice(0, 19).replace("T", " ");
+
+  const calls = await database
+    .collection<CrmCallLog>("crm_calls")
+    .find({ user_id: userId, created_at: { $gte: sinceUtc } }, { projection: { _id: 0 } })
+    .toArray();
+  for (const c of calls) {
+    const st = out[tehranDayKey(c.created_at)];
+    if (!st) continue;
+    st.calls += 1;
+    if (c.result === CRM_ACCEPT_RESULT) st.accepted += 1;
+    st.byResult[c.result] = (st.byResult[c.result] ?? 0) + 1;
+  }
+
+  const leads = await database
+    .collection<CrmLead>("crm_leads")
+    .find({ created_by: userId, created_at: { $gte: sinceUtc } }, { projection: { created_at: 1 } })
+    .toArray();
+  for (const l of leads) {
+    const st = out[tehranDayKey(l.created_at)];
+    if (st) st.leads += 1;
+  }
+
+  const followed = await database
+    .collection<CrmLead>("crm_leads")
+    .find({ followup_by: userId, followup_done: true, followup_done_at: { $gte: sinceUtc } }, { projection: { followup_done_at: 1 } })
+    .toArray();
+  for (const l of followed) {
+    const st = l.followup_done_at ? out[tehranDayKey(l.followup_done_at)] : undefined;
+    if (st) st.followups += 1;
+  }
+
+  const orders = await database
+    .collection<Inquiry>("inquiries")
+    .find({ source: "manual", created_by: userId, created_at: { $gte: sinceUtc } }, { projection: { created_at: 1 } })
+    .toArray();
+  for (const o of orders) {
+    const st = out[tehranDayKey(o.created_at)];
+    if (st) st.orders += 1;
+  }
+  return out;
 }
