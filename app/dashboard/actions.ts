@@ -1178,6 +1178,23 @@ export async function createCrmLeadAction(
   return { ok: true, message: "شماره ثبت شد." };
 }
 
+/** Live duplicate check while a number is being typed (the add/edit forms
+ *  call this a moment after typing stops) — so the user hears "duplicate"
+ *  right away instead of only when they press save. It looks at EVERY lead in
+ *  the CRM, not just the caller's own, but only ever answers yes/no. */
+export async function checkCrmPhoneAction(
+  phoneRaw: string,
+  ignoreLeadId?: number
+): Promise<{ duplicate: boolean }> {
+  await requireCrmAccess();
+  const t = (phoneRaw ?? "").toString().trim();
+  if (!t || t.length > 40) return { duplicate: false };
+  // Same normalisation the save actions use, so both always agree.
+  const phone = isValidPhone(t) ? normalizePhone(t) : t;
+  const found = await getCrmLeadByPhone(phone);
+  return { duplicate: !!found && found.id !== ignoreLeadId };
+}
+
 export type CrmEditFormState = { ok: boolean; message: string } | null;
 
 /** Main-admin only: edits every field of an existing lead — name, primary

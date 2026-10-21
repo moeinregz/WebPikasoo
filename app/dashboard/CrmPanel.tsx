@@ -10,6 +10,7 @@ import {
   deleteCrmLeadAction,
   updateCrmLeadAction,
   saveCrmLeadNoteAction,
+  checkCrmPhoneAction,
   toggleCrmFollowupAction,
   type CrmNoteState,
   type CrmFormState,
@@ -109,28 +110,120 @@ function BusinessTypeOptions({ extra = [] }: { extra?: string[] }) {
 
 /** "Does this business have more numbers?" — any number of extra phone
  *  inputs (up to MAX_EXTRA_PHONES), all submitted as `extraPhone`. */
+const toEnDigits = (v: string) =>
+  v.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+
+type PhoneStatus = "idle" | "checking" | "dup" | "free";
+
+/** Asks the server — shortly after typing stops — whether this number is
+ *  already in the CRM. Idle until it looks like a real number (8+ digits). */
+function usePhoneStatus(value: string, ignoreLeadId?: number): PhoneStatus {
+  const [status, setStatus] = useState<PhoneStatus>("idle");
+  useEffect(() => {
+    const digits = toEnDigits(value).replace(/\D/g, "");
+    if (digits.length < 8) {
+      setStatus("idle");
+      return;
+    }
+    setStatus("checking");
+    let cancelled = false;
+    const t = setTimeout(async () => {
+      try {
+        const res = await checkCrmPhoneAction(value, ignoreLeadId);
+        if (!cancelled) setStatus(res.duplicate ? "dup" : "free");
+      } catch {
+        if (!cancelled) setStatus("idle");
+      }
+    }, 350);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [value, ignoreLeadId]);
+  return status;
+}
+
+const DUP_MESSAGE = "این شماره تکراریه — قبلاً تو CRM ثبت شده.";
+
+/** A phone input that tells you "duplicate" as you type, and (via the
+ *  browser's own validation) refuses to submit the form while it is one. */
+function PhoneField({
+  value,
+  onChange,
+  inputCls,
+  ignoreLeadId,
+  name,
+  placeholder,
+  required,
+  inputMode,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  inputCls: string;
+  ignoreLeadId?: number;
+  name: string;
+  placeholder: string;
+  required?: boolean;
+  inputMode?: "tel";
+}) {
+  const status = usePhoneStatus(value, ignoreLeadId);
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    ref.current?.setCustomValidity(status === "dup" ? DUP_MESSAGE : "");
+  }, [status]);
+
+  return (
+    <div className="min-w-0 flex-1">
+      <input
+        ref={ref}
+        name={name}
+        dir="ltr"
+        inputMode={inputMode}
+        required={required}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        aria-invalid={status === "dup"}
+        className={`${inputCls} ${status === "dup" ? "!border-red-500 !bg-red-500/10" : status === "free" && ignoreLeadId === undefined ? "!border-emerald-500/50" : ""}`}
+      />
+      {status === "dup" && (
+        <p className="mt-1 text-[12px] font-bold text-red-500" role="alert">
+          ⚠️ {DUP_MESSAGE}
+        </p>
+      )}
+      {/* "new number" only makes sense when adding, not when editing a lead's own numbers */}
+      {status === "free" && ignoreLeadId === undefined && (
+        <p className="mt-1 text-[11.5px] font-semibold text-emerald-600">✓ شماره‌ی جدیده</p>
+      )}
+      {status === "checking" && <p className="mt-1 text-[11.5px] text-dim">در حال بررسی...</p>}
+    </div>
+  );
+}
+
 function ExtraPhoneFields({
   initial = [],
   inputCls,
   small = false,
+  ignoreLeadId,
 }: {
   initial?: string[];
   inputCls: string;
   small?: boolean;
+  ignoreLeadId?: number;
 }) {
   const [phones, setPhones] = useState<string[]>(initial);
   return (
     <div className="flex flex-col gap-2">
       {phones.map((p, i) => (
-        <div key={i} className="flex items-center gap-2">
-          <input
+        <div key={i} className="flex items-start gap-2">
+          <PhoneField
             name="extraPhone"
-            dir="ltr"
             inputMode="tel"
             value={p}
-            onChange={(e) => setPhones((prev) => prev.map((x, j) => (j === i ? e.target.value : x)))}
+            onChange={(v) => setPhones((prev) => prev.map((x, j) => (j === i ? v : x)))}
             placeholder="شماره‌ی دیگر"
-            className={inputCls}
+            inputCls={inputCls}
+            ignoreLeadId={ignoreLeadId}
           />
           <button
             type="button"
@@ -160,12 +253,14 @@ function AddLeadForm() {
   // Bumped after a successful add so the (stateful) extra-phone inputs
   // remount empty along with the form reset.
   const [resetKey, setResetKey] = useState(0);
+  const [phone, setPhone] = useState("");
 
   // Clear the fields after a successful add, so registering several
   // numbers in a row doesn't leave the previous one's info sitting there.
   useEffect(() => {
     if (state?.ok) {
       formRef.current?.reset();
+      setPhone("");
       setResetKey((k) => k + 1);
     }
   }, [state]);
@@ -175,7 +270,7 @@ function AddLeadForm() {
       <h2 className="mb-4 font-display text-lg font-normal">افزودن شماره‌ی جدید به CRM</h2>
       <div className="grid gap-4 sm:grid-cols-5">
         <input name="name" required placeholder="نام / نام کسب‌وکار" className={inputClass} />
-        <input name="phone" required dir="ltr" placeholder="شماره تماس" className={inputClass} />
+        <PhoneField name="phone" required value={phone} onChange={setPhone} placeholder="شماره تماس" inputCls={inputClass} />
         <input name="businessArea" placeholder="آدرس / منطقه‌ی کسب‌وکار (اختیاری)" className={inputClass} />
         <select name="businessType" defaultValue="" className={inputClass}>
           <option value="">نوع کسب‌وکار (اختیاری)</option>
@@ -223,6 +318,7 @@ const editInputClass =
  *  display for exactly one lead at a time (see `editingId` below). */
 function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
   const [state, formAction] = useFormState(updateCrmLeadAction, null as CrmEditFormState);
+  const [phone, setPhone] = useState(lead.phone);
 
   useEffect(() => {
     if (state?.ok) onDone();
@@ -234,13 +330,14 @@ function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
       <input type="hidden" name="leadId" value={lead.id} />
       <div className="grid gap-2 sm:grid-cols-2">
         <input name="name" defaultValue={lead.name} placeholder="نام کسب‌وکار" required className={editInputClass} />
-        <input
+        <PhoneField
           name="phone"
-          dir="ltr"
-          defaultValue={lead.phone}
-          placeholder="شماره‌ی اصلی"
           required
-          className={editInputClass}
+          value={phone}
+          onChange={setPhone}
+          placeholder="شماره‌ی اصلی"
+          inputCls={editInputClass}
+          ignoreLeadId={lead.id}
         />
       </div>
       <div className="grid gap-2 sm:grid-cols-3">
@@ -264,7 +361,7 @@ function EditLeadFields({ lead, onDone }: { lead: Lead; onDone: () => void }) {
         </select>
       </div>
       <div className="grid gap-2 sm:grid-cols-3">
-        <ExtraPhoneFields initial={lead.extra_phones ?? []} inputCls={editInputClass} small />
+        <ExtraPhoneFields initial={lead.extra_phones ?? []} inputCls={editInputClass} small ignoreLeadId={lead.id} />
         <input
           name="instagram"
           dir="ltr"
