@@ -43,18 +43,27 @@ const SI_MARK = /\/\*SI\*\/[\s\S]*?\/\*SI_END\*\//;
 
 /** JSON for the `{{images_json}}` placeholder: only valid slot keys with plain
  *  https URLs, and `<` escaped so it can never close the surrounding <script>. */
-function imagesJson(images?: Record<string, string>): string {
+function imagesJson(images?: Record<string, string>, allowData = false): string {
   const clean: Record<string, string> = {};
   for (const [k, v] of Object.entries(images ?? {})) {
-    if (/^[a-z][a-z0-9_]*$/.test(k) && /^https:\/\/[^\s"'<>\\]+$/.test(v)) clean[k] = v;
+    if (!/^[a-z][a-z0-9_]*$/.test(k)) continue;
+    const isHttps = /^https:\/\/[^\s"'<>\\]+$/.test(v);
+    // data: images are accepted only for the standalone download, and only as
+    // plain base64 JPEG/PNG/WebP — nothing that could break out of the JSON.
+    const isData = allowData && /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(v);
+    if (isHttps || isData) clean[k] = v;
   }
   return JSON.stringify(clean).replace(/</g, "\\u003c");
 }
 
 /** `{{images_json}}` is rendered as a marked block so that photos uploaded
  *  LATER can be swapped in when the page is served — no re-render needed. */
-export function injectSiteImages(html: string, images?: Record<string, string>): string {
-  return html.replace(SI_MARK, () => `/*SI*/${imagesJson(images)}/*SI_END*/`);
+export function injectSiteImages(
+  html: string,
+  images?: Record<string, string>,
+  opts: { allowData?: boolean } = {}
+): string {
+  return html.replace(SI_MARK, () => `/*SI*/${imagesJson(images, opts.allowData)}/*SI_END*/`);
 }
 
 export const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;

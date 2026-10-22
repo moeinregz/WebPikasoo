@@ -543,6 +543,17 @@ function SiteCard({ site }: { site: PrivateSite }) {
           >
             مشاهده
           </a>
+          <a
+            href={`/dashboard/sites/${site.id}/download`}
+            download
+            title="دانلود سایت به‌صورت یک فایل HTML (عکس‌های آپلودشده داخل فایل قرار می‌گیرن)"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} className="h-3.5 w-3.5" aria-hidden="true">
+              <path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            دانلود
+          </a>
           <form action={deletePrivateSiteAction}>
             <input type="hidden" name="siteId" value={site.id} />
             <DeleteButton />
