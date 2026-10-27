@@ -158,6 +158,8 @@ h2{font-size:clamp(36px,9vw,66px);line-height:1.25}
 .tile:nth-child(even){border-radius:32px 32px 10px 32px}
 .tile:active{transform:scale(.96) rotate(-1deg)}
 .tile .ew{width:76px;height:76px;border-radius:50% 46% 54% 50%;background:rgba(255,255,255,.55);display:grid;place-items:center;font-size:40px;animation:bob 3.4s ease-in-out infinite}
+.tile .ew.has-img{background:none;animation:none;overflow:hidden;width:92px;height:92px}
+.tile .ew.has-img img{width:100%;height:100%;object-fit:cover}
 .tile h3{font-size:25px;line-height:1.2;margin-top:4px}
 .tile p{font-size:13.5px;line-height:1.65;opacity:.88;flex:1}
 .price{background:var(--espresso);color:var(--milk);border-radius:999px;padding:3px 13px;font-weight:700;font-size:14.5px}
@@ -544,53 +546,28 @@ h2{font-size:clamp(36px,9vw,66px);line-height:1.25}
 
 <script>
 (function(){
-  var MENU=[
-    {id:'hot',n:'قهوه گرم',e:'☕',items:[
-      {n:'اسپرسو',d:'یه شات غلیظ و خوش‌عطر',p:95,e:'☕',b:1},
-      {n:'آمریکانو',d:'اسپرسو با آب داغ؛ سبک و روشن',p:110,e:'☕'},
-      {n:'کاپوچینو',d:'اسپرسو، شیر داغ و فوم پفکی',p:135,e:'☕',b:1},
-      {n:'لاته',d:'قهوه‌ی ملایم با شیر بخارداده',p:140,e:'🥛'},
-      {n:'موکا',d:'قهوه و شکلات با خامه‌ی روش',p:155,e:'🍫'},
-      {n:'قهوه ترک',d:'سنتی و دم‌کشیده روی حرارت ملایم',p:120,e:'☕'}]},
-    {id:'cold',n:'نوشیدنی سرد',e:'🧊',items:[
-      {n:'آیس لاته',d:'لاته‌ی خنک روی یخ',p:155,e:'🧊',b:1},
-      {n:'آیس آمریکانو',d:'تلخ و ترد؛ مخصوص روزهای گرم',p:120,e:'🧊'},
-      {n:'فراپه',d:'قهوه‌ی یخی، کوبیده و خامه‌ای',p:175,e:'🥤'},
-      {n:'لیموناد نعنا',d:'ترش، شیرین و خنک',p:110,e:'🍋'},
-      {n:'اسموتی توت',d:'توت، موز و ماست',p:165,e:'🍓'}]},
-    {id:'tea',n:'چای و دمنوش',e:'🍵',items:[
-      {n:'چای ماسالا',d:'چای و ادویه‌ی گرم با شیر',p:125,e:'🍵'},
-      {n:'دمنوش بهارنارنج',d:'آرام‌بخش و خوش‌بو',p:115,e:'🌼'},
-      {n:'چای سیاه',d:'دم‌کشیده و پررنگ، با نبات',p:80,e:'🍵'},
-      {n:'هات چاکلت',d:'شکلات داغ و غلیظ',p:145,e:'🍫',b:1}]},
-    {id:'sweet',n:'شیرینی',e:'🍰',items:[
-      {n:'چیزکیک',d:'نرم و خامه‌ای با سس میوه',p:185,e:'🍰',b:1},
-      {n:'تیرامیسو',d:'قهوه، ماسکارپونه و کاکائو',p:195,e:'🍰'},
-      {n:'کروسان',d:'کره‌ای و ترد، تازه از فر',p:110,e:'🥐'},
-      {n:'براونی',d:'شکلاتی و نمناک',p:160,e:'🍫'},
-      {n:'دونات',d:'لعاب‌دار و پفی',p:95,e:'🍩'}]},
-    {id:'food',n:'صبحانه',e:'🍳',items:[
-      {n:'املت',d:'گوجه، تخم‌مرغ و نون تازه',p:210,e:'🍳'},
-      {n:'تست آووکادو',d:'آووکادو و تخم‌مرغ روی نون تست',p:230,e:'🥑',b:1},
-      {n:'پنکیک',d:'با عسل و موز',p:220,e:'🥞'},
-      {n:'ساندویچ پنیر',d:'نون تست، پنیر و گوجه',p:175,e:'🥪'}]}
-  ];
+  var SM={{menu_json}}; /* the site's menu (edited from the dashboard): [{title, emoji, items:[{name, desc, price, emoji, image, badge}]}] */
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  var MENU=(Array.isArray(SM)?SM:[]).map(function(c,i){return {id:'c'+i,n:c.title,e:c.emoji||'☕',items:c.items.map(function(it){return {n:it.name,d:it.desc||'',p:it.price||'',e:it.emoji||c.emoji||'☕',b:it.badge||'',img:it.image||''};})};});
+  function priceHtml(p){var m=String(p).match(/^([\d۰-۹,٬،.\s]+)\s*(.*)$/);return m&&m[2]?esc(m[1].trim())+'<small>'+esc(m[2])+'</small>':esc(p);}
+
   var fa=function(n){return n.toLocaleString('fa-IR');};
   var tabs=document.getElementById('tabs'),grid=document.getElementById('grid');
-  var cur=MENU[0].id;
+  var cur=MENU.length?MENU[0].id:'';
   function renderTabs(){
-    tabs.innerHTML=MENU.map(function(c){return '<button class="tab" role="tab" id="tab-'+c.id+'" aria-selected="'+(c.id===cur)+'" data-id="'+c.id+'">'+c.e+' '+c.n+'</button>';}).join('');
+    tabs.innerHTML=MENU.map(function(c){return '<button class="tab" role="tab" id="tab-'+c.id+'" aria-selected="'+(c.id===cur)+'" data-id="'+c.id+'">'+esc(c.e)+' '+esc(c.n)+'</button>';}).join('');
   }
   function renderGrid(){
     var cat=MENU.filter(function(c){return c.id===cur;})[0];
+    if(!cat){grid.innerHTML='';return;}
     var cols=['var(--t1)','var(--t2)','var(--t3)','var(--t4)'];
     grid.setAttribute('aria-labelledby','tab-'+cur);
     grid.innerHTML=cat.items.map(function(it,i){
       return '<article class="tile" style="--bg:'+cols[i%4]+';animation-delay:'+(i*55)+'ms">'
-        +(it.b?'<span class="tag">محبوب</span>':'')
-        +'<div class="ew" style="animation-delay:-'+(i*0.5)+'s">'+it.e+'</div>'
-        +'<h3>'+it.n+'</h3><p>'+it.d+'</p>'
-        +'<div class="price">'+fa(it.p*1000)+'<small>تومان</small></div></article>';
+        +(it.b?'<span class="tag">'+esc(it.b)+'</span>':'')
+        +(it.img?'<div class="ew has-img"><img src="'+esc(it.img)+'" alt="'+esc(it.n)+'" loading="lazy"></div>':'<div class="ew" style="animation-delay:-'+(i*0.5)+'s">'+esc(it.e)+'</div>')
+        +'<h3>'+esc(it.n)+'</h3>'+(it.d?'<p>'+esc(it.d)+'</p>':'<p></p>')
+        +(it.p?'<div class="price">'+priceHtml(it.p)+'</div>':'')+'</article>';
     }).join('');
   }
   tabs.addEventListener('click',function(e){

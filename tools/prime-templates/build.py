@@ -13,8 +13,8 @@ FONTS = {
     'Markazi Text': ('&family=Markazi+Text:wght@500;700', 700),
     'Reem Kufi': ('&family=Reem+Kufi:wght@500;700', 700),
 }
-BANDS_LIGHT = dict(stmt='a', svc='b', about='a', steps='c', gal='d', rev='b', contact='a')
-BANDS_DARK = dict(stmt='a', svc='b', about='a', steps='c', gal='d', rev='b', contact='d')
+BANDS_LIGHT = dict(stmt='a', svc='b', menu='d', about='a', steps='c', gal='d', rev='b', contact='a')
+BANDS_DARK = dict(stmt='a', svc='b', menu='d', about='a', steps='c', gal='d', rev='b', contact='d')
 
 def lum(h):
     h = h.lstrip('#'); r, g, b = [int(h[i:i+2], 16) / 255 for i in (0, 2, 4)]
@@ -56,7 +56,12 @@ def build(cfg):
     # em markers in titles: *word* -> <em>word</em>
     em = lambda t: re.sub(r'\*([^*]+)\*', r'<em>\1</em>', esc(t))
 
+    has_menu = bool(cfg.get('menu'))
+    read = lambda f: open(os.path.join(HERE, f), encoding='utf-8').read() if has_menu else ''
     rep = {
+        'MENU_SECTION': read('menu_section.html'), 'MENU_CSS': read('menu.css'), 'MENU_JS': read('menu.js'),
+        'SVCID': 'menu' if has_menu else 'svc', 'B_MENU': 's-' + bands['menu'],
+        'MENU_T': em(cfg.get('menu_h', 'منوی *کامل*')),
         'G1': g1, 'G2': g2, 'FONTQ': fq, 'DISP': cfg['font'], 'DISPW': str(dw),
         'BG': pal['bg'], 'INK': pal['ink'], 'DEEP': pal['deep'],
         'PR': '{{t:' + pal['pr'] + '}}', 'PR2': '{{t:' + pal['pr2'] + '}}', 'AC': '{{t:' + pal['ac'] + '}}',
@@ -93,8 +98,9 @@ def ts_entry(cfg):
         ('hero', ph['hero'][0], ph['hero'][1], '1:1'),
         ('about', ph['about'][0], ph['about'][1], '4:5'),
     ] + [(f'g{i+1}', f'گالری — {c}', ph['gal'][i] if i < len(ph['gal']) else 'گالری', '4:5') for i, c in enumerate(cfg['gal'])]
+    menu_line = '    menu: true,\n' if cfg.get('menu') else ''
     lines = ''.join(f'      {{ key: "{k}", label: "{l}", hint: "{h}", ratio: "{r}" }},\n' for k, l, h, r in slots)
-    return (f'  {{\n    id: "{cfg["id"]}",\n    trade: "{cfg["trade"]}",\n    label: "{cfg["label"]}",\n    html: {camel(cfg["id"])},\n'
+    return (f'  {{\n    id: "{cfg["id"]}",\n    trade: "{cfg["trade"]}",\n    label: "{cfg["label"]}",\n    html: {camel(cfg["id"])},\n{menu_line}'
             f'    palette: {{ primary: "{pal["pr"]}", secondary: "{pal["pr2"]}" }},\n    images: [\n{lines}    ],\n  }},\n')
 
 def camel(i):

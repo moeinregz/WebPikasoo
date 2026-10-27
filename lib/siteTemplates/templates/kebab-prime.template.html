@@ -251,6 +251,7 @@ body.lock .mb{transform:translateY(140%)}
 
 html.motion:not(.ready) .hero .hw>span{visibility:hidden}
 html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(.ready) .chip{opacity:0}
+
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -317,6 +318,8 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
   <div class="cds" id="cds"><div class="cd" role="button" tabindex="0" data-t="کباب کوبیده" data-d="گوشت چرخ‌کرده‌ی تازه، روی ذغال، همراه برنج و گوجه‌ی کبابی." data-e="🍢"><div class="ic">🍢</div><h3>کباب کوبیده</h3><p>گوشت چرخ‌کرده‌ی تازه، روی ذغال، همراه برنج و گوجه‌ی کبابی.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="جوجه کباب" data-d="مرغ مزه‌دارشده با زعفران و آب‌لیمو، نرم و آبدار." data-e="🍗"><div class="ic">🍗</div><h3>جوجه کباب</h3><p>مرغ مزه‌دارشده با زعفران و آب‌لیمو، نرم و آبدار.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="برگ ممتاز" data-d="فیله‌ی نرم و آبدار، سیخ‌زده با دقت." data-e="🥩"><div class="ic">🥩</div><h3>برگ ممتاز</h3><p>فیله‌ی نرم و آبدار، سیخ‌زده با دقت.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="شیشلیک" data-d="دنده‌ی بره‌ی مزه‌دار روی آتش ملایم." data-e="🍖"><div class="ic">🍖</div><h3>شیشلیک</h3><p>دنده‌ی بره‌ی مزه‌دار روی آتش ملایم.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="ترکیبی‌ها" data-d="سلطانی، وزیری و بختیاری برای کسی که همه‌چیز رو می‌خواد." data-e="🍱"><div class="ic">🍱</div><h3>ترکیبی‌ها</h3><p>سلطانی، وزیری و بختیاری برای کسی که همه‌چیز رو می‌خواد.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="مخلفات و نوشیدنی" data-d="سالاد، ماست، ترشی، دوغ و نوشیدنی‌های خنک." data-e="🥗"><div class="ic">🥗</div><h3>مخلفات و نوشیدنی</h3><p>سالاد، ماست، ترشی، دوغ و نوشیدنی‌های خنک.</p><span class="go">جزئیات ‹</span></div></div><div class="dots" id="cdots"></div>
 </div></section>
 
+
+
 <section class="sec s-a" id="about"><div class="w ab">
   <div class="fm sh-round" data-r><div class="bk"></div><div class="dot"></div><div class="fr"><img data-slot="about" alt="درباره‌ی {{brand}}" loading="lazy" width="600" height="750"></div></div>
   <div>
@@ -371,7 +374,7 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
 <nav class="mb" aria-label="دسترسی سریع"><a href="#svc"><b>🍢</b>منو</a><a href="{{map_url}}" target="_blank" rel="noopener"><b>📍</b>مسیر</a><a class="p" href="{{phone_href}}"><b>📞</b>سفارش و رزرو</a></nav>
 
 <div class="sheet" id="sheet" aria-hidden="true"><div class="bd" id="sbd"></div><div class="pn" role="dialog" aria-modal="true" aria-labelledby="sh-t">
-  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p>
+  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p><p class="shp" id="sh-p"></p><span class="shb" id="sh-b" style="display:none"></span>
   <div class="acts"><a class="btn p" href="{{phone_href}}">📞 سفارش و رزرو</a><button class="cl" id="sh-x" type="button">بستن</button></div>
 </div></div>
 
@@ -442,6 +445,8 @@ function closeLb(){ if(!lb.classList.contains('on')) return; lb.classList.remove
 $('#gl').addEventListener('click',e=>{ const f=e.target.closest('.gi'); if(f) openLb(+f.dataset.i); });
 $('#lb-x').addEventListener('click',closeLb); $('#lb-p').addEventListener('click',()=>showLb(li-1)); $('#lb-n').addEventListener('click',()=>showLb(li+1)); lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
 (function(){ let x0=null; lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true}); lb.addEventListener('touchend',e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) showLb(li+(dx>0?-1:1)); x0=null; }); })();
+
+
 
 /* header (plain-scroll fallback; Lenis overrides when present) */
 const hdr=()=>{ const y=scrollY; hd.classList.toggle('sc',y>30); };

@@ -251,6 +251,7 @@ body.lock .mb{transform:translateY(140%)}
 
 html.motion:not(.ready) .hero .hw>span{visibility:hidden}
 html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(.ready) .chip{opacity:0}
+
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -317,6 +318,8 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
   <div class="cds" id="cds"><div class="cd" role="button" tabindex="0" data-t="اسباب‌کشی منزل" data-d="حمل کامل اثاثیه با بسته‌بندی و چیدمان." data-e="🏠"><div class="ic">🏠</div><h3>اسباب‌کشی منزل</h3><p>حمل کامل اثاثیه با بسته‌بندی و چیدمان.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="جابه‌جایی اداری" data-d="انتقال سریع و منظم بدون وقفه‌ی طولانی در کار." data-e="🏢"><div class="ic">🏢</div><h3>جابه‌جایی اداری</h3><p>انتقال سریع و منظم بدون وقفه‌ی طولانی در کار.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="بسته‌بندی حرفه‌ای" data-d="مواد مناسب برای اشیای شکستنی و حساس." data-e="📦"><div class="ic">📦</div><h3>بسته‌بندی حرفه‌ای</h3><p>مواد مناسب برای اشیای شکستنی و حساس.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="حمل بین‌شهری" data-d="انتقال مطمئن به شهرهای دیگر." data-e="🚛"><div class="ic">🚛</div><h3>حمل بین‌شهری</h3><p>انتقال مطمئن به شهرهای دیگر.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="مونتاژ و دمونتاژ" data-d="باز و بست مبلمان و وسایل بزرگ." data-e="🛠️"><div class="ic">🛠️</div><h3>مونتاژ و دمونتاژ</h3><p>باز و بست مبلمان و وسایل بزرگ.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="حمل تکی و سنگین" data-d="انتقال وسایل خاص یا سنگین با تجهیزات مناسب." data-e="🪑"><div class="ic">🪑</div><h3>حمل تکی و سنگین</h3><p>انتقال وسایل خاص یا سنگین با تجهیزات مناسب.</p><span class="go">جزئیات ‹</span></div></div><div class="dots" id="cdots"></div>
 </div></section>
 
+
+
 <section class="sec s-a" id="about"><div class="w ab">
   <div class="fm sh-round" data-r><div class="bk"></div><div class="dot"></div><div class="fr"><img data-slot="about" alt="درباره‌ی {{brand}}" loading="lazy" width="600" height="750"></div></div>
   <div>
@@ -371,7 +374,7 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
 <nav class="mb" aria-label="دسترسی سریع"><a href="#svc"><b>🚚</b>خدمات</a><a href="{{map_url}}" target="_blank" rel="noopener"><b>📍</b>مسیر</a><a class="p" href="{{phone_href}}"><b>📞</b>درخواست برآورد</a></nav>
 
 <div class="sheet" id="sheet" aria-hidden="true"><div class="bd" id="sbd"></div><div class="pn" role="dialog" aria-modal="true" aria-labelledby="sh-t">
-  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p>
+  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p><p class="shp" id="sh-p"></p><span class="shb" id="sh-b" style="display:none"></span>
   <div class="acts"><a class="btn p" href="{{phone_href}}">📞 درخواست برآورد</a><button class="cl" id="sh-x" type="button">بستن</button></div>
 </div></div>
 
@@ -445,6 +448,8 @@ function closeLb(){ if(!lb.classList.contains('on')) return; lb.classList.remove
 $('#gl').addEventListener('click',e=>{ const f=e.target.closest('.gi'); if(f) openLb(+f.dataset.i); });
 $('#lb-x').addEventListener('click',closeLb); $('#lb-p').addEventListener('click',()=>showLb(li-1)); $('#lb-n').addEventListener('click',()=>showLb(li+1)); lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
 (function(){ let x0=null; lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true}); lb.addEventListener('touchend',e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) showLb(li+(dx>0?-1:1)); x0=null; }); })();
+
+
 
 /* header (plain-scroll fallback; Lenis overrides when present) */
 const hdr=()=>{ const y=scrollY; hd.classList.toggle('sc',y>30); };

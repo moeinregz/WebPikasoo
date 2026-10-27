@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPrivateSiteByToken } from "@/lib/db";
-import { injectSiteImages } from "@/lib/siteTemplates/generate";
+import { injectSiteData } from "@/lib/siteTemplates/generate";
 
 // Serves an admin-uploaded private preview (see the «سایت‌های خصوصی» tab in
 // /dashboard) on our own domain: webpikaso.ir/preview/<token>. Anyone with
@@ -26,8 +26,8 @@ export async function GET(_request: NextRequest, { params }: { params: { token: 
       return new NextResponse("فایل در دسترس نیست.", { status: 502 });
     }
     let html = await blobRes.text();
-    // Photos uploaded after the site was built are swapped in here.
-    if (site.images) html = injectSiteImages(html, site.images);
+    // Photos and menu edits made after the site was built are swapped in here.
+    if (site.images || site.menu) html = injectSiteData(html, { images: site.images, menu: site.menu });
     return new NextResponse(html, {
       status: 200,
       headers: {

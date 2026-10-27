@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 import { getPrivateSiteById } from "@/lib/db";
-import { injectSiteImages } from "@/lib/siteTemplates/generate";
+import { injectSiteData } from "@/lib/siteTemplates/generate";
+import { menuImages, type MenuCategory } from "@/lib/siteTemplates/menu";
 
 // Downloads a private site (built from the CRM, the template builder, or
 // uploaded by hand) as ONE standalone .html file — admins only, same as the
@@ -42,6 +43,15 @@ async function embedImages(images: Record<string, string>): Promise<Record<strin
   return out;
 }
 
+/** The same, for menu-item photos: returns the menu with each photo embedded. */
+async function embedMenu(menu: MenuCategory[]): Promise<MenuCategory[]> {
+  const urls = menuImages(menu);
+  if (urls.length === 0) return menu;
+  const embedded = await embedImages(Object.fromEntries(urls.map((u, i) => [`m${i}`, u])));
+  const byUrl = new Map(urls.map((u, i) => [u, embedded[`m${i}`]]));
+  return menu.map((c) => ({ ...c, items: c.items.map((it) => (it.image ? { ...it, image: byUrl.get(it.image) ?? it.image } : it)) }));
+}
+
 /** A readable, filesystem-safe name: keeps Persian letters, drops the rest. */
 function fileBase(name: string, id: number): string {
   const cleaned = name
@@ -66,8 +76,16 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
     const blobRes = await fetch(site.url, { cache: "no-store" });
     if (!blobRes.ok) return new NextResponse("فایل سایت در دسترس نیست.", { status: 502 });
     let html = await blobRes.text();
-    if (site.images && Object.keys(site.images).length > 0) {
-      html = injectSiteImages(html, await embedImages(site.images), { allowData: true });
+    const hasImages = !!site.images && Object.keys(site.images).length > 0;
+    if (hasImages || site.menu) {
+      html = injectSiteData(
+        html,
+        {
+          images: hasImages ? await embedImages(site.images!) : undefined,
+          menu: site.menu ? await embedMenu(site.menu) : undefined,
+        },
+        { allowData: true }
+      );
     }
 
     const base = fileBase(site.name, site.id);

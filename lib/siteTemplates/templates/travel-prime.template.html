@@ -251,6 +251,7 @@ body.lock .mb{transform:translateY(140%)}
 
 html.motion:not(.ready) .hero .hw>span{visibility:hidden}
 html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(.ready) .chip{opacity:0}
+
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -317,6 +318,8 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
   <div class="cds" id="cds"><div class="cd" role="button" tabindex="0" data-t="تورهای داخلی" data-d="شمال، کیش، قشم، شیراز، اصفهان و مقصدهای دلنشین دیگه." data-e="🏝️"><div class="ic">🏝️</div><h3>تورهای داخلی</h3><p>شمال، کیش، قشم، شیراز، اصفهان و مقصدهای دلنشین دیگه.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="تورهای خارجی" data-d="ترکیه، دبی، ارمنستان و مقصدهای مختلف با برنامه‌ی کامل." data-e="🌍"><div class="ic">🌍</div><h3>تورهای خارجی</h3><p>ترکیه، دبی، ارمنستان و مقصدهای مختلف با برنامه‌ی کامل.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="بلیط هواپیما و قطار" data-d="رزرو سریع و مطمئن با بهترین گزینه‌ها." data-e="✈️"><div class="ic">✈️</div><h3>بلیط هواپیما و قطار</h3><p>رزرو سریع و مطمئن با بهترین گزینه‌ها.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="رزرو هتل" data-d="هتل و اقامتگاه متناسب با سلیقه و بودجه." data-e="🏨"><div class="ic">🏨</div><h3>رزرو هتل</h3><p>هتل و اقامتگاه متناسب با سلیقه و بودجه.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="ویزا و مشاوره" data-d="راهنمایی برای مدارک و مراحل ویزا." data-e="🛂"><div class="ic">🛂</div><h3>ویزا و مشاوره</h3><p>راهنمایی برای مدارک و مراحل ویزا.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="سفر خانوادگی و گروهی" data-d="برنامه‌ریزی اختصاصی برای خانواده و دوستان." data-e="👨‍👩‍👧"><div class="ic">👨‍👩‍👧</div><h3>سفر خانوادگی و گروهی</h3><p>برنامه‌ریزی اختصاصی برای خانواده و دوستان.</p><span class="go">جزئیات ‹</span></div></div><div class="dots" id="cdots"></div>
 </div></section>
 
+
+
 <section class="sec s-a" id="about"><div class="w ab">
   <div class="fm sh-arch" data-r><div class="bk"></div><div class="dot"></div><div class="fr"><img data-slot="about" alt="درباره‌ی {{brand}}" loading="lazy" width="600" height="750"></div></div>
   <div>
@@ -371,7 +374,7 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
 <nav class="mb" aria-label="دسترسی سریع"><a href="#svc"><b>✈️</b>تورها</a><a href="{{map_url}}" target="_blank" rel="noopener"><b>📍</b>مسیر</a><a class="p" href="{{phone_href}}"><b>📞</b>رزرو و مشاوره</a></nav>
 
 <div class="sheet" id="sheet" aria-hidden="true"><div class="bd" id="sbd"></div><div class="pn" role="dialog" aria-modal="true" aria-labelledby="sh-t">
-  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p>
+  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p><p class="shp" id="sh-p"></p><span class="shb" id="sh-b" style="display:none"></span>
   <div class="acts"><a class="btn p" href="{{phone_href}}">📞 رزرو و مشاوره</a><button class="cl" id="sh-x" type="button">بستن</button></div>
 </div></div>
 
@@ -442,6 +445,8 @@ function closeLb(){ if(!lb.classList.contains('on')) return; lb.classList.remove
 $('#gl').addEventListener('click',e=>{ const f=e.target.closest('.gi'); if(f) openLb(+f.dataset.i); });
 $('#lb-x').addEventListener('click',closeLb); $('#lb-p').addEventListener('click',()=>showLb(li-1)); $('#lb-n').addEventListener('click',()=>showLb(li+1)); lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
 (function(){ let x0=null; lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true}); lb.addEventListener('touchend',e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) showLb(li+(dx>0?-1:1)); x0=null; }); })();
+
+
 
 /* header (plain-scroll fallback; Lenis overrides when present) */
 const hdr=()=>{ const y=scrollY; hd.classList.toggle('sc',y>30); };

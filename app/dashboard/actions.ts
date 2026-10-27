@@ -46,6 +46,7 @@ import {
   deletePrivateSite,
   getPrivateSiteById,
   getInquiryById,
+  setPrivateSiteMenu,
   getWorkStatsForUser,
   setCrmLeadFollowup,
   setCrmLeadNote,
@@ -88,8 +89,9 @@ import {
 } from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
-import { imageSlotsFor, pickTemplate, templateIdOfSite } from "@/lib/siteTemplates";
+import { hasMenuFor, imageSlotsFor, pickTemplate, templateIdOfSite } from "@/lib/siteTemplates";
 import type { ManualOrderData, WorkReportData } from "@/lib/db";
+import { menuImages, sanitizeMenu } from "@/lib/siteTemplates/menu";
 import { isDayString, isTimeString, shiftDay, tehranDay, tehranToUtc } from "@/lib/attendance";
 import {
   toEn,
@@ -262,16 +264,18 @@ async function requireCrmAccess() {
   return user;
 }
 
-// The one account allowed to edit an existing lead's classification
-// (business area/type, problem status) after the fact — deliberately
-// narrower than "admin": there can be more than one admin account, but
-// this stays locked to a single phone number regardless of role.
-async function requireCrmOwner() {
+// Who may edit an existing lead (name, phones, area, type, problem status,
+// Instagram, WhatsApp):
+//  - the MAIN admin account (one specific phone number) — any lead;
+//  - a developer (sales expert) with CRM access — only leads THEY created,
+//    i.e. exactly the leads the CRM shows them;
+// other admin accounts stay read-only here, as before.
+async function requireCrmEditor() {
   const user = await requireCrmAccess();
-  if (user.phone !== MAIN_ADMIN_PHONE) {
-    redirect("/dashboard");
-  }
-  return user;
+  const isMainAdmin = user.phone === MAIN_ADMIN_PHONE;
+  const isSalesStaff = user.role === "developer";
+  if (!isMainAdmin && !isSalesStaff) redirect("/dashboard");
+  return { user, isMainAdmin };
 }
 
 /** Admin always qualifies; a developer only if an admin has granted them
@@ -1028,7 +1032,7 @@ export async function deletePrivateSiteAction(formData: FormData) {
   const site = await getPrivateSiteById(id);
   await deletePrivateSite(id);
   // The uploaded photos belong to this site only — don't leave them orphaned.
-  for (const url of Object.values(site?.images ?? {})) await deleteBlobQuietly(url);
+  for (const url of [...Object.values(site?.images ?? {}), ...menuImages(site?.menu)]) await deleteBlobQuietly(url);
   revalidatePath("/dashboard");
 }
 
@@ -1062,6 +1066,99 @@ export async function uploadPrivateSiteImageAction(formData: FormData): Promise<
     console.error("uploadPrivateSiteImageAction failed:", err);
     return { ok: false, message: err instanceof Error ? err.message : "آپلود ناموفق بود، دوباره امتحان کن." };
   }
+}
+
+// --- Editable menu of café / restaurant sites ---------------------------------
+
+export type MenuActionResult = { ok: boolean; message: string; url?: string };
+
+// Photos may only come from our own Blob store (the editor uploads them there);
+// a pasted foreign URL would let a menu hot-link arbitrary content.
+const isOwnBlobUrl = (u: string) => {
+  try {
+    const h = new URL(u);
+    return h.protocol === "https:" && h.hostname.endsWith(".blob.vercel-storage.com");
+  } catch {
+    return false;
+  }
+};
+
+const NOT_EDITABLE =
+  "این سایت قبل از اضافه‌شدن منوی قابل‌ویرایش ساخته شده؛ برای ویرایش منو دوباره از همین قالب بسازیدش.";
+
+/** Sites built before the editable menu existed have no menu slot (the SM marker comment) in their
+ *  stored HTML, so saved edits could never show up. A failed fetch doesn't
+ *  block the edit (we only refuse when we really saw the HTML without a slot). */
+async function siteHtmlHasMenuSlot(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return true;
+    return (await res.text()).includes("/*SM*/");
+  } catch {
+    return true;
+  }
+}
+
+/** Uploads one menu-item photo (already shrunk in the browser) and returns its
+ *  URL. The URL only becomes part of the site once the menu is saved. */
+export async function uploadMenuImageAction(formData: FormData): Promise<MenuActionResult> {
+  await requireAdmin();
+  const id = Number(formData.get("siteId"));
+  const file = formData.get("image");
+  const site = id ? await getPrivateSiteById(id) : null;
+  if (!site || !hasMenuFor(templateIdOfSite(site))) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
+  if (!(file instanceof File) || file.size === 0) return { ok: false, message: "عکسی انتخاب نشده." };
+  if (!(await siteHtmlHasMenuSlot(site.url))) return { ok: false, message: NOT_EDITABLE };
+  try {
+    const url = await savePrivateSiteImage(file);
+    return { ok: true, message: "عکس آپلود شد.", url };
+  } catch (err) {
+    console.error("uploadMenuImageAction failed:", err);
+    return { ok: false, message: err instanceof Error ? err.message : "آپلود ناموفق بود، دوباره امتحان کن." };
+  }
+}
+
+/** Saves the whole edited menu (validated + normalised on the server). */
+export async function savePrivateSiteMenuAction(siteId: number, menuJson: string): Promise<MenuActionResult> {
+  await requireAdmin();
+  const site = siteId ? await getPrivateSiteById(siteId) : null;
+  if (!site || !hasMenuFor(templateIdOfSite(site))) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
+  if (typeof menuJson !== "string" || menuJson.length > 600_000) return { ok: false, message: "منو خیلی بزرگه." };
+  if (!(await siteHtmlHasMenuSlot(site.url))) return { ok: false, message: NOT_EDITABLE };
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(menuJson);
+  } catch {
+    return { ok: false, message: "ساختار منو معتبر نیست." };
+  }
+  const checked = sanitizeMenu(parsed);
+  if (!checked.ok) return { ok: false, message: checked.message };
+  const bad = menuImages(checked.menu).find((u) => !isOwnBlobUrl(u));
+  if (bad) return { ok: false, message: "فقط عکس‌های آپلودشده از همین پنل قابل استفاده‌ن." };
+
+  try {
+    await setPrivateSiteMenu(siteId, checked.menu);
+    // Photos that are no longer in the menu are removed from storage.
+    const keep = new Set(menuImages(checked.menu));
+    for (const url of menuImages(site.menu)) if (!keep.has(url)) await deleteBlobQuietly(url);
+  } catch (err) {
+    console.error("savePrivateSiteMenuAction failed:", err);
+    return { ok: false, message: "ذخیره ناموفق بود، دوباره امتحان کن." };
+  }
+  revalidatePath("/dashboard");
+  return { ok: true, message: "منو ذخیره شد. صفحه‌ی سایت رو رفرش کن." };
+}
+
+/** Throws away the edits and goes back to the template's own menu. */
+export async function resetPrivateSiteMenuAction(siteId: number): Promise<MenuActionResult> {
+  await requireAdmin();
+  const site = siteId ? await getPrivateSiteById(siteId) : null;
+  if (!site || !hasMenuFor(templateIdOfSite(site))) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
+  await setPrivateSiteMenu(siteId, null);
+  for (const url of menuImages(site.menu)) await deleteBlobQuietly(url);
+  revalidatePath("/dashboard");
+  return { ok: true, message: "منو به حالت پیش‌فرض قالب برگشت." };
 }
 
 /** Takes a slot's photo away again (the template's placeholder returns). */
@@ -1197,13 +1294,14 @@ export async function checkCrmPhoneAction(
 
 export type CrmEditFormState = { ok: boolean; message: string } | null;
 
-/** Main-admin only: edits every field of an existing lead — name, primary
- *  and extra phones, area, type, problem status, Instagram, WhatsApp. */
+/** Edits every field of an existing lead — name, primary and extra phones,
+ *  area, type, problem status, Instagram, WhatsApp. Main admin: any lead;
+ *  a developer with CRM access: only their own leads (see requireCrmEditor). */
 export async function updateCrmLeadAction(
   _prevState: CrmEditFormState,
   formData: FormData
 ): Promise<CrmEditFormState> {
-  await requireCrmOwner();
+  const { user, isMainAdmin } = await requireCrmEditor();
 
   const id = Number(formData.get("leadId"));
   if (!id) return { ok: false, message: "شناسه‌ی لید نامعتبره." };
@@ -1220,6 +1318,10 @@ export async function updateCrmLeadAction(
 
   const lead = await getCrmLeadById(id);
   if (!lead) return { ok: false, message: "لید پیدا نشد." };
+  // Checked server-side — hiding the button in the UI is not the guard.
+  if (!isMainAdmin && lead.created_by !== user.id) {
+    return { ok: false, message: "فقط لیدهایی که خودتون ثبت کردید رو می‌تونید ویرایش کنید." };
+  }
 
   const socials = parseSocials(instagramRaw, whatsappRaw);
   if (!socials.ok) return { ok: false, message: socials.message };

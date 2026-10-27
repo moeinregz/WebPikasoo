@@ -251,6 +251,7 @@ body.lock .mb{transform:translateY(140%)}
 
 html.motion:not(.ready) .hero .hw>span{visibility:hidden}
 html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(.ready) .chip{opacity:0}
+
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -317,6 +318,8 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
   <div class="cds" id="cds"><div class="cd" role="button" tabindex="0" data-t="ویزیت و معاینه" data-d="بررسی دقیق و تشخیص همراه با توضیح روشن." data-e="🩺"><div class="ic">🩺</div><h3>ویزیت و معاینه</h3><p>بررسی دقیق و تشخیص همراه با توضیح روشن.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="آزمایش و بررسی" data-d="هماهنگی آزمایش‌ها و تفسیر نتایج." data-e="🧪"><div class="ic">🧪</div><h3>آزمایش و بررسی</h3><p>هماهنگی آزمایش‌ها و تفسیر نتایج.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="تزریقات و پانسمان" data-d="انجام توسط نیروی مجرب و با رعایت بهداشت." data-e="💉"><div class="ic">💉</div><h3>تزریقات و پانسمان</h3><p>انجام توسط نیروی مجرب و با رعایت بهداشت.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="پیگیری درمان" data-d="مراقبت و پیگیری بعد از ویزیت." data-e="📋"><div class="ic">📋</div><h3>پیگیری درمان</h3><p>مراقبت و پیگیری بعد از ویزیت.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="سلامت خانواده" data-d="معاینه‌ی دوره‌ای و مشاوره برای همه‌ی اعضا." data-e="👨‍👩‍👧"><div class="ic">👨‍👩‍👧</div><h3>سلامت خانواده</h3><p>معاینه‌ی دوره‌ای و مشاوره برای همه‌ی اعضا.</p><span class="go">جزئیات ‹</span></div><div class="cd" role="button" tabindex="0" data-t="مشاوره‌ی تلفنی" data-d="پاسخ به سؤال‌های کلی و راهنمایی برای مراجعه." data-e="📞"><div class="ic">📞</div><h3>مشاوره‌ی تلفنی</h3><p>پاسخ به سؤال‌های کلی و راهنمایی برای مراجعه.</p><span class="go">جزئیات ‹</span></div></div><div class="dots" id="cdots"></div>
 </div></section>
 
+
+
 <section class="sec s-a" id="about"><div class="w ab">
   <div class="fm sh-circle" data-r><div class="bk"></div><div class="dot"></div><div class="fr"><img data-slot="about" alt="درباره‌ی {{brand}}" loading="lazy" width="600" height="750"></div></div>
   <div>
@@ -371,7 +374,7 @@ html.motion:not(.ready) [data-h],html.motion:not(.ready) #stage,html.motion:not(
 <nav class="mb" aria-label="دسترسی سریع"><a href="#svc"><b>🩺</b>خدمات</a><a href="{{map_url}}" target="_blank" rel="noopener"><b>📍</b>مسیر</a><a class="p" href="{{phone_href}}"><b>📞</b>دریافت نوبت</a></nav>
 
 <div class="sheet" id="sheet" aria-hidden="true"><div class="bd" id="sbd"></div><div class="pn" role="dialog" aria-modal="true" aria-labelledby="sh-t">
-  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p>
+  <div class="gr" id="grab"><i></i></div><div class="big" id="sh-i"></div><h3 id="sh-t"></h3><p class="ds" id="sh-d"></p><p class="shp" id="sh-p"></p><span class="shb" id="sh-b" style="display:none"></span>
   <div class="acts"><a class="btn p" href="{{phone_href}}">📞 دریافت نوبت</a><button class="cl" id="sh-x" type="button">بستن</button></div>
 </div></div>
 
@@ -440,6 +443,8 @@ function closeLb(){ if(!lb.classList.contains('on')) return; lb.classList.remove
 $('#gl').addEventListener('click',e=>{ const f=e.target.closest('.gi'); if(f) openLb(+f.dataset.i); });
 $('#lb-x').addEventListener('click',closeLb); $('#lb-p').addEventListener('click',()=>showLb(li-1)); $('#lb-n').addEventListener('click',()=>showLb(li+1)); lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
 (function(){ let x0=null; lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true}); lb.addEventListener('touchend',e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) showLb(li+(dx>0?-1:1)); x0=null; }); })();
+
+
 
 /* header (plain-scroll fallback; Lenis overrides when present) */
 const hdr=()=>{ const y=scrollY; hd.classList.toggle('sc',y>30); };

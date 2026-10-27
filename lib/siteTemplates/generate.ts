@@ -10,6 +10,9 @@ export type ImageSlot = {
   ratio: string; // "4:5" — the shape the photo is cropped to
 };
 
+import { sanitizeMenu, type MenuCategory } from "./menu";
+import { DEFAULT_MENUS } from "./menus.default";
+
 export type SiteTemplate = {
   id: string;
   trade: string; // Trade.id
@@ -24,6 +27,8 @@ export type SiteTemplate = {
   palette?: { primary: string; secondary?: string };
   /** Photo spots (see ImageSlot). Omit when the template needs no photos. */
   images?: ImageSlot[];
+  /** The template reads an editable menu from `{{menu_json}}` (see menu.ts). */
+  menu?: boolean;
 };
 
 export type SiteInput = {
@@ -37,6 +42,8 @@ export type SiteInput = {
   whatsapp?: string; // optional: phone number
   /** slot key → https URL of an uploaded photo (see ImageSlot) */
   images?: Record<string, string>;
+  /** The site's own menu; templates with `menu: true` fall back to their default. */
+  menu?: MenuCategory[];
 };
 
 const SI_MARK = /\/\*SI\*\/[\s\S]*?\/\*SI_END\*\//;
@@ -56,14 +63,36 @@ function imagesJson(images?: Record<string, string>, allowData = false): string 
   return JSON.stringify(clean).replace(/</g, "\\u003c");
 }
 
-/** `{{images_json}}` is rendered as a marked block so that photos uploaded
- *  LATER can be swapped in when the page is served — no re-render needed. */
+const SM_MARK = /\/\*SM\*\/[\s\S]*?\/\*SM_END\*\//;
+
+/** JSON for `{{menu_json}}`. Re-validated here (never trust stored data), and
+ *  escaped so it can never close the surrounding <script>. */
+function menuJson(menu: unknown, allowData = false): string {
+  const checked = sanitizeMenu(menu, { allowData });
+  const safe = checked.ok ? checked.menu : [];
+  return JSON.stringify(safe).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+}
+
+/** `{{images_json}}` and `{{menu_json}}` are rendered as marked blocks so that
+ *  photos / menu edited LATER can be swapped in when the page is served — no
+ *  re-render needed. Pass only what changed; `menu` undefined = keep the
+ *  template's baked-in default. */
+export function injectSiteData(
+  html: string,
+  data: { images?: Record<string, string>; menu?: MenuCategory[] | null },
+  opts: { allowData?: boolean } = {}
+): string {
+  let out = html.replace(SI_MARK, () => `/*SI*/${imagesJson(data.images, opts.allowData)}/*SI_END*/`);
+  if (data.menu) out = out.replace(SM_MARK, () => `/*SM*/${menuJson(data.menu, opts.allowData)}/*SM_END*/`);
+  return out;
+}
+
 export function injectSiteImages(
   html: string,
   images?: Record<string, string>,
   opts: { allowData?: boolean } = {}
 ): string {
-  return html.replace(SI_MARK, () => `/*SI*/${imagesJson(images, opts.allowData)}/*SI_END*/`);
+  return injectSiteData(html, { images }, opts);
 }
 
 export const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
@@ -416,6 +445,7 @@ export function renderSite(
     whatsapp: esc(toFa(present.whatsapp)),
     whatsapp_href: esc(waNumber ? `https://wa.me/${waNumber}` : ""),
     images_json: `/*SI*/${imagesJson(input.images)}/*SI_END*/`,
+    menu_json: `/*SM*/${menuJson(input.menu ?? DEFAULT_MENUS[tpl.id] ?? [])}/*SM_END*/`,
     color_primary: colors.primary,
     color_secondary: colors.secondary,
     color_accent: colors.accent,

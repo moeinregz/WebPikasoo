@@ -64,12 +64,14 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "cafe",
     label: "کافه — رنگارنگ و شاد",
     html: cafeAdra,
+    menu: true,
   },
   {
     id: "cafe-sara",
     trade: "cafe",
     label: "کافه — گرم و دنج (سارا)",
     html: cafeSara,
+    menu: true,
     palette: { primary: "#d9673f", secondary: "#1f5451" },
   },
   {
@@ -199,6 +201,7 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "restaurant",
     label: "رستوران — مدرن و رنگارنگ",
     html: restaurantEmber,
+    menu: true,
     palette: { primary: "#e4572e", secondary: "#1f6f5c" },
     images: [
       { key: "hero", label: "غذای شاخص (بالای صفحه)", hint: "قاب گرد بزرگ بالای صفحه — بهترین غذای رستوران، نمای نزدیک", ratio: "1:1" },
@@ -218,6 +221,7 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "restaurant",
     label: "رستوران — شرقی و برنجی (مدائن)",
     html: restaurantMadaen,
+    menu: true,
     images: [
       { key: "hall", label: "سالن اصلی", hint: "نمای اصلی بالای صفحه و گالری — یک عکس عمودی از سالن", ratio: "4:5" },
       { key: "dish", label: "غذای شاخص", hint: "بخش «غذای ویژه» — نمای نزدیک از بهترین غذای منو", ratio: "1:1" },
@@ -262,6 +266,7 @@ export const TEMPLATES: SiteTemplate[] = [
     trade: "cafe",
     label: "کافه — اسپرسو و کارامل",
     html: cafePrime,
+    menu: true,
     palette: { primary: "#d38b45", secondary: "#8a5530" },
     images: [
       { key: "hero", label: "فنجان یا غذای شاخص (بالای صفحه)", hint: "قاب گرد بزرگ بالای صفحه — یک فنجان قهوه یا شیرینی از نمای نزدیک", ratio: "1:1" },
@@ -606,6 +611,11 @@ export function pickTemplateAmong(tradeIds: string[]): SiteTemplate | null {
   const list = TEMPLATES.filter((t) => tradeIds.includes(t.trade));
   if (list.length === 0) return null;
   return list[Math.floor(Math.random() * list.length)];
+}
+
+/** Templates whose menu can be edited from the «سایت‌های خصوصی» tab. */
+export function hasMenuFor(templateId?: string | null): boolean {
+  return !!TEMPLATES.find((t) => t.id === templateId)?.menu;
 }
 
 /** Which template a private site came from. Sites built before the template id

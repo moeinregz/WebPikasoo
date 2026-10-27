@@ -49,7 +49,8 @@ import BlogPanel from "./BlogPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
-import { imageSlotsFor, templateIdOfSite, templateOptions } from "@/lib/siteTemplates";
+import { hasMenuFor, imageSlotsFor, templateIdOfSite, templateOptions } from "@/lib/siteTemplates";
+import { DEFAULT_MENUS } from "@/lib/siteTemplates/menus.default";
 import AttendancePanel from "./AttendancePanel";
 import AdminAttendancePanel from "./AdminAttendancePanel";
 import WorkReportPanel from "./WorkReportPanel";
@@ -361,7 +362,7 @@ export default async function DashboardPage() {
     tabs.push({
       id: "crm",
       label: `CRM (${toPersianDigits(crmLeads.length)})`,
-      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} canEdit={currentUser.phone === MAIN_ADMIN_PHONE} creatorNames={creatorNames} />,
+      panel: <CrmPanel leads={crmLeads} canDelete={isAdmin} canEdit={currentUser.phone === MAIN_ADMIN_PHONE || (!isAdmin && perms.crm)} creatorNames={creatorNames} />,
     });
   }
   if (isAdmin || perms.channels) {
@@ -461,15 +462,22 @@ export default async function DashboardPage() {
       label: `سایت‌های خصوصی (${toPersianDigits(privateSites.length)})`,
       panel: (
         <PrivateSitesPanel
-          sites={privateSites.map((s) => ({
-            id: s.id,
-            token: s.token,
-            name: s.name,
-            note: s.note,
-            created_at: s.created_at,
-            images: s.images,
-            slots: imageSlotsFor(templateIdOfSite(s)),
-          }))}
+          sites={privateSites.map((s) => {
+            const tid = templateIdOfSite(s);
+            const hasMenu = hasMenuFor(tid);
+            return {
+              id: s.id,
+              token: s.token,
+              name: s.name,
+              note: s.note,
+              created_at: s.created_at,
+              images: s.images,
+              slots: imageSlotsFor(tid),
+              hasMenu,
+              menu: hasMenu ? (s.menu ?? DEFAULT_MENUS[tid ?? ""] ?? []) : undefined,
+              menuCustom: !!s.menu,
+            };
+          })}
         />
       ),
     });

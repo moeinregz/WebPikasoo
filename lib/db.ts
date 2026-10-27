@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import type { MenuCategory } from "@/lib/siteTemplates/menu";
 import { DEFAULT_WORK_HOURS, nowUtcStr, sessionMinutes, tehranDay, tehranToUtc, utcToMs } from "./attendance";
 import crypto from "crypto";
 import { cacheWrap, invalidateCache } from "@/lib/redis";
@@ -925,6 +926,9 @@ export type PrivateSite = {
   // Photos uploaded for those spots: slot key → Vercel Blob URL. They are
   // swapped into the page when /preview/<token> is served.
   images?: Record<string, string>;
+  // The site's own (edited) menu — only for templates with an editable menu.
+  // Absent = the template's default menu. Swapped in at serve time too.
+  menu?: MenuCategory[];
 };
 
 export async function createPrivateSite(data: {
@@ -971,6 +975,14 @@ export async function getPrivateSiteById(id: number): Promise<PrivateSite | null
     .collection<PrivateSite>("private_sites")
     .findOne({ id }, { projection: { _id: 0 } });
   return site ?? null;
+}
+
+/** Saves the site's edited menu, or (null) goes back to the template default. */
+export async function setPrivateSiteMenu(id: number, menu: MenuCategory[] | null): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection("private_sites")
+    .updateOne({ id }, menu ? { $set: { menu } } : { $unset: { menu: "" } });
 }
 
 /** Sets (url) or clears (null) the photo for one slot of a private site. */
