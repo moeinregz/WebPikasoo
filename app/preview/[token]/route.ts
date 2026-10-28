@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPrivateSiteByToken } from "@/lib/db";
 import { injectSiteData } from "@/lib/siteTemplates/generate";
+import { withAddon } from "@/lib/siteTemplates/siteAddon";
 
 // Serves an admin-uploaded private preview (see the «سایت‌های خصوصی» tab in
 // /dashboard) on our own domain: webpikaso.ir/preview/<token>. Anyone with
@@ -8,7 +9,7 @@ import { injectSiteData } from "@/lib/siteTemplates/generate";
 // portfolio, not in the sitemap — and search engines are told to skip it.
 export const dynamic = "force-dynamic";
 
-export async function GET(_request: NextRequest, { params }: { params: { token: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { token: string } }) {
   const token = params.token;
   // Tokens are url-safe base64 (A–Z a–z 0–9 - _); reject anything else early.
   if (!token || !/^[A-Za-z0-9_-]{8,64}$/.test(token)) {
@@ -28,6 +29,9 @@ export async function GET(_request: NextRequest, { params }: { params: { token: 
     let html = await blobRes.text();
     // Photos and menu edits made after the site was built are swapped in here.
     if (site.images || site.menu) html = injectSiteData(html, { images: site.images, menu: site.menu });
+    // Optional features (سفارش آنلاین، رزرو، منوی QR، نوبت‌دهی...) are spliced in here too,
+    // so switching one on or off works on the same link.
+    html = withAddon(html, site, request.nextUrl.origin);
     return new NextResponse(html, {
       status: 200,
       headers: {

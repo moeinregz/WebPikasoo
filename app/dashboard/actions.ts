@@ -47,6 +47,8 @@ import {
   getPrivateSiteById,
   getInquiryById,
   setPrivateSiteMenu,
+  setPrivateSiteFeatures,
+  setPrivateSitePanelLogin,
   getWorkStatsForUser,
   setCrmLeadFollowup,
   setCrmLeadNote,
@@ -89,7 +91,9 @@ import {
 } from "@/lib/uploads";
 import { slugify, isValidSlug } from "@/lib/slug";
 import { getTrade } from "@/lib/siteTemplates/trades";
-import { hasMenuFor, imageSlotsFor, pickTemplate, templateIdOfSite } from "@/lib/siteTemplates";
+import { hasMenuFor, imageSlotsFor, pickTemplate, templateIdOfSite, tradeOfTemplate } from "@/lib/siteTemplates";
+import { featuresForTrade, needsMenu, sanitizeFeatures } from "@/lib/siteTemplates/features";
+import { newPanelLogin } from "@/lib/panelAuth";
 import type { ManualOrderData, WorkReportData } from "@/lib/db";
 import { menuImages, sanitizeMenu } from "@/lib/siteTemplates/menu";
 import { isDayString, isTimeString, shiftDay, tehranDay, tehranToUtc } from "@/lib/attendance";
@@ -919,7 +923,14 @@ export async function deleteProjectAction(formData: FormData) {
 
 // --- Private site previews (admin only, NOT shown in the portfolio) --------
 
-export type PrivateSiteFormState = { ok: boolean; message: string; link?: string } | null;
+export type PrivateSiteFormState = {
+  ok: boolean;
+  message: string;
+  link?: string;
+  /** set when the site was built with «پنل مدیریت»: where the owner logs in, and the one-time password */
+  panelLink?: string;
+  panelPassword?: string;
+} | null;
 
 export async function createPrivateSiteAction(
   _prevState: PrivateSiteFormState,
@@ -971,6 +982,8 @@ export async function generateSiteAction(
   const secondary = str("color2");
   const instagram = str("instagram");
   const whatsapp = str("whatsapp");
+  // optional add-ons (checkboxes named "feature"); filtered to what the trade offers
+  const wantedFeatures = formData.getAll("feature").map((v) => v.toString());
 
   if (!trade) return { ok: false, message: "صنف رو انتخاب کن." };
   if (!brand) return { ok: false, message: "اسم برند رو بنویس." };
@@ -998,8 +1011,9 @@ export async function generateSiteAction(
   }
 
   try {
-    const { site } = await buildPrivateSite({
+    const { site, panelPassword } = await buildPrivateSite({
       template,
+      features: wantedFeatures,
       input: {
         brand,
         address,
@@ -1018,6 +1032,7 @@ export async function generateSiteAction(
         "سایت ساخته شد. لینکش آماده‌ست." +
         (imageSlotsFor(template.id).length > 0 ? " این قالب جای عکس داره؛ از تب «سایت‌های خصوصی» عکس‌هاش رو آپلود کن." : ""),
       link: `/preview/${site.token}`,
+      ...(panelPassword ? { panelLink: `/panel/${site.token}`, panelPassword } : {}),
     };
   } catch (err) {
     console.error("generateSiteAction failed:", err);
@@ -1083,6 +1098,15 @@ const isOwnBlobUrl = (u: string) => {
   }
 };
 
+/** The menu can be edited when the template has its own editable menu OR the site
+ *  uses a feature that needs one (سفارش آنلاین / منوی QR — they read the same menu). */
+const menuEditable = (site: { template_id?: string; note?: string; features?: string[] }) =>
+  hasMenuFor(templateIdOfSite(site)) || needsMenu(site.features);
+
+/** Only a template's own menu slot can be missing from old HTML; the add-on never needs one. */
+const slotRequired = (site: { template_id?: string; note?: string; features?: string[] }) =>
+  hasMenuFor(templateIdOfSite(site)) && !needsMenu(site.features);
+
 const NOT_EDITABLE =
   "این سایت قبل از اضافه‌شدن منوی قابل‌ویرایش ساخته شده؛ برای ویرایش منو دوباره از همین قالب بسازیدش.";
 
@@ -1106,9 +1130,9 @@ export async function uploadMenuImageAction(formData: FormData): Promise<MenuAct
   const id = Number(formData.get("siteId"));
   const file = formData.get("image");
   const site = id ? await getPrivateSiteById(id) : null;
-  if (!site || !hasMenuFor(templateIdOfSite(site))) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
+  if (!site || !menuEditable(site)) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
   if (!(file instanceof File) || file.size === 0) return { ok: false, message: "عکسی انتخاب نشده." };
-  if (!(await siteHtmlHasMenuSlot(site.url))) return { ok: false, message: NOT_EDITABLE };
+  if (slotRequired(site) && !(await siteHtmlHasMenuSlot(site.url))) return { ok: false, message: NOT_EDITABLE };
   try {
     const url = await savePrivateSiteImage(file);
     return { ok: true, message: "عکس آپلود شد.", url };
@@ -1122,9 +1146,9 @@ export async function uploadMenuImageAction(formData: FormData): Promise<MenuAct
 export async function savePrivateSiteMenuAction(siteId: number, menuJson: string): Promise<MenuActionResult> {
   await requireAdmin();
   const site = siteId ? await getPrivateSiteById(siteId) : null;
-  if (!site || !hasMenuFor(templateIdOfSite(site))) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
+  if (!site || !menuEditable(site)) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
   if (typeof menuJson !== "string" || menuJson.length > 600_000) return { ok: false, message: "منو خیلی بزرگه." };
-  if (!(await siteHtmlHasMenuSlot(site.url))) return { ok: false, message: NOT_EDITABLE };
+  if (slotRequired(site) && !(await siteHtmlHasMenuSlot(site.url))) return { ok: false, message: NOT_EDITABLE };
 
   let parsed: unknown;
   try {
@@ -1154,11 +1178,66 @@ export async function savePrivateSiteMenuAction(siteId: number, menuJson: string
 export async function resetPrivateSiteMenuAction(siteId: number): Promise<MenuActionResult> {
   await requireAdmin();
   const site = siteId ? await getPrivateSiteById(siteId) : null;
-  if (!site || !hasMenuFor(templateIdOfSite(site))) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
+  if (!site || !menuEditable(site)) return { ok: false, message: "این سایت منوی قابل‌ویرایش نداره." };
   await setPrivateSiteMenu(siteId, null);
   for (const url of menuImages(site.menu)) await deleteBlobQuietly(url);
   revalidatePath("/dashboard");
   return { ok: true, message: "منو به حالت پیش‌فرض قالب برگشت." };
+}
+
+// --- Optional features of a site (سفارش آنلاین، رزرو میز، منوی QR، پنل مدیریت...) ----
+
+export type FeaturesResult = {
+  ok: boolean;
+  message: string;
+  features?: string[];
+  /** shown ONCE: the password the owner uses at /panel/<token> */
+  panelPassword?: string;
+  hasPanelLogin?: boolean;
+};
+
+/** Switches features on/off for a site. They take effect on the same link
+ *  (the add-on is injected when the page is served). The panel password is
+ *  created the first time the panel is switched on. */
+export async function setSiteFeaturesAction(siteId: number, requested: string[]): Promise<FeaturesResult> {
+  await requireAdmin();
+  const site = siteId ? await getPrivateSiteById(siteId) : null;
+  if (!site) return { ok: false, message: "سایت پیدا نشد." };
+  const trade = tradeOfTemplate(templateIdOfSite(site));
+  if (featuresForTrade(trade).length === 0) return { ok: false, message: "برای این قالب قابلیتی تعریف نشده." };
+
+  const features = sanitizeFeatures(trade, requested);
+  let panelPassword: string | undefined;
+  try {
+    await setPrivateSiteFeatures(siteId, features);
+    if (features.includes("panel") && !site.panel) {
+      const login = newPanelLogin();
+      await setPrivateSitePanelLogin(siteId, login.panel);
+      panelPassword = login.plain;
+    }
+  } catch (err) {
+    console.error("setSiteFeaturesAction failed:", err);
+    return { ok: false, message: "ذخیره ناموفق بود، دوباره امتحان کن." };
+  }
+  revalidatePath("/dashboard");
+  return {
+    ok: true,
+    message: features.length ? "قابلیت‌ها ذخیره شد. صفحه‌ی سایت رو رفرش کن." : "همه‌ی قابلیت‌ها خاموش شد.",
+    features,
+    panelPassword,
+    hasPanelLogin: features.includes("panel") ? true : !!site.panel,
+  };
+}
+
+/** New password for the owner's panel (the old one and every open session stop working). */
+export async function regenerateSitePanelPasswordAction(siteId: number): Promise<FeaturesResult> {
+  await requireAdmin();
+  const site = siteId ? await getPrivateSiteById(siteId) : null;
+  if (!site || !site.features?.includes("panel")) return { ok: false, message: "پنل مدیریت برای این سایت فعال نیست." };
+  const login = newPanelLogin();
+  await setPrivateSitePanelLogin(siteId, login.panel);
+  revalidatePath("/dashboard");
+  return { ok: true, message: "رمز جدید ساخته شد.", panelPassword: login.plain, hasPanelLogin: true };
 }
 
 /** Takes a slot's photo away again (the template's placeholder returns). */

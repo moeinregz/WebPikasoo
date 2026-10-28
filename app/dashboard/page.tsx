@@ -19,6 +19,7 @@ import {
   getAllBlogPosts,
   getAllProjects,
   getAllPrivateSites,
+  countNewSiteRequests,
   getWorkHours,
   getOpenAttendance,
   getAttendanceForUser,
@@ -49,8 +50,9 @@ import BlogPanel from "./BlogPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
-import { hasMenuFor, imageSlotsFor, templateIdOfSite, templateOptions } from "@/lib/siteTemplates";
-import { DEFAULT_MENUS } from "@/lib/siteTemplates/menus.default";
+import { hasMenuFor, imageSlotsFor, templateIdOfSite, templateOptions, tradeOfTemplate } from "@/lib/siteTemplates";
+import { featuresForTrade, needsMenu } from "@/lib/siteTemplates/features";
+import { defaultMenuFor } from "@/lib/siteTemplates/menus.starter";
 import AttendancePanel from "./AttendancePanel";
 import AdminAttendancePanel from "./AdminAttendancePanel";
 import WorkReportPanel from "./WorkReportPanel";
@@ -117,6 +119,8 @@ export default async function DashboardPage() {
   const projects = isAdmin || perms.projects ? await getAllProjects() : [];
   // Admin-only: sites uploaded just to share a private link (never public).
   const privateSites = isAdmin ? await getAllPrivateSites() : [];
+  // Orders / bookings waiting in the owners' panels (badge on each site card).
+  const newRequestCounts = isAdmin ? await countNewSiteRequests(privateSites.map((x) => x.id)) : {};
   // Last message per ticket, for the one-line preview in the tickets list.
   const ticketLastMessages = await Promise.all(
     tickets.map(async (t) => {
@@ -464,7 +468,10 @@ export default async function DashboardPage() {
         <PrivateSitesPanel
           sites={privateSites.map((s) => {
             const tid = templateIdOfSite(s);
-            const hasMenu = hasMenuFor(tid);
+            const trade = tradeOfTemplate(tid);
+            // The menu editor is also needed by «سفارش آنلاین» / «منوی QR», even on templates
+            // with no menu of their own.
+            const hasMenu = hasMenuFor(tid) || needsMenu(s.features);
             return {
               id: s.id,
               token: s.token,
@@ -474,8 +481,12 @@ export default async function DashboardPage() {
               images: s.images,
               slots: imageSlotsFor(tid),
               hasMenu,
-              menu: hasMenu ? (s.menu ?? DEFAULT_MENUS[tid ?? ""] ?? []) : undefined,
+              menu: hasMenu ? (s.menu ?? defaultMenuFor(tid, trade)) : undefined,
               menuCustom: !!s.menu,
+              featureDefs: featuresForTrade(trade),
+              features: s.features ?? [],
+              hasPanelLogin: !!s.panel,
+              newRequests: newRequestCounts[s.id] ?? 0,
             };
           })}
         />

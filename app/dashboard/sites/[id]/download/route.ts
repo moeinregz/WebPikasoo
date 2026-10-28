@@ -3,6 +3,8 @@ import { getCurrentUser } from "@/lib/session";
 import { getPrivateSiteById } from "@/lib/db";
 import { injectSiteData } from "@/lib/siteTemplates/generate";
 import { menuImages, type MenuCategory } from "@/lib/siteTemplates/menu";
+import { menuOfSite, withAddon } from "@/lib/siteTemplates/siteAddon";
+import { needsMenu } from "@/lib/siteTemplates/features";
 
 // Downloads a private site (built from the CRM, the template builder, or
 // uploaded by hand) as ONE standalone .html file — admins only, same as the
@@ -62,7 +64,7 @@ function fileBase(name: string, id: number): string {
   return cleaned || `site-${id}`;
 }
 
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const user = await getCurrentUser();
   if (!user || !user.isAdmin) {
     return new NextResponse("اجازه‌ی دسترسی نداری.", { status: 403 });
@@ -86,6 +88,13 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
         },
         { allowData: true }
       );
+    }
+
+    // Features stay live in the downloaded file: its forms post to our server
+    // (absolute URL), so orders/bookings still land in the owner's panel.
+    if (site.features?.length) {
+      const addonMenu = needsMenu(site.features) ? await embedMenu(menuOfSite(site)) : undefined;
+      html = withAddon(html, site, request.nextUrl.origin, addonMenu);
     }
 
     const base = fileBase(site.name, site.id);

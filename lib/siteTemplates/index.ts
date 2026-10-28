@@ -613,6 +613,17 @@ export function pickTemplateAmong(tradeIds: string[]): SiteTemplate | null {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+/** The trade id of a template (to know which features the site can have). */
+export function tradeOfTemplate(templateId?: string | null): string | undefined {
+  return TEMPLATES.find((t) => t.id === templateId)?.trade;
+}
+
+/** The template's own main color (what its buttons / add-ons should match). */
+export function mainColorOfTemplate(templateId?: string | null): string | undefined {
+  const t = TEMPLATES.find((x) => x.id === templateId);
+  return t?.palette?.primary;
+}
+
 /** Templates whose menu can be edited from the «سایت‌های خصوصی» tab. */
 export function hasMenuFor(templateId?: string | null): boolean {
   return !!TEMPLATES.find((t) => t.id === templateId)?.menu;

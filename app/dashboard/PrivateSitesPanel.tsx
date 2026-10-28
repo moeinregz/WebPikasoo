@@ -8,10 +8,13 @@ import { useFormState, useFormStatus } from "react-dom";
 import {
   createPrivateSiteAction,
   deletePrivateSiteAction,
+  regenerateSitePanelPasswordAction,
   removePrivateSiteImageAction,
+  setSiteFeaturesAction,
   uploadPrivateSiteImageAction,
   type PrivateSiteFormState,
 } from "./actions";
+import { qrSvg } from "@/lib/siteTemplates/qr";
 import { formatDate } from "./format";
 
 type ImageSlot = { key: string; label: string; hint?: string; ratio: string };
@@ -30,6 +33,13 @@ type PrivateSite = {
   hasMenu?: boolean;
   menu?: MenuCategory[];
   menuCustom?: boolean;
+  /** switches this site's trade offers (سفارش آنلاین، رزرو میز...) — empty = none */
+  featureDefs?: { id: string; label: string; icon: string; desc: string }[];
+  /** the ones currently on */
+  features?: string[];
+  hasPanelLogin?: boolean;
+  /** orders / bookings still marked «new» in the owner's panel */
+  newRequests?: number;
 };
 
 const inputClass =
@@ -447,12 +457,199 @@ function SiteImagesEditor({ site }: { site: PrivateSite }) {
   );
 }
 
+/** Switches for the optional features of a site (online order, table booking, QR menu,
+ *  clinic appointments, management panel). The add-on is injected when the page is served,
+ *  so the same /preview link changes right away — nothing to rebuild. */
+function SiteFeaturesEditor({ site }: { site: PrivateSite }) {
+  const defs = site.featureDefs ?? [];
+  const NEEDS_PANEL = ["order", "reserve", "appointment", "callback"];
+  const hasPanelDef = defs.some((d) => d.id === "panel");
+  const withPanel = (list: string[]) =>
+    hasPanelDef && list.some((f) => NEEDS_PANEL.includes(f)) && !list.includes("panel") ? [...list, "panel"] : list;
+
+  const [on, setOn] = useState<string[]>(site.features ?? []);
+  const [saved, setSaved] = useState<string[]>(site.features ?? []);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const [hasLogin, setHasLogin] = useState(!!site.hasPanelLogin);
+
+  const dirty = on.slice().sort().join() !== saved.slice().sort().join();
+  const panelOn = saved.includes("panel");
+  const qrOn = saved.includes("qrmenu");
+  const panelPath = `/panel/${site.token}`;
+  const menuPath = `/m/${site.token}`;
+  const svg = qrOn && typeof window !== "undefined" ? qrSvg(fullLink(menuPath), { size: 150, margin: 2 }) : "";
+
+  function toggle(id: string) {
+    setMsg(null);
+    setOn((cur) => {
+      if (id === "panel" && cur.some((f) => NEEDS_PANEL.includes(f))) return cur; // required by another switch
+      const next = cur.includes(id) ? cur.filter((f) => f !== id) : [...cur, id];
+      return withPanel(next);
+    });
+  }
+
+  async function save() {
+    setBusy(true);
+    setMsg(null);
+    const res = await setSiteFeaturesAction(site.id, on);
+    setBusy(false);
+    setMsg({ ok: res.ok, text: res.message });
+    if (res.ok) {
+      const f = res.features ?? [];
+      setOn(f);
+      setSaved(f);
+      if (res.panelPassword) setPassword(res.panelPassword);
+      if (res.hasPanelLogin !== undefined) setHasLogin(res.hasPanelLogin);
+    }
+  }
+
+  async function newPassword() {
+    if (!confirm("رمز جدید ساخته بشه؟ رمز قبلی و همه‌ی ورودهای باز پنل از کار می‌افته.")) return;
+    setBusy(true);
+    const res = await regenerateSitePanelPasswordAction(site.id);
+    setBusy(false);
+    setMsg({ ok: res.ok, text: res.message });
+    if (res.ok && res.panelPassword) setPassword(res.panelPassword);
+  }
+
+  return (
+    <div className="mt-3 rounded-card border border-ink/[0.14] bg-canvas/40 p-4">
+      <p className="text-[13.5px] font-semibold">قابلیت‌های سایت</p>
+      <p className="mb-3 mt-1 text-[12px] leading-relaxed text-dim/80">
+        هر قابلیتی که روشن کنی، به همین لینک سایت اضافه می‌شه (دکمه‌ی شناور پایین سمت چپ صفحه). نیازی به ساخت دوباره‌ی سایت نیست.
+      </p>
+
+      <div className="grid gap-2 sm:grid-cols-2">
+        {defs.map((d) => {
+          const checked = on.includes(d.id);
+          const locked = d.id === "panel" && on.some((f) => NEEDS_PANEL.includes(f));
+          return (
+            <label
+              key={d.id}
+              className={`flex cursor-pointer items-start gap-3 rounded-[12px] border p-3 transition ${
+                checked ? "border-accent bg-accent/[0.07]" : "border-ink/[0.14] hover:border-ink/30"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                disabled={locked}
+                onChange={() => toggle(d.id)}
+                className="mt-1 h-4 w-4 accent-[#0077B6]"
+              />
+              <span className="min-w-0">
+                <span className="block text-[13.5px] font-bold">
+                  {d.icon} {d.label}
+                </span>
+                <span className="mt-0.5 block text-[12px] leading-relaxed text-dim">{d.desc}</span>
+                {locked && <span className="mt-0.5 block text-[11.5px] text-accent">برای دیدن درخواست‌ها لازمه</span>}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={save}
+          disabled={busy || !dirty}
+          className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-40"
+        >
+          {busy ? "در حال ذخیره..." : "ذخیره‌ی قابلیت‌ها"}
+        </button>
+        <a
+          href={`/preview/${site.token}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full border border-ink/[0.18] px-4 py-2 text-[12.5px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+        >
+          دیدن سایت
+        </a>
+        {msg && <span className={`text-[12.5px] font-semibold ${msg.ok ? "text-emerald-600" : "text-red-500"}`}>{msg.text}</span>}
+      </div>
+
+      {password && (
+        <div className="mt-3 rounded-[12px] border border-amber-500/50 bg-amber-500/10 p-3">
+          <p className="text-[12.5px] font-bold text-amber-700">رمز پنل مدیریت (فقط همین یک بار نشون داده می‌شه — ذخیره‌ش کن)</p>
+          <p dir="ltr" className="mt-1.5 select-all font-mono text-[18px] font-bold tracking-widest">
+            {password}
+          </p>
+        </div>
+      )}
+
+      {panelOn && (
+        <div className="mt-3 rounded-[12px] border border-ink/[0.14] p-3">
+          <p className="text-[13px] font-bold">🛠️ پنل مدیریت صاحب کسب‌وکار</p>
+          <p dir="ltr" className="mt-1.5 truncate rounded-md bg-surface/40 px-3 py-2 font-mono text-[12px] text-dim">
+            {panelPath}
+          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <CopyButton text={fullLink(panelPath)} />
+            <a
+              href={panelPath}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+            >
+              باز کردن پنل (بدون رمز، چون ادمینی)
+            </a>
+            <button
+              type="button"
+              onClick={newPassword}
+              disabled={busy}
+              className="rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent disabled:opacity-50"
+            >
+              {hasLogin ? "ساخت رمز جدید" : "ساخت رمز"}
+            </button>
+          </div>
+          <p className="mt-2 text-[11.5px] leading-relaxed text-dim/80">
+            لینک پنل + رمز رو به صاحب کسب‌وکار بده. تو پنل سفارش‌ها، رزروها / نوبت‌ها رو می‌بینه و وضعیتشون رو عوض می‌کنه
+            {saved.includes("order") || saved.includes("qrmenu") ? "، منو رو هم ویرایش می‌کنه" : ""}.
+          </p>
+        </div>
+      )}
+
+      {qrOn && (
+        <div className="mt-3 flex flex-wrap items-center gap-4 rounded-[12px] border border-ink/[0.14] p-3">
+          {svg && <div className="h-[150px] w-[150px] overflow-hidden rounded-lg border border-ink/10 bg-white" dangerouslySetInnerHTML={{ __html: svg }} />}
+          <div className="min-w-[200px] flex-1">
+            <p className="text-[13px] font-bold">📱 منوی QR</p>
+            <p dir="ltr" className="mt-1.5 truncate rounded-md bg-surface/40 px-3 py-2 font-mono text-[12px] text-dim">
+              {menuPath}
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <CopyButton text={fullLink(menuPath)} />
+              <a
+                href={menuPath}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+              >
+                دیدن منو
+              </a>
+            </div>
+            <p className="mt-2 text-[11.5px] leading-relaxed text-dim/80">
+              منو همیشه به‌روزه؛ هر تغییری تو «ویرایش منو» بدی همین‌جا دیده می‌شه. بارکد قابل‌چاپ تو پنل مالک هم هست.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SiteCard({ site }: { site: PrivateSite }) {
   const path = `/preview/${site.token}`;
   const hasSlots = site.slots.length > 0;
   const filled = site.slots.filter((s) => site.images?.[s.key]).length;
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [featOpen, setFeatOpen] = useState(false);
+  const featDefs = site.featureDefs ?? [];
+  const featCount = site.features?.length ?? 0;
 
   return (
     <div className="rounded-card border border-ink/[0.14] bg-surface/20 p-4">
@@ -463,6 +660,21 @@ function SiteCard({ site }: { site: PrivateSite }) {
           <p className="mt-1.5 font-mono text-[11.5px] text-dim/70">{formatDate(site.created_at)}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {featDefs.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setFeatOpen((o) => !o)}
+              aria-expanded={featOpen}
+              className="relative inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-violet-500/40 bg-violet-500/10 px-3 py-1.5 text-[12px] font-semibold text-violet-600 transition hover:bg-violet-500/20"
+            >
+              ⚙️ قابلیت‌ها{featCount > 0 ? ` (${fa(featCount)})` : ""}
+              {(site.newRequests ?? 0) > 0 && (
+                <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[10.5px] font-bold leading-none text-white">
+                  {fa(site.newRequests ?? 0)} جدید
+                </span>
+              )}
+            </button>
+          )}
           {site.hasMenu && (
             <button
               type="button"
@@ -521,6 +733,7 @@ function SiteCard({ site }: { site: PrivateSite }) {
       <p className="mt-3 truncate rounded-md bg-canvas/60 px-3 py-2 font-mono text-[12px] text-dim" dir="ltr">
         {path}
       </p>
+      {featDefs.length > 0 && featOpen && <SiteFeaturesEditor site={site} />}
       {site.hasMenu && menuOpen && (
         <SiteMenuEditor siteId={site.id} token={site.token} initial={site.menu ?? []} custom={!!site.menuCustom} />
       )}

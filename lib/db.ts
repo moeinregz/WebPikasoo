@@ -929,6 +929,24 @@ export type PrivateSite = {
   // The site's own (edited) menu — only for templates with an editable menu.
   // Absent = the template's default menu. Swapped in at serve time too.
   menu?: MenuCategory[];
+  // Optional features switched on from the dashboard (سفارش آنلاین، رزرو میز،
+  // منوی QR، نوبت‌دهی، پنل مدیریت...). See lib/siteTemplates/features.ts.
+  // They are injected into the page when it is served, so toggling needs no rebuild.
+  features?: string[];
+  // Facts the add-on needs (brand, phones, color). Saved when the site is built
+  // from a template; older sites fall back to what can be derived from `name`.
+  meta?: SiteMeta;
+  // Login of the owner's management panel (/panel/<token>) — scrypt hash only.
+  panel?: { salt: string; hash: string };
+};
+
+export type SiteMeta = {
+  brand: string;
+  phone?: string;
+  whatsapp?: string;
+  /** main color (#hex) the add-on buttons use */
+  color?: string;
+  address?: string;
 };
 
 export async function createPrivateSite(data: {
@@ -936,6 +954,9 @@ export async function createPrivateSite(data: {
   note?: string;
   url: string;
   template_id?: string;
+  meta?: SiteMeta;
+  features?: string[];
+  panel?: { salt: string; hash: string };
 }): Promise<PrivateSite> {
   const database = await getDb();
   const id = await nextId("private_sites");
@@ -947,6 +968,9 @@ export async function createPrivateSite(data: {
     note: data.note || "",
     url: data.url,
     ...(data.template_id ? { template_id: data.template_id } : {}),
+    ...(data.meta ? { meta: data.meta } : {}),
+    ...(data.features && data.features.length ? { features: data.features } : {}),
+    ...(data.panel ? { panel: data.panel } : {}),
   };
   await database.collection<PrivateSite>("private_sites").insertOne({ ...doc });
   return doc;
@@ -994,9 +1018,99 @@ export async function setPrivateSiteImage(id: number, key: string, url: string |
     .updateOne({ id }, url ? { $set: { [`images.${key}`]: url } } : { $unset: { [`images.${key}`]: "" } });
 }
 
+/** Replaces the switched-on features of a private site (already sanitized by the caller). */
+export async function setPrivateSiteFeatures(id: number, features: string[]): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection("private_sites")
+    .updateOne({ id }, features.length ? { $set: { features } } : { $unset: { features: "" } });
+}
+
+/** Sets (or, with null, removes) the owner's panel login. */
+export async function setPrivateSitePanelLogin(id: number, panel: { salt: string; hash: string } | null): Promise<void> {
+  const database = await getDb();
+  await database.collection("private_sites").updateOne({ id }, panel ? { $set: { panel } } : { $unset: { panel: "" } });
+}
+
+/** Stores the facts the add-on needs for a site that was built without them. */
+export async function setPrivateSiteMeta(id: number, meta: SiteMeta): Promise<void> {
+  const database = await getDb();
+  await database.collection("private_sites").updateOne({ id }, { $set: { meta } });
+}
+
 export async function deletePrivateSite(id: number): Promise<void> {
   const database = await getDb();
   await database.collection("private_sites").deleteOne({ id });
+  await database.collection("site_requests").deleteMany({ site_id: id });
+}
+
+// -----------------------------------------------------------------------
+// Requests coming from the sites' add-on: online orders, table bookings,
+// clinic appointments and call-back requests. One collection; `kind` tells
+// them apart and `data` holds the kind-specific fields (already sanitized).
+// -----------------------------------------------------------------------
+
+export type SiteRequestKind = "order" | "reserve" | "appointment" | "callback";
+export type SiteRequestStatus = "new" | "confirmed" | "done" | "canceled";
+
+export type SiteRequest = {
+  id: number;
+  site_id: number;
+  kind: SiteRequestKind;
+  status: SiteRequestStatus;
+  created_at: string;
+  name: string;
+  phone: string;
+  data: Record<string, unknown>;
+};
+
+export async function createSiteRequest(data: {
+  site_id: number;
+  kind: SiteRequestKind;
+  name: string;
+  phone: string;
+  data: Record<string, unknown>;
+}): Promise<SiteRequest> {
+  const database = await getDb();
+  const id = await nextId("site_requests");
+  const doc: SiteRequest = { id, created_at: nowStr(), status: "new", ...data };
+  await database.collection<SiteRequest>("site_requests").insertOne({ ...doc });
+  return doc;
+}
+
+export async function listSiteRequests(siteId: number, limit = 300): Promise<SiteRequest[]> {
+  const database = await getDb();
+  return database
+    .collection<SiteRequest>("site_requests")
+    .find({ site_id: siteId }, { projection: { _id: 0 } })
+    .sort({ id: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+export async function setSiteRequestStatus(siteId: number, id: number, status: SiteRequestStatus): Promise<boolean> {
+  const database = await getDb();
+  const res = await database.collection("site_requests").updateOne({ id, site_id: siteId }, { $set: { status } });
+  return res.matchedCount > 0;
+}
+
+export async function deleteSiteRequest(siteId: number, id: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("site_requests").deleteOne({ id, site_id: siteId });
+}
+
+/** site id → number of requests still marked «new» (for the dashboard badges). */
+export async function countNewSiteRequests(siteIds: number[]): Promise<Record<number, number>> {
+  if (siteIds.length === 0) return {};
+  const database = await getDb();
+  const rows = await database
+    .collection("site_requests")
+    .aggregate<{ _id: number; n: number }>([
+      { $match: { site_id: { $in: siteIds }, status: "new" } },
+      { $group: { _id: "$site_id", n: { $sum: 1 } } },
+    ])
+    .toArray();
+  return Object.fromEntries(rows.map((r) => [r._id, r.n]));
 }
 
 // -----------------------------------------------------------------------

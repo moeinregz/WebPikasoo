@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       // Staff dashboard, customer account area and its API/server actions
       // have no SEO value and shouldn't be crawled or shown in results.
-      disallow: ["/dashboard", "/account", "/preview"],
+      disallow: ["/dashboard", "/account", "/preview", "/panel", "/m/"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { resetPrivateSiteMenuAction, savePrivateSiteMenuAction, uploadMenuImageAction } from "./actions";
+import { resetPrivateSiteMenuAction, savePrivateSiteMenuAction, uploadMenuImageAction, type MenuActionResult } from "./actions";
 import { shrinkImage } from "./shrinkImage";
 import type { MenuCategory } from "@/lib/siteTemplates/menu";
 
@@ -23,6 +23,14 @@ function move<T>(list: T[], i: number, d: -1 | 1): T[] {
   return next;
 }
 
+/** Where the editor saves to. By default the admin's dashboard actions; the owner's
+ *  panel (/panel/<token>) passes its own, token-checked ones. */
+export type MenuEditorApi = {
+  save: (menuJson: string) => Promise<MenuActionResult>;
+  reset: () => Promise<MenuActionResult>;
+  upload: (fd: FormData) => Promise<MenuActionResult>;
+};
+
 /** Edits the menu of a café / restaurant site: categories, items, prices and a
  *  photo per item. Saved menus are swapped into the live page when
  *  /preview/<token> is served — no rebuild needed. */
@@ -31,11 +39,13 @@ export default function SiteMenuEditor({
   token,
   initial,
   custom,
+  api,
 }: {
   siteId: number;
   token: string;
   initial: MenuCategory[];
   custom: boolean;
+  api?: MenuEditorApi;
 }) {
   const seq = useRef(0);
   const uid = () => `k${++seq.current}`;
@@ -93,7 +103,7 @@ export default function SiteMenuEditor({
       const fd = new FormData();
       fd.set("siteId", String(siteId));
       fd.set("image", file);
-      const res = await uploadMenuImageAction(fd);
+      const res = await (api ? api.upload(fd) : uploadMenuImageAction(fd));
       if (!res.ok || !res.url) throw new Error(res.message);
       setItem(ck, ik, { image: res.url });
     } catch (err) {
@@ -119,7 +129,7 @@ export default function SiteMenuEditor({
     if (total === 0) return setMsg({ ok: false, text: "منو باید حداقل یک مورد داشته باشه." });
     setBusy(true);
     setMsg(null);
-    const res = await savePrivateSiteMenuAction(siteId, current);
+    const res = await (api ? api.save(current) : savePrivateSiteMenuAction(siteId, current));
     setBusy(false);
     setMsg({ ok: res.ok, text: res.message });
     if (res.ok) {
@@ -131,7 +141,7 @@ export default function SiteMenuEditor({
   async function reset() {
     if (!confirm("همه‌ی تغییرات منو پاک بشه و منوی اصلی قالب برگرده؟")) return;
     setBusy(true);
-    const res = await resetPrivateSiteMenuAction(siteId);
+    const res = await (api ? api.reset() : resetPrivateSiteMenuAction(siteId));
     setBusy(false);
     setMsg({ ok: res.ok, text: res.message });
     if (res.ok) {

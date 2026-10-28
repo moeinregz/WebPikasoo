@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { generateSiteAction, type PrivateSiteFormState } from "./actions";
 import { TRADES } from "@/lib/siteTemplates/trades";
+import { featuresForTrade } from "@/lib/siteTemplates/features";
 
 type TemplateOption = {
   id: string;
@@ -20,6 +21,7 @@ const inputClass =
 const labelClass = "mb-1.5 block text-[12.5px] font-semibold text-dim";
 
 const MAX_PHONES = 3;
+const NEEDS_PANEL = ["order", "reserve", "appointment", "callback"];
 
 function SubmitButton({ disabled }: { disabled: boolean }) {
   const { pending } = useFormStatus();
@@ -121,12 +123,14 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
   const [hours, setHours] = useState("");
   const [phones, setPhones] = useState<string[]>([""]);
   const [color1, setColor1] = useState<string | null>(null);
+  const [feats, setFeats] = useState<string[]>([]);
   const [color2, setColor2] = useState<string | null>(null);
   const [instagram, setInstagram] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
 
   const trade = TRADES.find((t) => t.id === tradeId) ?? TRADES[0];
   const tradeTemplates = templates.filter((t) => t.trade === tradeId);
+  const tradeFeatures = featuresForTrade(tradeId);
   const noTemplates = tradeTemplates.length === 0;
   // Each template has its own signature colors; show those as the "default".
   const shownTemplate = tradeTemplates.find((t) => t.id === templateId) ?? tradeTemplates[0];
@@ -325,6 +329,37 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
         />
       </div>
 
+      {tradeFeatures.length > 0 && (
+        <div className="mt-4 rounded-[12px] border border-ink/[0.14] p-4">
+          <p className="text-[13px] font-bold">قابلیت‌های اضافه (اختیاری)</p>
+          <p className="mb-3 mt-1 text-[12px] text-dim/80">بعداً هم از تب «سایت‌های خصوصی ← ⚙️ قابلیت‌ها» می‌شه عوضشون کرد.</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {tradeFeatures.map((f) => {
+              const locked = f.id === "panel" && feats.some((x) => NEEDS_PANEL.includes(x));
+              const checked = feats.includes(f.id) || locked;
+              return (
+                <label key={f.id} className={`flex cursor-pointer items-start gap-3 rounded-[12px] border p-3 ${checked ? "border-accent bg-accent/[0.07]" : "border-ink/[0.14]"}`}>
+                  <input
+                    type="checkbox"
+                    name="feature"
+                    value={f.id}
+                    checked={checked}
+                    disabled={locked}
+                    onChange={() => setFeats((cur) => (cur.includes(f.id) ? cur.filter((x) => x !== f.id) : [...cur, f.id]))}
+                    className="mt-1 h-4 w-4 accent-[#0077B6]"
+                  />
+                  <span>
+                    <span className="block text-[13.5px] font-bold">{f.icon} {f.label}</span>
+                    <span className="mt-0.5 block text-[12px] text-dim">{f.desc}</span>
+                  </span>
+                  {locked && <input type="hidden" name="feature" value="panel" />}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {noTemplates && (
         <p className="mt-3 text-sm text-amber-500">برای صنف «{trade.label}» هنوز قالبی اضافه نشده.</p>
       )}
@@ -346,6 +381,16 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
               مشاهده
             </a>
           </div>
+          {state.panelLink && state.panelPassword && (
+            <div className="mt-3 rounded-lg border border-amber-500/50 bg-amber-500/10 p-3">
+              <p className="text-[12.5px] font-bold text-amber-700">پنل مدیریت صاحب کسب‌وکار — رمز فقط همین یک بار نشون داده می‌شه</p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                <span dir="ltr" className="select-all font-mono text-[17px] font-bold tracking-widest">{state.panelPassword}</span>
+                <CopyButton text={`${fullLink(state.panelLink)}\nرمز: ${state.panelPassword}`} />
+              </div>
+              <p dir="ltr" className="mt-1 truncate font-mono text-[12px] text-dim">{fullLink(state.panelLink)}</p>
+            </div>
+          )}
         </div>
       )}
 
