@@ -69,9 +69,9 @@ export default function Reveal({
       id={id}
       style={{ ...style, transitionDelay: visible ? `${delay}ms` : "0ms" }}
       className={[
-        "transition-all duration-500 ease-out",
-        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-7",
+        "transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(.16,1,.3,1)]",
+        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:filter-none",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 blur-[6px]",
         className,
       ].join(" ")}
     >

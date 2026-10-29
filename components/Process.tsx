@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
 
 type Step = {
   n: string;
@@ -116,18 +117,11 @@ export default function Process() {
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-16 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
-          Map
-          </span>
-          <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">فرایند همکاری</h2>
-            <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
-              از اولین جلسه‌ی رایگان تا پشتیبانی بعد از تحویل — شش قدم روشن که همیشه می‌دونید دقیقاً
-              کجای مسیر ایستادید.
-            </p>
-          </div>
-        </Reveal>
+        <SectionHeading
+          eyebrow="مسیر همکاری"
+          title={<>شش قدم <em>روشن</em> تا تحویل</>}
+          desc="از اولین جلسه‌ی رایگان تا پشتیبانی بعد از تحویل — شش قدم روشن که همیشه می‌دونید دقیقاً کجای مسیر ایستادید."
+        />
 
         {/* نسخه‌ی دسکتاپ — دو ردیف سه‌تایی با چیدمان گرید معمولی؛ کارت‌ها
             هیچ‌وقت روی هم نمی‌افتن چون هر کدوم تو یه خونه‌ی مجزای گرید
@@ -154,7 +148,7 @@ export default function Process() {
                         </span>
                       </span>
 
-                      <div className="w-full rounded-card border border-ink/10 bg-surface/70 p-4 backdrop-blur-sm">
+                      <div className="w-full fx-card rounded-card p-4 backdrop-blur-sm">
                         <span
                           className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
                           style={{ background: `${s.color}1f`, color: s.color }}
@@ -190,7 +184,7 @@ export default function Process() {
                     {i + 1}
                   </span>
                 </span>
-                <div className="min-w-0 flex-1 rounded-card border border-ink/10 bg-surface/50 p-4">
+                <div className="min-w-0 flex-1 fx-card rounded-card p-4">
                   <span
                     className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
                     style={{ background: `${s.color}1f`, color: s.color }}

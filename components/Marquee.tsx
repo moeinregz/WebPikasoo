@@ -61,10 +61,14 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
         {repeated.map((t, i) => (
           <span
             key={i}
-            className="flex items-center gap-[18px] whitespace-nowrap px-[22px] font-mono text-[15px] font-semibold text-dim transition-colors hover:text-ink sm:text-[17px]"
+            className={`flex items-center gap-7 whitespace-nowrap px-7 font-mono text-[24px] font-black tracking-tight transition-colors sm:text-[34px] ${
+              i % 2 ? "text-outline hover:text-ink" : "text-ink/80 hover:text-accent3"
+            }`}
           >
             {t}
-            <span className="h-1 w-1 rounded-full bg-accent" />
+            <svg viewBox="0 0 24 24" className="h-4 w-4 flex-shrink-0 text-accent3 sm:h-5 sm:w-5" fill="currentColor">
+              <path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" />
+            </svg>
           </span>
         ))}
       </div>
@@ -74,15 +78,17 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
 
 export default function Marquee() {
   return (
-    <section className="relative overflow-hidden border-y border-ink/10 bg-surface/40 py-6">
+    <div className="relative overflow-hidden py-8">
+    <section className="relative -mx-4 -rotate-1 overflow-hidden border-y border-accent3/20 bg-surface/60 py-7 shadow-[0_0_80px_-30px_rgba(0,180,216,0.5)] backdrop-blur-sm">
       {/* Fade masks on both edges — the classic GitHub/Vercel logo-ticker
           treatment, so the loop never looks like it's hard-cut at the edge. */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-canvas to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-canvas to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-canvas to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-canvas to-transparent" />
       <MarqueeRow items={stackItems} />
-      <div className="mt-2.5">
+      <div className="mt-4">
         <MarqueeRow items={growthItems} reverse />
       </div>
     </section>
+    </div>
   );
 }

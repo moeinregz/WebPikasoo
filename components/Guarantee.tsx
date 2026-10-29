@@ -16,9 +16,9 @@ export default function Guarantee() {
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mx-auto flex max-w-[820px] flex-col items-center gap-6 rounded-card border border-ink/10 bg-surface/50 p-8 text-center sm:p-12">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-accent text-accent">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-8 w-8">
+        <Reveal className="mx-auto flex max-w-[820px] flex-col items-center gap-6 fx-card fx-static rounded-[28px] p-8 text-center sm:p-12">
+          <span className="relative flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-accent3 to-accent2 text-white shadow-glow-strong animate-float-y">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-10 w-10">
               <path d="M12 3 4.5 6.5v5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5v-5L12 3Z" />
               <path d="m8.5 12.3 2.4 2.4 4.6-4.9" />
             </svg>
@@ -26,8 +26,8 @@ export default function Guarantee() {
           <span className="rounded-full border border-ink/10 bg-canvas px-3.5 py-1.5 font-mono text-[12px] font-bold text-dim">
             Guarantee
           </span>
-          <h2 className="font-display text-[26px] font-normal sm:text-[32px]">
-            اگه پروژه باگ فنی داشت، رایگان رفعش می‌کنیم
+          <h2 className="font-display text-[32px] font-normal leading-[1.3] sm:text-[44px]">
+            اگه پروژه باگ فنی داشت، <span className="text-gradient">رایگان</span> رفعش می‌کنیم
           </h2>
           <p className="max-w-[56ch] text-[14.5px] leading-relaxed text-dim">
             بعد از تحویل هر پروژه، ۳۰ روز گارانتی رفع باگ فنی داری — بدون هزینه‌ی اضافه و بدون
@@ -35,7 +35,7 @@ export default function Guarantee() {
           </p>
           <a
             href="#lead-form"
-            className="mt-2 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[14.5px] font-bold text-canvas transition hover:-translate-y-0.5"
+            className="mt-2 btn-primary magnetic"
           >
             با خیال راحت شروع کن — مشاوره رایگان
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

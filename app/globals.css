@@ -17,8 +17,8 @@
        This is the default look: Vercel/GitHub dashboard style. */
     --color-ink: 237 237 240;
     --color-dim: 138 143 152;
-    --color-canvas: 0 0 0;
-    --color-surface: 14 14 16;
+    --color-canvas: 4 7 15;
+    --color-surface: 13 19 33;
   }
 
   html {
@@ -92,7 +92,12 @@
   /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
      همون آبی آسمانی اصلی برند. */
   .accent-gradient-text {
-    color: #0077B6;
+    background-image: linear-gradient(100deg, #48cae4 0%, #0096c7 25%, #3b82f6 50%, #00b4d8 75%, #48cae4 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
   }
 
   /* Skill card — each card tracks the cursor with --sx/--sy (set via JS on
@@ -334,5 +339,222 @@
     to {
       width: 100%;
     }
+  }
+}
+
+/* ==========================================================================
+   ری‌دیزاین مدرن (۱۴۰۵) — زبان بصری بولد: گرادیان الکتریکی آبی→فیروزه‌ای،
+   کارت‌های شیشه‌ای با نور دنبال‌کننده‌ی ماوس، دکمه‌های براق و پس‌زمینه‌ی
+   «شفق» متحرک. هر چیزی که این‌جا تعریف شده با prefers-reduced-motion
+   خاموش می‌شه.
+   ========================================================================== */
+@layer components {
+  /* متن گرادیانی متحرک برای کلمات کلیدی تیترها */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      #48cae4 0%,
+      #0096c7 22%,
+      #3b82f6 45%,
+      #00b4d8 68%,
+      #48cae4 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.2px rgb(var(--color-ink) / 0.35);
+  }
+
+  /* چیپ کوچیک بالای تیتر هر سکشن */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-accent3/30 bg-accent3/[0.08] px-3.5 py-1.5 font-mono text-[12px] font-bold tracking-wide text-accent3;
+  }
+  :root:not(.dark) .eyebrow {
+    @apply text-accent;
+  }
+
+  /* دکمه‌ی اصلی — گرادیان، هاله‌ی نورانی و یه برق که با هاور ازش رد می‌شه */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3.5 text-[15px] font-black text-white transition-[transform,box-shadow] duration-300;
+    background-image: linear-gradient(110deg, #023e8a 0%, #0077b6 35%, #00b4d8 70%, #0077b6 100%);
+    background-size: 200% auto;
+    box-shadow: 0 0 0 1px rgba(72, 202, 228, 0.35) inset, 0 14px 40px -12px rgba(0, 150, 199, 0.7);
+    animation: shimmer 8s linear infinite;
+  }
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(72, 202, 228, 0.6) inset, 0 22px 50px -12px rgba(0, 180, 216, 0.85);
+  }
+  .btn-primary:hover::after {
+    transform: translateX(120%);
+  }
+  .btn-ghost {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink/15 bg-canvas/40 px-7 py-[12px] text-[15px] font-bold text-ink backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-accent3 hover:text-accent3;
+  }
+
+  /* کارت شیشه‌ای با «نورافکن» — FxLayer موقعیت ماوس رو تو --mx/--my
+     می‌ریزه؛ یه لبه‌ی گرادیانی و یه هاله‌ی نرم دقیقاً زیر ماوس روشن می‌شه. */
+  .fx-card {
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
+    isolation: isolate;
+    border: 1px solid rgb(var(--color-ink) / 0.09);
+    background-color: rgb(var(--color-surface) / 0.55);
+    background-image: radial-gradient(
+      420px circle at var(--mx) var(--my),
+      rgba(0, 180, 216, 0.09),
+      transparent 45%
+    );
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.4s ease;
+  }
+  .fx-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(260px circle at var(--mx) var(--my), rgba(72, 202, 228, 0.9), transparent 60%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .fx-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 60px -30px rgba(0, 119, 182, 0.55);
+  }
+  .fx-card:hover::before {
+    opacity: 1;
+  }
+  .fx-card.fx-static:hover {
+    transform: none;
+  }
+
+  /* پس‌زمینه‌ی شفق — چند لکه‌ی رنگی بزرگ و محو که آروم جابه‌جا می‌شن */
+  .aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .aurora > span {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(110px);
+    opacity: 0.55;
+    will-change: transform;
+  }
+  :root:not(.dark) .aurora > span {
+    opacity: 0.3;
+  }
+
+  /* بافت نویز خیلی ظریف روی کل صفحه — حس «چاپی» و غیرتخت */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* خط گرادیانی ظریف بین سکشن‌ها */
+  .section-line {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 180, 216, 0.55), transparent);
+  }
+
+  /* کلمه‌های تیتر هیرو که یکی‌یکی از پایین بالا میان */
+  .word-reveal > span {
+    display: inline-block;
+    animation: wordUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* دکمه‌ی مغناطیسی — FxLayer مقدار --tx/--ty رو ست می‌کنه */
+  .magnetic {
+    translate: var(--tx, 0px) var(--ty, 0px);
+    transition: translate 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* لینک‌های منو با زیرخط گرادیانی که از وسط باز می‌شه */
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    bottom: -6px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #00b4d8, #0077b6);
+    transition: left 0.3s ease, right 0.3s ease;
+  }
+  .nav-link:hover::after,
+  .nav-link[data-active="true"]::after {
+    left: 0;
+    right: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+@keyframes wordUp {
+  0% {
+    opacity: 0;
+    transform: translateY(60%) rotate(4deg);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient,
+  .btn-primary,
+  .aurora > span,
+  .word-reveal > span {
+    animation: none !important;
+  }
+  .magnetic {
+    translate: none;
+  }
+}
+@keyframes heroDraw {
+  to {
+    stroke-dashoffset: 0;
   }
 }
