@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
 import StatCounter from "./StatCounter";
 import LaptopShowcase from "./LaptopShowcase";
 
@@ -112,18 +113,11 @@ export default function Services() {
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-14 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
-            Services
-          </span>
-          <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">خدمات</h2>
-            <p className="mt-2.5 max-w-[60ch] text-[15px] text-dim">
-              توسعه نرم‌افزار، طراحی سایت فروشگاهی و شرکتی، هوش مصنوعی و سئو — چهار خدمتی که تیم وب
-              پیکاسو زیر یه سقف ارائه می‌ده.
-            </p>
-          </div>
-        </Reveal>
+        <SectionHeading
+          eyebrow="خدمات ما"
+          title={<>هرچی برای <em>رشد آنلاین</em> لازم داری</>}
+          desc="توسعه نرم‌افزار، طراحی سایت فروشگاهی و شرکتی، هوش مصنوعی و سئو — چهار خدمتی که تیم وب پیکاسو زیر یه سقف ارائه می‌ده."
+        />
 
         {/* 01–03 — Software dev / Store & corporate sites / AI, shown
             through one interactive laptop preview. */}
@@ -253,7 +247,7 @@ export default function Services() {
               <div
                 key={item.n}
                 style={{ "--seo-color": item.color } as CSSProperties}
-                className="seo-card group relative flex items-center gap-4 rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6"
+                className="seo-card group relative flex items-center gap-4 fx-card rounded-card p-5 sm:p-6"
               >
                 <span
                   className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] p-2.5 transition-transform duration-300 group-hover:scale-110"
@@ -283,7 +277,7 @@ export default function Services() {
         {/* Points to the dedicated skills page for the full technical list —
             the pretty per-technology cards that used to live in this
             section now live there instead. */}
-        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink/10 bg-surface/50 p-6 sm:p-7">
+        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 fx-card rounded-card p-6 sm:p-7">
           <div>
             <h4 className="text-[16px] font-bold">کنجکاوید با چه تکنولوژی‌هایی کار می‌کنیم؟</h4>
             <p className="mt-1.5 text-[13.5px] text-dim">

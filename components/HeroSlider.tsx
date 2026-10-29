@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 
 type Slide = {
   title: string;
@@ -38,6 +38,20 @@ export default function HeroSlider() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
+
+  // کج‌شدن سه‌بعدی قاب به سمت ماوس — فقط با اشاره‌گر دقیق (دسکتاپ).
+  const onTilt = (e: PointerEvent<HTMLDivElement>) => {
+    const el = tiltRef.current;
+    if (!el || e.pointerType !== "mouse") return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(1100px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg)`;
+  };
+  const resetTilt = () => {
+    if (tiltRef.current) tiltRef.current.style.transform = "perspective(1100px) rotateY(0deg) rotateX(0deg)";
+  };
 
   const goTo = useCallback((i: number) => {
     setIndex(((i % slides.length) + slides.length) % slides.length);
@@ -54,10 +68,39 @@ export default function HeroSlider() {
   }, [paused]);
 
   return (
+    <div className="relative">
+      {/* هاله‌ی رنگی پشت قاب */}
+      <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-br from-accent3/40 via-accent/30 to-accent2/40 opacity-70 blur-3xl" />
+
+      {/* بج‌های شناور دور قاب */}
+      <div className="pointer-events-none absolute -right-3 top-10 z-20 hidden animate-float-y items-center gap-2.5 rounded-2xl border border-white/15 bg-[#0b1324]/80 px-3.5 py-2.5 text-white shadow-2xl backdrop-blur-xl sm:-right-8 sm:flex">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} className="h-4 w-4"><path d="M20 6 9 17l-5-5" /></svg>
+        </span>
+        <span className="leading-tight">
+          <span className="block text-[12.5px] font-black">۳۰ روز گارانتی</span>
+          <span className="block text-[10.5px] text-white/55">رفع باگ رایگان</span>
+        </span>
+      </div>
+      <div className="pointer-events-none absolute -left-3 bottom-20 z-20 hidden animate-float-y-slow items-center gap-2.5 rounded-2xl border border-white/15 bg-[#0b1324]/80 px-3.5 py-2.5 text-white shadow-2xl backdrop-blur-xl sm:-left-8 sm:flex">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-accent3 to-accent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} className="h-4 w-4"><path d="M4 19V5M4 19h16" /><path d="M8 15l3.5-4 3 3L19 8" /></svg>
+        </span>
+        <span className="leading-tight">
+          <span className="block text-[12.5px] font-black">سایت نتیجه‌محور</span>
+          <span className="block text-[10.5px] text-white/55">طراحی برای فروش</span>
+        </span>
+      </div>
+
     <div
+      ref={tiltRef}
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      className="group relative overflow-hidden rounded-card border border-ink/10 bg-[#0a0a0c] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]"
+      onMouseLeave={() => {
+        setPaused(false);
+        resetTilt();
+      }}
+      onPointerMove={onTilt}
+      className="group relative overflow-hidden rounded-[22px] border border-white/15 bg-[#0a0a0c] shadow-[0_40px_100px_-30px_rgba(0,40,90,0.9)] transition-transform duration-300 ease-out will-change-transform"
     >
       {/* بدنه‌ی اسلایدر — قاب مربعی ۱ در ۱ */}
       <div className="relative aspect-square w-full overflow-hidden">
@@ -74,7 +117,7 @@ export default function HeroSlider() {
               fill
               sizes="(min-width: 1024px) 560px, 100vw"
               priority={i === 0}
-              className="object-cover"
+              className="object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-105"
             />
 
             {/* گرادیان تیره از پایین فقط برای خوانا موندن عنوان */}
@@ -136,6 +179,7 @@ export default function HeroSlider() {
           </button>
         ))}
       </div>
+    </div>
     </div>
   );
 }
