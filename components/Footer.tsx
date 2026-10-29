@@ -211,15 +211,6 @@ export default function Footer() {
             </svg>
           </button>
         </div>
-
-        {/* واژه‌نمای غول‌پیکر برند ته صفحه — فقط تزئینی */}
-        <div
-          aria-hidden
-          dir="ltr"
-          className="pointer-events-none mt-6 select-none text-center font-mono text-[17vw] font-black leading-[0.8] tracking-tighter text-outline opacity-70 sm:mt-10 lg:text-[200px]"
-        >
-          WebPIKASO
-        </div>
       </div>
     </footer>
   );

@@ -67,7 +67,7 @@ export default async function Contact() {
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="relative isolate overflow-hidden rounded-[32px] border border-accent3/25 bg-[#050b18] px-6 py-20 shadow-[0_40px_120px_-40px_rgba(0,150,199,0.6)] text-white sm:px-10">
+        <Reveal className="relative isolate overflow-hidden rounded-[24px] border border-ink/10 bg-[#0a0a0c] px-6 py-16 text-white sm:px-10">
           {/* Ambient animated gradient mesh — the Vercel "deploy" CTA-panel
               treatment: a soft drifting blob of brand-gradient behind the
               copy, contained inside the panel only. */}
@@ -75,18 +75,12 @@ export default async function Contact() {
             className="absolute -inset-x-[10%] -inset-y-[30%] -z-10 animate-pulse-soft blur-[60px]"
             style={{ background: "rgba(0, 119, 182, .28)" }}
           />
-          <span className="absolute inset-0 -z-10 bg-dot-grid opacity-40" />
-          <span
-            aria-hidden
-            className="absolute left-1/2 top-1/2 -z-10 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 animate-spin-slow rounded-full opacity-25 [animation-duration:24s]"
-            style={{ background: "conic-gradient(from 0deg, transparent, #00b4d8, transparent 25%, #0077b6, transparent 55%)" }}
-          />
           <span className="mb-[22px] inline-flex items-center gap-2 rounded-full border border-white/[0.14] px-3.5 py-1.5 font-mono text-[12.5px] text-white/70">
             <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
-          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[38px] font-normal leading-[1.25] sm:text-[54px] lg:text-[72px]">
-            بیا یه چیز <span className="text-gradient">خفن</span> با هم بسازیم.
+          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[32px] font-normal leading-[1.35] sm:text-[42px] lg:text-[58px]">
+            بیا یه چیز خفن با هم بسازیم.
           </h2>
           <p className="mx-auto mb-3 max-w-[48ch] text-base text-white/60">
             برای پنل مدیریت، فروشگاه آنلاین، یا هر ایده‌ای که تو سرته، پیام بده — سریع جواب می‌دیم.
@@ -97,7 +91,7 @@ export default async function Contact() {
               href="https://wa.me/989965745535"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary magnetic !px-[34px] !py-[17px] !text-base"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-[34px] py-[17px] text-base font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
             >
               شروع گفتگو در واتساپ
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -115,9 +109,9 @@ export default async function Contact() {
 
         <Reveal
           id="lead-form"
-          className="fx-card fx-static mx-auto mt-14 max-w-[720px] scroll-mt-[90px] rounded-card p-6 text-right sm:p-9"
+          className="mx-auto mt-14 max-w-[720px] scroll-mt-[90px] rounded-card border border-ink/10 bg-surface/50 p-6 text-right sm:p-9"
         >
-          <h3 className="mb-2 font-display text-[28px] font-normal sm:text-[32px]">
+          <h3 className="mb-2 font-display text-2xl font-normal">
             یا مشاوره‌ی رایگان پروژه‌ت رو رزرو کن
           </h3>
           <p className="mb-7 text-sm text-dim">
@@ -137,7 +131,7 @@ export default async function Contact() {
               href={s.href}
               target={s.href.startsWith("http") ? "_blank" : undefined}
               rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="group flex flex-col items-center justify-center gap-2.5 fx-card rounded-[14px] px-3 py-[22px] font-mono text-[12.5px] text-dim transition hover:-translate-y-1 hover:border-ink/20"
+              className="group flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-ink/10 bg-surface/40 px-3 py-[22px] font-mono text-[12.5px] text-dim transition hover:-translate-y-1 hover:border-ink/20"
             >
               {s.icon}
               <span className="font-fa text-[13.5px] font-semibold text-ink">{s.label}</span>

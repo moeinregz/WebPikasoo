@@ -1,5 +1,4 @@
 import Reveal from "./Reveal";
-import SectionHeading from "./SectionHeading";
 
 type Testimonial = {
   name: string;
@@ -61,11 +60,20 @@ export default function Testimonials() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[420px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <SectionHeading
-          eyebrow="نظر مشتری‌ها"
-          title={<>حرف <em>مشتری‌هامون</em> رو باور کن، نه حرف ما رو</>}
-          desc="این‌ها آدم‌هایی‌ان که قبل از شروع همون نگرانی‌هایی رو داشتن که شاید الان تو داری — و بعد از تحویل پروژه، این چیزی بود که گفتن."
-        />
+        <Reveal className="mb-12 flex items-baseline gap-4">
+          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+            Comments
+          </span>
+          <div>
+            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+              حرف مشتری‌هامون رو باور کن، نه حرف ما رو
+            </h2>
+            <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
+              این‌ها آدم‌هایی‌ان که قبل از شروع همون نگرانی‌هایی رو داشتن که شاید الان تو داری —
+              و بعد از تحویل پروژه، این چیزی بود که گفتن.
+            </p>
+          </div>
+        </Reveal>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           {testimonials.map((t, i) => (
@@ -73,7 +81,7 @@ export default function Testimonials() {
               key={t.name}
               delay={i * 80}
               className={[
-                "flex flex-col fx-card rounded-card p-5 sm:p-6",
+                "flex flex-col rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6",
                 i === 2 ? "col-span-2 sm:col-span-1" : "",
               ].join(" ")}
             >

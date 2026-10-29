@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
-import SectionHeading from "./SectionHeading";
 import StatCounter from "./StatCounter";
 import { businessSites, categories } from "@/lib/businessSites";
 
@@ -57,11 +56,20 @@ export default function Trust() {
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <SectionHeading
-          eyebrow="چرا وب پیکاسو"
-          title={<>چرا کسب‌وکارت رو به <em>وب پیکاسو</em> بسپاری؟</>}
-          desc="یه تیم کوچیک و متخصصیم، نه یه آژانس بزرگ با هزار واسطه — یعنی هم سریع‌تر جواب می‌گیری، هم دقیقاً می‌دونی پروژه‌ت دست کیه."
-        />
+        <Reveal className="mb-12 flex items-baseline gap-4">
+          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+            About
+          </span>
+          <div>
+            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+              چرا کسب‌وکارت رو به وب پیکاسو بسپاری؟
+            </h2>
+            <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
+              یه تیم کوچیک و متخصصیم، نه یه آژانس بزرگ با هزار واسطه — یعنی هم سریع‌تر جواب می‌گیری،
+              هم دقیقاً می‌دونی پروژه‌ت دست کیه.
+            </p>
+          </div>
+        </Reveal>
 
         {/* پنل تیره‌ی آماری — همون حس ترمینال هیرو و پنل سئوی بخش مهارت‌ها.
             رنگ پس‌زمینه عمداً یه مقدار ثابت (bg-[#0a0a0c]) هست، نه
@@ -69,37 +77,37 @@ export default function Trust() {
             تو حالت تاریک (canvas مشکی) فرقی نمی‌کرد، ولی تو حالت روشن
             (canvas سفید) نتیجه‌ش یه جعبه‌ی خاکستری کم‌رنگ بود که متن
             سفید/۴۵ تا سفید/۷۰ داخلش عملاً کم‌کنتراست و به‌سختی خونا می‌شد. */}
-        <Reveal className="mb-8 overflow-hidden relative rounded-[28px] border border-accent3/20 bg-[#050b18] p-7 shadow-[0_30px_90px_-40px_rgba(0,150,199,0.55)] sm:p-10">
+        <Reveal className="mb-8 overflow-hidden rounded-card border border-white/10 bg-[#0a0a0c] p-6 sm:p-9">
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4">
             <div>
-              <div className="text-gradient font-display text-[38px] font-normal leading-none sm:text-[52px]">
+              <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
                 <StatCounter to={10} suffix=" نفر" />
               </div>
-              <div className="mt-3 font-mono text-[11.5px] font-bold leading-relaxed text-white/55 sm:text-[12.5px]">
+              <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
                 تیم متخصص و کوچیک
               </div>
             </div>
             <div>
-              <div className="text-gradient font-display text-[38px] font-normal leading-none sm:text-[52px]">
+              <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
                 <StatCounter to={categories.length} />
               </div>
-              <div className="mt-3 font-mono text-[11.5px] font-bold leading-relaxed text-white/55 sm:text-[12.5px]">
+              <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
                 صنف و حوزه‌ی کاری مختلف
               </div>
             </div>
             <div>
-              <div className="text-gradient font-display text-[38px] font-normal leading-none sm:text-[52px]">
+              <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
                 <StatCounter to={businessSites.length} suffix="+" />
               </div>
-              <div className="mt-3 font-mono text-[11.5px] font-bold leading-relaxed text-white/55 sm:text-[12.5px]">
+              <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
                 نمونه‌سایت طراحی‌شده
               </div>
             </div>
             <div>
-              <div className="text-gradient font-display text-[38px] font-normal leading-none sm:text-[52px]">
+              <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
                 <StatCounter to={30} suffix=" روز" />
               </div>
-              <div className="mt-3 font-mono text-[11.5px] font-bold leading-relaxed text-white/55 sm:text-[12.5px]">
+              <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
                 گارانتی رفع باگ
               </div>
             </div>
@@ -110,9 +118,9 @@ export default function Trust() {
           {trustPoints.map((p) => (
             <Reveal
               key={p.title}
-              className="flex items-start gap-4 fx-card rounded-card p-5 sm:p-6"
+              className="flex items-start gap-4 rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6"
             >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent3 to-accent2 p-2.5 text-white shadow-glow">
+              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] bg-accent p-2.5 text-white">
                 {p.icon}
               </span>
               <div className="min-w-0 flex-1">
