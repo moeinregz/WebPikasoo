@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Reveal from "./Reveal";
-import SectionHeading from "./SectionHeading";
 import { categories, type BusinessCategory } from "@/lib/businessSites";
 
 const PAGE_SIZE = 6;
@@ -203,11 +202,20 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
           به اندازه‌ی ارتفاع کارت‌های تازه اضافه‌شده می‌ندازه پایین‌تر —
           دقیقاً همون پرش ناخواسته به ته گالری. */}
       <div className="relative z-[1] mx-auto max-w-container px-6" style={{ overflowAnchor: "none" }}>
-        <SectionHeading
-          eyebrow="نمونه‌کارها"
-          title={<>نمونه‌کارهایی شبیه <em>کسب‌وکار شما</em></>}
-          desc="نمونه‌سایت‌هایی که برای انواع کسب‌وکارها ساخته شده — از دسته‌بندی‌ها انتخاب کن یا دنبال چیزی مشخص بگرد تا ببینی برای کسب‌وکار خودت چه سایتی مناسبه."
-        />
+        <Reveal className="mb-10 flex items-baseline gap-4">
+          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+            Gallery
+          </span>
+          <div>
+            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+              نمونه‌کارهایی شبیه کسب‌وکار شما
+            </h2>
+            <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
+              نمونه‌سایت‌هایی که برای انواع کسب‌وکارها ساخته شده — از دسته‌بندی‌ها انتخاب کن یا
+              دنبال چیزی مشخص بگرد تا ببینی برای کسب‌وکار خودت چه سایتی مناسبه.
+            </p>
+          </div>
+        </Reveal>
 
         {/* z-40 + position اینجا لازمه: Reveal با transform یه stacking context
             جدید می‌سازه، و بدون z-index صریح روی خودِ این Reveal، پنل دراپ‌داون
@@ -245,7 +253,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
                 <Reveal
                   as="article"
                   key={s.id}
-                  className="group relative overflow-hidden fx-card rounded-card transition-all hover:-translate-y-1 hover:border-ink/20"
+                  className="group relative overflow-hidden rounded-card border border-ink/10 bg-surface/40 transition-all hover:-translate-y-1 hover:border-ink/20"
                 >
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
                     {s.image ? (

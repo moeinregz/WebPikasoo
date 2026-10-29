@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Vazirmatn, Lalezar } from "next/font/google";
 import MobileStickyCta from "@/components/MobileStickyCta";
-import FxLayer from "@/components/FxLayer";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -121,8 +120,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="grain pb-[68px] sm:pb-0">
-        <FxLayer />
+      <body className="pb-[68px] sm:pb-0">
         {children}
         <MobileStickyCta />
       </body>
