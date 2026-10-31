@@ -102,18 +102,10 @@ export default function Services() {
   return (
     <section id="skills" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-dot-grid" />
-      <span
-        className="pointer-events-none absolute -right-[220px] -top-[260px] z-0 h-[640px] w-[640px] rounded-full opacity-45 blur-[130px]"
-        style={{ background: "rgba(0, 119, 182, .35)" }}
-      />
-      <span
-        className="pointer-events-none absolute -left-[180px] -bottom-[240px] z-0 h-[520px] w-[520px] rounded-full opacity-35 blur-[130px]"
-        style={{ background: "rgba(2, 62, 138, .35)" }}
-      />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-14 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
             Services
           </span>
           <div>
@@ -128,7 +120,9 @@ export default function Services() {
         {/* 01–03 — Software dev / Store & corporate sites / AI, shown
             through one interactive laptop preview. */}
         <Reveal className="relative z-[1] mb-20">
-          <LaptopShowcase />
+          <div data-gsap="zoom">
+            <LaptopShowcase />
+          </div>
         </Reveal>
 
         {/* 04 — SEO & Growth */}
@@ -158,7 +152,7 @@ export default function Services() {
               against that gray. A solid dark color stays dark regardless
               of theme, matching the other "always dark" panels in this
               codebase (Contact's CTA, the laptop mockup, etc). */}
-          <div className="seo-hero relative mb-6 overflow-hidden rounded-card border border-white/10 bg-[#0a0a0c] p-6 sm:p-9">
+          <div className="seo-hero relative mb-6 overflow-hidden matte rounded-card !bg-[#0a0a0c] p-6 sm:p-9">
             <div className="relative z-[1] flex flex-col gap-9 lg:flex-row lg:items-center">
               <div className="flex-1">
                 <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
@@ -253,7 +247,7 @@ export default function Services() {
               <div
                 key={item.n}
                 style={{ "--seo-color": item.color } as CSSProperties}
-                className="seo-card group relative flex items-center gap-4 rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6"
+                className="seo-card group relative flex items-center gap-4 matte matte-hover rounded-card p-5 sm:p-6"
               >
                 <span
                   className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] p-2.5 transition-transform duration-300 group-hover:scale-110"
@@ -283,7 +277,7 @@ export default function Services() {
         {/* Points to the dedicated skills page for the full technical list —
             the pretty per-technology cards that used to live in this
             section now live there instead. */}
-        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink/10 bg-surface/50 p-6 sm:p-7">
+        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 matte matte-hover rounded-card p-6 sm:p-7">
           <div>
             <h4 className="text-[16px] font-bold">کنجکاوید با چه تکنولوژی‌هایی کار می‌کنیم؟</h4>
             <p className="mt-1.5 text-[13.5px] text-dim">
@@ -292,7 +286,7 @@ export default function Services() {
           </div>
           <Link
             href="/skills"
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-full border border-ink/15 bg-canvas px-5 py-3 text-[14px] font-bold text-ink transition hover:border-accent hover:text-accent"
+            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-canvas px-5 py-3 text-[14px] font-bold text-ink"
           >
             مشاهده مهارت‌های فنی
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

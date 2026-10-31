@@ -52,7 +52,7 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
     // the translateX() animation always moves physically left regardless of
     // text direction. Pinning this element to LTR makes its static position
     // anchor left, matching what translateX(0 → -50%) assumes.
-    <div dir="ltr" className="overflow-hidden">
+    <div dir="ltr" data-marquee className="overflow-hidden">
       <div
         className={`flex w-max items-center ${
           reverse ? "animate-marquee-rtl" : "animate-marquee-ltr"
@@ -61,10 +61,14 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
         {repeated.map((t, i) => (
           <span
             key={i}
-            className="flex items-center gap-[18px] whitespace-nowrap px-[22px] font-mono text-[15px] font-semibold text-dim transition-colors hover:text-ink sm:text-[17px]"
+            className={`flex items-center gap-6 whitespace-nowrap px-6 font-mono text-[20px] font-black tracking-tight sm:text-[28px] ${
+              reverse ? "text-ink" : "text-white"
+            }`}
           >
             {t}
-            <span className="h-1 w-1 rounded-full bg-accent" />
+            <svg viewBox="0 0 24 24" className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5" fill="currentColor" aria-hidden>
+              <path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" />
+            </svg>
           </span>
         ))}
       </div>
@@ -74,13 +78,13 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
 
 export default function Marquee() {
   return (
-    <section className="relative overflow-hidden border-y border-ink/10 bg-surface/40 py-6">
-      {/* Fade masks on both edges — the classic GitHub/Vercel logo-ticker
-          treatment, so the loop never looks like it's hard-cut at the edge. */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-canvas to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-canvas to-transparent" />
-      <MarqueeRow items={stackItems} />
-      <div className="mt-2.5">
+    // دو نوار مات و ضربدری — مثل دو تکه چسب‌نواری روی هم. هر ردیف با
+    // سرعت اسکرول کج می‌شه (ScrollFx، data-marquee).
+    <section className="relative overflow-hidden py-14">
+      <div className="relative z-[2] -mx-6 -rotate-2 border-y-2 border-ink bg-accent py-4 shadow-[0_8px_0_0_rgb(var(--matte-shadow))]">
+        <MarqueeRow items={stackItems} />
+      </div>
+      <div className="relative z-[1] -mx-6 -mt-3 rotate-[1.5deg] border-y-2 border-ink bg-surface py-4">
         <MarqueeRow items={growthItems} reverse />
       </div>
     </section>

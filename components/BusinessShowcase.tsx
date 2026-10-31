@@ -191,10 +191,6 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
 
   return (
     <section id="showcase" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
-      <span
-        className="pointer-events-none absolute -right-[200px] -bottom-[220px] z-0 h-[560px] w-[560px] rounded-full opacity-30 blur-[130px]"
-        style={{ background: "rgba(2, 62, 138, .35)" }}
-      />
 
       {/* overflow-anchor: none روی این wrapper لازمه — وگرنه وقتی با دکمه‌ی
           «بیشتر» چندین کارت جدید بالای دکمه اضافه می‌شن، رفتار پیش‌فرض
@@ -203,7 +199,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
           دقیقاً همون پرش ناخواسته به ته گالری. */}
       <div className="relative z-[1] mx-auto max-w-container px-6" style={{ overflowAnchor: "none" }}>
         <Reveal className="mb-10 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
             Gallery
           </span>
           <div>
@@ -253,7 +249,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
                 <Reveal
                   as="article"
                   key={s.id}
-                  className="group relative overflow-hidden rounded-card border border-ink/10 bg-surface/40 transition-all hover:-translate-y-1 hover:border-ink/20"
+                  className="group relative overflow-hidden matte matte-hover rounded-card transition-all hover:-translate-y-1 hover:border-ink/20"
                 >
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
                     {s.image ? (
@@ -298,7 +294,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
                 <button
                   type="button"
                   onClick={handleShowAll}
-                  className="group inline-flex items-center gap-2.5 rounded-full border-2 border-ink/15 px-7 py-3.5 text-[14.5px] font-bold text-ink transition hover:border-accent hover:text-accent"
+                  className="group inline-flex items-center gap-2.5 matte-btn rounded-xl bg-canvas px-7 py-3.5 text-[14.5px] font-bold text-ink"
                 >
                   نمایش {remaining} نمونه‌ی دیگر
                   <svg

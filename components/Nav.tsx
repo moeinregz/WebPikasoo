@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
@@ -37,15 +38,15 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
       {/* Sticky glass nav — theme-adaptive blurred bar with a hairline
           border, the same treatment Vercel/GitHub use on their marketing
           headers, instead of a fixed brand-color block. */}
-      <header className="sticky top-0 z-[100] border-b border-ink/10 bg-canvas/70 backdrop-blur-xl">
-        <div className="mx-auto max-w-container px-6">
+      <header className="sticky top-0 z-[100] border-b-2 border-ink bg-canvas">
+        <div data-hero-item className="mx-auto max-w-container px-6">
           {/* Mobile bar: menu + dark mode on the right, wordmark centered,
               signup/account on the left. Plain 3-column grid so each group
               stays put regardless of the other groups' width. */}
           <div className="grid h-[68px] grid-cols-3 items-center md:hidden">
             <div className="flex items-center gap-2">
               <button
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-ink/[0.14]"
+                className="matte-btn flex h-9 w-9 items-center justify-center rounded-lg bg-surface"
                 aria-label="منو"
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen((v) => !v)}
@@ -56,7 +57,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             </div>
 
             <Link href="/" className="flex items-center justify-center gap-2 font-mono text-[16px] font-black tracking-wide text-ink">
-              <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-glow">
+              <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-ink transition-transform duration-500 hover:rotate-[-10deg] hover:scale-110">
                 <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="32px" className="object-cover" priority />
               </span>
             </Link>
@@ -64,7 +65,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             <div className="flex justify-end">
               <Link
                 href="/account"
-                className="whitespace-nowrap rounded-lg bg-ink px-4 py-2 font-mono text-[12.5px] font-bold text-canvas transition hover:opacity-85"
+                className="matte-btn whitespace-nowrap rounded-lg bg-accent px-4 py-2 font-mono text-[12.5px] font-black text-white"
               >
                 {accountLabel}
               </Link>
@@ -80,7 +81,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
           <div dir="ltr" className="hidden h-[68px] items-center justify-between md:flex">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2.5 font-mono text-[17px] font-black tracking-wide text-ink">
-                <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-glow">
+                <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-ink transition-transform duration-500 hover:rotate-[-10deg] hover:scale-110">
                   <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="36px" className="object-cover" priority />
                 </span>
                 <span className="leading-none">
@@ -94,9 +95,10 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
                   <Link
                     key={l.href}
                     href={l.href}
-                    className="text-[14px] font-semibold text-dim transition hover:text-ink"
+                    className="group relative text-[14px] font-bold text-dim transition hover:text-ink"
                   >
                     {l.label}
+                    <span className="absolute -bottom-1.5 left-0 h-[3px] w-full origin-right scale-x-0 rounded-full bg-accent transition-transform duration-300 group-hover:origin-left group-hover:scale-x-100" />
                   </Link>
                 ))}
               </nav>
@@ -105,7 +107,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             <div className="flex items-center gap-3">
               <Link
                 href="/account"
-                className="whitespace-nowrap rounded-lg bg-ink px-5 py-[9px] font-mono text-[13px] font-bold text-canvas transition hover:opacity-85"
+                className="matte-btn whitespace-nowrap rounded-lg bg-accent px-5 py-[9px] font-mono text-[13px] font-black text-white"
               >
                 {accountLabel}
               </Link>
@@ -119,22 +121,37 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
       {/* Rendered as a sibling of <header>, not nested inside it, so the
           fixed mobile panel positions itself against the viewport rather
           than any potential containing-block quirk from the header. */}
-      <div
-        className={`fixed inset-x-0 top-[68px] bottom-0 z-[95] flex-col gap-6 border-t border-ink/10 bg-canvas/95 px-6 py-8 text-xl font-semibold text-ink backdrop-blur-xl md:hidden ${
-          mobileOpen ? "flex" : "hidden"
-        }`}
-      >
-        {links.map((l) => (
-          <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
-            {l.label}
-          </Link>
-        ))}
-        <Link href="/account" onClick={() => setMobileOpen(false)}>
-          {accountLabel}
-        </Link>
-
-        {leaveAccount}
-      </div>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ clipPath: "circle(0% at 92% 0%)" }}
+            animate={{ clipPath: "circle(150% at 92% 0%)" }}
+            exit={{ clipPath: "circle(0% at 92% 0%)" }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-x-0 top-[68px] bottom-0 z-[95] flex flex-col gap-2 overflow-y-auto bg-canvas px-6 py-8 md:hidden"
+          >
+            {[...links, { href: "/account", label: accountLabel }].map((l, i) => (
+              <motion.div
+                key={l.href}
+                initial={{ opacity: 0, x: -50, rotate: -4 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 220, damping: 20, delay: 0.15 + i * 0.05 }}
+              >
+                <Link
+                  href={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="matte matte-sm flex items-center justify-between rounded-xl px-5 py-3.5 font-display text-[24px] leading-none text-ink active:translate-x-[-4px] active:translate-y-[4px] active:shadow-none"
+                >
+                  {l.label}
+                  <span className="font-mono text-[12px] font-black text-accent">0{i + 1}</span>
+                </Link>
+              </motion.div>
+            ))}
+            <div className="mt-3">{leaveAccount}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

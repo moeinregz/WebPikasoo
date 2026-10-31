@@ -363,7 +363,7 @@ export default function PricingPlans({
             onClick={() => setActive(c.slug)}
             className={`rounded-lg border px-5 py-2.5 text-[13.5px] font-bold transition ${
               active === c.slug
-                ? "border-transparent text-white shadow-glow"
+                ? "matte-btn text-white"
                 : "border-ink/15 bg-surface/40 text-dim hover:border-ink/25 hover:text-ink"
             }`}
             style={active === c.slug ? { background: c.color } : undefined}
@@ -386,12 +386,12 @@ export default function PricingPlans({
           return (
             <Reveal key={key} delay={i * 80}>
               <div
-                className={`relative flex h-full flex-col rounded-card border p-7 ${
-                  p.highlight ? "shadow-glow-soft" : "border-ink/10 bg-surface/50"
+                className={`matte matte-hover relative flex h-full flex-col rounded-card p-7 ${
+                  p.highlight ? "md:-translate-y-3" : ""
                 }`}
                 style={
                   p.highlight
-                    ? { borderColor: `${cat.color}80`, background: `${cat.color}12` }
+                    ? { boxShadow: `-10px 10px 0 0 ${cat.color}` }
                     : undefined
                 }
               >
@@ -441,7 +441,7 @@ export default function PricingPlans({
                     }
                     className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-bold transition disabled:pointer-events-none disabled:opacity-60 ${
                       p.highlight
-                        ? "text-white shadow-glow hover:-translate-y-0.5"
+                        ? "matte-btn text-white"
                         : "border border-ink/15 bg-canvas text-ink hover:border-accent hover:text-accent"
                     }`}
                     style={p.highlight ? { background: cat.color } : undefined}

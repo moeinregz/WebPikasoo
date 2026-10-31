@@ -57,7 +57,7 @@ export default function HeroSlider() {
     <div
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className="group relative overflow-hidden rounded-card border border-ink/10 bg-[#0a0a0c] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]"
+      className="matte group relative overflow-hidden rounded-[20px] !bg-[#0a0a0c] ![box-shadow:-10px_10px_0_0_rgb(var(--matte-shadow))]"
     >
       {/* بدنه‌ی اسلایدر — قاب مربعی ۱ در ۱ */}
       <div className="relative aspect-square w-full overflow-hidden">

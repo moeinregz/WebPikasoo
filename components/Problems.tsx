@@ -69,7 +69,7 @@ export default function Problems() {
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
             Problems
           </span>
           <div>
@@ -87,7 +87,7 @@ export default function Problems() {
             <Reveal
               key={it.problem}
               delay={i * 80}
-              className="flex flex-col gap-4 rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6"
+              className="flex flex-col gap-4 matte matte-hover rounded-card p-5 sm:p-6"
             >
               <div className="flex items-start gap-4">
                 <span
@@ -123,7 +123,7 @@ export default function Problems() {
           </div>
           <a
             href="#lead-form"
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-3 text-[14px] font-bold text-white shadow-glow transition hover:-translate-y-0.5"
+            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-accent px-5 py-3 text-[14px] font-black text-white"
           >
             نمی‌دانم چه راهکاری نیاز دارم
           </a>

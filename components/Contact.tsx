@@ -61,20 +61,9 @@ export default async function Contact() {
 
   return (
     <section id="contact" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px] pt-[120px] text-center">
-      <span
-        className="pointer-events-none absolute -right-[160px] -bottom-[280px] z-0 h-[600px] w-[600px] rounded-full opacity-35 blur-[130px]"
-        style={{ background: "rgba(0, 119, 182, .35)" }}
-      />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="relative isolate overflow-hidden rounded-[24px] border border-ink/10 bg-[#0a0a0c] px-6 py-16 text-white sm:px-10">
-          {/* Ambient animated gradient mesh — the Vercel "deploy" CTA-panel
-              treatment: a soft drifting blob of brand-gradient behind the
-              copy, contained inside the panel only. */}
-          <span
-            className="absolute -inset-x-[10%] -inset-y-[30%] -z-10 animate-pulse-soft blur-[60px]"
-            style={{ background: "rgba(0, 119, 182, .28)" }}
-          />
+        <div data-gsap="zoom" className="matte relative isolate overflow-hidden rounded-[24px] !bg-[#0a0a0c] px-6 py-16 text-white ![box-shadow:-12px_12px_0_0_rgb(var(--matte-shadow))] sm:px-10">
           <span className="mb-[22px] inline-flex items-center gap-2 rounded-full border border-white/[0.14] px-3.5 py-1.5 font-mono text-[12.5px] text-white/70">
             <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
             آماده‌ی همکاری روی پروژه‌های جدید
@@ -91,7 +80,7 @@ export default async function Contact() {
               href="https://wa.me/989965745535"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-[34px] py-[17px] text-base font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-accent px-[34px] py-[17px] text-base font-black text-white"
             >
               شروع گفتگو در واتساپ
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -100,16 +89,16 @@ export default async function Contact() {
             </a>
             <a
               href="tel:+989965745535"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 px-[34px] py-[17px] text-base font-semibold text-white transition hover:border-accent hover:text-accent"
+              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-white px-[34px] py-[17px] text-base font-black text-[#0a0a0c]"
             >
               تماس مستقیم
             </a>
           </div>
-        </Reveal>
+        </div>
 
         <Reveal
           id="lead-form"
-          className="mx-auto mt-14 max-w-[720px] scroll-mt-[90px] rounded-card border border-ink/10 bg-surface/50 p-6 text-right sm:p-9"
+          className="mx-auto mt-14 max-w-[720px] scroll-mt-[90px] matte rounded-card p-6 text-right sm:p-9"
         >
           <h3 className="mb-2 font-display text-2xl font-normal">
             یا مشاوره‌ی رایگان پروژه‌ت رو رزرو کن
@@ -131,7 +120,7 @@ export default async function Contact() {
               href={s.href}
               target={s.href.startsWith("http") ? "_blank" : undefined}
               rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="group flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-ink/10 bg-surface/40 px-3 py-[22px] font-mono text-[12.5px] text-dim transition hover:-translate-y-1 hover:border-ink/20"
+              className="group flex flex-col items-center justify-center gap-2.5 matte matte-sm matte-hover rounded-[14px] px-3 py-[22px] font-mono text-[12.5px] text-dim transition hover:-translate-y-1 hover:border-ink/20"
             >
               {s.icon}
               <span className="font-fa text-[13.5px] font-semibold text-ink">{s.label}</span>

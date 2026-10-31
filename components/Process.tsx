@@ -106,18 +106,10 @@ export default function Process() {
 
   return (
     <section className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
-      <span
-        className="pointer-events-none absolute -left-[200px] top-[120px] z-0 h-[520px] w-[520px] rounded-full opacity-30 blur-[130px]"
-        style={{ background: "rgba(0, 119, 182, .35)" }}
-      />
-      <span
-        className="pointer-events-none absolute -right-[220px] bottom-[40px] z-0 h-[480px] w-[480px] rounded-full opacity-25 blur-[130px]"
-        style={{ background: "rgba(72, 202, 228, .35)" }}
-      />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-16 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
           Map
           </span>
           <div>
@@ -135,14 +127,14 @@ export default function Process() {
         <div className="hidden lg:block">
           {[row1, row2].map((row, rowIdx) => (
             <div key={rowIdx} className={rowIdx === 0 ? "relative mb-16" : "relative"}>
-              <span className="pointer-events-none absolute inset-x-[16.6667%] top-7 h-[2px] bg-gradient-to-r from-accent3 via-accent to-accent2/50" />
+              <span data-gsap="draw" className="pointer-events-none absolute inset-x-[16.6667%] top-7 h-[4px] rounded-full bg-gradient-to-r from-accent3 via-accent to-accent2" />
               <div className="relative grid grid-cols-3 gap-6">
                 {row.map((s, i) => {
                   const idx = rowIdx * 3 + i;
                   return (
                     <Reveal key={s.n} delay={idx * 120} className="flex flex-col items-center">
                       <span
-                        className="relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-canvas p-3.5 shadow-glow-soft"
+                        className="relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-canvas p-3.5 shadow-[-4px_4px_0_0_rgb(var(--matte-shadow))]"
                         style={{ borderColor: s.color, color: s.color }}
                       >
                         {s.icon}
@@ -154,7 +146,7 @@ export default function Process() {
                         </span>
                       </span>
 
-                      <div className="w-full rounded-card border border-ink/10 bg-surface/70 p-4 backdrop-blur-sm">
+                      <div className="w-full matte matte-hover rounded-card p-4">
                         <span
                           className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
                           style={{ background: `${s.color}1f`, color: s.color }}
@@ -190,7 +182,7 @@ export default function Process() {
                     {i + 1}
                   </span>
                 </span>
-                <div className="min-w-0 flex-1 rounded-card border border-ink/10 bg-surface/50 p-4">
+                <div className="min-w-0 flex-1 matte matte-hover rounded-card p-4">
                   <span
                     className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
                     style={{ background: `${s.color}1f`, color: s.color }}

@@ -61,7 +61,7 @@ export default function Testimonials() {
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
             Comments
           </span>
           <div>
@@ -81,7 +81,7 @@ export default function Testimonials() {
               key={t.name}
               delay={i * 80}
               className={[
-                "flex flex-col rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6",
+                "flex flex-col matte matte-hover rounded-card p-5 sm:p-6",
                 i === 2 ? "col-span-2 sm:col-span-1" : "",
               ].join(" ")}
             >

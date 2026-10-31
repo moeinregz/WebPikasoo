@@ -50,14 +50,10 @@ export default function Trust() {
   return (
     <section id="trust" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[480px] bg-dot-grid" />
-      <span
-        className="pointer-events-none absolute -left-[200px] -top-[220px] z-0 h-[560px] w-[560px] rounded-full opacity-40 blur-[130px]"
-        style={{ background: "rgba(0, 119, 182, .3)" }}
-      />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
             About
           </span>
           <div>
@@ -77,8 +73,8 @@ export default function Trust() {
             تو حالت تاریک (canvas مشکی) فرقی نمی‌کرد، ولی تو حالت روشن
             (canvas سفید) نتیجه‌ش یه جعبه‌ی خاکستری کم‌رنگ بود که متن
             سفید/۴۵ تا سفید/۷۰ داخلش عملاً کم‌کنتراست و به‌سختی خونا می‌شد. */}
-        <Reveal className="mb-8 overflow-hidden rounded-card border border-white/10 bg-[#0a0a0c] p-6 sm:p-9">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4">
+        <Reveal className="mb-8 overflow-hidden matte rounded-card !bg-[#0a0a0c] p-6 sm:p-9">
+          <div data-gsap="pop" className="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4">
             <div>
               <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
                 <StatCounter to={10} suffix=" نفر" />
@@ -118,9 +114,9 @@ export default function Trust() {
           {trustPoints.map((p) => (
             <Reveal
               key={p.title}
-              className="flex items-start gap-4 rounded-card border border-ink/10 bg-surface/50 p-5 sm:p-6"
+              className="flex items-start gap-4 matte matte-hover rounded-card p-5 sm:p-6"
             >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] bg-accent p-2.5 text-white">
+              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-ink bg-accent p-2.5 text-white">
                 {p.icon}
               </span>
               <div className="min-w-0 flex-1">

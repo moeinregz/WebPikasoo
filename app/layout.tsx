@@ -83,6 +83,11 @@ const themeInitScript = `
   } catch (e) {
     document.documentElement.classList.add('dark');
   }
+  try {
+    if (sessionStorage.getItem('webpikaso-intro')) {
+      document.documentElement.setAttribute('data-intro-seen', '');
+    }
+  } catch (e) {}
 })();
 `;
 
@@ -91,6 +96,7 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html
+      suppressHydrationWarning
       lang="fa"
       dir="rtl"
       className={`${vazirmatn.variable} ${lalezar.variable}`}

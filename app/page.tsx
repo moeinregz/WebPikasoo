@@ -13,6 +13,8 @@ import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import IntroSplash from "@/components/fx/IntroSplash";
+import ScrollFx from "@/components/fx/ScrollFx";
 import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
 import { businessSites } from "@/lib/businessSites";
 import { projectViewUrl } from "@/lib/projectLink";
@@ -64,6 +66,8 @@ export default async function Home() {
   // فرم تماس — دقیقاً همون لحظه‌ای که تصمیم گرفته شده.
   return (
     <>
+      <IntroSplash />
+      <ScrollFx />
       <Nav isLoggedIn={isLoggedIn} />
       <Hero />
       <Marquee />

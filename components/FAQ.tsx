@@ -45,7 +45,7 @@ export default function FAQ() {
     <section id="faq" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="flex h-8 items-center rounded-full border border-ink/10 bg-surface px-3.5 font-mono text-sm font-bold text-ink">
+          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
             FAQ
           </span>
           <div>
@@ -62,7 +62,7 @@ export default function FAQ() {
           {faqs.map((item, i) => {
             const isOpen = openIndex === i;
             return (
-              <Reveal key={item.q} delay={i * 60} className="overflow-hidden rounded-card border border-ink/10 bg-surface/50">
+              <Reveal key={item.q} delay={i * 60} className="overflow-hidden matte rounded-card">
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
