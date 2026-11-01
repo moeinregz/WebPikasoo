@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type ElementType, type ReactNode, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type ElementType, type ReactNode, type CSSProperties } from "react";
+import { motion, useInView, useReducedMotion, type Variants } from "motion/react";
 
 type RevealProps = {
   children: ReactNode;
@@ -11,6 +12,13 @@ type RevealProps = {
   id?: string;
 };
 
+// حالت مخفی: کمی پایین‌تر، کوچیک‌تر و با یه چرخش سه‌بعدی ملایم به عقب؛
+// موقع ورود با یه فنر نرم صاف می‌شه سر جاش.
+const variants: Variants = {
+  hidden: { opacity: 0, y: 70, scale: 0.94, rotateX: 14, transition: { duration: 0 } },
+  shown: { opacity: 1, y: 0, scale: 1, rotateX: 0 },
+};
+
 export default function Reveal({
   children,
   as: Tag = "div",
@@ -19,63 +27,36 @@ export default function Reveal({
   delay = 0,
   id,
 }: RevealProps) {
-  const [node, setNode] = useState<Element | null>(null);
-  // پیش‌فرض «دیده‌شده» — سرور و همون اولین رندر همیشه محتوا رو کامل و
-  // واضح نشون می‌ده (بدون فلش خالی/محو روی سکشن‌هایی مثل هیرو، درست
-  // بعد از تموم‌شدن لودینگ). فقط وقتی جاوااسکریپت هیدریت شد و تشخیص داد
-  // این المان الان واقعاً پایین صفحه و بیرون از دیده، مخفی و منتظر
-  // اسکرول می‌مونه؛ برای هرچیزی که همون لحظه‌ی اول تو دیده، اصلاً مخفی
-  // نمی‌شه.
-  const [visible, setVisible] = useState(true);
+  const MotionTag = useMemo(() => motion.create(Tag), [Tag]);
+  const ref = useRef<HTMLElement | null>(null);
+  const reduce = useReducedMotion();
+  // پیش‌فرض «دیده‌شده» — سرور و اولین رندر همیشه محتوا رو کامل نشون می‌دن.
+  // فقط وقتی بعد از هیدریشن معلوم شد المان هنوز پایین‌تر از دیدرسه، مخفی
+  // می‌شه و منتظر اسکرول می‌مونه. هر چیزی که همون لحظه‌ی اول تو دیده (یا
+  // با لینک anchor ازش رد شدیم) اصلاً مخفی نمی‌شه.
+  const [armed, setArmed] = useState(false);
+  const inView = useInView(ref, { once: true, amount: 0.15 });
 
   useEffect(() => {
-    if (!node) return;
+    if (!ref.current || reduce) return;
+    const rect = ref.current.getBoundingClientRect();
+    if (rect.top >= window.innerHeight * 0.9) setArmed(true);
+  }, [reduce]);
 
-    const rect = node.getBoundingClientRect();
-    // قبلاً اگه المان کاملاً از بالای صفحه رد شده بود (rect.bottom <= 0) —
-    // که دقیقاً همون اتفاقیه که با لینک‌های anchor مثل /#lead-form می‌افته،
-    // چون مرورگر مستقیم اسکرول می‌کنه پایین‌تر و این باکس بالاتر از
-    // ویوپورت جا می‌مونه — این شرط false می‌شد، یعنی opacity-0 ست می‌شد و
-    // منتظر IntersectionObserver می‌موند؛ ولی چون کاربر معمولاً برنمی‌گرده
-    // بالا اسکرول کنه، اون المان برای همیشه محو/بریده باقی می‌موند. حالا
-    // فقط چک می‌کنیم که المان از پایین ویوپورت رد نشده باشه — یعنی «هنوز
-    // نرسیده به دیدرس از پایین» — چه بالای صفحه رد شده باشه چه همین الان
-    // دیده بشه، هر دو حالت بلافاصله نمایش داده می‌شن.
-    const alreadyInView = rect.top < window.innerHeight * 0.9;
-    if (alreadyInView) {
-      setVisible(true);
-      return;
-    }
-
-    setVisible(false);
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    io.observe(node);
-    return () => io.disconnect();
-  }, [node]);
+  const state = !armed || inView ? "shown" : "hidden";
 
   return (
-    <Tag
-      ref={setNode}
+    <MotionTag
+      ref={ref}
       id={id}
-      style={{ ...style, transitionDelay: visible ? `${delay}ms` : "0ms" }}
-      className={[
-        "transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(.16,1,.3,1)]",
-        "motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:filter-none",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 blur-[6px]",
-        className,
-      ].join(" ")}
+      style={{ ...style, transformPerspective: 1000 }}
+      className={className}
+      variants={variants}
+      initial={false}
+      animate={state}
+      transition={{ type: "spring", stiffness: 70, damping: 16, mass: 0.9, delay: delay / 1000 }}
     >
       {children}
-    </Tag>
+    </MotionTag>
   );
 }

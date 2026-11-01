@@ -6,7 +6,7 @@ import { submitInquiry, type InquiryFormState } from "@/app/actions";
 const initialState: InquiryFormState = null;
 
 const inputClass =
-  "w-full rounded-[10px] border border-ink/[0.14] bg-surface/60 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:shadow-glow";
+  "w-full rounded-[10px] border-2 border-ink/20 bg-canvas px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:shadow-[-4px_4px_0_0_rgb(var(--matte-shadow))]";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-[15px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
+      className="inline-flex w-full items-center justify-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[15px] font-black text-white disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
     >
       {pending ? "در حال ارسال..." : "دریافت مشاوره رایگان"}
       {!pending && (

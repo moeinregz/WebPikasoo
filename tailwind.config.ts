@@ -69,7 +69,6 @@ const config: Config = {
         glow: "0 0 0 1px rgba(0, 119, 182, 0.35), 0 8px 40px -8px rgba(0, 119, 182, 0.45)",
         "glow-violet": "0 0 0 1px rgba(2, 62, 138, 0.35), 0 8px 40px -8px rgba(2, 62, 138, 0.45)",
         "glow-soft": "0 20px 60px -20px rgba(0, 119, 182, 0.35)",
-        "glow-strong": "0 0 0 1px rgba(56, 189, 248, 0.35), 0 18px 60px -12px rgba(0, 150, 199, 0.65)",
       },
       keyframes: {
         pulseDot: {
@@ -171,28 +170,6 @@ const config: Config = {
           "40%, 55%": { transform: "translateX(16px)" },
           "80%, 100%": { transform: "translateX(-16px)" },
         },
-        // --- ری‌دیزاین مدرن: انیمیشن‌های مشترک ---
-        shimmer: {
-          "0%": { backgroundPosition: "0% 50%" },
-          "100%": { backgroundPosition: "200% 50%" },
-        },
-        aurora: {
-          "0%, 100%": { transform: "translate3d(0,0,0) rotate(0deg) scale(1)" },
-          "33%": { transform: "translate3d(4%,-6%,0) rotate(8deg) scale(1.08)" },
-          "66%": { transform: "translate3d(-5%,4%,0) rotate(-6deg) scale(.96)" },
-        },
-        wordUp: {
-          "0%": { opacity: "0", transform: "translateY(60%) rotate(4deg)", filter: "blur(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0) rotate(0)", filter: "blur(0)" },
-        },
-        floatY: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-12px)" },
-        },
-        menuItemIn: {
-          "0%": { opacity: "0", transform: "translateX(-24px)" },
-          "100%": { opacity: "1", transform: "translateX(0)" },
-        },
         eyeBlink: {
           "0%, 92%, 100%": { transform: "scaleY(1)" },
           "95%": { transform: "scaleY(.1)" },
@@ -223,14 +200,6 @@ const config: Config = {
         "glitch-clip-2": "glitchClip 2.7s steps(8) infinite reverse",
         "eye-look": "eyeLook 4.5s ease-in-out infinite",
         "eye-blink": "eyeBlink 5s ease-in-out infinite",
-
-        shimmer: "shimmer 6s linear infinite",
-        aurora: "aurora 18s ease-in-out infinite",
-        "aurora-slow": "aurora 26s ease-in-out infinite reverse",
-        "word-up": "wordUp .9s cubic-bezier(.16,1,.3,1) both",
-        "float-y": "floatY 6s ease-in-out infinite",
-        "float-y-slow": "floatY 8s ease-in-out infinite reverse",
-        "menu-item-in": "menuItemIn .5s cubic-bezier(.16,1,.3,1) both",
       },
     },
   },

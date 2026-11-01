@@ -1,4 +1,3 @@
-import Reveal from "./Reveal";
 import HeroSlider from "./HeroSlider";
 
 const features = [
@@ -7,131 +6,101 @@ const features = [
   { t: "پشتیبانی واقعی", d: "بعد از تحویل هم تنها نیستی" },
 ];
 
-/** هر کلمه تو یه span جدا، با تاخیر پله‌ای — تیتر کلمه‌به‌کلمه از پایین
- *  با یه بلور نرم بالا میاد. */
-function Words({ text, start = 0, className = "" }: { text: string; start?: number; className?: string }) {
-  return (
-    <span className="word-reveal">
-      {text.split(" ").map((w, i) => (
-        <span key={i} style={{ animationDelay: `${start + i * 90}ms` }}>
-          <span className={className}>{w}</span>
-          {" "}
-        </span>
-      ))}
-    </span>
-  );
-}
-
+/** هیرو — هر تکه‌ای که data-hero-item داره، بعد از تموم شدن اینترو با
+ *  تایم‌لاین GSAP (IntroSplash) پله‌پله وارد می‌شه. شکل‌های هندسی مات
+ *  پشت صحنه با data-speed روی اسکرول پارالاکس دارن (ScrollFx). */
 export default function Hero() {
   return (
-    <section className="relative -mt-[72px] overflow-hidden pb-24 pt-[130px] md:-mt-[78px] md:pt-[150px] sm:pb-32">
-      {/* پس‌زمینه: گرید نقطه‌ای + شفق متحرک + یه حلقه‌ی چرخان بزرگ */}
-      <div className="pointer-events-none absolute inset-0 z-0 h-[760px] bg-dot-grid" />
-      <div className="aurora">
-        <span className="-right-[180px] -top-[200px] h-[620px] w-[620px] animate-aurora bg-accent" />
-        <span className="-left-[220px] top-[80px] h-[540px] w-[540px] animate-aurora-slow bg-accent2" />
-        <span className="left-[30%] top-[420px] h-[360px] w-[360px] animate-aurora bg-accent3 !opacity-30" />
+    <section className="relative overflow-hidden pb-[110px] pt-20">
+      <div className="pointer-events-none absolute inset-0 z-0 h-[640px] bg-dot-grid" />
+
+      {/* شکل‌های هندسی مات و برجسته — همون رنگ‌های پالت، سایه‌ی تخت */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 hidden md:block">
+        <span data-speed="-0.35" className="matte absolute left-[6%] top-[90px] h-16 w-16 rotate-12 rounded-2xl !border-ink bg-accent" />
+        <span data-speed="0.25" className="matte absolute left-[44%] top-[64px] h-9 w-9 rounded-full !border-ink bg-accent3" />
+        <span data-speed="-0.2" className="matte absolute bottom-[70px] left-[40%] h-12 w-24 -rotate-6 rounded-xl !border-ink bg-frosted-blue" />
+        <span data-speed="0.45" className="matte absolute right-[3%] top-[48%] h-10 w-10 rotate-45 !border-ink bg-accent2" />
       </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[120px] z-0 h-[900px] w-[900px] -translate-x-1/2 animate-spin-slow rounded-full opacity-[0.07] [animation-duration:60s]"
-        style={{ background: "conic-gradient(from 0deg, transparent, #00b4d8, transparent 30%, #0077b6, transparent 60%)" }}
-      />
 
-      <div className="relative z-10 mx-auto grid max-w-container grid-cols-1 gap-16 px-6 md:grid-cols-[1.1fr_.9fr] md:items-center">
+      <div className="relative z-10 mx-auto mt-14 grid max-w-container grid-cols-1 gap-14 px-6 md:grid-cols-[1.05fr_.95fr] md:items-center">
         <div>
-          <Reveal>
-            <span className="eyebrow mb-7 !py-2">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inset-0 animate-ping rounded-full bg-accent3 opacity-75" />
-                <span className="relative h-2 w-2 rounded-full bg-accent3" />
-              </span>
-              آماده‌ی همکاری روی پروژه‌های جدید
-            </span>
-          </Reveal>
+          <span
+            data-hero-item
+            className="matte matte-sm mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[12.5px] font-bold text-ink"
+          >
+            <span className="h-2 w-2 animate-pulse-dot rounded-full bg-accent3" />
+            آماده‌ی همکاری روی پروژه‌های جدید
+          </span>
 
-          <h1 className="mb-7 font-display text-[44px] font-normal leading-[1.22] tracking-tight sm:text-[60px] lg:text-[76px]">
-            <Words text="ما نرم‌افزار نمی‌سازیم؛" />
-            <br />
-            <span className="relative inline-block whitespace-nowrap">
-              <Words text="ابزار پول‌سازی" start={300} className="text-gradient" />
-              <svg
-                viewBox="0 0 300 18"
-                preserveAspectRatio="none"
-                className="absolute inset-x-0 -bottom-1 h-[12px] w-full"
-                fill="none"
-                strokeWidth={6}
-                strokeLinecap="round"
-              >
-                <defs>
-                  <linearGradient id="heroUnderline" x1="0" x2="1">
-                    <stop offset="0" stopColor="#48CAE4" />
-                    <stop offset="1" stopColor="#0077B6" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M4 10c60-9 220-9 292 0"
-                  stroke="url(#heroUnderline)"
-                  pathLength={1}
-                  strokeDasharray="1"
-                  strokeDashoffset="1"
-                  className="[animation:heroDraw_1s_.9s_cubic-bezier(.16,1,.3,1)_forwards] motion-reduce:[stroke-dashoffset:0]"
-                />
-              </svg>
-            </span>{" "}
-            <Words text="می‌سازیم." start={480} />
+          <h1 className="mb-6 font-display text-[42px] font-normal leading-[1.28] sm:text-[56px] lg:text-[66px]">
+            <span data-hero-item className="block">
+              ما نرم‌افزار نمی‌سازیم؛
+            </span>
+            <span data-hero-item className="block">
+              <span className="relative inline-block whitespace-nowrap accent-gradient-text">
+                ابزار پول‌سازی
+                <svg
+                  viewBox="0 0 300 18"
+                  preserveAspectRatio="none"
+                  className="absolute inset-x-0 -bottom-2 h-[10px] w-full text-accent2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={7}
+                  strokeLinecap="round"
+                >
+                  <path d="M4 9c60-8 220-8 292 0" />
+                </svg>
+              </span>{" "}
+              می‌سازیم.
+            </span>
           </h1>
 
-          <Reveal delay={500}>
-            <p className="mb-9 max-w-[52ch] text-[16px] leading-[1.9] text-dim sm:text-[18.5px]">
-              برای کسب‌وکارت{" "}
-              <b className="font-black text-ink">پنل مدیریت، فروشگاه آنلاین، سیستم فاکتوردهی و نرم‌افزار اختصاصی</b>{" "}
-              می‌سازیم — چیزی که واقعاً تو کسب‌وکارت اجرا می‌شه و مشتری جذب می‌کنه، نه فقط تو دمو خوب
-              به‌نظر می‌رسه. یه تیم ۱۰ نفره پشت هر پروژه‌ست، یعنی هم سرعت داری هم پشتیبانی واقعی.
-            </p>
-          </Reveal>
+          <p data-hero-item className="mb-8 max-w-[52ch] text-[15.5px] text-dim sm:text-[18px]">
+            برای کسب‌وکارت{" "}
+            <b className="font-semibold text-ink">پنل مدیریت، فروشگاه آنلاین، سیستم فاکتوردهی و نرم‌افزار اختصاصی</b>{" "}
+            می‌سازیم — چیزی که واقعاً تو کسب‌وکارت اجرا می‌شه و مشتری جذب می‌کنه، نه فقط تو دمو خوب به‌نظر
+            می‌رسه. یه تیم ۱۰ نفره پشت هر پروژه‌ست، یعنی هم سرعت داری هم پشتیبانی واقعی.
+          </p>
 
-          <Reveal delay={600}>
-            {/* اولین قدم کم‌ریسک‌ترین قدمه (مشاوره‌ی رایگان)، نه تعهد پولی. */}
-            <div className="flex flex-wrap items-center gap-4">
-              <a href="#lead-form" className="btn-primary magnetic !px-8 !py-4 !text-[16px]">
+          <div data-hero-item className="my-9 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {features.map((f, i) => (
+              <div key={f.t} className="matte matte-sm matte-hover rounded-[14px] p-4">
+                <span className="mb-2 flex h-7 w-7 items-center justify-center rounded-lg border-2 border-ink bg-accent font-mono text-[11px] font-black text-white">
+                  {i + 1}
+                </span>
+                <span className="block text-sm font-bold leading-relaxed">{f.t}</span>
+                <span className="block text-xs leading-relaxed text-dim">{f.d}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* اولین قدم کم‌ریسک‌ترین قدمه (مشاوره‌ی رایگان)، نه یه تعهد پولی. */}
+          <div data-hero-item>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#lead-form"
+                className="matte-btn inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-[15px] font-black text-white"
+              >
                 مشاوره رایگان پروژه من
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} className="h-[16px] w-[16px] rotate-180">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} className="h-[15px] w-[15px] rotate-180">
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </a>
-              <a href="#showcase" className="btn-ghost magnetic">
+              <a
+                href="#showcase"
+                className="matte-btn inline-flex items-center gap-2 rounded-xl bg-canvas px-6 py-3.5 text-[15px] font-bold text-ink"
+              >
                 نمونه‌کارهای مشابه کسب‌وکارم
               </a>
             </div>
-            <p className="mt-4 flex items-center gap-2 font-mono text-[12.5px] text-dim">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} className="h-3.5 w-3.5 text-accent3">
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
-              بدون تعهد — فقط ۱۵ دقیقه گفتگو درباره‌ی کسب‌وکارت
-            </p>
-          </Reveal>
-
-          <Reveal delay={700}>
-            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {features.map((f, i) => (
-                <div key={f.t} className="fx-card rounded-2xl p-4">
-                  <span className="mb-2 flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-accent3 to-accent font-mono text-[11px] font-black text-white">
-                    0{i + 1}
-                  </span>
-                  <span className="block text-[14px] font-black leading-relaxed">{f.t}</span>
-                  <span className="block text-[12px] leading-relaxed text-dim">{f.d}</span>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+            <p className="mt-4 font-mono text-[12.5px] text-dim">بدون تعهد — فقط ۱۵ دقیقه گفتگو درباره‌ی کسب‌وکارت</p>
+          </div>
         </div>
 
-        {/* اسلایدر نمونه‌کارها با قاب سه‌بعدی و بج‌های شناور */}
-        <div id="work" className="scroll-mt-[90px]">
-          <Reveal delay={300}>
+        <div id="work" data-hero-item className="scroll-mt-[90px]">
+          <div data-speed="0.12">
             <HeroSlider />
-          </Reveal>
+          </div>
         </div>
       </div>
     </section>

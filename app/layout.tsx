@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Vazirmatn, Lalezar } from "next/font/google";
 import MobileStickyCta from "@/components/MobileStickyCta";
-import FxLayer from "@/components/FxLayer";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -84,6 +83,11 @@ const themeInitScript = `
   } catch (e) {
     document.documentElement.classList.add('dark');
   }
+  try {
+    if (sessionStorage.getItem('webpikaso-intro')) {
+      document.documentElement.setAttribute('data-intro-seen', '');
+    }
+  } catch (e) {}
 })();
 `;
 
@@ -92,6 +96,7 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html
+      suppressHydrationWarning
       lang="fa"
       dir="rtl"
       className={`${vazirmatn.variable} ${lalezar.variable}`}
@@ -121,8 +126,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="grain pb-[68px] sm:pb-0">
-        <FxLayer />
+      <body className="pb-[68px] sm:pb-0">
         {children}
         <MobileStickyCta />
       </body>

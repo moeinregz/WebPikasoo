@@ -10,9 +10,11 @@ import Process from "@/components/Process";
 import PricingPlans from "@/components/PricingPlans";
 import Guarantee from "@/components/Guarantee";
 import FAQ from "@/components/FAQ";
-import SectionHeading from "@/components/SectionHeading";
+import Reveal from "@/components/Reveal";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import IntroSplash from "@/components/fx/IntroSplash";
+import ScrollFx from "@/components/fx/ScrollFx";
 import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
 import { businessSites } from "@/lib/businessSites";
 import { projectViewUrl } from "@/lib/projectLink";
@@ -64,6 +66,8 @@ export default async function Home() {
   // فرم تماس — دقیقاً همون لحظه‌ای که تصمیم گرفته شده.
   return (
     <>
+      <IntroSplash />
+      <ScrollFx />
       <Nav isLoggedIn={isLoggedIn} />
       <Hero />
       <Marquee />
@@ -83,12 +87,13 @@ export default async function Home() {
       <section id="pricing" className="relative overflow-hidden py-16 sm:py-20">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <div className="relative z-[1] mx-auto max-w-container px-6">
-          <SectionHeading
-            center
-            eyebrow="تعرفه‌ها"
-            title={<>پلنی که <em>به کارت میاد</em> رو انتخاب کن</>}
-            desc="یه دسته رو انتخاب کن و از بین ۳ پلن، اونی که به کارت میاد رو بردار — قیمت‌ها تقریبی و برای شروع مذاکره‌ن، بعد از شنیدن نیاز دقیقت یه پیشنهاد مکتوب و قطعی بهت می‌دیم."
-          />
+          <Reveal className="mb-12 text-center">
+            <h2 className="font-display text-[26px] font-normal sm:text-[32px]">تعرفه‌ها و پلن‌ها</h2>
+            <p className="mx-auto mt-2.5 max-w-[54ch] text-[14.5px] text-dim">
+              یه دسته رو انتخاب کن و از بین ۳ پلن، اونی که به کارت میاد رو بردار — قیمت‌ها تقریبی و
+              برای شروع مذاکره‌ن، بعد از شنیدن نیاز دقیقت یه پیشنهاد مکتوب و قطعی بهت می‌دیم.
+            </p>
+          </Reveal>
           <PricingPlans isLoggedIn={isLoggedIn} />
         </div>
       </section>
