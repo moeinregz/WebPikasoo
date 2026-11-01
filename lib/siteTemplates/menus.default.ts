@@ -3,8 +3,9 @@
 // of MenuCategory (see menu.ts). A private site starts from its template's
 // default and stores its own copy once the menu is edited in the dashboard.
 import type { MenuCategory } from "./menu";
+import { LUX_MENUS } from "./menus.lux";
 
-export const DEFAULT_MENUS: Record<string, MenuCategory[]> = {
+const BASE_MENUS: Record<string, MenuCategory[]> = {
   "cafe-adra": [
     {
       "title": "قهوه گرم",
@@ -954,3 +955,5 @@ export const DEFAULT_MENUS: Record<string, MenuCategory[]> = {
     }
   ]
 };
+
+export const DEFAULT_MENUS: Record<string, MenuCategory[]> = { ...BASE_MENUS, ...LUX_MENUS };

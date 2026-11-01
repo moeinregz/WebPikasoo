@@ -589,6 +589,10 @@ window.__bookFx=function(){
   var G=window.gsap,ST=window.ScrollTrigger,html=document.documentElement;
   if(!html.classList.contains("motion")||!G){var l=$(".ld");if(l)l.style.display="none";$$("[data-count]").forEach(function(b){b.textContent=fa(b.dataset.count)+(b.hasAttribute("data-plus")?"+":"")});return}
   G.registerPlugin(ST);
+  /* CSS smooth scrolling fights ScrollTrigger's refresh; scroll anchors in JS instead */
+  html.style.scrollBehavior="auto";
+  document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute("href");var t=id.length>1?$(id):null;if(!t&&id!=="#top")return;e.preventDefault();
+    var y=id==="#top"?0:t.getBoundingClientRect().top+scrollY-70;window.scrollTo({top:y,behavior:"smooth"})});
 
   var ul=$(".hl .ul"),ull=ul.getTotalLength();
   var heroTl=G.timeline({paused:true,defaults:{ease:"expo.out"}})

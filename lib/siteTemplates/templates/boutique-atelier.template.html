@@ -616,6 +616,10 @@ window.__boutiqueFx=function(){
   var G=window.gsap,ST=window.ScrollTrigger,html=document.documentElement;
   if(!html.classList.contains("motion")||!G){var l=$(".ld");if(l)l.style.display="none";$$(".st-text .w").forEach(function(w){w.style.opacity=1});return}
   G.registerPlugin(ST);
+  /* CSS smooth scrolling fights ScrollTrigger's refresh; scroll anchors in JS instead */
+  html.style.scrollBehavior="auto";
+  document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute("href");var t=id.length>1?$(id):null;if(!t&&id!=="#top")return;e.preventDefault();
+    var y=id==="#top"?0:t.getBoundingClientRect().top+scrollY-70;window.scrollTo({top:y,behavior:"smooth"})});
   var stx=$(".st-text");stx.innerHTML=stx.textContent.trim().split(/\s+/).map(function(w){return '<span class="w">'+w+'</span>'}).join(" ");
 
   var heroTl=G.timeline({paused:true,defaults:{ease:"expo.out"}})
