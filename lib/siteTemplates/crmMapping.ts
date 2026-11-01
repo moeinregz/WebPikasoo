@@ -11,7 +11,7 @@ import { TRADES } from "./trades";
 /** The type picker in the CRM, grouped so 23 choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
   { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream"] },
-  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics"] },
+  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
   { label: "خدمات و شرکتی", tradeIds: ["upholstery", "moving", "realestate", "law"] },
   { label: "آموزش", tradeIds: ["language", "music"] },
@@ -31,7 +31,7 @@ export const CRM_BUSINESS_TYPES: string[] = CRM_TYPE_GROUPS_LABELED.flatMap((g) 
 export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
   "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream"],
   "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch"],
-  "لوازم آرایشی و بهداشتی": ["cosmetics"],
+  "لوازم آرایشی و بهداشتی": ["cosmetics", "perfume"],
   "پزشکی و کلینیک": ["clinic", "dental"],
   "املاک و مستغلات": ["realestate"],
   "آموزشی": ["language", "music"],
@@ -50,7 +50,8 @@ const KEYWORDS: [string, string[]][] = [
   ["jewelry", ["طلافروشی", "طلا و جواهر", "جواهر", "زرگری"]],
   ["watch", ["ساعت"]],
   ["carpet", ["فرش"]],
-  ["cosmetics", ["آرایشی", "آرایش", "عطر", "پوست"]],
+  ["perfume", ["عطر", "ادکلن", "ادوکلن", "پرفیوم", "دکانت"]],
+  ["cosmetics", ["آرایشی", "آرایش", "پوست"]],
   ["music", ["موسیقی", "گیتار", "پیانو"]],
   ["language", ["زبان", "آیلتس"]],
   ["travel", ["آژانس", "مسافرتی", "مسافرت"]],

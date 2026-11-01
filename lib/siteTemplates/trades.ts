@@ -27,6 +27,7 @@ export const TRADES: Trade[] = [
   { id: "watch", label: "ساعت‌فروشی", colors: { primary: "#C9A24B", secondary: "#7A2E3A", accent: "#E6C877", bg: "#0B0C0F", text: "#EFE9DB" } },
   { id: "carpet", label: "فرش‌فروشی", colors: { primary: "#6E1423", secondary: "#C39A4B", accent: "#E1B866", bg: "#F6EFE6", text: "#2A1418" } },
   { id: "cosmetics", label: "لوازم آرایشی", colors: { primary: "#C6455B", secondary: "#C9A15A", accent: "#9E2F44", bg: "#FFF9F5", text: "#2B0F14" } },
+  { id: "perfume", label: "عطر و ادکلن فروشی", colors: { primary: "#C9A25A", secondary: "#5B1F3A", accent: "#E8D3A2", bg: "#0C0A0B", text: "#F3EAD9" } },
   { id: "dental", label: "دندانپزشکی", colors: { primary: "#1F8FBF", secondary: "#7FC8E8", accent: "#2BB5A0", bg: "#F4FAFD", text: "#12303F" } },
   { id: "clinic", label: "کلینیک", colors: { primary: "#2A9D8F", secondary: "#8ED1C6", accent: "#1F6F8B", bg: "#F3FAF9", text: "#143A36" } },
   { id: "gym", label: "باشگاه ورزشی", colors: { primary: "#E4572E", secondary: "#1F2933", accent: "#F2B134", bg: "#0F141A", text: "#F3F4F6" } },
