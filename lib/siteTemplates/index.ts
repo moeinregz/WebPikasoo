@@ -34,6 +34,8 @@ import watchPrime from "./templates/watch-prime.template.html";
 import carpetPrime from "./templates/carpet-prime.template.html";
 import cosmeticsPrime from "./templates/cosmetics-prime.template.html";
 import perfumeNoir from "./templates/perfume-noir.template.html";
+import boutiqueAtelier from "./templates/boutique-atelier.template.html";
+import bookstoreBarg from "./templates/bookstore-barg.template.html";
 import clinicPrime from "./templates/clinic-prime.template.html";
 import upholsteryPrime from "./templates/upholstery-prime.template.html";
 import movingPrime from "./templates/moving-prime.template.html";
@@ -60,6 +62,35 @@ import gardenGilas from "./templates/garden-gilas.template.html";
 // ---------------------------------------------------------------------------
 
 export const TEMPLATES: SiteTemplate[] = [
+  {
+    id: "boutique-atelier",
+    trade: "womenswear",
+    label: "مزون زنانه — ادیتوریال و رمانتیک (آتلیه)",
+    html: boutiqueAtelier,
+    palette: { primary: "#b76e79", secondary: "#7d3c47" },
+    images: [
+      { key: "hero", label: "عکس اصلی (قاب وسط بالای صفحه)", hint: "مدل یا لباس شاخص، قاب کمانی بلند", ratio: "2:3" },
+      { key: "g1", label: "گالری — ویترین کالکشن", hint: "ویترین", ratio: "4:5" },
+      { key: "g2", label: "گالری — اتاق پرو", hint: "اتاق پرو یا فضای داخلی", ratio: "7:5" },
+      { key: "g3", label: "گالری — جزئیات دوخت", hint: "نمای نزدیک دوخت یا پارچه", ratio: "7:5" },
+      { key: "g4", label: "گالری — بسته‌بندی", hint: "بسته‌بندی یا کیسه‌ی خرید", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "bookstore-barg",
+    trade: "bookstore",
+    label: "کتاب‌فروشی — کاغذی و ادبی (برگ)",
+    html: bookstoreBarg,
+    palette: { primary: "#1f4d3a", secondary: "#b8862f" },
+    images: [
+      { key: "hero", label: "جلد کتاب سه‌بعدی (بالای صفحه)", hint: "طرح جلد یا لوگوی فروشگاه، عمودی", ratio: "2:3" },
+      { key: "about", label: "داستان ما (داخل کتاب ورق‌خور)", hint: "نمای فروشگاه", ratio: "16:9" },
+      { key: "g1", label: "گالری — ویترین کتاب‌ها", hint: "ویترین", ratio: "4:5" },
+      { key: "g2", label: "گالری — گوشه‌ی کتاب‌خوانی", hint: "فضای مطالعه", ratio: "4:3" },
+      { key: "g3", label: "گالری — قفسه‌ی کودک", hint: "قفسه‌ی کتاب کودک", ratio: "4:3" },
+      { key: "g4", label: "گالری — تازه‌ها", hint: "کتاب‌های تازه", ratio: "16:9" },
+    ],
+  },
   {
     id: "perfume-noir",
     trade: "perfume",
