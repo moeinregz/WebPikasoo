@@ -2,7 +2,7 @@
 // developer confirms, this builds a demo site from the lead's data with a
 // random template and drops name + link into the team chat.
 import { headers } from "next/headers";
-import { sendTeamMessage, setCrmLeadSite, type CrmLead } from "@/lib/db";
+import { sendTeamMessage, setChannelLeadSite, setCrmLeadSite, type ChannelLead, type CrmLead } from "@/lib/db";
 import { detectTrades } from "@/lib/siteTemplates/crmMapping";
 import { imageSlotsFor, pickTemplateAmong } from "@/lib/siteTemplates";
 import { normalizeInstagram, whatsappNumber } from "@/lib/siteTemplates/generate";
@@ -22,69 +22,118 @@ function siteOrigin(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || "https://webpikaso.ir").replace(/\/$/, "");
 }
 
-/** Never throws: the lead's status has already been saved by the caller, and
- *  a site-building hiccup must not undo that — it is reported in the chat. */
-export async function autoBuildSiteForLead(lead: CrmLead, userId: number): Promise<void> {
+type SiteSource = {
+  name: string;
+  businessType: string;
+  phones: string[];
+  address?: string;
+  instagram?: string;
+  whatsapp?: string;
+  existingToken?: string;
+  /** Shown in the private site's note, e.g. «CRM» / «کانال‌ها». */
+  sourceLabel: string;
+  saveToken: (token: string) => Promise<void>;
+};
+
+/** Shared by the CRM and the channels tab. Never throws: the status has
+ *  already been saved by the caller, and a site-building hiccup must not undo
+ *  that — it is reported in the team chat instead. */
+async function buildSiteAndPost(src: SiteSource, userId: number): Promise<void> {
   try {
-    // One site per lead: accepting again just re-posts the existing link.
-    if (lead.site_token) {
+    // One site per lead/channel: accepting again just re-posts the existing link.
+    if (src.existingToken) {
       await sendTeamMessage({
         userId,
-        message: `${lead.name}\n${siteOrigin()}/preview/${lead.site_token}\n(سایت قبلاً برای این کسب‌وکار ساخته شده بود)`,
+        message: `${src.name}\n${siteOrigin()}/preview/${src.existingToken}\n(سایت قبلاً برای این کسب‌وکار ساخته شده بود)`,
       });
       return;
     }
 
-    const guess = detectTrades(lead.name, lead.business_type);
+    const guess = detectTrades(src.name, src.businessType);
     const template = pickTemplateAmong(guess.tradeIds);
     if (!template && guess.tradeIds.length > 0) {
-      await sendTeamMessage({
-        userId,
-        message: `⚠️ ${lead.name}\nسایت خودکار ساخته نشد: برای این صنف هنوز قالبی اضافه نشده.`,
-      });
+      await sendTeamMessage({ userId, message: `⚠️ ${src.name}\nسایت خودکار ساخته نشد: برای این صنف هنوز قالبی اضافه نشده.` });
       return;
     }
     if (!template) {
       await sendTeamMessage({
         userId,
-        message: `⚠️ ${lead.name}\nسایت خودکار ساخته نشد: صنف کاری مشخص نیست. نوع کسب‌وکار لید را تکمیل کنید.`,
+        message: `⚠️ ${src.name}\nسایت خودکار ساخته نشد: صنف کاری مشخص نیست. نوع کسب‌وکار را تکمیل کنید.`,
+      });
+      return;
+    }
+    const phones = src.phones.filter(Boolean).slice(0, 3);
+    if (!phones.length) {
+      await sendTeamMessage({
+        userId,
+        message: `⚠️ ${src.name}\nسایت خودکار ساخته نشد: شماره تماس ثبت نشده. اطلاعاتش رو تکمیل کنید و دوباره «قبول» بزنید.`,
       });
       return;
     }
 
-    const phones = [lead.phone, ...(lead.extra_phones ?? [])].filter(Boolean).slice(0, 3);
-    const instagram = lead.instagram && normalizeInstagram(lead.instagram) ? lead.instagram : undefined;
-    const whatsapp = lead.whatsapp && whatsappNumber(lead.whatsapp) ? lead.whatsapp : undefined;
+    const instagram = src.instagram && normalizeInstagram(src.instagram) ? src.instagram : undefined;
+    const whatsapp = src.whatsapp && whatsappNumber(src.whatsapp) ? src.whatsapp : undefined;
 
     const { site } = await buildPrivateSite({
       template,
-      input: {
-        brand: lead.name,
-        address: lead.business_area || "—",
-        phones,
-        instagram,
-        whatsapp,
-      },
-      note: `ساخته‌شده‌ی خودکار از CRM — قالب «${template.label}»`,
+      input: { brand: src.name, address: src.address || "—", phones, instagram, whatsapp },
+      note: `ساخته‌شده‌ی خودکار از ${src.sourceLabel} — قالب «${template.label}»`,
     });
 
-    await setCrmLeadSite(lead.id, site.token);
+    await src.saveToken(site.token);
     const needsPhotos = imageSlotsFor(template.id).length > 0;
     await sendTeamMessage({
       userId,
       message:
-        `${lead.name}\n${siteOrigin()}/preview/${site.token}` +
+        `${src.name}\n${siteOrigin()}/preview/${site.token}` +
         (needsPhotos ? "\n📷 این قالب جای عکس داره؛ از تب «سایت‌های خصوصی» عکس‌هاش رو آپلود کنید." : ""),
     });
   } catch (err) {
-    console.error("autoBuildSiteForLead failed:", err);
+    console.error("buildSiteAndPost failed:", err);
     try {
       await sendTeamMessage({
         userId,
-        message: `⚠️ ${lead.name}\nساخت خودکار سایت ناموفق بود. از تب «ساخت سایت از قالب» دستی بسازید.`,
+        message: `⚠️ ${src.name}\nساخت خودکار سایت ناموفق بود. از تب «ساخت سایت از قالب» دستی بسازید.`,
       });
     } catch {
       // chat itself failing is not worth masking the original error
     }
   }
+}
+
+export async function autoBuildSiteForLead(lead: CrmLead, userId: number): Promise<void> {
+  await buildSiteAndPost(
+    {
+      name: lead.name,
+      businessType: lead.business_type,
+      phones: [lead.phone, ...(lead.extra_phones ?? [])],
+      address: lead.business_area,
+      instagram: lead.instagram,
+      whatsapp: lead.whatsapp,
+      existingToken: lead.site_token,
+      sourceLabel: "CRM",
+      saveToken: (t) => setCrmLeadSite(lead.id, t),
+    },
+    userId
+  );
+}
+
+/** A page/channel accepted («قبول کرد»). Its page id is used as Instagram
+ *  when it looks like a handle / instagram link. */
+export async function autoBuildSiteForChannel(channel: ChannelLead, userId: number): Promise<void> {
+  const page = (channel.page_name || "").trim();
+  const looksLikeInstagram = /instagram\.com\//i.test(page) || /^@?[A-Za-z0-9._]{2,30}$/.test(page);
+  await buildSiteAndPost(
+    {
+      name: channel.business_name || page,
+      businessType: channel.business_type || "",
+      phones: [channel.phone || ""],
+      address: channel.address,
+      instagram: looksLikeInstagram ? page : undefined,
+      existingToken: channel.site_token,
+      sourceLabel: "کانال‌ها",
+      saveToken: (t) => setChannelLeadSite(channel.id, t),
+    },
+    userId
+  );
 }

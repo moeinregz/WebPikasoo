@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { MAIN_ADMIN_PHONE } from "@/lib/crmAccess";
 import { CRM_ACCEPT_RESULT } from "@/lib/crmReport";
-import { autoBuildSiteForLead } from "@/lib/crmSite";
+import { autoBuildSiteForChannel, autoBuildSiteForLead } from "@/lib/crmSite";
+import { CHANNEL_ACCEPT_RESULT } from "@/lib/channelReport";
 import { buildPrivateSite } from "@/lib/siteTemplates/publish";
 import {
   getUserByPhone,
@@ -31,6 +32,8 @@ import {
   deleteCrmLead,
   updateCrmLead,
   createChannelLead,
+  getChannelLeadById,
+  updateChannelLeadInfo,
   setChannelLeadMessaged,
   recordChannelMessageResult,
   deleteChannelLead,
@@ -78,7 +81,7 @@ import {
   type UserRole,
   type UserPermissions,
 } from "@/lib/db";
-import { verifyPassword, hashPassword, isValidPhone, normalizePhone, toPersianDigits } from "@/lib/auth";
+import { verifyPassword, hashPassword, isValidPhone, normalizePhone, toEnglishDigits, toPersianDigits } from "@/lib/auth";
 import { setSessionCookie, getCurrentUser, USER_COOKIE_NAME } from "@/lib/session";
 import {
   saveChatAttachment,
@@ -1540,13 +1543,17 @@ export async function createChannelLeadAction(
   const pageName = (formData.get("pageName") ?? "").toString().trim();
   const businessName = (formData.get("businessName") ?? "").toString().trim();
   const note = (formData.get("note") ?? "").toString().trim();
+  const phone = normalizeChannelPhone((formData.get("phone") ?? "").toString());
+  const address = (formData.get("address") ?? "").toString().trim().slice(0, 200);
+  const businessType = (formData.get("businessType") ?? "").toString().trim().slice(0, 80);
 
   if (!pageName || !businessName) {
     return { ok: false, message: "اسم پیج/کانال و اسم کسب‌وکار رو پر کن." };
   }
+  if (phone === null) return { ok: false, message: "شماره تماس معتبر نیست." };
 
   try {
-    await createChannelLead({ pageName, businessName, note, createdBy: currentUser.id });
+    await createChannelLead({ pageName, businessName, note, createdBy: currentUser.id, phone, address, businessType });
   } catch (err) {
     console.error("createChannelLeadAction failed:", err);
     return { ok: false, message: "یه مشکلی پیش اومد، دوباره امتحان کن." };
@@ -1563,7 +1570,12 @@ export async function setChannelResultAction(formData: FormData) {
   const currentUser = await requireChannelsAccess();
   const channelId = Number(formData.get("channelId"));
   const result = (formData.get("result") ?? "").toString();
+  // confirm=1 is only sent after the "are you sure?" dialog for «قبول کرد».
+  const confirmed = formData.get("confirm") === "1";
   if (!channelId) return;
+
+  // Read BEFORE recording, so re-submitting the same status never builds a second site.
+  const before = result === CHANNEL_ACCEPT_RESULT ? await getChannelLeadById(channelId) : undefined;
 
   if (!result) {
     await setChannelLeadMessaged(channelId, false);
@@ -1571,6 +1583,36 @@ export async function setChannelResultAction(formData: FormData) {
     await recordChannelMessageResult({ channelId, userId: currentUser.id, result });
   }
   revalidatePath("/dashboard");
+
+  if (confirmed && before && !(before.messaged && before.last_message_result === CHANNEL_ACCEPT_RESULT)) {
+    await autoBuildSiteForChannel(before, currentUser.id);
+    revalidatePath("/dashboard");
+  }
+}
+
+/** Phone for a channel: optional; returns null when given but invalid. */
+function normalizeChannelPhone(raw: string): string | null {
+  const v = toEnglishDigits(raw).replace(/[\s\-()]/g, "");
+  if (!v) return "";
+  return /^\+?\d{7,15}$/.test(v) ? v : null;
+}
+
+/** Saves/edits a channel's business info (name, phone, address, type, note). */
+export async function updateChannelInfoAction(_prev: ChannelFormState, formData: FormData): Promise<ChannelFormState> {
+  await requireChannelsAccess();
+  const id = Number(formData.get("channelId"));
+  const businessName = (formData.get("businessName") ?? "").toString().trim().slice(0, 120);
+  const phone = normalizeChannelPhone((formData.get("phone") ?? "").toString());
+  const address = (formData.get("address") ?? "").toString().trim().slice(0, 200);
+  const businessType = (formData.get("businessType") ?? "").toString().trim().slice(0, 80);
+  const note = (formData.get("note") ?? "").toString().trim().slice(0, 500);
+  if (!id) return { ok: false, message: "شناسه نامعتبره." };
+  if (!businessName) return { ok: false, message: "اسم کسب‌وکار رو پر کن." };
+  if (phone === null) return { ok: false, message: "شماره تماس معتبر نیست." };
+  if (!(await getChannelLeadById(id))) return { ok: false, message: "پیج/کانال پیدا نشد." };
+  await updateChannelLeadInfo(id, { businessName, phone, address, businessType, note });
+  revalidatePath("/dashboard");
+  return { ok: true, message: "ذخیره شد." };
 }
 
 /** Admin-only — a developer with the "channels" permission can add

@@ -7,6 +7,11 @@
 
 export type ChannelResultOption = { label: string; colorClass: string };
 
+/** Picking this result (after a confirmation) builds a demo site from the
+ *  channel's info and posts the link in the team chat — like the CRM's
+ *  «قبول برای دیدن». */
+export const CHANNEL_ACCEPT_RESULT = "قبول کرد";
+
 export const CHANNEL_RESULT_OPTIONS: ChannelResultOption[] = [
   { label: "پیام داده شد", colorClass: "border-sky-500/40 bg-sky-500/15 text-sky-600" },
   { label: "قبول کرد", colorClass: "border-emerald-500/40 bg-emerald-500/15 text-emerald-600" },

@@ -1,19 +1,23 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { createPortal, useFormState, useFormStatus } from "react-dom";
 import {
   createChannelLeadAction,
   setChannelResultAction,
   deleteChannelLeadAction,
+  updateChannelInfoAction,
   type ChannelFormState,
 } from "./actions";
 import { toPersianDigits } from "@/lib/auth";
-import { CHANNEL_RESULT_OPTIONS, CHANNEL_NOT_MESSAGED_OPTION } from "@/lib/channelReport";
+import { CHANNEL_ACCEPT_RESULT, CHANNEL_RESULT_OPTIONS, CHANNEL_NOT_MESSAGED_OPTION } from "@/lib/channelReport";
+import { CRM_TYPE_GROUPS_LABELED } from "@/lib/siteTemplates/crmMapping";
 import SearchInput from "./SearchInput";
 import Pagination from "./Pagination";
 
 const PAGE_SIZE = 20;
+
+const toEnglishDigitsLoose = (v: string) => v.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
 
 type Channel = {
   id: number;
@@ -24,7 +28,31 @@ type Channel = {
   created_at: string;
   created_by: number | null;
   last_message_result?: string;
+  phone?: string;
+  address?: string;
+  business_type?: string;
+  site_token?: string;
 };
+
+/** Business type options, grouped like the CRM's — decides the site template. */
+function TypeOptions({ current }: { current?: string }) {
+  const known = CRM_TYPE_GROUPS_LABELED.some((g) => g.types.includes(current || ""));
+  return (
+    <>
+      <option value="">نوع کسب‌وکار (برای ساخت سایت)</option>
+      {CRM_TYPE_GROUPS_LABELED.map((g) => (
+        <optgroup key={g.label} label={g.label}>
+          {g.types.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </optgroup>
+      ))}
+      {current && !known && <option value={current}>{current}</option>}
+    </>
+  );
+}
 
 const inputClass =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:bg-surface/70";
@@ -60,9 +88,17 @@ function AddChannelForm() {
       <h2 className="mb-4 font-display text-lg font-normal">افزودن پیج/کانال جدید</h2>
       <div className="grid gap-4 sm:grid-cols-3">
         <input name="pageName" required placeholder="آیدی پیج یا کانال" className={inputClass} />
-        <input name="businessName" required placeholder="کسب‌وکار" className={inputClass} />
+        <input name="businessName" required placeholder="اسم کسب‌وکار" className={inputClass} />
+        <select name="businessType" defaultValue="" className={inputClass}>
+          <TypeOptions />
+        </select>
+        <input name="phone" inputMode="tel" placeholder="شماره تماس" className={inputClass} />
+        <input name="address" placeholder="آدرس / منطقه" className={inputClass} />
         <input name="note" placeholder="یادداشت — پلتفرم" className={inputClass} />
       </div>
+      <p className="mt-3 text-[12.5px] text-dim">
+        با ثبت «{CHANNEL_ACCEPT_RESULT}»، از روی همین اطلاعات سایت ساخته می‌شه و لینکش تو چت تیم میاد.
+      </p>
       {state && <p className={`mt-3 text-sm ${state.ok ? "text-accent" : "text-red-500"}`}>{state.message}</p>}
       <SubmitButton />
     </form>
@@ -82,6 +118,10 @@ function ChannelStatusCell({ channel }: { channel: Channel }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [value, setValue] = useState(channel.messaged ? channel.last_message_result || "" : "");
   const [open, setOpen] = useState(false);
+  // «قبول کرد» needs an "are you sure?" first; `confirmed` tells the server the
+  // dialog was approved (only then does it build the site).
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -100,17 +140,146 @@ function ChannelStatusCell({ channel }: { channel: Channel }) {
   const current = STATUS_DROPDOWN_OPTIONS.find((o) => o.value === value) ?? STATUS_DROPDOWN_OPTIONS[0];
 
   function choose(v: string) {
-    setValue(v);
     setOpen(false);
+    if (v === CHANNEL_ACCEPT_RESULT && value !== CHANNEL_ACCEPT_RESULT) {
+      setConfirmOpen(true); // nothing is saved until confirmed
+      return;
+    }
+    setConfirmed(false);
+    setValue(v);
+    requestAnimationFrame(() => formRef.current?.requestSubmit());
+  }
+
+  function confirmAccept() {
+    setConfirmOpen(false);
+    setConfirmed(true);
+    setValue(CHANNEL_ACCEPT_RESULT);
     requestAnimationFrame(() => formRef.current?.requestSubmit());
   }
 
   return (
-    <form ref={formRef} action={setChannelResultAction} className="inline-block">
-      <input type="hidden" name="channelId" value={channel.id} />
-      <input type="hidden" name="result" value={value} />
-      <StatusDropdownButton wrapRef={wrapRef} open={open} setOpen={setOpen} current={current} onChoose={choose} />
-    </form>
+    <>
+      <form ref={formRef} action={setChannelResultAction} className="inline-block">
+        <input type="hidden" name="channelId" value={channel.id} />
+        <input type="hidden" name="result" value={value} />
+        {confirmed && <input type="hidden" name="confirm" value="1" />}
+        <StatusDropdownButton wrapRef={wrapRef} open={open} setOpen={setOpen} current={current} onChoose={choose} />
+      </form>
+      {confirmOpen && (
+        <Modal onClose={() => setConfirmOpen(false)}>
+          <h3 className="mb-2 font-display text-lg font-normal">مطمئنی؟</h3>
+          <p className="mb-3 text-[13.5px] leading-relaxed text-dim">
+            «{channel.business_name}» روی «{CHANNEL_ACCEPT_RESULT}» ثبت بشه؟ سایتش ساخته می‌شه و لینکش تو چت تیم فرستاده می‌شه.
+          </p>
+          {(!channel.phone || !channel.business_type) && (
+            <p className="mb-4 rounded-[10px] border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-[12.5px] text-amber-600">
+              {!channel.phone ? "شماره تماس ثبت نشده؛ سایت ساخته نمی‌شه. " : ""}
+              {!channel.business_type ? "نوع کسب‌وکار ثبت نشده؛ قالب از روی اسم حدس زده می‌شه." : ""}
+            </p>
+          )}
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <button type="button" onClick={() => setConfirmOpen(false)} className="rounded-full border border-ink/[0.18] px-5 py-2.5 text-[13.5px] font-bold text-dim transition hover:border-accent hover:text-accent">
+              انصراف
+            </button>
+            <button type="button" onClick={confirmAccept} autoFocus className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5">
+              بله، ثبت کن
+            </button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+/** Small portal dialog (Escape / backdrop click closes it). */
+function Modal({ children, onClose }: { children: ReactNode; onClose: () => void }) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4"
+      role="dialog"
+      aria-modal="true"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="w-full max-w-md rounded-card border border-ink/[0.14] bg-canvas p-6 text-right shadow-2xl">{children}</div>
+    </div>,
+    document.body
+  );
+}
+
+function SaveInfoButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" disabled={pending} className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:opacity-60">
+      {pending ? "در حال ذخیره..." : "ذخیره"}
+    </button>
+  );
+}
+
+/** «اطلاعات» button: edit name / phone / address / type of a channel. */
+function ChannelInfoButton({ channel }: { channel: Channel }) {
+  const [open, setOpen] = useState(false);
+  const [state, formAction] = useFormState(updateChannelInfoAction, null as ChannelFormState);
+  useEffect(() => {
+    if (state?.ok) setOpen(false);
+  }, [state]);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="rounded-full border border-ink/[0.18] px-3 py-1.5 text-[12px] font-semibold text-dim transition hover:border-accent hover:text-accent"
+      >
+        ✏️ اطلاعات
+      </button>
+      {open && (
+        <Modal onClose={() => setOpen(false)}>
+          <h3 className="mb-4 font-display text-lg font-normal">اطلاعات «{channel.page_name}»</h3>
+          <form action={formAction} className="grid gap-3">
+            <input type="hidden" name="channelId" value={channel.id} />
+            <input name="businessName" required defaultValue={channel.business_name} placeholder="اسم کسب‌وکار" className={inputClass} />
+            <select name="businessType" defaultValue={channel.business_type || ""} className={inputClass}>
+              <TypeOptions current={channel.business_type} />
+            </select>
+            <input name="phone" inputMode="tel" defaultValue={channel.phone || ""} placeholder="شماره تماس" className={inputClass} />
+            <input name="address" defaultValue={channel.address || ""} placeholder="آدرس / منطقه" className={inputClass} />
+            <input name="note" defaultValue={channel.note || ""} placeholder="یادداشت" className={inputClass} />
+            {state && !state.ok && <p className="text-sm text-red-500">{state.message}</p>}
+            <div className="flex justify-end gap-2">
+              <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-ink/[0.18] px-5 py-2.5 text-[13.5px] font-bold text-dim">
+                انصراف
+              </button>
+              <SaveInfoButton />
+            </div>
+          </form>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+/** Phone / address / site link under a channel's business name. */
+function ChannelExtra({ c }: { c: Channel }) {
+  if (!c.phone && !c.address && !c.site_token && !c.business_type) return null;
+  return (
+    <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-dim">
+      {c.business_type && <span>🏷️ {c.business_type}</span>}
+      {c.phone && <span dir="ltr">📞 {toPersianDigits(c.phone)}</span>}
+      {c.address && <span>📍 {c.address}</span>}
+      {c.site_token && (
+        <a href={`/preview/${c.site_token}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
+          🌐 سایت ساخته‌شده
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -180,7 +349,7 @@ function StatusDropdownButton({
         onClick={() => setOpen(!open)}
         className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold outline-none transition disabled:opacity-60 ${current.colorClass}`}
       >
-        {current.label}
+        {pending && current.value === CHANNEL_ACCEPT_RESULT ? "در حال ساخت سایت..." : current.label}
         <svg
           viewBox="0 0 20 20"
           fill="none"
@@ -266,7 +435,9 @@ export default function ChannelPanel({
       return (
         c.page_name.toLowerCase().includes(q) ||
         c.business_name.toLowerCase().includes(q) ||
-        (c.note && c.note.toLowerCase().includes(q))
+        (c.note && c.note.toLowerCase().includes(q)) ||
+        (c.phone && toEnglishDigitsLoose(c.phone).includes(toEnglishDigitsLoose(q))) ||
+        (c.address && c.address.toLowerCase().includes(q))
       );
     });
   }, [channels, query, statusFilter]);
@@ -292,7 +463,7 @@ export default function ChannelPanel({
         </div>
       ) : (
         <>
-          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام پیج، کسب‌وکار یا یادداشت..." />
+          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام پیج، کسب‌وکار، شماره، آدرس یا یادداشت..." />
 
           <div className="mb-4 flex flex-wrap gap-2">
             {filterTabs.map((tab) => (
@@ -328,6 +499,7 @@ export default function ChannelPanel({
                     <div className="min-w-0">
                       <p className="font-semibold text-[14.5px]">{c.page_name}</p>
                       <p className="mt-1 text-[13px] text-dim">{c.business_name}</p>
+                      <ChannelExtra c={c} />
                     </div>
                     {c.note && <p className="mt-2 text-[13px] text-dim">{c.note}</p>}
                     {showCreator && (
@@ -335,6 +507,7 @@ export default function ChannelPanel({
                     )}
                     <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
                       <ChannelStatusCell channel={c} />
+                      <ChannelInfoButton channel={c} />
                       {canDelete && (
                         <form action={deleteChannelLeadAction}>
                           <input type="hidden" name="channelId" value={c.id} />
@@ -368,10 +541,16 @@ export default function ChannelPanel({
                     {paged.map((c, i) => (
                       <tr key={c.id} className={i % 2 === 0 ? "bg-surface/20" : "bg-canvas"}>
                         <td className="px-5 py-3.5 font-semibold">{c.page_name}</td>
-                        <td className="px-5 py-3.5 text-dim">{c.business_name}</td>
+                        <td className="px-5 py-3.5 text-dim">
+                          {c.business_name}
+                          <ChannelExtra c={c} />
+                        </td>
                         <td className="px-5 py-3.5 text-dim">{c.note || "—"}</td>
                         <td className="px-5 py-3.5">
-                          <ChannelStatusCell channel={c} />
+                          <div className="flex flex-wrap items-center gap-2">
+                            <ChannelStatusCell channel={c} />
+                            <ChannelInfoButton channel={c} />
+                          </div>
                         </td>
                         {showCreator && (
                           <td className="px-5 py-3.5 font-mono text-[12.5px] text-dim">{creatorLabel(c.created_by)}</td>

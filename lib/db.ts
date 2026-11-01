@@ -1394,9 +1394,24 @@ export type ChannelLead = {
   // way CrmLead.last_call_result is, so the list can show it without a
   // join. Full history lives in channel_messages below.
   last_message_result?: string;
+  // Optional business info used to auto-build a demo site when the channel
+  // accepts («قبول کرد») — same idea as a CRM lead's fields.
+  phone?: string;
+  address?: string;
+  business_type?: string;
+  /** Token of the private site auto-built on «قبول کرد» (one site per channel). */
+  site_token?: string;
 };
 
-export type NewChannelLead = { pageName: string; businessName: string; note?: string; createdBy?: number };
+export type NewChannelLead = {
+  pageName: string;
+  businessName: string;
+  note?: string;
+  createdBy?: number;
+  phone?: string;
+  address?: string;
+  businessType?: string;
+};
 
 export async function createChannelLead(data: NewChannelLead): Promise<number> {
   const database = await getDb();
@@ -1409,8 +1424,42 @@ export async function createChannelLead(data: NewChannelLead): Promise<number> {
     note: data.note || "",
     messaged: 0,
     created_by: data.createdBy ?? null,
+    ...(data.phone ? { phone: data.phone } : {}),
+    ...(data.address ? { address: data.address } : {}),
+    ...(data.businessType ? { business_type: data.businessType } : {}),
   });
   return id;
+}
+
+export async function getChannelLeadById(id: number): Promise<ChannelLead | undefined> {
+  const database = await getDb();
+  const doc = await database.collection<ChannelLead>("channel_leads").findOne({ id }, { projection: { _id: 0 } });
+  return doc ?? undefined;
+}
+
+/** Edits the business info of an existing channel (never its status). */
+export async function updateChannelLeadInfo(
+  id: number,
+  data: { businessName: string; phone: string; address: string; businessType: string; note: string }
+): Promise<void> {
+  const database = await getDb();
+  await database.collection("channel_leads").updateOne(
+    { id },
+    {
+      $set: {
+        business_name: data.businessName,
+        phone: data.phone,
+        address: data.address,
+        business_type: data.businessType,
+        note: data.note,
+      },
+    }
+  );
+}
+
+export async function setChannelLeadSite(id: number, siteToken: string): Promise<void> {
+  const database = await getDb();
+  await database.collection("channel_leads").updateOne({ id }, { $set: { site_token: siteToken } });
 }
 
 export async function getAllChannelLeads(): Promise<ChannelLead[]> {
