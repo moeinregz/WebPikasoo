@@ -62,6 +62,7 @@ import gardenGilas from "./templates/garden-gilas.template.html";
 // ---------------------------------------------------------------------------
 
 // <lux-imports>
+import accessoriesLux from "./templates/accessories-lux.template.html";
 import bakeryLux from "./templates/bakery-lux.template.html";
 import bookstoreLux from "./templates/bookstore-lux.template.html";
 import cafeLux from "./templates/cafe-lux.template.html";
@@ -92,6 +93,21 @@ import watchLux from "./templates/watch-lux.template.html";
 
 export const TEMPLATES: SiteTemplate[] = [
   // <lux-templates>
+  {
+    id: "accessories-lux",
+    trade: "accessories",
+    label: "اکسسوری و بدلیجات — رنگی و ترندی (لوکس)",
+    html: accessoriesLux,
+    palette: { primary: "#d9466f", secondary: "#2b2d42" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "اکسسوری شاخص روی زمینه‌ی ساده", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — کیف‌ها", hint: "کیف‌ها", ratio: "4:5" },
+      { key: "g2", label: "گالری — عینک‌ها", hint: "عینک‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — بدلیجات", hint: "بدلیجات", ratio: "4:5" },
+      { key: "g4", label: "گالری — شال و روسری", hint: "شال و روسری", ratio: "4:5" },
+    ],
+  },
   {
     id: "bakery-lux",
     trade: "bakery",

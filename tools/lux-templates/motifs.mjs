@@ -96,6 +96,12 @@ export const MOTIFS = {
 <path class="c" d="M20 56c28-6 54-4 80 10v100c-26-14-52-16-80-10z"/><path class="c" d="M180 56c-28-6-54-4-80 10v100c26-14 52-16 80-10z"/><path class="sh" d="M100 66c26-14 52-16 80-10v100c-28-6-54-4-80 10z" style="opacity:.06"/>
 <path class="ki" d="M36 82c18-3 34-2 50 4M36 98c18-3 34-2 50 4M36 114c18-3 34-2 50 4M36 130c18-3 34-2 40 2M114 86c16-6 32-7 50-4M114 102c16-6 32-7 50-4M114 118c16-6 32-7 50-4" style="stroke-width:2.5;opacity:.25"/>
 <path class="kp" d="M100 66v100" style="stroke-width:3"/><path class="a" d="M140 40h14v40l-7-6-7 6z"/><g class="a"><path d="M40 28l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle cx="168" cy="26" r="3"/></g>`),
+  glasses: S(`<ellipse class="sh" cx="100" cy="182" rx="76" ry="7"/>
+<path class="s" d="M58 112c-6-30 6-52 42-52s48 22 42 52l-6 52c-1 8-8 14-16 14H80c-8 0-15-6-16-14z"/><path class="sh" d="M112 62c26 6 34 26 30 50l-6 52c-1 8-8 14-16 14h-8z"/>
+<path class="ki" d="M78 66c0-22 10-34 22-34s22 12 22 34" style="stroke:var(--ac);stroke-width:6"/><rect class="a" x="88" y="96" width="24" height="14" rx="4"/><path class="kw" d="M70 120l-4 40"/>
+<g transform="translate(0 6)"><circle cx="58" cy="54" r="26" class="p"/><circle cx="142" cy="54" r="26" class="p"/><path class="ki" d="M84 50c8-6 24-6 32 0M32 50L12 40M168 50l20-10" style="stroke-width:5"/>
+<circle class="hl" cx="48" cy="46" r="8"/><circle class="hl" cx="132" cy="46" r="8"/></g>
+<g class="a"><circle cx="30" cy="120" r="6"/><path d="M30 126l-6 14h12z"/><circle cx="172" cy="120" r="6"/><path d="M172 126l-6 14h12z"/></g>`),
   bed: S(`<ellipse class="sh" cx="100" cy="180" rx="88" ry="8"/><rect class="s" x="14" y="56" width="22" height="120" rx="6"/><rect class="i" x="164" y="120" width="10" height="56" rx="3"/><rect class="p" x="30" y="112" width="148" height="44" rx="10"/>
 <rect class="c" x="34" y="94" width="144" height="28" rx="12"/><rect class="w" x="40" y="80" width="46" height="26" rx="12" style="opacity:.95"/><path class="sh" d="M30 140h148v6c0 6-4 10-10 10H40c-6 0-10-4-10-10z"/>
 <path class="a" d="M92 98h86v20c-30 4-58 2-86-6z" style="opacity:.75"/><g class="a"><path d="M146 30l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><circle cx="176" cy="60" r="3"/><circle cx="118" cy="46" r="2.5"/></g>`),
