@@ -1,0 +1,15 @@
+node_modules
+.next
+.data
+*.sqlite3
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+coverage
+*.log
+.DS_Store
+.vscode
+.idea
+docs

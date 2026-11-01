@@ -1,0 +1,41 @@
+# یافته امنیتی این مرحله (Prompt 13 — بخش ۱۲ Secrets):
+# این پروژه قبلاً هیچ .gitignore نداشت، در حالی که چند فایل کد (مثلاً
+# lib/db/client.ts) صراحتاً فرض کرده بودند فایل دیتابیس محلی «در Git نادیده
+# گرفته می‌شود». بدون این فایل، دیتابیس واقعی SQLite (شامل رمز عبور Hash‌شده
+# کاربران، سفارش‌ها، اطلاعات تماس مشتریان) و هر فایل .env آینده (Secretهای
+# Payment/SMS/JWT) می‌توانستند به‌طور تصادفی Commit شوند.
+
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+build/
+
+# دیتابیس محلی (شامل داده واقعی کاربران/سفارش/پرداخت — هرگز نباید در Git باشد)
+.data/
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+
+# متغیرهای محیطی / Secrets — طبق بخش ۱۲ Prompt (هیچ Secret نباید در Repository باشد)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# لاگ‌ها
+*.log
+npm-debug.log*
+
+# فایل‌های موقت ابزارها
+.DS_Store
+*.tsbuildinfo
+.vscode/
+.idea/
+
+# پوشش تست
+coverage/

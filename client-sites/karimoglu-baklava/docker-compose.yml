@@ -1,0 +1,72 @@
+# ===== docker-compose.yml — «باقلوا کریم اغلو» — Production تک‌سرور =====
+#
+# دیتابیس: PostgreSQL خارجی (مثلاً لیارا). مقدار `DATABASE_URL` را در فایل
+# .env.production قرار دهید. هیچ Volume داده‌ای لازم نیست (عکس‌ها هم در PostgreSQL‌اند).
+#
+# سرویس‌های این فایل:
+# - app: خود Next.js (از Dockerfile کنار همین فایل)
+# - reverse-proxy: Caddy — HTTPS خودکار (Let's Encrypt) + Redirect HTTP→HTTPS
+#   + Header‌های امنیتی سطح Proxy (رجوع به Caddyfile)
+#
+# چیزی که این‌جا نیست چون هنوز مشخص نیست (TODO تیم، حدس زده نشده):
+# - نام Domain واقعی (در .env.production یا این فایل جایگزین شود)
+# - هرگونه سرویس Payment/SMS واقعی (پروژه هنوز از Mock Provider استفاده می‌کند)
+# - یک سرویس Cache/Redis جداگانه (چون فعلاً هیچ‌جای کد به آن نیاز ندارد؛
+#   Rate Limiter فعلی In-memory است و طبق گزارش Prompt 13 برای تک‌سرور کافی است)
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: karimoglu-web:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:?لطفاً DATABASE_URL را در .env.production تنظیم کنید}
+      # این دو فقط برای Bootstrap اولین حساب ادمین در Production لازم‌اند
+      # (رجوع به lib/db/seed.ts، اصلاح Prompt 13) — مقدار واقعی از فایل
+      # .env.production (که در Git نیست) خوانده می‌شود، اینجا Hardcode نشده
+      KARIMOGLU_BOOTSTRAP_ADMIN_MOBILE: ${KARIMOGLU_BOOTSTRAP_ADMIN_MOBILE}
+      KARIMOGLU_BOOTSTRAP_ADMIN_PASSWORD: ${KARIMOGLU_BOOTSTRAP_ADMIN_PASSWORD}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    # به بیرون از شبکه Docker مستقیم Expose نمی‌شود — فقط reverse-proxy
+    # با آن صحبت می‌کند (Least Privilege شبکه‌ای)
+    expose:
+      - "3000"
+    networks:
+      - internal
+
+  reverse-proxy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    environment:
+      # TODO تیم: Domain واقعی هنوز مشخص نشده — تا آن زمان این مقدار خالی/
+      # Placeholder می‌ماند و Caddy را عمداً اجرا نکنید تا یک Certificate
+      # اشتباه برای یک Domain نادرست درخواست نشود
+      SITE_DOMAIN: ${SITE_DOMAIN:?لطفاً SITE_DOMAIN واقعی را در .env.production تنظیم کنید}
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  caddy-data:
+  caddy-config:

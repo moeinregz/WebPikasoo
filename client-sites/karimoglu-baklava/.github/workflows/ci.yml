@@ -1,0 +1,61 @@
+# ===== CI — «باقلوا کریم اغلو» (Prompt 15، بخش ۱۱) =====
+#
+# روی هر Push/Pull Request اجرا می‌شود. هدف: هیچ کد شکسته/ناامنی به main
+# Merge نشود. این Workflow چیزی را Deploy نمی‌کند — فقط بررسی می‌کند.
+#
+# ⚠️ TODO تیم: نسخه Node.js دقیقاً باید با نسخه واقعی Production یکی باشد
+# (رجوع به Dockerfile — فعلاً 24.7.0 Pin شده آنجا). اینجا هم عمداً همان
+# نسخه دقیق تکرار شده، نه صرفاً "24" یا "lts/*"، تا رفتار CI و Production
+# قابل پیش‌بینی و یکسان بماند.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# اگر روی همان PR چند Commit پشت‌سرهم Push شود، اجرای قبلی لغو می‌شود —
+# صرفه‌جویی در زمان/هزینه CI
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, Type Check, Test, Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.7.0"
+          cache: "npm"
+
+      - name: Install dependencies (Reproducible — از lockfile دقیق)
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+      - name: Unit + Integration Tests (Vitest)
+        run: npm test
+
+      # بخش ۱۱ Prompt: «Security Check» — بررسی Dependencyهای آسیب‌پذیر.
+      # `--audit-level=high` یعنی مشکلات Low/Moderate جلوی CI را نمی‌گیرند
+      # (تا Noise بی‌مورد نشود) اما High/Critical باعث شکست Build می‌شوند.
+      - name: Dependency Vulnerability Audit
+        run: npm audit --audit-level=high
+
+      - name: Build (Production)
+        run: npm run build
+
+      # مطمئن می‌شویم Image واقعاً Build می‌شود — بدون Push، فقط اعتبارسنجی
+      - name: Docker Build (اعتبارسنجی، بدون Push)
+        run: docker build -t karimoglu-web:ci-${{ github.sha }} .

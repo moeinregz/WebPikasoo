@@ -1,0 +1,53 @@
+# ===== Caddyfile — «باقلوا کریم اغلو» =====
+#
+# چرا Caddy (نه Nginx دستی): HTTPS/Certificate Renewal را کاملاً خودکار
+# (Let's Encrypt) مدیریت می‌کند — دقیقاً الزام صریح Prompt («Certificate
+# Renewal باید قابل مدیریت باشد») را با کمترین پیکربندی دستی برآورده می‌کند.
+# اگر تیم ترجیح Nginx دارد، معادل Nginx در docs/deployment-guide.md
+# (بخش «جایگزین Nginx») توضیح داده شده.
+#
+# {$SITE_DOMAIN} از متغیر محیطی خوانده می‌شود (docker-compose.yml) — دامنه
+# واقعی هنوز مشخص نشده (TODO تیم)، پس این فایل تا تنظیم آن نباید اجرا شود.
+
+{$SITE_DOMAIN} {
+	# Redirect خودکار HTTP→HTTPS توسط خود Caddy انجام می‌شود (پیش‌فرض)
+
+	encode gzip zstd
+
+	# ===== Header‌های امنیتی سطح Proxy (بخش ۱۱ Prompt 13 + بخش ۶ Prompt 15) =====
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+		X-Frame-Options "DENY"
+		# ⚠️ CSP عمداً اینجا هم اضافه نشده — طبق تصمیم مستند در Prompt 13
+		# (lib/server/security.ts)، افزودن CSP نیازمند Nonce/تست کامل قبل
+		# از فعال‌سازی است تا کل سایت را نشکند. همان TODO مستند همچنان پابرجاست.
+		-Server
+	}
+
+	# مسیرهای خصوصی که هرگز نباید Cache شوند (حتی توسط CDN/Proxy میانی)
+	@private path /admin* /api/admin* /cart* /checkout* /order* /payment* /api/auth*
+	header @private Cache-Control "no-store"
+
+	reverse_proxy app:3000 {
+		health_uri /api/health
+		health_interval 30s
+		health_timeout 5s
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 50mb
+			roll_keep 10
+		}
+		# آدرس IP کامل کاربران را Log نمی‌کنیم (حریم خصوصی) — فقط بخشی از آن
+		format json
+	}
+}
+
+# اگر تیم subdomain جدا برای API/www بخواهد بسازد، اینجا (بعد از مشخص شدن
+# Domain واقعی) بلوک‌های مشابه اضافه می‌شود — طبق بخش ۷ Prompt («ساختار
+# Domain/Subdomain») فعلاً یک Domain واحد کافی است چون API همان Next.js
+# (مسیر /api) است، نه یک سرویس جدا.
