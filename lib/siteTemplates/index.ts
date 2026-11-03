@@ -63,6 +63,7 @@ import gardenGilas from "./templates/garden-gilas.template.html";
 
 // <lux-imports>
 import accessoriesLux from "./templates/accessories-lux.template.html";
+import autopartsLux from "./templates/autoparts-lux.template.html";
 import bakeryLux from "./templates/bakery-lux.template.html";
 import bookstoreLux from "./templates/bookstore-lux.template.html";
 import cafeLux from "./templates/cafe-lux.template.html";
@@ -85,7 +86,10 @@ import musicLux from "./templates/music-lux.template.html";
 import pastryLux from "./templates/pastry-lux.template.html";
 import realestateLux from "./templates/realestate-lux.template.html";
 import restaurantLux from "./templates/restaurant-lux.template.html";
+import shoesLux from "./templates/shoes-lux.template.html";
 import shopLux from "./templates/shop-lux.template.html";
+import stationeryLux from "./templates/stationery-lux.template.html";
+import toolsLux from "./templates/tools-lux.template.html";
 import travelLux from "./templates/travel-lux.template.html";
 import upholsteryLux from "./templates/upholstery-lux.template.html";
 import watchLux from "./templates/watch-lux.template.html";
@@ -106,6 +110,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — عینک‌ها", hint: "عینک‌ها", ratio: "4:5" },
       { key: "g3", label: "گالری — بدلیجات", hint: "بدلیجات", ratio: "4:5" },
       { key: "g4", label: "گالری — شال و روسری", hint: "شال و روسری", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "autoparts-lux",
+    trade: "autoparts",
+    label: "لوازم یدکی — مسابقه‌ای و فنی (لوکس)",
+    html: autopartsLux,
+    palette: { primary: "#e10600", secondary: "#1b263b" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "قطعه‌ی شاخص روی زمینه‌ی تیره", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین یا انبار", ratio: "4:5" },
+      { key: "g1", label: "گالری — ویترین", hint: "ویترین", ratio: "4:5" },
+      { key: "g2", label: "گالری — قفسه‌ها", hint: "قفسه‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — روغن و فیلتر", hint: "روغن و فیلتر", ratio: "4:5" },
+      { key: "g4", label: "گالری — انبار", hint: "انبار", ratio: "4:5" },
     ],
   },
   {
@@ -447,6 +466,21 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "shoes-lux",
+    trade: "shoes",
+    label: "کیف و کفش — استریت و بیلبوردی (لوکس)",
+    html: shoesLux,
+    palette: { primary: "#ff5b1f", secondary: "#111111" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "یه کفش یا کیف شاخص روی زمینه‌ی ساده", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — کتونی‌ها", hint: "کتونی‌ها", ratio: "4:5" },
+      { key: "g2", label: "گالری — کفش رسمی", hint: "کفش رسمی", ratio: "4:5" },
+      { key: "g3", label: "گالری — کیف‌ها", hint: "کیف‌ها", ratio: "4:5" },
+      { key: "g4", label: "گالری — فضای فروشگاه", hint: "فضای فروشگاه", ratio: "4:5" },
+    ],
+  },
+  {
     id: "shop-lux",
     trade: "shop",
     label: "فروشگاه — مدرن و پرانرژی (لوکس)",
@@ -459,6 +493,36 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — قفسه‌ها", hint: "قفسه‌ها", ratio: "4:5" },
       { key: "g3", label: "گالری — بسته‌بندی", hint: "بسته‌بندی", ratio: "4:5" },
       { key: "g4", label: "گالری — ارسال", hint: "ارسال", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "stationery-lux",
+    trade: "stationery",
+    label: "لوازم‌التحریر — دفترچه‌ای و رنگی (لوکس)",
+    html: stationeryLux,
+    palette: { primary: "#4c6ef5", secondary: "#ff8fab" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "لوازم‌التحریر از بالا", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "قفسه‌های فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — دفترها", hint: "دفترها", ratio: "4:5" },
+      { key: "g2", label: "گالری — رنگ‌ها", hint: "رنگ‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — مدرسه", hint: "مدرسه", ratio: "4:5" },
+      { key: "g4", label: "گالری — اداری", hint: "اداری", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "tools-lux",
+    trade: "tools",
+    label: "ابزارآلات — صنعتی و محکم (لوکس)",
+    html: toolsLux,
+    palette: { primary: "#ffc400", secondary: "#ff7a00" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "ابزار شاخص روی زمینه‌ی تیره", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "قفسه‌های فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — ابزار برقی", hint: "ابزار برقی", ratio: "4:5" },
+      { key: "g2", label: "گالری — ابزار دستی", hint: "ابزار دستی", ratio: "4:5" },
+      { key: "g3", label: "گالری — یراق‌آلات", hint: "یراق‌آلات", ratio: "4:5" },
+      { key: "g4", label: "گالری — انبار", hint: "انبار", ratio: "4:5" },
     ],
   },
   {

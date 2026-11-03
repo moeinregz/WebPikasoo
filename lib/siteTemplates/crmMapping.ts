@@ -11,8 +11,9 @@ import { TRADES } from "./trades";
 /** The type picker in the CRM, grouped so 23 choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
   { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream"] },
-  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "bookstore"] },
+  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bookstore", "stationery"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
+  { label: "ابزار و خودرو", tradeIds: ["tools", "autoparts"] },
   { label: "خدمات و شرکتی", tradeIds: ["upholstery", "moving", "realestate", "law"] },
   { label: "آموزش", tradeIds: ["language", "music"] },
   { label: "گردشگری و اقامت", tradeIds: ["travel", "hotel"] },
@@ -30,7 +31,7 @@ export const CRM_BUSINESS_TYPES: string[] = CRM_TYPE_GROUPS_LABELED.flatMap((g) 
 
 export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
   "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream"],
-  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "bookstore"],
+  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bookstore", "stationery", "tools", "autoparts"],
   "لوازم آرایشی و بهداشتی": ["cosmetics", "perfume"],
   "پزشکی و کلینیک": ["clinic", "dental"],
   "املاک و مستغلات": ["realestate"],
@@ -47,7 +48,10 @@ const KEYWORDS: [string, string[]][] = [
   ["dental", ["دندان", "ارتودنسی"]],
   ["law", ["وکیل", "وکالت", "حقوقی"]],
   ["realestate", ["املاک", "مستغلات"]],
-  ["accessories", ["اکسسوری", "اکسسوریز", "بدلیجات", "بدلی", "زیورآلات", "عینک", "کیف و کفش", "کیف"]],
+  ["autoparts", ["لوازم یدکی", "یدکی", "قطعات خودرو", "لوازم خودرو", "روغن موتور", "لنت", "باتری خودرو"]],
+  ["tools", ["ابزارآلات", "ابزار", "یراق", "یراق‌آلات", "پیچ و مهره", "ابزار برقی", "رنگ و ابزار"]],
+  ["shoes", ["کیف و کفش", "کفش", "کیف", "کتونی", "اسنیکر"]],
+  ["accessories", ["اکسسوری", "اکسسوریز", "بدلیجات", "بدلی", "زیورآلات", "عینک"]],
   ["jewelry", ["طلافروشی", "طلا و جواهر", "جواهر", "زرگری"]],
   ["watch", ["ساعت"]],
   ["carpet", ["فرش"]],
@@ -69,7 +73,8 @@ const KEYWORDS: [string, string[]][] = [
   ["kebab", ["کبابی", "چلوکبابی", "کباب‌سرا", "کبابسرا", "کباب سرا", "کباب"]],
   ["cafe", ["کافه", "قهوه", "کافی", "cafe", "coffee"]],
   ["restaurant", ["رستوران", "سفره", "غذا"]],
-  ["bookstore", ["کتاب", "نشر", "لوازم التحریر", "لوازم‌التحریر"]],
+  ["stationery", ["لوازم التحریر", "لوازم‌التحریر", "نوشت‌افزار", "نوشت افزار", "لوازم مدرسه", "تحریر"]],
+  ["bookstore", ["کتاب", "نشر"]],
   ["shop", ["فروشگاه", "شاپ", "مارکت"]],
 ];
 
