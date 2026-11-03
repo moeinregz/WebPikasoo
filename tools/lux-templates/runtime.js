@@ -126,13 +126,14 @@ var lastY=0;addEventListener("scroll",function(){var y=scrollY,n=$(".nav");n.cla
   function rs(){W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener("resize",rs);
   var src=$("#heroVis"),mx=-999,my=-999;
   c.parentNode.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});
-  var rise={steam:1,sparks:1,bubbles:1,glyphs:1,twinkle:0,fall:-1,sprinkles:-1,leaves:-1,confetti:-1};
+  var rise={steam:1,sparks:1,bubbles:1,glyphs:1,twinkle:0,fall:-1,sprinkles:-1,leaves:-1,confetti:-1,streaks:2};
   function spawn(init){
     var p={l:0,L:180+Math.random()*240,r:1+Math.random()*2.6,a:0,rot:Math.random()*6,vr:(Math.random()-.5)*.06,c:cols[(Math.random()*3)|0],g:glyphs[(Math.random()*glyphs.length)|0]};
     var dir=rise[kind];
     if(kind==="steam"||kind==="sparks"){var s=src?src.getBoundingClientRect():null,r=c.getBoundingClientRect();
       p.x=s?s.left-r.left+s.width*(.3+Math.random()*.4):Math.random()*W;p.y=s?s.top-r.top+s.height*(kind==="steam"?.15:.5):H;
       p.vx=(Math.random()-.5)*.6;p.vy=-(.5+Math.random()*(kind==="sparks"?1.6:.8));if(kind==="steam")p.r=8+Math.random()*14;}
+    else if(dir===2){p.x=init?Math.random()*W:W+60+Math.random()*200;p.y=Math.random()*H;p.vx=-(5+Math.random()*10);p.vy=0;p.r=40+Math.random()*110;p.L=9e9;p.vr=0;p.rot=0}
     else if(dir===1){p.x=Math.random()*W;p.y=init?Math.random()*H:H+20;p.vx=(Math.random()-.5)*.4;p.vy=-(.3+Math.random()*.7);if(kind==="glyphs")p.r=12+Math.random()*16;if(kind==="bubbles")p.r=3+Math.random()*9}
     else if(dir===-1){p.x=Math.random()*W;p.y=init?Math.random()*H:-20;p.vx=(Math.random()-.5)*.5;p.vy=.3+Math.random()*.8;if(kind==="leaves"||kind==="confetti")p.r=4+Math.random()*6;p.L=9e9}
     else {p.x=Math.random()*W;p.y=Math.random()*H;p.vx=0;p.vy=0;p.L=80+Math.random()*120}
@@ -143,10 +144,10 @@ var lastY=0;addEventListener("scroll",function(){var y=scrollY,n=$(".nav");n.cla
   var vis=true;new IntersectionObserver(function(e){vis=e[0].isIntersecting}).observe(c);
   (function loop(t){requestAnimationFrame(loop);if(!vis)return;x.clearRect(0,0,W,H);
     for(var i=0;i<ps.length;i++){var p=ps[i];p.l++;
-      p.vx+=Math.sin((p.l+i*7)*.03)*.012;var dx=p.x-mx,dy=p.y-my,dd=dx*dx+dy*dy;if(dd<10000&&dd>1){p.vx+=dx/dd*5;p.vy+=dy/dd*5}
+      if(kind!=="streaks")p.vx+=Math.sin((p.l+i*7)*.03)*.012;var dx=p.x-mx,dy=p.y-my,dd=dx*dx+dy*dy;if(dd<10000&&dd>1){p.vx+=dx/dd*5;p.vy+=dy/dd*5}
       p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;
       var life=p.L>1e8?1:Math.min(1,p.l/30)*(1-p.l/p.L);
-      if(p.l>p.L||p.y<-60||p.y>H+60){ps[i]=spawn(false);continue}
+      if(p.l>p.L||p.y<-60||p.y>H+60||p.x<-260){ps[i]=spawn(false);continue}
       x.save();x.translate(p.x,p.y);x.rotate(p.rot);
       if(kind==="steam"){var rr=p.r+p.l*.09,gr=x.createRadialGradient(0,0,0,0,0,rr);gr.addColorStop(0,"rgba(255,255,255,"+(life*.22)+")");gr.addColorStop(1,"rgba(255,255,255,0)");x.fillStyle=gr;x.beginPath();x.arc(0,0,rr,0,6.283);x.fill()}
       else if(kind==="sparks"){x.globalAlpha=life;x.fillStyle=p.l%9<5?cols[2]:cols[0];x.beginPath();x.arc(0,0,p.r*.8,0,6.283);x.fill()}
@@ -155,6 +156,7 @@ var lastY=0;addEventListener("scroll",function(){var y=scrollY,n=$(".nav");n.cla
       else if(kind==="twinkle"){var tw=Math.sin(p.l/p.L*Math.PI);x.globalAlpha=tw;x.fillStyle=cols[2];x.beginPath();for(var k=0;k<4;k++){x.rotate(Math.PI/2);x.moveTo(0,0);x.quadraticCurveTo(p.r*.4,p.r*.4,0,p.r*3)}x.fill()}
       else if(kind==="fall"){x.globalAlpha=.5;x.fillStyle=cols[3];x.beginPath();x.arc(0,0,p.r*.8,0,6.283);x.fill()}
       else if(kind==="sprinkles"||kind==="confetti"){x.globalAlpha=.85;x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r*1.4,p.r,p.r*2.8)}
+      else if(kind==="streaks"){x.globalAlpha=.35;x.strokeStyle=p.c;x.lineWidth=1.6;x.beginPath();x.moveTo(0,0);x.lineTo(p.r,0);x.stroke()}
       else if(kind==="leaves"){x.globalAlpha=.6;x.fillStyle=p.c;x.beginPath();x.ellipse(0,0,p.r*1.6,p.r*.7,0,0,6.283);x.fill()}
       x.restore()}
   })(0);

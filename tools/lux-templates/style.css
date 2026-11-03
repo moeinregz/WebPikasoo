@@ -287,3 +287,52 @@ footer .fb{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;ma
 .mbar .p{background:var(--pr);color:var(--on)}
 @media(max-width:900px){.mbar{display:flex}}
 .fly{position:fixed;z-index:170;width:14px;height:14px;border-radius:50%;background:var(--pr);pointer-events:none;box-shadow:0 0 18px var(--pr)}
+
+/* ===== engine variants (per-template look) ===== */
+/* billboard hero: a full-width giant headline, text + motif side by side below it */
+.hero.billboard .hg{grid-template-columns:1.05fr .95fr;align-items:start;row-gap:10px}
+.hero.billboard .htx{display:contents}
+.hero.billboard .kick{grid-column:1/-1;justify-self:start}
+.hero.billboard .h1{grid-column:1/-1;font-size:clamp(58px,10.6vw,184px);line-height:1;letter-spacing:-.03em;margin:6px 0 10px}
+.hero.billboard .h1 .ln:nth-child(2){padding-inline-start:12vw}
+.hero.billboard .htx p{grid-column:1;margin-top:8px}
+.hero.billboard .acts{grid-column:1;align-self:start}
+.hero.billboard .hvwrap{grid-column:2;grid-row:3/span 2;margin-top:-10px}
+.hero.billboard .hv{width:min(380px,88%)}
+@media(max-width:900px){.hero.billboard .hg{grid-template-columns:1fr}.hero.billboard .hvwrap{grid-column:1;grid-row:auto;margin-top:0;order:-1}.hero.billboard .h1 .ln:nth-child(2){padding-inline-start:0}.hero.billboard .kick{justify-self:center}}
+
+/* brutal: thick ink borders, square corners, hard offset shadows */
+.cs-brutal .card,.cs-brutal .sv,.cs-brutal .stat,.cs-brutal .qbox,.cs-brutal .form,.cs-brutal .cr,.cs-brutal .qo,.cs-brutal .gi,.cs-brutal .chip{border:2.5px solid var(--ink);border-radius:4px;box-shadow:-6px 6px 0 0 var(--ink)}
+.cs-brutal .card .vis,.cs-brutal .cta,.cs-brutal .av,.cs-brutal .tabs button,.cs-brutal .add,.cs-brutal .card .tag{border-radius:3px}
+.cs-brutal .btn{border-radius:4px;border:2.5px solid var(--ink);box-shadow:-4px 4px 0 0 var(--ink);transition:transform .2s,box-shadow .2s,color .45s var(--ease)}
+.cs-brutal .btn:hover{transform:translate(2px,-2px);box-shadow:-6px 6px 0 0 var(--ink)}
+.cs-brutal .sv:hover,.cs-brutal .cr:hover{transform:translate(3px,-3px);box-shadow:-9px 9px 0 0 var(--ink)}
+.cs-brutal .hv .disc{border:3px solid var(--ink);box-shadow:-10px 10px 0 0 var(--ink)}
+.cs-brutal .hv .orb{border-style:solid;border-width:2px}
+
+/* polaroid: paper cards, slightly tilted, with a strip of washi tape */
+.cs-polaroid .card{border-radius:3px;padding:14px 14px 20px;background:#fffdf8;box-shadow:0 22px 34px -20px rgba(40,30,20,.45);overflow:visible}
+.cs-polaroid .card:nth-child(odd){rotate:-2.2deg}.cs-polaroid .card:nth-child(even){rotate:1.8deg}
+.cs-polaroid .card .vis{border-radius:2px}
+.cs-polaroid .card:after{content:"";position:absolute;top:-12px;left:50%;width:96px;height:26px;margin-left:-48px;background:color-mix(in srgb,var(--ac) 70%,transparent);rotate:-4deg;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+.cs-polaroid .card:nth-child(3n+2):after{background:color-mix(in srgb,var(--pr) 45%,transparent);rotate:3deg}
+.cs-polaroid .card:nth-child(3n):after{background:color-mix(in srgb,var(--pr2) 45%,transparent)}
+.cs-polaroid .gi{border-radius:3px;border:10px solid #fffdf8;border-bottom-width:44px;box-shadow:0 20px 30px -18px rgba(40,30,20,.45)}
+.cs-polaroid .gi:nth-child(odd){rotate:-1.5deg}.cs-polaroid .gi:nth-child(even){rotate:1.5deg}
+.cs-polaroid .gi figcaption{inset:auto 0 -38px;background:none;font-family:var(--fl),serif;font-size:17px}
+@media(max-width:900px){.cs-polaroid .card:nth-child(n){rotate:0deg}}
+
+/* decor: hazard stripes along section edges */
+.dc-stripes .hero:after,.dc-stripes .sc:before,.dc-stripes footer:before{content:"";position:absolute;inset-inline:0;height:14px;background:repeating-linear-gradient(-45deg,var(--ac) 0 18px,#111 18px 36px);z-index:4}
+.dc-stripes .hero:after{bottom:0}.dc-stripes .sc:before,.dc-stripes footer:before{top:0}
+.dc-stripes footer{position:relative}
+
+/* decor: blueprint grid */
+body.dc-grid{background-image:linear-gradient(color-mix(in srgb,var(--pr) 9%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--pr) 9%,transparent) 1px,transparent 1px);background-size:34px 34px}
+.dc-grid .hero .glow{background:radial-gradient(circle,color-mix(in srgb,var(--pr) 22%,transparent),transparent 62%)}
+.dc-grid .card .vis{background-image:linear-gradient(color-mix(in srgb,var(--ink) 7%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 7%,transparent) 1px,transparent 1px),radial-gradient(circle at 50% 60%,color-mix(in srgb,var(--tone) 35%,var(--bg2)),var(--bg2) 72%);background-size:18px 18px,18px 18px,auto}
+
+/* decor: notebook paper */
+body.dc-paper{background-image:repeating-linear-gradient(transparent 0 33px,color-mix(in srgb,var(--pr2) 16%,transparent) 33px 34px)}
+body.dc-paper:before{content:"";position:fixed;top:0;bottom:0;right:56px;width:2px;background:color-mix(in srgb,var(--pr) 30%,transparent);pointer-events:none;z-index:0}
+@media(max-width:900px){body.dc-paper:before{display:none}}

@@ -102,6 +102,27 @@ export const MOTIFS = {
 <g transform="translate(0 6)"><circle cx="58" cy="54" r="26" class="p"/><circle cx="142" cy="54" r="26" class="p"/><path class="ki" d="M84 50c8-6 24-6 32 0M32 50L12 40M168 50l20-10" style="stroke-width:5"/>
 <circle class="hl" cx="48" cy="46" r="8"/><circle class="hl" cx="132" cy="46" r="8"/></g>
 <g class="a"><circle cx="30" cy="120" r="6"/><path d="M30 126l-6 14h12z"/><circle cx="172" cy="120" r="6"/><path d="M172 126l-6 14h12z"/></g>`),
+  sneaker: S(`<ellipse class="sh" cx="100" cy="176" rx="88" ry="8"/>
+<path class="s" d="M128 40h40l6 70h-52z"/><path class="ki" d="M136 40c0-18 24-18 24 0" style="stroke:var(--pr2);stroke-width:5"/><rect class="a" x="140" y="58" width="16" height="10" rx="3"/><path class="sh" d="M150 40h18l6 70h-24z"/>
+<path class="c" d="M14 150c0-10 8-16 18-16h34c18 0 30-12 40-30l6-12c4-6 12-8 18-4l26 18c10 6 20 10 30 12 6 2 10 6 10 12v20z"/>
+<path class="p" d="M60 134c18 0 30-12 40-30l6-12c4-6 12-8 18-4l26 18c-10 2-20 10-26 22-10 18-30 26-50 26z"/>
+<path class="i" d="M10 150h182v10c0 6-4 10-10 10H22c-8 0-12-4-12-10z"/><path class="w" d="M14 160h176" style="stroke:#fff;stroke-width:3;stroke-dasharray:6 6;fill:none;opacity:.5"/>
+<path class="ki" d="M98 112l14 6M104 102l14 6M110 92l14 6" style="stroke-width:3"/><path class="a" d="M150 132c10 2 20 4 30 6v8h-34z"/><path class="kw" d="M30 142h30"/>`),
+  pencil: S(`<ellipse class="sh" cx="100" cy="182" rx="80" ry="7"/>
+<rect class="c" x="26" y="58" width="108" height="122" rx="6" transform="rotate(-6 80 120)"/><g transform="rotate(-6 80 120)"><rect class="s" x="26" y="58" width="16" height="122" rx="4"/><g class="ki" style="stroke-width:2;opacity:.25"><path d="M52 86h70M52 104h70M52 122h70M52 140h50M52 158h60"/></g><g class="w"><circle cx="34" cy="76" r="3"/><circle cx="34" cy="100" r="3"/><circle cx="34" cy="124" r="3"/><circle cx="34" cy="148" r="3"/></g></g>
+<g transform="rotate(38 140 100)"><rect class="p" x="128" y="20" width="24" height="120" rx="3"/><rect class="sh" x="140" y="20" width="12" height="120"/><rect class="a" x="128" y="14" width="24" height="12" rx="3"/><path class="b" d="M128 140h24l-12 28z" style="fill:#f1d3a6"/><path class="i" d="M136 158h8l-4 10z"/></g>
+<g transform="rotate(-62 60 60)"><rect class="a" x="20" y="48" width="96" height="20" rx="3" style="opacity:.9"/><path class="ki" d="M30 48v8M42 48v12M54 48v8M66 48v12M78 48v8M90 48v12M102 48v8" style="stroke-width:2"/></g>`),
+  tools: S(`<ellipse class="sh" cx="100" cy="182" rx="80" ry="7"/>
+<g transform="rotate(45 100 100)"><rect class="s" x="92" y="54" width="16" height="122" rx="6"/><rect class="sh" x="100" y="54" width="8" height="122" rx="4"/><path class="p" d="M70 34h60v22c0 8-6 14-14 14H84c-8 0-14-6-14-14z"/><path class="sh" d="M100 34h30v22c0 8-6 14-14 14h-16z"/><path class="kw" d="M78 40v14"/></g>
+<g transform="rotate(-45 100 100)"><rect class="i" x="93" y="60" width="14" height="118" rx="5"/><path class="a" d="M100 18c-18 0-30 12-30 26 0 8 4 14 10 18l8 4h24l8-4c6-4 10-10 10-18 0-14-12-26-30-26zm0 16a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path class="sh" d="M100 18c18 0 30 12 30 26 0 8-4 14-10 18l-8 4h-12v-12a10 10 0 0 0 0-20z"/></g>
+<g class="a"><path d="M30 40l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><circle cx="170" cy="150" r="4"/><circle cx="160" cy="34" r="3"/></g>`),
+  autopart: S(`<ellipse class="sh" cx="100" cy="182" rx="80" ry="7"/>
+<circle class="i" cx="88" cy="104" r="70"/><circle class="s" cx="88" cy="104" r="62"/><circle cx="88" cy="104" r="50" style="fill:none;stroke:#000;stroke-opacity:.18;stroke-width:2;stroke-dasharray:3 6"/>
+<g class="i" style="opacity:.6"><circle cx="88" cy="58" r="5"/><circle cx="128" cy="86" r="5"/><circle cx="114" cy="138" r="5"/><circle cx="62" cy="138" r="5"/><circle cx="48" cy="86" r="5"/></g>
+<circle class="c" cx="88" cy="104" r="22"/><circle class="i" cx="88" cy="104" r="8"/><path class="kw" d="M42 74a58 58 0 0 1 30-30"/>
+<path class="p" d="M112 40c0-6 6-10 12-10h20c6 0 12 4 12 10v60h-44z"/><path class="sh" d="M134 30h10c6 0 12 4 12 10v60h-22z"/><rect class="a" x="120" y="100" width="28" height="22" rx="3"/>
+<rect class="c" x="126" y="122" width="16" height="26"/><path class="i" d="M128 148h12l-6 16z"/><path class="kw" d="M118 46v44" style="stroke:#fff"/>
+<path class="ka" d="M164 160l12 6M170 146l14 0M160 172l8 10" style="stroke-width:3"/>`),
   bed: S(`<ellipse class="sh" cx="100" cy="180" rx="88" ry="8"/><rect class="s" x="14" y="56" width="22" height="120" rx="6"/><rect class="i" x="164" y="120" width="10" height="56" rx="3"/><rect class="p" x="30" y="112" width="148" height="44" rx="10"/>
 <rect class="c" x="34" y="94" width="144" height="28" rx="12"/><rect class="w" x="40" y="80" width="46" height="26" rx="12" style="opacity:.95"/><path class="sh" d="M30 140h148v6c0 6-4 10-10 10H40c-6 0-10-4-10-10z"/>
 <path class="a" d="M92 98h86v20c-30 4-58 2-86-6z" style="opacity:.75"/><g class="a"><path d="M146 30l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><circle cx="176" cy="60" r="3"/><circle cx="118" cy="46" r="2.5"/></g>`),

@@ -76,7 +76,7 @@ ${CSS}
 ${MOTIF_CSS}
 </style>
 </head>
-<body>
+<body class="${[c.cardStyle ? "cs-" + c.cardStyle : "", c.decor ? "dc-" + c.decor : ""].filter(Boolean).join(" ")}">
 
 <div class="ld" aria-hidden="true">
   <div class="in"><div class="mk">${motif(c.motif)}</div><div class="bn"><span>{{brand}}</span></div><div class="pc">${h(c.loader)} · <span class="n">۰</span>٪</div></div>
@@ -97,7 +97,7 @@ ${MOTIF_CSS}
 <nav class="mm" aria-label="منوی موبایل">${nav.map(([href, label], i) => `<a href="${href}">${h(label)} <small>0${i + 1}</small></a>`).join("")}</nav>
 
 <main id="top">
-<section class="hero${c.heroLayout === "center" ? " center" : ""}">
+<section class="hero${c.heroLayout ? " " + c.heroLayout : ""}">
   <div class="glow"></div>
   ${ghost ? `<div class="ghost" dir="ltr">${h(ghost)}</div>` : ""}
   <canvas id="fx"></canvas>
