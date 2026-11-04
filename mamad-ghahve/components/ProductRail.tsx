@@ -1,6 +1,7 @@
 "use client";
 import { Children, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Chevron from "./Chevron";
 
 /** ردیف افقی محصولات: روی گوشی با کشیدن (سوایپ) و روی دسکتاپ با دکمه‌های قبلی/بعدی */
 export default function ProductRail({ title, subtitle, more, children }: { title: string; subtitle?: string; more?: string; children: React.ReactNode }) {
@@ -55,8 +56,8 @@ export default function ProductRail({ title, subtitle, more, children }: { title
         </h2>
         <div className="rail-ctl">
           {more && <Link href={more}>مشاهده همه</Link>}
-          <button className="rail-btn" onClick={() => go(-1)} disabled={atStart} aria-label="قبلی">›</button>
-          <button className="rail-btn" onClick={() => go(1)} disabled={atEnd} aria-label="بعدی">‹</button>
+          <button className="rail-btn" onClick={() => go(-1)} disabled={atStart} aria-label="قبلی"><Chevron dir="right" /></button>
+          <button className="rail-btn" onClick={() => go(1)} disabled={atEnd} aria-label="بعدی"><Chevron dir="left" /></button>
         </div>
       </div>
       <div className="rail" ref={ref}>

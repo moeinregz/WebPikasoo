@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { imgSrc } from "./ProductArt";
+import Chevron from "./Chevron";
 
 export type HeroSlide = { id: number; title: string; subtitle: string; button_text: string; button_link: string; image: string; bg: string; emoji: string };
 
-const INTERVAL = 3000;
+const INTERVAL = 3000; // هر ۳ ثانیه اسلاید بعدی
 
 /** فایل svg = تصویرسازی کنار متن؛ عکس معمولی (jpg/png/webp) = پس‌زمینه‌ی کامل اسلاید */
-const isArt = (src: string) => /\.svg(\?|$)/i.test(src); // هر ۳ ثانیه اسلاید بعدی
+const isArt = (src: string) => /\.svg(\?|$)/i.test(src);
 
 export default function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const [i, setI] = useState(0);
@@ -86,8 +87,8 @@ export default function HeroSlider({ slides }: { slides: HeroSlide[] }) {
       {n > 1 && (
         <>
           {!paused && <span key={tick + "-" + i} className="progress" style={{ animation: `heroProgress ${INTERVAL}ms linear forwards` }} />}
-          <button className="arrow prev" onClick={() => go(i - 1)} aria-label="اسلاید قبلی">›</button>
-          <button className="arrow next" onClick={() => go(i + 1)} aria-label="اسلاید بعدی">‹</button>
+          <button className="arrow prev" onClick={() => go(i - 1)} aria-label="اسلاید قبلی"><Chevron dir="right" /></button>
+          <button className="arrow next" onClick={() => go(i + 1)} aria-label="اسلاید بعدی"><Chevron dir="left" /></button>
           <div className="dots">
             {slides.map((s, k) => (
               <button key={s.id} className={k === i ? "on" : ""} onClick={() => go(k)} aria-label={`اسلاید ${k + 1}`} />
