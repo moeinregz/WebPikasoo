@@ -40,7 +40,7 @@ export default function Location({ hasGate = false }: { hasGate?: boolean }) {
             </defs>
             <rect width="600" height="380" fill="url(#grid)" />
             {/* roads: the square, the road we arrive on, and Firouz Bahram straight ahead */}
-            <path d="M470 0V380" className="map-road map-road-side" />
+            <path d="M470 190V380" className="map-road map-road-side" />
             <path d="M600 190H0" className="map-road" />
             <circle cx="470" cy="190" r="30" className="map-square" />
             <circle cx="470" cy="190" r="12" fill="rgba(217,180,90,.25)" />
