@@ -28,7 +28,7 @@ export default function Location({ hasGate = false }: { hasGate?: boolean }) {
       <SectionHead eyebrow="مسیر" title={<>تا <em>شاهکار</em> راهی نیست</>} />
       <div className="location-layout">
         <div className="map" data-reveal>
-          <svg viewBox="0 0 600 380" role="img" aria-label="نقشه‌ی مسیر: میدان گل‌دسته، ورودی فیروزبهرام، باغچه رستوران شاهکار روبه‌روی چهارباغ">
+          <svg viewBox="0 0 600 380" role="img" aria-label="نقشه‌ی مسیر: از میدان گل‌دسته مستقیم وارد ورودی فیروزبهرام؛ اولین باغچه شاهکار است، روبه‌روی چهارباغ">
             <defs>
               <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
                 <path d="M24 0H0V24" fill="none" stroke="rgba(217,180,90,.07)" />
@@ -39,49 +39,44 @@ export default function Location({ hasGate = false }: { hasGate?: boolean }) {
               </radialGradient>
             </defs>
             <rect width="600" height="380" fill="url(#grid)" />
-            {/* roads */}
-            <path d="M0 120H600" className="map-road" />
-            <path d="M210 120V380" className="map-road" />
-            <circle cx="470" cy="120" r="30" className="map-square" />
-            <circle cx="470" cy="120" r="12" fill="rgba(217,180,90,.25)" />
-            {/* gardens */}
-            <g className="map-plot">
-              <rect x="88" y="196" width="104" height="80" rx="10" />
-              <text x="140" y="242" textAnchor="middle">چهارباغ</text>
-            </g>
+            {/* roads: the square, the road we arrive on, and Firouz Bahram straight ahead */}
+            <path d="M470 0V380" className="map-road map-road-side" />
+            <path d="M600 190H0" className="map-road" />
+            <circle cx="470" cy="190" r="30" className="map-square" />
+            <circle cx="470" cy="190" r="12" fill="rgba(217,180,90,.25)" />
+            {/* gardens: first garden on the left of the road is Shahkar, Chaharbagh opposite */}
             <g className="map-plot is-ours">
-              <rect x="228" y="196" width="118" height="80" rx="10" />
-              <text x="287" y="242" textAnchor="middle">شاهکار</text>
+              <rect x="250" y="84" width="128" height="82" rx="10" />
+              <text x="314" y="130" textAnchor="middle">شاهکار</text>
+              <text x="314" y="152" textAnchor="middle" className="map-small">اولین باغچه</text>
             </g>
-            {/* route */}
-            <path
-              className="map-route"
-              pathLength={1}
-              d="M590 120H500A30 30 0 0 0 440 120H210V236H228"
-            />
+            <g className="map-plot">
+              <rect x="258" y="214" width="112" height="80" rx="10" />
+              <text x="314" y="259" textAnchor="middle">چهارباغ</text>
+            </g>
+            {/* route: into the square and straight through onto Firouz Bahram */}
+            <path className="map-route" pathLength={1} d="M590 190H500A30 30 0 0 0 440 190H314V170" />
             {/* labels */}
             <g className="map-step">
-              <text x="470" y="74" textAnchor="middle">میدان گل‌دسته</text>
+              <text x="536" y="236" textAnchor="middle">میدان گل‌دسته</text>
             </g>
             <g className="map-step">
-              <text x="210" y="100" textAnchor="middle">ورودی فیروزبهرام</text>
-            </g>
-            <g className="map-step">
-              <text x="210" y="320" textAnchor="middle" className="map-small">اولین باغچه</text>
+              <text x="140" y="174" textAnchor="middle">ورودی فیروزبهرام</text>
+              <text x="140" y="222" textAnchor="middle" className="map-small">مستقیم، بدون گردش</text>
             </g>
             <g className="map-pin">
-              <circle cx="287" cy="182" r="34" fill="url(#pinGlow)" className="map-pulse" />
-              <path d="M287 196c-12-14-18-23-18-31a18 18 0 0 1 36 0c0 8-6 17-18 31z" fill="#d9b45a" />
-              <circle cx="287" cy="165" r="6" fill="#0a0907" />
+              <circle cx="314" cy="62" r="34" fill="url(#pinGlow)" className="map-pulse" />
+              <path d="M314 80c-12-14-18-23-18-31a18 18 0 0 1 36 0c0 8-6 17-18 31z" fill="#d9b45a" />
+              <circle cx="314" cy="49" r="6" fill="#0a0907" />
             </g>
-            <text x="18" y="112" className="map-small">اسلام‌شهر</text>
+            <text x="60" y="40" textAnchor="middle" className="map-small">اسلام‌شهر</text>
           </svg>
         </div>
 
         <div className="location-info" data-reveal>
           <ol className="steps">
-            <li><b>۱</b> میدان گل‌دسته را رد کنید</li>
-            <li><b>۲</b> وارد ورودی فیروزبهرام شوید</li>
+            <li><b>۱</b> به میدان گل‌دسته بیایید</li>
+            <li><b>۲</b> مستقیم وارد ورودی فیروزبهرام شوید؛ همان ابتدای میدان، بدون گردش به چپ یا راست</li>
             <li><b>۳</b> اولین باغچه، روبه‌روی باغچه رستوران چهارباغ</li>
             <li><b>۴</b> سردر با تابلوی سبز نورانی «باغچه رستوران سنتی»</li>
           </ol>

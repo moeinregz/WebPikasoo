@@ -2379,3 +2379,7 @@ a.parking-note:hover {
     background: linear-gradient(to top, rgba(7, 6, 5, 0.92), transparent 65%);
   }
 }
+.map-road-side {
+  stroke: #1b1813;
+  stroke-width: 18;
+}
