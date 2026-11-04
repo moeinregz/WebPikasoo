@@ -13,7 +13,7 @@ function SlideForm({ s }: { s?: Slide }) {
       <div className="field"><label>متن دکمه</label><input name="button_text" defaultValue={s?.button_text} /></div>
       <div className="field"><label>لینک دکمه</label><input name="button_link" defaultValue={s?.button_link || "/shop"} dir="ltr" /></div>
       <div className="field"><label>عکس پس‌زمینه (اختیاری)</label><input type="file" name="image_file" accept="image/*" /><small>عریض، حداقل ۱۶۰۰×۷۰۰</small></div>
-      <div className="field"><label>یا آدرس عکس</label><input name="image_url" defaultValue={s?.image} dir="ltr" /></div>
+      <div className="field"><label>یا آدرس عکس</label><input name="image_url" defaultValue={s?.image} dir="ltr" /><small>عکس معمولی = پس‌زمینه‌ی کامل. تصویرسازی‌های آماده (کنار متن): /hero/roast.svg، /hero/club.svg، /hero/gear.svg</small></div>
       <div className="field"><label>رنگ پس‌زمینه</label><input type="color" name="bg" defaultValue={s?.bg || "#3b2316"} style={{ height: 46, padding: 4 }} /></div>
       <div className="field"><label>ایموجی (وقتی عکس نداره)</label><input name="emoji" defaultValue={s?.emoji || "☕"} /></div>
       <div className="field"><label>ترتیب</label><input name="sort" defaultValue={s?.sort ?? 0} dir="ltr" /></div>

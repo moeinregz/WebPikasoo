@@ -50,8 +50,8 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
       <footer className="footer">
         <div className="container cols">
           <div>
-            <div className="logo" style={{ color: "#fbf6ee", marginBottom: 12 }}>
-              <span className="cup" style={{ background: "#6b3f26" }}>☕</span>
+            <div className="logo" style={{ marginBottom: 12 }}>
+              <span className="cup">☕</span>
               {s.shop_name}
             </div>
             <p>{s.shop_tagline}</p>

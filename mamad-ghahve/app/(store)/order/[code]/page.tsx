@@ -24,7 +24,7 @@ export default function OrderPage({ params, searchParams }: { params: { code: st
       {ok && <ClearCart />}
       <div className="card center" style={{ marginTop: 26 }}>
         <div style={{ fontSize: "3.6rem" }}>{ok ? "🎉" : o.status === "pending" ? "⏳" : "😕"}</div>
-        <h1 className="display" style={{ fontSize: "2rem", color: "var(--roast)" }}>
+        <h1 className="display" style={{ fontSize: "2rem", color: "var(--head)" }}>
           {ok ? "سفارشت ثبت شد!" : o.status === "pending" ? "در انتظار پرداخت" : "پرداخت ناموفق بود"}
         </h1>
         {searchParams.msg && !ok && <p className="alert bad" style={{ margin: "10px 0" }}>{searchParams.msg}</p>}

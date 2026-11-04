@@ -52,7 +52,16 @@ export function seedIfEmpty(db: Database.Database) {
   for (const [k, v] of Object.entries(defaults)) ins.run(k, v);
 
   const hasCats = db.prepare("SELECT COUNT(*) c FROM categories").get() as { c: number };
-  if (hasCats.c) return;
+  if (hasCats.c) {
+    // دیتابیس‌های قدیمی: به اسلایدهای پیش‌فرضِ بدون عکس، تصویرسازی بده (فقط یک بار)
+    const done = db.prepare("SELECT value FROM settings WHERE key = 'hero_art_v1'").get();
+    if (!done) {
+      const art: Record<string, string> = { "☕": "/hero/roast.svg", "🎁": "/hero/club.svg", "⚗️": "/hero/gear.svg" };
+      for (const [e, img] of Object.entries(art)) db.prepare("UPDATE slides SET image = ? WHERE image = '' AND emoji = ?").run(img, e);
+      db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('hero_art_v1', '1')").run();
+    }
+    return;
+  }
 
   const cats: [string, string, string][] = [
     ["قهوه دانه", "beans", "🫘"],
@@ -99,11 +108,11 @@ export function seedIfEmpty(db: Database.Database) {
   });
 
   const slides = [
-    ["قهوه‌ی تازه‌برشته، هر هفته", "هر بسته‌ی ممد قهوه حداکثر ۷ روز بعد از برشته‌کاری به دستت می‌رسه.", "خرید قهوه", "/shop?cat=beans", "#3b2316", "☕"],
-    ["عضو باشگاه مشتری‌های ممد شو", "با هر خرید امتیاز بگیر، با امتیازهات قهوه‌ی مجانی بخر. ۲۰۰ امتیاز هدیه‌ی عضویت!", "عضویت رایگان", "/club", "#6b3a1f", "🎁"],
-    ["تا ۲۰٪ تخفیف لوازم دم‌آوری", "موکاپات، فرنچ‌پرس و آسیاب دستی با قیمت ویژه.", "دیدن تخفیف‌ها", "/shop?cat=gear", "#2a1810", "⚗️"],
+    ["قهوه‌ی تازه‌برشته، هر هفته", "هر بسته‌ی ممد قهوه حداکثر ۷ روز بعد از برشته‌کاری به دستت می‌رسه.", "خرید قهوه", "/shop?cat=beans", "#3b2316", "☕", "/hero/roast.svg"],
+    ["عضو باشگاه مشتری‌های ممد شو", "با هر خرید امتیاز بگیر، با امتیازهات قهوه‌ی مجانی بخر. ۲۰۰ امتیاز هدیه‌ی عضویت!", "عضویت رایگان", "/club", "#6b3a1f", "🎁", "/hero/club.svg"],
+    ["تا ۲۰٪ تخفیف لوازم دم‌آوری", "موکاپات، فرنچ‌پرس و آسیاب دستی با قیمت ویژه.", "دیدن تخفیف‌ها", "/shop?cat=gear", "#2a1810", "⚗️", "/hero/gear.svg"],
   ];
-  const sIns = db.prepare("INSERT INTO slides (title, subtitle, button_text, button_link, bg, emoji, sort) VALUES (?, ?, ?, ?, ?, ?, ?)");
+  const sIns = db.prepare("INSERT INTO slides (title, subtitle, button_text, button_link, bg, emoji, image, sort) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
   slides.forEach((s, i) => sIns.run(...s, i));
 
   db.prepare("INSERT INTO coupons (code, type, value, min_total, club_only) VALUES (?, ?, ?, ?, ?)").run("MAMAD10", "percent", 10, 500000, 0);

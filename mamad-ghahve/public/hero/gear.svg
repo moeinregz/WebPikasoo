@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="55%" r="50%"><stop offset="0" stop-color="#f1cd7d" stop-opacity=".4"/><stop offset="1" stop-color="#f1cd7d" stop-opacity="0"/></radialGradient>
+    <linearGradient id="steel" x1="0" x2="1"><stop offset="0" stop-color="#9a9aa0"/><stop offset=".45" stop-color="#e4e4e8"/><stop offset="1" stop-color="#6b6b72"/></linearGradient>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffe2a0"/><stop offset=".5" stop-color="#d6a650"/><stop offset="1" stop-color="#a8772b"/></linearGradient>
+    <linearGradient id="glass" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".5" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient>
+  </defs>
+  <circle cx="210" cy="215" r="190" fill="url(#glow)"/>
+  <ellipse cx="210" cy="352" rx="175" ry="18" fill="#000" opacity=".35"/>
+  <!-- moka pot -->
+  <path d="M78 340 L92 236 H178 L192 340 Z" fill="url(#steel)"/>
+  <path d="M92 236 L104 214 H166 L178 236 Z" fill="#5a5a60"/>
+  <path d="M100 214 L84 120 H186 L170 214 Z" fill="url(#steel)"/>
+  <path d="M84 120 L135 92 L186 120 Z" fill="#c9c9ce"/>
+  <circle cx="135" cy="90" r="9" fill="#2a2a2e"/>
+  <path d="M84 132 L60 120" stroke="#9a9aa0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M186 130 c34 4 34 70 -6 74" fill="none" stroke="#2a2a2e" stroke-width="13" stroke-linecap="round"/>
+  <path d="M92 236 h86" stroke="#4a4a50" stroke-width="3"/>
+  <path d="M104 250 L98 330" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".35"/>
+  <!-- french press -->
+  <rect x="246" y="140" width="96" height="196" rx="10" fill="#3b2416"/>
+  <rect x="246" y="200" width="96" height="136" rx="6" fill="#5a3420"/>
+  <rect x="246" y="140" width="96" height="196" rx="10" fill="url(#glass)" stroke="url(#gold)" stroke-width="5"/>
+  <rect x="238" y="126" width="112" height="18" rx="6" fill="url(#gold)"/>
+  <rect x="290" y="88" width="8" height="40" fill="url(#gold)"/>
+  <circle cx="294" cy="84" r="12" fill="url(#gold)"/>
+  <path d="M342 170 c30 0 30 90 0 90" fill="none" stroke="url(#gold)" stroke-width="12" stroke-linecap="round"/>
+  <rect x="240" y="332" width="108" height="12" rx="5" fill="url(#gold)"/>
+  <path d="M258 158 v160" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".25"/>
+  <!-- steam -->
+  <g fill="none" stroke="#f1cd7d" stroke-width="5" stroke-linecap="round">
+    <path d="M128 76 c-12 -14 10 -22 -2 -40"><animate attributeName="opacity" values="0;.85;0" dur="3s" repeatCount="indefinite"/></path>
+    <path d="M146 76 c-12 -14 10 -22 -2 -40"><animate attributeName="opacity" values="0;.85;0" dur="3s" begin="1.3s" repeatCount="indefinite"/></path>
+  </g>
+  <!-- sale tag -->
+  <g transform="rotate(-14 360 90)">
+    <path d="M318 60 h70 a8 8 0 0 1 8 8 v44 a8 8 0 0 1 -8 8 h-70 l-18 -30z" fill="url(#gold)"/>
+    <circle cx="316" cy="90" r="5" fill="#3b2416"/>
+    <text x="356" y="101" text-anchor="middle" font-family="Lalezar, Vazirmatn, Tahoma, sans-serif" font-size="30" fill="#2a1709">٪۲۰</text>
+  </g>
+  <g fill="#ffe2a0"><circle cx="40" cy="90" r="3"/><circle cx="210" cy="60" r="2.5"/><circle cx="395" cy="250" r="3"/></g>
+</svg>

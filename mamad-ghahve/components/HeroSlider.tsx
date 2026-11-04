@@ -5,7 +5,10 @@ import { imgSrc } from "./ProductArt";
 
 export type HeroSlide = { id: number; title: string; subtitle: string; button_text: string; button_link: string; image: string; bg: string; emoji: string };
 
-const INTERVAL = 3000; // هر ۳ ثانیه اسلاید بعدی
+const INTERVAL = 3000;
+
+/** فایل svg = تصویرسازی کنار متن؛ عکس معمولی (jpg/png/webp) = پس‌زمینه‌ی کامل اسلاید */
+const isArt = (src: string) => /\.svg(\?|$)/i.test(src); // هر ۳ ثانیه اسلاید بعدی
 
 export default function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const [i, setI] = useState(0);
@@ -61,11 +64,13 @@ export default function HeroSlider({ slides }: { slides: HeroSlide[] }) {
         {slides.map((s, k) => (
           <div
             key={s.id}
-            className={`slide ${k === i ? "active" : ""} ${s.image ? "has-img" : ""}`}
+            className={`slide ${k === i ? "active" : ""} ${s.image && !isArt(s.image) ? "has-img" : ""}`}
             style={{ background: `linear-gradient(120deg, ${s.bg}, #1f130c)` }}
             aria-hidden={k !== i}
           >
-            {s.image ? <img className="bg" src={imgSrc(s.image)} alt="" /> : <span className="art" aria-hidden="true">{s.emoji}</span>}
+            {s.image && !isArt(s.image) && <img className="bg" src={imgSrc(s.image)} alt="" />}
+            {s.image && isArt(s.image) && <img className="art-img" src={imgSrc(s.image)} alt="" />}
+            {!s.image && <span className="art" aria-hidden="true">{s.emoji}</span>}
             <div className="copy">
               <h2>{s.title}</h2>
               <p>{s.subtitle}</p>
