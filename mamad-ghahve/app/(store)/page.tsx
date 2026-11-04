@@ -5,6 +5,9 @@ import ProductCard from "@/components/ProductCard";
 import { activeSlides, categories, discounted, featured, newest, popular, toCard } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import { TIERS } from "@/lib/club";
+import TrustBar from "@/components/TrustBar";
+import Reviews from "@/components/Reviews";
+import AboutBlock from "@/components/AboutBlock";
 
 export default function Home() {
   const s = getSettings();
@@ -19,14 +22,6 @@ export default function Home() {
     <>
       <HeroSlider slides={slides} />
       <div className="container">
-        <nav className="cats" aria-label="دسته‌بندی‌ها">
-          {cats.map((c) => (
-            <Link key={c.id} href={`/shop?cat=${c.slug}`} className="cat">
-              <span className="i">{c.icon}</span>
-              {c.name}
-            </Link>
-          ))}
-        </nav>
 
         {news.length > 0 && (
           <ProductRail title="جدیدترین‌ها" subtitle="تازه‌ترین قهوه‌ها و محصولاتی که به ممد قهوه اضافه شدن" more="/shop">
@@ -34,9 +29,43 @@ export default function Home() {
           </ProductRail>
         )}
 
+        <TrustBar />
+
         {pops.length > 0 && (
           <ProductRail title="محبوب‌ترین‌ها" subtitle="پرفروش‌ترین محصولات به انتخاب مشتری‌ها" more="/shop?sort=popular">
             {pops.map((p) => <ProductCard key={p.id} p={p} />)}
+          </ProductRail>
+        )}
+
+
+        <section className="section cats-section">
+          <div className="section-head">
+            <h2>
+              دسته‌بندی‌ها
+              <small>هر چی برای یه قهوه‌ی خوب لازم داری</small>
+            </h2>
+          </div>
+          <nav className="cats" aria-label="دسته‌بندی‌ها">
+          {cats.map((c) => (
+            <Link key={c.id} href={`/shop?cat=${c.slug}`} className="cat">
+              <span className="i">{c.icon}</span>
+              {c.name}
+            </Link>
+          ))}
+        </nav>
+        </section>
+
+        {offs.length > 0 && (
+          <ProductRail title="تخفیف‌های ویژه" subtitle="تا تموم نشده بردار" more="/shop?sale=1">
+            {offs.map((p) => <ProductCard key={p.id} p={p} />)}
+          </ProductRail>
+        )}
+
+        <Reviews />
+
+        {feats.length > 0 && (
+          <ProductRail title="پیشنهاد ممد" subtitle="انتخاب‌های شخصی باریستای ما" more="/shop">
+            {feats.map((p) => <ProductCard key={p.id} p={p} />)}
           </ProductRail>
         )}
 
@@ -60,24 +89,7 @@ export default function Home() {
           </div>
         </section>
 
-        {offs.length > 0 && (
-          <ProductRail title="تخفیف‌های ویژه" subtitle="تا تموم نشده بردار" more="/shop?sale=1">
-            {offs.map((p) => <ProductCard key={p.id} p={p} />)}
-          </ProductRail>
-        )}
-
-        {feats.length > 0 && (
-          <ProductRail title="پیشنهاد ممد" subtitle="انتخاب‌های شخصی باریستای ما" more="/shop">
-            {feats.map((p) => <ProductCard key={p.id} p={p} />)}
-          </ProductRail>
-        )}
-
-        <section className="features">
-          <div className="feature"><span className="i">🔥</span><div><b>تازه‌برشته</b><span>برشته‌کاری هفتگی</span></div></div>
-          <div className="feature"><span className="i">🚚</span><div><b>ارسال سریع</b><span>به سراسر ایران</span></div></div>
-          <div className="feature"><span className="i">💳</span><div><b>پرداخت امن</b><span>آنلاین یا اقساطی</span></div></div>
-          <div className="feature"><span className="i">☎️</span><div><b>پشتیبانی</b><span>{s.shop_phone}</span></div></div>
-        </section>
+        <AboutBlock phone={s.shop_phone} />
       </div>
     </>
   );
