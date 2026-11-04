@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0907">
+<title>باغچه رستوران شاهکار | اسلام‌شهر</title>
+<meta name="description" content="باغچه رستوران شاهکار در اسلام‌شهر — پذیرایی تمام‌وقت از جشن‌ها و میهمانی‌ها، انواع غذاهای ایرانی، موسیقی زنده، حضور هنرمندان و پارکینگ اختصاصی.">
+<link rel="icon" href="{{icon}}">
+<style>
+{{fonts}}
+:root{--bg:#0a0907;--card:#15120d;--line:rgba(217,180,90,.25);--gold:#d9b45a;--gold2:#f3d98b;--text:#efe6d2;--muted:#a99d84}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Vazirmatn,system-ui,sans-serif;line-height:1.9}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.btn{display:inline-block;padding:.75rem 1.5rem;border-radius:999px;font-weight:700;border:1px solid var(--gold);transition:background .2s,color .2s}
+.btn-gold{background:var(--gold);color:#1a1307}
+.btn-gold:hover{background:var(--gold2)}
+.btn-line{color:var(--gold2)}
+.btn-line:hover{background:rgba(217,180,90,.12)}
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(10,9,7,.92);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:900;font-size:1.5rem;color:var(--gold2)}
+.logo small{font-weight:400;font-size:.75rem;color:var(--muted);margin-inline-start:.4rem}
+nav{display:flex;gap:1.2rem;font-size:.95rem}
+nav a{color:var(--muted)}
+nav a:hover{color:var(--gold2)}
+header .btn{padding:.45rem 1.1rem;font-size:.9rem}
+/* hero */
+.hero{position:relative;min-height:78vh;display:flex;align-items:center;text-align:center;background:#000}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.hero .wrap{position:relative}
+.hero p.tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.2rem 1rem;color:var(--gold2);font-size:.9rem;margin:0}
+.hero h1{margin:.6rem 0;font-size:clamp(3rem,12vw,6rem);font-weight:900;color:var(--gold2);line-height:1.3}
+.hero .lead{max-width:600px;margin:0 auto 1.6rem;color:#e5dbc4;font-size:1.1rem}
+.hero .btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+/* sections */
+section{padding:4.5rem 0}
+h2{text-align:center;font-size:clamp(1.8rem,5vw,2.5rem);margin:0 0 .3rem;color:var(--gold2)}
+.sub{text-align:center;color:var(--muted);margin:0 auto 2.4rem;max-width:620px}
+.line{width:80px;height:2px;background:var(--gold);margin:.4rem auto 1rem}
+.alt{background:#0f0d0a;border-block:1px solid var(--line)}
+/* features */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem}
+.feature{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.4rem;text-align:center}
+.feature b{display:block;color:var(--gold2);font-size:1.1rem;margin:.5rem 0 .2rem}
+.feature span{color:var(--muted);font-size:.92rem}
+.feature i{font-style:normal;display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);color:var(--gold2);font-weight:700}
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.gallery figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.gallery figcaption{padding:.5rem .8rem;font-size:.88rem;color:var(--muted)}
+/* menu */
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.menu-col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.4rem 1.6rem}
+.menu-col h3{margin:0 0 .6rem;color:var(--gold);font-size:1.15rem}
+.menu-col ul{list-style:none;margin:0;padding:0}
+.menu-col li{padding:.45rem 0;border-bottom:1px dashed var(--line)}
+.menu-col li:last-child{border:0}
+.note{text-align:center;color:var(--muted);font-size:.9rem;margin-top:1.4rem}
+/* events */
+.events{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center}
+.events img{border-radius:14px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:.6rem;margin:1rem 0 1.4rem;padding:0;list-style:none}
+.chips li{border:1px solid var(--line);border-radius:999px;padding:.35rem 1rem;color:var(--gold2)}
+.events p{color:var(--muted);margin:0}
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.6rem}
+.box h3{margin:0 0 .8rem;color:var(--gold)}
+.box ol{margin:0 0 1rem;padding-inline-start:1.3rem}
+.box address{font-style:normal;color:var(--muted)}
+.rows a{display:flex;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--line)}
+.rows a:last-child{border:0}
+.rows a span{color:var(--muted)}
+.rows a b{color:var(--gold2)}
+.box .btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+footer{text-align:center;padding:2rem 16px 5.5rem;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line)}
+footer b{color:var(--gold2)}
+.call-bar{display:none}
+@media (max-width:760px){
+  nav{display:none}
+  .gallery{grid-template-columns:1fr 1fr}
+  .menu,.events,.contact{grid-template-columns:1fr}
+  .call-bar{display:flex;position:fixed;bottom:0;inset-inline:0;z-index:10;background:#0a0907;border-top:1px solid var(--line);padding:.6rem;gap:.6rem}
+  .call-bar a{flex:1;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="#" class="logo">شاهکار<small>باغچه رستوران</small></a>
+    <nav>
+      <a href="#services">خدمات</a>
+      <a href="#gallery">تصاویر</a>
+      <a href="#menu">منو</a>
+      <a href="#events">مراسم</a>
+      <a href="#contact">تماس و آدرس</a>
+    </nav>
+    <a class="btn btn-gold" href="tel:+989353030519">تماس</a>
+  </div>
+</header>
+
+<div class="hero">
+  <img src="{{img:garden-front}}" alt="باغچه رستوران شاهکار در شب">
+  <div class="wrap">
+    <p class="tag">باغچه رستوران · اسلام‌شهر</p>
+    <h1>شاهکار</h1>
+    <p class="lead">میزبان جشن‌ها و میهمانی‌های شما، با غذای اصیل ایرانی و موسیقی زنده در فضای باغ.</p>
+    <div class="btns">
+      <a class="btn btn-gold" href="tel:+989353030519">تماس و رزرو: ۰۹۳۵۳۰۳۰۵۱۹</a>
+      <a class="btn btn-line" href="https://wa.me/989353030519" target="_blank" rel="noopener">واتساپ</a>
+    </div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <h2>خدمات ما</h2>
+    <div class="line"></div>
+    <p class="sub">هر آنچه برای یک شب خوب لازم دارید، در باغچه رستوران شاهکار.</p>
+    <div class="features">
+      <div class="feature"><i>۱</i><b>پذیرایی تمام‌وقت</b><span>آماده‌ی پذیرایی از جشن‌ها و میهمانی‌های شما به‌صورت تمام‌وقت</span></div>
+      <div class="feature"><i>۲</i><b>پارکینگ اختصاصی</b><span>محوطه‌ی بزرگ پارکینگ کنار ورودی باغ</span></div>
+      <div class="feature"><i>۳</i><b>غذاهای ایرانی</b><span>انواع کباب و غذاهای سنتی ایرانی</span></div>
+      <div class="feature"><i>۴</i><b>موسیقی زنده</b><span>اجرای زنده در فضای سالن و باغ</span></div>
+      <div class="feature"><i>۵</i><b>حضور هنرمندان</b><span>حضور هنرمندان سینما و موزیک پاپ کشور</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="alt">
+  <div class="wrap">
+    <h2>تصاویر محیط</h2>
+    <div class="line"></div>
+    <p class="sub">سالن سرپوشیده با نورپردازی طلایی و باغچه‌ای سرسبز زیر فانوس‌ها.</p>
+    <div class="gallery">
+      <figure><img src="{{img:hall-wide}}" alt="سالن سرپوشیده" loading="lazy"><figcaption>سالن سرپوشیده</figcaption></figure>
+      <figure><img src="{{img:hall-angle}}" alt="نورپردازی سالن" loading="lazy"><figcaption>نورپردازی سالن</figcaption></figure>
+      <figure><img src="{{img:garden-tables}}" alt="میزهای فضای باز" loading="lazy"><figcaption>فضای باز باغچه</figcaption></figure>
+      <figure><img src="{{img:garden-front}}" alt="باغچه در شب" loading="lazy"><figcaption>باغچه زیر فانوس‌ها</figcaption></figure>
+      <figure><img src="{{img:kitchen-garden}}" alt="آشپزخانه کنار باغ" loading="lazy"><figcaption>آشپزخانه</figcaption></figure>
+      <figure><img src="{{img:parking-yard}}" alt="پارکینگ اختصاصی" loading="lazy"><figcaption>پارکینگ اختصاصی</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="wrap">
+    <h2>منوی غذا</h2>
+    <div class="line"></div>
+    <p class="sub">طعم اصیل ایرانی، از کباب‌های زغالی تا غذاهای خانگی.</p>
+    <div class="menu">
+      <div class="menu-col">
+        <h3>کباب‌ها</h3>
+        <ul><li>چلوکباب کوبیده</li><li>چلوکباب برگ</li><li>چلوکباب سلطانی</li><li>جوجه‌کباب زعفرانی</li><li>کباب بختیاری</li><li>شیشلیک</li></ul>
+      </div>
+      <div class="menu-col">
+        <h3>غذاهای سنتی</h3>
+        <ul><li>قورمه‌سبزی</li><li>قیمه</li><li>باقالی‌پلو با ماهیچه</li><li>زرشک‌پلو با مرغ</li><li>فسنجان</li><li>دیزی سنگی</li></ul>
+      </div>
+    </div>
+    <p class="note">برای منوی کامل و قیمت‌ها تماس بگیرید؛ برای مراسم، منوی اختصاصی هم آماده می‌کنیم.</p>
+  </div>
+</section>
+
+<section id="events" class="alt">
+  <div class="wrap events">
+    <img src="{{img:hall-wide}}" alt="سالن پذیرایی شاهکار" loading="lazy">
+    <div>
+      <h2 style="text-align:start">جشن‌ها و میهمانی‌ها</h2>
+      <ul class="chips">
+        <li>جشن تولد</li><li>عقد و نامزدی</li><li>بله‌برون و پاگشا</li><li>سالگرد ازدواج</li><li>دورهمی خانوادگی</li><li>مهمانی کاری</li>
+      </ul>
+      <p>شاهکار آماده‌ی پذیرایی از جشن‌ها و میهمانی‌های شما به‌صورت تمام‌وقت است. شب‌ها با موسیقی زنده و در شب‌های ویژه با حضور هنرمندان سینما و موزیک پاپ کشور.</p>
+      <p style="margin-top:1.2rem"><a class="btn btn-gold" href="https://wa.me/989353030519?text=%D8%B3%D9%84%D8%A7%D9%85%D8%8C%20%D8%A8%D8%B1%D8%A7%DB%8C%20%D8%B1%D8%B2%D8%B1%D9%88%20%D9%85%D8%B1%D8%A7%D8%B3%D9%85%20%D8%AF%D8%B1%20%D8%B4%D8%A7%D9%87%DA%A9%D8%A7%D8%B1%20%D8%A7%D8%B7%D9%84%D8%A7%D8%B9%D8%A7%D8%AA%20%D9%85%DB%8C%E2%80%8C%D8%AE%D9%88%D8%A7%D8%B3%D8%AA%D9%85." target="_blank" rel="noopener">رزرو مراسم در واتساپ</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <h2>تماس و آدرس</h2>
+    <div class="line"></div>
+    <p class="sub">برای رزرو میز یا مراسم تماس بگیرید یا در واتساپ پیام بدهید.</p>
+    <div class="contact">
+      <div class="box">
+        <h3>مسیر</h3>
+        <ol>
+          <li>به میدان گل‌دسته بیایید</li>
+          <li>مستقیم وارد ورودی فیروزبهرام شوید (بدون گردش به چپ یا راست)</li>
+          <li>اولین باغچه، روبه‌روی باغچه رستوران چهارباغ</li>
+        </ol>
+        <address>اسلام‌شهر، بعد از میدان گل‌دسته، ورودی فیروزبهرام، اولین باغچه — روبه‌روی باغچه رستوران چهارباغ</address>
+        <div class="btns"><a class="btn btn-gold" href="https://www.google.com/maps/search/?api=1&amp;query=%D8%A8%D8%A7%D8%BA%DA%86%D9%87%20%D8%B1%D8%B3%D8%AA%D9%88%D8%B1%D8%A7%D9%86%20%D8%B4%D8%A7%D9%87%DA%A9%D8%A7%D8%B1%20%D8%A7%D8%B3%D9%84%D8%A7%D9%85%D8%B4%D9%87%D8%B1%20%D9%81%DB%8C%D8%B1%D9%88%D8%B2%20%D8%A8%D9%87%D8%B1%D8%A7%D9%85" target="_blank" rel="noopener">مسیریابی</a></div>
+      </div>
+      <div class="box rows">
+        <h3>راه‌های ارتباطی</h3>
+        <a href="tel:+989353030519"><span>تلفن</span><b>۰۹۳۵۳۰۳۰۵۱۹</b></a>
+        <a href="https://wa.me/989353030519" target="_blank" rel="noopener"><span>واتساپ</span><b>۰۹۳۵۳۰۳۰۵۱۹</b></a>
+        <a href="https://instagram.com/sofrehkaneh.shahkar" target="_blank" rel="noopener"><span>اینستاگرام</span><b dir="ltr">@sofrehkaneh.shahkar</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>باغچه رستوران شاهکار</b> · اسلام‌شهر<br>
+  © ۱۴۰۵ — همه‌ی حقوق محفوظ است
+</footer>
+
+<div class="call-bar">
+  <a class="btn btn-gold" href="tel:+989353030519">تماس</a>
+  <a class="btn btn-line" href="https://wa.me/989353030519" target="_blank" rel="noopener">واتساپ</a>
+</div>
+
+</body>
+</html>
