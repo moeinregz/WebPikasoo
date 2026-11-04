@@ -34,6 +34,12 @@ const PANELS = [
     title: "طعم‌هایی که جلوی چشمتان آماده می‌شوند",
     text: "آشپزخانه‌ی باز کنار باغ؛ کباب روی زغال و غذای تازه برای هر سفره.",
   },
+  {
+    img: "parking-yard",
+    kicker: "پارکینگ اختصاصی",
+    title: "از ماشین تا میز، چند قدم",
+    text: "محوطه‌ی بزرگ پارکینگ زیر درخت‌ها، درست کنار ورودی باغ؛ بی‌دغدغه بیایید.",
+  },
 ] as const;
 
 /** Desktop: pinned horizontal journey through the venue. Mobile: stacked cards. */
@@ -122,7 +128,7 @@ export default function Spaces() {
               />
             </div>
             <div className="space-copy">
-              <span className="space-index">{["۰۱", "۰۲", "۰۳", "۰۴", "۰۵"][i]}</span>
+              <span className="space-index">{["۰۱", "۰۲", "۰۳", "۰۴", "۰۵", "۰۶"][i]}</span>
               <span className="eyebrow">{p.kicker}</span>
               <h3>{p.title}</h3>
               <p>{p.text}</p>

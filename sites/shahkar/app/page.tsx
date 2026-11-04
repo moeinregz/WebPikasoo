@@ -14,6 +14,8 @@ import Reserve from "@/components/Reserve";
 import Reveal from "@/components/Reveal";
 import Ribbon from "@/components/Ribbon";
 import Spaces from "@/components/Spaces";
+import fs from "node:fs";
+import path from "node:path";
 import { getMenu } from "@/lib/db";
 
 // Menu is read from SQLite on every request, so admin edits show up immediately.
@@ -27,6 +29,9 @@ export default function Home() {
     subtitle: c.subtitle,
     items: c.items.map(({ id, name, description, price, featured }) => ({ id, name, description, price, featured })),
   }));
+
+  // The gate photo is optional: drop public/images/gate.webp (+ gate-sm.webp) and the block appears.
+  const hasGate = fs.existsSync(path.join(process.cwd(), "public", "images", "gate.webp"));
 
   return (
     <>
@@ -45,7 +50,7 @@ export default function Home() {
         <Events />
         <Gallery />
         <Reserve />
-        <Location />
+        <Location hasGate={hasGate} />
       </main>
       <Footer />
       <FloatingActions />

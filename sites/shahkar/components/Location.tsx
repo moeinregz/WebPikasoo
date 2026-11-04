@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion } from "motion/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { SITE, waLink } from "@/lib/site";
 import { SectionHead } from "./Ornaments";
 
 /** Stylised route map: Golddasteh square → Firouz Bahram entrance → Shahkar (opposite Chaharbagh). */
-export default function Location() {
+export default function Location({ hasGate = false }: { hasGate?: boolean }) {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -82,11 +83,12 @@ export default function Location() {
             <li><b>۱</b> میدان گل‌دسته را رد کنید</li>
             <li><b>۲</b> وارد ورودی فیروزبهرام شوید</li>
             <li><b>۳</b> اولین باغچه، روبه‌روی باغچه رستوران چهارباغ</li>
+            <li><b>۴</b> سردر با تابلوی سبز نورانی «باغچه رستوران سنتی»</li>
           </ol>
           <address>{SITE.address}</address>
-          <p className="parking-note">
+          <a className="parking-note" href="#parking">
             <span className="p-badge">P</span> پارکینگ اختصاصی برای مهمانان
-          </p>
+          </a>
           <div className="location-actions">
             <a className="btn btn-gold" href={SITE.mapHref} target="_blank" rel="noreferrer">
               مسیریابی
@@ -95,6 +97,62 @@ export default function Location() {
               دریافت لوکیشن در واتساپ
             </a>
           </div>
+        </div>
+      </div>
+
+      {hasGate && (
+        <motion.figure
+          className="gate"
+          initial={{ clipPath: "inset(0 50% 0 50% round 24px)" }}
+          whileInView={{ clipPath: "inset(0 0% 0 0% round 24px)" }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
+        >
+          <img
+            src="/images/gate-sm.webp"
+            srcSet="/images/gate-sm.webp 800w, /images/gate.webp 1500w"
+            sizes="(min-width: 900px) 80vw, 100vw"
+            alt="سردر ورودی باغ با تابلوی سبز نورانی «باغچه رستوران سنتی» و ریسه‌های رنگی"
+            loading="lazy"
+          />
+          <figcaption>
+            <span className="eyebrow">نشانه‌ی ورودی</span>
+            <b>دنبال این سردر بگردید</b>
+            <small>تابلوی سبز نورانی «باغچه رستوران سنتی» و ریسه‌های رنگی روی درخت کنار در</small>
+          </figcaption>
+        </motion.figure>
+      )}
+
+      <div className="parking" id="parking">
+        <div className="parking-copy" data-reveal>
+          <span className="p-badge p-badge-lg">P</span>
+          <h3>پارکینگ اختصاصی</h3>
+          <p>
+            محوطه‌ای بزرگ و روشن، زیر سایه‌ی درخت‌ها و درست کنار ورودی باغ. ماشین را پارک کنید و
+            با خیال راحت از شب لذت ببرید؛ بدون گشتن دنبال جای پارک در خیابان.
+          </p>
+          <ul className="parking-points">
+            <li>محوطه‌ی وسیع شنی</li>
+            <li>روشنایی در تمام ساعات شب</li>
+            <li>چند قدم تا میزها</li>
+          </ul>
+        </div>
+        <div className="parking-photos">
+          {[
+            ["parking-yard", "محوطه‌ی پارکینگ اختصاصی شاهکار در شب، زیر درخت‌ها و ریسه‌ی چراغ"],
+            ["parking-well", "ورودی باغ کنار پارکینگ، با چاه آب تزئینی و گلدان‌ها"],
+          ].map(([src, alt], i) => (
+            <motion.figure
+              key={src}
+              className={`parking-photo pp-${i}`}
+              initial={{ opacity: 0, y: 60, rotate: i ? 3 : -3 }}
+              whileInView={{ opacity: 1, y: 0, rotate: i ? 2 : -2 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 1, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <img src={`/images/${src}-sm.webp`} srcSet={`/images/${src}-sm.webp 800w, /images/${src}.webp 1500w`} sizes="(min-width: 900px) 30vw, 90vw" alt={alt} loading="lazy" />
+            </motion.figure>
+          ))}
         </div>
       </div>
     </section>

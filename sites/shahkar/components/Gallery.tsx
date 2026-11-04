@@ -10,6 +10,8 @@ const PHOTOS = [
   { src: "hall-angle", alt: "نورپردازی خطی و انعکاس طلایی روی میزها", cls: "" },
   { src: "garden-tables", alt: "میزهای فضای باز روی چمن", cls: "" },
   { src: "kitchen-garden", alt: "آشپزخانه‌ی باز کنار باغ", cls: "g-wide" },
+  { src: "parking-yard", alt: "پارکینگ اختصاصی شاهکار زیر درخت‌ها", cls: "g-wide" },
+  { src: "parking-well", alt: "چاه آب تزئینی کنار پارکینگ و ورودی باغ", cls: "g-wide" },
 ];
 
 export default function Gallery() {
