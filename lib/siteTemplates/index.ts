@@ -64,7 +64,9 @@ import gardenGilas from "./templates/garden-gilas.template.html";
 // <lux-imports>
 import accessoriesLux from "./templates/accessories-lux.template.html";
 import autopartsLux from "./templates/autoparts-lux.template.html";
+import bagsLux from "./templates/bags-lux.template.html";
 import bakeryLux from "./templates/bakery-lux.template.html";
+import beddingLux from "./templates/bedding-lux.template.html";
 import bookstoreLux from "./templates/bookstore-lux.template.html";
 import cafeLux from "./templates/cafe-lux.template.html";
 import carpetLux from "./templates/carpet-lux.template.html";
@@ -73,19 +75,27 @@ import cosmeticsLux from "./templates/cosmetics-lux.template.html";
 import dentalLux from "./templates/dental-lux.template.html";
 import fashionLux from "./templates/fashion-lux.template.html";
 import fastfoodLux from "./templates/fastfood-lux.template.html";
+import footwearLux from "./templates/footwear-lux.template.html";
 import gardenLux from "./templates/garden-lux.template.html";
 import gymLux from "./templates/gym-lux.template.html";
 import hotelLux from "./templates/hotel-lux.template.html";
 import icecreamLux from "./templates/icecream-lux.template.html";
 import jewelryLux from "./templates/jewelry-lux.template.html";
+import jigarLux from "./templates/jigar-lux.template.html";
 import kebabLux from "./templates/kebab-lux.template.html";
+import kitchenwareLux from "./templates/kitchenware-lux.template.html";
 import languageLux from "./templates/language-lux.template.html";
 import lawLux from "./templates/law-lux.template.html";
+import lingerieLux from "./templates/lingerie-lux.template.html";
+import melamineLux from "./templates/melamine-lux.template.html";
+import menunderLux from "./templates/menunder-lux.template.html";
 import movingLux from "./templates/moving-lux.template.html";
 import musicLux from "./templates/music-lux.template.html";
 import pastryLux from "./templates/pastry-lux.template.html";
+import plasticsLux from "./templates/plastics-lux.template.html";
 import realestateLux from "./templates/realestate-lux.template.html";
 import restaurantLux from "./templates/restaurant-lux.template.html";
+import schoolLux from "./templates/school-lux.template.html";
 import shoesLux from "./templates/shoes-lux.template.html";
 import shopLux from "./templates/shop-lux.template.html";
 import stationeryLux from "./templates/stationery-lux.template.html";
@@ -128,6 +138,21 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "bags-lux",
+    trade: "bags",
+    label: "کیف‌فروشی — چرم کنیاکی (لوکس)",
+    html: bagsLux,
+    palette: { primary: "#7a4b2a", secondary: "#1f1b18" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "کیف چرم شاخص", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین گالری", ratio: "4:5" },
+      { key: "g1", label: "گالری — کنیاکی", hint: "کنیاکی", ratio: "4:5" },
+      { key: "g2", label: "گالری — مشکی", hint: "مشکی", ratio: "4:5" },
+      { key: "g3", label: "گالری — عسلی", hint: "عسلی", ratio: "4:5" },
+      { key: "g4", label: "گالری — زرشکی", hint: "زرشکی", ratio: "4:5" },
+    ],
+  },
+  {
     id: "bakery-lux",
     trade: "bakery",
     label: "نانوایی — گرم و تنوری (لوکس)",
@@ -141,6 +166,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — خمیر", hint: "خمیر", ratio: "4:5" },
       { key: "g3", label: "گالری — سنگک", hint: "سنگک", ratio: "4:5" },
       { key: "g4", label: "گالری — ویترین", hint: "ویترین", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "bedding-lux",
+    trade: "bedding",
+    label: "کالای خواب — شبانه و آرام (لوکس)",
+    html: beddingLux,
+    palette: { primary: "#8fb8ff", secondary: "#c9a7ff" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "تشک یا اتاق خواب مرتب", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "شوروم", ratio: "4:5" },
+      { key: "g1", label: "گالری — شوروم تشک", hint: "شوروم تشک", ratio: "4:5" },
+      { key: "g2", label: "گالری — بالش‌ها", hint: "بالش‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — روتختی‌ها", hint: "روتختی‌ها", ratio: "4:5" },
+      { key: "g4", label: "گالری — سرویس کودک", hint: "سرویس کودک", ratio: "4:5" },
     ],
   },
   {
@@ -266,6 +306,21 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "footwear-lux",
+    trade: "footwear",
+    label: "کفش‌فروشی — شبانه و شیک (لوکس)",
+    html: footwearLux,
+    palette: { primary: "#e0a96d", secondary: "#6b2737" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "کفش شاخص روی زمینه‌ی تیره", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — مجلسی", hint: "مجلسی", ratio: "4:5" },
+      { key: "g2", label: "گالری — رسمی", hint: "رسمی", ratio: "4:5" },
+      { key: "g3", label: "گالری — اسپرت", hint: "اسپرت", ratio: "4:5" },
+      { key: "g4", label: "گالری — بوت", hint: "بوت", ratio: "4:5" },
+    ],
+  },
+  {
     id: "garden-lux",
     trade: "garden",
     label: "باغ رستوران — شب‌های فانوسی (لوکس)",
@@ -343,6 +398,22 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "jigar-lux",
+    trade: "jigar",
+    label: "جیگرسرا — دودی و شبانه (لوکس)",
+    html: jigarLux,
+    palette: { primary: "#ff7a1a", secondary: "#b3202a" },
+    menu: true,
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "سینی جیگر یا منقل", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "منقل یا سالن", ratio: "4:5" },
+      { key: "g1", label: "گالری — منقل", hint: "منقل", ratio: "4:5" },
+      { key: "g2", label: "گالری — سیخ‌ها", hint: "سیخ‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — سالن", hint: "سالن", ratio: "4:5" },
+      { key: "g4", label: "گالری — شب", hint: "شب", ratio: "4:5" },
+    ],
+  },
+  {
     id: "kebab-lux",
     trade: "kebab",
     label: "کبابی — آتشین و جسور (لوکس)",
@@ -356,6 +427,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — سالن", hint: "سالن", ratio: "4:5" },
       { key: "g3", label: "گالری — سیخ‌ها", hint: "سیخ‌ها", ratio: "4:5" },
       { key: "g4", label: "گالری — سینی‌ها", hint: "سینی‌ها", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "kitchenware-lux",
+    trade: "kitchenware",
+    label: "ظروف و لوازم آشپزخانه — گرم و کاشی‌کاری (لوکس)",
+    html: kitchenwareLux,
+    palette: { primary: "#d1495b", secondary: "#2e4057" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "قابلمه یا سرویس شاخص", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — قابلمه‌ها", hint: "قابلمه‌ها", ratio: "4:5" },
+      { key: "g2", label: "گالری — چینی و بلور", hint: "چینی و بلور", ratio: "4:5" },
+      { key: "g3", label: "گالری — سرویس‌ها", hint: "سرویس‌ها", ratio: "4:5" },
+      { key: "g4", label: "گالری — ویترین", hint: "ویترین", ratio: "4:5" },
     ],
   },
   {
@@ -386,6 +472,51 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — اتاق جلسه", hint: "اتاق جلسه", ratio: "4:5" },
       { key: "g3", label: "گالری — کتابخانه‌ی حقوقی", hint: "کتابخانه‌ی حقوقی", ratio: "4:5" },
       { key: "g4", label: "گالری — پذیرش", hint: "پذیرش", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "lingerie-lux",
+    trade: "lingerie",
+    label: "لباس زیر زنانه — گلبهی و ظریف (لوکس)",
+    html: lingerieLux,
+    palette: { primary: "#b03a5b", secondary: "#3c1f2b" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "ست لباس یا گل و پارچه‌ی لطیف", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین بوتیک", ratio: "4:5" },
+      { key: "g1", label: "گالری — گلبهی", hint: "گلبهی", ratio: "4:5" },
+      { key: "g2", label: "گالری — شرابی", hint: "شرابی", ratio: "4:5" },
+      { key: "g3", label: "گالری — مشکی", hint: "مشکی", ratio: "4:5" },
+      { key: "g4", label: "گالری — کرم", hint: "کرم", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "melamine-lux",
+    trade: "melamine",
+    label: "ملامین عمده — بنکداری و حرفه‌ای (لوکس)",
+    html: melamineLux,
+    palette: { primary: "#1d3557", secondary: "#e63946" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "سرویس ملامین روی زمینه‌ی ساده", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "انبار یا ویترین", ratio: "4:5" },
+      { key: "g1", label: "گالری — انبار", hint: "انبار", ratio: "4:5" },
+      { key: "g2", label: "گالری — طرح‌ها", hint: "طرح‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — بسته‌بندی", hint: "بسته‌بندی", ratio: "4:5" },
+      { key: "g4", label: "گالری — بارگیری", hint: "بارگیری", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "menunder-lux",
+    trade: "menunder",
+    label: "زیرپوش مردانه — اسپرت و تمیز (لوکس)",
+    html: menunderLux,
+    palette: { primary: "#0b3d91", secondary: "#0d1b2e" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "زیرپوش تاشده یا بسته‌ها", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "قفسه‌ها", ratio: "4:5" },
+      { key: "g1", label: "گالری — سفید", hint: "سفید", ratio: "4:5" },
+      { key: "g2", label: "گالری — سرمه‌ای", hint: "سرمه‌ای", ratio: "4:5" },
+      { key: "g3", label: "گالری — مشکی", hint: "مشکی", ratio: "4:5" },
+      { key: "g4", label: "گالری — طوسی", hint: "طوسی", ratio: "4:5" },
     ],
   },
   {
@@ -435,6 +566,21 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "plastics-lux",
+    trade: "plastics",
+    label: "پلاسکو — رنگی و خال‌خالی (لوکس)",
+    html: plasticsLux,
+    palette: { primary: "#00a6a6", secondary: "#ff6f59" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "ظروف رنگی پلاستیکی", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "قفسه‌های فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — قفسه‌ی رنگی", hint: "قفسه‌ی رنگی", ratio: "4:5" },
+      { key: "g2", label: "گالری — ظروف نگهداری", hint: "ظروف نگهداری", ratio: "4:5" },
+      { key: "g3", label: "گالری — سبدها", hint: "سبدها", ratio: "4:5" },
+      { key: "g4", label: "گالری — انبار", hint: "انبار", ratio: "4:5" },
+    ],
+  },
+  {
     id: "realestate-lux",
     trade: "realestate",
     label: "مشاور املاک — معتبر و شیک (لوکس)",
@@ -463,6 +609,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — آشپزخانه", hint: "آشپزخانه", ratio: "4:5" },
       { key: "g3", label: "گالری — بشقاب‌ها", hint: "بشقاب‌ها", ratio: "4:5" },
       { key: "g4", label: "گالری — سالن مراسم", hint: "سالن مراسم", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "school-lux",
+    trade: "school",
+    label: "مدرسه غیرانتفاعی — دفتر مشق و رنگی (لوکس)",
+    html: schoolLux,
+    palette: { primary: "#2b59c3", secondary: "#ff8c42" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "دانش‌آموزان یا ساختمان مدرسه", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "کلاس یا حیاط", ratio: "4:5" },
+      { key: "g1", label: "گالری — کلاس", hint: "کلاس", ratio: "4:5" },
+      { key: "g2", label: "گالری — حیاط", hint: "حیاط", ratio: "4:5" },
+      { key: "g3", label: "گالری — کارگاه", hint: "کارگاه", ratio: "4:5" },
+      { key: "g4", label: "گالری — جشن‌ها", hint: "جشن‌ها", ratio: "4:5" },
     ],
   },
   {

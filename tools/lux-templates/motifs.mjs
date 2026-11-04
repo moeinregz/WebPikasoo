@@ -123,6 +123,59 @@ export const MOTIFS = {
 <path class="p" d="M112 40c0-6 6-10 12-10h20c6 0 12 4 12 10v60h-44z"/><path class="sh" d="M134 30h10c6 0 12 4 12 10v60h-22z"/><rect class="a" x="120" y="100" width="28" height="22" rx="3"/>
 <rect class="c" x="126" y="122" width="16" height="26"/><path class="i" d="M128 148h12l-6 16z"/><path class="kw" d="M118 46v44" style="stroke:#fff"/>
 <path class="ka" d="M164 160l12 6M170 146l14 0M160 172l8 10" style="stroke-width:3"/>`),
+  pot: S(`<ellipse class="sh" cx="100" cy="178" rx="84" ry="8"/>
+<path class="ki" d="M30 92h-14M170 92h14" style="stroke-width:9"/><path class="p" d="M28 86h144v52c0 22-18 36-40 36H68c-22 0-40-14-40-36z"/><path class="sh" d="M112 86h60v52c0 22-18 36-40 36h-20z"/>
+<rect class="s" x="22" y="78" width="156" height="14" rx="7"/><path class="c" d="M44 78c4-24 28-36 56-36s52 12 56 36z"/><rect class="a" x="92" y="30" width="16" height="14" rx="6"/><path class="kw" d="M44 108v40"/>
+<path class="ki" d="M78 30c-6-8 6-12 0-22M122 30c-6-8 6-12 0-22" style="opacity:.3"/><g class="a"><circle cx="70" cy="126" r="5"/><circle cx="100" cy="132" r="5"/><circle cx="130" cy="126" r="5"/></g>`),
+  plates: S(`<ellipse class="sh" cx="100" cy="182" rx="80" ry="8"/>
+<ellipse class="s" cx="100" cy="164" rx="80" ry="16"/><ellipse class="p" cx="100" cy="150" rx="80" ry="16"/><ellipse class="s" cx="100" cy="136" rx="80" ry="16"/><ellipse class="p" cx="100" cy="122" rx="80" ry="16"/>
+<ellipse class="c" cx="100" cy="98" rx="84" ry="36"/><ellipse cx="100" cy="98" rx="62" ry="25" style="fill:none;stroke:var(--pr);stroke-width:3;stroke-dasharray:2 7"/><ellipse class="b" cx="100" cy="98" rx="44" ry="17"/>
+<g class="a"><path d="M100 84l4 7 8 2-6 5 1 8-7-4-7 4 1-8-6-5 8-2z"/><circle cx="56" cy="98" r="4"/><circle cx="144" cy="98" r="4"/></g><path class="kw" d="M40 88c10-12 26-18 40-20" style="stroke:var(--pr)"/>`),
+  basket: S(`<ellipse class="sh" cx="100" cy="182" rx="82" ry="8"/>
+<path class="ki" d="M56 72c0-34 88-34 88 0" style="stroke:var(--pr2);stroke-width:8"/><path class="p" d="M18 72h164l-16 104H34z"/><path class="sh" d="M112 72h70l-16 104h-54z"/>
+<g class="c" style="opacity:.55"><rect x="36" y="88" width="20" height="10" rx="5"/><rect x="66" y="88" width="20" height="10" rx="5"/><rect x="96" y="88" width="20" height="10" rx="5"/><rect x="126" y="88" width="20" height="10" rx="5"/><rect x="156" y="88" width="12" height="10" rx="5"/>
+<rect x="40" y="112" width="20" height="10" rx="5"/><rect x="70" y="112" width="20" height="10" rx="5"/><rect x="100" y="112" width="20" height="10" rx="5"/><rect x="130" y="112" width="20" height="10" rx="5"/>
+<rect x="44" y="136" width="20" height="10" rx="5"/><rect x="74" y="136" width="20" height="10" rx="5"/><rect x="104" y="136" width="20" height="10" rx="5"/><rect x="134" y="136" width="20" height="10" rx="5"/></g>
+<rect class="s" x="12" y="64" width="176" height="14" rx="7"/><rect class="a" x="128" y="24" width="40" height="34" rx="6"/><rect class="c" x="132" y="18" width="32" height="10" rx="4"/>`),
+  pillow: S(`<ellipse class="sh" cx="100" cy="182" rx="86" ry="8"/>
+<rect class="s" x="10" y="132" width="180" height="40" rx="14"/><rect class="sh" x="10" y="156" width="180" height="16" rx="8"/><path class="kw" d="M24 146h152" style="stroke-dasharray:6 8"/>
+<path class="p" d="M22 96c0-16 8-22 22-24 36-6 76-6 112 0 14 2 22 8 22 24s-8 22-22 24c-36 6-76 6-112 0-14-2-22-8-22-24z"/><path class="sh" d="M100 70c20 0 40 1 56 4 14 2 22 8 22 22s-8 22-22 24c-16 3-36 4-56 4z"/>
+<path class="c" d="M44 64c0-12 6-16 16-18 28-4 52-4 80 0 10 2 16 6 16 18s-6 16-16 18c-28 4-52 4-80 0-10-2-16-6-16-18z"/><path class="ki" d="M80 64c10 6 30 6 40 0" style="stroke:var(--pr);stroke-width:3;opacity:.6"/>
+<g class="a"><path d="M160 22l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle cx="30" cy="40" r="3"/></g><text x="164" y="58" style="font:700 20px serif;fill:var(--ac)">z</text>`),
+  grill: S(`<ellipse class="sh" cx="100" cy="184" rx="80" ry="7"/>
+<path class="ki" d="M48 150l-12 30M152 150l12 30" style="stroke-width:6"/><path class="i" d="M22 112h156l-12 40H34z"/><rect class="s" x="16" y="104" width="168" height="12" rx="4"/>
+<g class="a"><circle cx="50" cy="104" r="7"/><circle cx="78" cy="102" r="8"/><circle cx="108" cy="104" r="7"/><circle cx="136" cy="102" r="8"/><circle cx="160" cy="104" r="6"/></g>
+<g><path class="ki" d="M24 80h152M24 60h152M24 40h152" style="stroke:#9a8a7a;stroke-width:3"/>
+<rect class="p" x="46" y="72" width="18" height="16" rx="6"/><rect class="s" x="70" y="72" width="14" height="16" rx="5"/><rect class="p" x="90" y="72" width="18" height="16" rx="6"/><rect class="c" x="114" y="73" width="12" height="14" rx="5"/><rect class="p" x="132" y="72" width="18" height="16" rx="6"/>
+<rect class="p" x="56" y="52" width="18" height="16" rx="6"/><rect class="s" x="80" y="52" width="14" height="16" rx="5"/><rect class="p" x="100" y="52" width="18" height="16" rx="6"/><rect class="c" x="124" y="53" width="12" height="14" rx="5"/>
+<rect class="p" x="66" y="32" width="18" height="16" rx="6"/><rect class="s" x="90" y="32" width="14" height="16" rx="5"/><rect class="p" x="110" y="32" width="18" height="16" rx="6"/></g>
+<path class="ka" d="M60 98c-4-8 4-10 0-18M140 98c-4-8 4-10 0-18" style="stroke-width:3;opacity:.7"/>`),
+  school: S(`<ellipse class="sh" cx="100" cy="184" rx="86" ry="7"/>
+<rect class="c" x="26" y="80" width="148" height="98" rx="4"/><rect class="sh" x="100" y="80" width="74" height="98" style="opacity:.06"/><path class="p" d="M16 84L100 36l84 48z"/>
+<rect class="s" x="86" y="130" width="28" height="48" rx="3"/><g class="b"><rect x="40" y="96" width="26" height="22" rx="3"/><rect x="134" y="96" width="26" height="22" rx="3"/><rect x="40" y="134" width="26" height="22" rx="3"/><rect x="134" y="134" width="26" height="22" rx="3"/></g>
+<circle class="a" cx="100" cy="98" r="14"/><path class="ki" d="M100 88v10l7 4" style="stroke-width:3"/><path class="ki" d="M100 36V12" style="stroke-width:3"/><path class="a" d="M100 12h26l-6 7 6 7h-26z"/>
+<g transform="translate(150 22) rotate(12)"><path class="i" d="M-24 8L0 -2l24 10L0 18z"/><path class="i" d="M-12 12v10c8 6 16 6 24 0V12"/><path class="ka" d="M24 8v14" style="stroke-width:2"/></g>`),
+  slip: S(`<ellipse class="sh" cx="100" cy="184" rx="60" ry="7"/>
+<path class="ki" d="M100 8q9 0 9 9 0 7-9 11v8" style="stroke:#9a8a7a;stroke-width:2.5"/><path class="ki" d="M100 36L46 62h108z" style="stroke:#9a8a7a;stroke-width:2.5"/>
+<path class="ki" d="M76 62l6 26M124 62l-6 26" style="stroke:var(--pr);stroke-width:2.5"/>
+<path class="p" d="M80 88c6 10 34 10 40 0l6 16c-4 4-8 6-8 8l30 64c-30 10-66 10-96 0l30-64c0-2-4-4-8-8z"/><path class="sh" d="M100 96c10 0 18-2 20-8l6 16c-4 4-8 6-8 8l30 64c-15 5-31 8-48 8z"/>
+<path d="M50 170c16 6 84 6 100 0" style="fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:2 5;opacity:.7"/><path d="M84 100c10 6 22 6 32 0" style="fill:none;stroke:#fff;stroke-width:2;opacity:.55"/>
+<g class="a"><path d="M100 112c-8-8-18-4-14 2 4 6 14 2 14-2zm0 0c8-8 18-4 14 2-4 6-14 2-14-2z"/><circle cx="100" cy="112" r="3"/></g><g class="a"><path d="M158 40l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle cx="40" cy="96" r="3"/></g>`),
+  handbag: S(`<ellipse class="sh" cx="100" cy="182" rx="76" ry="8"/>
+<path class="ki" d="M66 82V60c0-20 14-32 34-32s34 12 34 32v22" style="stroke:var(--pr2);stroke-width:9"/>
+<path class="p" d="M30 80h140l-8 92c-1 6-6 10-12 10H50c-6 0-11-4-12-10z"/><path class="sh" d="M112 80h58l-8 92c-1 6-6 10-12 10h-38z"/>
+<path class="s" d="M30 80h140v28c-40 14-100 14-140 0z"/><rect class="a" x="88" y="98" width="24" height="20" rx="4"/><rect class="i" x="96" y="104" width="8" height="8" rx="2" style="opacity:.5"/>
+<path d="M44 124c8 30 8 40 6 50M156 124c-8 30-8 40-6 50" style="fill:none;stroke:#fff;stroke-width:2;stroke-dasharray:3 6;opacity:.5"/><path class="kw" d="M44 92h20"/>`),
+  heel: S(`<ellipse class="sh" cx="100" cy="182" rx="84" ry="7"/>
+<path class="p" d="M22 126c0-10 6-16 16-16 18 0 28-30 44-46 10-10 26-10 34 2 10 14 18 32 30 46 10 12 24 16 34 18v20H96c-20 0-32-10-40-22-6 8-14 14-24 16z"/>
+<path class="sh" d="M116 66c10 14 18 32 30 46 10 12 24 16 34 18v20h-48c4-30-4-60-16-84z"/><path class="s" d="M22 126c0-10 6-16 16-16 8 0 14-4 20-10l12 14c-8 12-18 22-30 26-10 2-18-4-18-14z"/>
+<path class="i" d="M30 140l4 40h10l-2-40z"/><path class="i" d="M96 166h84v14H96z" style="opacity:.85"/><path class="kw" d="M70 92c6-10 14-18 22-22"/>
+<g class="a"><circle cx="130" cy="150" r="4"/><path d="M164 30l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></g>`),
+  tank: S(`<ellipse class="sh" cx="100" cy="184" rx="70" ry="7"/>
+<path class="c" d="M70 20c0 22 8 34 30 34s30-12 30-34h14c0 26 4 38 16 48v108H40V68c12-10 16-22 16-48z" style="stroke:var(--pr);stroke-width:3"/>
+<path class="sh" d="M100 54c22 0 30-12 30-34h14c0 26 4 38 16 48v108h-60z" style="opacity:.06"/><path d="M70 20c0 22 8 34 30 34s30-12 30-34" style="fill:none;stroke:var(--pr);stroke-width:6"/>
+<path d="M40 166h120" style="fill:none;stroke:var(--pr);stroke-width:5"/><path d="M56 74v84M144 74v84" style="fill:none;stroke:var(--pr);stroke-width:1.5;stroke-dasharray:2 6;opacity:.6"/>
+<rect class="p" x="120" y="118" width="62" height="46" rx="6" transform="rotate(-8 151 141)"/><path d="M122 132l58-8" transform="rotate(0)" style="fill:none;stroke:#fff;stroke-width:4;opacity:.7"/><g class="a"><circle cx="40" cy="40" r="3"/><path d="M168 46l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/></g>`),
   bed: S(`<ellipse class="sh" cx="100" cy="180" rx="88" ry="8"/><rect class="s" x="14" y="56" width="22" height="120" rx="6"/><rect class="i" x="164" y="120" width="10" height="56" rx="3"/><rect class="p" x="30" y="112" width="148" height="44" rx="10"/>
 <rect class="c" x="34" y="94" width="144" height="28" rx="12"/><rect class="w" x="40" y="80" width="46" height="26" rx="12" style="opacity:.95"/><path class="sh" d="M30 140h148v6c0 6-4 10-10 10H40c-6 0-10-4-10-10z"/>
 <path class="a" d="M92 98h86v20c-30 4-58 2-86-6z" style="opacity:.75"/><g class="a"><path d="M146 30l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><circle cx="176" cy="60" r="3"/><circle cx="118" cy="46" r="2.5"/></g>`),
