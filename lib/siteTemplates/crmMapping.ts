@@ -10,12 +10,13 @@ import { TRADES } from "./trades";
 
 /** The type picker in the CRM, grouped so 23 choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
-  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream"] },
-  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bookstore", "stationery"] },
+  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "jigar"] },
+  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
+  { label: "خانه و آشپزخانه", tradeIds: ["kitchenware", "melamine", "plastics", "bedding"] },
   { label: "ابزار و خودرو", tradeIds: ["tools", "autoparts"] },
   { label: "خدمات و شرکتی", tradeIds: ["upholstery", "moving", "realestate", "law"] },
-  { label: "آموزش", tradeIds: ["language", "music"] },
+  { label: "آموزش", tradeIds: ["language", "music", "school"] },
   { label: "گردشگری و اقامت", tradeIds: ["travel", "hotel"] },
 ];
 
@@ -30,12 +31,12 @@ export const CRM_TYPE_GROUPS_LABELED: { label: string; types: string[] }[] = CRM
 export const CRM_BUSINESS_TYPES: string[] = CRM_TYPE_GROUPS_LABELED.flatMap((g) => g.types);
 
 export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
-  "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream"],
-  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bookstore", "stationery", "tools", "autoparts"],
+  "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream", "jigar"],
+  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery", "tools", "autoparts", "kitchenware", "melamine", "plastics", "bedding"],
   "لوازم آرایشی و بهداشتی": ["cosmetics", "perfume"],
   "پزشکی و کلینیک": ["clinic", "dental"],
   "املاک و مستغلات": ["realestate"],
-  "آموزشی": ["language", "music"],
+  "آموزشی": ["language", "music", "school"],
   "خدماتی": ["upholstery", "moving", "gym"],
   "شرکتی و کسب‌وکار": ["law"],
   "گردشگری و اقامتی": ["travel", "hotel"],
@@ -43,14 +44,23 @@ export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
 
 // Most specific first — the first trade with a matching keyword wins.
 const KEYWORDS: [string, string[]][] = [
+  ["jigar", ["جگرکی", "جیگرکی", "جگرسرا", "جیگرسرا", "جگر", "جیگر", "دل و قلوه"]],
+  ["lingerie", ["لباس زیر زنانه", "لانژری", "لباس خواب زنانه", "سوتین", "شورت زنانه"]],
+  ["menunder", ["زیرپوش", "لباس زیر مردانه", "شورت مردانه"]],
+  ["melamine", ["ملامین"]],
+  ["plastics", ["پلاسکو", "پلاستیک", "لوازم پلاستیکی"]],
+  ["kitchenware", ["ظروف", "لوازم آشپزخانه", "چینی", "بلور", "کریستال"]],
   ["upholstery", ["مبل‌شویی", "مبلشویی", "قالیشویی", "قالی‌شویی", "شستشوی مبل"]],
+  ["bedding", ["کالای خواب", "سرویس خواب", "تشک فروشی", "تشک طبی", "پتو", "روتختی", "لحاف", "بالش"]],
   ["moving", ["باربری", "اسباب‌کشی", "اسبابکشی", "حمل‌ونقل", "حمل و نقل"]],
   ["dental", ["دندان", "ارتودنسی"]],
   ["law", ["وکیل", "وکالت", "حقوقی"]],
   ["realestate", ["املاک", "مستغلات"]],
   ["autoparts", ["لوازم یدکی", "یدکی", "قطعات خودرو", "لوازم خودرو", "روغن موتور", "لنت", "باتری خودرو"]],
   ["tools", ["ابزارآلات", "ابزار", "یراق", "یراق‌آلات", "پیچ و مهره", "ابزار برقی", "رنگ و ابزار"]],
-  ["shoes", ["کیف و کفش", "کفش", "کیف", "کتونی", "اسنیکر"]],
+  ["shoes", ["کیف و کفش"]],
+  ["footwear", ["کفش", "کتونی", "اسنیکر"]],
+  ["bags", ["کیف فروشی", "گالری کیف", "کیف و کوله", "کیف چرم", "کیف زنانه", "کیف مردانه", "چرم"]],
   ["accessories", ["اکسسوری", "اکسسوریز", "بدلیجات", "بدلی", "زیورآلات", "عینک"]],
   ["jewelry", ["طلافروشی", "طلا و جواهر", "جواهر", "زرگری"]],
   ["watch", ["ساعت"]],
@@ -59,6 +69,7 @@ const KEYWORDS: [string, string[]][] = [
   ["cosmetics", ["آرایشی", "آرایش", "پوست"]],
   ["music", ["موسیقی", "گیتار", "پیانو"]],
   ["language", ["زبان", "آیلتس"]],
+  ["school", ["مدرسه", "دبستان", "دبیرستان", "پیش‌دبستانی", "پیش دبستانی", "غیرانتفاعی", "غیر انتفاعی", "مهدکودک"]],
   ["travel", ["آژانس", "مسافرتی", "مسافرت"]],
   ["hotel", ["هتل", "مهمانپذیر", "اقامتگاه", "هاستل", "بوم‌گردی"]],
   ["gym", ["باشگاه", "بدنسازی", "ورزش", "کراس‌فیت", "یوگا"]],

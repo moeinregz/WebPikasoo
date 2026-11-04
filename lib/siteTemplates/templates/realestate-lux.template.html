@@ -354,6 +354,25 @@ body.dc-paper{background-image:repeating-linear-gradient(transparent 0 33px,colo
 body.dc-paper:before{content:"";position:fixed;top:0;bottom:0;right:56px;width:2px;background:color-mix(in srgb,var(--pr) 30%,transparent);pointer-events:none;z-index:0}
 @media(max-width:900px){body.dc-paper:before{display:none}}
 
+/* arch: dome-topped product frames, soft and elegant */
+.cs-arch .card{border-radius:999px 999px 26px 26px;padding:18px 18px 22px;text-align:center}
+.cs-arch .card .vis{border-radius:999px 999px 18px 18px;height:240px}
+.cs-arch .card .ft{flex-direction:column;align-items:stretch;gap:10px}
+.cs-arch .card .tag{top:auto;bottom:calc(100% - 270px);right:50%;transform:translateX(50%)}
+.cs-arch .gi{border-radius:999px 999px 24px 24px}
+.cs-arch .sv,.cs-arch .stat{border-radius:28px 28px 28px 4px}
+.cs-arch .hv .disc{border-radius:999px 999px 40px 40px;inset:6% 14%}
+.cs-arch .hv .orb{border-radius:999px 999px 50px 50px;inset:-2% 8%}
+@media(max-width:900px){.cs-arch .card{border-radius:999px 999px 18px 18px;padding:12px}.cs-arch .card .vis{height:130px}.cs-arch .card .tag{bottom:auto;top:18px}}
+
+/* decor: polka dots */
+body.dc-dots{background-image:radial-gradient(color-mix(in srgb,var(--pr) 16%,transparent) 2.5px,transparent 3px),radial-gradient(color-mix(in srgb,var(--ac) 22%,transparent) 2.5px,transparent 3px);background-size:38px 38px;background-position:0 0,19px 19px}
+.dc-dots .card .vis,.dc-dots .gi .ph{background-image:radial-gradient(color-mix(in srgb,var(--card) 70%,transparent) 2px,transparent 2.5px),radial-gradient(circle at 50% 60%,color-mix(in srgb,var(--tone) 40%,var(--bg2)),var(--bg2) 72%);background-size:16px 16px,auto}
+
+/* decor: kitchen tiles */
+.dc-tiles .sc,.dc-tiles .sp,.dc-tiles .ts{background-color:var(--bg2);background-image:linear-gradient(45deg,color-mix(in srgb,var(--pr) 7%,transparent) 25%,transparent 25%,transparent 75%,color-mix(in srgb,var(--pr) 7%,transparent) 75%),linear-gradient(45deg,color-mix(in srgb,var(--pr) 7%,transparent) 25%,transparent 25%,transparent 75%,color-mix(in srgb,var(--pr) 7%,transparent) 75%);background-size:56px 56px;background-position:0 0,28px 28px}
+.dc-tiles .hero:after{content:"";position:absolute;inset-inline:0;bottom:0;height:10px;background:repeating-linear-gradient(90deg,var(--pr) 0 28px,var(--card) 28px 56px);z-index:4}
+
 .mot svg .p{fill:var(--pr)}.mot svg .s{fill:var(--pr2)}.mot svg .a{fill:var(--ac)}.mot svg .i{fill:var(--ink)}.mot svg .w{fill:#fff}.mot svg .b{fill:var(--bg2)}.mot svg .c{fill:var(--card)}
 .mot svg .sh{fill:#000;opacity:.14}.mot svg .hl{fill:#fff;opacity:.35}.mot svg .kp{fill:none;stroke:var(--pr);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .mot svg .ki{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.mot svg .ka{fill:none;stroke:var(--ac);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.mot svg .kw{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:.6}

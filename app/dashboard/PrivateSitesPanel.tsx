@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type DragEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type DragEvent } from "react";
+import SearchInput from "./SearchInput";
 import { shrinkImage } from "./shrinkImage";
 import SiteMenuEditor from "./SiteMenuEditor";
 import type { MenuCategory } from "@/lib/siteTemplates/menu";
@@ -742,7 +743,25 @@ function SiteCard({ site }: { site: PrivateSite }) {
   );
 }
 
+/** Lower-case, unify Arabic/Persian letters and digits, drop spaces and ZWNJ. */
+function normSearch(s: string): string {
+  return s
+    .replace(/ي/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .replace(/[\u200c\s]+/g, "")
+    .toLowerCase();
+}
+
 export default function PrivateSitesPanel({ sites }: { sites: PrivateSite[] }) {
+  const [query, setQuery] = useState("");
+  const shown = useMemo(() => {
+    const q = normSearch(query);
+    if (!q) return sites;
+    return sites.filter((s) => normSearch(`${s.name} ${s.note ?? ""} ${s.token}`).includes(q));
+  }, [sites, query]);
+
   return (
     <div>
       <UploadForm />
@@ -752,11 +771,20 @@ export default function PrivateSitesPanel({ sites }: { sites: PrivateSite[] }) {
           هنوز سایتی آپلود نشده — از دکمه‌ی بالا یه فایل HTML آپلود کن تا لینکش ساخته بشه.
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {sites.map((s) => (
-            <SiteCard key={s.id} site={s} />
-          ))}
-        </div>
+        <>
+          <SearchInput value={query} onChange={setQuery} placeholder="جستجو بر اساس نام سایت، یادداشت یا لینک..." />
+          {shown.length === 0 ? (
+            <div className="rounded-card border border-dashed border-ink/[0.2] p-8 text-center text-dim">
+              سایتی با «{query.trim()}» پیدا نشد.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {shown.map((s) => (
+                <SiteCard key={s.id} site={s} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
