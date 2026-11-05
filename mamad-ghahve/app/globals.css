@@ -25,10 +25,10 @@
   --warn: #c98a1d;
   --info: #3c6f8f;
   --r: 20px;
-  --shadow: 0 6px 0 #140b06, inset 0 2px 0 #4a3122;
-  --shadow-lg: 0 9px 0 #140b06, inset 0 2px 0 #4a3122;
-  --shadow-gold: 0 5px 0 #8a5f1f, inset 0 2px 0 #ffe9b8;
-  --shadow-gold-press: 0 1px 0 #8a5f1f, inset 0 2px 0 #ffe9b8;
+  --shadow: -6px 8px 0 #7d5634, inset 0 2px 0 #4a3122;
+  --shadow-lg: -9px 11px 0 #7d5634, inset 0 2px 0 #4a3122;
+  --shadow-gold: 0 6px 0 #6e4710, inset 0 2px 0 #ffe9b8;
+  --shadow-gold-press: 0 1px 0 #6e4710, inset 0 2px 0 #ffe9b8;
   --f: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
   --fd: "Lalezar", "Vazirmatn", Tahoma, sans-serif;
   color-scheme: dark;
@@ -470,3 +470,28 @@ body { color: var(--on-bg); }
 .admin aside nav a.on { box-shadow: 0 3px 0 #8a5f1f, inset 0 2px 0 #ffe9b8; }
 .stat { box-shadow: var(--shadow); }
 .thumb-sm { box-shadow: 0 2px 0 #140b06; }
+
+/* سایه‌ی پررنگ‌تر و قابل دیدن (روی پس‌زمینه‌ی نسکافه‌ای: نسکافه‌ای تیره، روی سطح تیره: تقریباً مشکی) */
+.hero { box-shadow: -9px 11px 0 #7d5634; }
+.pcard:hover, .cat:hover { box-shadow: -10px 13px 0 #7d5634, inset 0 2px 0 #4a3122; }
+.cat:active, .filters a:active { transform: translate(-3px, 4px); box-shadow: -2px 3px 0 #7d5634; }
+.rail-btn { box-shadow: -4px 5px 0 #7d5634, inset 0 2px 0 #4a3122; }
+.rail-btn:disabled { box-shadow: -2px 3px 0 #7d5634; }
+.rail-btn:not(:disabled):active { transform: translate(-3px, 3px); box-shadow: -1px 2px 0 #7d5634; }
+.filters a { box-shadow: -4px 5px 0 #7d5634, inset 0 2px 0 #4a3122; }
+.filters a.on { box-shadow: -4px 5px 0 #6e4710, inset 0 2px 0 #ffe9b8; }
+.btn.light { box-shadow: 0 5px 0 #0b0503, inset 0 2px 0 #4a3122; }
+.btn.light:active { box-shadow: 0 1px 0 #0b0503; }
+.add-mini { box-shadow: 0 5px 0 #6e4710, inset 0 2px 0 #ffe9b8; }
+.icon-btn { box-shadow: 0 4px 0 #0b0503, inset 0 2px 0 #4a3122; }
+.trust-item { box-shadow: 0 6px 0 #0b0503, inset 0 2px 0 #4a3122; }
+.cat .i, .rev .av, .thumb-sm, .qty, .opts button, .gw, .hero .arrow { box-shadow: 0 4px 0 #0b0503; }
+.gw.on, .opts button.on { box-shadow: 0 4px 0 #6e4710; }
+.pcard .tag { box-shadow: 0 3px 0 #6e4710; }
+.pcard .off { box-shadow: 0 3px 0 #5a1c0f; }
+.bottom-nav { box-shadow: 0 -5px 0 #0b0503; }
+.admin aside nav a.on { box-shadow: 0 4px 0 #6e4710, inset 0 2px 0 #ffe9b8; }
+.rail { padding-bottom: 26px; padding-left: 14px; }
+@media (max-width: 760px) { .rail { padding-left: 16px; } }
+.rev-track { padding-bottom: 24px; padding-left: 12px; }
+.pgrid { padding-bottom: 12px; }
