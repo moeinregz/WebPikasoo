@@ -18,6 +18,8 @@ import {
   getUserPermissions,
   getAllBlogPosts,
   getSeoSettings,
+  getSmsCampaigns,
+  getRecentSmsMessages,
   getSeoKeywords,
   getSeoRuns,
   countSeoKeywords,
@@ -52,6 +54,9 @@ import { AdminTasksPanel, MyTasksPanel } from "./TasksPanel";
 import OverviewPanel from "./OverviewPanel";
 import BlogPanel from "./BlogPanel";
 import SeoAutomationPanel from "./SeoAutomationPanel";
+import SmsPanel from "./SmsPanel";
+import { getSmsAudience } from "@/lib/smsAudience";
+import { smsProvider } from "@/lib/sms";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
@@ -122,6 +127,10 @@ export default async function DashboardPage() {
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
   const projects = isAdmin || perms.projects ? await getAllProjects() : [];
+  // Admin-only: SMS panel — every mobile number from CRM + channels.
+  const sms = isAdmin
+    ? await Promise.all([getSmsAudience(), getSmsCampaigns(), getRecentSmsMessages()]).catch(() => null)
+    : null;
   // Admin-only: SEO content automation (keywords → AI article → blog).
   const seo = isAdmin
     ? await Promise.all([getSeoSettings(), countSeoKeywords(), getSeoKeywords("all", 300), getSeoRuns(15)]).catch(() => null)
@@ -453,6 +462,21 @@ export default async function DashboardPage() {
       id: "blog",
       label: `وبلاگ (${toPersianDigits(blogPosts.length)})`,
       panel: <BlogPanel posts={blogPosts} canDelete={isAdmin} />,
+    });
+  }
+  if (isAdmin && sms) {
+    const [contacts, campaigns, messages] = sms;
+    tabs.push({
+      id: "sms",
+      label: `پنل پیامک (${toPersianDigits(contacts.length)})`,
+      panel: (
+        <SmsPanel
+          contacts={contacts}
+          campaigns={campaigns}
+          messages={messages.map((m) => ({ id: m.id, at: m.at, phone: m.phone, name: m.name, source: m.source, ok: m.ok, error: m.error, text: m.text }))}
+          provider={smsProvider()}
+        />
+      ),
     });
   }
   if (isAdmin && seo) {

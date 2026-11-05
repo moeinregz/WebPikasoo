@@ -163,3 +163,49 @@ export async function submitPlanOrder(input: {
     return { ok: false, message: "یه مشکلی پیش اومد. دوباره امتحان کن یا از واتساپ پیام بده." };
   }
 }
+
+/** Order form on the SMS landing page (/o, /o/<code>). Saved as a normal
+ *  inquiry (shows in the dashboard's orders tab); when it came from an SMS
+ *  link, the campaign gets credited with an order. */
+export async function submitOfferOrder(input: {
+  name: string;
+  phone: string;
+  business: string;
+  tradeLabel: string;
+  note?: string;
+  code?: string;
+  website?: string; // honeypot
+}): Promise<{ ok: boolean; message: string }> {
+  if (input.website) return { ok: true, message: "ثبت شد" };
+  const name = (input.name ?? "").trim().slice(0, 80);
+  const business = (input.business ?? "").trim().slice(0, 80);
+  const { toMobile } = await import("@/lib/smsText");
+  const phone = toMobile(input.phone);
+  if (!name) return { ok: false, message: "اسمت رو بنویس." };
+  if (!phone) return { ok: false, message: "شماره موبایل درست نیست (مثلاً ۰۹۱۲۱۲۳۴۵۶۷)." };
+
+  const allowed = await allowAndCooldown(`offer-order:${phone}`, 60_000);
+  if (!allowed) return { ok: true, message: "درخواستت ثبت شده؛ به‌زودی باهات تماس می‌گیریم." };
+
+  const code = (input.code ?? "").trim();
+  const message = [
+    `درخواست طراحی سایت از صفحه‌ی پیشنهاد ویژه${code ? ` (لینک پیامکی ${code})` : ""}`,
+    business && `کسب‌وکار: ${business}`,
+    input.tradeLabel && `صنف: ${input.tradeLabel}`,
+    input.note?.trim() && `توضیحات: ${input.note.trim().slice(0, 1000)}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  try {
+    await insertInquiry({ name, phone, projectType: `طراحی سایت ${input.tradeLabel || ""}`.trim(), message });
+    if (code) {
+      const { markSmsRefOrdered } = await import("@/lib/db");
+      await markSmsRefOrdered(code).catch(() => {});
+    }
+    return { ok: true, message: "درخواستت ثبت شد! به‌زودی باهات تماس می‌گیریم." };
+  } catch (err) {
+    console.error("submitOfferOrder failed:", err);
+    return { ok: false, message: "یه مشکلی پیش اومد. از واتساپ پیام بده یا دوباره امتحان کن." };
+  }
+}
