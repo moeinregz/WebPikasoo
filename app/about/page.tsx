@@ -118,7 +118,7 @@ export default async function AboutPage() {
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <span
           className="pointer-events-none absolute -left-[200px] -top-[220px] z-0 h-[520px] w-[520px] rounded-full opacity-35 blur-[130px]"
-          style={{ background: "rgba(173, 150, 241, .3)" }}
+          style={{ background: "rgba(2, 151, 222, .3)" }}
         />
 
         <div className="relative z-[1] mx-auto max-w-container px-6">

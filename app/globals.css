@@ -4,29 +4,26 @@
 
 @layer base {
   :root {
-    /* Light mode — pure white canvas, GitHub-light-esque neutrals. This is
-       now the SECONDARY theme; dark is the default (see layout.tsx script). */
-    /* Light mode — lavender-white canvas, cobalt-black text. */
-    --color-ink: 1 1 2;
-    --color-dim: 98 90 122;
-    --color-canvas: 250 248 255;
-    --color-surface: 241 236 254;
-    --color-accent: 118 72 236; /* vivid violet — readable on white */
-    --color-accent2: 109 40 217;
-    --color-accent3: 219 39 160;
+    /* Light theme (secondary) — paper white, midnight text, deeper blue. */
+    --color-ink: 2 7 10;
+    --color-dim: 84 101 112;
+    --color-canvas: 246 249 251;
+    --color-surface: 255 255 255;
+    --color-accent: 2 119 182; /* deeper electric blue, readable on white */
+    --color-accent2: 228 87 46; /* deep cantaloupe */
+    --color-accent3: 2 151 222;
   }
 
   .dark {
-    /* Dark mode — pure black canvas, near-white text, near-black cards.
-       This is the default look: Vercel/GitHub dashboard style. */
-    /* Dark mode (default) — Cobalt Black #010102 + Lavender Violet #AD96F1. */
-    --color-ink: 242 239 255;
-    --color-dim: 168 158 200;
-    --color-canvas: 4 3 10;
-    --color-surface: 18 14 34;
-    --color-accent: 178 152 255; /* lavender, a touch brighter than #AD96F1 */
-    --color-accent2: 139 92 246; /* electric violet #8B5CF6 */
-    --color-accent3: 255 138 216; /* pink #FF8AD8 */
+    /* Midnight (default) — Midnight Black #02070A, Electric Blue #0297DE,
+       Cantaloupe Orange #FC734D. */
+    --color-ink: 236 244 249;
+    --color-dim: 140 160 172;
+    --color-canvas: 2 7 10;
+    --color-surface: 9 19 26;
+    --color-accent: 2 151 222; /* #0297DE */
+    --color-accent2: 252 115 77; /* #FC734D */
+    --color-accent3: 92 196 255;
   }
 
   html {
@@ -65,7 +62,7 @@
     @apply font-medium;
   }
   ::selection {
-    @apply bg-accent text-on-accent;
+    @apply bg-accent text-white;
   }
 
   /* Thin custom scrollbar — Vercel/GitHub dashboards never show the chunky
@@ -87,33 +84,31 @@
 }
 
 @layer components {
-  /* Faint dot/grid backdrop used behind hero + section headers — the
-     signature Vercel/GitHub marketing-page texture. A radial mask fades it
-     out toward the edges so it never fights with foreground content. */
-  /* (اسم قدیمی) — حالا یه هاله‌ی نرم لوندر بالای سکشن، به‌جای نقطه‌چین */
+  /* (old name) — a soft "light curtain" glow above section headers:
+     fine vertical lines lit blue, warming to cantaloupe in the middle. */
   .bg-dot-grid {
     background:
-      radial-gradient(ellipse 40% 55% at 22% 0%, rgb(139 92 246 / 0.22) 0%, transparent 70%),
-      radial-gradient(ellipse 35% 50% at 78% 8%, rgb(255 138 216 / 0.14) 0%, transparent 70%),
-      radial-gradient(ellipse 30% 40% at 50% 0%, rgb(127 227 255 / 0.08) 0%, transparent 70%);
+      radial-gradient(ellipse 34% 60% at 50% 0%, rgb(252 115 77 / 0.14) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 50% 0%, rgb(2 151 222 / 0.2) 0%, transparent 72%),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 7px);
+    -webkit-mask-image: radial-gradient(ellipse 70% 75% at 50% 0%, #000 35%, transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 75% at 50% 0%, #000 35%, transparent 100%);
   }
 
-  /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
-     همون آبی آسمانی اصلی برند. */
+  /* Highlight words: electric blue → cantaloupe. */
   .accent-gradient-text,
   .text-iris {
-    background: linear-gradient(100deg, #b49bff 0%, #8b5cf6 30%, #ff8ad8 62%, #7fe3ff 100%);
+    background: linear-gradient(100deg, #5cc4ff 0%, #0297de 38%, #fc734d 78%, #ffb08f 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: irisShift 8s ease-in-out infinite alternate;
+    animation: irisShift 9s ease-in-out infinite alternate;
   }
   /* SplitText (ScrollFx) wraps each word in its own boxes; a text gradient on
      the outer span does not reach into them, so the words inherit it. */
   .accent-gradient-text *,
-  .text-iris *,
-  .text-iris-deep * {
+  .text-iris * {
     background-image: inherit;
     background-size: inherit;
     -webkit-background-clip: text;
@@ -154,7 +149,7 @@
     z-index: 2;
     padding: 1px;
     opacity: var(--glow-o, 0);
-    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #AD96F1) 0%, transparent 70%);
+    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #0297DE) 0%, transparent 70%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -162,7 +157,7 @@
   .skill-card::after {
     z-index: 0;
     opacity: calc(var(--glow-o, 0) * 0.16);
-    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #AD96F1) 0%, transparent 72%);
+    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #0297DE) 0%, transparent 72%);
   }
   .skill-card > * {
     position: relative;
@@ -177,7 +172,7 @@
     transition: filter 0.35s ease, opacity 0.35s ease;
   }
   .skill-card:hover .skill-icon-logo {
-    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #AD96F1));
+    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #0297DE));
     opacity: 1;
   }
 
@@ -188,7 +183,7 @@
     transition: text-shadow 0.35s ease;
   }
   .skill-card:hover .skill-title-glow {
-    text-shadow: 0 0 8px var(--skill-color, #AD96F1), 0 0 26px var(--skill-color, #AD96F1);
+    text-shadow: 0 0 8px var(--skill-color, #0297DE), 0 0 26px var(--skill-color, #0297DE);
   }
 
   /* رجیستر کردن --tool-angle به‌عنوان یه <angle> واقعی — بدون این، مرورگر
@@ -219,11 +214,11 @@
     padding: 1.4px;
     background: conic-gradient(
       from var(--tool-angle),
-      var(--tool-color, #AD96F1) 0deg,
+      var(--tool-color, #0297DE) 0deg,
       transparent 90deg,
       transparent 230deg,
-      var(--tool-color, #AD96F1) 320deg,
-      var(--tool-color, #AD96F1) 360deg
+      var(--tool-color, #0297DE) 320deg,
+      var(--tool-color, #0297DE) 360deg
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
@@ -236,7 +231,7 @@
     opacity: 1;
   }
   .tool-chip:hover {
-    box-shadow: 0 10px 28px -14px var(--tool-color, #AD96F1);
+    box-shadow: 0 10px 28px -14px var(--tool-color, #0297DE);
   }
   .tool-chip > * {
     position: relative;
@@ -263,14 +258,14 @@
     inset: -1px;
     z-index: -1;
     border-radius: inherit;
-    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #AD96F1), transparent 70%);
+    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #0297DE), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
   .tool-group-card:hover {
     transform: translateY(-3px);
     border-color: transparent;
-    box-shadow: 0 20px 40px -24px var(--group-color, #AD96F1);
+    box-shadow: 0 20px 40px -24px var(--group-color, #0297DE);
   }
   .tool-group-card:hover::before {
     opacity: 0.16;
@@ -291,7 +286,7 @@
     width: 85%;
     height: 140%;
     transform: translate(-50%, -50%);
-    background: rgba(173, 150, 241, .4);
+    background: rgba(2, 151, 222, .4);
     filter: blur(90px);
     animation: seoHeroPulse 6s ease-in-out infinite;
   }
@@ -307,10 +302,10 @@
 
   /* خط نمودار رشد — گلوی رنگی دورش که با گرادیان خودِ استروک هماهنگه. */
   .seo-chart-line {
-    filter: drop-shadow(0 0 5px rgba(173, 150, 241, 0.85)) drop-shadow(0 0 16px rgba(124, 92, 230, 0.45));
+    filter: drop-shadow(0 0 5px rgba(2, 151, 222, 0.85)) drop-shadow(0 0 16px rgba(252, 115, 77, 0.45));
   }
   .seo-chart-dot {
-    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #AD96F1);
+    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #0297DE);
   }
 
   /* کارت‌های ستون سئو — طرح ساده و کم‌رنگ: بک‌گراند تیره‌ی یکدست برای
@@ -329,8 +324,8 @@
   }
   .seo-card:hover .seo-card-arrow {
     transform: translateX(-3px);
-    border-color: var(--seo-color, #AD96F1);
-    color: var(--seo-color, #AD96F1);
+    border-color: var(--seo-color, #0297DE);
+    color: var(--seo-color, #0297DE);
   }
 
   /* Syntax-highlight classes injected via dangerouslySetInnerHTML by the
@@ -340,13 +335,13 @@
     color: #ededf0;
   }
   .terminal-body .str {
-    color: #AD96F1;
+    color: #0297DE;
   }
   .terminal-body .punc {
     color: rgba(237, 237, 240, 0.45);
   }
   .terminal-body .kw {
-    color: #7C5CE6;
+    color: #0277B6;
     font-weight: 600;
   }
 
@@ -369,117 +364,235 @@
 }
 
 /* ==========================================================================
-   استایل «مات» — سطح‌های کاملاً مات (بدون شفافیت و بلور) با سایه‌ی تخت و
-   غیرشفاف که به سمت چپ-پایین افتاده (هماهنگ با جهت RTL). رنگ‌ها همون
-   پالت قبلیِ سایت‌ان؛ فقط جنس سطح‌ها عوض شده.
+   «Midnight» — Midnight Black + Electric Blue + Cantaloupe Orange.
+   Same class names as the old matte system so every page follows.
    ========================================================================== */
 @layer base {
   :root {
-    --matte-shadow: 1 1 2; /* حالت روشن: سایه‌ی کبالت مشکی تخت */
-    --matte-border: 1 1 2;
+    --matte-shadow: 2 7 10;
+    --matte-border: 2 7 10;
   }
   .dark {
-    --matte-shadow: 139 92 246; /* حالت تاریک: بنفش برند */
-    --matte-border: 64 58 92;
+    --matte-shadow: 2 151 222;
+    --matte-border: 40 56 66;
   }
 }
 
 @layer components {
-  /* «سافت» (جایگزین استایل مات قبلی، همون اسم کلاس‌ها): کارت‌های نرم با
-     لبه‌ی یاسی کم‌رنگ و هاله‌ی بنفش، دکمه‌ها کپسولی — هم‌حس هیروی آسمان لوندر. */
+  /* Cards: dark glass with a hairline border and a lit top edge. */
   .matte {
     position: relative;
     background:
-      linear-gradient(180deg, rgb(var(--color-ink) / 0.035), rgb(var(--color-ink) / 0) 60%),
+      linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0) 45%),
       rgb(var(--color-surface));
-    border: 1px solid rgb(var(--color-accent) / 0.2);
+    border: 1px solid rgb(var(--color-ink) / 0.09);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.06),
-      0 24px 60px -32px rgb(var(--color-accent) / 0.55);
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+      inset 0 1px 0 rgb(255 255 255 / 0.07),
+      0 30px 60px -40px rgb(0 0 0 / 0.9);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.4s ease;
   }
   .matte-hover:hover {
-    transform: translateY(-5px);
-    border-color: rgb(var(--color-accent3) / 0.45);
+    transform: translateY(-4px);
+    border-color: rgb(var(--color-accent) / 0.45);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.08),
-      0 30px 70px -28px rgb(var(--color-accent) / 0.7);
+      inset 0 1px 0 rgb(255 255 255 / 0.1),
+      0 30px 70px -36px rgb(var(--color-accent) / 0.65);
   }
   .matte-sm {
-    box-shadow: 0 12px 30px -20px rgb(var(--color-accent) / 0.5);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
   }
 
+  /* Buttons: pills. */
   .matte-btn {
-    border: 1px solid rgb(var(--color-accent) / 0.25);
+    border: 1px solid rgb(var(--color-ink) / 0.12);
     border-radius: 999px !important;
-    box-shadow: 0 14px 34px -14px rgb(var(--color-accent) / 0.7);
-    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+    box-shadow: 0 14px 34px -16px rgb(var(--color-accent) / 0.75);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background-color 0.25s ease;
   }
   .matte-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 20px 44px -14px rgb(var(--color-accent) / 0.85);
+    box-shadow: 0 20px 44px -16px rgb(var(--color-accent) / 0.9);
   }
   .matte-btn:active {
     transform: translateY(0) scale(0.98);
   }
 
-  /* تیترها: وزیرمتن خیلی ضخیم و فشرده، مثل تیتر هیرو (به‌جای لاله‌زار).
-     :not(#_) فقط برای اینه که از font-normal کلاس‌های قبلی قوی‌تر باشه. */
+  /* Headings: elegant serif — Instrument Serif for Latin, Noto Naskh for
+     Persian. No letter-spacing (it breaks Persian letter joins).
+     :not(#_) only lifts specificity over older font-normal classes. */
   .font-display:not(#_) {
-    font-weight: 900;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    letter-spacing: 0;
   }
 
-  /* «جزیره‌ی آسمان»: سکشنی که روی پنل گرد ابری یاسی می‌شینه؛ متغیرهای رنگ
-     داخلش روشن می‌شن تا همه‌ی کامپوننت‌های داخلش خودبه‌خود متن مشکی بگیرن. */
-  .theme-sky {
-    --color-ink: 1 1 2;
-    --color-dim: 74 64 104;
-    --color-canvas: 246 242 255;
-    --color-surface: 255 255 255;
-    --color-accent: 110 78 214;
-    --color-accent2: 76 48 176;
-    --color-accent3: 173 150 241;
-    --matte-shadow: 1 1 2;
-    --matte-border: 1 1 2;
-    color: rgb(var(--color-ink));
+  /* Warm highlight for the hero headline (stands out on the blue curtain). */
+  .text-ember {
+    background: linear-gradient(100deg, #ffd9c8 0%, #ffb08f 35%, #fc734d 75%, #ff9a6b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 24px rgba(252, 115, 77, 0.35));
   }
-  .theme-sky .matte {
-    background: rgb(255 255 255 / 0.72);
+  .text-ember * {
+    background-image: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Small label with a glowing dot, like "• Media Library". */
+  .mono-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-vazirmatn), var(--font-plex-mono), sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgb(var(--color-ink) / 0.6);
+  }
+  .mono-label::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fc734d;
+    box-shadow: 0 0 10px #fc734d;
+  }
+
+  /* Beam panel (SkyIsland): a section on a rounded midnight panel lit by the
+     light curtain — blue from above, a cantaloupe ember at the bottom. */
+  .beam-panel {
+    background:
+      radial-gradient(ellipse 50% 40% at 50% 0%, rgb(2 151 222 / 0.22), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 50% 100%, rgb(252 115 77 / 0.16), transparent 70%),
+      linear-gradient(180deg, #06121a, #03090d);
+    border: 1px solid rgb(255 255 255 / 0.07);
+  }
+  .beam-panel__lines {
+    background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 8px);
+    -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, #000 20%, transparent 80%);
+    mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, #000 20%, transparent 80%);
+  }
+
+  /* ---------- Hero: the light curtain ---------- */
+  .curtain {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #02070a;
+  }
+  .curtain__glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 18% 30% at 50% 96%, #fff1e8 0%, rgba(255, 241, 232, 0) 62%),
+      radial-gradient(ellipse 30% 46% at 50% 98%, #ffb08f 0%, rgba(255, 176, 143, 0) 66%),
+      radial-gradient(ellipse 52% 70% at 50% 104%, #fc734d 0%, rgba(252, 115, 77, 0) 70%),
+      radial-gradient(ellipse 30% 70% at 50% 18%, rgba(92, 196, 255, 0.85) 0%, rgba(2, 151, 222, 0) 65%),
+      radial-gradient(ellipse 55% 95% at 50% 40%, rgba(2, 151, 222, 0.75) 0%, rgba(2, 151, 222, 0) 70%),
+      radial-gradient(ellipse 90% 60% at 50% 100%, rgba(2, 100, 160, 0.6) 0%, rgba(2, 7, 10, 0) 75%);
+    animation: curtainBreathe 9s ease-in-out infinite alternate;
+  }
+  @keyframes curtainBreathe {
+    from { opacity: 0.88; transform: scaleX(1); }
+    to { opacity: 1; transform: scaleX(1.05); }
+  }
+  /* fine vertical "pleats" that slice the light */
+  .curtain__lines {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(2, 7, 10, 0.55) 0 2px, rgba(2, 7, 10, 0) 2px 5px, rgba(255, 255, 255, 0.06) 5px 6px, rgba(2, 7, 10, 0) 6px 9px);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 75%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 75%, transparent 100%);
+    animation: curtainShift 14s linear infinite;
+  }
+  @keyframes curtainShift {
+    from { background-position: 0 0; }
+    to { background-position: 90px 0; }
+  }
+  .curtain__vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, #02070a 0%, rgba(2, 7, 10, 0) 22%, rgba(2, 7, 10, 0) 78%, #02070a 100%),
+      linear-gradient(180deg, #02070a 0%, rgba(2, 7, 10, 0) 18%);
+  }
+  .curtain__grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+
+  /* glass ring button in the middle of the hero */
+  .orb-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    color: #fff;
+    background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06) 60%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.25), 0 0 40px rgba(252, 115, 77, 0.45);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    border-color: rgb(255 255 255 / 0.9);
-    box-shadow: 0 24px 60px -30px rgb(76 48 176 / 0.45);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .theme-sky .accent-gradient-text,
-  .theme-sky .text-iris {
-    background-image: linear-gradient(100deg, #5b21b6 0%, #7c3aed 30%, #db2777 65%, #0e7490 100%);
+  .orb-btn:hover {
+    transform: scale(1.06);
   }
-  .sky-island__bg {
-    background:
-      radial-gradient(90% 60% at 50% 0%, #f8f5ff 0%, rgba(248, 245, 255, 0) 70%),
-      linear-gradient(160deg, #f3edff 0%, #e2d4ff 40%, #cbb2ff 75%, #b799ff 100%);
-  }
-
-  /* گوی مشکی براق — همون جنس سکه‌ی هیرو، برای تزئین سکشن‌ها */
-  .gloss-orb {
+  .orb-btn::before,
+  .orb-btn::after {
+    content: "";
     position: absolute;
+    inset: -10px;
     border-radius: 50%;
-    background:
-      radial-gradient(55% 40% at 33% 24%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%),
-      radial-gradient(circle at 50% 58%, #1f1c28 0%, #07070a 60%, #000 100%);
-    box-shadow:
-      inset 0 -8px 18px rgba(0, 0, 0, 0.8),
-      0 30px 50px -20px rgba(26, 16, 51, 0.6);
-    animation: orbFloat 7s ease-in-out infinite;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    animation: orbRing 3s ease-out infinite;
   }
-  @keyframes orbFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
+  .orb-btn::after {
+    animation-delay: 1.5s;
+  }
+  @keyframes orbRing {
+    from { transform: scale(0.9); opacity: 0.9; }
+    to { transform: scale(1.45); opacity: 0; }
   }
 
-  /* اینترو: اگه این نشست قبلاً دیده شده، اسکریپت قبل از رنگ‌آمیزی این
-     data-attribute رو می‌ذاره و پرده اصلاً نمایش داده نمی‌شه. */
+  /* round side arrows */
+  .ring-arrow {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .ring-arrow:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.06);
+  }
+
+  /* portfolio cards peeking from the bottom of the hero */
+  .peek-card {
+    border-radius: 22px;
+    padding: 10px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   html[data-intro-seen] .intro-splash {
     display: none;
   }
@@ -488,228 +601,16 @@
 @media (prefers-reduced-motion: reduce) {
   .matte,
   .matte-btn,
-  .gloss-orb {
+  .curtain__glow,
+  .curtain__lines,
+  .orb-btn::before,
+  .orb-btn::after,
+  .accent-gradient-text,
+  .text-iris {
+    animation: none;
     transition: none;
   }
   .intro-splash {
     display: none;
-  }
-}
-
-/* ==========================================================================
-   هیروی «آسمان لوندر» نسخه‌ی ۲ (components/Hero.tsx)
-   ========================================================================== */
-@layer components {
-  .sky-hero__base {
-    background:
-      radial-gradient(110% 60% at 50% 0%, #fbf8ff 0%, rgba(251, 248, 255, 0) 62%),
-      linear-gradient(180deg, #efe7ff 0%, #d9c8ff 24%, #b99bff 46%, #9466f5 62%, #6a35e0 76%, #2e1270 90%, #12062e 100%);
-  }
-  .sky-hero__fade {
-    background: linear-gradient(180deg, rgba(18, 6, 46, 0) 0%, rgb(var(--color-canvas)) 100%);
-  }
-  .sky-aurora {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.45;
-    mix-blend-mode: screen;
-    animation: auroraMove 18s ease-in-out infinite alternate;
-  }
-  @keyframes auroraMove {
-    from { transform: translate(0, 0) scale(1); }
-    to { transform: translate(6%, -5%) scale(1.15); }
-  }
-  /* ابر: چند دایره‌ی سفید که با بلور واقعی یکی می‌شن — نرم و بی‌دانه */
-  .sky-cloud {
-    position: absolute;
-    filter: blur(16px);
-    animation: cloudDrift 48s ease-in-out infinite alternate;
-  }
-  .sky-cloud span {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle at 45% 40%, #ffffff 0%, rgba(255, 255, 255, 0.92) 45%, rgba(240, 232, 255, 0) 72%);
-  }
-  @keyframes cloudDrift {
-    from { transform: translateX(-2.5%); }
-    to { transform: translateX(2.5%); }
-  }
-  .sky-sparkle {
-    position: absolute;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
-    animation: twinkle 3.6s ease-in-out infinite;
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.15; transform: scale(0.6) rotate(0deg); }
-    50% { opacity: 1; transform: scale(1) rotate(20deg); }
-  }
-
-  /* کارت‌های شیشه‌ای شناور */
-  .glass-card {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.62);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 24px 50px -22px rgba(76, 29, 149, 0.55), inset 0 1px 0 #fff;
-    -webkit-backdrop-filter: blur(14px) saturate(1.4);
-    backdrop-filter: blur(14px) saturate(1.4);
-    animation: cardFloat 7s ease-in-out infinite;
-  }
-  @keyframes cardFloat {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(-12px) rotate(1deg); }
-  }
-
-  /* گرادیان رنگین‌کمونی تیره برای کلمه‌ی کلیدی روی آسمون روشن */
-  .text-iris-deep {
-    background: linear-gradient(100deg, #5b21b6 0%, #7c3aed 30%, #db2777 65%, #0e7490 100%);
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: irisShift 8s ease-in-out infinite alternate;
-  }
-
-  /* سکه: صحنه + هاله + مدار */
-  .sky-coin-stage {
-    position: relative;
-    width: clamp(160px, 20vw, 215px);
-    aspect-ratio: 1;
-  }
-  .sky-coin__halo {
-    position: absolute;
-    inset: -45%;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(255, 255, 255, 0.85), rgba(196, 167, 255, 0.55) 40%, rgba(139, 92, 246, 0) 75%);
-    animation: haloPulse 5s ease-in-out infinite;
-  }
-  @keyframes haloPulse {
-    0%, 100% { opacity: 0.75; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.06); }
-  }
-  .sky-coin__orbit {
-    position: absolute;
-    inset: 8% -48%;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.75);
-    transform: rotate(-10deg);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-  }
-  .sky-coin__orbit i {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    animation: orbitSpin 9s linear infinite;
-  }
-  .sky-coin__orbit i::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: -6px;
-    width: 12px;
-    height: 12px;
-    margin-left: -6px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 14px 4px rgba(255, 138, 216, 0.9);
-  }
-  @keyframes orbitSpin {
-    to { transform: rotate(360deg); }
-  }
-  .sky-coin-wrap {
-    position: absolute;
-    inset: 0;
-    perspective: 900px;
-  }
-  .sky-coin {
-    position: absolute;
-    inset: 0;
-    transform-style: preserve-3d;
-    animation: coinFloat 6s ease-in-out infinite, coinTurn 9s ease-in-out infinite;
-  }
-  .sky-coin__edge,
-  .sky-coin__face {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-  }
-  .sky-coin__edge {
-    transform: translateY(8%);
-    background: conic-gradient(from 200deg, #4b4366, #0c0b12 18%, #6e6390 32%, #0c0b12 50%, #3d3656 66%, #0c0b12 82%, #4b4366);
-    box-shadow: 0 40px 70px -24px rgba(18, 6, 46, 0.85);
-  }
-  .sky-coin__face {
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    background:
-      radial-gradient(60% 45% at 32% 20%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%),
-      radial-gradient(circle at 50% 55%, #201c2c 0%, #09080e 60%, #000 100%);
-    box-shadow:
-      inset 0 2px 0 rgba(255, 255, 255, 0.35),
-      inset 0 -8px 18px rgba(0, 0, 0, 0.85),
-      inset 0 0 0 5px rgba(180, 155, 255, 0.12),
-      inset 0 0 0 7px rgba(0, 0, 0, 0.6),
-      inset 0 0 0 8px rgba(255, 255, 255, 0.08);
-  }
-  .sky-coin__logo {
-    width: 64%;
-    height: 64%;
-    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.7)) drop-shadow(0 0 18px rgba(180, 155, 255, 0.55));
-  }
-  .sky-coin__shine {
-    position: absolute;
-    inset: -20%;
-    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.22) 48%, transparent 60%);
-    animation: coinShine 6s ease-in-out infinite;
-  }
-  @keyframes coinShine {
-    0%, 55% { transform: translateX(-70%); }
-    100% { transform: translateX(70%); }
-  }
-  .sky-coin__shadow {
-    position: absolute;
-    left: 15%;
-    right: 15%;
-    bottom: -20%;
-    height: 12%;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(18, 6, 46, 0.55), transparent);
-    animation: coinShadow 6s ease-in-out infinite;
-  }
-  @keyframes coinFloat {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -12px; }
-  }
-  @keyframes coinTurn {
-    0%, 100% { transform: rotateY(-18deg) rotateX(10deg); }
-    50% { transform: rotateY(18deg) rotateX(4deg); }
-  }
-  @keyframes coinShadow {
-    0%, 100% { transform: scaleX(1); opacity: 1; }
-    50% { transform: scaleX(0.82); opacity: 0.7; }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sky-cloud,
-  .sky-aurora,
-  .sky-sparkle,
-  .glass-card,
-  .sky-coin,
-  .sky-coin__shine,
-  .sky-coin__halo,
-  .sky-coin__orbit i,
-  .sky-coin__shadow,
-  .gloss-orb,
-  .accent-gradient-text,
-  .text-iris,
-  .text-iris-deep {
-    animation: none;
   }
 }

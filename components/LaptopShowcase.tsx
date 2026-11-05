@@ -25,7 +25,7 @@ const services: ServiceTab[] = [
       "اتصال به API‌های داخلی و خارجی",
       "معماری مقیاس‌پذیر و قابل نگهداری",
     ],
-    accent: "#AD96F1",
+    accent: "#0297DE",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 6l-4 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -42,7 +42,7 @@ const services: ServiceTab[] = [
       "طراحی اختصاصی هماهنگ با هویت برند",
       "سرعت بالا و تجربه‌ی کاربری روان روی موبایل",
     ],
-    accent: "#C4B3F6",
+    accent: "#5CC4FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M3 6h18l-1.5 11a2 2 0 01-2 1.7H6.5a2 2 0 01-2-1.7L3 6Z" strokeLinecap="round" strokeLinejoin="round" />
@@ -60,7 +60,7 @@ const services: ServiceTab[] = [
       "اتوماسیون فرایندهای تکراری با AI",
       "تحلیل و پیش‌بینی داده‌های کسب‌وکار",
     ],
-    accent: "#7C5CE6",
+    accent: "#0277B6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <circle cx="12" cy="12" r="3" />
@@ -111,9 +111,9 @@ function AdminPanelScreen() {
           {/* کارت‌های آماری */}
           <div className="grid grid-cols-3 gap-2">
             {[
-              { l: "فروش امروز", v: "۴۲.۶M", c: "#C4B3F6" },
-              { l: "سفارش‌ها", v: "۱۲۸", c: "#AD96F1" },
-              { l: "کاربر فعال", v: "۹۶۴", c: "#7C5CE6" },
+              { l: "فروش امروز", v: "۴۲.۶M", c: "#5CC4FF" },
+              { l: "سفارش‌ها", v: "۱۲۸", c: "#0297DE" },
+              { l: "کاربر فعال", v: "۹۶۴", c: "#0277B6" },
             ].map((s) => (
               <div key={s.l} className="rounded-md border border-white/10 bg-white/[0.03] p-2">
                 <div className="h-1.5 w-8 rounded-full" style={{ background: `${s.c}55` }} />
@@ -129,7 +129,7 @@ function AdminPanelScreen() {
               <span
                 key={i}
                 className="flex-1 rounded-t-sm"
-                style={{ height: `${h}%`, background: i === 5 ? "#C4B3F6" : "rgba(173, 150, 241,.4)" }}
+                style={{ height: `${h}%`, background: i === 5 ? "#5CC4FF" : "rgba(2, 151, 222,.4)" }}
               />
             ))}
           </div>
@@ -213,15 +213,15 @@ function AiScreen() {
   return (
     <div className="relative flex h-full flex-col overflow-hidden bg-[#0a0a0c]">
       <svg viewBox="0 0 320 200" className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.12]">
-        <circle cx="40" cy="40" r="3" fill="#C4B3F6" />
-        <circle cx="40" cy="110" r="3" fill="#C4B3F6" />
-        <circle cx="40" cy="170" r="3" fill="#C4B3F6" />
-        <circle cx="150" cy="70" r="3" fill="#C4B3F6" />
-        <circle cx="150" cy="140" r="3" fill="#C4B3F6" />
-        <circle cx="270" cy="100" r="3" fill="#C4B3F6" />
+        <circle cx="40" cy="40" r="3" fill="#5CC4FF" />
+        <circle cx="40" cy="110" r="3" fill="#5CC4FF" />
+        <circle cx="40" cy="170" r="3" fill="#5CC4FF" />
+        <circle cx="150" cy="70" r="3" fill="#5CC4FF" />
+        <circle cx="150" cy="140" r="3" fill="#5CC4FF" />
+        <circle cx="270" cy="100" r="3" fill="#5CC4FF" />
         <path
           d="M40 40 150 70M40 110 150 70M40 110 150 140M40 170 150 140M150 70 270 100M150 140 270 100"
-          stroke="#C4B3F6"
+          stroke="#5CC4FF"
           strokeWidth="1"
         />
       </svg>

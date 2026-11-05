@@ -70,18 +70,18 @@ export default async function Home() {
       <IntroSplash />
       <ScrollFx />
       <Nav isLoggedIn={isLoggedIn} />
-      <Hero />
+      <Hero sites={projects} />
       <Marquee />
       <Trust />
-      <SkyIsland id="problems" orbs={[{ size: 70, top: "70px", left: "4%" }, { size: 38, bottom: "90px", right: "6%" }]}>
+      <SkyIsland id="problems">
         <Problems />
       </SkyIsland>
       <BusinessShowcase sites={projects} />
-      <SkyIsland id="services" orbs={[{ size: 90, top: "60px", right: "3%" }, { size: 44, bottom: "120px", left: "5%" }]}>
+      <SkyIsland id="services">
         <Services />
       </SkyIsland>
       <Process />
-      <SkyIsland id="testimonials" orbs={[{ size: 56, top: "50px", left: "6%" }]}>
+      <SkyIsland id="testimonials">
         <Testimonials />
       </SkyIsland>
 
@@ -106,7 +106,7 @@ export default async function Home() {
       </section>
 
       <Guarantee />
-      <SkyIsland id="faq" orbs={[{ size: 64, top: "80px", right: "5%" }, { size: 30, bottom: "60px", left: "8%" }]}>
+      <SkyIsland id="faq">
         <FAQ />
       </SkyIsland>
 

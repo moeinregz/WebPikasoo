@@ -18,43 +18,46 @@ const config: Config = {
         canvas: "rgb(var(--color-canvas) / <alpha-value>)", // page background
         surface: "rgb(var(--color-surface) / <alpha-value>)", // card/panel fill
 
-        // Brand accents — Cobalt Black + Lavender Violet. Theme-adaptive (CSS
-        // variables in globals.css): pure lavender #AD96F1 on the dark theme,
-        // a deeper violet on the light theme so links stay readable on white.
-        accent: "rgb(var(--color-accent) / <alpha-value>)", // لوندر — دکمه‌ها، لینک‌ها، فوکوس، برند
-        accent2: "rgb(var(--color-accent2) / <alpha-value>)", // بنفش عمیق‌تر — هاور، سایه‌ها
-        accent3: "rgb(var(--color-accent3) / <alpha-value>)", // یاسی روشن — نقطه‌ی وضعیت و برجسته‌سازی‌های کوچک
-        // Text on top of an accent fill (lavender is light, so it takes black).
-        "on-accent": "#010102",
-        cobalt: "#010102",
-        lavender: "#AD96F1",
+        // Brand accents — Midnight Black + Electric Blue + Cantaloupe Orange.
+        // Theme-adaptive (CSS variables in globals.css).
+        accent: "rgb(var(--color-accent) / <alpha-value>)", // آبی الکتریکی — دکمه‌ها، لینک‌ها، برند
+        accent2: "rgb(var(--color-accent2) / <alpha-value>)", // نارنجی طالبی — تأکید، هاله‌ها
+        accent3: "rgb(var(--color-accent3) / <alpha-value>)", // آبی روشن — نقطه‌ی وضعیت و جزئیات
+        // Text on an electric-blue fill.
+        "on-accent": "#FFFFFF",
+        midnight: "#02070A",
+        electric: "#0297DE",
+        cantaloupe: "#FC734D",
 
-        // پالت کامل بنفش/لوندر (اسم‌های قدیمی نگه داشته شدن تا کلاس‌های
-        // موجود خودبه‌خود رنگ جدید بگیرن) — از تیره به روشن.
-        "deep-twilight": "#1A1033",
-        "french-blue": "#4B2FA8",
-        "bright-teal-blue": "#7C5CE6",
-        "blue-green": "#9479EC",
-        "turquoise-surf": "#AD96F1",
-        "sky-aqua": "#C4B3F6",
-        "frosted-blue": "#D9CEFA",
-        "frosted-blue-2": "#E6DEFC",
-        "light-cyan": "#F1ECFE",
+        // Old palette names kept so existing classes recolor: blue scale.
+        "deep-twilight": "#02070A",
+        "french-blue": "#01557F",
+        "bright-teal-blue": "#0277B6",
+        "blue-green": "#0297DE",
+        "turquoise-surf": "#0297DE",
+        "sky-aqua": "#5CC4FF",
+        "frosted-blue": "#BFE6FA",
+        "frosted-blue-2": "#DDF2FC",
+        "light-cyan": "#EEF8FD",
 
         // Legacy aliases — kept so components outside the redesigned landing
         // page (account/dashboard) still render sensibly against the new
         // dark-first palette without needing a separate rewrite pass.
-        navy: "#010102",
+        navy: "#02070A",
         alabaster: "#f5f5f7",
       },
       fontFamily: {
         fa: ["var(--font-vazirmatn)", "sans-serif"],
-        display: ["var(--font-vazirmatn)", "sans-serif"],
+        display: ["var(--font-serif)", "var(--font-naskh)", "serif"],
+        serif: ["var(--font-serif)", "var(--font-naskh)", "serif"],
         // JetBrains Mono کلاً از پروژه حذف شد — فقط لاتین رو پوشش می‌داد و
         // باعث می‌شد حروف فارسی داخل badge/آمار‌های font-mono با فونت
         // پیش‌فرض/محو مرورگر رندر بشن. حالا font-mono هم مستقیم همون
         // Vazirmatn هست، یعنی همه‌جای سایت یکدست و بدون فال‌بک ناهماهنگ.
-        mono: ["var(--font-vazirmatn)", "sans-serif"],
+        // Persian first: the Latin mono font would supply a very wide space
+        // character and pull Persian words apart. Use `font-plex` for Latin-only mono.
+        mono: ["var(--font-vazirmatn)", "monospace"],
+        plex: ["var(--font-plex-mono)", "monospace"],
       },
       maxWidth: {
         container: "1160px",
@@ -70,9 +73,9 @@ const config: Config = {
         grid: "44px 44px",
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(173, 150, 241, 0.35), 0 8px 40px -8px rgba(173, 150, 241, 0.45)",
-        "glow-violet": "0 0 0 1px rgba(124, 92, 230, 0.35), 0 8px 40px -8px rgba(124, 92, 230, 0.45)",
-        "glow-soft": "0 20px 60px -20px rgba(173, 150, 241, 0.35)",
+        glow: "0 0 0 1px rgba(2, 151, 222, 0.35), 0 8px 40px -8px rgba(2, 151, 222, 0.45)",
+        "glow-violet": "0 0 0 1px rgba(252, 115, 77, 0.35), 0 8px 40px -8px rgba(252, 115, 77, 0.45)",
+        "glow-soft": "0 20px 60px -20px rgba(2, 151, 222, 0.35)",
       },
       keyframes: {
         pulseDot: {
