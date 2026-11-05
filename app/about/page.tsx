@@ -118,7 +118,7 @@ export default async function AboutPage() {
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <span
           className="pointer-events-none absolute -left-[200px] -top-[220px] z-0 h-[520px] w-[520px] rounded-full opacity-35 blur-[130px]"
-          style={{ background: "rgba(0, 119, 182, .3)" }}
+          style={{ background: "rgba(173, 150, 241, .3)" }}
         />
 
         <div className="relative z-[1] mx-auto max-w-container px-6">
@@ -171,7 +171,7 @@ export default async function AboutPage() {
             <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/order"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent shadow-glow transition hover:-translate-y-0.5"
               >
                 مشاهده‌ی پلن‌ها و ثبت سفارش
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

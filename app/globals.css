@@ -6,19 +6,27 @@
   :root {
     /* Light mode — pure white canvas, GitHub-light-esque neutrals. This is
        now the SECONDARY theme; dark is the default (see layout.tsx script). */
-    --color-ink: 12 12 15;
-    --color-dim: 107 114 128;
-    --color-canvas: 255 255 255;
-    --color-surface: 246 247 249;
+    /* Light mode — lavender-white canvas, cobalt-black text. */
+    --color-ink: 1 1 2;
+    --color-dim: 98 90 122;
+    --color-canvas: 250 248 255;
+    --color-surface: 241 236 254;
+    --color-accent: 122 90 224; /* #7A5AE0 — readable on white */
+    --color-accent2: 86 58 190;
+    --color-accent3: 173 150 241;
   }
 
   .dark {
     /* Dark mode — pure black canvas, near-white text, near-black cards.
        This is the default look: Vercel/GitHub dashboard style. */
-    --color-ink: 237 237 240;
-    --color-dim: 138 143 152;
-    --color-canvas: 0 0 0;
-    --color-surface: 14 14 16;
+    /* Dark mode (default) — Cobalt Black #010102 + Lavender Violet #AD96F1. */
+    --color-ink: 242 239 255;
+    --color-dim: 160 152 186;
+    --color-canvas: 1 1 2;
+    --color-surface: 16 14 26;
+    --color-accent: 173 150 241; /* #AD96F1 */
+    --color-accent2: 130 104 224;
+    --color-accent3: 214 202 250;
   }
 
   html {
@@ -57,7 +65,7 @@
     @apply font-medium;
   }
   ::selection {
-    @apply bg-accent text-white;
+    @apply bg-accent text-on-accent;
   }
 
   /* Thin custom scrollbar — Vercel/GitHub dashboards never show the chunky
@@ -92,7 +100,7 @@
   /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
      همون آبی آسمانی اصلی برند. */
   .accent-gradient-text {
-    color: #0077B6;
+    color: rgb(var(--color-accent));
   }
 
   /* Skill card — each card tracks the cursor with --sx/--sy (set via JS on
@@ -123,7 +131,7 @@
     z-index: 2;
     padding: 1px;
     opacity: var(--glow-o, 0);
-    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 70%);
+    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #AD96F1) 0%, transparent 70%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -131,7 +139,7 @@
   .skill-card::after {
     z-index: 0;
     opacity: calc(var(--glow-o, 0) * 0.16);
-    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 72%);
+    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #AD96F1) 0%, transparent 72%);
   }
   .skill-card > * {
     position: relative;
@@ -146,7 +154,7 @@
     transition: filter 0.35s ease, opacity 0.35s ease;
   }
   .skill-card:hover .skill-icon-logo {
-    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #0077B6));
+    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #AD96F1));
     opacity: 1;
   }
 
@@ -157,7 +165,7 @@
     transition: text-shadow 0.35s ease;
   }
   .skill-card:hover .skill-title-glow {
-    text-shadow: 0 0 8px var(--skill-color, #0077B6), 0 0 26px var(--skill-color, #0077B6);
+    text-shadow: 0 0 8px var(--skill-color, #AD96F1), 0 0 26px var(--skill-color, #AD96F1);
   }
 
   /* رجیستر کردن --tool-angle به‌عنوان یه <angle> واقعی — بدون این، مرورگر
@@ -188,11 +196,11 @@
     padding: 1.4px;
     background: conic-gradient(
       from var(--tool-angle),
-      var(--tool-color, #0077B6) 0deg,
+      var(--tool-color, #AD96F1) 0deg,
       transparent 90deg,
       transparent 230deg,
-      var(--tool-color, #0077B6) 320deg,
-      var(--tool-color, #0077B6) 360deg
+      var(--tool-color, #AD96F1) 320deg,
+      var(--tool-color, #AD96F1) 360deg
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
@@ -205,7 +213,7 @@
     opacity: 1;
   }
   .tool-chip:hover {
-    box-shadow: 0 10px 28px -14px var(--tool-color, #0077B6);
+    box-shadow: 0 10px 28px -14px var(--tool-color, #AD96F1);
   }
   .tool-chip > * {
     position: relative;
@@ -232,14 +240,14 @@
     inset: -1px;
     z-index: -1;
     border-radius: inherit;
-    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #0077B6), transparent 70%);
+    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #AD96F1), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
   .tool-group-card:hover {
     transform: translateY(-3px);
     border-color: transparent;
-    box-shadow: 0 20px 40px -24px var(--group-color, #0077B6);
+    box-shadow: 0 20px 40px -24px var(--group-color, #AD96F1);
   }
   .tool-group-card:hover::before {
     opacity: 0.16;
@@ -260,7 +268,7 @@
     width: 85%;
     height: 140%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 119, 182, .4);
+    background: rgba(173, 150, 241, .4);
     filter: blur(90px);
     animation: seoHeroPulse 6s ease-in-out infinite;
   }
@@ -276,10 +284,10 @@
 
   /* خط نمودار رشد — گلوی رنگی دورش که با گرادیان خودِ استروک هماهنگه. */
   .seo-chart-line {
-    filter: drop-shadow(0 0 5px rgba(0, 119, 182, 0.85)) drop-shadow(0 0 16px rgba(2, 62, 138, 0.45));
+    filter: drop-shadow(0 0 5px rgba(173, 150, 241, 0.85)) drop-shadow(0 0 16px rgba(124, 92, 230, 0.45));
   }
   .seo-chart-dot {
-    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #0077B6);
+    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #AD96F1);
   }
 
   /* کارت‌های ستون سئو — طرح ساده و کم‌رنگ: بک‌گراند تیره‌ی یکدست برای
@@ -298,8 +306,8 @@
   }
   .seo-card:hover .seo-card-arrow {
     transform: translateX(-3px);
-    border-color: var(--seo-color, #0077B6);
-    color: var(--seo-color, #0077B6);
+    border-color: var(--seo-color, #AD96F1);
+    color: var(--seo-color, #AD96F1);
   }
 
   /* Syntax-highlight classes injected via dangerouslySetInnerHTML by the
@@ -309,13 +317,13 @@
     color: #ededf0;
   }
   .terminal-body .str {
-    color: #0077B6;
+    color: #AD96F1;
   }
   .terminal-body .punc {
     color: rgba(237, 237, 240, 0.45);
   }
   .terminal-body .kw {
-    color: #023E8A;
+    color: #7C5CE6;
     font-weight: 600;
   }
 
@@ -344,12 +352,12 @@
    ========================================================================== */
 @layer base {
   :root {
-    --matte-shadow: 12 12 15; /* حالت روشن: سایه‌ی مشکی تخت */
-    --matte-border: 12 12 15;
+    --matte-shadow: 1 1 2; /* حالت روشن: سایه‌ی کبالت مشکی تخت */
+    --matte-border: 1 1 2;
   }
   .dark {
-    --matte-shadow: 2 62 138; /* حالت تاریک: آبی تیره‌ی برند (#023E8A) */
-    --matte-border: 60 64 72;
+    --matte-shadow: 130 104 224; /* حالت تاریک: بنفش برند */
+    --matte-border: 64 58 92;
   }
 }
 
@@ -398,5 +406,109 @@
   }
   .intro-splash {
     display: none;
+  }
+}
+
+/* ==========================================================================
+   هیروی «آسمان لوندر» (components/Hero.tsx) — Cobalt Black + Lavender Violet
+   ========================================================================== */
+@layer components {
+  .sky-hero__base {
+    background:
+      radial-gradient(120% 70% at 50% 8%, #f6f2ff 0%, rgba(246, 242, 255, 0) 60%),
+      linear-gradient(180deg, #e9e1ff 0%, #d4c6fb 30%, #ad96f1 52%, #7c5ce6 68%, #3b2378 84%, #1a1033 100%);
+  }
+  .sky-hero__clouds {
+    /* soft top/bottom so the layer never shows a hard edge */
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 62%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 62%, transparent 100%);
+    opacity: 0.85;
+    mix-blend-mode: screen;
+    animation: skyDrift 60s ease-in-out infinite alternate;
+  }
+  .sky-hero__clouds--front {
+    opacity: 0.6;
+    animation-duration: 42s;
+    animation-direction: alternate-reverse;
+  }
+  .sky-hero__fade {
+    background: linear-gradient(180deg, rgba(26, 16, 51, 0) 0%, rgb(var(--color-canvas)) 100%);
+  }
+  @keyframes skyDrift {
+    from { transform: translateX(-3%); }
+    to { transform: translateX(3%); }
+  }
+
+  /* سکه: دیسک ضخیم مشکی براق؛ لبه با یه لایه‌ی جابه‌جاشده زیرش ساخته شده */
+  .sky-coin-wrap {
+    position: relative;
+    width: clamp(150px, 22vw, 210px);
+    aspect-ratio: 1;
+    perspective: 900px;
+  }
+  .sky-coin {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    animation: coinFloat 6s ease-in-out infinite, coinTurn 9s ease-in-out infinite;
+  }
+  .sky-coin__edge,
+  .sky-coin__face {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+  .sky-coin__edge {
+    transform: translateY(9%) scaleY(0.98);
+    background: linear-gradient(180deg, #2a2633 0%, #050507 55%, #000 100%);
+    box-shadow: 0 30px 60px -18px rgba(1, 1, 2, 0.75);
+  }
+  .sky-coin__face {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(60% 45% at 32% 22%, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 70%),
+      radial-gradient(circle at 50% 55%, #1c1a24 0%, #08080c 62%, #000 100%);
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.25),
+      inset 0 -6px 14px rgba(0, 0, 0, 0.8),
+      inset 0 0 0 6px rgba(255, 255, 255, 0.04);
+  }
+  .sky-coin__mark {
+    font-size: clamp(70px, 10vw, 104px);
+    line-height: 1;
+    color: #f4f1ff;
+    transform: translateY(-6%);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6), 0 0 22px rgba(173, 150, 241, 0.45);
+  }
+  .sky-coin__shadow {
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: -18%;
+    height: 12%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(26, 16, 51, 0.55), transparent);
+    animation: coinShadow 6s ease-in-out infinite;
+  }
+  @keyframes coinFloat {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -12px; }
+  }
+  @keyframes coinTurn {
+    0%, 100% { transform: rotateY(-16deg) rotateX(10deg); }
+    50% { transform: rotateY(16deg) rotateX(4deg); }
+  }
+  @keyframes coinShadow {
+    0%, 100% { transform: scaleX(1); opacity: 1; }
+    50% { transform: scaleX(0.82); opacity: 0.7; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-hero__clouds,
+  .sky-coin,
+  .sky-coin__shadow {
+    animation: none;
   }
 }

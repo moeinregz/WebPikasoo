@@ -31,7 +31,7 @@ export default function Guarantee() {
           </p>
           <a
             href="#lead-form"
-            className="mt-2 inline-flex items-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[14.5px] font-black text-white"
+            className="mt-2 inline-flex items-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[14.5px] font-black text-on-accent"
           >
             با خیال راحت شروع کن — مشاوره رایگان
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

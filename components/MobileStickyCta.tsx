@@ -11,7 +11,7 @@ export default function MobileStickyCta() {
     >
       <a
         href="/#lead-form"
-        className="flex w-full items-center justify-center gap-2 matte-btn rounded-xl bg-accent px-5 py-3 text-[14.5px] font-black text-white"
+        className="flex w-full items-center justify-center gap-2 matte-btn rounded-xl bg-accent px-5 py-3 text-[14.5px] font-black text-on-accent"
       >
         مشاوره رایگان
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

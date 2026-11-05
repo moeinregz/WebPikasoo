@@ -18,29 +18,33 @@ const config: Config = {
         canvas: "rgb(var(--color-canvas) / <alpha-value>)", // page background
         surface: "rgb(var(--color-surface) / <alpha-value>)", // card/panel fill
 
-        // Fixed flat brand accents — same in both themes. یه پالت آبی
-        // آسمانی/فیروزه‌ای ثابت، همه‌جا رنگ تخت (بدون گرادیان) استفاده می‌شه.
-        accent: "#0077B6", // آبی آسمانی اصلی — دکمه‌ها، لینک‌ها، فوکوس، برند
-        accent2: "#023E8A", // آبی تیره‌تر — حالت هاور، سایه‌ها، جزئیات ثانویه
-        accent3: "#00B4D8", // فیروزه‌ای روشن‌تر — نقطه‌ی وضعیت «آنلاین/آماده‌ی همکاری» و برجسته‌سازی‌های کوچک
+        // Brand accents — Cobalt Black + Lavender Violet. Theme-adaptive (CSS
+        // variables in globals.css): pure lavender #AD96F1 on the dark theme,
+        // a deeper violet on the light theme so links stay readable on white.
+        accent: "rgb(var(--color-accent) / <alpha-value>)", // لوندر — دکمه‌ها، لینک‌ها، فوکوس، برند
+        accent2: "rgb(var(--color-accent2) / <alpha-value>)", // بنفش عمیق‌تر — هاور، سایه‌ها
+        accent3: "rgb(var(--color-accent3) / <alpha-value>)", // یاسی روشن — نقطه‌ی وضعیت و برجسته‌سازی‌های کوچک
+        // Text on top of an accent fill (lavender is light, so it takes black).
+        "on-accent": "#010102",
+        cobalt: "#010102",
+        lavender: "#AD96F1",
 
-        // پالت کامل آبی آسمانی، برای استفاده‌ی مستقیم هرجا لازم بود
-        // (نمودارها، دسته‌بندی‌ها و جزئیات چندرنگ) — بدون گرادیان، فقط
-        // رنگ‌های تخت از تیره به روشن.
-        "deep-twilight": "#03045E",
-        "french-blue": "#023E8A",
-        "bright-teal-blue": "#0077B6",
-        "blue-green": "#0096C7",
-        "turquoise-surf": "#00B4D8",
-        "sky-aqua": "#48CAE4",
-        "frosted-blue": "#90E0EF",
-        "frosted-blue-2": "#ADE8F4",
-        "light-cyan": "#CAF0F8",
+        // پالت کامل بنفش/لوندر (اسم‌های قدیمی نگه داشته شدن تا کلاس‌های
+        // موجود خودبه‌خود رنگ جدید بگیرن) — از تیره به روشن.
+        "deep-twilight": "#1A1033",
+        "french-blue": "#4B2FA8",
+        "bright-teal-blue": "#7C5CE6",
+        "blue-green": "#9479EC",
+        "turquoise-surf": "#AD96F1",
+        "sky-aqua": "#C4B3F6",
+        "frosted-blue": "#D9CEFA",
+        "frosted-blue-2": "#E6DEFC",
+        "light-cyan": "#F1ECFE",
 
         // Legacy aliases — kept so components outside the redesigned landing
         // page (account/dashboard) still render sensibly against the new
         // dark-first palette without needing a separate rewrite pass.
-        navy: "#0a0a0c",
+        navy: "#010102",
         alabaster: "#f5f5f7",
       },
       fontFamily: {
@@ -66,9 +70,9 @@ const config: Config = {
         grid: "44px 44px",
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(0, 119, 182, 0.35), 0 8px 40px -8px rgba(0, 119, 182, 0.45)",
-        "glow-violet": "0 0 0 1px rgba(2, 62, 138, 0.35), 0 8px 40px -8px rgba(2, 62, 138, 0.45)",
-        "glow-soft": "0 20px 60px -20px rgba(0, 119, 182, 0.35)",
+        glow: "0 0 0 1px rgba(173, 150, 241, 0.35), 0 8px 40px -8px rgba(173, 150, 241, 0.45)",
+        "glow-violet": "0 0 0 1px rgba(124, 92, 230, 0.35), 0 8px 40px -8px rgba(124, 92, 230, 0.45)",
+        "glow-soft": "0 20px 60px -20px rgba(173, 150, 241, 0.35)",
       },
       keyframes: {
         pulseDot: {

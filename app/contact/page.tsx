@@ -151,7 +151,7 @@ export default async function ContactPage() {
       <section id="contact-form" className="relative overflow-hidden border-t border-ink/10 py-16 sm:py-20">
         <span
           className="pointer-events-none absolute -left-[200px] -bottom-[240px] z-0 h-[560px] w-[560px] rounded-full opacity-30 blur-[130px]"
-          style={{ background: "rgba(0, 119, 182, .3)" }}
+          style={{ background: "rgba(173, 150, 241, .3)" }}
         />
         <div className="relative z-[1] mx-auto max-w-[760px] px-6">
           <Reveal className="rounded-card border border-ink/10 bg-surface/50 p-6 text-right sm:p-9">
