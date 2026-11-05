@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>روزنگار | پایگاه خبری و تحلیلی</title>
+  <meta name="description" content="روزنگار؛ پایگاه خبری و تحلیلی — اخبار سیاسی، اقتصادی، اجتماعی، ورزشی، فرهنگی و بین‌الملل. (نمونه‌کار طراحی)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f7f5f0;
+      --card: #ffffff;
+      --ink: #14171f;
+      --ink-2: #3b4150;
+      --muted: #6b7180;
+      --line: #e3e0d8;
+      --line-2: #d2cec3;
+      --navy: #0f1d33;
+      --navy-2: #1a2c4a;
+      --red: #b3121f;
+      --red-soft: #fbe9ea;
+      --gold: #b8873a;
+      --up: #0f8a4a;
+      --down: #c62828;
+      --shadow: 0 1px 2px rgba(15, 29, 51, .06), 0 8px 24px -12px rgba(15, 29, 51, .18);
+      --radius: 6px;
+      --wrap: 1240px;
+      --body-size: 18px;
+    }
+
+    :root[data-theme="dark"] {
+      --paper: #0e1117;
+      --card: #161a22;
+      --ink: #eceef2;
+      --ink-2: #c4c8d2;
+      --muted: #8d93a1;
+      --line: #262b36;
+      --line-2: #333947;
+      --navy: #0a1220;
+      --navy-2: #141f33;
+      --red: #e0333f;
+      --red-soft: #2a1518;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .6);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Vazirmatn', system-ui, sans-serif;
+      line-height: 1.75;
+      overflow-x: hidden;
+      transition: background .3s, color .3s;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+    button, input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+    button { cursor: pointer; background: none; border: 0; }
+    img, svg { display: block; max-width: 100%; }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    ::selection { background: var(--red); color: #fff; }
+
+    /* ---------- Top bar ---------- */
+    .topbar { background: var(--navy); color: #c9d1e0; font-size: 13px; }
+    .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 38px; }
+    .topbar .dates { display: flex; gap: 14px; align-items: center; white-space: nowrap; overflow: hidden; }
+    .topbar .dates span + span::before { content: ""; display: inline-block; width: 1px; height: 11px; background: #3a4a66; margin-left: 14px; vertical-align: middle; }
+    .topbar .tools { display: flex; gap: 6px; align-items: center; }
+    .topbar .tools a, .topbar .tools button { padding: 4px 10px; border-radius: 4px; transition: background .2s; color: #c9d1e0; }
+    .topbar .tools a:hover, .topbar .tools button:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+    .clock { font-variant-numeric: tabular-nums; color: #fff; font-weight: 600; }
+
+    /* ---------- Masthead ---------- */
+    .masthead { background: var(--card); border-bottom: 1px solid var(--line); }
+    .masthead .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding-top: 22px; padding-bottom: 22px; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 14px; justify-self: center; }
+    .logo-mark { width: 54px; height: 54px; border-radius: 10px; background: var(--red); display: grid; place-items: center; color: #fff; box-shadow: 0 6px 18px -6px rgba(179, 18, 31, .6); }
+    .logo-mark svg { width: 30px; height: 30px; }
+    .logo-text b { display: block; font-family: 'Noto Naskh Arabic', serif; font-size: 40px; line-height: 1; font-weight: 700; letter-spacing: -.5px; }
+    .logo-text small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; letter-spacing: .3px; }
+    .mh-side { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+    .mh-side.end { justify-content: flex-end; }
+    .weather-mini { display: flex; align-items: center; gap: 10px; }
+    .weather-mini .ic { width: 36px; height: 36px; }
+    .weather-mini b { color: var(--ink); font-size: 18px; }
+    .search-box { display: flex; align-items: center; border: 1px solid var(--line-2); border-radius: 999px; padding: 0 6px 0 14px; height: 42px; background: var(--paper); width: 100%; max-width: 280px; transition: border-color .2s, box-shadow .2s; }
+    .search-box:focus-within { border-color: var(--navy-2); box-shadow: 0 0 0 3px rgba(26, 44, 74, .12); }
+    .search-box input { border: 0; background: none; outline: 0; flex: 1; min-width: 0; font-size: 14px; padding: 0 4px; }
+    .search-box button { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: #fff; }
+    .search-box svg { width: 16px; height: 16px; }
+
+    /* ---------- Nav ---------- */
+    .nav { background: var(--card); border-bottom: 3px solid var(--ink); position: sticky; top: 0; z-index: 50; transition: box-shadow .2s; }
+    .nav.stuck { box-shadow: 0 6px 18px -10px rgba(0, 0, 0, .35); }
+    .nav .wrap { display: flex; align-items: stretch; gap: 4px; height: 54px; }
+    .nav-home { display: grid; place-items: center; width: 44px; color: var(--ink); }
+    .nav-home svg { width: 20px; height: 20px; }
+    .nav ul { display: flex; align-items: stretch; flex: 1; overflow-x: auto; scrollbar-width: none; }
+    .nav ul::-webkit-scrollbar { display: none; }
+    .nav li { display: flex; }
+    .nav li a { display: flex; align-items: center; padding: 0 15px; font-weight: 700; font-size: 15px; white-space: nowrap; position: relative; color: var(--ink-2); transition: color .2s; }
+    .nav li a::after { content: ""; position: absolute; bottom: -3px; right: 15px; left: 15px; height: 3px; background: var(--red); transform: scaleX(0); transition: transform .25s; }
+    .nav li a:hover, .nav li a.active { color: var(--ink); }
+    .nav li a:hover::after, .nav li a.active::after { transform: scaleX(1); }
+    .nav-live { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; padding: 0 14px; font-weight: 800; color: var(--red); font-size: 14px; white-space: nowrap; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(179, 18, 31, .6); animation: pulse 1.6s infinite; flex: none; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(179, 18, 31, .55); } 70% { box-shadow: 0 0 0 9px rgba(179, 18, 31, 0); } 100% { box-shadow: 0 0 0 0 rgba(179, 18, 31, 0); } }
+    .burger { display: none; width: 44px; place-items: center; }
+    .burger svg { width: 24px; height: 24px; }
+
+    /* ---------- Breaking ticker ---------- */
+    .ticker { background: var(--card); border-bottom: 1px solid var(--line); }
+    .ticker .wrap { display: flex; align-items: center; height: 46px; gap: 14px; }
+    .ticker-label { background: var(--red); color: #fff; font-weight: 800; font-size: 13.5px; padding: 5px 14px; border-radius: 4px; display: flex; align-items: center; gap: 8px; flex: none; }
+    .ticker-label .dot { background: #fff; animation: none; }
+    .ticker-track { flex: 1; overflow: hidden; mask-image: linear-gradient(to left, transparent, #000 4%, #000 96%, transparent); -webkit-mask-image: linear-gradient(to left, transparent, #000 4%, #000 96%, transparent); }
+    .ticker-inner { display: flex; gap: 48px; width: max-content; animation: tick 70s linear infinite; }
+    .ticker:hover .ticker-inner { animation-play-state: paused; }
+    .ticker-inner a { font-size: 14.5px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 10px; color: var(--ink-2); }
+    .ticker-inner a:hover { color: var(--red); }
+    .ticker-inner a time { color: var(--red); font-weight: 800; font-size: 13px; }
+    @keyframes tick { from { transform: translateX(0); } to { transform: translateX(50%); } }
+
+    /* ---------- Markets ---------- */
+    .markets { background: var(--paper); border-bottom: 1px solid var(--line); }
+    .markets .wrap { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .markets .wrap::-webkit-scrollbar { display: none; }
+    .mk { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-left: 1px solid var(--line); white-space: nowrap; font-size: 13.5px; flex: 1 0 auto; }
+    .mk:last-child { border-left: 0; }
+    .mk .n { color: var(--muted); }
+    .mk .v { font-weight: 800; font-variant-numeric: tabular-nums; transition: color .4s; }
+    .mk .ch { font-size: 12px; font-weight: 700; direction: ltr; padding: 1px 6px; border-radius: 4px; }
+    .mk .ch.up { color: var(--up); background: rgba(15, 138, 74, .1); }
+    .mk .ch.down { color: var(--down); background: rgba(198, 40, 40, .1); }
+    .flash-up { color: var(--up) !important; }
+    .flash-down { color: var(--down) !important; }
+
+    /* ---------- Generic blocks ---------- */
+    main { padding: 28px 0 60px; min-height: 60vh; }
+    .sec { margin-top: 44px; }
+    .sec-h { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--line-2); padding-bottom: 10px; position: relative; }
+    .sec-h::after { content: ""; position: absolute; bottom: -1px; right: 0; width: 64px; height: 3px; background: var(--c, var(--red)); }
+    .sec-h h2 { font-size: 21px; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+    .sec-h h2 i { width: 10px; height: 10px; background: var(--c, var(--red)); display: inline-block; transform: rotate(45deg); }
+    .sec-h .more { margin-inline-start: auto; font-size: 13.5px; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 4px; transition: color .2s, gap .2s; }
+    .sec-h .more:hover { color: var(--red); gap: 8px; }
+    .kicker { font-size: 13px; color: var(--c, var(--red)); font-weight: 700; display: block; margin-bottom: 4px; }
+    .meta { font-size: 12.5px; color: var(--muted); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .meta svg { width: 13px; height: 13px; }
+    .badge { display: inline-block; font-size: 11.5px; font-weight: 800; padding: 2px 9px; border-radius: 3px; background: var(--c, var(--red)); color: #fff; }
+
+    .thumb { position: relative; overflow: hidden; border-radius: var(--radius); background: #dfe3ea; aspect-ratio: 16/10; }
+    .thumb svg { width: 100%; height: 100%; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+    a:hover .thumb svg, .card:hover .thumb svg { transform: scale(1.05); }
+    .thumb .cr { position: absolute; bottom: 8px; left: 8px; font-size: 10.5px; color: rgba(255, 255, 255, .85); background: rgba(0, 0, 0, .35); padding: 1px 7px; border-radius: 3px; backdrop-filter: blur(4px); }
+    .thumb .badge { position: absolute; top: 10px; right: 10px; z-index: 2; }
+    .play { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2; }
+    .play span { width: 58px; height: 58px; border-radius: 50%; background: rgba(255, 255, 255, .92); display: grid; place-items: center; color: var(--red); box-shadow: 0 10px 30px -8px rgba(0, 0, 0, .5); transition: transform .3s; }
+    .play svg { width: 22px; height: 22px; margin-right: -3px; transform: none !important; }
+    a:hover .play span { transform: scale(1.1); }
+    .dur { position: absolute; bottom: 8px; right: 8px; z-index: 2; background: rgba(0, 0, 0, .7); color: #fff; font-size: 12px; padding: 1px 7px; border-radius: 3px; font-weight: 700; }
+
+    h3.t { font-weight: 800; line-height: 1.6; transition: color .2s; }
+    a:hover h3.t { color: var(--red); }
+
+    /* ---------- Lead grid ---------- */
+    .lead-grid { display: grid; grid-template-columns: 1.55fr 1fr 300px; gap: 26px; }
+    .lead-main .thumb { aspect-ratio: 16/9.5; }
+    .lead-main h3.t { font-size: 30px; line-height: 1.5; margin: 14px 0 10px; font-weight: 900; }
+    .lead-main p { color: var(--ink-2); font-size: 16px; margin-bottom: 12px; }
+    .lead-sub { display: flex; flex-direction: column; gap: 18px; }
+    .lead-sub a { display: block; }
+    .lead-sub a:first-child h3.t { font-size: 18px; }
+    .lead-sub a:first-child .thumb { margin-bottom: 10px; }
+    .lead-sub .row { display: grid; grid-template-columns: 1fr 120px; gap: 12px; align-items: start; padding-top: 16px; border-top: 1px solid var(--line); }
+    .lead-sub .row .thumb { aspect-ratio: 4/3; }
+    .lead-sub h3.t { font-size: 15.5px; }
+
+    /* ---------- Sidebar widgets ---------- */
+    .widget { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+    .widget + .widget { margin-top: 22px; }
+    .widget h4 { font-size: 16px; font-weight: 900; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .widget h4 .dot { width: 8px; height: 8px; }
+    .tabs { display: flex; background: var(--paper); border-radius: 6px; padding: 3px; margin-bottom: 12px; }
+    .tabs button { flex: 1; padding: 6px; font-size: 13.5px; font-weight: 700; border-radius: 4px; color: var(--muted); transition: all .2s; }
+    .tabs button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
+    .rank li a { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); align-items: flex-start; }
+    .rank li:last-child a { border-bottom: 0; }
+    .rank .num { font-family: 'Noto Naskh Arabic', serif; font-size: 30px; font-weight: 700; color: var(--line-2); line-height: 1; min-width: 26px; transition: color .2s; }
+    .rank li a:hover .num { color: var(--red); }
+    .rank h3.t { font-size: 14.5px; font-weight: 700; }
+
+    .timeline li a { display: grid; grid-template-columns: 52px 1fr; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; font-weight: 600; }
+    .timeline li:last-child a { border-bottom: 0; }
+    .timeline time { color: var(--red); font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; padding-top: 1px; }
+    .timeline li a:hover span { color: var(--red); }
+
+    /* ---------- Category block ---------- */
+    .cat-block { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+    .cat-block .big h3.t { font-size: 20px; margin: 12px 0 6px; }
+    .cat-block .big p { color: var(--ink-2); font-size: 14.5px; }
+    .cat-block .list { display: flex; flex-direction: column; }
+    .cat-block .list a { display: grid; grid-template-columns: 130px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .cat-block .list a:first-child { padding-top: 0; }
+    .cat-block .list a:last-child { border-bottom: 0; }
+    .cat-block .list .thumb { aspect-ratio: 4/3; }
+    .cat-block .list h3.t { font-size: 15px; margin-bottom: 4px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .main-side { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start; }
+    .sticky-side { position: sticky; top: 74px; }
+
+    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .card h3.t { font-size: 15.5px; margin: 10px 0 6px; }
+
+    /* ---------- Opinion ---------- */
+    .opinion { background: var(--navy); color: #e9edf5; padding: 40px 0; margin-top: 50px; position: relative; overflow: hidden; }
+    .opinion::before { content: "«"; position: absolute; left: 3%; top: -60px; font-family: 'Noto Naskh Arabic', serif; font-size: 360px; color: rgba(255, 255, 255, .04); line-height: 1; }
+    .opinion .sec-h { border-color: rgba(255, 255, 255, .15); }
+    .opinion .sec-h h2 { color: #fff; }
+    .opinion .sec-h .more { color: #9fb0cc; }
+    .op-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .op { background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: background .25s, transform .25s; }
+    .op:hover { background: rgba(255, 255, 255, .08); transform: translateY(-3px); }
+    .op .who { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 17px; color: #fff; flex: none; border: 2px solid rgba(255, 255, 255, .25); }
+    .op .who b { display: block; font-size: 14.5px; }
+    .op .who small { color: #9fb0cc; font-size: 12px; }
+    .op h3 { font-family: 'Noto Naskh Arabic', serif; font-size: 19px; font-weight: 700; line-height: 1.7; color: #fff; }
+    .op p { font-size: 13.5px; color: #b8c3d6; }
+
+    /* ---------- Photo report ---------- */
+    .gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 210px 210px; gap: 12px; }
+    .gallery a { position: relative; border-radius: var(--radius); overflow: hidden; }
+    .gallery a:first-child { grid-row: span 2; }
+    .gallery .thumb { height: 100%; aspect-ratio: auto; border-radius: 0; }
+    .gallery .cap { position: absolute; inset: auto 0 0 0; padding: 40px 16px 14px; background: linear-gradient(to top, rgba(0, 0, 0, .85), transparent); color: #fff; z-index: 2; }
+    .gallery .cap b { display: block; font-size: 15px; font-weight: 800; line-height: 1.6; }
+    .gallery a:first-child .cap b { font-size: 21px; }
+    .gallery .cap small { font-size: 12px; opacity: .8; display: flex; align-items: center; gap: 5px; }
+    .gallery .cap svg { width: 14px; height: 14px; }
+
+    /* ---------- Infographic ---------- */
+    .info-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+    .info-card h3 { font-size: 17px; font-weight: 900; margin-bottom: 4px; }
+    .info-card .sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+    .bars { display: flex; flex-direction: column; gap: 12px; }
+    .bar { display: grid; grid-template-columns: 90px 1fr 54px; gap: 10px; align-items: center; font-size: 13.5px; }
+    .bar .track { height: 12px; background: var(--paper); border-radius: 99px; overflow: hidden; }
+    .bar .fill { height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, var(--navy-2), var(--red)); transition: width 1.2s cubic-bezier(.2, .7, .2, 1); }
+    .bar b { text-align: left; font-variant-numeric: tabular-nums; }
+    .weather-list li { display: grid; grid-template-columns: 1fr 34px 70px; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+    .weather-list li:last-child { border-bottom: 0; }
+    .weather-list svg { width: 28px; height: 28px; }
+    .weather-list b { text-align: left; font-variant-numeric: tabular-nums; }
+    .weather-list small { color: var(--muted); }
+
+    /* ---------- Newsletter ---------- */
+    .newsletter { margin-top: 50px; background: linear-gradient(120deg, var(--red), #7d0c16); color: #fff; border-radius: 10px; padding: 34px 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; position: relative; overflow: hidden; }
+    .newsletter::after { content: ""; position: absolute; width: 340px; height: 340px; border: 50px solid rgba(255, 255, 255, .06); border-radius: 50%; left: -90px; top: -120px; }
+    .newsletter h3 { font-size: 24px; font-weight: 900; margin-bottom: 6px; }
+    .newsletter p { opacity: .85; font-size: 14.5px; }
+    .nl-form { display: flex; gap: 8px; position: relative; z-index: 1; }
+    .nl-form input { flex: 1; min-width: 0; height: 50px; border-radius: 6px; border: 0; padding: 0 16px; background: #fff; color: #14171f; outline: 0; direction: ltr; text-align: right; }
+    .nl-form button { height: 50px; padding: 0 26px; background: var(--navy); color: #fff; font-weight: 800; border-radius: 6px; transition: background .2s; white-space: nowrap; }
+    .nl-form button:hover { background: #000; }
+
+    /* ---------- Article page ---------- */
+    .crumbs { font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+    .crumbs a:hover { color: var(--red); }
+    .crumbs i { font-style: normal; opacity: .5; }
+    .article { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 36px 40px; box-shadow: var(--shadow); }
+    .article .code { font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+    .article h1 { font-size: 33px; font-weight: 900; line-height: 1.55; margin: 6px 0 16px; }
+    .article .lead { font-size: 17.5px; color: var(--ink-2); background: var(--paper); border-right: 4px solid var(--c, var(--red)); padding: 16px 20px; border-radius: 4px; margin-bottom: 22px; font-weight: 500; line-height: 1.9; }
+    .byline { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+    .byline .who { display: flex; align-items: center; gap: 12px; }
+    .byline .avatar { width: 44px; height: 44px; font-size: 15px; border: 0; }
+    .byline .who b { display: block; font-size: 14.5px; }
+    .art-tools { display: flex; gap: 6px; }
+    .art-tools button, .share a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line-2); display: grid; place-items: center; color: var(--ink-2); transition: all .2s; font-weight: 800; font-size: 13px; }
+    .art-tools button:hover, .share a:hover { background: var(--ink); color: var(--card); border-color: var(--ink); }
+    .art-tools svg, .share svg { width: 17px; height: 17px; }
+    .article figure { margin: 0 0 24px; }
+    .article figure .thumb { aspect-ratio: 16/9; }
+    .article figcaption { font-size: 13px; color: var(--muted); padding: 8px 2px 0; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+    .body { font-family: 'Noto Naskh Arabic', serif; font-size: var(--body-size); line-height: 2.15; color: var(--ink); text-align: justify; }
+    .body p { margin-bottom: 1.15em; }
+    .body h2 { font-family: 'Vazirmatn', sans-serif; font-size: 1.15em; font-weight: 800; margin: 1.6em 0 .6em; }
+    .body blockquote { margin: 1.6em 0; padding: 20px 26px; background: var(--paper); border-radius: 6px; position: relative; font-size: 1.08em; font-weight: 600; }
+    .body blockquote::before { content: "«"; position: absolute; top: -18px; right: 16px; font-size: 60px; color: var(--c, var(--red)); line-height: 1; }
+    .body blockquote cite { display: block; font-family: 'Vazirmatn', sans-serif; font-size: 13px; color: var(--muted); font-style: normal; margin-top: 8px; font-weight: 500; }
+    .facts { border: 1px solid var(--line-2); border-radius: 6px; padding: 18px 22px; margin: 1.6em 0; font-family: 'Vazirmatn', sans-serif; font-size: 15px; }
+    .facts b { display: block; margin-bottom: 8px; font-size: 15.5px; color: var(--c, var(--red)); }
+    .facts li { padding-right: 18px; position: relative; margin-bottom: 4px; }
+    .facts li::before { content: ""; position: absolute; right: 2px; top: 11px; width: 6px; height: 6px; background: var(--c, var(--red)); border-radius: 50%; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); align-items: center; }
+    .tags span { font-weight: 800; font-size: 14px; margin-left: 6px; }
+    .tags a { font-size: 13px; padding: 4px 13px; border-radius: 99px; background: var(--paper); border: 1px solid var(--line); transition: all .2s; }
+    .tags a:hover { background: var(--red); color: #fff; border-color: var(--red); }
+    .share-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    .share { display: flex; gap: 6px; }
+    .short-link { display: flex; align-items: center; border: 1px dashed var(--line-2); border-radius: 6px; font-size: 13px; overflow: hidden; }
+    .short-link code { padding: 7px 12px; direction: ltr; color: var(--muted); }
+    .short-link button { padding: 7px 12px; background: var(--paper); font-weight: 700; border-right: 1px dashed var(--line-2); }
+
+    .comments { margin-top: 26px; }
+    .c-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 22px; }
+    .c-form textarea { grid-column: 1/-1; min-height: 110px; resize: vertical; }
+    .c-form input, .c-form textarea { border: 1px solid var(--line-2); background: var(--paper); border-radius: 6px; padding: 12px 14px; outline: 0; transition: border-color .2s; }
+    .c-form input:focus, .c-form textarea:focus { border-color: var(--navy-2); }
+    .c-form .note { font-size: 12.5px; color: var(--muted); align-self: center; }
+    .btn { background: var(--ink); color: var(--card); font-weight: 800; padding: 11px 26px; border-radius: 6px; transition: background .2s, transform .1s; justify-self: end; }
+    .btn:hover { background: var(--red); color: #fff; }
+    .btn:active { transform: scale(.97); }
+    .cmt { display: flex; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
+    .cmt .avatar { width: 40px; height: 40px; font-size: 14px; border: 0; }
+    .cmt b { font-size: 14px; }
+    .cmt small { color: var(--muted); font-size: 12px; margin-right: 8px; }
+    .cmt p { font-size: 14.5px; color: var(--ink-2); margin-top: 4px; }
+    .cmt .acts { display: flex; gap: 14px; margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+    .cmt .acts button { display: inline-flex; gap: 4px; align-items: center; color: var(--muted); }
+    .cmt .acts button:hover { color: var(--red); }
+    .cmt .acts svg { width: 14px; height: 14px; }
+    .progress { position: fixed; top: 0; right: 0; height: 3px; background: var(--red); z-index: 100; width: 0; transition: width .1s; }
+
+    /* ---------- Category page ---------- */
+    .cat-hero { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 30px; margin-bottom: 26px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-right: 6px solid var(--c); box-shadow: var(--shadow); flex-wrap: wrap; }
+    .cat-hero h1 { font-size: 30px; font-weight: 900; }
+    .cat-hero p { color: var(--muted); font-size: 14.5px; }
+    .cat-hero .count { font-size: 13px; color: var(--muted); }
+    .cat-hero .count b { color: var(--ink); font-size: 26px; display: block; text-align: center; line-height: 1.2; }
+    .feed a { display: grid; grid-template-columns: 240px 1fr; gap: 22px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .feed a:first-child { padding-top: 0; }
+    .feed h3.t { font-size: 19px; margin-bottom: 6px; }
+    .feed p { color: var(--ink-2); font-size: 14.5px; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .pager { display: flex; gap: 6px; justify-content: center; margin-top: 30px; }
+    .pager button { width: 40px; height: 40px; border-radius: 6px; border: 1px solid var(--line-2); font-weight: 700; background: var(--card); transition: all .2s; }
+    .pager button.on, .pager button:hover { background: var(--ink); color: var(--card); border-color: var(--ink); }
+    .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty svg { width: 64px; height: 64px; margin: 0 auto 14px; opacity: .4; }
+    mark { background: rgba(184, 135, 58, .3); color: inherit; padding: 0 2px; border-radius: 2px; }
+
+    /* ---------- Footer ---------- */
+    footer { background: var(--navy); color: #b8c3d6; padding-top: 50px; font-size: 14px; }
+    .ft-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: 36px; padding-bottom: 36px; }
+    footer .logo { justify-self: start; }
+    footer .logo-text b { color: #fff; font-size: 34px; }
+    footer .logo-text small { color: #8d9bb5; }
+    footer .about { margin-top: 16px; line-height: 2; font-size: 13.5px; }
+    footer h5 { color: #fff; font-size: 15.5px; font-weight: 800; margin-bottom: 14px; }
+    footer li { margin-bottom: 8px; }
+    footer li a { transition: color .2s, padding .2s; }
+    footer li a:hover { color: #fff; padding-right: 4px; }
+    .socials { display: flex; gap: 8px; margin-top: 16px; }
+    .socials a { width: 38px; height: 38px; border-radius: 8px; background: rgba(255, 255, 255, .07); display: grid; place-items: center; transition: background .2s; }
+    .socials a:hover { background: var(--red); color: #fff; }
+    .socials svg { width: 18px; height: 18px; }
+    .contact-li li { display: flex; gap: 10px; align-items: flex-start; }
+    .contact-li svg { width: 17px; height: 17px; flex: none; margin-top: 4px; color: #8d9bb5; }
+    .apps { display: flex; gap: 8px; margin-top: 14px; }
+    .apps a { border: 1px solid rgba(255, 255, 255, .18); border-radius: 6px; padding: 6px 12px; font-size: 12.5px; transition: all .2s; }
+    .apps a:hover { background: #fff; color: var(--navy); }
+    .ft-bottom { border-top: 1px solid rgba(255, 255, 255, .08); padding: 18px 0; font-size: 12.5px; display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; color: #8d9bb5; }
+    .demo-note { background: rgba(184, 135, 58, .14); color: #e6c58f; border-radius: 6px; padding: 8px 14px; font-size: 12.5px; margin-bottom: 24px; display: flex; gap: 8px; align-items: center; }
+    .demo-note svg { width: 16px; height: 16px; flex: none; }
+
+    /* ---------- Misc ---------- */
+    .to-top { position: fixed; left: 22px; bottom: 22px; width: 46px; height: 46px; border-radius: 50%; background: var(--ink); color: var(--card); display: grid; place-items: center; box-shadow: var(--shadow); opacity: 0; transform: translateY(20px); pointer-events: none; transition: all .3s; z-index: 60; }
+    .to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+    .to-top svg { width: 20px; height: 20px; }
+    .toast { position: fixed; bottom: 26px; left: 50%; transform: translate(-50%, 30px); background: var(--ink); color: var(--card); padding: 12px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; opacity: 0; transition: all .3s; z-index: 200; pointer-events: none; box-shadow: var(--shadow); }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .drawer-bg { position: fixed; inset: 0; background: rgba(0, 0, 0, .5); z-index: 90; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 290px; max-width: 85vw; background: var(--card); z-index: 91; transform: translateX(100%); transition: transform .3s cubic-bezier(.2, .7, .2, 1); padding: 20px; overflow-y: auto; }
+    body.drawer-open .drawer { transform: none; }
+    body.drawer-open .drawer-bg { opacity: 1; pointer-events: auto; }
+    .drawer .search-box { max-width: none; margin: 18px 0; }
+    .drawer li a { display: flex; align-items: center; gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--line); font-weight: 700; }
+    .drawer li a i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); }
+    .drawer-head { display: flex; justify-content: space-between; align-items: center; }
+    .drawer-head b { font-family: 'Noto Naskh Arabic', serif; font-size: 26px; }
+    .drawer-head button svg { width: 24px; height: 24px; }
+    .fade-in { animation: fadeIn .45s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1100px) {
+      .lead-grid { grid-template-columns: 1.4fr 1fr; }
+      .lead-grid > aside { grid-column: 1/-1; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+      .lead-grid > aside .widget + .widget { margin-top: 0; }
+      .op-grid, .grid4 { grid-template-columns: repeat(2, 1fr); }
+      .ft-grid { grid-template-columns: 1fr 1fr; }
+      .main-side { grid-template-columns: 1fr 280px; }
+    }
+    @media (max-width: 860px) {
+      .masthead .wrap { grid-template-columns: 1fr; padding-top: 16px; padding-bottom: 16px; }
+      .mh-side { display: none; }
+      .logo { justify-self: start; }
+      .logo-mark { width: 44px; height: 44px; }
+      .logo-text b { font-size: 32px; }
+      .nav ul, .nav-home { display: none; }
+      .burger { display: grid; }
+      .nav .wrap { height: 50px; }
+      .lead-grid, .cat-block, .two-col, .main-side { grid-template-columns: 1fr; }
+      .lead-grid > aside { grid-template-columns: 1fr; }
+      .sticky-side { position: static; }
+      .lead-main h3.t { font-size: 23px; }
+      .grid3 { grid-template-columns: 1fr 1fr; }
+      .gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 240px 160px 160px; }
+      .gallery a:first-child { grid-column: 1/-1; grid-row: auto; }
+      .newsletter { grid-template-columns: 1fr; padding: 28px 22px; }
+      .article { padding: 22px 18px; }
+      .article h1 { font-size: 24px; }
+      .feed a { grid-template-columns: 130px 1fr; gap: 14px; }
+      .feed h3.t { font-size: 15.5px; }
+      .feed p { display: none; }
+      .topbar .tools a { display: none; }
+    }
+    @media (max-width: 560px) {
+      .wrap { padding: 0 16px; }
+      .op-grid, .grid4, .grid3 { grid-template-columns: 1fr; }
+      .cat-block .list a { grid-template-columns: 110px 1fr; }
+      .ft-grid { grid-template-columns: 1fr; }
+      .c-form { grid-template-columns: 1fr; }
+      .nl-form { flex-direction: column; }
+      .topbar .dates span:nth-child(n+2) { display: none; }
+      .ticker-label span { display: none; }
+    }
+    @media print {
+      .topbar, .nav, .ticker, .markets, footer, aside, .share-row, .comments, .art-tools, .to-top, .related, .masthead .mh-side { display: none !important; }
+      .main-side { grid-template-columns: 1fr; }
+      .article { border: 0; box-shadow: none; padding: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" id="progress"></div>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="dates">
+        <span id="dateFa"></span>
+        <span id="dateHijri"></span>
+        <span id="dateEn" dir="ltr"></span>
+        <span>تهران <b class="clock" id="clock"></b></span>
+      </div>
+      <div class="tools">
+        <a href="#about">درباره ما</a>
+        <a href="#contact">تماس</a>
+        <a href="#ads">تبلیغات</a>
+        <button id="themeBtn" aria-label="تغییر حالت شب و روز">🌙 حالت شب</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="wrap">
+      <div class="mh-side">
+        <div class="weather-mini" id="weatherMini"></div>
+      </div>
+      <a href="#/" class="logo" aria-label="روزنگار - صفحه اصلی">
+        <span class="logo-mark"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 25V8.5A2.5 2.5 0 0 1 8.5 6H23a3 3 0 0 1 3 3v13.5a2.5 2.5 0 0 1-2.5 2.5H8.5" /><path d="M11 12h10M11 16.5h10M11 21h6" /></svg></span>
+        <span class="logo-text"><b>روزنگار</b><small>پایگاه خبری و تحلیلی · از ۱۳۸۷</small></span>
+      </a>
+      <div class="mh-side end">
+        <form class="search-box" data-search>
+          <input type="search" placeholder="جست‌وجو در اخبار…" aria-label="جست‌وجو">
+          <button aria-label="جست‌وجو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg></button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav" id="nav">
+    <div class="wrap">
+      <button class="burger" id="burger" aria-label="منو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
+      <a href="#/" class="nav-home" aria-label="خانه"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" /></svg></a>
+      <ul id="navList"></ul>
+      <a href="#/latest" class="nav-live"><span class="dot"></span>آخرین اخبار</a>
+    </div>
+  </nav>
+
+  <!-- Breaking ticker -->
+  <div class="ticker">
+    <div class="wrap">
+      <div class="ticker-label"><span class="dot"></span>فوری<span>&nbsp;·&nbsp;خبر</span></div>
+      <div class="ticker-track"><div class="ticker-inner" id="tickerInner"></div></div>
+    </div>
+  </div>
+
+  <!-- Markets -->
+  <div class="markets"><div class="wrap" id="markets"></div></div>
+
+  <main><div class="wrap" id="app"></div></main>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="wrap">
+      <div class="demo-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16.5v.01" /></svg>این وب‌سایت یک نمونه‌کار طراحی است؛ نام «روزنگار»، اخبار، نویسندگان و اعداد آن ساختگی هستند و جنبه‌ی نمایشی دارند.</div>
+      <div class="ft-grid">
+        <div id="about">
+          <a href="#/" class="logo">
+            <span class="logo-mark"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 25V8.5A2.5 2.5 0 0 1 8.5 6H23a3 3 0 0 1 3 3v13.5a2.5 2.5 0 0 1-2.5 2.5H8.5" /><path d="M11 12h10M11 16.5h10M11 21h6" /></svg></span>
+            <span class="logo-text"><b>روزنگار</b><small>پایگاه خبری و تحلیلی</small></span>
+          </a>
+          <p class="about">روزنگار رسانه‌ای مستقل است که با تکیه بر تحریریه‌ای حرفه‌ای، اخبار ایران و جهان را به‌صورت شبانه‌روزی، دقیق و بی‌طرفانه پوشش می‌دهد. انتشار مطالب با ذکر منبع آزاد است.</p>
+          <div class="socials">
+            <a href="#" aria-label="تلگرام"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.3-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L5.9 13.4 1 11.9c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3Z" /></svg></a>
+            <a href="#" aria-label="اینستاگرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" /></svg></a>
+            <a href="#" aria-label="ایکس"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.9L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z" /></svg></a>
+            <a href="#" aria-label="یوتیوب"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2c-.2-1.6-1-2.7-2.6-2.9C16.9 5 12 5 12 5s-4.9 0-7.4.3C3 5.5 2.2 6.6 2 8.2 1.8 9.6 1.8 12 1.8 12s0 2.4.2 3.8c.2 1.6 1 2.7 2.6 2.9 2.5.3 7.4.3 7.4.3s4.9 0 7.4-.3c1.6-.2 2.4-1.3 2.6-2.9.2-1.4.2-3.8.2-3.8s0-2.4-.2-3.8ZM10 15.1V8.9l5.2 3.1-5.2 3.1Z" /></svg></a>
+            <a href="#/" aria-label="آر‌اس‌اس"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 11a8 8 0 0 1 8 8M5 5a14 14 0 0 1 14 14" /><circle cx="6" cy="18" r="1.4" fill="currentColor" /></svg></a>
+          </div>
+        </div>
+        <div>
+          <h5>سرویس‌ها</h5>
+          <ul id="ftCats"></ul>
+        </div>
+        <div>
+          <h5>روزنگار</h5>
+          <ul>
+            <li><a href="#about">درباره ما</a></li>
+            <li><a href="#/">اعضای تحریریه</a></li>
+            <li><a href="#/">منشور اخلاق حرفه‌ای</a></li>
+            <li><a href="#/">حریم خصوصی</a></li>
+            <li><a href="#ads">تعرفه تبلیغات</a></li>
+            <li><a href="#/">آرشیو اخبار</a></li>
+            <li><a href="#/">همکاری با ما</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>ارتباط با ما</h5>
+          <ul class="contact-li">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg>تهران، خیابان نمونه، پلاک ۱۲، ساختمان روزنگار</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" /></svg><span dir="ltr">۰۲۱-۰۰۰۰ ۰۰۰۰</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>info@example.com</li>
+          </ul>
+          <div class="apps" id="ads"><a href="#/">اپلیکیشن اندروید</a><a href="#/">نسخه iOS</a></div>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <span>© <span id="yearFa"></span> تمامی حقوق مادی و معنوی این پایگاه محفوظ است. · نمونه‌کار طراحی</span>
+        <span>طراحی و توسعه: وب‌پیکاسو</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" aria-label="بازگشت به بالا"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 15 6-6 6 6" /></svg></button>
+  <div class="toast" id="toast"></div>
+
+  <!-- Mobile drawer -->
+  <div class="drawer-bg" id="drawerBg"></div>
+  <aside class="drawer" id="drawer" aria-label="منوی موبایل">
+    <div class="drawer-head"><b>روزنگار</b><button id="drawerClose" aria-label="بستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg></button></div>
+    <form class="search-box" data-search>
+      <input type="search" placeholder="جست‌وجو در اخبار…" aria-label="جست‌وجو">
+      <button aria-label="جست‌وجو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg></button>
+    </form>
+    <ul id="drawerList"></ul>
+  </aside>
+
+  <script>
+    /* ============================================================
+       Data
+       ============================================================ */
+    const CATS = {
+      politics: { fa: "سیاسی", c: "#1f4e8c", c2: "#0f2a52", desc: "اخبار مجلس، دولت، دیپلماسی و احزاب" },
+      economy: { fa: "اقتصادی", c: "#0f7a55", c2: "#06402c", desc: "بازار سرمایه، پول، انرژی و کسب‌وکار" },
+      society: { fa: "اجتماعی", c: "#c0631a", c2: "#6b3109", desc: "شهری، آموزش، محیط زیست و حوادث" },
+      sport: { fa: "ورزشی", c: "#b3121f", c2: "#5c0810", desc: "فوتبال، والیبال، کشتی و رشته‌های المپیکی" },
+      culture: { fa: "فرهنگ و هنر", c: "#7a3a9a", c2: "#3b1550", desc: "سینما، کتاب، موسیقی و میراث فرهنگی" },
+      world: { fa: "بین‌الملل", c: "#1b6f8a", c2: "#0a3646", desc: "رویدادهای جهان، منطقه و سازمان‌های بین‌المللی" },
+      tech: { fa: "علم و فناوری", c: "#2d3a9b", c2: "#141b52", desc: "فضا، هوش مصنوعی، استارتاپ‌ها و ارتباطات" },
+      health: { fa: "سلامت", c: "#0e8a8a", c2: "#044444", desc: "پزشکی، تغذیه، سبک زندگی و سلامت روان" },
+    };
+
+    const AUTHORS = [
+      { n: "سارا محمدی", r: "خبرنگار سیاسی", col: "#1f4e8c" },
+      { n: "علی رضایی", r: "دبیر سرویس اقتصادی", col: "#0f7a55" },
+      { n: "مریم کاظمی", r: "خبرنگار اجتماعی", col: "#c0631a" },
+      { n: "حمید نوری", r: "خبرنگار ورزشی", col: "#b3121f" },
+      { n: "نگار احمدی", r: "دبیر فرهنگ و هنر", col: "#7a3a9a" },
+      { n: "کاوه شریفی", r: "دبیر سرویس بین‌الملل", col: "#1b6f8a" },
+      { n: "پریسا یزدانی", r: "خبرنگار علم و فناوری", col: "#2d3a9b" },
+      { n: "دکتر رضا امینی", r: "مشاور تحریریه سلامت", col: "#0e8a8a" },
+    ];
+    const AUTH_BY_CAT = { politics: 0, economy: 1, society: 2, sport: 3, culture: 4, world: 5, tech: 6, health: 7 };
+
+    // min = minutes ago, v = views
+    const NEWS = [
+      { id: 1, cat: "politics", k: "در جلسه فوق‌العاده کمیسیون تلفیق", t: "کلیات لایحه بودجه سال آینده با تمرکز بر عمران و اشتغال تصویب شد", l: "کمیسیون تلفیق در نشستی هشت‌ساعته، کلیات لایحه بودجه سال آینده را با ۲۴ رأی موافق تصویب کرد؛ افزایش سهم بودجه عمرانی و حمایت از اشتغال جوانان مهم‌ترین محورهای این لایحه است.", min: 18, v: 48210, hot: 1, tags: ["بودجه", "مجلس", "کمیسیون تلفیق", "اشتغال"],
+        b: [
+          "به گزارش روزنگار، اعضای کمیسیون تلفیق پس از بررسی گزارش کارشناسی مرکز پژوهش‌ها و شنیدن نظرات نمایندگان سازمان برنامه و بودجه، کلیات لایحه را به رأی گذاشتند. سخنگوی کمیسیون پس از پایان جلسه گفت جزئیات لایحه از هفته آینده در زیرکمیسیون‌های تخصصی بررسی خواهد شد.",
+          "بر اساس متن لایحه، سهم اعتبارات عمرانی نسبت به سال جاری حدود ۱۸ درصد افزایش یافته و بخش قابل‌توجهی از آن به تکمیل طرح‌های نیمه‌تمام آب، راه و مدارس اختصاص پیدا کرده است. همچنین بسته‌ای برای حمایت از کارفرمایانی که نیروی جوان جذب می‌کنند در نظر گرفته شده است.",
+          "#Q|اولویت ما این است که هیچ طرح عمرانی جدیدی آغاز نشود، مگر آنکه منابع تکمیل آن از پیش مشخص باشد.|سخنگوی کمیسیون تلفیق",
+          "#H|زمان‌بندی بررسی در صحن علنی",
+          "طبق برنامه اعلام‌شده، گزارش نهایی کمیسیون تا پایان ماه آینده تقدیم هیئت‌رئیسه می‌شود و بررسی جزئیات در صحن علنی از ابتدای ماه بعد آغاز خواهد شد. کارشناسان پیش‌بینی می‌کنند بخش درآمدهای مالیاتی و منابع حاصل از فروش انرژی، بیشترین بحث را در صحن به خود اختصاص دهد.",
+          "#F|نکات کلیدی لایحه|افزایش ۱۸ درصدی بودجه عمرانی|بسته تشویقی اشتغال جوانان|اولویت تکمیل طرح‌های نیمه‌تمام|کاهش وابستگی به درآمدهای نفتی",
+        ] },
+      { id: 2, cat: "economy", k: "گزارش معاملات امروز بازار سرمایه", t: "شاخص کل بورس با رشد ۲.۸ درصدی وارد کانال تازه‌ای شد", l: "بازار سهام در معاملات امروز شاهد ورود نقدینگی حقیقی بود و شاخص کل با رشدی بیش از ۵۰ هزار واحدی، رکورد تازه‌ای را در ماه جاری ثبت کرد.", min: 34, v: 39120, hot: 1, tags: ["بورس", "شاخص کل", "بازار سرمایه"],
+        b: [
+          "به گزارش روزنگار از بازار سرمایه، ارزش معاملات خرد امروز به بالاترین سطح خود در سه ماه گذشته رسید و نمادهای گروه فلزات اساسی، پتروشیمی و بانکی بیشترین تأثیر مثبت را بر شاخص داشتند.",
+          "تحلیلگران بازار، کاهش نرخ سود در بازار بین‌بانکی و انتشار گزارش‌های فصلی مثبت شرکت‌ها را از دلایل اصلی این رشد می‌دانند. شاخص هم‌وزن نیز با افزایش ۲.۱ درصدی همراه شد که نشان می‌دهد رشد بازار تنها به نمادهای بزرگ محدود نبوده است.",
+          "#Q|بازار وارد فاز تثبیت شده و اگر ثبات نسبی در متغیرهای کلان ادامه پیدا کند، روند صعودی می‌تواند پایدار باشد.|یک کارشناس بازار سرمایه",
+          "در مقابل، برخی فعالان بازار به سرمایه‌گذاران خرد توصیه می‌کنند با احتیاط و بر اساس تحلیل بنیادی تصمیم بگیرند و از خرید هیجانی پرهیز کنند.",
+        ] },
+      { id: 3, cat: "sport", k: "قهرمانی والیبال آسیا", t: "تیم ملی والیبال با پیروزی مقتدرانه به نیمه‌نهایی صعود کرد", l: "ملی‌پوشان والیبال کشورمان در دیداری تماشایی، حریف قدرتمند خود را سه بر یک شکست دادند و برای کسب عنوان قهرمانی، گامی بلند برداشتند.", min: 52, v: 61450, hot: 1, video: "۰۳:۲۴", tags: ["والیبال", "تیم ملی", "قهرمانی آسیا"],
+        b: [
+          "به گزارش روزنگار، تیم ملی والیبال در این دیدار که با حضور پرشور تماشاگران برگزار شد، ست نخست را با نتیجه ۲۵ بر ۲۱ واگذار کرد اما در ادامه با تغییر آرایش دفاعی و دریافت‌های دقیق، سه ست بعدی را با نتایج ۲۵-۱۹، ۲۵-۲۲ و ۲۵-۱۸ به سود خود به پایان رساند.",
+          "سرمربی تیم ملی پس از دیدار گفت بازیکنان جوان تیم نشان دادند که توان رقابت در بالاترین سطح را دارند و تمرکز تیم اکنون بر بازی نیمه‌نهایی است.",
+          "#Q|این پیروزی متعلق به همه مردمی است که در این مدت پشت تیم ایستادند. ما برای قهرمانی آمده‌ایم.|کاپیتان تیم ملی والیبال",
+          "تیم ملی در مرحله نیمه‌نهایی روز پنج‌شنبه به مصاف برنده دیدار دو تیم دیگر گروه می‌رود. این مسابقه از شبکه ورزش به‌صورت زنده پخش خواهد شد.",
+        ] },
+      { id: 4, cat: "tech", k: "دستاورد دانشگاهی", t: "نخستین ماهواره دانشجویی کشور با موفقیت در مدار قرار گرفت", l: "ماهواره مکعبی که توسط گروهی از دانشجویان مهندسی هوافضا طراحی و ساخته شده بود، پس از پرتاب با موفقیت در مدار ۵۰۰ کیلومتری زمین قرار گرفت و نخستین سیگنال‌های خود را ارسال کرد.", min: 75, v: 33870, tags: ["ماهواره", "فضا", "دانشجویان", "هوافضا"],
+        b: [
+          "به گزارش روزنگار، این ماهواره با وزن کمتر از چهار کیلوگرم، مأموریت تصویربرداری از پوشش گیاهی و پایش منابع آبی را بر عهده دارد. ایستگاه زمینی دانشگاه حدود ۹۰ دقیقه پس از پرتاب، نخستین سیگنال تله‌متری آن را دریافت کرد.",
+          "سرپرست تیم سازنده گفت تمام زیرسیستم‌های ماهواره، از جمله سامانه کنترل وضعیت و پنل‌های خورشیدی، در داخل دانشگاه طراحی و آزمون شده‌اند. این پروژه حدود سه سال زمان برده و بیش از ۴۰ دانشجو در آن مشارکت داشته‌اند.",
+          "#F|مشخصات ماهواره|ابعاد: ۳U مکعبی|ارتفاع مدار: ۵۰۰ کیلومتر|طول عمر پیش‌بینی‌شده: ۲ سال|مأموریت: پایش پوشش گیاهی و منابع آب",
+          "قرار است داده‌های این ماهواره در اختیار پژوهشگران حوزه کشاورزی و محیط زیست قرار گیرد.",
+        ] },
+      { id: 5, cat: "world", k: "اجلاس سالانه اقلیمی", t: "کشورهای جهان بر سر سازوکار صندوق خسارت‌های اقلیمی به توافق رسیدند", l: "نمایندگان بیش از ۱۹۰ کشور پس از دو هفته مذاکره فشرده، بیانیه پایانی اجلاس را تصویب کردند که بر اساس آن، کشورهای آسیب‌پذیر از محل صندوق ویژه خسارت حمایت مالی دریافت می‌کنند.", min: 96, v: 22340, tags: ["تغییرات اقلیمی", "سازمان ملل", "محیط زیست"],
+        b: [
+          "به گزارش سرویس بین‌الملل روزنگار، این توافق که مذاکرات آن تا ساعات پایانی شب ادامه داشت، چارچوب تأمین مالی و نحوه تخصیص منابع صندوق را مشخص می‌کند.",
+          "بر اساس متن مصوب، کشورهای توسعه‌یافته متعهد شده‌اند سهم مشارکت خود را طی پنج سال آینده به‌تدریج افزایش دهند. گروه‌های فعال محیط زیست ضمن استقبال از این توافق، خواستار تعهدات الزام‌آورتر برای کاهش انتشار گازهای گلخانه‌ای شدند.",
+          "#Q|این توافق گامی تاریخی است، اما بدون اقدام سریع برای کاهش انتشار، کافی نخواهد بود.|یکی از مذاکره‌کنندگان ارشد",
+          "اجلاس سال آینده در یکی از کشورهای آسیایی برگزار خواهد شد.",
+        ] },
+      { id: 6, cat: "society", k: "طرح ملی محیط زیست", t: "کاشت یک میلیون نهال در کمربند سبز شهرهای بزرگ آغاز شد", l: "با آغاز فصل نهال‌کاری، طرح ملی توسعه کمربند سبز با مشارکت شهرداری‌ها، دانش‌آموزان و داوطلبان مردمی در ۳۲ شهر به‌طور همزمان کلید خورد.", min: 120, v: 18760, tags: ["محیط زیست", "نهال‌کاری", "کمربند سبز"],
+        b: [
+          "به گزارش روزنگار، در این طرح گونه‌های بومی و مقاوم به کم‌آبی انتخاب شده‌اند و آبیاری آن‌ها با استفاده از پساب تصفیه‌شده و سامانه‌های قطره‌ای انجام می‌شود.",
+          "مسئولان اجرایی طرح اعلام کرده‌اند که شهروندان می‌توانند از طریق سامانه اینترنتی طرح، برای مشارکت در کاشت یا حمایت از نگهداری نهال‌ها ثبت‌نام کنند.",
+          "#F|طرح در یک نگاه|۳۲ شهر مشارکت‌کننده|بیش از ۴۰ هزار داوطلب|گونه‌های بومی و کم‌آب‌بر|آبیاری با پساب تصفیه‌شده",
+        ] },
+      { id: 7, cat: "culture", k: "جشنواره بین‌المللی فیلم", t: "فیلم ایرانی جایزه بهترین فیلمنامه جشنواره بین‌المللی را از آن خود کرد", l: "یک فیلم بلند داستانی ایرانی در مراسم اختتامیه جشنواره، جایزه بهترین فیلمنامه را دریافت کرد و مورد تحسین منتقدان بین‌المللی قرار گرفت.", min: 145, v: 27410, video: "۰۲:۱۰", tags: ["سینما", "جشنواره", "فیلمنامه"],
+        b: [
+          "به گزارش روزنگار، این فیلم که روایتی انسانی از زندگی یک خانواده در حاشیه شهر است، پیش از این نیز در بخش مسابقه چند جشنواره دیگر حضور داشت.",
+          "نویسنده فیلمنامه در سخنان کوتاهی هنگام دریافت جایزه، این افتخار را به همه سینماگران جوان کشور تقدیم کرد.",
+          "#Q|قصه‌های ما، قصه‌های جهانی‌اند؛ کافی است صادقانه روایتشان کنیم.|نویسنده فیلمنامه",
+          "پیش‌بینی می‌شود این فیلم از ماه آینده در سینماهای کشور اکران عمومی شود.",
+        ] },
+      { id: 8, cat: "health", k: "فصل سرما", t: "واکسیناسیون آنفلوآنزا برای گروه‌های پرخطر در مراکز بهداشت آغاز شد", l: "وزارت بهداشت اعلام کرد واکسن آنفلوآنزای فصلی از امروز برای سالمندان، بیماران مزمن، کادر درمان و زنان باردار در مراکز جامع سلامت تزریق می‌شود.", min: 170, v: 30980, tags: ["آنفلوآنزا", "واکسن", "سلامت عمومی"],
+        b: [
+          "به گزارش روزنگار، متقاضیان می‌توانند با مراجعه به سامانه نوبت‌دهی یا تماس با نزدیک‌ترین مرکز بهداشت، برای دریافت واکسن نوبت بگیرند.",
+          "متخصصان توصیه می‌کنند افراد در معرض خطر، واکسن را پیش از اوج فصل بیماری دریافت کنند؛ زیرا ایجاد ایمنی کامل حدود دو هفته زمان می‌برد.",
+          "#F|چه کسانی در اولویت هستند؟|افراد بالای ۶۵ سال|بیماران دیابتی، قلبی و ریوی|کادر درمان|زنان باردار",
+          "رعایت بهداشت دست‌ها، استفاده از ماسک در صورت بروز علائم و استراحت کافی، همچنان مؤثرترین راه‌های پیشگیری عنوان شده است.",
+        ] },
+      { id: 9, cat: "economy", k: "زیرساخت حمل‌ونقل", t: "فاز جدید کریدور ریلی شمال–جنوب به بهره‌برداری رسید", l: "با افتتاح قطعه جدید خط ریلی، ظرفیت ترانزیت کالا در کریدور شمال–جنوب سالانه ۵ میلیون تن افزایش می‌یابد و زمان حمل بار تا ۴۰ درصد کاهش پیدا می‌کند.", min: 210, v: 16540, tags: ["ترانزیت", "راه‌آهن", "کریدور"],
+        b: [
+          "به گزارش روزنگار، این قطعه ۱۶۰ کیلومتری شامل ۱۲ پل و ۴ تونل است و با استفاده از توان پیمانکاران داخلی اجرا شده است.",
+          "کارشناسان حمل‌ونقل معتقدند تکمیل این مسیر، نقش کشور را در زنجیره لجستیک منطقه پررنگ‌تر کرده و درآمدهای ترانزیتی را به‌طور محسوسی افزایش می‌دهد.",
+          "#Q|هر کیلومتر ریل، یک قدم به سمت اقتصاد پایدارتر است.|مدیرعامل شرکت ساخت زیربناهای حمل‌ونقل",
+        ] },
+      { id: 10, cat: "sport", k: "شهرآورد پایتخت", t: "شهرآورد پرهیجان پایتخت با تساوی دو بر دو به پایان رسید", l: "دو تیم سرخ و آبی پایتخت در دیداری پرگل و جذاب، با تساوی دو بر دو امتیازها را تقسیم کردند تا رقابت در صدر جدول همچنان نفس‌گیر باقی بماند.", min: 260, v: 72300, video: "۰۵:۴۸", tags: ["فوتبال", "شهرآورد", "لیگ برتر"],
+        b: [
+          "به گزارش روزنگار، تیم میزبان در نیمه نخست با دو گل پیش افتاد، اما حریف با تغییرات تاکتیکی در نیمه دوم و دو گل در ۱۵ دقیقه پایانی، بازی را به تساوی کشاند.",
+          "داور بازی در دقیقه ۸۸ پس از بازبینی ویدئویی، یک پنالتی اعلام‌شده را لغو کرد که با واکنش هواداران همراه شد.",
+          "#F|آمار بازی|مالکیت توپ: ۵۲٪ – ۴۸٪|شوت در چارچوب: ۶ – ۵|کرنر: ۷ – ۴|کارت زرد: ۳ – ۲",
+        ] },
+      { id: 11, cat: "politics", k: "دیپلماسی منطقه‌ای", t: "نشست مشترک وزرای خارجه منطقه با محوریت همکاری‌های اقتصادی برگزار شد", l: "وزرای امور خارجه کشورهای منطقه در نشستی یک‌روزه، بر توسعه همکاری‌های ترانزیتی، انرژی و گردشگری تأکید کردند و بیانیه‌ای ۱۲ بندی را امضا کردند.", min: 300, v: 21180, tags: ["دیپلماسی", "وزارت خارجه", "همکاری منطقه‌ای"],
+        b: [
+          "به گزارش روزنگار، در این نشست طرح ایجاد کارگروه مشترک تسهیل تجارت مرزی و حذف موانع گمرکی مطرح شد و مقرر شد نشست کارشناسی بعدی ظرف سه ماه آینده برگزار شود.",
+          "ناظران سیاسی برگزاری این نشست را نشانه‌ای از عزم کشورهای منطقه برای حل مسائل مشترک از مسیر گفت‌وگو می‌دانند.",
+          "#Q|امنیت و رفاه منطقه، تنها با همکاری خود کشورهای منطقه تأمین می‌شود.|بخشی از بیانیه پایانی",
+        ] },
+      { id: 12, cat: "tech", k: "ارتباطات روستایی", t: "پوشش اینترنت پرسرعت در روستاهای کشور به ۸۰ درصد رسید", l: "با اجرای فاز سوم طرح توسعه ارتباطات روستایی، بیش از ۸۰ درصد روستاهای بالای ۲۰ خانوار به اینترنت پرسرعت همراه دسترسی پیدا کردند.", min: 340, v: 14320, tags: ["اینترنت", "روستا", "ارتباطات"],
+        b: [
+          "به گزارش روزنگار، در این مرحله بیش از ۲ هزار سایت جدید ارتباطی در مناطق کم‌برخوردار نصب شده است.",
+          "مسئولان طرح می‌گویند دسترسی به اینترنت پایدار، زمینه آموزش آنلاین، فروش اینترنتی محصولات کشاورزی و صنایع دستی را برای روستاییان فراهم می‌کند.",
+        ] },
+      { id: 13, cat: "culture", k: "رویداد فرهنگی سال", t: "نمایشگاه کتاب امسال با حضور ۲۵۰۰ ناشر داخلی و خارجی برگزار می‌شود", l: "دبیر نمایشگاه کتاب از حضور ۲۵۰۰ ناشر و برگزاری نسخه مجازی همزمان با نمایشگاه حضوری خبر داد؛ بخش کودک و نوجوان امسال با فضایی دو برابری میزبان مخاطبان خواهد بود.", min: 390, v: 12780, tags: ["کتاب", "نمایشگاه", "نشر"],
+        b: [
+          "به گزارش روزنگار، امسال برای نخستین بار بخش ویژه‌ای به معرفی کتاب‌های صوتی و نشر دیجیتال اختصاص یافته است.",
+          "همچنین طرح «کتاب‌یار» با هدف حمایت از خرید کتاب دانشجویان و طلاب، با یارانه ۳۰ درصدی اجرا خواهد شد.",
+          "#F|برنامه نمایشگاه|۱۰ روز برگزاری|۲۵۰۰ ناشر|نسخه مجازی همزمان|بخش ویژه نشر دیجیتال",
+        ] },
+      { id: 14, cat: "society", k: "حمل‌ونقل عمومی", t: "ساعت کار مترو در شب‌های آخر هفته تا نیمه‌شب تمدید شد", l: "شرکت بهره‌برداری متروی تهران اعلام کرد از هفته آینده، قطارها در شب‌های پنج‌شنبه و جمعه تا ساعت ۲۴ در خطوط اصلی فعال خواهند بود.", min: 430, v: 25640, tags: ["مترو", "حمل‌ونقل عمومی", "شهری"],
+        b: [
+          "به گزارش روزنگار، این تصمیم با توجه به افزایش سفرهای شبانه شهروندان و درخواست‌های مکرر مسافران گرفته شده است.",
+          "سرفاصله حرکت قطارها در ساعات تمدیدشده ۱۲ دقیقه خواهد بود و ایستگاه‌های تبادلی تا آخرین قطار باز می‌مانند.",
+        ] },
+      { id: 15, cat: "world", k: "بازار جهانی انرژی", t: "قیمت جهانی نفت در آستانه نشست کشورهای تولیدکننده افزایش یافت", l: "بهای هر بشکه نفت خام در بازارهای جهانی با افزایش ۱.۶ درصدی همراه شد؛ معامله‌گران منتظر تصمیم تولیدکنندگان درباره سطح تولید ماه‌های آینده هستند.", min: 480, v: 15890, tags: ["نفت", "انرژی", "بازار جهانی"],
+        b: [
+          "به گزارش روزنگار، تحلیلگران بازار انرژی معتقدند احتمال تمدید سیاست کاهش تولید، عامل اصلی رشد قیمت‌ها در روزهای اخیر بوده است.",
+          "همزمان، گزارش‌های مربوط به کاهش ذخایر تجاری نفت خام نیز به تقویت قیمت‌ها کمک کرده است.",
+        ] },
+      { id: 16, cat: "health", k: "پژوهش‌های پزشکی", t: "پژوهشگران ایرانی روش تازه‌ای برای تشخیص زودهنگام دیابت معرفی کردند", l: "گروهی از پژوهشگران یک دانشگاه علوم پزشکی موفق به طراحی آزمونی کم‌هزینه شدند که با استفاده از یک قطره خون، خطر ابتلا به دیابت نوع دو را سال‌ها پیش از بروز علائم پیش‌بینی می‌کند.", min: 540, v: 19870, tags: ["دیابت", "پژوهش", "تشخیص زودهنگام"],
+        b: [
+          "به گزارش روزنگار، نتایج این پژوهش در یکی از مجلات معتبر بین‌المللی منتشر شده و دقت این روش در آزمایش‌های اولیه بالای ۹۰ درصد گزارش شده است.",
+          "مجری طرح گفت در صورت تأیید نهایی، این آزمون می‌تواند در برنامه غربالگری مراکز بهداشت قرار گیرد.",
+          "#Q|پیشگیری همیشه ارزان‌تر و مؤثرتر از درمان است؛ هدف ما ساده کردن غربالگری بود.|مجری طرح پژوهشی",
+        ] },
+      { id: 17, cat: "politics", k: "صحن علنی مجلس", t: "طرح شفافیت آرای نمایندگان در دستور کار صحن علنی قرار گرفت", l: "هیئت‌رئیسه مجلس اعلام کرد طرح شفافیت آرای نمایندگان پس از تأیید کمیسیون تخصصی، هفته آینده در صحن علنی بررسی می‌شود.", min: 600, v: 17430, tags: ["مجلس", "شفافیت", "قانون‌گذاری"],
+        b: [
+          "به گزارش روزنگار، بر اساس این طرح، آرای نمایندگان در تمامی رأی‌گیری‌های صحن به‌صورت عمومی منتشر خواهد شد.",
+          "موافقان طرح آن را گامی مهم برای پاسخ‌گویی بیشتر می‌دانند و مخالفان خواستار پیش‌بینی استثنائاتی برای برخی موضوعات شده‌اند.",
+        ] },
+      { id: 18, cat: "sport", k: "دوومیدانی", t: "رکورد ملی دوی ۴۰۰ متر پس از ۱۲ سال شکسته شد", l: "دونده جوان کشورمان در مسابقات قهرمانی کشور با ثبت زمان ۴۵ ثانیه و ۴۸ صدم، رکورد ۱۲ ساله این ماده را بهبود بخشید.", min: 660, v: 13250, tags: ["دوومیدانی", "رکورد ملی", "المپیک"],
+        b: [
+          "به گزارش روزنگار، این ورزشکار ۲۱ ساله با این رکورد، به استاندارد ورودی مسابقات قهرمانی آسیا نیز نزدیک‌تر شده است.",
+          "سرمربی تیم ملی دوومیدانی ابراز امیدواری کرد این دونده در رویدادهای بین‌المللی آینده نیز درخشش داشته باشد.",
+        ] },
+      { id: 19, cat: "economy", k: "گزارش مرکز آمار", t: "نرخ تورم ماهانه برای سومین ماه پیاپی کاهش یافت", l: "بر اساس تازه‌ترین گزارش مرکز آمار، نرخ تورم ماهانه به ۲.۱ درصد رسید که نسبت به ماه گذشته ۰.۴ واحد درصد کاهش نشان می‌دهد.", min: 720, v: 28760, tags: ["تورم", "مرکز آمار", "اقتصاد کلان"],
+        b: [
+          "به گزارش روزنگار، بیشترین کاهش نرخ تورم در گروه خوراکی‌ها و آشامیدنی‌ها ثبت شده و گروه مسکن و خدمات همچنان بالاترین تورم را دارند.",
+          "اقتصاددانان تأکید می‌کنند تداوم این روند به انضباط مالی دولت و ثبات در بازار ارز بستگی دارد.",
+          "#F|اعداد کلیدی|تورم ماهانه: ۲.۱٪|کاهش نسبت به ماه قبل: ۰.۴ واحد|بیشترین کاهش: خوراکی‌ها|بیشترین تورم: مسکن",
+        ] },
+      { id: 20, cat: "culture", k: "میراث فرهنگی", t: "مرمت کاروانسرای تاریخی صفوی در حاشیه کویر به پایان رسید", l: "عملیات مرمت یک کاروانسرای ۴۰۰ ساله پس از چهار سال به پایان رسید و این بنا به‌عنوان اقامتگاه سنتی و مرکز معرفی صنایع دستی در اختیار گردشگران قرار می‌گیرد.", min: 800, v: 11240, tags: ["میراث فرهنگی", "کاروانسرا", "گردشگری"],
+        b: [
+          "به گزارش روزنگار، در این پروژه از مصالح سنتی همچون خشت، گچ و ساروج استفاده شده و استادکاران بومی منطقه در آن مشارکت داشته‌اند.",
+          "مدیرکل میراث فرهنگی استان گفت این کاروانسرا ظرفیت پذیرش روزانه ۸۰ گردشگر را خواهد داشت.",
+        ] },
+      { id: 21, cat: "tech", k: "اکوسیستم نوآوری", t: "استارتاپ‌های هوش مصنوعی داخلی در سال جاری دو برابر سرمایه جذب کردند", l: "گزارش سالانه اکوسیستم نوآوری نشان می‌دهد سرمایه‌گذاری خطرپذیر در استارتاپ‌های حوزه هوش مصنوعی نسبت به سال گذشته بیش از دو برابر شده است.", min: 900, v: 16980, tags: ["هوش مصنوعی", "استارتاپ", "سرمایه‌گذاری"],
+        b: [
+          "به گزارش روزنگار، بیشترین سرمایه‌گذاری در حوزه‌های سلامت دیجیتال، پردازش زبان فارسی و کشاورزی هوشمند انجام شده است.",
+          "فعالان این حوزه می‌گویند کمبود نیروی متخصص و دسترسی به زیرساخت پردازشی، مهم‌ترین چالش‌های پیش روی استارتاپ‌هاست.",
+        ] },
+      { id: 22, cat: "world", k: "انرژی‌های تجدیدپذیر", t: "بزرگ‌ترین مزرعه خورشیدی آسیای میانه وارد مدار تولید شد", l: "نیروگاه خورشیدی با ظرفیت یک هزار مگاوات در آسیای میانه افتتاح شد که برق مورد نیاز حدود ۵۰۰ هزار خانوار را تأمین می‌کند.", min: 1000, v: 9870, tags: ["انرژی خورشیدی", "آسیای میانه", "تجدیدپذیر"],
+        b: [
+          "به گزارش روزنگار، این نیروگاه در زمینی به وسعت ۲ هزار هکتار احداث شده و انتظار می‌رود سالانه از انتشار یک میلیون تن دی‌اکسید کربن جلوگیری کند.",
+          "کارشناسان انرژی این پروژه را الگویی برای کشورهای منطقه با تابش خورشیدی بالا می‌دانند.",
+        ] },
+      { id: 23, cat: "health", k: "سبک زندگی سالم", t: "۱۰ توصیه متخصصان برای حفظ سلامت قلب در فصل سرما", l: "متخصصان قلب و عروق می‌گویند در فصل سرما فشار بیشتری به قلب وارد می‌شود؛ تحرک منظم، تغذیه سالم و پرهیز از فعالیت سنگین ناگهانی در هوای سرد از مهم‌ترین توصیه‌هاست.", min: 1100, v: 21560, tags: ["قلب", "زمستان", "تغذیه"],
+        b: [
+          "به گزارش روزنگار، سرمای هوا باعث تنگ شدن عروق و افزایش فشار خون می‌شود و به همین دلیل بیماران قلبی باید در این فصل مراقبت بیشتری داشته باشند.",
+          "#F|توصیه‌های اصلی|پیاده‌روی روزانه ۳۰ دقیقه|پوشیدن لباس گرم و لایه‌لایه|کاهش مصرف نمک و چربی|کنترل منظم فشار خون|خواب کافی و مدیریت استرس",
+          "متخصصان تأکید می‌کنند در صورت بروز درد قفسه سینه، تنگی نفس یا تعریق سرد، باید بلافاصله با اورژانس ۱۱۵ تماس گرفت.",
+        ] },
+      { id: 24, cat: "society", k: "آموزش عالی", t: "ثبت‌نام آزمون سراسری سال آینده از هفته دوم ماه آغاز می‌شود", l: "سازمان سنجش آموزش کشور زمان‌بندی ثبت‌نام آزمون سراسری را اعلام کرد؛ داوطلبان می‌توانند به مدت ۱۰ روز از طریق درگاه اینترنتی سازمان ثبت‌نام کنند.", min: 1250, v: 34510, tags: ["کنکور", "سازمان سنجش", "دانشگاه"],
+        b: [
+          "به گزارش روزنگار، دفترچه راهنمای ثبت‌نام از چند روز پیش از آغاز ثبت‌نام روی سایت سازمان قرار می‌گیرد.",
+          "مشاوران تحصیلی به داوطلبان توصیه می‌کنند پیش از ثبت‌نام، اطلاعات سوابق تحصیلی خود را در سامانه بررسی کنند.",
+        ] },
+    ];
+
+    const OPINIONS = [
+      { a: "دکتر بهرام صالحی", r: "اقتصاددان", col: "#0f7a55", t: "تورم را باید با اعتماد مهار کرد، نه با دستور", p: "تجربه دهه‌های اخیر نشان می‌دهد هیچ سیاست قیمتی بدون ثبات انتظارات پایدار نمی‌ماند…" },
+      { a: "فرشته جلالی", r: "جامعه‌شناس", col: "#c0631a", t: "شهری برای پیاده‌ها؛ رؤیا یا ضرورت؟", p: "شهرهای ما برای خودرو ساخته شده‌اند؛ اما آیندهٔ زیست‌پذیر، از پیاده‌روها آغاز می‌شود…" },
+      { a: "مهدی کیانی", r: "تحلیلگر روابط بین‌الملل", col: "#1b6f8a", t: "منطقه‌گرایی؛ فرصتی که نباید از دست برود", p: "همکاری‌های منطقه‌ای دیگر یک انتخاب نیست، بلکه پاسخی ناگزیر به جهان چندقطبی است…" },
+      { a: "لیلا مرادی", r: "منتقد سینما", col: "#7a3a9a", t: "سینمای ایران و جهانی شدن قصه‌های کوچک", p: "موفقیت‌های اخیر نشان می‌دهد روایت صادقانهٔ زندگی روزمره، زبان مشترک مخاطبان جهان است…" },
+    ];
+
+    const GALLERY = [
+      { cat: "society", t: "پاییز در کوچه‌باغ‌های شمال؛ روایت تصویری از فصل برداشت", n: 18 },
+      { cat: "culture", t: "آیین سنتی نمدمالی در روستاهای کویری", n: 12 },
+      { cat: "sport", t: "حال و هوای سکوها در شهرآورد پایتخت", n: 24 },
+      { cat: "world", t: "پرواز پرندگان مهاجر بر فراز تالاب‌ها", n: 15 },
+      { cat: "tech", t: "از کارگاه تا مدار؛ پشت صحنه ساخت ماهواره", n: 20 },
+    ];
+
+    const MARKETS = [
+      { n: "دلار", v: 589400, ch: 0.42 },
+      { n: "یورو", v: 641200, ch: -0.18 },
+      { n: "سکه امامی", v: 742500000, ch: 0.65 },
+      { n: "طلای ۱۸ عیار", v: 72380000, ch: 0.31 },
+      { n: "شاخص بورس", v: 2864310, ch: 2.81 },
+      { n: "نفت برنت", v: 74.62, ch: 1.6, usd: 1 },
+      { n: "انس طلا", v: 2718.4, ch: -0.27, usd: 1 },
+      { n: "بیت‌کوین", v: 68240, ch: 1.12, usd: 1 },
+    ];
+
+    const WEATHER = [
+      { c: "تهران", s: "sun", t: 18, lo: 9 },
+      { c: "مشهد", s: "cloud", t: 14, lo: 5 },
+      { c: "اصفهان", s: "sun", t: 17, lo: 6 },
+      { c: "تبریز", s: "rain", t: 11, lo: 3 },
+      { c: "شیراز", s: "sun", t: 21, lo: 10 },
+      { c: "رشت", s: "rain", t: 15, lo: 10 },
+    ];
+
+    const COMMENTS = [
+      { n: "محمد", txt: "گزارش دقیق و بی‌طرفانه‌ای بود. ممنون از تیم تحریریه.", min: 25, like: 14 },
+      { n: "زهرا", txt: "امیدوارم این روند ادامه پیدا کند و پیگیری‌های بعدی هم منتشر شود.", min: 60, like: 9 },
+      { n: "امیر", txt: "کاش اینفوگرافیکی هم کنار خبر قرار می‌دادید تا اعداد بهتر دیده شوند.", min: 140, like: 5 },
+    ];
+
+    /* ============================================================
+       Helpers
+       ============================================================ */
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const FA_DIG = "۰۱۲۳۴۵۶۷۸۹";
+    const fa = (x) => String(x).replace(/\d/g, (d) => FA_DIG[d]).replace(/\./g, "٫");
+    const faNum = (n, dec = 0) => fa(Number(n).toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec })).replace(/,/g, "٬");
+    const byId = (id) => NEWS.find((n) => n.id === +id);
+    const sorted = () => [...NEWS].sort((a, b) => a.min - b.min);
+    const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    function ago(min) {
+      if (min < 60) return fa(min) + " دقیقه پیش";
+      if (min < 1440) return fa(Math.floor(min / 60)) + " ساعت پیش";
+      return fa(Math.floor(min / 1440)) + " روز پیش";
+    }
+    function clockOf(min) {
+      const d = new Date(Date.now() - min * 60000);
+      return fa(String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"));
+    }
+    function fullDate(min) {
+      const d = new Date(Date.now() - min * 60000);
+      return new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(d) + " · ساعت " + clockOf(min);
+    }
+    const readTime = (n) => Math.max(2, Math.round((n.l + n.b.join(" ")).split(/\s+/).length / 180) + 1);
+    const ico = {
+      clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+      eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>',
+      arrow: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>',
+      cam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+      play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>',
+      book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg>',
+    };
+
+    /* ---------- Procedural editorial illustrations (no external images) ---------- */
+    function rng(seed) { let s = seed * 9301 + 49297; return () => ((s = (s * 9301 + 49297) % 233280) / 233280); }
+    function art(cat, seed, opts = {}) {
+      const C = CATS[cat], r = rng(seed * 7 + cat.length), uid = "g" + seed + cat + (opts.k || "");
+      const W = 400, H = 250;
+      let m = "";
+      const light = "rgba(255,255,255,";
+      switch (cat) {
+        case "politics": {
+          const cx = 200 + (r() - .5) * 120, base = 205;
+          m += `<rect x="${cx - 120}" y="${base}" width="240" height="14" fill="${light}.25)"/><rect x="${cx - 110}" y="${base - 10}" width="220" height="10" fill="${light}.3)"/>`;
+          for (let i = 0; i < 8; i++) m += `<rect x="${cx - 98 + i * 27}" y="${base - 92}" width="12" height="82" fill="${light}.35)"/>`;
+          m += `<polygon points="${cx - 115},${base - 92} ${cx},${base - 140} ${cx + 115},${base - 92}" fill="${light}.4)"/>`;
+          m += `<path d="M${cx - 40} ${base - 140} a40 40 0 0 1 80 0z" fill="${light}.28)"/><rect x="${cx - 1}" y="${base - 205}" width="2" height="30" fill="${light}.6)"/><path d="M${cx + 1} ${base - 205} h26 l-6 7 6 7 h-26z" fill="${light}.55)"/>`;
+          break;
+        }
+        case "economy": {
+          let pts = [], y = 190;
+          for (let i = 0; i <= 10; i++) { y -= (r() - .3) * 26; y = Math.max(40, Math.min(210, y)); pts.push([20 + i * 36, y]); }
+          pts.forEach((p, i) => { if (i < 10) { const h = 40 + r() * 120; m += `<rect x="${p[0] + 6}" y="${H - h}" width="22" height="${h}" fill="${light}${.08 + r() * .12})"/>`; } });
+          m += `<polyline points="${pts.map((p) => p.join(",")).join(" ")}" fill="none" stroke="${light}.85)" stroke-width="4" stroke-linejoin="round"/>`;
+          m += `<polygon points="${pts.map((p) => p.join(",")).join(" ")} 380,250 20,250" fill="${light}.12)"/>`;
+          const l = pts[pts.length - 1]; m += `<circle cx="${l[0]}" cy="${l[1]}" r="8" fill="#fff"/><circle cx="${l[0]}" cy="${l[1]}" r="16" fill="none" stroke="${light}.5)" stroke-width="2"/>`;
+          break;
+        }
+        case "society": {
+          let x = 0;
+          while (x < W) { const w = 30 + r() * 46, h = 60 + r() * 130; m += `<rect x="${x}" y="${H - h}" width="${w - 4}" height="${h}" fill="${light}${.12 + r() * .18})"/>`;
+            for (let wy = H - h + 10; wy < H - 10; wy += 16) for (let wx = x + 6; wx < x + w - 12; wx += 11) if (r() > .45) m += `<rect x="${wx}" y="${wy}" width="5" height="7" fill="${light}.55)"/>`;
+            x += w; }
+          m += `<circle cx="${60 + r() * 280}" cy="${40 + r() * 30}" r="22" fill="${light}.5)"/>`;
+          break;
+        }
+        case "sport": {
+          m += `<rect x="20" y="40" width="360" height="190" rx="4" fill="none" stroke="${light}.35)" stroke-width="3"/><line x1="200" y1="40" x2="200" y2="230" stroke="${light}.35)" stroke-width="3"/><circle cx="200" cy="135" r="38" fill="none" stroke="${light}.35)" stroke-width="3"/>`;
+          m += `<rect x="20" y="90" width="50" height="90" fill="none" stroke="${light}.3)" stroke-width="3"/><rect x="330" y="90" width="50" height="90" fill="none" stroke="${light}.3)" stroke-width="3"/>`;
+          const bx = 120 + r() * 160, by = 90 + r() * 80;
+          m += `<circle cx="${bx}" cy="${by}" r="20" fill="#fff"/><polygon points="${bx},${by - 8} ${bx + 7.6},${by - 2.5} ${bx + 4.7},${by + 6.5} ${bx - 4.7},${by + 6.5} ${bx - 7.6},${by - 2.5}" fill="${C.c2}"/>`;
+          m += `<path d="M${bx - 26} ${by + 4} q-40 10 -80 -20" fill="none" stroke="${light}.5)" stroke-width="3" stroke-dasharray="4 7" stroke-linecap="round"/>`;
+          break;
+        }
+        case "culture": {
+          m += `<rect x="0" y="70" width="400" height="110" fill="${light}.12)"/>`;
+          for (let i = 0; i < 20; i++) { m += `<rect x="${i * 22 + 6}" y="76" width="12" height="9" rx="2" fill="${light}.45)"/><rect x="${i * 22 + 6}" y="165" width="12" height="9" rx="2" fill="${light}.45)"/>`; }
+          for (let i = 0; i < 4; i++) m += `<rect x="${12 + i * 98}" y="92" width="86" height="66" rx="3" fill="${light}${.15 + r() * .25})"/>`;
+          m += `<circle cx="${80 + r() * 240}" cy="125" r="26" fill="${light}.75)"/><path d="M${0} 230 q100 -30 200 0 t200 0" fill="${light}.15)"/>`;
+          break;
+        }
+        case "world": {
+          const cx = 200 + (r() - .5) * 100;
+          m += `<circle cx="${cx}" cy="128" r="92" fill="${light}.12)" stroke="${light}.6)" stroke-width="3"/>`;
+          for (let i = 1; i < 4; i++) m += `<ellipse cx="${cx}" cy="128" rx="${92 * i / 4}" ry="92" fill="none" stroke="${light}.35)" stroke-width="2"/>`;
+          for (let i = -2; i <= 2; i++) { const yy = 128 + i * 30, rx = Math.sqrt(92 * 92 - (i * 30) ** 2); m += `<line x1="${cx - rx}" y1="${yy}" x2="${cx + rx}" y2="${yy}" stroke="${light}.35)" stroke-width="2"/>`; }
+          m += `<path d="M${cx - 50} ${100} q20 -20 45 -6 t30 24 q-10 26 -40 18 t-35 -36z" fill="${light}.45)"/><path d="M${cx + 20} ${150} q24 -6 34 12 q-6 22 -26 20 q-14 -12 -8 -32z" fill="${light}.4)"/>`;
+          break;
+        }
+        case "tech": {
+          for (let i = 0; i < 14; i++) { let x = r() * W, y = r() * H; let d = `M${x} ${y}`; for (let j = 0; j < 3; j++) { if (r() > .5) x += (r() - .5) * 160; else y += (r() - .5) * 120; d += ` L${x} ${y}`; }
+            m += `<path d="${d}" fill="none" stroke="${light}.35)" stroke-width="2"/><circle cx="${x}" cy="${y}" r="4" fill="${light}.8)"/>`; }
+          m += `<rect x="150" y="80" width="100" height="90" rx="10" fill="${light}.2)" stroke="${light}.7)" stroke-width="3"/><rect x="172" y="102" width="56" height="46" rx="4" fill="${light}.45)"/>`;
+          for (let i = 0; i < 5; i++) m += `<rect x="${160 + i * 18}" y="68" width="6" height="12" fill="${light}.6)"/><rect x="${160 + i * 18}" y="170" width="6" height="12" fill="${light}.6)"/>`;
+          break;
+        }
+        case "health": {
+          const cx = 120 + r() * 160;
+          m += `<path d="M0 140 H${cx - 70} l18 -50 l22 100 l20 -80 l14 30 H400" fill="none" stroke="${light}.8)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>`;
+          m += `<g transform="translate(${400 - cx} 60)"><rect x="-14" y="-40" width="28" height="80" rx="5" fill="${light}.25)"/><rect x="-40" y="-14" width="80" height="28" rx="5" fill="${light}.25)"/></g>`;
+          for (let i = 0; i < 9; i++) m += `<circle cx="${r() * W}" cy="${r() * H}" r="${3 + r() * 10}" fill="${light}${.08 + r() * .15})"/>`;
+          break;
+        }
+      }
+      const ang = Math.floor(r() * 60) + 110;
+      return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id="${uid}" gradientTransform="rotate(${ang} .5 .5)"><stop offset="0" stop-color="${C.c}"/><stop offset="1" stop-color="${C.c2}"/></linearGradient>
+        <pattern id="${uid}p" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="rgba(255,255,255,.08)"/></pattern></defs>
+        <rect width="${W}" height="${H}" fill="url(#${uid})"/><circle cx="${r() * W}" cy="${r() * H}" r="${120 + r() * 80}" fill="rgba(255,255,255,.06)"/>${m}<rect width="${W}" height="${H}" fill="url(#${uid}p)"/></svg>`;
+    }
+    const thumb = (n, o = {}) => `<div class="thumb" style="--c:${CATS[n.cat].c}">${o.badge ? `<span class="badge" style="--c:${CATS[n.cat].c}">${CATS[n.cat].fa}</span>` : ""}${art(n.cat, n.id, o)}${n.video && o.play !== false ? `<div class="play"><span>${ico.play}</span></div><span class="dur">${n.video}</span>` : ""}${o.cr ? `<span class="cr">عکس: آرشیو روزنگار</span>` : ""}</div>`;
+    const metaHTML = (n, views) => `<div class="meta"><span>${ico.clock}${ago(n.min)}</span>${views ? `<span>${ico.eye}${faNum(n.v)}</span>` : ""}</div>`;
+    const link = (n) => `#/news/${n.id}`;
+    const kick = (n) => `<span class="kicker" style="--c:${CATS[n.cat].c}">${n.k}</span>`;
+
+    function weatherIcon(s) {
+      if (s === "sun") return '<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="6.5" fill="#f2b233"/><g stroke="#f2b233" stroke-width="2.2" stroke-linecap="round"><path d="M16 3v3.5M16 25.5V29M3 16h3.5M25.5 16H29M6.8 6.8l2.5 2.5M22.7 22.7l2.5 2.5M6.8 25.2l2.5-2.5M22.7 9.3l2.5-2.5"/></g></svg>';
+      if (s === "cloud") return '<svg viewBox="0 0 32 32"><circle cx="12" cy="12" r="5" fill="#f2b233"/><path d="M9 25h15a5 5 0 0 0 0-10 7 7 0 0 0-13.4 2A4 4 0 0 0 9 25z" fill="#9aa6b8"/></svg>';
+      return '<svg viewBox="0 0 32 32"><path d="M8 20h16a5 5 0 0 0 0-10 7 7 0 0 0-13.4 2A4 4 0 0 0 8 20z" fill="#8090a8"/><g stroke="#3d7be0" stroke-width="2.2" stroke-linecap="round"><path d="M11 23l-1.5 4M17 23l-1.5 4M23 23l-1.5 4"/></g></svg>';
+    }
+
+    /* ============================================================
+       Static chrome
+       ============================================================ */
+    function buildChrome() {
+      const navItems = Object.entries(CATS).map(([k, c]) => `<li><a href="#/cat/${k}" data-cat="${k}">${c.fa}</a></li>`).join("");
+      $("#navList").innerHTML = `<li><a href="#/latest" data-cat="latest">آخرین اخبار</a></li>` + navItems + `<li><a href="#/multimedia" data-cat="multimedia">چندرسانه‌ای</a></li>`;
+      $("#drawerList").innerHTML = `<li><a href="#/" style="--c:var(--ink)"><i></i>صفحه اصلی</a></li><li><a href="#/latest" style="--c:var(--red)"><i></i>آخرین اخبار</a></li>` + Object.entries(CATS).map(([k, c]) => `<li><a href="#/cat/${k}" style="--c:${c.c}"><i></i>${c.fa}</a></li>`).join("") + `<li><a href="#/multimedia" style="--c:var(--gold)"><i></i>چندرسانه‌ای</a></li>`;
+      $("#ftCats").innerHTML = Object.entries(CATS).slice(0, 7).map(([k, c]) => `<li><a href="#/cat/${k}">${c.fa}</a></li>`).join("");
+
+      const t = sorted().slice(0, 8).map((n) => `<a href="${link(n)}"><time>${clockOf(n.min)}</time>${n.t}</a>`).join("");
+      $("#tickerInner").innerHTML = t + t;
+
+      $("#markets").innerHTML = MARKETS.map((m, i) => `<div class="mk" data-i="${i}"><span class="n">${m.n}</span><span class="v">${m.usd ? "$" : ""}${faNum(m.v, m.usd && m.v < 10000 ? 2 : 0)}</span><span class="ch ${m.ch >= 0 ? "up" : "down"}">${m.ch >= 0 ? "▲" : "▼"} ${fa(Math.abs(m.ch).toFixed(2))}٪</span></div>`).join("");
+
+      const w = WEATHER[0];
+      $("#weatherMini").innerHTML = `<span class="ic">${weatherIcon(w.s)}</span><div><b>${fa(w.t)}°</b> <span>تهران</span><br><small>کمینه ${fa(w.lo)}° · آسمان صاف</small></div>`;
+
+      const now = new Date();
+      $("#dateFa").textContent = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(now);
+      try { $("#dateHijri").textContent = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-arab", { day: "numeric", month: "long", year: "numeric" }).format(now).replace(/\s?هـ$/, " ق"); } catch (e) { $("#dateHijri").remove(); }
+      $("#dateEn").textContent = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      $("#yearFa").textContent = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(now);
+      const tickClock = () => { const d = new Date(); $("#clock").textContent = fa([d.getHours(), d.getMinutes(), d.getSeconds()].map((x) => String(x).padStart(2, "0")).join(":")); };
+      tickClock(); setInterval(tickClock, 1000);
+    }
+
+    // Small simulated live fluctuations in the market strip
+    function liveMarkets() {
+      setInterval(() => {
+        const i = Math.floor(Math.random() * MARKETS.length), m = MARKETS[i];
+        const delta = (Math.random() - .45) * .002;
+        m.v = m.v * (1 + delta); m.ch = +(m.ch + delta * 100).toFixed(2);
+        const el = $(`.mk[data-i="${i}"]`); if (!el) return;
+        const v = $(".v", el), ch = $(".ch", el);
+        v.textContent = (m.usd ? "$" : "") + faNum(m.v, m.usd && m.v < 10000 ? 2 : 0);
+        ch.className = "ch " + (m.ch >= 0 ? "up" : "down");
+        ch.textContent = (m.ch >= 0 ? "▲ " : "▼ ") + fa(Math.abs(m.ch).toFixed(2)) + "٪";
+        v.classList.add(delta >= 0 ? "flash-up" : "flash-down");
+        setTimeout(() => v.classList.remove("flash-up", "flash-down"), 900);
+      }, 2600);
+    }
+
+    /* ============================================================
+       Views
+       ============================================================ */
+    const secHead = (title, c, href, more = "بیشتر") => `<div class="sec-h" style="--c:${c}"><h2><i></i>${title}</h2>${href ? `<a class="more" href="${href}">${more}${ico.arrow}</a>` : ""}</div>`;
+
+    function mostRead(range) {
+      const list = [...NEWS].filter((n) => range === "week" || n.min < 1440).sort((a, b) => (range === "week" ? b.v * 1.3 + (b.id % 5) * 4000 : b.v) - (range === "week" ? a.v * 1.3 + (a.id % 5) * 4000 : a.v)).slice(0, 6);
+      return list.map((n, i) => `<li><a href="${link(n)}"><span class="num">${fa(i + 1)}</span><h3 class="t">${n.t}</h3></a></li>`).join("");
+    }
+    const mostReadWidget = () => `<div class="widget"><h4><span class="dot"></span>پربازدیدترین‌ها</h4><div class="tabs" data-tabs><button class="on" data-r="day">امروز</button><button data-r="week">هفته</button></div><ol class="rank" id="rankList">${mostRead("day")}</ol></div>`;
+    const timelineWidget = (n = 8) => `<div class="widget"><h4><span class="dot"></span>تازه‌ترین خبرها</h4><ul class="timeline">${sorted().slice(0, n).map((x) => `<li><a href="${link(x)}"><time>${clockOf(x.min)}</time><span>${x.t}</span></a></li>`).join("")}</ul></div>`;
+    const weatherWidget = () => `<div class="widget"><h4>☁ وضعیت هوای امروز</h4><ul class="weather-list">${WEATHER.map((w) => `<li><span>${w.c}</span>${weatherIcon(w.s)}<b>${fa(w.t)}° <small>/ ${fa(w.lo)}°</small></b></li>`).join("")}</ul></div>`;
+
+    function catBlock(cat) {
+      const items = sorted().filter((n) => n.cat === cat);
+      const [first, ...rest] = items;
+      const C = CATS[cat];
+      return `<section class="sec reveal">${secHead(C.fa, C.c, `#/cat/${cat}`, "همه اخبار " + C.fa)}
+        <div class="cat-block">
+          <a class="big" href="${link(first)}">${thumb(first, { cr: 1, k: "b" })}${kick(first)}<h3 class="t">${first.t}</h3><p>${first.l}</p>${metaHTML(first, 1)}</a>
+          <div class="list">${rest.slice(0, 3).map((n) => `<a href="${link(n)}">${thumb(n, { k: "l", play: false })}<div>${kick(n)}<h3 class="t">${n.t}</h3>${metaHTML(n)}</div></a>`).join("")}</div>
+        </div></section>`;
+    }
+
+    function renderHome() {
+      const hot = sorted().filter((n) => n.hot);
+      const lead = NEWS[0];
+      const subs = [hot[1], hot[2], ...sorted().filter((n) => !n.hot).slice(0, 3)];
+      const videos = NEWS.filter((n) => n.video);
+      const extraVideos = [byId(4), byId(13)];
+      return `
+      <section class="lead-grid fade-in">
+        <article class="lead-main">
+          <a href="${link(lead)}">${thumb(lead, { badge: 1, cr: 1, k: "lead" })}${kick(lead)}<h3 class="t">${lead.t}</h3></a>
+          <p>${lead.l}</p>${metaHTML(lead, 1)}
+        </article>
+        <div class="lead-sub">
+          <a href="${link(subs[0])}">${thumb(subs[0], { badge: 1, k: "s" })}${kick(subs[0])}<h3 class="t">${subs[0].t}</h3>${metaHTML(subs[0])}</a>
+          ${subs.slice(1, 4).map((n) => `<a class="row" href="${link(n)}"><div>${kick(n)}<h3 class="t">${n.t}</h3>${metaHTML(n)}</div>${thumb(n, { k: "r", play: false })}</a>`).join("")}
+        </div>
+        <aside>${mostReadWidget()}</aside>
+      </section>
+
+      <section class="sec reveal">${secHead("گزیده خبرها", "var(--ink)", "#/latest", "آرشیو")}
+        <div class="grid4">${sorted().filter((n) => ![1, 2, 3].includes(n.id)).slice(4, 8).map((n) => `<a class="card" href="${link(n)}">${thumb(n, { badge: 1, k: "c" })}<h3 class="t">${n.t}</h3>${metaHTML(n, 1)}</a>`).join("")}</div>
+      </section>
+
+      <div class="main-side">
+        <div>
+          ${catBlock("politics")}
+          ${catBlock("economy")}
+          <section class="sec reveal">${secHead("گزارش تصویری", "var(--gold)", "#/multimedia", "همه گزارش‌ها")}
+            <div class="gallery">${GALLERY.map((g, i) => `<a href="#/multimedia">${`<div class="thumb">${art(g.cat, 100 + i, { k: "gal" })}</div>`}<div class="cap"><b>${g.t}</b><small>${ico.cam}${fa(g.n)} قطعه عکس</small></div></a>`).join("")}</div>
+          </section>
+        </div>
+        <aside class="sec sticky-side">${timelineWidget()}${weatherWidget()}</aside>
+      </div>
+      </div></main>
+
+      <section class="opinion reveal"><div class="wrap">
+        ${secHead("یادداشت و دیدگاه", "var(--gold)", "#/latest", "همه یادداشت‌ها")}
+        <div class="op-grid">${OPINIONS.map((o) => `<a class="op" href="#/news/${[19, 14, 11, 7][OPINIONS.indexOf(o)]}"><div class="who"><span class="avatar" style="background:${o.col}">${o.a.replace("دکتر ", "").split(" ").map((w) => w[0]).join("‌")}</span><div><b>${o.a}</b><small>${o.r}</small></div></div><h3>${o.t}</h3><p>${o.p}</p></a>`).join("")}</div>
+      </div></section>
+
+      <main style="padding-top:0"><div class="wrap">
+      <div class="main-side">
+        <div>
+          ${catBlock("sport")}
+          <div class="two-col">${["society", "culture"].map((c) => miniCol(c)).join("")}</div>
+          <section class="sec reveal">${secHead("چندرسانه‌ای", "var(--red)", "#/multimedia", "همه ویدئوها")}
+            <div class="grid3">${[...videos, ...extraVideos].slice(0, 3).map((n, i) => `<a class="card" href="${link(n)}">${thumb({ ...n, video: n.video || ["۰۴:۱۲", "۰۱:۵۵"][i % 2] }, { k: "v" })}<h3 class="t">${n.t}</h3>${metaHTML(n, 1)}</a>`).join("")}</div>
+          </section>
+          <div class="two-col">${["world", "tech"].map((c) => miniCol(c)).join("")}</div>
+          ${catBlock("health")}
+        </div>
+        <aside class="sec sticky-side">
+          <div class="info-card reveal"><h3>اینفوگرافیک: سهم بخش‌ها از بودجه عمرانی</h3><p class="sub">ارقام به درصد؛ لایحه بودجه سال آینده (داده نمایشی)</p>
+            <div class="bars">${[["آب و کشاورزی", 26], ["راه و ترابری", 22], ["آموزش", 17], ["سلامت", 14], ["انرژی", 12], ["سایر", 9]].map(([a, b]) => `<div class="bar"><span>${a}</span><div class="track"><div class="fill" data-w="${b * 3.4}"></div></div><b>${fa(b)}٪</b></div>`).join("")}</div>
+          </div>
+          <div class="widget" style="margin-top:22px"><h4>🏷 برچسب‌های داغ</h4><div class="tags" style="margin:0;padding:0;border:0">${[...new Set(NEWS.flatMap((n) => n.tags))].slice(0, 16).map((t) => `<a href="#/search/${encodeURIComponent(t)}">${t}</a>`).join("")}</div></div>
+        </aside>
+      </div>
+
+      <section class="newsletter reveal">
+        <div><h3>خبرنامه روزانه روزنگار</h3><p>هر صبح ساعت ۷، مهم‌ترین اخبار و تحلیل‌های روز را در ایمیل خود دریافت کنید.</p></div>
+        <form class="nl-form" id="nlForm"><input type="email" required placeholder="ایمیل خود را وارد کنید" aria-label="ایمیل"><button>عضویت رایگان</button></form>
+      </section>`;
+    }
+
+    function miniCol(cat) {
+      const C = CATS[cat], items = sorted().filter((n) => n.cat === cat);
+      return `<section class="sec reveal">${secHead(C.fa, C.c, `#/cat/${cat}`)}
+        <a class="card" href="${link(items[0])}">${thumb(items[0], { k: "m", cr: 1 })}${kick(items[0])}<h3 class="t" style="font-size:17px">${items[0].t}</h3>${metaHTML(items[0], 1)}</a>
+        <ul class="timeline" style="margin-top:10px">${items.slice(1, 3).map((n) => `<li><a href="${link(n)}"><time>${clockOf(n.min)}</time><span>${n.t}</span></a></li>`).join("")}</ul>
+      </section>`;
+    }
+
+    function feed(items, q) {
+      const hl = (s) => (q ? s.replace(new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "g"), "<mark>$1</mark>") : s);
+      return `<div class="feed">${items.map((n) => `<a href="${link(n)}">${thumb(n, { badge: 1, k: "f" })}<div>${kick(n)}<h3 class="t">${hl(n.t)}</h3><p>${hl(n.l)}</p>${metaHTML(n, 1)}</div></a>`).join("")}</div>`;
+    }
+    const PER = 6;
+    function listPage(title, sub, color, items, page, base, q) {
+      const pages = Math.ceil(items.length / PER) || 1; page = Math.min(Math.max(1, page), pages);
+      const slice = items.slice((page - 1) * PER, page * PER);
+      return `<div class="main-side fade-in"><div>
+        <div class="crumbs"><a href="#/">روزنگار</a><i>/</i><span>${title}</span></div>
+        <div class="cat-hero" style="--c:${color}"><div><h1>${title}</h1><p>${sub}</p></div><div class="count"><b>${fa(items.length)}</b>خبر</div></div>
+        ${items.length ? feed(slice, q) : `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h6"/></svg>نتیجه‌ای برای «${esc(q || "")}» پیدا نشد. واژه دیگری را امتحان کنید.</div>`}
+        ${pages > 1 ? `<div class="pager">${Array.from({ length: pages }, (_, i) => `<button class="${i + 1 === page ? "on" : ""}" data-go="${base}/p${i + 1}">${fa(i + 1)}</button>`).join("")}</div>` : ""}
+      </div><aside class="sticky-side">${mostReadWidget()}${timelineWidget(6)}</aside></div>`;
+    }
+
+    function renderArticle(n) {
+      const C = CATS[n.cat], A = AUTHORS[AUTH_BY_CAT[n.cat]];
+      const bodyHTML = n.b.map((p) => {
+        if (p.startsWith("#Q|")) { const [, q, c] = p.split("|"); return `<blockquote>${q}<cite>— ${c}</cite></blockquote>`; }
+        if (p.startsWith("#H|")) return `<h2>${p.slice(3)}</h2>`;
+        if (p.startsWith("#F|")) { const [, h, ...li] = p.split("|"); return `<div class="facts"><b>${h}</b><ul>${li.map((x) => `<li>${x}</li>`).join("")}</ul></div>`; }
+        return `<p>${p}</p>`;
+      }).join("");
+      const related = NEWS.filter((x) => x.cat === n.cat && x.id !== n.id).concat(NEWS.filter((x) => x.cat !== n.cat && x.id !== n.id)).slice(0, 3);
+      const idx = sorted().findIndex((x) => x.id === n.id), next = sorted()[(idx + 1) % NEWS.length];
+      const code = 1000000 + n.id * 4721;
+      return `<div class="main-side fade-in" style="--c:${C.c}"><div>
+        <div class="crumbs"><a href="#/">روزنگار</a><i>/</i><a href="#/cat/${n.cat}">${C.fa}</a><i>/</i><span>کد خبر ${fa(code)}</span></div>
+        <article class="article">
+          <div class="code"><span>${ico.clock.replace("<svg", '<svg width="13" height="13" style="display:inline;vertical-align:-2px"')} ${fullDate(n.min)}</span><span>کد خبر: ${fa(code)} · ${fa(readTime(n))} دقیقه مطالعه · ${faNum(n.v)} بازدید</span></div>
+          ${kick(n)}
+          <h1>${n.t}</h1>
+          <div class="lead">${n.l}</div>
+          <div class="byline">
+            <div class="who"><span class="avatar" style="background:${A.col}">${A.n.replace("دکتر ", "").split(" ").map((w) => w[0]).join("‌")}</span><div><b>${A.n}</b><small style="color:var(--muted);font-size:12.5px">${A.r}</small></div></div>
+            <div class="art-tools">
+              <button data-fs="1" title="بزرگ‌تر کردن متن">+A</button>
+              <button data-fs="-1" title="کوچک‌تر کردن متن">-A</button>
+              <button id="saveBtn" title="ذخیره"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button>
+              <button onclick="print()" title="چاپ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg></button>
+            </div>
+          </div>
+          <figure>${thumb(n, { k: "art" })}<figcaption>${n.k} — عکس: آرشیو روزنگار</figcaption></figure>
+          <div class="body" id="artBody">${bodyHTML}<p>انتهای پیام/</p></div>
+          <div class="tags"><span>برچسب‌ها:</span>${n.tags.map((t) => `<a href="#/search/${encodeURIComponent(t)}">${t}</a>`).join("")}</div>
+          <div class="share-row">
+            <div class="share">
+              <a href="#" data-share title="تلگرام"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.3-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L5.9 13.4 1 11.9c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3Z"/></svg></a>
+              <a href="#" data-share title="واتس‌اپ"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1a17 17 0 0 1-1.7-.6 13.4 13.4 0 0 1-5.1-4.5c-.4-.5-1-1.5-1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4Z"/></svg></a>
+              <a href="#" data-share title="ایکس"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.9L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg></a>
+            </div>
+            <div class="short-link"><code>rzn.example/${code.toString(36)}</code><button id="copyBtn">کپی لینک</button></div>
+          </div>
+        </article>
+
+        <section class="sec related">${secHead("اخبار مرتبط", C.c)}
+          <div class="grid3">${related.map((r) => `<a class="card" href="${link(r)}">${thumb(r, { badge: 1, k: "rel" })}<h3 class="t">${r.t}</h3>${metaHTML(r)}</a>`).join("")}</div>
+        </section>
+
+        <section class="sec comments"><div class="widget">
+          <h4>💬 دیدگاه‌ها <small style="color:var(--muted);font-weight:500" id="cCount">(${fa(COMMENTS.length)})</small></h4>
+          <form class="c-form" id="cForm">
+            <input required placeholder="نام شما" name="n">
+            <input type="email" placeholder="ایمیل (منتشر نمی‌شود)" name="e" dir="ltr" style="text-align:right">
+            <textarea required placeholder="دیدگاه خود را بنویسید…" name="t"></textarea>
+            <span class="note">دیدگاه‌ها پس از تأیید سردبیر منتشر می‌شوند.</span>
+            <button class="btn">ارسال دیدگاه</button>
+          </form>
+          <div id="cList">${COMMENTS.map(cmtHTML).join("")}</div>
+        </div></section>
+      </div>
+      <aside class="sticky-side">
+        <div class="widget"><h4>${ico.book.replace("<svg", '<svg width="18" height="18"')} خبر بعدی</h4><a class="card" href="${link(next)}">${thumb(next, { k: "nx" })}<h3 class="t">${next.t}</h3></a></div>
+        ${mostReadWidget()}
+      </aside></div>`;
+    }
+    const cmtHTML = (c) => `<div class="cmt"><span class="avatar" style="background:#${((c.n.charCodeAt(0) * 2654435761) >>> 8).toString(16).slice(0, 6).padStart(6, "4")}">${c.n[0]}</span><div><b>${esc(c.n)}</b><small>${c.min === 0 ? "لحظاتی پیش · در انتظار تأیید" : ago(c.min)}</small><p>${esc(c.txt)}</p><div class="acts"><button data-like>👍 <span>${fa(c.like)}</span></button><button>پاسخ</button></div></div></div>`;
+
+    function renderMultimedia() {
+      return `<div class="fade-in"><div class="crumbs"><a href="#/">روزنگار</a><i>/</i><span>چندرسانه‌ای</span></div>
+        <div class="cat-hero" style="--c:var(--gold)"><div><h1>چندرسانه‌ای</h1><p>ویدئو، گزارش تصویری و اینفوگرافیک</p></div></div>
+        ${secHead("ویدئوها", "var(--red)")}
+        <div class="grid3">${NEWS.slice(0, 6).map((n, i) => `<a class="card" href="${link(n)}">${thumb({ ...n, video: n.video || ["۰۲:۴۰", "۰۱:۱۸", "۰۳:۰۵"][i % 3] }, { k: "mm" })}<h3 class="t">${n.t}</h3>${metaHTML(n, 1)}</a>`).join("")}</div>
+        <section class="sec">${secHead("گزارش تصویری", "var(--gold)")}
+        <div class="gallery">${GALLERY.map((g, i) => `<a href="#/multimedia"><div class="thumb">${art(g.cat, 100 + i, { k: "gal2" })}</div><div class="cap"><b>${g.t}</b><small>${ico.cam}${fa(g.n)} قطعه عکس</small></div></a>`).join("")}</div></section>
+      </div>`;
+    }
+
+    /* ============================================================
+       Router
+       ============================================================ */
+    function route() {
+      const h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+      const parts = h.split("/");
+      const app = $("#app");
+      let html, active = "";
+      const pg = (+((parts.find((p) => /^p\d+$/.test(p)) || "p1").slice(1)));
+      if (parts[0] === "news" && byId(parts[1])) {
+        const n = byId(parts[1]); html = renderArticle(n); active = n.cat;
+        document.title = n.t + " | روزنگار";
+      } else if (parts[0] === "cat" && CATS[parts[1]]) {
+        const C = CATS[parts[1]]; active = parts[1];
+        html = listPage(C.fa, C.desc, C.c, sorted().filter((n) => n.cat === parts[1]), pg, `cat/${parts[1]}`);
+        document.title = C.fa + " | روزنگار";
+      } else if (parts[0] === "latest") {
+        active = "latest"; html = listPage("آخرین اخبار", "تمامی اخبار به ترتیب زمان انتشار", "var(--red)", sorted(), pg, "latest");
+        document.title = "آخرین اخبار | روزنگار";
+      } else if (parts[0] === "multimedia") {
+        active = "multimedia"; html = renderMultimedia(); document.title = "چندرسانه‌ای | روزنگار";
+      } else if (parts[0] === "search") {
+        const q = (parts[1] || "").trim();
+        const res = q ? sorted().filter((n) => (n.t + n.l + n.k + n.tags.join(" ") + n.b.join(" ")).includes(q)) : [];
+        html = listPage(`نتایج جست‌وجو: «${esc(q)}»`, `${fa(res.length)} خبر یافت شد`, "var(--navy-2)", res, pg, `search/${encodeURIComponent(q)}`, esc(q));
+        document.title = "جست‌وجو | روزنگار";
+      } else if (!h || h === "" ) {
+        html = renderHome(); document.title = "روزنگار | پایگاه خبری و تحلیلی";
+      } else {
+        return; // in-page anchors (#about, #contact…) — let the browser scroll
+      }
+      // Home view closes/reopens <main> to insert a full-bleed opinion band.
+      const main = $("main");
+      $$(".opinion, main.extra").forEach((el) => el.remove());
+      if (!parts[0]) {
+        const [before, rest] = html.split("</div></main>");
+        app.innerHTML = before;
+        const tmp = document.createElement("div"); tmp.innerHTML = rest;
+        const op = tmp.querySelector(".opinion"), m2 = tmp.querySelector("main");
+        m2.classList.add("extra");
+        main.after(op); op.after(m2);
+      } else app.innerHTML = html;
+
+      $$("#navList a").forEach((a) => a.classList.toggle("active", a.dataset.cat === active));
+      document.body.classList.remove("drawer-open");
+      window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      bindView();
+    }
+
+    function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2400); }
+
+    function bindView() {
+      $$("[data-tabs]").forEach((tabs) => tabs.addEventListener("click", (e) => {
+        const b = e.target.closest("button"); if (!b) return;
+        $$("button", tabs).forEach((x) => x.classList.toggle("on", x === b));
+        tabs.nextElementSibling.innerHTML = mostRead(b.dataset.r);
+      }));
+      $$("[data-go]").forEach((b) => b.addEventListener("click", () => (location.hash = "#/" + b.dataset.go)));
+      $$("[data-fs]").forEach((b) => b.addEventListener("click", () => {
+        const cur = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--body-size"));
+        const v = Math.min(24, Math.max(15, cur + +b.dataset.fs * 1.5));
+        document.documentElement.style.setProperty("--body-size", v + "px");
+      }));
+      $$("[data-share]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); toast("لینک اشتراک‌گذاری آماده شد"); }));
+      const cp = $("#copyBtn"); if (cp) cp.addEventListener("click", () => { navigator.clipboard?.writeText(location.href).catch(() => {}); toast("لینک خبر کپی شد ✓"); });
+      const sv = $("#saveBtn"); if (sv) sv.addEventListener("click", () => { sv.style.background = "var(--ink)"; sv.style.color = "var(--card)"; toast("خبر در فهرست ذخیره‌ها قرار گرفت"); });
+      const cf = $("#cForm"); if (cf) cf.addEventListener("submit", (e) => {
+        e.preventDefault(); const fd = new FormData(cf);
+        $("#cList").insertAdjacentHTML("afterbegin", cmtHTML({ n: fd.get("n"), txt: fd.get("t"), min: 0, like: 0 }));
+        cf.reset(); toast("دیدگاه شما ثبت شد و پس از تأیید منتشر می‌شود");
+      });
+      $$("[data-like]").forEach((b) => b.addEventListener("click", () => { if (b.dataset.done) return; b.dataset.done = 1; const s = $("span", b); s.textContent = fa(+s.textContent.replace(/[۰-۹]/g, (d) => FA_DIG.indexOf(d)) + 1); b.style.color = "var(--red)"; }));
+      const nl = $("#nlForm"); if (nl) nl.addEventListener("submit", (e) => { e.preventDefault(); nl.reset(); toast("عضویت شما در خبرنامه با موفقیت انجام شد ✓"); });
+
+      const io = new IntersectionObserver((ents) => ents.forEach((en) => {
+        if (!en.isIntersecting) return;
+        en.target.classList.add("in");
+        $$(".fill", en.target).forEach((f) => (f.style.width = f.dataset.w + "%"));
+        io.unobserve(en.target);
+      }), { threshold: .12 });
+      $$(".reveal").forEach((el) => io.observe(el));
+    }
+
+    /* ============================================================
+       Global events
+       ============================================================ */
+    function initGlobal() {
+      $$("[data-search]").forEach((f) => f.addEventListener("submit", (e) => {
+        e.preventDefault(); const q = $("input", f).value.trim(); if (!q) return;
+        location.hash = "#/search/" + encodeURIComponent(q);
+      }));
+      $("#burger").onclick = () => document.body.classList.add("drawer-open");
+      $("#drawerClose").onclick = $("#drawerBg").onclick = () => document.body.classList.remove("drawer-open");
+
+      const root = document.documentElement, btn = $("#themeBtn");
+      const setTheme = (t) => { root.dataset.theme = t; btn.textContent = t === "dark" ? "☀ حالت روز" : "🌙 حالت شب"; try { localStorage.setItem("rzn-theme", t); } catch (e) {} };
+      let saved = null; try { saved = localStorage.getItem("rzn-theme"); } catch (e) {}
+      setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+      btn.onclick = () => setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+
+      const nav = $("#nav"), top = $("#toTop"), prog = $("#progress");
+      addEventListener("scroll", () => {
+        const y = scrollY;
+        nav.classList.toggle("stuck", y > 200);
+        top.classList.toggle("show", y > 700);
+        const body = $("#artBody");
+        if (body) { const r = body.getBoundingClientRect(); const p = Math.min(1, Math.max(0, (innerHeight * .4 - r.top) / r.height)); prog.style.width = p * 100 + "%"; }
+        else prog.style.width = 0;
+      }, { passive: true });
+      top.onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+      addEventListener("hashchange", route);
+    }
+
+    buildChrome();
+    initGlobal();
+    liveMarkets();
+    route();
+  </script>
+</body>
+
+</html>

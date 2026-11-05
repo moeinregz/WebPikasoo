@@ -7,7 +7,8 @@ export type BusinessCategory =
   | "آموزشی"
   | "خدماتی"
   | "شرکتی و کسب‌وکار"
-  | "گردشگری و اقامتی";
+  | "گردشگری و اقامتی"
+  | "رسانه و خبری";
 
 export const categories: BusinessCategory[] = [
   "رستوران و کافه",
@@ -19,6 +20,7 @@ export const categories: BusinessCategory[] = [
   "خدماتی",
   "شرکتی و کسب‌وکار",
   "گردشگری و اقامتی",
+  "رسانه و خبری",
 ];
 
 export type BusinessSite = {
@@ -327,5 +329,13 @@ export const businessSites: BusinessSite[] = [
     desc: "آژانس تخصصی تور و بلیط؛ جست‌وجوی سفر و پیشنهادهای ویژه.",
     url: "/projects/pargar-safar.html",
     image: "/screenshots/pargar-safar.jpg",
+  },
+  {
+    id: "roozneghar-news",
+    name: "روزنگار",
+    category: "رسانه و خبری",
+    desc: "پایگاه خبری و تحلیلی رسمی؛ سرویس‌های خبری، خبر فوری، تابلوی بازار، صفحه خبر، جست‌وجو و حالت شب.",
+    url: "/projects/roozneghar-news.html",
+    image: "/screenshots/roozneghar-news.webp",
   },
 ];
