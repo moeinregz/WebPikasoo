@@ -95,7 +95,7 @@ export default async function Home() {
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <div className="relative z-[1] mx-auto max-w-container px-6">
           <Reveal className="mb-12 text-center">
-            <h2 className="font-display text-[26px] font-normal sm:text-[32px]">تعرفه‌ها و پلن‌ها</h2>
+            <h2 className="font-display text-[26px] font-normal sm:text-[32px]">تعرفه‌ها و <span className="accent-gradient-text">پلن‌ها</span></h2>
             <p className="mx-auto mt-2.5 max-w-[54ch] text-[14.5px] text-dim">
               یه دسته رو انتخاب کن و از بین ۳ پلن، اونی که به کارت میاد رو بردار — قیمت‌ها تقریبی و
               برای شروع مذاکره‌ن، بعد از شنیدن نیاز دقیقت یه پیشنهاد مکتوب و قطعی بهت می‌دیم.

@@ -109,7 +109,7 @@ export default function Services() {
             Services
           </span>
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">خدمات</h2>
+            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]"><span className="accent-gradient-text">خدمات</span></h2>
             <p className="mt-2.5 max-w-[60ch] text-[15px] text-dim">
               توسعه نرم‌افزار، طراحی سایت فروشگاهی و شرکتی، هوش مصنوعی و سئو — چهار خدمتی که تیم وب
               پیکاسو زیر یه سقف ارائه می‌ده.

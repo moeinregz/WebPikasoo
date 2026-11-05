@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import BrandMark from "./BrandMark";
 import Reveal from "./Reveal";
 import ContactForm from "./ContactForm";
 import { getCurrentUser } from "@/lib/session";
@@ -67,22 +68,31 @@ export default async function Contact() {
         <div data-gsap="zoom" className="theme-sky relative isolate overflow-hidden rounded-[36px] px-6 pb-16 pt-14 text-[#010102] shadow-[0_50px_120px_-50px_rgb(173_150_241/0.8)] sm:px-10">
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
             <div className="sky-hero__base absolute inset-0" />
-            <svg className="absolute inset-0 h-full w-full opacity-75 [mix-blend-mode:screen]" preserveAspectRatio="none">
-              <filter id="cta-cloud" x="0" y="0" width="100%" height="100%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.005 0.01" numOctaves="5" seed="11" />
-                <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.7 1.1" />
-              </filter>
-              <rect width="100%" height="100%" filter="url(#cta-cloud)" />
-            </svg>
-          </div>
-          <div className="sky-coin-wrap mx-auto mb-8 !w-[110px]">
-            <div className="sky-coin">
-              <span className="sky-coin__edge" />
-              <span className="sky-coin__face">
-                <span className="sky-coin__mark font-display !text-[58px]">پ</span>
-              </span>
+            <span className="sky-aurora left-[-10%] top-[20%] h-[70%] w-[45%] bg-[#ff8ad8]" />
+            <span className="sky-aurora right-[-8%] top-[5%] h-[60%] w-[40%] bg-[#7fe3ff] [animation-delay:-7s]" />
+            <div className="sky-cloud left-[-4%] top-[4%] h-[30%] w-[40%] opacity-80">
+              <span style={{ left: "0%", top: "30%", width: "34%", aspectRatio: "1" }} />
+              <span style={{ left: "20%", top: "10%", width: "38%", aspectRatio: "1" }} />
+              <span style={{ left: "46%", top: "28%", width: "32%", aspectRatio: "1" }} />
             </div>
-            <span className="sky-coin__shadow" />
+            <div className="sky-cloud right-[-4%] bottom-[6%] h-[30%] w-[44%] opacity-70 [animation-delay:-12s]">
+              <span style={{ left: "4%", top: "30%", width: "32%", aspectRatio: "1" }} />
+              <span style={{ left: "28%", top: "12%", width: "38%", aspectRatio: "1" }} />
+              <span style={{ left: "56%", top: "30%", width: "30%", aspectRatio: "1" }} />
+            </div>
+          </div>
+          <div className="sky-coin-stage mx-auto mb-12 !w-[120px]">
+            <span className="sky-coin__halo" />
+            <div className="sky-coin-wrap">
+              <div className="sky-coin">
+                <span className="sky-coin__edge" />
+                <span className="sky-coin__face">
+                  <BrandMark className="sky-coin__logo" idSuffix="cta" />
+                  <span className="sky-coin__shine" />
+                </span>
+              </div>
+              <span className="sky-coin__shadow" />
+            </div>
           </div>
           <span className="mb-[22px] inline-flex items-center gap-2 rounded-md border border-[#010102]/15 bg-white/55 px-3.5 py-1.5 text-[12.5px] font-bold text-[#010102]">
             <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-[#7C5CE6]" />

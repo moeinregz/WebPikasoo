@@ -23,7 +23,7 @@ export default function Guarantee() {
             Guarantee
           </span>
           <h2 className="font-display text-[26px] font-normal sm:text-[32px]">
-            اگه پروژه باگ فنی داشت، رایگان رفعش می‌کنیم
+            اگه پروژه باگ فنی داشت، <span className="accent-gradient-text">رایگان</span> رفعش می‌کنیم
           </h2>
           <p className="max-w-[56ch] text-[14.5px] leading-relaxed text-dim">
             بعد از تحویل هر پروژه، ۳۰ روز گارانتی رفع باگ فنی داری — بدون هزینه‌ی اضافه و بدون

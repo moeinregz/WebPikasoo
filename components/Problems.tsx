@@ -74,7 +74,7 @@ export default function Problems() {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              چه مشکلی داری؟
+              چه <span className="accent-gradient-text">مشکلی</span> داری؟
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               احتمالاً یکی از این‌هاست — و راه‌حلش هم دقیقاً روبه‌روشه.
