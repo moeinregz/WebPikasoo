@@ -86,9 +86,12 @@ function toBlocks(content: string): Block[] {
 // classes when it creates real <h2>..<h6> DOM nodes — the editor and the
 // published page must always render headings identically, from one source.
 export const HEADING_CLASS: Record<2 | 3 | 4 | 5 | 6, string> = {
-  2: "mb-4 mt-10 font-display text-[26px] font-semibold leading-snug text-ink sm:text-[30px]",
-  3: "mb-3.5 mt-8 font-display text-[22px] font-semibold leading-snug text-ink sm:text-[25px]",
-  4: "mb-3 mt-7 font-display text-[19px] font-semibold leading-snug text-ink sm:text-[21px]",
+  // h2: the big section title — accent bar on the start (right, RTL) side,
+  // Lalezar display face (single weight, so no synthetic bold).
+  2: "mb-5 mt-12 border-r-[5px] border-accent pr-4 font-display text-[27px] font-normal leading-[1.5] text-ink sm:text-[33px]",
+  // h3: accent-colored, a small square marker before it.
+  3: "relative mb-3.5 mt-9 pr-5 font-display text-[22px] font-normal leading-[1.5] text-accent2 dark:text-accent3 before:absolute before:right-0 before:top-[0.62em] before:h-2.5 before:w-2.5 before:rounded-[3px] before:bg-accent sm:text-[25px]",
+  4: "mb-3 mt-7 font-display text-[19px] font-normal leading-snug text-ink sm:text-[21px]",
   5: "mb-2.5 mt-6 text-[17px] font-bold leading-snug text-ink sm:text-[18px]",
   6: "mb-2 mt-5 text-[14px] font-bold uppercase tracking-wide leading-snug text-ink/65 sm:text-[14.5px]",
 };
@@ -198,6 +201,16 @@ export function renderBlogContent(content: string): ReactNode {
                 <li key={j}>{renderInline(item, `li-${i}-${j}`)}</li>
               ))}
             </ul>
+          );
+        }
+        if (block.type === "image" && block.url === "/blog-placeholder.svg") {
+          // Spot reserved for a photo (the SEO automation adds 3–4 per article
+          // when it has no stock photo). Replace it from the blog editor.
+          return (
+            <figure key={i} className="my-8">
+              <img src={block.url} alt={block.alt} width={1200} height={675} loading="lazy" className="w-full rounded-card border border-accent/30" />
+              {block.alt && <figcaption className="mt-2 text-center text-[13px] text-dim">{block.alt}</figcaption>}
+            </figure>
           );
         }
         if (block.type === "image") {

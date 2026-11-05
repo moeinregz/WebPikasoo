@@ -15,6 +15,7 @@ type Run = {
   post_title: string | null;
   linked_post_ids: number[];
   error: string | null;
+  metrics?: { words: number; density: number; internal: number; external: number; images: number; lists: number };
 };
 
 type Props = {
@@ -44,7 +45,7 @@ export default function SeoAutomationPanel({ settings, counts, keywords, runs, h
       const res = await fetch("/api/cron/seo", { method: "POST" });
       const data = await res.json();
       if (data.ok && data.postId) {
-        setMsg({ ok: true, text: `منتشر شد: «${data.title}» — کلمه‌ی کلیدی «${data.keyword}»، ${fa(data.linked)} مقاله‌ی قبلی بهش لینک شد.` });
+        setMsg({ ok: true, text: `منتشر شد: «${data.title}» — کلمه‌ی کلیدی «${data.keyword}»، ${fa(data.linked)} مقاله‌ی قبلی بهش لینک شد. ${fa(data.metrics.words)} کلمه، چگالی ${data.metrics.density.toLocaleString("fa-IR")}٪.` });
       } else if (data.ok) {
         setMsg({ ok: true, text: data.reason });
       } else {
@@ -67,6 +68,7 @@ export default function SeoAutomationPanel({ settings, counts, keywords, runs, h
           <ul className="mt-1 list-disc pr-5 font-mono text-[12.5px]" dir="ltr">
             {!hasApiKey && <li>ANTHROPIC_API_KEY</li>}
             {!hasCronSecret && <li>CRON_SECRET (any long random string)</li>}
+            <li className="opacity-70">PEXELS_API_KEY (optional — real photos instead of placeholders)</li>
           </ul>
         </div>
       )}
@@ -169,6 +171,12 @@ export default function SeoAutomationPanel({ settings, counts, keywords, runs, h
                 )}
                 {r.keyword && <span className="text-dim">«{r.keyword}»</span>}
                 {r.ok && <span className="text-dim">{fa(r.linked_post_ids.length)} لینک برگشتی</span>}
+                {r.metrics && (
+                  <span className="w-full text-[12px] text-dim">
+                    {fa(r.metrics.words)} کلمه · چگالی {r.metrics.density.toLocaleString("fa-IR")}٪ · لینک داخلی {fa(r.metrics.internal)} · لینک خارجی{" "}
+                    {fa(r.metrics.external)} · عکس {fa(r.metrics.images)} · لیست {fa(r.metrics.lists)}
+                  </span>
+                )}
               </li>
             ))}
           </ul>

@@ -2145,6 +2145,8 @@ export type SeoRun = {
   post_title: string | null;
   linked_post_ids: number[];
   error: string | null;
+  /** quality numbers of the published article */
+  metrics?: { words: number; density: number; internal: number; external: number; images: number; lists: number };
 };
 
 const SEO_SETTINGS_ID = "main";

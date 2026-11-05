@@ -106,6 +106,21 @@ export async function discoverKeywords(seedCount = 8): Promise<number> {
 
 type LinkTarget = { url: string; title: string };
 
+/** Content rules — kept in one place so the prompt and the checks agree. */
+export const RULES = {
+  words: 2800,
+  minWords: 1800,
+  density: 2, // ٪ — (تکرار کلمه‌ی کلیدی × تعداد کلمه‌هاش) ÷ کل کلمه‌ها
+  metaMin: 145,
+  metaMax: 160,
+  linksMin: 3,
+  linksMax: 4,
+  imagesMin: 3,
+  imagesMax: 4,
+};
+
+export const IMAGE_PLACEHOLDER = "/blog-placeholder.svg";
+
 function linkTargets(posts: BlogPostWithAuthor[]): { landing: LinkTarget[]; blog: LinkTarget[] } {
   const landing: LinkTarget[] = [
     ...Object.values(landingPages).map((p) => ({ url: `/${p.slug}`, title: p.title })),
@@ -122,33 +137,51 @@ function linkTargets(posts: BlogPostWithAuthor[]): { landing: LinkTarget[]; blog
 
 const SYSTEM_PROMPT = `تو نویسنده‌ی ارشد محتوا و متخصص سئوی «وب پیکاسو» هستی؛ یه تیم طراحی سایت ایرانی که برای کسب‌وکارها (کافه، رستوران، فروشگاه، کلینیک، آموزشگاه و...) سایت اختصاصی، فروشگاهی و شرکتی طراحی می‌کنه و خدمات سئو می‌ده.
 
-کار تو: از بین کلمه‌های کلیدی پیشنهادی، بهترین کلمه رو انتخاب کنی و براش یه مقاله‌ی کامل، کاربردی و انسانی به فارسی بنویسی.
+کار تو: از بین کلمه‌های کلیدی پیشنهادی، بهترین کلمه‌ی کلیدی اصلی رو انتخاب کنی و براش یه مقاله‌ی جامع، کاربردی و انسانی به فارسی بنویسی.
 
-انتخاب کلمه‌ی کلیدی:
-- کلمه‌ای رو انتخاب کن که به خدمات وب پیکاسو مربوطه و کسی که جستجوش می‌کنه می‌تونه مشتری بشه.
-- کلمه‌ای که موضوعش با مقاله‌های موجود تکراری باشه انتخاب نکن (کنیبالیزیشن).
+انتخاب کلمه‌ی کلیدی اصلی:
+- به خدمات وب پیکاسو مربوط باشه و کسی که جستجوش می‌کنه بتونه مشتری بشه.
+- موضوعش با مقاله‌های موجود تکراری نباشه.
 - کلمه‌هایی که اسم برند یا شرکت دیگه‌ای دارن، بی‌ربطن یا معنی ندارن رو توی skip_keywords بذار.
-- اگه هیچ‌کدوم مناسب نبود، خودت یه کلمه‌ی کلیدی واقعی و پرجستجو و مرتبط با خدمات پیشنهاد بده.
+- اگه هیچ‌کدوم مناسب نبود، خودت یه کلمه‌ی کلیدی واقعی، پرجستجو و مرتبط پیشنهاد بده.
 
-قوانین سئو:
-- کلمه‌ی کلیدی اصلی دقیقاً توی title، توی پاراگراف اول و توی حداقل یکی از تیترهای ## بیاد؛ توی متن طبیعی و بدون تکرار زورکی (چگالی حدود ۱٪).
-- title بین ۴۰ تا ۶۵ کاراکتر، جذاب و قابل کلیک.
-- meta_description بین ۱۲۰ تا ۱۶۰ کاراکتر، شامل کلمه‌ی کلیدی و یه دعوت به عمل.
-- slug: کوتاه، فارسی، کلمه‌ها با خط تیره، بدون حروف اضافه (مثلاً «طراحی-سایت-کافه»).
-- طول متن ۱۲۰۰ تا ۱۸۰۰ کلمه؛ پاراگراف‌های کوتاه (۲ تا ۴ جمله).
-- ساختار: مقدمه‌ی کوتاه که مستقیم به سوال جواب بده، ۴ تا ۷ بخش با تیتر ##، زیربخش‌ها با ###، حداقل یه لیست، بخش «## سوالات متداول» با ۳ تا ۵ سوال (هر سوال یه تیتر ### و جواب کوتاه زیرش)، و یه جمع‌بندی با دعوت به سفارش یا مشاوره.
-- از کلمه‌های مرتبط و هم‌معنی (LSI) استفاده کن.
+عنوان (title) — همه‌ی این‌ها الزامیه:
+- دقیقاً با کلمه‌ی کلیدی اصلی شروع بشه (اولین کلمه‌های عنوان، بدون هیچ کلمه‌ای قبلش).
+- یه عدد داشته باشه (مثلاً «۷ نکته»، «۱۰ قدم»، «راهنمای ۱۴۰۵»). عدد رو با رقم فارسی بنویس.
+- بین ۵۰ تا ۷۰ کاراکتر، جذاب و قابل کلیک.
+- نمونه: «طراحی سایت کافه: ۹ نکته برای جذب مشتری بیشتر در ۱۴۰۵»
 
-لینک‌سازی داخلی (خیلی مهم):
-- ۳ تا ۶ لینک داخلی توی متن بذار، با انکرتکست طبیعی و توصیفی (نه «اینجا کلیک کنید»).
-- حداقل ۲ لینک به صفحه‌های خدمات و اگه مقاله‌ی مرتبط وجود داره، ۱ تا ۳ لینک به مقاله‌های قبلی.
-- فقط و فقط از آدرس‌هایی که توی لیست داده شده استفاده کن، دقیقاً همون‌طور که نوشته شده. هیچ لینک خارجی نذار.
-- توی related_post_slugs اسلاگ ۱ تا ۳ مقاله‌ی موجود که بیشترین ارتباط موضوعی رو دارن بذار (فقط از لیست؛ اگه هیچ‌کدوم مرتبط نیست، خالی بذار).
+توضیحات متا (meta_description):
+- بین ${RULES.metaMin} تا ${RULES.metaMax} کاراکتر (حرف، نه کلمه) — دقیق بشمار.
+- کلمه‌ی کلیدی اصلی اول جمله بیاد و یه دعوت به عمل داشته باشه.
+
+slug: کوتاه، فارسی، با کلمه‌ی کلیدی اصلی، کلمه‌ها با خط تیره (مثلاً «طراحی-سایت-کافه»).
+
+متن (content):
+- طول: حدود ${RULES.words} کلمه (حداقل ۲۵۰۰). کوتاه‌تر قبول نیست.
+- چگالی کلمه‌ی کلیدی اصلی دقیقاً حدود ${RULES.density}٪: تعداد تکرار = (${RULES.words} × ${RULES.density / 100}) ÷ تعداد کلمه‌های خود کلمه‌ی کلیدی. مثلاً برای یه کلمه‌ی کلیدی ۳ کلمه‌ای حدود ۱۹ بار، برای ۲ کلمه‌ای حدود ۲۸ بار. تکرارها طبیعی و پخش در کل متن باشن (پاراگراف اول، تیترها، وسط و جمع‌بندی). کلمه‌ی کلیدی رو دقیقاً با همون املا تکرار کن.
+- کلمه‌ی کلیدی اصلی توی پاراگراف اول و حداقل ۳ تا از تیترهای ## بیاد.
+- ساختار: مقدمه‌ی گیرا که مستقیم به سوال جواب بده، ۷ تا ۱۰ بخش با تیتر ##، زیربخش‌ها با ###، بخش «## سوالات متداول» با ۴ تا ۶ سوال (هر سوال یه تیتر ### و جواب کوتاه)، و جمع‌بندی با دعوت به سفارش یا مشاوره.
+- تیترها جذاب و کنجکاوی‌برانگیز باشن، نه خشک (مثلاً «چرا ۷۰٪ سایت‌ها مشتری رو فراری می‌دن؟» فقط اگه آمارش واقعی باشه؛ وگرنه «چرا بیشتر سایت‌ها مشتری رو فراری می‌دن؟»).
+- حداقل ۳ لیست (هر آیتم یه خط که با «- » شروع بشه)، هر لیست ۳ تا ۷ آیتم.
+- پاراگراف‌های کوتاه (۲ تا ۴ جمله). از کلمه‌های مرتبط و هم‌معنی (LSI) استفاده کن.
+
+عکس‌ها:
+- ${RULES.imagesMin} تا ${RULES.imagesMax} جای عکس توی متن بذار، هر کدوم توی یه خط جدا و بعد از یه پاراگراف مرتبط، با این فرمت دقیق: ![متن alt](IMAGE_1) ، ![متن alt](IMAGE_2) و...
+- alt هر عکس توصیف واقعی عکس باشه و کلمه‌ی کلیدی اصلی توش بیاد (مثلاً «طراحی سایت کافه روی موبایل مشتری»).
+- برای هر عکس توی آرایه‌ی images یه آیتم با همون id، همون alt و یه عبارت جستجوی انگلیسی کوتاه برای پیدا کردن عکس استوک مناسب (search_query_en) بذار.
+
+لینک‌سازی (هر دو نوع الزامیه):
+- لینک داخلی: ${RULES.linksMin} تا ${RULES.linksMax} لینک (یا بیشتر اگه طبیعی بود) با انکرتکست توصیفی — حداقل ۲ لینک به صفحه‌های خدمات و اگه مقاله‌ی مرتبط هست ۱ تا ۲ لینک به مقاله‌های قبلی. فقط از آدرس‌های لیست، دقیقاً همون‌طور که نوشته شده.
+- لینک خارجی: ${RULES.linksMin} تا ${RULES.linksMax} لینک به منابع معتبر و واقعی که مطمئنی صفحه‌شون وجود داره. فقط صفحه‌های پایدار و شناخته‌شده؛ ترجیحاً: developers.google.com/search/docs ، web.dev ، developer.mozilla.org ، fa.wikipedia.org ، schema.org ، w3.org ، support.google.com. آدرس کامل با https بنویس. به سایت رقبای طراحی سایت لینک نده. لینک‌های خراب خودکار حذف می‌شن، پس فقط آدرس‌هایی که مطمئنی.
+- انکرتکست «اینجا کلیک کنید» ممنوع.
+- توی related_post_slugs اسلاگ ۱ تا ۳ مقاله‌ی موجود که بیشترین ارتباط رو دارن بذار (فقط از لیست؛ اگه نیست، خالی).
 
 فرمت content (یه مارک‌داون ساده؛ هر چیز دیگه خام نمایش داده می‌شه):
 - تیتر: «## » و «### » (تیتر # ممنوع؛ عنوان جداست). بخش «## مطالب مرتبط» ننویس؛ خودکار اضافه می‌شه.
 - لیست: هر آیتم یه خط که با «- » شروع بشه.
-- لینک: [انکرتکست](/آدرس)
+- لینک: [انکرتکست](آدرس)
+- عکس: یه خط جدا ![alt](IMAGE_n)
 - پاراگراف‌ها با یه خط خالی از هم جدا بشن.
 - بولد (**)، ایتالیک، جدول، کد، نقل‌قول و HTML ممنوع.
 
@@ -156,20 +189,29 @@ const SYSTEM_PROMPT = `تو نویسنده‌ی ارشد محتوا و متخص�
 - آمار، درصد، قیمت دقیق، اسم مشتری یا نقل‌قول ساختگی ننویس. اگه به قیمت اشاره می‌کنی، بگو به امکانات بستگی داره و به صفحه‌ی قیمت لینک بده.
 - لحن: صمیمی، حرفه‌ای و مفید؛ فارسی روان و درست با نیم‌فاصله.`;
 
-const OUTPUT_SCHEMA = {
+const OUTPUT_SCHEMA: Record<string, unknown> = {
   type: "object",
   additionalProperties: false,
-  required: ["keyword", "skip_keywords", "title", "slug", "meta_description", "content", "related_post_slugs"],
+  required: ["keyword", "skip_keywords", "title", "slug", "meta_description", "content", "images", "related_post_slugs"],
   properties: {
     keyword: { type: "string", description: "کلمه‌ی کلیدی اصلی انتخاب‌شده" },
-    skip_keywords: { type: "array", items: { type: "string" }, description: "کلمه‌های پیشنهادی بی‌ربط یا نامناسب" },
+    skip_keywords: { type: "array", items: { type: "string" } },
     title: { type: "string" },
     slug: { type: "string" },
     meta_description: { type: "string" },
     content: { type: "string" },
+    images: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["id", "alt", "search_query_en"],
+        properties: { id: { type: "string" }, alt: { type: "string" }, search_query_en: { type: "string" } },
+      },
+    },
     related_post_slugs: { type: "array", items: { type: "string" } },
   },
-} as const;
+};
 
 type Article = {
   keyword: string;
@@ -178,6 +220,7 @@ type Article = {
   slug: string;
   meta_description: string;
   content: string;
+  images: { id: string; alt: string; search_query_en: string }[];
   related_post_slugs: string[];
 };
 
@@ -193,15 +236,16 @@ ${list(targets.landing)}
 مقاله‌های منتشرشده‌ی قبلی (برای لینک داخلی و جلوگیری از موضوع تکراری):
 ${targets.blog.length ? list(targets.blog) : "(هنوز مقاله‌ای نیست)"}
 
-یه کلمه انتخاب کن و مقاله‌ش رو بنویس.`;
+یه کلمه‌ی کلیدی اصلی انتخاب کن و مقاله‌ی ${RULES.words} کلمه‌ای‌ش رو با همه‌ی قوانین بنویس.`;
 
   const stream = client.beta.messages.stream({
     model: MODEL,
-    max_tokens: 32000,
+    max_tokens: 48000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
     thinking: { type: "adaptive" },
-    output_config: { effort: "high", format: { type: "json_schema", schema: OUTPUT_SCHEMA as unknown as Record<string, unknown> } },
+    // medium keeps a 2800-word article inside the 300s function limit
+    output_config: { effort: "medium", format: { type: "json_schema", schema: OUTPUT_SCHEMA } },
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: userMsg }],
   });
@@ -219,7 +263,7 @@ ${targets.blog.length ? list(targets.blog) : "(هنوز مقاله‌ای نیس
 }
 
 // -----------------------------------------------------------------------
-// 3) Post-processing: safe content + internal links
+// 3) Post-processing: safe content, checked links, images
 // -----------------------------------------------------------------------
 
 function normUrl(u: string): string {
@@ -230,27 +274,192 @@ function normUrl(u: string): string {
   }
 }
 
-/** Keeps only links to real pages of this site; anything else becomes plain text. */
-export function sanitizeContent(content: string, allowed: Set<string>): { content: string; links: number } {
-  let links = 0;
+const OWN_HOSTS = ["webpikaso.ir", "www.webpikaso.ir"];
+
+/** Is this external page really there? (HEAD, then GET for servers that refuse HEAD) */
+async function urlAlive(url: string): Promise<boolean> {
+  for (const method of ["HEAD", "GET"] as const) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 7000);
+    try {
+      const res = await fetch(url, { method, redirect: "follow", signal: ctrl.signal, headers: { "User-Agent": "Mozilla/5.0 (compatible; WebPikasoLinkCheck/1.0)" } });
+      if (res.ok) return true;
+      if (method === "GET" || ![403, 405, 501].includes(res.status)) return false;
+    } catch {
+      if (method === "GET") return false;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  return false;
+}
+
+/** Internal links must point at real pages of this site; external links must
+ *  be live https pages. Anything else becomes plain text. */
+export async function sanitizeContent(
+  content: string,
+  allowed: Set<string>,
+  check: (url: string) => Promise<boolean> = urlAlive
+): Promise<{ content: string; internal: number; external: number }> {
   let out = content
     .replace(/\r\n/g, "\n")
     .replace(/\*\*([^*]+)\*\*/g, "$1")
     .replace(/__([^_]+)__/g, "$1")
     .replace(/^#\s+.*$/gm, "") // H1 belongs to the page title
     .replace(/<[^>]+>/g, "");
-  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, text: string, url: string) => {
-    const u = normUrl(url);
+  const rel = out.indexOf(RELATED_HEADING); // managed by code, never by the model
+  if (rel >= 0) out = out.slice(0, rel);
+
+  const linkRe = /(!?)\[([^\]]+)\]\(([^)\s]+)\)/g;
+  const externals = new Map<string, boolean>();
+  for (const m of Array.from(out.matchAll(linkRe))) {
+    const url = m[3];
+    if (m[1] || !/^https:\/\//i.test(url)) continue;
+    try {
+      if (!OWN_HOSTS.includes(new URL(url).hostname)) externals.set(url, false);
+    } catch {}
+  }
+  await Promise.all(Array.from(externals.keys()).map(async (u) => externals.set(u, await check(u))));
+
+  let internal = 0;
+  let external = 0;
+  out = out.replace(linkRe, (whole, bang: string, text: string, url: string) => {
+    if (bang) return whole; // images are handled separately
+    if (externals.get(url)) {
+      external++;
+      return `[${text}](${url})`;
+    }
+    let u = normUrl(url);
+    try {
+      const parsed = new URL(url);
+      if (OWN_HOSTS.includes(parsed.hostname)) u = normUrl(parsed.pathname);
+    } catch {}
     if (allowed.has(u)) {
-      links++;
+      internal++;
       return `[${text}](${u})`;
     }
     return text;
   });
-  // the related block is managed by code, never by the model
-  const rel = out.indexOf(RELATED_HEADING);
-  if (rel >= 0) out = out.slice(0, rel);
-  return { content: out.replace(/\n{3,}/g, "\n\n").trim(), links };
+  return { content: out.replace(/\n{3,}/g, "\n\n").trim(), internal, external };
+}
+
+/** Optional stock photo (Pexels, free key in PEXELS_API_KEY); null = keep the placeholder. */
+async function findPhoto(query: string): Promise<string | null> {
+  const key = process.env.PEXELS_API_KEY;
+  if (!key || !query) return null;
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?per_page=5&orientation=landscape&query=${encodeURIComponent(query)}`, {
+      headers: { Authorization: key },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { photos?: { src?: { large?: string } }[] };
+    const photos = (data.photos ?? []).map((p) => p.src?.large).filter((u): u is string => !!u);
+    return photos.length ? photos[Math.floor(Math.random() * Math.min(3, photos.length))] : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Replaces IMAGE_n markers with photos (or the placeholder), makes sure every
+ *  alt carries the keyword, and adds slots after ## sections if the model left
+ *  out some — so every article has 3–4 image spots. */
+export async function placeImages(
+  content: string,
+  images: Article["images"],
+  keyword: string,
+  photo: (q: string) => Promise<string | null> = findPhoto
+): Promise<{ content: string; count: number; cover: string | null }> {
+  const altFor = (alt: string, n: number) => {
+    const a = (alt || "").replace(/[\[\]()]/g, "").trim();
+    if (a && a.includes(keyword)) return a;
+    return a ? `${keyword} — ${a}` : `${keyword} — تصویر ${n}`;
+  };
+  const meta = new Map(images.map((im) => [im.id.trim(), im]));
+  let out = content;
+  const used: string[] = [];
+  out = out.replace(/!\[([^\]]*)\]\((IMAGE_\d+)\)/g, (_m, alt: string, id: string) => {
+    if (used.length >= RULES.imagesMax) return "";
+    used.push(id);
+    return `![${altFor(alt || meta.get(id)?.alt || "", used.length)}](${id})`;
+  });
+  // Too few slots: add after ## headings' first paragraph, spread through the article.
+  if (used.length < RULES.imagesMin) {
+    const lines = out.split("\n");
+    const h2 = lines.map((l, i) => (l.startsWith("## ") && !l.startsWith(RELATED_HEADING) ? i : -1)).filter((i) => i >= 0);
+    const spots = h2.filter((_, i) => i % 2 === 0);
+    let added = 0;
+    for (const at of spots.reverse()) {
+      if (used.length + added >= RULES.imagesMin) break;
+      // after the first paragraph under the heading
+      let j = at + 1;
+      while (j < lines.length && lines[j].trim() === "") j++;
+      while (j < lines.length && lines[j].trim() !== "") j++;
+      const id = `IMAGE_X${added + 1}`;
+      lines.splice(j, 0, "", `![${altFor(lines[at].replace(/^##\s+/, ""), used.length + added + 1)}](${id})`);
+      added++;
+    }
+    out = lines.join("\n");
+  }
+  // Resolve markers to photo URLs.
+  const ids = Array.from(out.matchAll(/!\[[^\]]*\]\((IMAGE_[X\d]+)\)/g)).map((m) => m[1]);
+  let cover: string | null = null;
+  for (const id of ids) {
+    const q = meta.get(id)?.search_query_en || "website design";
+    const url = (await photo(q)) ?? IMAGE_PLACEHOLDER;
+    if (!cover && url !== IMAGE_PLACEHOLDER) cover = url;
+    out = out.replace(`(${id})`, `(${url})`);
+  }
+  return { content: out.replace(/\n{3,}/g, "\n\n").trim(), count: ids.length, cover };
+}
+
+function plainText(content: string): string {
+  return content
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/^#{2,6}\s+/gm, "")
+    .replace(/^-\s+/gm, "");
+}
+
+const normFa = (s: string) => s.replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/‌/g, " ").replace(/\s+/g, " ").trim();
+
+/** Word count, keyword density (%), and how many times the keyword appears. */
+export function measure(content: string, keyword: string): { words: number; density: number; hits: number } {
+  const text = normFa(plainText(content));
+  const words = text.split(" ").filter(Boolean).length;
+  const kw = normFa(keyword);
+  const hits = kw ? text.split(kw).length - 1 : 0;
+  const kwWords = kw.split(" ").length;
+  return { words, hits, density: words ? Math.round(((hits * kwWords) / words) * 1000) / 10 : 0 };
+}
+
+export function countLists(content: string): number {
+  let n = 0;
+  let inList = false;
+  for (const line of content.split("\n")) {
+    const item = /^-\s+/.test(line);
+    if (item && !inList && !line.match(/^-\s+\[[^\]]+\]\(\/blog\//)) n++;
+    inList = item;
+  }
+  return n;
+}
+
+/** Keyword first, a number in it — fixed in code if the model slipped. */
+export function fixTitle(title: string, keyword: string): string {
+  let t = title.replace(/\s+/g, " ").trim();
+  // Prepend rather than cut the keyword out of the middle, which breaks the sentence.
+  if (!normFa(t).startsWith(normFa(keyword))) t = `${keyword}: ${t}`;
+  if (!/[0-9۰-۹]/.test(t)) t = `${t} در ۱۴۰۵`;
+  return t.slice(0, 120);
+}
+
+export function fixMeta(meta: string, keyword: string): string {
+  let m = meta.replace(/\s+/g, " ").trim();
+  if (!normFa(m).startsWith(normFa(keyword))) m = `${keyword}؛ ${m}`;
+  if (m.length > RULES.metaMax) {
+    const cut = m.slice(0, RULES.metaMax - 1);
+    m = cut.slice(0, Math.max(cut.lastIndexOf(" "), RULES.metaMin - 10)).trim() + "…";
+  }
+  return m;
 }
 
 /** Adds links into a post's «مطالب مرتبط» list (kept last, newest first, de-duplicated). */
@@ -286,8 +495,10 @@ async function uniqueSlug(wanted: string, fallback: string): Promise<string> {
 // 4) One run
 // -----------------------------------------------------------------------
 
+export type SeoMetrics = { words: number; density: number; internal: number; external: number; images: number; lists: number };
+
 export type SeoRunResult =
-  | { ok: true; skipped?: false; postId: number; slug: string; title: string; keyword: string; linked: number }
+  | { ok: true; skipped?: false; postId: number; slug: string; title: string; keyword: string; linked: number; metrics: SeoMetrics }
   | { ok: true; skipped: true; reason: string }
   | { ok: false; error: string };
 
@@ -321,8 +532,11 @@ export async function runSeoAutomation(trigger: "cron" | "manual"): Promise<SeoR
     keyword = cleanKeyword(article.keyword) ?? article.keyword.trim();
 
     const allowed = new Set([...targets.landing, ...targets.blog].map((t) => normUrl(t.url)));
-    const { content: body } = sanitizeContent(article.content, allowed);
-    if (body.split(/\s+/).length < 500) throw new Error("مقاله خیلی کوتاه بود؛ منتشر نشد");
+    const linked = await sanitizeContent(article.content, allowed);
+    const withImages = await placeImages(linked.content, article.images ?? [], keyword);
+    const body = withImages.content;
+    const m = measure(body, keyword);
+    if (m.words < RULES.minWords) throw new Error(`مقاله کوتاه بود (${m.words} کلمه)؛ منتشر نشد`);
 
     const published = posts.filter((p) => p.published);
     const related = article.related_post_slugs
@@ -336,13 +550,14 @@ export async function runSeoAutomation(trigger: "cron" | "manual"): Promise<SeoR
     }
 
     const slug = await uniqueSlug(article.slug, keyword);
-    const title = article.title.trim().slice(0, 120);
+    const title = fixTitle(article.title, keyword);
     const content = upsertRelated(body, related.map((p) => ({ title: p.title, url: `/blog/${p.slug}` })));
     const postId = await createBlogPost({
       title,
       slug,
-      excerpt: article.meta_description.trim().slice(0, 300),
+      excerpt: fixMeta(article.meta_description, keyword),
       content,
+      coverImage: withImages.cover ?? undefined,
       published: true,
     });
 
@@ -355,9 +570,17 @@ export async function runSeoAutomation(trigger: "cron" | "manual"): Promise<SeoR
     else await addSeoKeywords([{ keyword, seed: "ai" }]).then(() => setSeoKeywordStatus(keyword!, "used", postId));
     for (const s of article.skip_keywords) if (candidates.includes(s) && s !== keyword) await setSeoKeywordStatus(s, "skipped");
 
+    const metrics: SeoMetrics = {
+      words: m.words,
+      density: m.density,
+      internal: linked.internal + related.length,
+      external: linked.external,
+      images: withImages.count,
+      lists: countLists(body),
+    };
     await updateSeoSettings({ last_run_at: new Date().toISOString().slice(0, 19).replace("T", " ") });
-    await logSeoRun({ trigger, ok: true, keyword, post_id: postId, post_slug: slug, post_title: title, linked_post_ids: related.map((p) => p.id), error: null });
-    return { ok: true, postId, slug, title, keyword, linked: related.length };
+    await logSeoRun({ trigger, ok: true, keyword, post_id: postId, post_slug: slug, post_title: title, linked_post_ids: related.map((p) => p.id), error: null, metrics });
+    return { ok: true, postId, slug, title, keyword, linked: related.length, metrics };
   } catch (e) {
     const error = e instanceof Anthropic.APIError ? `خطای API (${e.status}): ${e.message}` : e instanceof Error ? e.message : String(e);
     await logSeoRun({ trigger, ok: false, keyword, post_id: null, post_slug: null, post_title: null, linked_post_ids: [], error }).catch(() => {});

@@ -35,6 +35,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "cdn.simpleicons.org",
       },
+      // Stock photos the SEO automation adds to articles (PEXELS_API_KEY).
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
     ],
   },
 
