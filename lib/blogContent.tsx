@@ -13,6 +13,7 @@ type Block =
   | { type: "heading"; level: 2 | 3 | 4 | 5 | 6; text: string }
   | { type: "list"; items: string[] }
   | { type: "image"; url: string; alt: string }
+  | { type: "cta"; text: string; button?: { label: string; href: string } }
   | { type: "paragraph"; lines: string[] };
 
 // "##" through "######" — H1 is reserved for the page/post title itself, so
@@ -20,6 +21,10 @@ type Block =
 const HEADING_RE = /^(#{2,6})\s+/;
 const LIST_ITEM_RE = /^[-*]\s+/;
 const STANDALONE_IMAGE_RE = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
+// ">> متن [برچسب دکمه](/order)" — a call-to-action box. A link at the very
+// end of the line becomes the box's button; any other links stay inline.
+const CTA_RE = /^>>\s+/;
+const CTA_BUTTON_RE = /\s*\[([^\]]+)\]\(([^)\s]+)\)\s*$/;
 
 function toBlocks(content: string): Block[] {
   const lines = content.replace(/\r\n/g, "\n").split("\n");
@@ -38,6 +43,19 @@ function toBlocks(content: string): Block[] {
     if (headingMatch) {
       const level = headingMatch[1].length as 2 | 3 | 4 | 5 | 6;
       blocks.push({ type: "heading", level, text: line.replace(HEADING_RE, "").trim() });
+      i++;
+      continue;
+    }
+
+    if (CTA_RE.test(line)) {
+      let text = line.replace(CTA_RE, "").trim();
+      const btn = text.match(CTA_BUTTON_RE);
+      let button: { label: string; href: string } | undefined;
+      if (btn) {
+        button = { label: btn[1], href: btn[2] };
+        text = text.slice(0, btn.index).trim();
+      }
+      blocks.push({ type: "cta", text, button });
       i++;
       continue;
     }
@@ -65,6 +83,7 @@ function toBlocks(content: string): Block[] {
       lines[i].trim() !== "" &&
       !HEADING_RE.test(lines[i]) &&
       !LIST_ITEM_RE.test(lines[i]) &&
+      !CTA_RE.test(lines[i]) &&
       !STANDALONE_IMAGE_RE.test(lines[i].trim())
     ) {
       paraLines.push(lines[i]);
@@ -103,6 +122,10 @@ export const BLOG_CLASSES = {
   link: "text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent",
   image: "my-6 w-full h-auto rounded-card border border-ink/[0.14]",
   paragraph: "my-5 text-[16px] leading-[1.9] text-ink/90",
+  cta: "my-8 rounded-card border border-accent/40 bg-accent/[0.07] p-5 sm:p-6",
+  ctaText: "text-[16px] font-semibold leading-[1.9] text-ink",
+  ctaButton:
+    "mt-4 inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-[15px] font-bold text-white no-underline shadow-sm transition hover:opacity-90",
 };
 
 // Custom inline text-size wrapper the editor's "بزرگ‌نمایی متن" tool inserts
@@ -201,6 +224,20 @@ export function renderBlogContent(content: string): ReactNode {
                 <li key={j}>{renderInline(item, `li-${i}-${j}`)}</li>
               ))}
             </ul>
+          );
+        }
+        if (block.type === "cta") {
+          // data-cta lets the dashboard editor turn this box back into
+          // ">> ..." when it re-serializes the DOM (see BlogPanel.tsx).
+          return (
+            <aside key={i} data-cta="1" className={BLOG_CLASSES.cta}>
+              <p className={BLOG_CLASSES.ctaText}>{renderInline(block.text, `cta-${i}`)}</p>
+              {block.button && (
+                <Link href={block.button.href} data-cta-button="1" className={BLOG_CLASSES.ctaButton}>
+                  {block.button.label}
+                </Link>
+              )}
+            </aside>
           );
         }
         if (block.type === "image" && block.url === "/blog-placeholder.svg") {

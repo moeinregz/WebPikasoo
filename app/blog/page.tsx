@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { getPublishedBlogPosts } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
+import { ensureSeedArticles } from "@/lib/seedArticles";
 
 // Always read the latest posts straight from the database.
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ function formatDate(iso: string) {
 
 export default async function BlogIndexPage() {
   const isLoggedIn = !!(await getCurrentUser());
+  await ensureSeedArticles();
   const posts = await getPublishedBlogPosts();
 
   return (
