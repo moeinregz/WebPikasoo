@@ -169,7 +169,7 @@ slug: کوتاه، فارسی، با کلمه‌ی کلیدی اصلی، کلم�
 
 عکس‌ها:
 - ${RULES.imagesMin} تا ${RULES.imagesMax} جای عکس توی متن بذار، هر کدوم توی یه خط جدا و بعد از یه پاراگراف مرتبط، با این فرمت دقیق: ![متن alt](IMAGE_1) ، ![متن alt](IMAGE_2) و...
-- alt هر عکس توصیف واقعی عکس باشه و کلمه‌ی کلیدی اصلی توش بیاد (مثلاً «طراحی سایت کافه روی موبایل مشتری»).
+- alt هر عکس فقط به فارسی (بدون کلمه‌ی انگلیسی، مگه اینکه خود کلمه‌ی کلیدی انگلیسی داشته باشه)، توصیف واقعی عکس باشه و کلمه‌ی کلیدی اصلی توش بیاد (مثلاً «طراحی سایت کافه روی موبایل مشتری»).
 - برای هر عکس توی آرایه‌ی images یه آیتم با همون id، همون alt و یه عبارت جستجوی انگلیسی کوتاه برای پیدا کردن عکس استوک مناسب (search_query_en) بذار.
 
 لینک‌سازی (هر دو نوع الزامیه):
@@ -360,7 +360,9 @@ export async function placeImages(
   photo: (q: string) => Promise<string | null> = findPhoto
 ): Promise<{ content: string; count: number; cover: string | null }> {
   const altFor = (alt: string, n: number) => {
-    const a = (alt || "").replace(/[\[\]()]/g, "").trim();
+    let a = (alt || "").replace(/[\[\]()]/g, "").trim();
+    // Persian only: an alt the model wrote in English is dropped for the fallback.
+    if (a && !/[\u0600-\u06FF]/.test(a)) a = "";
     if (a && a.includes(keyword)) return a;
     return a ? `${keyword} — ${a}` : `${keyword} — تصویر ${n}`;
   };

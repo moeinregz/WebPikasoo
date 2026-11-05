@@ -203,8 +203,11 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
  *  paragraphs. Server-safe (no client-only APIs), so it can be called
  *  straight from /blog/[slug] — and also from the BlogPanel editor's live
  *  preview, since it's a plain function with no server-only imports. */
-export function renderBlogContent(content: string): ReactNode {
-  const blocks = toBlocks(content);
+export function renderBlogContent(content: string, fallbackAlt?: string): ReactNode {
+  // Older posts can carry English (or empty) alts; with a fallback (the post
+  // title, which starts with the main keyword) those render in Persian.
+  const altOf = (alt: string) => (fallbackAlt && !/[\u0600-\u06FF]/.test(alt) ? fallbackAlt : alt);
+  const blocks = toBlocks(content).map((b) => (b.type === "image" ? { ...b, alt: altOf(b.alt) } : b));
 
   return (
     <>
