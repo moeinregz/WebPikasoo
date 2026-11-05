@@ -2111,3 +2111,153 @@ export async function getWorkStatsForUser(userId: number, days: string[]): Promi
   }
   return out;
 }
+
+// -----------------------------------------------------------------------
+// SEO content automation (lib/seoAutomation.ts)
+// -----------------------------------------------------------------------
+// Keywords found from Google's autocomplete are queued in seo_keywords; every
+// run picks one, writes an article with internal links and publishes it to the
+// blog. Settings live in a single seo_settings doc, each run is logged.
+
+export type SeoSettings = {
+  enabled: boolean;
+  /** days between two automatic articles */
+  interval_days: number;
+  last_run_at: string | null;
+};
+
+export type SeoKeyword = {
+  keyword: string;
+  seed: string;
+  status: "new" | "used" | "skipped";
+  created_at: string;
+  post_id: number | null;
+};
+
+export type SeoRun = {
+  id: number;
+  at: string;
+  trigger: "cron" | "manual";
+  ok: boolean;
+  keyword: string | null;
+  post_id: number | null;
+  post_slug: string | null;
+  post_title: string | null;
+  linked_post_ids: number[];
+  error: string | null;
+};
+
+const SEO_SETTINGS_ID = "main";
+
+export async function getSeoSettings(): Promise<SeoSettings> {
+  const database = await getDb();
+  const doc = await database
+    .collection("seo_settings")
+    .findOne({ _id: SEO_SETTINGS_ID as unknown as any }, { projection: { _id: 0 } });
+  return {
+    enabled: doc?.enabled ?? true,
+    interval_days: doc?.interval_days ?? 2,
+    last_run_at: doc?.last_run_at ?? null,
+  };
+}
+
+export async function updateSeoSettings(data: Partial<SeoSettings>): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection("seo_settings")
+    .updateOne({ _id: SEO_SETTINGS_ID as unknown as any }, { $set: data }, { upsert: true });
+}
+
+/** Queues keywords not seen before; returns how many were new. */
+export async function addSeoKeywords(items: { keyword: string; seed: string }[]): Promise<number> {
+  if (!items.length) return 0;
+  const database = await getDb();
+  const col = database.collection<SeoKeyword>("seo_keywords");
+  const existing = new Set(
+    (await col.find({ keyword: { $in: items.map((i) => i.keyword) } }, { projection: { _id: 0, keyword: 1 } }).toArray()).map(
+      (k) => k.keyword
+    )
+  );
+  const now = nowStr();
+  const fresh = items.filter((i, idx) => !existing.has(i.keyword) && items.findIndex((j) => j.keyword === i.keyword) === idx);
+  if (fresh.length) {
+    await col.insertMany(fresh.map((i) => ({ keyword: i.keyword, seed: i.seed, status: "new" as const, created_at: now, post_id: null })));
+  }
+  return fresh.length;
+}
+
+export async function getSeoKeywords(status: SeoKeyword["status"] | "all", limit = 200): Promise<SeoKeyword[]> {
+  const database = await getDb();
+  const filter = status === "all" ? {} : { status };
+  return database
+    .collection<SeoKeyword>("seo_keywords")
+    .find(filter, { projection: { _id: 0 } })
+    .sort({ created_at: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+export async function setSeoKeywordStatus(keyword: string, status: SeoKeyword["status"], postId: number | null = null): Promise<void> {
+  const database = await getDb();
+  await database.collection("seo_keywords").updateOne({ keyword }, { $set: { status, post_id: postId } });
+}
+
+export async function countSeoKeywords(): Promise<Record<SeoKeyword["status"], number>> {
+  const database = await getDb();
+  const rows = await database
+    .collection("seo_keywords")
+    .aggregate<{ _id: SeoKeyword["status"]; n: number }>([{ $group: { _id: "$status", n: { $sum: 1 } } }])
+    .toArray();
+  const out = { new: 0, used: 0, skipped: 0 };
+  for (const r of rows) out[r._id] = r.n;
+  return out;
+}
+
+export async function logSeoRun(run: Omit<SeoRun, "id" | "at">): Promise<void> {
+  const database = await getDb();
+  const id = await nextId("seo_runs");
+  await database.collection<SeoRun>("seo_runs").insertOne({ id, at: nowStr(), ...run });
+}
+
+export async function getSeoRuns(limit = 20): Promise<SeoRun[]> {
+  const database = await getDb();
+  return database
+    .collection<SeoRun>("seo_runs")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ id: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+/** Atomically claims a run so a cron retry and a manual click can't both write an article. */
+export async function claimSeoRunLock(ttlMinutes = 10): Promise<boolean> {
+  const database = await getDb();
+  const now = Date.now();
+  try {
+    const res = await database.collection("seo_settings").findOneAndUpdate(
+      { _id: "lock" as unknown as any, $or: [{ until: { $lt: now } }, { until: { $exists: false } }] },
+      { $set: { until: now + ttlMinutes * 60_000 } },
+      { upsert: true, returnDocument: "after" }
+    );
+    return !!res;
+  } catch {
+    // duplicate key on upsert = someone else holds a live lock
+    return false;
+  }
+}
+
+export async function releaseSeoRunLock(): Promise<void> {
+  const database = await getDb();
+  await database.collection("seo_settings").updateOne({ _id: "lock" as unknown as any }, { $set: { until: 0 } });
+}
+
+/** Rewrites a post's body only (keeps title/slug/published) — used to add
+ *  «مطالب مرتبط» links into older posts when a new article is published. */
+export async function setBlogPostContent(id: number, content: string): Promise<void> {
+  const database = await getDb();
+  const existing = await database
+    .collection<BlogPost>("blog_posts")
+    .findOne({ id }, { projection: { _id: 0, slug: 1 } });
+  await database.collection("blog_posts").updateOne({ id }, { $set: { content, updated_at: nowStr() } });
+  await invalidateCache("blog:published", ...(existing ? [`blog:slug:${existing.slug}`] : []));
+}

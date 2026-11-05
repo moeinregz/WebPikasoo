@@ -122,12 +122,16 @@ function renderLinks(text: string, keyPrefix: string): ReactNode[] {
 
   while ((match = linkRe.exec(text))) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+    // Internal links (/blog/..., /website-design...) open in the same tab so
+    // link equity and the reader both stay on the site; external ones open
+    // a new tab as before.
+    const internal = match[2].startsWith("/");
     parts.push(
       <Link
         key={`${keyPrefix}-a-${i++}`}
         href={match[2]}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={internal ? undefined : "_blank"}
+        rel={internal ? undefined : "noopener noreferrer"}
         className="text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent"
       >
         {match[1]}

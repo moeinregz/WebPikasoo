@@ -17,6 +17,10 @@ import {
   getAllChannelMessageLogs,
   getUserPermissions,
   getAllBlogPosts,
+  getSeoSettings,
+  getSeoKeywords,
+  getSeoRuns,
+  countSeoKeywords,
   getAllProjects,
   getAllPrivateSites,
   countNewSiteRequests,
@@ -47,6 +51,7 @@ import UsersPanel from "./UsersPanel";
 import { AdminTasksPanel, MyTasksPanel } from "./TasksPanel";
 import OverviewPanel from "./OverviewPanel";
 import BlogPanel from "./BlogPanel";
+import SeoAutomationPanel from "./SeoAutomationPanel";
 import ProjectsPanel from "./ProjectsPanel";
 import PrivateSitesPanel from "./PrivateSitesPanel";
 import SiteGeneratorPanel from "./SiteGeneratorPanel";
@@ -117,6 +122,10 @@ export default async function DashboardPage() {
   const myTasks = !isAdmin ? await getTasksForUser(currentUser.id) : [];
   const blogPosts = isAdmin || perms.blog ? await getAllBlogPosts() : [];
   const projects = isAdmin || perms.projects ? await getAllProjects() : [];
+  // Admin-only: SEO content automation (keywords → AI article → blog).
+  const seo = isAdmin
+    ? await Promise.all([getSeoSettings(), countSeoKeywords(), getSeoKeywords("all", 300), getSeoRuns(15)]).catch(() => null)
+    : null;
   // Admin-only: sites uploaded just to share a private link (never public).
   const privateSites = isAdmin ? await getAllPrivateSites() : [];
   // Orders / bookings waiting in the owners' panels (badge on each site card).
@@ -444,6 +453,23 @@ export default async function DashboardPage() {
       id: "blog",
       label: `وبلاگ (${toPersianDigits(blogPosts.length)})`,
       panel: <BlogPanel posts={blogPosts} canDelete={isAdmin} />,
+    });
+  }
+  if (isAdmin && seo) {
+    const [settings, counts, keywords, runs] = seo;
+    tabs.push({
+      id: "seo-automation",
+      label: "اتوماسیون سئو",
+      panel: (
+        <SeoAutomationPanel
+          settings={settings}
+          counts={counts}
+          keywords={keywords.map((k) => ({ keyword: k.keyword, seed: k.seed, status: k.status }))}
+          runs={runs}
+          hasApiKey={!!process.env.ANTHROPIC_API_KEY}
+          hasCronSecret={!!process.env.CRON_SECRET}
+        />
+      ),
     });
   }
   if (isAdmin || perms.projects) {

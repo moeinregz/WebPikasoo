@@ -1853,3 +1853,29 @@ export async function uploadBlogContentImageAction(
     return { ok: false, message: err instanceof Error ? err.message : "آپلود تصویر ناموفق بود." };
   }
 }
+
+// -----------------------------------------------------------------------
+// SEO content automation (tab «اتوماسیون سئو»)
+// -----------------------------------------------------------------------
+
+export async function saveSeoSettingsAction(formData: FormData) {
+  await requireAdmin();
+  const { updateSeoSettings } = await import("@/lib/db");
+  const days = Math.min(30, Math.max(1, parseInt(String(formData.get("interval_days") ?? "2"), 10) || 2));
+  await updateSeoSettings({ enabled: formData.get("enabled") === "on", interval_days: days });
+  revalidatePath("/dashboard");
+}
+
+export async function setSeoKeywordStatusAction(formData: FormData) {
+  await requireAdmin();
+  const { setSeoKeywordStatus, addSeoKeywords } = await import("@/lib/db");
+  const keyword = String(formData.get("keyword") ?? "").trim();
+  const status = String(formData.get("status") ?? "");
+  if (!keyword) return;
+  if (status === "add") {
+    await addSeoKeywords([{ keyword, seed: "manual" }]);
+  } else if (status === "skipped" || status === "new") {
+    await setSeoKeywordStatus(keyword, status);
+  }
+  revalidatePath("/dashboard");
+}
