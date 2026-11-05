@@ -2111,3 +2111,318 @@ export async function getWorkStatsForUser(userId: number, days: string[]): Promi
   }
   return out;
 }
+
+// -----------------------------------------------------------------------
+// SEO content automation (lib/seoAutomation.ts)
+// -----------------------------------------------------------------------
+// Keywords found from Google's autocomplete are queued in seo_keywords; every
+// run picks one, writes an article with internal links and publishes it to the
+// blog. Settings live in a single seo_settings doc, each run is logged.
+
+export type SeoSettings = {
+  enabled: boolean;
+  /** days between two automatic articles */
+  interval_days: number;
+  last_run_at: string | null;
+};
+
+export type SeoKeyword = {
+  keyword: string;
+  seed: string;
+  status: "new" | "used" | "skipped";
+  created_at: string;
+  post_id: number | null;
+};
+
+export type SeoRun = {
+  id: number;
+  at: string;
+  trigger: "cron" | "manual";
+  ok: boolean;
+  keyword: string | null;
+  post_id: number | null;
+  post_slug: string | null;
+  post_title: string | null;
+  linked_post_ids: number[];
+  error: string | null;
+  /** quality numbers of the published article */
+  metrics?: { words: number; density: number; internal: number; external: number; images: number; lists: number };
+};
+
+const SEO_SETTINGS_ID = "main";
+
+export async function getSeoSettings(): Promise<SeoSettings> {
+  const database = await getDb();
+  const doc = await database
+    .collection("seo_settings")
+    .findOne({ _id: SEO_SETTINGS_ID as unknown as any }, { projection: { _id: 0 } });
+  return {
+    enabled: doc?.enabled ?? true,
+    interval_days: doc?.interval_days ?? 2,
+    last_run_at: doc?.last_run_at ?? null,
+  };
+}
+
+export async function updateSeoSettings(data: Partial<SeoSettings>): Promise<void> {
+  const database = await getDb();
+  await database
+    .collection("seo_settings")
+    .updateOne({ _id: SEO_SETTINGS_ID as unknown as any }, { $set: data }, { upsert: true });
+}
+
+/** Queues keywords not seen before; returns how many were new. */
+export async function addSeoKeywords(items: { keyword: string; seed: string }[]): Promise<number> {
+  if (!items.length) return 0;
+  const database = await getDb();
+  const col = database.collection<SeoKeyword>("seo_keywords");
+  const existing = new Set(
+    (await col.find({ keyword: { $in: items.map((i) => i.keyword) } }, { projection: { _id: 0, keyword: 1 } }).toArray()).map(
+      (k) => k.keyword
+    )
+  );
+  const now = nowStr();
+  const fresh = items.filter((i, idx) => !existing.has(i.keyword) && items.findIndex((j) => j.keyword === i.keyword) === idx);
+  if (fresh.length) {
+    await col.insertMany(fresh.map((i) => ({ keyword: i.keyword, seed: i.seed, status: "new" as const, created_at: now, post_id: null })));
+  }
+  return fresh.length;
+}
+
+export async function getSeoKeywords(status: SeoKeyword["status"] | "all", limit = 200): Promise<SeoKeyword[]> {
+  const database = await getDb();
+  const filter = status === "all" ? {} : { status };
+  return database
+    .collection<SeoKeyword>("seo_keywords")
+    .find(filter, { projection: { _id: 0 } })
+    .sort({ created_at: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+export async function setSeoKeywordStatus(keyword: string, status: SeoKeyword["status"], postId: number | null = null): Promise<void> {
+  const database = await getDb();
+  await database.collection("seo_keywords").updateOne({ keyword }, { $set: { status, post_id: postId } });
+}
+
+export async function countSeoKeywords(): Promise<Record<SeoKeyword["status"], number>> {
+  const database = await getDb();
+  const rows = await database
+    .collection("seo_keywords")
+    .aggregate<{ _id: SeoKeyword["status"]; n: number }>([{ $group: { _id: "$status", n: { $sum: 1 } } }])
+    .toArray();
+  const out = { new: 0, used: 0, skipped: 0 };
+  for (const r of rows) out[r._id] = r.n;
+  return out;
+}
+
+export async function logSeoRun(run: Omit<SeoRun, "id" | "at">): Promise<void> {
+  const database = await getDb();
+  const id = await nextId("seo_runs");
+  await database.collection<SeoRun>("seo_runs").insertOne({ id, at: nowStr(), ...run });
+}
+
+export async function getSeoRuns(limit = 20): Promise<SeoRun[]> {
+  const database = await getDb();
+  return database
+    .collection<SeoRun>("seo_runs")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ id: -1 })
+    .limit(limit)
+    .toArray();
+}
+
+/** Atomically claims a run so a cron retry and a manual click can't both write an article. */
+export async function claimSeoRunLock(ttlMinutes = 10): Promise<boolean> {
+  const database = await getDb();
+  const now = Date.now();
+  try {
+    const res = await database.collection("seo_settings").findOneAndUpdate(
+      { _id: "lock" as unknown as any, $or: [{ until: { $lt: now } }, { until: { $exists: false } }] },
+      { $set: { until: now + ttlMinutes * 60_000 } },
+      { upsert: true, returnDocument: "after" }
+    );
+    return !!res;
+  } catch {
+    // duplicate key on upsert = someone else holds a live lock
+    return false;
+  }
+}
+
+export async function releaseSeoRunLock(): Promise<void> {
+  const database = await getDb();
+  await database.collection("seo_settings").updateOne({ _id: "lock" as unknown as any }, { $set: { until: 0 } });
+}
+
+/** Rewrites a post's body only (keeps title/slug/published) — used to add
+ *  «مطالب مرتبط» links into older posts when a new article is published. */
+export async function setBlogPostContent(id: number, content: string): Promise<void> {
+  const database = await getDb();
+  const existing = await database
+    .collection<BlogPost>("blog_posts")
+    .findOne({ id }, { projection: { _id: 0, slug: 1 } });
+  await database.collection("blog_posts").updateOne({ id }, { $set: { content, updated_at: nowStr() } });
+  await invalidateCache("blog:published", ...(existing ? [`blog:slug:${existing.slug}`] : []));
+}
+
+// -----------------------------------------------------------------------
+// SMS panel (tab «پنل پیامک») + offer landing page (/o)
+// -----------------------------------------------------------------------
+// A campaign = one send to a filtered audience. Every recipient gets a short
+// tracking code (sms_refs) used in their link (/o/<code>), so the landing page
+// can greet them by business name and the panel can show visits and orders.
+
+export type SmsCampaign = {
+  id: number;
+  created_at: string;
+  created_by: number | null;
+  name: string;
+  /** trade id (or "*") → message template */
+  texts: Record<string, string>;
+  total: number;
+  sent: number;
+  failed: number;
+};
+
+export type SmsMessage = {
+  id: number;
+  at: string;
+  campaign_id: number | null; // null = test SMS
+  phone: string;
+  source: "crm" | "channel" | "test";
+  lead_id: number | null;
+  name: string;
+  trade_id: string | null;
+  code: string | null;
+  text: string;
+  ok: boolean;
+  error: string | null;
+};
+
+export type SmsRef = {
+  code: string;
+  created_at: string;
+  campaign_id: number | null;
+  source: "crm" | "channel";
+  lead_id: number;
+  name: string;
+  phone: string;
+  trade_id: string | null;
+  visits: number;
+  last_visit_at: string | null;
+  ordered_at: string | null;
+};
+
+export async function createSmsCampaign(data: { name: string; texts: Record<string, string>; total: number; createdBy: number | null }): Promise<number> {
+  const database = await getDb();
+  const id = await nextId("sms_campaigns");
+  await database.collection<SmsCampaign>("sms_campaigns").insertOne({
+    id,
+    created_at: nowStr(),
+    created_by: data.createdBy,
+    name: data.name,
+    texts: data.texts,
+    total: data.total,
+    sent: 0,
+    failed: 0,
+  });
+  return id;
+}
+
+export async function getSmsCampaign(id: number): Promise<SmsCampaign | undefined> {
+  const database = await getDb();
+  return (await database.collection<SmsCampaign>("sms_campaigns").findOne({ id }, { projection: { _id: 0 } })) ?? undefined;
+}
+
+export async function addSmsCampaignCounts(id: number, sent: number, failed: number): Promise<void> {
+  const database = await getDb();
+  await database.collection("sms_campaigns").updateOne({ id }, { $inc: { sent, failed } });
+}
+
+/** Campaigns, newest first, with visit/order counts from their links. */
+export async function getSmsCampaigns(limit = 30): Promise<(SmsCampaign & { visited: number; ordered: number })[]> {
+  const database = await getDb();
+  const list = await database
+    .collection<SmsCampaign>("sms_campaigns")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ id: -1 })
+    .limit(limit)
+    .toArray();
+  const stats = await database
+    .collection("sms_refs")
+    .aggregate<{ _id: number; visited: number; ordered: number }>([
+      { $match: { campaign_id: { $in: list.map((c) => c.id) } } },
+      {
+        $group: {
+          _id: "$campaign_id",
+          visited: { $sum: { $cond: [{ $gt: ["$visits", 0] }, 1, 0] } },
+          ordered: { $sum: { $cond: [{ $ifNull: ["$ordered_at", false] }, 1, 0] } },
+        },
+      },
+    ])
+    .toArray();
+  const by = new Map(stats.map((s) => [s._id, s]));
+  return list.map((c) => ({ ...c, visited: by.get(c.id)?.visited ?? 0, ordered: by.get(c.id)?.ordered ?? 0 }));
+}
+
+export async function insertSmsMessage(m: Omit<SmsMessage, "id" | "at">): Promise<void> {
+  const database = await getDb();
+  const id = await nextId("sms_messages");
+  await database.collection<SmsMessage>("sms_messages").insertOne({ id, at: nowStr(), ...m });
+}
+
+export async function getRecentSmsMessages(limit = 40): Promise<SmsMessage[]> {
+  const database = await getDb();
+  return database.collection<SmsMessage>("sms_messages").find({}, { projection: { _id: 0 } }).sort({ id: -1 }).limit(limit).toArray();
+}
+
+/** phone → time of the last successful SMS (to skip people messaged recently). */
+export async function getLastSmsByPhone(): Promise<Record<string, string>> {
+  const database = await getDb();
+  const rows = await database
+    .collection("sms_messages")
+    .aggregate<{ _id: string; at: string }>([{ $match: { ok: true, campaign_id: { $ne: null } } }, { $group: { _id: "$phone", at: { $max: "$at" } } }])
+    .toArray();
+  return Object.fromEntries(rows.map((r) => [r._id, r.at]));
+}
+
+const REF_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
+
+/** Short unique code for /o/<code> (6 chars keeps the SMS short). */
+export async function createSmsRef(data: Omit<SmsRef, "code" | "created_at" | "visits" | "last_visit_at" | "ordered_at">): Promise<string> {
+  const database = await getDb();
+  const col = database.collection<SmsRef>("sms_refs");
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const code = Array.from(crypto.randomBytes(6), (b) => REF_ALPHABET[b % REF_ALPHABET.length]).join("");
+    if (await col.findOne({ code }, { projection: { _id: 1 } })) continue;
+    await col.insertOne({ code, created_at: nowStr(), visits: 0, last_visit_at: null, ordered_at: null, ...data });
+    return code;
+  }
+  throw new Error("could not create a unique SMS code");
+}
+
+export async function getSmsRef(code: string): Promise<SmsRef | undefined> {
+  if (!/^[a-z0-9]{4,12}$/.test(code)) return undefined;
+  const database = await getDb();
+  return (await database.collection<SmsRef>("sms_refs").findOne({ code }, { projection: { _id: 0 } })) ?? undefined;
+}
+
+export async function touchSmsRef(code: string): Promise<void> {
+  const database = await getDb();
+  await database.collection("sms_refs").updateOne({ code }, { $inc: { visits: 1 }, $set: { last_visit_at: nowStr() } });
+}
+
+export async function markSmsRefOrdered(code: string): Promise<void> {
+  const database = await getDb();
+  await database.collection("sms_refs").updateOne({ code, ordered_at: null }, { $set: { ordered_at: nowStr() } });
+}
+
+export async function getSmsOptOuts(): Promise<string[]> {
+  const database = await getDb();
+  return (await database.collection<{ phone: string }>("sms_optout").find({}, { projection: { _id: 0, phone: 1 } }).toArray()).map((r) => r.phone);
+}
+
+export async function setSmsOptOut(phone: string, optedOut: boolean): Promise<void> {
+  const database = await getDb();
+  if (optedOut) await database.collection("sms_optout").updateOne({ phone }, { $set: { phone, at: nowStr() } }, { upsert: true });
+  else await database.collection("sms_optout").deleteOne({ phone });
+}
