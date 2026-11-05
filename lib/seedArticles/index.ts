@@ -10,8 +10,10 @@ import a05 from "./a05";
 import a06 from "./a06";
 import a07 from "./a07";
 import a08 from "./a08";
+import a09 from "./a09";
+import a10 from "./a10";
 
-const modules: SeedArticle[][] = [a01, a02, a03, a04, a05, a06, a07, a08];
+const modules: SeedArticle[][] = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10];
 
 export const SEED_ARTICLES: SeedArticle[] = modules.flat();
 
