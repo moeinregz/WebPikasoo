@@ -24,7 +24,7 @@ const slides: Slide[] = [
   },
   {
     title: "پنل مدیریت فروشگاه",
-    accent: "#0077B6",
+    accent: "#AD96F1",
     image: "/work/site-novapanel.webp",
   },
 ];

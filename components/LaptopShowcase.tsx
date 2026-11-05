@@ -25,7 +25,7 @@ const services: ServiceTab[] = [
       "اتصال به API‌های داخلی و خارجی",
       "معماری مقیاس‌پذیر و قابل نگهداری",
     ],
-    accent: "#0077B6",
+    accent: "#AD96F1",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 6l-4 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -42,7 +42,7 @@ const services: ServiceTab[] = [
       "طراحی اختصاصی هماهنگ با هویت برند",
       "سرعت بالا و تجربه‌ی کاربری روان روی موبایل",
     ],
-    accent: "#00B4D8",
+    accent: "#C4B3F6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M3 6h18l-1.5 11a2 2 0 01-2 1.7H6.5a2 2 0 01-2-1.7L3 6Z" strokeLinecap="round" strokeLinejoin="round" />
@@ -60,7 +60,7 @@ const services: ServiceTab[] = [
       "اتوماسیون فرایندهای تکراری با AI",
       "تحلیل و پیش‌بینی داده‌های کسب‌وکار",
     ],
-    accent: "#023E8A",
+    accent: "#7C5CE6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <circle cx="12" cy="12" r="3" />
@@ -84,7 +84,7 @@ function AdminPanelScreen() {
     <div className="flex h-full bg-[#0a0a0c]">
       {/* نوار کناری آیکون‌محور */}
       <div className="flex w-[42px] flex-shrink-0 flex-col items-center gap-4 border-l border-white/10 bg-white/[0.03] py-3.5 sm:w-[50px]">
-        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-accent text-white">
+        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-accent text-on-accent">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} className="h-3.5 w-3.5">
             <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" strokeLinejoin="round" />
           </svg>
@@ -111,9 +111,9 @@ function AdminPanelScreen() {
           {/* کارت‌های آماری */}
           <div className="grid grid-cols-3 gap-2">
             {[
-              { l: "فروش امروز", v: "۴۲.۶M", c: "#48CAE4" },
-              { l: "سفارش‌ها", v: "۱۲۸", c: "#0077B6" },
-              { l: "کاربر فعال", v: "۹۶۴", c: "#023E8A" },
+              { l: "فروش امروز", v: "۴۲.۶M", c: "#C4B3F6" },
+              { l: "سفارش‌ها", v: "۱۲۸", c: "#AD96F1" },
+              { l: "کاربر فعال", v: "۹۶۴", c: "#7C5CE6" },
             ].map((s) => (
               <div key={s.l} className="rounded-md border border-white/10 bg-white/[0.03] p-2">
                 <div className="h-1.5 w-8 rounded-full" style={{ background: `${s.c}55` }} />
@@ -129,7 +129,7 @@ function AdminPanelScreen() {
               <span
                 key={i}
                 className="flex-1 rounded-t-sm"
-                style={{ height: `${h}%`, background: i === 5 ? "#48CAE4" : "rgba(0,119,182,.4)" }}
+                style={{ height: `${h}%`, background: i === 5 ? "#C4B3F6" : "rgba(173, 150, 241,.4)" }}
               />
             ))}
           </div>
@@ -178,7 +178,7 @@ function StoreScreen() {
               <circle cx="10" cy="21" r="1.2" />
               <circle cx="17" cy="21" r="1.2" />
             </svg>
-            <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] font-black text-white">
+            <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] font-black text-on-accent">
               ۳
             </span>
           </span>
@@ -213,15 +213,15 @@ function AiScreen() {
   return (
     <div className="relative flex h-full flex-col overflow-hidden bg-[#0a0a0c]">
       <svg viewBox="0 0 320 200" className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.12]">
-        <circle cx="40" cy="40" r="3" fill="#48CAE4" />
-        <circle cx="40" cy="110" r="3" fill="#48CAE4" />
-        <circle cx="40" cy="170" r="3" fill="#48CAE4" />
-        <circle cx="150" cy="70" r="3" fill="#48CAE4" />
-        <circle cx="150" cy="140" r="3" fill="#48CAE4" />
-        <circle cx="270" cy="100" r="3" fill="#48CAE4" />
+        <circle cx="40" cy="40" r="3" fill="#C4B3F6" />
+        <circle cx="40" cy="110" r="3" fill="#C4B3F6" />
+        <circle cx="40" cy="170" r="3" fill="#C4B3F6" />
+        <circle cx="150" cy="70" r="3" fill="#C4B3F6" />
+        <circle cx="150" cy="140" r="3" fill="#C4B3F6" />
+        <circle cx="270" cy="100" r="3" fill="#C4B3F6" />
         <path
           d="M40 40 150 70M40 110 150 70M40 110 150 140M40 170 150 140M150 70 270 100M150 140 270 100"
-          stroke="#48CAE4"
+          stroke="#C4B3F6"
           strokeWidth="1"
         />
       </svg>
@@ -245,7 +245,7 @@ function AiScreen() {
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="max-w-[78%] rounded-xl rounded-tl-sm bg-accent px-3 py-2 text-[10.5px] leading-relaxed text-white sm:text-[11.5px]">
+          <div className="max-w-[78%] rounded-xl rounded-tl-sm bg-accent px-3 py-2 text-[10.5px] leading-relaxed text-on-accent sm:text-[11.5px]">
             گزارش فروش این هفته رو خلاصه کن
           </div>
         </div>

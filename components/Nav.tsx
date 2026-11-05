@@ -65,7 +65,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             <div className="flex justify-end">
               <Link
                 href="/account"
-                className="matte-btn whitespace-nowrap rounded-lg bg-accent px-4 py-2 font-mono text-[12.5px] font-black text-white"
+                className="matte-btn whitespace-nowrap rounded-lg bg-accent px-4 py-2 font-mono text-[12.5px] font-black text-on-accent"
               >
                 {accountLabel}
               </Link>
@@ -107,7 +107,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             <div className="flex items-center gap-3">
               <Link
                 href="/account"
-                className="matte-btn whitespace-nowrap rounded-lg bg-accent px-5 py-[9px] font-mono text-[13px] font-black text-white"
+                className="matte-btn whitespace-nowrap rounded-lg bg-accent px-5 py-[9px] font-mono text-[13px] font-black text-on-accent"
               >
                 {accountLabel}
               </Link>
