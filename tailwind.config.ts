@@ -18,46 +18,39 @@ const config: Config = {
         canvas: "rgb(var(--color-canvas) / <alpha-value>)", // page background
         surface: "rgb(var(--color-surface) / <alpha-value>)", // card/panel fill
 
-        // Brand accents — Midnight Black + Electric Blue + Cantaloupe Orange.
-        // Theme-adaptive (CSS variables in globals.css).
-        accent: "rgb(var(--color-accent) / <alpha-value>)", // آبی الکتریکی — دکمه‌ها، لینک‌ها، برند
-        accent2: "rgb(var(--color-accent2) / <alpha-value>)", // نارنجی طالبی — تأکید، هاله‌ها
-        accent3: "rgb(var(--color-accent3) / <alpha-value>)", // آبی روشن — نقطه‌ی وضعیت و جزئیات
-        // Text on an electric-blue fill.
-        "on-accent": "#FFFFFF",
-        midnight: "#02070A",
-        electric: "#0297DE",
-        cantaloupe: "#FC734D",
+        // Fixed flat brand accents — same in both themes. یه پالت آبی
+        // آسمانی/فیروزه‌ای ثابت، همه‌جا رنگ تخت (بدون گرادیان) استفاده می‌شه.
+        accent: "#0077B6", // آبی آسمانی اصلی — دکمه‌ها، لینک‌ها، فوکوس، برند
+        accent2: "#023E8A", // آبی تیره‌تر — حالت هاور، سایه‌ها، جزئیات ثانویه
+        accent3: "#00B4D8", // فیروزه‌ای روشن‌تر — نقطه‌ی وضعیت «آنلاین/آماده‌ی همکاری» و برجسته‌سازی‌های کوچک
 
-        // Old palette names kept so existing classes recolor: blue scale.
-        "deep-twilight": "#02070A",
-        "french-blue": "#01557F",
-        "bright-teal-blue": "#0277B6",
-        "blue-green": "#0297DE",
-        "turquoise-surf": "#0297DE",
-        "sky-aqua": "#5CC4FF",
-        "frosted-blue": "#BFE6FA",
-        "frosted-blue-2": "#DDF2FC",
-        "light-cyan": "#EEF8FD",
+        // پالت کامل آبی آسمانی، برای استفاده‌ی مستقیم هرجا لازم بود
+        // (نمودارها، دسته‌بندی‌ها و جزئیات چندرنگ) — بدون گرادیان، فقط
+        // رنگ‌های تخت از تیره به روشن.
+        "deep-twilight": "#03045E",
+        "french-blue": "#023E8A",
+        "bright-teal-blue": "#0077B6",
+        "blue-green": "#0096C7",
+        "turquoise-surf": "#00B4D8",
+        "sky-aqua": "#48CAE4",
+        "frosted-blue": "#90E0EF",
+        "frosted-blue-2": "#ADE8F4",
+        "light-cyan": "#CAF0F8",
 
         // Legacy aliases — kept so components outside the redesigned landing
         // page (account/dashboard) still render sensibly against the new
         // dark-first palette without needing a separate rewrite pass.
-        navy: "#02070A",
+        navy: "#0a0a0c",
         alabaster: "#f5f5f7",
       },
       fontFamily: {
         fa: ["var(--font-vazirmatn)", "sans-serif"],
-        display: ["var(--font-serif)", "var(--font-naskh)", "serif"],
-        serif: ["var(--font-serif)", "var(--font-naskh)", "serif"],
+        display: ["var(--font-lalezar)", "var(--font-vazirmatn)", "sans-serif"],
         // JetBrains Mono کلاً از پروژه حذف شد — فقط لاتین رو پوشش می‌داد و
         // باعث می‌شد حروف فارسی داخل badge/آمار‌های font-mono با فونت
         // پیش‌فرض/محو مرورگر رندر بشن. حالا font-mono هم مستقیم همون
         // Vazirmatn هست، یعنی همه‌جای سایت یکدست و بدون فال‌بک ناهماهنگ.
-        // Persian first: the Latin mono font would supply a very wide space
-        // character and pull Persian words apart. Use `font-plex` for Latin-only mono.
-        mono: ["var(--font-vazirmatn)", "monospace"],
-        plex: ["var(--font-plex-mono)", "monospace"],
+        mono: ["var(--font-vazirmatn)", "sans-serif"],
       },
       maxWidth: {
         container: "1160px",
@@ -73,9 +66,9 @@ const config: Config = {
         grid: "44px 44px",
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(2, 151, 222, 0.35), 0 8px 40px -8px rgba(2, 151, 222, 0.45)",
-        "glow-violet": "0 0 0 1px rgba(252, 115, 77, 0.35), 0 8px 40px -8px rgba(252, 115, 77, 0.45)",
-        "glow-soft": "0 20px 60px -20px rgba(2, 151, 222, 0.35)",
+        glow: "0 0 0 1px rgba(0, 119, 182, 0.35), 0 8px 40px -8px rgba(0, 119, 182, 0.45)",
+        "glow-violet": "0 0 0 1px rgba(2, 62, 138, 0.35), 0 8px 40px -8px rgba(2, 62, 138, 0.45)",
+        "glow-soft": "0 20px 60px -20px rgba(0, 119, 182, 0.35)",
       },
       keyframes: {
         pulseDot: {

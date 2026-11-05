@@ -4,26 +4,21 @@
 
 @layer base {
   :root {
-    /* Light theme (secondary) — paper white, midnight text, deeper blue. */
-    --color-ink: 2 7 10;
-    --color-dim: 84 101 112;
-    --color-canvas: 246 249 251;
-    --color-surface: 255 255 255;
-    --color-accent: 2 119 182; /* deeper electric blue, readable on white */
-    --color-accent2: 228 87 46; /* deep cantaloupe */
-    --color-accent3: 2 151 222;
+    /* Light mode — pure white canvas, GitHub-light-esque neutrals. This is
+       now the SECONDARY theme; dark is the default (see layout.tsx script). */
+    --color-ink: 12 12 15;
+    --color-dim: 107 114 128;
+    --color-canvas: 255 255 255;
+    --color-surface: 246 247 249;
   }
 
   .dark {
-    /* Midnight (default) — Midnight Black #02070A, Electric Blue #0297DE,
-       Cantaloupe Orange #FC734D. */
-    --color-ink: 236 244 249;
-    --color-dim: 140 160 172;
-    --color-canvas: 2 7 10;
-    --color-surface: 9 19 26;
-    --color-accent: 2 151 222; /* #0297DE */
-    --color-accent2: 252 115 77; /* #FC734D */
-    --color-accent3: 92 196 255;
+    /* Dark mode — pure black canvas, near-white text, near-black cards.
+       This is the default look: Vercel/GitHub dashboard style. */
+    --color-ink: 237 237 240;
+    --color-dim: 138 143 152;
+    --color-canvas: 0 0 0;
+    --color-surface: 14 14 16;
   }
 
   html {
@@ -84,41 +79,20 @@
 }
 
 @layer components {
-  /* (old name) — a soft "light curtain" glow above section headers:
-     fine vertical lines lit blue, warming to cantaloupe in the middle. */
+  /* Faint dot/grid backdrop used behind hero + section headers — the
+     signature Vercel/GitHub marketing-page texture. A radial mask fades it
+     out toward the edges so it never fights with foreground content. */
   .bg-dot-grid {
-    background:
-      radial-gradient(ellipse 34% 60% at 50% 0%, rgb(252 115 77 / 0.14) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 80% at 50% 0%, rgb(2 151 222 / 0.2) 0%, transparent 72%),
-      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 7px);
-    -webkit-mask-image: radial-gradient(ellipse 70% 75% at 50% 0%, #000 35%, transparent 100%);
-    mask-image: radial-gradient(ellipse 70% 75% at 50% 0%, #000 35%, transparent 100%);
+    background-image: radial-gradient(rgb(var(--color-ink) / 0.16) 1px, transparent 1px);
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
   }
 
-  /* Highlight words: electric blue → cantaloupe. */
-  .accent-gradient-text,
-  .text-iris {
-    background: linear-gradient(100deg, #5cc4ff 0%, #0297de 38%, #fc734d 78%, #ffb08f 100%);
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: irisShift 9s ease-in-out infinite alternate;
-  }
-  /* SplitText (ScrollFx) wraps each word in its own boxes; a text gradient on
-     the outer span does not reach into them, so the words inherit it. */
-  .accent-gradient-text *,
-  .text-iris * {
-    background-image: inherit;
-    background-size: inherit;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: inherit;
-  }
-  @keyframes irisShift {
-    from { background-position: 0% 50%; }
-    to { background-position: 100% 50%; }
+  /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
+     همون آبی آسمانی اصلی برند. */
+  .accent-gradient-text {
+    color: #0077B6;
   }
 
   /* Skill card — each card tracks the cursor with --sx/--sy (set via JS on
@@ -149,7 +123,7 @@
     z-index: 2;
     padding: 1px;
     opacity: var(--glow-o, 0);
-    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #0297DE) 0%, transparent 70%);
+    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 70%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -157,7 +131,7 @@
   .skill-card::after {
     z-index: 0;
     opacity: calc(var(--glow-o, 0) * 0.16);
-    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #0297DE) 0%, transparent 72%);
+    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 72%);
   }
   .skill-card > * {
     position: relative;
@@ -172,7 +146,7 @@
     transition: filter 0.35s ease, opacity 0.35s ease;
   }
   .skill-card:hover .skill-icon-logo {
-    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #0297DE));
+    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #0077B6));
     opacity: 1;
   }
 
@@ -183,7 +157,7 @@
     transition: text-shadow 0.35s ease;
   }
   .skill-card:hover .skill-title-glow {
-    text-shadow: 0 0 8px var(--skill-color, #0297DE), 0 0 26px var(--skill-color, #0297DE);
+    text-shadow: 0 0 8px var(--skill-color, #0077B6), 0 0 26px var(--skill-color, #0077B6);
   }
 
   /* رجیستر کردن --tool-angle به‌عنوان یه <angle> واقعی — بدون این، مرورگر
@@ -214,11 +188,11 @@
     padding: 1.4px;
     background: conic-gradient(
       from var(--tool-angle),
-      var(--tool-color, #0297DE) 0deg,
+      var(--tool-color, #0077B6) 0deg,
       transparent 90deg,
       transparent 230deg,
-      var(--tool-color, #0297DE) 320deg,
-      var(--tool-color, #0297DE) 360deg
+      var(--tool-color, #0077B6) 320deg,
+      var(--tool-color, #0077B6) 360deg
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
@@ -231,7 +205,7 @@
     opacity: 1;
   }
   .tool-chip:hover {
-    box-shadow: 0 10px 28px -14px var(--tool-color, #0297DE);
+    box-shadow: 0 10px 28px -14px var(--tool-color, #0077B6);
   }
   .tool-chip > * {
     position: relative;
@@ -258,14 +232,14 @@
     inset: -1px;
     z-index: -1;
     border-radius: inherit;
-    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #0297DE), transparent 70%);
+    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #0077B6), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
   .tool-group-card:hover {
     transform: translateY(-3px);
     border-color: transparent;
-    box-shadow: 0 20px 40px -24px var(--group-color, #0297DE);
+    box-shadow: 0 20px 40px -24px var(--group-color, #0077B6);
   }
   .tool-group-card:hover::before {
     opacity: 0.16;
@@ -286,7 +260,7 @@
     width: 85%;
     height: 140%;
     transform: translate(-50%, -50%);
-    background: rgba(2, 151, 222, .4);
+    background: rgba(0, 119, 182, .4);
     filter: blur(90px);
     animation: seoHeroPulse 6s ease-in-out infinite;
   }
@@ -302,10 +276,10 @@
 
   /* خط نمودار رشد — گلوی رنگی دورش که با گرادیان خودِ استروک هماهنگه. */
   .seo-chart-line {
-    filter: drop-shadow(0 0 5px rgba(2, 151, 222, 0.85)) drop-shadow(0 0 16px rgba(252, 115, 77, 0.45));
+    filter: drop-shadow(0 0 5px rgba(0, 119, 182, 0.85)) drop-shadow(0 0 16px rgba(2, 62, 138, 0.45));
   }
   .seo-chart-dot {
-    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #0297DE);
+    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #0077B6);
   }
 
   /* کارت‌های ستون سئو — طرح ساده و کم‌رنگ: بک‌گراند تیره‌ی یکدست برای
@@ -324,8 +298,8 @@
   }
   .seo-card:hover .seo-card-arrow {
     transform: translateX(-3px);
-    border-color: var(--seo-color, #0297DE);
-    color: var(--seo-color, #0297DE);
+    border-color: var(--seo-color, #0077B6);
+    color: var(--seo-color, #0077B6);
   }
 
   /* Syntax-highlight classes injected via dangerouslySetInnerHTML by the
@@ -335,13 +309,13 @@
     color: #ededf0;
   }
   .terminal-body .str {
-    color: #0297DE;
+    color: #0077B6;
   }
   .terminal-body .punc {
     color: rgba(237, 237, 240, 0.45);
   }
   .terminal-body .kw {
-    color: #0277B6;
+    color: #023E8A;
     font-weight: 600;
   }
 
@@ -364,235 +338,54 @@
 }
 
 /* ==========================================================================
-   «Midnight» — Midnight Black + Electric Blue + Cantaloupe Orange.
-   Same class names as the old matte system so every page follows.
+   استایل «مات» — سطح‌های کاملاً مات (بدون شفافیت و بلور) با سایه‌ی تخت و
+   غیرشفاف که به سمت چپ-پایین افتاده (هماهنگ با جهت RTL). رنگ‌ها همون
+   پالت قبلیِ سایت‌ان؛ فقط جنس سطح‌ها عوض شده.
    ========================================================================== */
 @layer base {
   :root {
-    --matte-shadow: 2 7 10;
-    --matte-border: 2 7 10;
+    --matte-shadow: 12 12 15; /* حالت روشن: سایه‌ی مشکی تخت */
+    --matte-border: 12 12 15;
   }
   .dark {
-    --matte-shadow: 2 151 222;
-    --matte-border: 40 56 66;
+    --matte-shadow: 2 62 138; /* حالت تاریک: آبی تیره‌ی برند (#023E8A) */
+    --matte-border: 60 64 72;
   }
 }
 
 @layer components {
-  /* Cards: dark glass with a hairline border and a lit top edge. */
   .matte {
     position: relative;
-    background:
-      linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0) 45%),
-      rgb(var(--color-surface));
-    border: 1px solid rgb(var(--color-ink) / 0.09);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.07),
-      0 30px 60px -40px rgb(0 0 0 / 0.9);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    background-color: rgb(var(--color-surface));
+    border: 2px solid rgb(var(--matte-border));
+    box-shadow: -6px 6px 0 0 rgb(var(--matte-shadow));
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .matte-hover:hover {
-    transform: translateY(-4px);
-    border-color: rgb(var(--color-accent) / 0.45);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.1),
-      0 30px 70px -36px rgb(var(--color-accent) / 0.65);
+    transform: translate(3px, -3px);
+    box-shadow: -10px 10px 0 0 rgb(var(--matte-shadow));
   }
   .matte-sm {
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+    box-shadow: -4px 4px 0 0 rgb(var(--matte-shadow));
   }
 
-  /* Buttons: pills. */
+  /* دکمه‌ی مات — با هاور بالا میاد، با کلیک «فشرده» می‌شه روی سایه‌ش */
   .matte-btn {
-    border: 1px solid rgb(var(--color-ink) / 0.12);
-    border-radius: 999px !important;
-    box-shadow: 0 14px 34px -16px rgb(var(--color-accent) / 0.75);
-    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background-color 0.25s ease;
+    border: 2px solid rgb(var(--matte-border));
+    box-shadow: -5px 5px 0 0 rgb(var(--matte-shadow));
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .matte-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 44px -16px rgb(var(--color-accent) / 0.9);
+    transform: translate(2px, -2px);
+    box-shadow: -7px 7px 0 0 rgb(var(--matte-shadow));
   }
   .matte-btn:active {
-    transform: translateY(0) scale(0.98);
+    transform: translate(-5px, 5px);
+    box-shadow: 0 0 0 0 rgb(var(--matte-shadow));
   }
 
-  /* Headings: elegant serif — Instrument Serif for Latin, Noto Naskh for
-     Persian. No letter-spacing (it breaks Persian letter joins).
-     :not(#_) only lifts specificity over older font-normal classes. */
-  .font-display:not(#_) {
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-
-  /* Warm highlight for the hero headline (stands out on the blue curtain). */
-  .text-ember {
-    background: linear-gradient(100deg, #ffd9c8 0%, #ffb08f 35%, #fc734d 75%, #ff9a6b 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 24px rgba(252, 115, 77, 0.35));
-  }
-  .text-ember * {
-    background-image: inherit;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* Small label with a glowing dot, like "• Media Library". */
-  .mono-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-vazirmatn), var(--font-plex-mono), sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: rgb(var(--color-ink) / 0.6);
-  }
-  .mono-label::before {
-    content: "";
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #fc734d;
-    box-shadow: 0 0 10px #fc734d;
-  }
-
-  /* Beam panel (SkyIsland): a section on a rounded midnight panel lit by the
-     light curtain — blue from above, a cantaloupe ember at the bottom. */
-  .beam-panel {
-    background:
-      radial-gradient(ellipse 50% 40% at 50% 0%, rgb(2 151 222 / 0.22), transparent 70%),
-      radial-gradient(ellipse 40% 30% at 50% 100%, rgb(252 115 77 / 0.16), transparent 70%),
-      linear-gradient(180deg, #06121a, #03090d);
-    border: 1px solid rgb(255 255 255 / 0.07);
-  }
-  .beam-panel__lines {
-    background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 8px);
-    -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, #000 20%, transparent 80%);
-    mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, #000 20%, transparent 80%);
-  }
-
-  /* ---------- Hero: the light curtain ---------- */
-  .curtain {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    background: #02070a;
-  }
-  .curtain__glow {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 18% 30% at 50% 96%, #fff1e8 0%, rgba(255, 241, 232, 0) 62%),
-      radial-gradient(ellipse 30% 46% at 50% 98%, #ffb08f 0%, rgba(255, 176, 143, 0) 66%),
-      radial-gradient(ellipse 52% 70% at 50% 104%, #fc734d 0%, rgba(252, 115, 77, 0) 70%),
-      radial-gradient(ellipse 30% 70% at 50% 18%, rgba(92, 196, 255, 0.85) 0%, rgba(2, 151, 222, 0) 65%),
-      radial-gradient(ellipse 55% 95% at 50% 40%, rgba(2, 151, 222, 0.75) 0%, rgba(2, 151, 222, 0) 70%),
-      radial-gradient(ellipse 90% 60% at 50% 100%, rgba(2, 100, 160, 0.6) 0%, rgba(2, 7, 10, 0) 75%);
-    animation: curtainBreathe 9s ease-in-out infinite alternate;
-  }
-  @keyframes curtainBreathe {
-    from { opacity: 0.88; transform: scaleX(1); }
-    to { opacity: 1; transform: scaleX(1.05); }
-  }
-  /* fine vertical "pleats" that slice the light */
-  .curtain__lines {
-    position: absolute;
-    inset: 0;
-    background:
-      repeating-linear-gradient(90deg, rgba(2, 7, 10, 0.55) 0 2px, rgba(2, 7, 10, 0) 2px 5px, rgba(255, 255, 255, 0.06) 5px 6px, rgba(2, 7, 10, 0) 6px 9px);
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 75%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 0%, #000 75%, transparent 100%);
-    animation: curtainShift 14s linear infinite;
-  }
-  @keyframes curtainShift {
-    from { background-position: 0 0; }
-    to { background-position: 90px 0; }
-  }
-  .curtain__vignette {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(90deg, #02070a 0%, rgba(2, 7, 10, 0) 22%, rgba(2, 7, 10, 0) 78%, #02070a 100%),
-      linear-gradient(180deg, #02070a 0%, rgba(2, 7, 10, 0) 18%);
-  }
-  .curtain__grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.07;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    mix-blend-mode: overlay;
-  }
-
-  /* glass ring button in the middle of the hero */
-  .orb-btn {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 112px;
-    height: 112px;
-    border-radius: 50%;
-    color: #fff;
-    background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06) 60%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.25), 0 0 40px rgba(252, 115, 77, 0.45);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .orb-btn:hover {
-    transform: scale(1.06);
-  }
-  .orb-btn::before,
-  .orb-btn::after {
-    content: "";
-    position: absolute;
-    inset: -10px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    animation: orbRing 3s ease-out infinite;
-  }
-  .orb-btn::after {
-    animation-delay: 1.5s;
-  }
-  @keyframes orbRing {
-    from { transform: scale(0.9); opacity: 0.9; }
-    to { transform: scale(1.45); opacity: 0; }
-  }
-
-  /* round side arrows */
-  .ring-arrow {
-    display: grid;
-    place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    transition: background 0.25s ease, transform 0.25s ease;
-  }
-  .ring-arrow:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: scale(1.06);
-  }
-
-  /* portfolio cards peeking from the bottom of the hero */
-  .peek-card {
-    border-radius: 22px;
-    padding: 10px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
+  /* اینترو: اگه این نشست قبلاً دیده شده، اسکریپت قبل از رنگ‌آمیزی این
+     data-attribute رو می‌ذاره و پرده اصلاً نمایش داده نمی‌شه. */
   html[data-intro-seen] .intro-splash {
     display: none;
   }
@@ -600,14 +393,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .matte,
-  .matte-btn,
-  .curtain__glow,
-  .curtain__lines,
-  .orb-btn::before,
-  .orb-btn::after,
-  .accent-gradient-text,
-  .text-iris {
-    animation: none;
+  .matte-btn {
     transition: none;
   }
   .intro-splash {

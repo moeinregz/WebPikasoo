@@ -13,7 +13,6 @@ import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import SkyIsland from "@/components/SkyIsland";
 import IntroSplash from "@/components/fx/IntroSplash";
 import ScrollFx from "@/components/fx/ScrollFx";
 import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
@@ -70,20 +69,14 @@ export default async function Home() {
       <IntroSplash />
       <ScrollFx />
       <Nav isLoggedIn={isLoggedIn} />
-      <Hero sites={projects} />
+      <Hero />
       <Marquee />
       <Trust />
-      <SkyIsland id="problems">
-        <Problems />
-      </SkyIsland>
+      <Problems />
       <BusinessShowcase sites={projects} />
-      <SkyIsland id="services">
-        <Services />
-      </SkyIsland>
+      <Services />
       <Process />
-      <SkyIsland id="testimonials">
-        <Testimonials />
-      </SkyIsland>
+      <Testimonials />
 
       {/* عمداً درست همینجا — بعد از نمونه‌کار، فرآیند کار و نظر مشتری‌ها
           (یعنی بعد از این‌که بازدیدکننده به کیفیت کار اعتماد کرده) و درست
@@ -95,7 +88,7 @@ export default async function Home() {
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <div className="relative z-[1] mx-auto max-w-container px-6">
           <Reveal className="mb-12 text-center">
-            <h2 className="font-display text-[26px] font-normal sm:text-[32px]">تعرفه‌ها و <span className="accent-gradient-text">پلن‌ها</span></h2>
+            <h2 className="font-display text-[26px] font-normal sm:text-[32px]">تعرفه‌ها و پلن‌ها</h2>
             <p className="mx-auto mt-2.5 max-w-[54ch] text-[14.5px] text-dim">
               یه دسته رو انتخاب کن و از بین ۳ پلن، اونی که به کارت میاد رو بردار — قیمت‌ها تقریبی و
               برای شروع مذاکره‌ن، بعد از شنیدن نیاز دقیقت یه پیشنهاد مکتوب و قطعی بهت می‌دیم.
@@ -106,9 +99,7 @@ export default async function Home() {
       </section>
 
       <Guarantee />
-      <SkyIsland id="faq">
-        <FAQ />
-      </SkyIsland>
+      <FAQ />
 
       <Contact />
       <Footer />

@@ -11,7 +11,7 @@ const seoItems: SeoItem[] = [
     n: "۰۱",
     title: "سئوی داخلی",
     desc: "بهینه‌سازی محتوا، عنوان‌ها و ساختار صفحات برای رتبه بهتر در گوگل",
-    color: "#5CC4FF",
+    color: "#48CAE4",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <rect x="5" y="3.5" width="11" height="17" rx="2" />
@@ -25,7 +25,7 @@ const seoItems: SeoItem[] = [
     n: "۰۲",
     title: "سئوی خارجی",
     desc: "لینک‌سازی و افزایش اعتبار دامنه",
-    color: "#0297DE",
+    color: "#0077B6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M9.4 14.6 14.6 9.4" />
@@ -38,7 +38,7 @@ const seoItems: SeoItem[] = [
     n: "۰۳",
     title: "سئوی تکنیکال",
     desc: "سرعت، ایندکس‌شدن و ساختار فنی سایت",
-    color: "#0277B6",
+    color: "#023E8A",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M14.7 6.3a3 3 0 0 1-3.9 3.9L4.5 16.5l2 2 6.3-6.3a3 3 0 0 1 3.9-3.9L20.5 4.5l-2-2-3.8 3.8Z" />
@@ -49,7 +49,7 @@ const seoItems: SeoItem[] = [
     n: "۰۴",
     title: "سئوی محلی",
     desc: "دیده‌شدن کسب‌وکار در جستجوهای محلی و گوگل‌مپ",
-    color: "#02070A",
+    color: "#03045E",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
@@ -72,7 +72,7 @@ function GroupHead({
 }) {
   return (
     <div className="mb-6 flex items-center gap-3.5">
-      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-on-accent">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-white">
         {num}
       </span>
       <h3
@@ -109,7 +109,7 @@ export default function Services() {
             Services
           </span>
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]"><span className="accent-gradient-text">خدمات</span></h2>
+            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">خدمات</h2>
             <p className="mt-2.5 max-w-[60ch] text-[15px] text-dim">
               توسعه نرم‌افزار، طراحی سایت فروشگاهی و شرکتی، هوش مصنوعی و سئو — چهار خدمتی که تیم وب
               پیکاسو زیر یه سقف ارائه می‌ده.
@@ -199,13 +199,13 @@ export default function Services() {
                 <svg viewBox="0 0 380 200" fill="none" className="w-full">
                   <defs>
                     <linearGradient id="seoAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0297DE" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#0297DE" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#0077B6" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#0077B6" stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="seoLineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#5CC4FF" />
-                      <stop offset="55%" stopColor="#0297DE" />
-                      <stop offset="100%" stopColor="#0277B6" />
+                      <stop offset="0%" stopColor="#48CAE4" />
+                      <stop offset="55%" stopColor="#0077B6" />
+                      <stop offset="100%" stopColor="#023E8A" />
                     </linearGradient>
                   </defs>
 
@@ -225,7 +225,7 @@ export default function Services() {
                     strokeLinecap="round"
                   />
 
-                  <circle cx="355" cy="14" r="4" fill="#0277B6">
+                  <circle cx="355" cy="14" r="4" fill="#023E8A">
                     <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="1;.35;1" dur="2s" repeatCount="indefinite" />
                   </circle>

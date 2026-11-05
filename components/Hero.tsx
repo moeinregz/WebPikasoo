@@ -1,107 +1,106 @@
-import HeroShowcase from "./HeroShowcase";
-import type { ShowcaseSite } from "./BusinessShowcase";
+import HeroSlider from "./HeroSlider";
 
-/** هیرو «Midnight» — پرده‌ی نور: خطوط عمودی ریز که از بالا آبی الکتریکی روشن
- *  می‌شن و پایین وسط به یه طلوع نارنجی طالبی می‌رسن؛ تیتر سریف (نسخ برای
- *  فارسی، Instrument Serif برای لاتین)، آمار دو طرف، دکمه‌ی حلقه‌ای شیشه‌ای
- *  وسط، و پایین سه کارت شیشه‌ای کج با نمونه‌کارهای واقعی که با فلش‌های دو
- *  طرف ورق می‌خورن. data-hero-item ها بعد از اینترو پله‌پله وارد می‌شن. */
-
-const statsStart = [
-  { v: "10", u: "نفر", l: "تیم متخصص و درگیر" },
-  { v: "35+", u: "", l: "پروژه‌ی تحویل‌شده" },
-];
-const statsEnd = [
-  { v: "9", u: "صنف", l: "کسب‌وکار مختلف" },
-  { v: "30", u: "روز", l: "گارانتی رفع باگ" },
+const features = [
+  { t: "بدون هزینه پنهان", d: "قیمت و امکانات از اول شفافه" },
+  { t: "سایت نتیجه‌محور", d: "برای فروش و مشتری بیشتر، نه فقط ظاهر" },
+  { t: "پشتیبانی واقعی", d: "بعد از تحویل هم تنها نیستی" },
 ];
 
-function Stat({ v, u, l }: { v: string; u: string; l: string }) {
+/** هیرو — هر تکه‌ای که data-hero-item داره، بعد از تموم شدن اینترو با
+ *  تایم‌لاین GSAP (IntroSplash) پله‌پله وارد می‌شه. شکل‌های هندسی مات
+ *  پشت صحنه با data-speed روی اسکرول پارالاکس دارن (ScrollFx). */
+export default function Hero() {
   return (
-    <div>
-      <div className="flex items-baseline gap-1.5 text-white">
-        <span className="font-serif text-[34px] leading-none" dir="ltr">
-          {v}
-        </span>
-        {u && <span className="text-[13px] text-white/70">{u}</span>}
-      </div>
-      <div className="mt-1.5 text-[12px] font-medium text-white/55">{l}</div>
-    </div>
-  );
-}
+    <section className="relative overflow-hidden pb-[110px] pt-20">
+      <div className="pointer-events-none absolute inset-0 z-0 h-[640px] bg-dot-grid" />
 
-export default function Hero({ sites = [] }: { sites?: ShowcaseSite[] }) {
-  return (
-    <section className="relative isolate overflow-hidden">
-      <div aria-hidden className="curtain -z-10">
-        <div className="curtain__glow" />
-        <div className="curtain__lines" />
-        <div className="curtain__vignette" />
-        <div className="curtain__grain" />
+      {/* شکل‌های هندسی مات و برجسته — همون رنگ‌های پالت، سایه‌ی تخت */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 hidden md:block">
+        <span data-speed="-0.35" className="matte absolute left-[6%] top-[90px] h-16 w-16 rotate-12 rounded-2xl !border-ink bg-accent" />
+        <span data-speed="0.25" className="matte absolute left-[44%] top-[64px] h-9 w-9 rounded-full !border-ink bg-accent3" />
+        <span data-speed="-0.2" className="matte absolute bottom-[70px] left-[40%] h-12 w-24 -rotate-6 rounded-xl !border-ink bg-frosted-blue" />
+        <span data-speed="0.45" className="matte absolute right-[3%] top-[48%] h-10 w-10 rotate-45 !border-ink bg-accent2" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-[1180px] flex-col px-5 pt-14 sm:px-6 sm:pt-20">
-        <div className="relative text-center">
-          <span data-hero-item className="mono-label mb-7 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 !text-white/80 backdrop-blur">
-            طراحی سایت · نرم‌افزار اختصاصی · سئو
+      <div className="relative z-10 mx-auto mt-14 grid max-w-container grid-cols-1 gap-14 px-6 md:grid-cols-[1.05fr_.95fr] md:items-center">
+        <div>
+          <span
+            data-hero-item
+            className="matte matte-sm mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[12.5px] font-bold text-ink"
+          >
+            <span className="h-2 w-2 animate-pulse-dot rounded-full bg-accent3" />
+            آماده‌ی همکاری روی پروژه‌های جدید
           </span>
 
-          <h1
-            data-hero-item
-            className="mx-auto max-w-[22ch] font-display text-[40px] font-semibold leading-[1.5] text-white [text-shadow:0_4px_40px_rgba(2,7,10,0.55)] sm:text-[56px] lg:text-[66px]"
-          >
-            ما نرم‌افزار نمی‌سازیم؛
-            <br />
-            <span className="text-ember">ابزار پول‌سازی</span> می‌سازیم
-            <span className="font-serif italic text-[#fc734d]">.</span>
+          <h1 className="mb-6 font-display text-[42px] font-normal leading-[1.28] sm:text-[56px] lg:text-[66px]">
+            <span data-hero-item className="block">
+              ما نرم‌افزار نمی‌سازیم؛
+            </span>
+            <span data-hero-item className="block">
+              <span className="relative inline-block whitespace-nowrap accent-gradient-text">
+                ابزار پول‌سازی
+                <svg
+                  viewBox="0 0 300 18"
+                  preserveAspectRatio="none"
+                  className="absolute inset-x-0 -bottom-2 h-[10px] w-full text-accent2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={7}
+                  strokeLinecap="round"
+                >
+                  <path d="M4 9c60-8 220-8 292 0" />
+                </svg>
+              </span>{" "}
+              می‌سازیم.
+            </span>
           </h1>
 
-          <p data-hero-item className="mx-auto mt-5 max-w-[52ch] text-[14.5px] font-medium leading-[2] text-white/70 sm:text-[16px]">
-            پنل مدیریت، فروشگاه آنلاین و نرم‌افزار اختصاصی؛ چیزی که واقعاً توی کسب‌وکارت اجرا می‌شه و مشتری میاره.
+          <p data-hero-item className="mb-8 max-w-[52ch] text-[15.5px] text-dim sm:text-[18px]">
+            برای کسب‌وکارت{" "}
+            <b className="font-semibold text-ink">پنل مدیریت، فروشگاه آنلاین، سیستم فاکتوردهی و نرم‌افزار اختصاصی</b>{" "}
+            می‌سازیم — چیزی که واقعاً تو کسب‌وکارت اجرا می‌شه و مشتری جذب می‌کنه، نه فقط تو دمو خوب به‌نظر
+            می‌رسه. یه تیم ۱۰ نفره پشت هر پروژه‌ست، یعنی هم سرعت داری هم پشتیبانی واقعی.
           </p>
 
-          {/* آمار دو طرف (دسکتاپ) */}
-          <div data-hero-item className="pointer-events-none absolute inset-y-0 right-0 hidden w-[180px] flex-col justify-center gap-8 text-right lg:flex">
-            {statsStart.map((s) => (
-              <Stat key={s.l} {...s} />
-            ))}
-          </div>
-          <div data-hero-item className="pointer-events-none absolute inset-y-0 left-0 hidden w-[180px] flex-col justify-center gap-8 text-left lg:flex">
-            {statsEnd.map((s) => (
-              <Stat key={s.l} {...s} />
-            ))}
-          </div>
-
-          {/* آمار موبایل */}
-          <div data-hero-item className="mx-auto mt-8 grid max-w-[420px] grid-cols-4 gap-2 text-center lg:hidden">
-            {[...statsStart, ...statsEnd].map((s) => (
-              <div key={s.l}>
-                <div className="font-serif text-[24px] leading-none text-white" dir="ltr">
-                  {s.v}
-                </div>
-                <div className="mt-1 text-[10.5px] leading-4 text-white/55">{s.l}</div>
+          <div data-hero-item className="my-9 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {features.map((f, i) => (
+              <div key={f.t} className="matte matte-sm matte-hover rounded-[14px] p-4">
+                <span className="mb-2 flex h-7 w-7 items-center justify-center rounded-lg border-2 border-ink bg-accent font-mono text-[11px] font-black text-white">
+                  {i + 1}
+                </span>
+                <span className="block text-sm font-bold leading-relaxed">{f.t}</span>
+                <span className="block text-xs leading-relaxed text-dim">{f.d}</span>
               </div>
             ))}
           </div>
 
-          <div data-hero-item className="mt-10 flex flex-col items-center gap-5 sm:mt-12">
-            <a href="#lead-form" className="orb-btn" aria-label="مشاوره رایگان پروژه">
-              <span className="flex flex-col items-center gap-1 text-[12.5px] font-bold">
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                  <path d="M4 12h3l2-6 4 12 2-6h5" />
+          {/* اولین قدم کم‌ریسک‌ترین قدمه (مشاوره‌ی رایگان)، نه یه تعهد پولی. */}
+          <div data-hero-item>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#lead-form"
+                className="matte-btn inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-[15px] font-black text-white"
+              >
+                مشاوره رایگان پروژه من
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} className="h-[15px] w-[15px] rotate-180">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
-                شروع پروژه
-              </span>
-            </a>
-            <a href="#showcase" className="text-[13px] font-medium text-white/60 underline decoration-white/25 underline-offset-4 transition hover:text-white">
-              همه‌ی نمونه‌کارها
-            </a>
+              </a>
+              <a
+                href="#showcase"
+                className="matte-btn inline-flex items-center gap-2 rounded-xl bg-canvas px-6 py-3.5 text-[15px] font-bold text-ink"
+              >
+                نمونه‌کارهای مشابه کسب‌وکارم
+              </a>
+            </div>
+            <p className="mt-4 font-mono text-[12.5px] text-dim">بدون تعهد — فقط ۱۵ دقیقه گفتگو درباره‌ی کسب‌وکارت</p>
           </div>
         </div>
 
-        {/* نمونه‌کارها روی کارت‌های شیشه‌ای پایین */}
-        <div data-hero-item className="mt-auto pt-14">
-          <HeroShowcase sites={sites} />
+        <div id="work" data-hero-item className="scroll-mt-[90px]">
+          <div data-speed="0.12">
+            <HeroSlider />
+          </div>
         </div>
       </div>
     </section>
