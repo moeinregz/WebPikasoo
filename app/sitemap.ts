@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedBlogPosts } from "@/lib/db";
+import { ensureSeedArticles } from "@/lib/seedArticles";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://webpikaso.ir";
 
@@ -31,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let blogPages: MetadataRoute.Sitemap = [];
   try {
+    await ensureSeedArticles();
     const posts = await getPublishedBlogPosts();
     blogPages = posts.map((post) => ({
       url: `${siteUrl}/blog/${encodeURIComponent(post.slug)}`,

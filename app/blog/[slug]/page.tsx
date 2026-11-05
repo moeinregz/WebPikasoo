@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { getPublishedBlogPostBySlug } from "@/lib/db";
 import { getCurrentUser } from "@/lib/session";
 import { renderBlogContent } from "@/lib/blogContent";
+import { ensureSeedArticles } from "@/lib/seedArticles";
 
 // Always read the latest posts straight from the database — never serve a
 // stale/pre-rendered version of an article page.
@@ -33,6 +34,7 @@ function decodeSlugParam(raw: string): string {
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://webpikaso.ir";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
+  await ensureSeedArticles();
   const slug = decodeSlugParam(params.slug);
   const post = await getPublishedBlogPostBySlug(slug);
   if (!post) return { title: "مقاله پیدا نشد — وب پیکاسو", robots: { index: false, follow: true } };

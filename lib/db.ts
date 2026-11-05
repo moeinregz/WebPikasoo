@@ -2426,3 +2426,48 @@ export async function setSmsOptOut(phone: string, optedOut: boolean): Promise<vo
   if (optedOut) await database.collection("sms_optout").updateOne({ phone }, { $set: { phone, at: nowStr() } }, { upsert: true });
   else await database.collection("sms_optout").deleteOne({ phone });
 }
+
+// -----------------------------------------------------------------------
+// Ready-written SEO articles (lib/seedArticles) — inserted once each
+// -----------------------------------------------------------------------
+// Each article is inserted only if it was never seeded before AND no post
+// uses its slug, and a marker is kept so an article the admin later deletes
+// or rewrites is never put back.
+
+let seedArticlesDone = false;
+
+export async function seedArticlesIfMissing(
+  articles: { slug: string; title: string; excerpt: string; content: string; daysAgo: number }[]
+): Promise<number> {
+  if (seedArticlesDone || articles.length === 0) return 0;
+  const database = await getDb();
+  const markers = database.collection<{ _id: string }>("seed_markers");
+  const ids = articles.map((a) => `article:${a.slug}`);
+  const seen = new Set((await markers.find({ _id: { $in: ids } }).toArray()).map((m) => m._id));
+  const todo = articles.filter((a) => !seen.has(`article:${a.slug}`));
+  let added = 0;
+  for (const a of todo) {
+    const exists = await database.collection("blog_posts").findOne({ slug: a.slug }, { projection: { _id: 1 } });
+    if (!exists) {
+      const id = await nextId("blog_posts");
+      const at = new Date(Date.now() - a.daysAgo * 86_400_000).toISOString().slice(0, 19).replace("T", " ");
+      await database.collection<BlogPost>("blog_posts").insertOne({
+        id,
+        created_at: at,
+        updated_at: at,
+        title: a.title,
+        slug: a.slug,
+        excerpt: a.excerpt,
+        content: a.content,
+        cover_image: "",
+        published: 1,
+        author_id: null,
+      });
+      added++;
+    }
+    await markers.updateOne({ _id: `article:${a.slug}` }, { $set: { at: nowStr() } }, { upsert: true });
+  }
+  if (added) await invalidateCache("blog:published");
+  seedArticlesDone = true;
+  return added;
+}
