@@ -2434,6 +2434,7 @@ export async function setSmsOptOut(phone: string, optedOut: boolean): Promise<vo
 // uses its slug, and a marker is kept so an article the admin later deletes
 // or rewrites is never put back.
 
+const appliedSeedFixes = new Set<string>();
 let seedPhotosDone = false;
 let seedArticlesDone = false;
 
@@ -2529,4 +2530,30 @@ export async function fillSeedArticlePhotos(
     if (missing === 0) await markers.updateOne({ _id: `photos:${slug}` }, { $set: { at: nowStr() } }, { upsert: true });
   }
   return updated;
+}
+
+/** One-time text fixes to seed articles already saved in the database
+ *  (editing the seed files only affects articles not inserted yet). Each
+ *  marker id runs once; a replacement is skipped if the admin has since
+ *  changed that text, so their edits are never overwritten. */
+export async function applySeedContentFixes(
+  markerId: string,
+  fixes: { slug: string; from: string; to: string }[]
+): Promise<void> {
+  if (appliedSeedFixes.has(markerId)) return;
+  const database = await getDb();
+  const markers = database.collection<{ _id: string }>("seed_markers");
+  if (await markers.findOne({ _id: `fix:${markerId}` })) {
+    appliedSeedFixes.add(markerId);
+    return;
+  }
+  const posts = database.collection<BlogPost>("blog_posts");
+  for (const f of fixes) {
+    const post = await posts.findOne({ slug: f.slug }, { projection: { id: 1, content: 1 } });
+    if (!post || !post.content.includes(f.from)) continue;
+    await posts.updateOne({ id: post.id }, { $set: { content: post.content.split(f.from).join(f.to) } });
+    await invalidateCache("blog:published", `blog:slug:${f.slug}`);
+  }
+  await markers.updateOne({ _id: `fix:${markerId}` }, { $set: { at: nowStr() } }, { upsert: true });
+  appliedSeedFixes.add(markerId);
 }

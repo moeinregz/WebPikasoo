@@ -1,5 +1,5 @@
 import type { SeedArticle } from "./types";
-import { fillSeedArticlePhotos, seedArticlesIfMissing } from "@/lib/db";
+import { applySeedContentFixes, fillSeedArticlePhotos, seedArticlesIfMissing } from "@/lib/db";
 import { findPhoto, hasStockPhotoKey } from "@/lib/stockPhoto";
 import { PHOTO_QUERIES } from "./photoQueries";
 
@@ -43,6 +43,12 @@ export const SEED_ARTICLES: SeedArticle[] = modules.flat();
 export async function ensureSeedArticles(): Promise<void> {
   try {
     await seedArticlesIfMissing(SEED_ARTICLES);
+    // Image alts made fully Persian after the first release.
+    await applySeedContentFixes("persian-alts-1", [
+      { slug: "منوی-دیجیتال", from: "![منوی دیجیتال رستوران با QR کد]", to: "![منوی دیجیتال رستوران با کیو آر کد روی میز]" },
+      { slug: "گواهی-ssl", from: "![گواهی SSL و اتصال امن HTTPS]", to: "![گواهی SSL و قفل اتصال امن در نوار آدرس مرورگر]" },
+      { slug: "طراحی-سایت-با-هوش-مصنوعی", from: "![طراحی سایت با هوش مصنوعی و ابزارهای AI]", to: "![طراحی سایت با هوش مصنوعی و ابزارهای هوشمند]" },
+    ]);
   } catch (e) {
     console.error("seedArticles failed:", e);
   }

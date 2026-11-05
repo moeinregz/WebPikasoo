@@ -135,7 +135,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         )}
 
-        <article className="text-[16px] leading-[1.9] text-ink/90">{renderBlogContent(post.content)}</article>
+        <article className="text-[16px] leading-[1.9] text-ink/90">{renderBlogContent(post.content, post.title)}</article>
       </main>
 
       <Footer />
