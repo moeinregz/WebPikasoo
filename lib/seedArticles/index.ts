@@ -1,5 +1,7 @@
 import type { SeedArticle } from "./types";
-import { seedArticlesIfMissing } from "@/lib/db";
+import { fillSeedArticlePhotos, seedArticlesIfMissing } from "@/lib/db";
+import { findPhoto, hasStockPhotoKey } from "@/lib/stockPhoto";
+import { PHOTO_QUERIES } from "./photoQueries";
 
 // Article modules are added to this list as they're written.
 import a01 from "./a01";
@@ -43,5 +45,14 @@ export async function ensureSeedArticles(): Promise<void> {
     await seedArticlesIfMissing(SEED_ARTICLES);
   } catch (e) {
     console.error("seedArticles failed:", e);
+  }
+  // Real photos instead of placeholders, a few articles per visit, once a
+  // Pexels key is configured. Never blocks the page on failure.
+  if (hasStockPhotoKey()) {
+    try {
+      await fillSeedArticlePhotos(PHOTO_QUERIES, findPhoto, 3);
+    } catch (e) {
+      console.error("seed article photos failed:", e);
+    }
   }
 }

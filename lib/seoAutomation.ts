@@ -7,6 +7,7 @@
 // هر روز کرون Vercel صداش می‌زنه (vercel.json) و خودش بر اساس interval_days
 // (پیش‌فرض ۲ روز) تصمیم می‌گیره نوبت مقاله‌ی جدید هست یا نه.
 import Anthropic from "@anthropic-ai/sdk";
+import { findPhoto } from "@/lib/stockPhoto";
 import {
   addSeoKeywords,
   claimSeoRunLock,
@@ -347,23 +348,6 @@ export async function sanitizeContent(
     return text;
   });
   return { content: out.replace(/\n{3,}/g, "\n\n").trim(), internal, external };
-}
-
-/** Optional stock photo (Pexels, free key in PEXELS_API_KEY); null = keep the placeholder. */
-async function findPhoto(query: string): Promise<string | null> {
-  const key = process.env.PEXELS_API_KEY;
-  if (!key || !query) return null;
-  try {
-    const res = await fetch(`https://api.pexels.com/v1/search?per_page=5&orientation=landscape&query=${encodeURIComponent(query)}`, {
-      headers: { Authorization: key },
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { photos?: { src?: { large?: string } }[] };
-    const photos = (data.photos ?? []).map((p) => p.src?.large).filter((u): u is string => !!u);
-    return photos.length ? photos[Math.floor(Math.random() * Math.min(3, photos.length))] : null;
-  } catch {
-    return null;
-  }
 }
 
 /** Replaces IMAGE_n markers with photos (or the placeholder), makes sure every

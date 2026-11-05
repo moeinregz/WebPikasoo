@@ -2434,6 +2434,7 @@ export async function setSmsOptOut(phone: string, optedOut: boolean): Promise<vo
 // uses its slug, and a marker is kept so an article the admin later deletes
 // or rewrites is never put back.
 
+let seedPhotosDone = false;
 let seedArticlesDone = false;
 
 export async function seedArticlesIfMissing(
@@ -2470,4 +2471,62 @@ export async function seedArticlesIfMissing(
   if (added) await invalidateCache("blog:published");
   seedArticlesDone = true;
   return added;
+}
+
+/** Swaps the "/blog-placeholder.svg" images of seed articles for stock
+ *  photos (one search phrase per image slot, in order). Handles at most
+ *  `limit` articles per call so a page view never waits on dozens of photo
+ *  searches; an article is marked done only when every slot got a photo, so
+ *  misses are retried later. Images the admin already replaced are left
+ *  alone, and the first photo becomes the cover if the post has none. */
+export async function fillSeedArticlePhotos(
+  queries: Record<string, string[]>,
+  find: (q: string, avoid: Set<string>) => Promise<string | null>,
+  limit = 3
+): Promise<number> {
+  if (seedPhotosDone) return 0;
+  const database = await getDb();
+  const markers = database.collection<{ _id: string }>("seed_markers");
+  const slugs = Object.keys(queries);
+  const done = new Set(
+    (await markers.find({ _id: { $in: slugs.map((s) => `photos:${s}`) } }).toArray()).map((m) => m._id.slice(7))
+  );
+  const todo = slugs.filter((s) => !done.has(s));
+  if (todo.length === 0) {
+    seedPhotosDone = true;
+    return 0;
+  }
+  const posts = database.collection<BlogPost>("blog_posts");
+  let updated = 0;
+  for (const slug of todo.slice(0, limit)) {
+    const post = await posts.findOne({ slug });
+    if (!post) continue;
+    const list = queries[slug];
+    const used = new Set<string>();
+    const photos: (string | null)[] = [];
+    for (const q of list) {
+      const url = await find(q, used);
+      if (url) used.add(url);
+      photos.push(url);
+    }
+    let n = -1;
+    let missing = 0;
+    const content = post.content.replace(/^!\[([^\]]*)\]\(\/blog-placeholder\.svg\)$/gm, (m, alt: string) => {
+      n++;
+      const url = photos[n];
+      if (!url) {
+        if (n < list.length) missing++;
+        return m;
+      }
+      return `![${alt}](${url})`;
+    });
+    const cover = post.cover_image || photos.find((u): u is string => !!u) || "";
+    if (content !== post.content || cover !== post.cover_image) {
+      await posts.updateOne({ id: post.id }, { $set: { content, cover_image: cover } });
+      await invalidateCache("blog:published", `blog:slug:${slug}`);
+      updated++;
+    }
+    if (missing === 0) await markers.updateOne({ _id: `photos:${slug}` }, { $set: { at: nowStr() } }, { upsert: true });
+  }
+  return updated;
 }
