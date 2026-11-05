@@ -86,6 +86,34 @@ export async function allowAndCooldown(key: string, windowMs: number): Promise<b
 // Read-through cache
 // -----------------------------------------------------------------------
 
+const memoryCounts = new Map<string, { n: number; until: number }>();
+
+/** Fixed-window counter: true while `key` has been used fewer than `limit`
+ *  times in the current `windowMs` window (and counts this use). Redis
+ *  INCR + PEXPIRE when available, a local Map otherwise; fails open. */
+export async function allowCount(key: string, limit: number, windowMs: number): Promise<boolean> {
+  const redis = getRedis();
+  if (redis) {
+    try {
+      const k = `count:${key}`;
+      const n = await redis.incr(k);
+      if (n === 1) await redis.pexpire(k, windowMs);
+      return n <= limit;
+    } catch (err) {
+      console.error("Redis counter failed, allowing request:", (err as Error).message);
+      return true;
+    }
+  }
+  const now = Date.now();
+  const cur = memoryCounts.get(key);
+  if (!cur || cur.until < now) {
+    memoryCounts.set(key, { n: 1, until: now + windowMs });
+    return true;
+  }
+  cur.n++;
+  return cur.n <= limit;
+}
+
 /** Returns the cached JSON value for `key` if present, otherwise calls
  *  `load()`, caches its result for `ttlSeconds`, and returns it. If Redis
  *  isn't configured (or errors), just calls `load()` directly — the page

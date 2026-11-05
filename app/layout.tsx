@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Vazirmatn, Lalezar } from "next/font/google";
 import MobileStickyCta from "@/components/MobileStickyCta";
+import ChatWidget from "@/components/ChatWidget";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -129,6 +130,7 @@ export default function RootLayout({
       <body className="pb-[68px] sm:pb-0">
         {children}
         <MobileStickyCta />
+        <ChatWidget />
       </body>
     </html>
   );
