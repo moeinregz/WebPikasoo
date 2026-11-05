@@ -6,7 +6,7 @@
     <linearGradient id="glass" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".5" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient>
   </defs>
   <circle cx="210" cy="215" r="190" fill="url(#glow)"/>
-  <ellipse cx="210" cy="352" rx="175" ry="18" fill="#000" opacity=".35"/>
+  <ellipse cx="210" cy="352" rx="175" ry="18" fill="#140b06"/>
   <!-- moka pot -->
   <path d="M78 340 L92 236 H178 L192 340 Z" fill="url(#steel)"/>
   <path d="M92 236 L104 214 H166 L178 236 Z" fill="#5a5a60"/>

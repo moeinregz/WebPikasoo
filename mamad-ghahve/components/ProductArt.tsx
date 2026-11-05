@@ -19,7 +19,7 @@ export default function ProductArt({ image, color, name }: { image?: string; col
         </linearGradient>
       </defs>
       <rect width="300" height="300" fill={`url(#g${c.slice(1)})`} />
-      <ellipse cx="150" cy="262" rx="88" ry="12" fill="rgba(0,0,0,.45)" />
+      <ellipse cx="150" cy="262" rx="88" ry="12" fill="#140b06" />
       <path d="M92 70 L208 70 L222 250 Q150 262 78 250 Z" fill={c} />
       <path d="M92 70 L208 70 L212 92 L88 92 Z" fill="rgba(0,0,0,.18)" />
       <path d="M100 52 H200 L208 70 H92 Z" fill={c} />

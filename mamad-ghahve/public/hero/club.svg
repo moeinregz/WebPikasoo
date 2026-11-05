@@ -6,7 +6,7 @@
     <linearGradient id="box" x1="0" x2="1"><stop offset="0" stop-color="#7a3a25"/><stop offset="1" stop-color="#4e2214"/></linearGradient>
   </defs>
   <circle cx="210" cy="200" r="190" fill="url(#glow)"/>
-  <ellipse cx="210" cy="352" rx="165" ry="18" fill="#000" opacity=".35"/>
+  <ellipse cx="210" cy="352" rx="165" ry="18" fill="#140b06"/>
   <!-- gift box -->
   <rect x="226" y="222" width="140" height="120" rx="10" fill="url(#box)"/>
   <rect x="216" y="196" width="160" height="38" rx="8" fill="#8a4630"/>
