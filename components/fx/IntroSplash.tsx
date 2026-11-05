@@ -163,7 +163,7 @@ export default function IntroSplash() {
           <span className="font-mono text-[12px] font-bold text-dim">برای رد کردن کلیک کن</span>
           <div className="flex flex-1 items-center gap-4" dir="ltr">
             <span className="intro-count font-display text-[44px] leading-none text-ink sm:text-[64px]">000</span>
-            <span className="h-[6px] flex-1 overflow-hidden rounded-full border-2 border-ink/80">
+            <span className="h-[6px] flex-1 overflow-hidden rounded-full border border-accent/35">
               <span className="intro-bar block h-full w-full origin-left bg-accent" />
             </span>
           </div>

@@ -116,7 +116,7 @@ export default function Trust() {
               key={p.title}
               className="flex items-start gap-4 matte matte-hover rounded-card p-5 sm:p-6"
             >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-ink bg-accent p-2.5 text-on-accent">
+              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] border border-accent/30 bg-accent p-2.5 text-on-accent">
                 {p.icon}
               </span>
               <div className="min-w-0 flex-1">

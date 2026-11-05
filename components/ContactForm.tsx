@@ -6,7 +6,7 @@ import { submitInquiry, type InquiryFormState } from "@/app/actions";
 const initialState: InquiryFormState = null;
 
 const inputClass =
-  "w-full rounded-[10px] border-2 border-ink/20 bg-canvas px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:shadow-[-4px_4px_0_0_rgb(var(--matte-shadow))]";
+  "w-full rounded-[10px] border border-accent/20 bg-canvas px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:shadow-[0_10px_30px_-12px_rgb(var(--color-accent)/0.6)]";
 
 function SubmitButton() {
   const { pending } = useFormStatus();

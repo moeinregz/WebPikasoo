@@ -13,6 +13,7 @@ import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import SkyIsland from "@/components/SkyIsland";
 import IntroSplash from "@/components/fx/IntroSplash";
 import ScrollFx from "@/components/fx/ScrollFx";
 import { getAllProjects, seedProjectsIfEmpty } from "@/lib/db";
@@ -72,11 +73,17 @@ export default async function Home() {
       <Hero />
       <Marquee />
       <Trust />
-      <Problems />
+      <SkyIsland id="problems" orbs={[{ size: 70, top: "70px", left: "4%" }, { size: 38, bottom: "90px", right: "6%" }]}>
+        <Problems />
+      </SkyIsland>
       <BusinessShowcase sites={projects} />
-      <Services />
+      <SkyIsland id="services" orbs={[{ size: 90, top: "60px", right: "3%" }, { size: 44, bottom: "120px", left: "5%" }]}>
+        <Services />
+      </SkyIsland>
       <Process />
-      <Testimonials />
+      <SkyIsland id="testimonials" orbs={[{ size: 56, top: "50px", left: "6%" }]}>
+        <Testimonials />
+      </SkyIsland>
 
       {/* عمداً درست همینجا — بعد از نمونه‌کار، فرآیند کار و نظر مشتری‌ها
           (یعنی بعد از این‌که بازدیدکننده به کیفیت کار اعتماد کرده) و درست
@@ -99,7 +106,9 @@ export default async function Home() {
       </section>
 
       <Guarantee />
-      <FAQ />
+      <SkyIsland id="faq" orbs={[{ size: 64, top: "80px", right: "5%" }, { size: 30, bottom: "60px", left: "8%" }]}>
+        <FAQ />
+      </SkyIsland>
 
       <Contact />
       <Footer />

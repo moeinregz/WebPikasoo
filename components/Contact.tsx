@@ -63,24 +63,44 @@ export default async function Contact() {
     <section id="contact" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px] pt-[120px] text-center">
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <div data-gsap="zoom" className="matte relative isolate overflow-hidden rounded-[24px] !bg-[#0a0a0c] px-6 py-16 text-white ![box-shadow:-12px_12px_0_0_rgb(var(--matte-shadow))] sm:px-10">
-          <span className="mb-[22px] inline-flex items-center gap-2 rounded-full border border-white/[0.14] px-3.5 py-1.5 font-mono text-[12.5px] text-white/70">
-            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
+        {/* CTA نهایی — همون آسمون لوندر و سکه‌ی مشکی هیرو، به‌عنوان «بسته‌شدن» داستان صفحه */}
+        <div data-gsap="zoom" className="theme-sky relative isolate overflow-hidden rounded-[36px] px-6 pb-16 pt-14 text-[#010102] shadow-[0_50px_120px_-50px_rgb(173_150_241/0.8)] sm:px-10">
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="sky-hero__base absolute inset-0" />
+            <svg className="absolute inset-0 h-full w-full opacity-75 [mix-blend-mode:screen]" preserveAspectRatio="none">
+              <filter id="cta-cloud" x="0" y="0" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.005 0.01" numOctaves="5" seed="11" />
+                <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.7 1.1" />
+              </filter>
+              <rect width="100%" height="100%" filter="url(#cta-cloud)" />
+            </svg>
+          </div>
+          <div className="sky-coin-wrap mx-auto mb-8 !w-[110px]">
+            <div className="sky-coin">
+              <span className="sky-coin__edge" />
+              <span className="sky-coin__face">
+                <span className="sky-coin__mark font-display !text-[58px]">پ</span>
+              </span>
+            </div>
+            <span className="sky-coin__shadow" />
+          </div>
+          <span className="mb-[22px] inline-flex items-center gap-2 rounded-md border border-[#010102]/15 bg-white/55 px-3.5 py-1.5 text-[12.5px] font-bold text-[#010102]">
+            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-[#7C5CE6]" />
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
-          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[32px] font-normal leading-[1.35] sm:text-[42px] lg:text-[58px]">
+          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[34px] leading-[1.3] sm:text-[46px] lg:text-[60px]">
             بیا یه چیز خفن با هم بسازیم.
           </h2>
-          <p className="mx-auto mb-3 max-w-[48ch] text-base text-white/60">
+          <p className="mx-auto mb-3 max-w-[48ch] text-base text-[#1A1033]/75">
             برای پنل مدیریت، فروشگاه آنلاین، یا هر ایده‌ای که تو سرته، پیام بده — سریع جواب می‌دیم.
           </p>
-          <p className="mx-auto mb-10 font-mono text-[12.5px] text-white/40">بدون تعهد، بدون هزینه</p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <p className="mx-auto mb-10 text-[12.5px] text-white/85">بدون تعهد، بدون هزینه</p>
+          <div className="flex flex-wrap justify-center gap-3">
             <a
               href="https://wa.me/989965745535"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-accent px-[34px] py-[17px] text-base font-black text-on-accent"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-black text-[#010102] shadow-[0_14px_40px_-12px_rgba(26,16,51,0.55)] transition hover:-translate-y-0.5"
             >
               شروع گفتگو در واتساپ
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -89,7 +109,7 @@ export default async function Contact() {
             </a>
             <a
               href="tel:+989965745535"
-              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-white px-[34px] py-[17px] text-base font-black text-[#0a0a0c]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#010102] px-8 py-4 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-[#1A1033]"
             >
               تماس مستقیم
             </a>

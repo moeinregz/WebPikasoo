@@ -49,7 +49,7 @@ const config: Config = {
       },
       fontFamily: {
         fa: ["var(--font-vazirmatn)", "sans-serif"],
-        display: ["var(--font-lalezar)", "var(--font-vazirmatn)", "sans-serif"],
+        display: ["var(--font-vazirmatn)", "sans-serif"],
         // JetBrains Mono کلاً از پروژه حذف شد — فقط لاتین رو پوشش می‌داد و
         // باعث می‌شد حروف فارسی داخل badge/آمار‌های font-mono با فونت
         // پیش‌فرض/محو مرورگر رندر بشن. حالا font-mono هم مستقیم همون

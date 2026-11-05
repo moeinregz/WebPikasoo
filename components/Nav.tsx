@@ -38,7 +38,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
       {/* Sticky glass nav — theme-adaptive blurred bar with a hairline
           border, the same treatment Vercel/GitHub use on their marketing
           headers, instead of a fixed brand-color block. */}
-      <header className="sticky top-0 z-[100] border-b-2 border-ink bg-canvas">
+      <header className="sticky top-0 z-[100] border-b border-accent/15 bg-canvas/75 backdrop-blur-xl">
         <div data-hero-item className="mx-auto max-w-container px-6">
           {/* Mobile bar: menu + dark mode on the right, wordmark centered,
               signup/account on the left. Plain 3-column grid so each group
@@ -57,7 +57,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             </div>
 
             <Link href="/" className="flex items-center justify-center gap-2 font-mono text-[16px] font-black tracking-wide text-ink">
-              <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-ink transition-transform duration-500 hover:rotate-[-10deg] hover:scale-110">
+              <span className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-accent/30 transition-transform duration-500 hover:rotate-[-10deg] hover:scale-110">
                 <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="32px" className="object-cover" priority />
               </span>
             </Link>
@@ -81,7 +81,7 @@ export default function Nav({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
           <div dir="ltr" className="hidden h-[68px] items-center justify-between md:flex">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2.5 font-mono text-[17px] font-black tracking-wide text-ink">
-                <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-ink transition-transform duration-500 hover:rotate-[-10deg] hover:scale-110">
+                <span className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-accent/30 transition-transform duration-500 hover:rotate-[-10deg] hover:scale-110">
                   <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="36px" className="object-cover" priority />
                 </span>
                 <span className="leading-none">
