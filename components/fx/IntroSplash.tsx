@@ -6,18 +6,18 @@ import gsap from "gsap";
 // همون تکه‌های هندسیِ لوگوی کوبیستی (مثل PageLoader) — این‌جا با GSAP از
 // بیرون پرواز می‌کنن و یه «چهره» می‌سازن.
 const pieces = [
-  { points: "90,90 168,90 149.7,140.2", color: "#0297DE" },
-  { points: "90,90 149.7,140.2 96.8,167.7", color: "#5CC4FF" },
-  { points: "90,90 96.8,167.7 63.3,163.3", color: "#0297DE" },
-  { points: "90,90 63.3,163.3 16.7,116.7", color: "#5CC4FF" },
-  { points: "90,90 16.7,116.7 22.5,51", color: "#0277B6" },
-  { points: "90,90 22.5,51 76.4,13.2", color: "#02070A" },
-  { points: "90,90 76.4,13.2 129,22.5", color: "#BFE6FA" },
-  { points: "90,90 129,22.5 168,90", color: "#DDF2FC" },
+  { points: "90,90 168,90 149.7,140.2", color: "#0077B6" },
+  { points: "90,90 149.7,140.2 96.8,167.7", color: "#00B4D8" },
+  { points: "90,90 96.8,167.7 63.3,163.3", color: "#0096C7" },
+  { points: "90,90 63.3,163.3 16.7,116.7", color: "#48CAE4" },
+  { points: "90,90 16.7,116.7 22.5,51", color: "#023E8A" },
+  { points: "90,90 22.5,51 76.4,13.2", color: "#03045E" },
+  { points: "90,90 76.4,13.2 129,22.5", color: "#90E0EF" },
+  { points: "90,90 129,22.5 168,90", color: "#ADE8F4" },
 ];
 
 // ستون‌های پرده که آخر کار پله‌پله بالا می‌رن — رنگ‌ها از همون پالت سایت.
-const columns = ["#02070A", "#0277B6", "#0297DE", "#0297DE", "#5CC4FF"];
+const columns = ["#03045E", "#023E8A", "#0077B6", "#0096C7", "#00B4D8"];
 
 const BRAND = "WebPIKASO";
 const SEEN_KEY = "webpikaso-intro";
@@ -163,7 +163,7 @@ export default function IntroSplash() {
           <span className="font-mono text-[12px] font-bold text-dim">برای رد کردن کلیک کن</span>
           <div className="flex flex-1 items-center gap-4" dir="ltr">
             <span className="intro-count font-display text-[44px] leading-none text-ink sm:text-[64px]">000</span>
-            <span className="h-[6px] flex-1 overflow-hidden rounded-full border border-accent/35">
+            <span className="h-[6px] flex-1 overflow-hidden rounded-full border-2 border-ink/80">
               <span className="intro-bar block h-full w-full origin-left bg-accent" />
             </span>
           </div>

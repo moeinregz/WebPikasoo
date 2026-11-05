@@ -63,30 +63,24 @@ export default async function Contact() {
     <section id="contact" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px] pt-[120px] text-center">
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        {/* CTA نهایی — یه پرده‌ی نور کوچیک، مثل هیرو: «بسته‌شدن» داستان صفحه */}
-        <div data-gsap="zoom" className="relative isolate overflow-hidden rounded-[36px] border border-white/10 px-6 pb-20 pt-16 text-white shadow-[0_60px_140px_-60px_rgb(2_151_222/0.7)] sm:px-10">
-          <div aria-hidden className="curtain -z-10">
-            <div className="curtain__glow" />
-            <div className="curtain__lines" />
-            <div className="curtain__vignette" />
-            <div className="curtain__grain" />
-          </div>
-          <span className="mono-label mb-7 rounded-full border border-white/15 bg-white/[0.05] px-4 py-1.5 !text-white/80 backdrop-blur">
+        <div data-gsap="zoom" className="matte relative isolate overflow-hidden rounded-[24px] !bg-[#0a0a0c] px-6 py-16 text-white ![box-shadow:-12px_12px_0_0_rgb(var(--matte-shadow))] sm:px-10">
+          <span className="mb-[22px] inline-flex items-center gap-2 rounded-full border border-white/[0.14] px-3.5 py-1.5 font-mono text-[12.5px] text-white/70">
+            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
-          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[36px] leading-[1.45] sm:text-[48px] lg:text-[62px]">
-            بیا یه چیز <span className="text-ember">خفن</span> با هم بسازیم<span className="font-serif italic text-[#fc734d]">.</span>
+          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[32px] font-normal leading-[1.35] sm:text-[42px] lg:text-[58px]">
+            بیا یه چیز خفن با هم بسازیم.
           </h2>
-          <p className="mx-auto mb-3 max-w-[48ch] font-mono text-[14px] leading-8 text-white/70">
+          <p className="mx-auto mb-3 max-w-[48ch] text-base text-white/60">
             برای پنل مدیریت، فروشگاه آنلاین، یا هر ایده‌ای که تو سرته، پیام بده — سریع جواب می‌دیم.
           </p>
-          <p className="mx-auto mb-10 font-mono text-[12px] text-white/50">بدون تعهد، بدون هزینه</p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <p className="mx-auto mb-10 font-mono text-[12.5px] text-white/40">بدون تعهد، بدون هزینه</p>
+          <div className="flex flex-wrap justify-center gap-4">
             <a
               href="https://wa.me/989965745535"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-black text-[#02070A] shadow-[0_14px_40px_-12px_rgba(252,115,77,0.6)] transition hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-accent px-[34px] py-[17px] text-base font-black text-white"
             >
               شروع گفتگو در واتساپ
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -95,7 +89,7 @@ export default async function Contact() {
             </a>
             <a
               href="tel:+989965745535"
-              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/[0.06] px-8 py-4 text-base font-black text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15"
+              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-white px-[34px] py-[17px] text-base font-black text-[#0a0a0c]"
             >
               تماس مستقیم
             </a>

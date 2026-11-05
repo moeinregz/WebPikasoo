@@ -204,7 +204,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              نمونه‌کارهایی شبیه <span className="accent-gradient-text">کسب‌وکار شما</span>
+              نمونه‌کارهایی شبیه کسب‌وکار شما
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               نمونه‌سایت‌هایی که برای انواع کسب‌وکارها ساخته شده — از دسته‌بندی‌ها انتخاب کن یا
@@ -324,7 +324,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
           </>
         ) : (
           <Reveal className="flex flex-col items-center gap-3 rounded-card border-2 border-dashed border-ink/15 py-16 text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-6 w-6">
                 <rect x="3" y="4" width="18" height="14" rx="2" />
                 <path d="M3 15l4.5-4.5a2 2 0 0 1 2.8 0L15 15" />

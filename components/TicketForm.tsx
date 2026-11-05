@@ -75,7 +75,7 @@ export default function TicketForm({ withHeading = true }: { withHeading?: boole
       >
         <span
           className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full opacity-[0.12] blur-2xl"
-          style={{ background: "#0297DE" }}
+          style={{ background: "#0077B6" }}
         />
         {withHeading && (
           <h2 className="relative mb-4 flex items-center gap-2 font-display text-lg font-normal">

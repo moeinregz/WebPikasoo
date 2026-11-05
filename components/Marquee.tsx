@@ -81,10 +81,10 @@ export default function Marquee() {
     // دو نوار مات و ضربدری — مثل دو تکه چسب‌نواری روی هم. هر ردیف با
     // سرعت اسکرول کج می‌شه (ScrollFx، data-marquee).
     <section className="relative overflow-hidden py-14">
-      <div className="relative z-[2] -mx-6 -rotate-2 border-y border-accent/30 bg-accent py-4 shadow-[0_24px_60px_-24px_rgb(var(--color-accent)/0.7)]">
+      <div className="relative z-[2] -mx-6 -rotate-2 border-y-2 border-ink bg-accent py-4 shadow-[0_8px_0_0_rgb(var(--matte-shadow))]">
         <MarqueeRow items={stackItems} />
       </div>
-      <div className="relative z-[1] -mx-6 -mt-3 rotate-[1.5deg] border-y border-accent/30 bg-surface py-4">
+      <div className="relative z-[1] -mx-6 -mt-3 rotate-[1.5deg] border-y-2 border-ink bg-surface py-4">
         <MarqueeRow items={growthItems} reverse />
       </div>
     </section>

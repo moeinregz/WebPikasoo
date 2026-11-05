@@ -23,7 +23,7 @@ export default function Guarantee() {
             Guarantee
           </span>
           <h2 className="font-display text-[26px] font-normal sm:text-[32px]">
-            اگه پروژه باگ فنی داشت، <span className="accent-gradient-text">رایگان</span> رفعش می‌کنیم
+            اگه پروژه باگ فنی داشت، رایگان رفعش می‌کنیم
           </h2>
           <p className="max-w-[56ch] text-[14.5px] leading-relaxed text-dim">
             بعد از تحویل هر پروژه، ۳۰ روز گارانتی رفع باگ فنی داری — بدون هزینه‌ی اضافه و بدون
@@ -31,7 +31,7 @@ export default function Guarantee() {
           </p>
           <a
             href="#lead-form"
-            className="mt-2 inline-flex items-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[14.5px] font-black text-on-accent"
+            className="mt-2 inline-flex items-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[14.5px] font-black text-white"
           >
             با خیال راحت شروع کن — مشاوره رایگان
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

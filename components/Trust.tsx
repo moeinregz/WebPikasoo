@@ -58,7 +58,7 @@ export default function Trust() {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              چرا کسب‌وکارت رو به <span className="accent-gradient-text">وب پیکاسو</span> بسپاری؟
+              چرا کسب‌وکارت رو به وب پیکاسو بسپاری؟
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               یه تیم کوچیک و متخصصیم، نه یه آژانس بزرگ با هزار واسطه — یعنی هم سریع‌تر جواب می‌گیری،
@@ -116,7 +116,7 @@ export default function Trust() {
               key={p.title}
               className="flex items-start gap-4 matte matte-hover rounded-card p-5 sm:p-6"
             >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] border border-accent/30 bg-accent p-2.5 text-on-accent">
+              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-ink bg-accent p-2.5 text-white">
                 {p.icon}
               </span>
               <div className="min-w-0 flex-1">

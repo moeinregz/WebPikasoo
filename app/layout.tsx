@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Vazirmatn, Noto_Naskh_Arabic, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
+import { Vazirmatn, Lalezar } from "next/font/google";
 import MobileStickyCta from "@/components/MobileStickyCta";
 import "./globals.css";
 
@@ -11,27 +11,10 @@ const vazirmatn = Vazirmatn({
   display: "swap",
 });
 
-// Midnight theme type: an elegant naskh for Persian headlines, Instrument
-// Serif (italic) for Latin accent words, IBM Plex Mono for labels and numbers.
-const naskh = Noto_Naskh_Arabic({
+const lalezar = Lalezar({
   subsets: ["arabic"],
-  weight: ["500", "600", "700"],
-  variable: "--font-naskh",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
   weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
+  variable: "--font-lalezar",
   display: "swap",
 });
 
@@ -116,7 +99,7 @@ export default function RootLayout({
       suppressHydrationWarning
       lang="fa"
       dir="rtl"
-      className={`${vazirmatn.variable} ${naskh.variable} ${instrumentSerif.variable} ${plexMono.variable}`}
+      className={`${vazirmatn.variable} ${lalezar.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

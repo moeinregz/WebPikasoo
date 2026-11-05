@@ -62,11 +62,11 @@ export default function Footer() {
           هم مثل بقیه‌ی صفحه یه ذره جلوه داشته باشه و کاملاً تخت نباشه. */}
       <span
         className="pointer-events-none absolute -top-24 right-[-120px] h-72 w-72 rounded-full opacity-[0.16] blur-[110px]"
-        style={{ background: "#0297DE" }}
+        style={{ background: "#0077B6" }}
       />
       <span
         className="pointer-events-none absolute bottom-[-160px] left-[-100px] h-80 w-80 rounded-full opacity-[0.14] blur-[130px]"
-        style={{ background: "#5CC4FF" }}
+        style={{ background: "#00B4D8" }}
       />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-accent/50 to-transparent" />
 

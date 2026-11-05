@@ -206,7 +206,7 @@ export default async function WebsitePricePage() {
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/order"
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent shadow-glow transition hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
           >
             مشاهده‌ی همه‌ی پلن‌ها و ثبت سفارش
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -633,7 +633,7 @@ export default async function WebsitePricePage() {
             <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/order"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent shadow-glow transition hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
               >
                 مشاهده‌ی همه‌ی پلن‌ها
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
