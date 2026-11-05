@@ -90,11 +90,9 @@
   /* Faint dot/grid backdrop used behind hero + section headers — the
      signature Vercel/GitHub marketing-page texture. A radial mask fades it
      out toward the edges so it never fights with foreground content. */
+  /* (اسم قدیمی) — حالا یه هاله‌ی نرم لوندر بالای سکشن، به‌جای نقطه‌چین */
   .bg-dot-grid {
-    background-image: radial-gradient(rgb(var(--color-ink) / 0.16) 1px, transparent 1px);
-    background-size: 26px 26px;
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    background: radial-gradient(ellipse 60% 70% at 50% 0%, rgb(var(--color-accent) / 0.16) 0%, transparent 70%);
   }
 
   /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
@@ -362,34 +360,93 @@
 }
 
 @layer components {
+  /* «سافت» (جایگزین استایل مات قبلی، همون اسم کلاس‌ها): کارت‌های نرم با
+     لبه‌ی یاسی کم‌رنگ و هاله‌ی بنفش، دکمه‌ها کپسولی — هم‌حس هیروی آسمان لوندر. */
   .matte {
     position: relative;
-    background-color: rgb(var(--color-surface));
-    border: 2px solid rgb(var(--matte-border));
-    box-shadow: -6px 6px 0 0 rgb(var(--matte-shadow));
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background:
+      linear-gradient(180deg, rgb(var(--color-ink) / 0.035), rgb(var(--color-ink) / 0) 60%),
+      rgb(var(--color-surface));
+    border: 1px solid rgb(var(--color-accent) / 0.2);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 24px 60px -32px rgb(var(--color-accent) / 0.55);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
   }
   .matte-hover:hover {
-    transform: translate(3px, -3px);
-    box-shadow: -10px 10px 0 0 rgb(var(--matte-shadow));
+    transform: translateY(-5px);
+    border-color: rgb(var(--color-accent) / 0.45);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 30px 70px -28px rgb(var(--color-accent) / 0.7);
   }
   .matte-sm {
-    box-shadow: -4px 4px 0 0 rgb(var(--matte-shadow));
+    box-shadow: 0 12px 30px -20px rgb(var(--color-accent) / 0.5);
   }
 
-  /* دکمه‌ی مات — با هاور بالا میاد، با کلیک «فشرده» می‌شه روی سایه‌ش */
   .matte-btn {
-    border: 2px solid rgb(var(--matte-border));
-    box-shadow: -5px 5px 0 0 rgb(var(--matte-shadow));
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgb(var(--color-accent) / 0.25);
+    border-radius: 999px !important;
+    box-shadow: 0 14px 34px -14px rgb(var(--color-accent) / 0.7);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
   }
   .matte-btn:hover {
-    transform: translate(2px, -2px);
-    box-shadow: -7px 7px 0 0 rgb(var(--matte-shadow));
+    transform: translateY(-2px);
+    box-shadow: 0 20px 44px -14px rgb(var(--color-accent) / 0.85);
   }
   .matte-btn:active {
-    transform: translate(-5px, 5px);
-    box-shadow: 0 0 0 0 rgb(var(--matte-shadow));
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* تیترها: وزیرمتن خیلی ضخیم و فشرده، مثل تیتر هیرو (به‌جای لاله‌زار).
+     :not(#_) فقط برای اینه که از font-normal کلاس‌های قبلی قوی‌تر باشه. */
+  .font-display:not(#_) {
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  /* «جزیره‌ی آسمان»: سکشنی که روی پنل گرد ابری یاسی می‌شینه؛ متغیرهای رنگ
+     داخلش روشن می‌شن تا همه‌ی کامپوننت‌های داخلش خودبه‌خود متن مشکی بگیرن. */
+  .theme-sky {
+    --color-ink: 1 1 2;
+    --color-dim: 74 64 104;
+    --color-canvas: 246 242 255;
+    --color-surface: 255 255 255;
+    --color-accent: 110 78 214;
+    --color-accent2: 76 48 176;
+    --color-accent3: 173 150 241;
+    --matte-shadow: 1 1 2;
+    --matte-border: 1 1 2;
+    color: rgb(var(--color-ink));
+  }
+  .theme-sky .matte {
+    background: rgb(255 255 255 / 0.72);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-color: rgb(255 255 255 / 0.9);
+    box-shadow: 0 24px 60px -30px rgb(76 48 176 / 0.45);
+  }
+  .sky-island__bg {
+    background:
+      radial-gradient(90% 60% at 50% 0%, #f8f5ff 0%, rgba(248, 245, 255, 0) 70%),
+      linear-gradient(180deg, #efe9ff 0%, #ddd1fc 45%, #c9b7f7 100%);
+  }
+
+  /* گوی مشکی براق — همون جنس سکه‌ی هیرو، برای تزئین سکشن‌ها */
+  .gloss-orb {
+    position: absolute;
+    border-radius: 50%;
+    background:
+      radial-gradient(55% 40% at 33% 24%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%),
+      radial-gradient(circle at 50% 58%, #1f1c28 0%, #07070a 60%, #000 100%);
+    box-shadow:
+      inset 0 -8px 18px rgba(0, 0, 0, 0.8),
+      0 30px 50px -20px rgba(26, 16, 51, 0.6);
+    animation: orbFloat 7s ease-in-out infinite;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
   }
 
   /* اینترو: اگه این نشست قبلاً دیده شده، اسکریپت قبل از رنگ‌آمیزی این
@@ -401,7 +458,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .matte,
-  .matte-btn {
+  .matte-btn,
+  .gloss-orb {
     transition: none;
   }
   .intro-splash {
@@ -508,7 +566,8 @@
 @media (prefers-reduced-motion: reduce) {
   .sky-hero__clouds,
   .sky-coin,
-  .sky-coin__shadow {
+  .sky-coin__shadow,
+  .gloss-orb {
     animation: none;
   }
 }

@@ -134,7 +134,7 @@ export default function Process() {
                   return (
                     <Reveal key={s.n} delay={idx * 120} className="flex flex-col items-center">
                       <span
-                        className="relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-canvas p-3.5 shadow-[-4px_4px_0_0_rgb(var(--matte-shadow))]"
+                        className="relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-canvas p-3.5 shadow-[0_10px_30px_-12px_rgb(var(--color-accent)/0.6)]"
                         style={{ borderColor: s.color, color: s.color }}
                       >
                         {s.icon}

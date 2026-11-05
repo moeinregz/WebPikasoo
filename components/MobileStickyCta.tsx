@@ -5,7 +5,7 @@
 export default function MobileStickyCta() {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-[90] border-t-2 border-ink bg-canvas px-4 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 sm:hidden"
+      className="fixed inset-x-0 bottom-0 z-[90] border-t border-accent/20 bg-canvas px-4 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 sm:hidden"
       role="complementary"
       aria-label="دسترسی سریع به مشاوره رایگان"
     >
