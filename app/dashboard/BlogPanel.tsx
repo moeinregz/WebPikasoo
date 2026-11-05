@@ -152,6 +152,16 @@ function domToMarkdown(root: HTMLElement): string {
       if (items.length) blocks.push(items.join("\n"));
       return;
     }
+    if (el.dataset.cta) {
+      // Call-to-action box rendered by lib/blogContent.tsx — keep its
+      // ">> text [button](href)" form instead of flattening it to a paragraph.
+      const textEl = el.querySelector("p");
+      const btn = el.querySelector<HTMLAnchorElement>("a[data-cta-button]");
+      const text = (textEl ? inlineToMarkdown(textEl) : "").replace(/\s+/g, " ").trim();
+      const button = btn ? ` [${btn.textContent ?? ""}](${btn.getAttribute("href") ?? ""})` : "";
+      if (text || button) blocks.push(`>> ${text}${button}`.trim());
+      return;
+    }
     if (tag === "img") {
       const img = el as HTMLImageElement;
       blocks.push(`![${img.alt || ""}](${img.getAttribute("src") || ""})`);
