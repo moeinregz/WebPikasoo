@@ -416,3 +416,17 @@ ul { list-style: none; }
   .hero .slide.has-img .copy { padding-bottom: 8px; }
 }
 @keyframes artInM { from { opacity: 0; transform: translateY(18px) scale(.92); } to { opacity: 1; transform: none; } }
+
+/* ---------- متن روی پس‌زمینه‌ی نسکافه‌ای: تیره؛ متن داخل کارت‌های تیره: روشن ---------- */
+:root { --on-bg: #2a1709; --on-bg-muted: #4e2f18; --on-bg-head: #2a1508; }
+body { color: var(--on-bg); }
+.header, .bottom-nav, .card, .pcard, .cat, .rev, .stat, .about, .filters a, .gw, .opts button, .qty, .spec div, .tabs, .buy-bar, .feature, .admin aside { color: var(--text); }
+.muted { color: var(--on-bg-muted); }
+.header .muted, .card .muted, .pcard .muted, .rev .muted, .stat .muted, .about .muted, .admin aside .muted, .footer .muted { color: var(--muted); }
+.section-head h2, .page-title, .pdp h1, .admin main h1 { background: linear-gradient(90deg, #1f1006, #5a3018); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.section-head h2 small { color: var(--on-bg-muted); -webkit-text-fill-color: var(--on-bg-muted); }
+.rail-ctl a { color: var(--on-bg-head); }
+.rail-dots i { background: rgba(42, 21, 8, .25); }
+.rail-dots i.on { background: var(--on-bg-head); }
+.pdp .price-lg { color: var(--on-bg-head); }
+.pdp .price-lg del { color: var(--on-bg-muted); }
