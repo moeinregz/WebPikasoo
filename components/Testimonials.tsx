@@ -66,7 +66,7 @@ export default function Testimonials() {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              حرف مشتری‌هامون رو باور کن، نه حرف ما رو
+              حرف <span className="accent-gradient-text">مشتری‌هامون</span> رو باور کن، نه حرف ما رو
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               این‌ها آدم‌هایی‌ان که قبل از شروع همون نگرانی‌هایی رو داشتن که شاید الان تو داری —

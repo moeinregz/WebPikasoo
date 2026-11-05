@@ -50,7 +50,7 @@ export default function FAQ() {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              سوالات پرتکرار
+              سوالات <span className="accent-gradient-text">پرتکرار</span>
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               اگه سوال دیگه‌ای داشتی هم می‌تونی مستقیم تو واتساپ یا فرم پایین بپرسی.

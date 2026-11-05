@@ -113,7 +113,7 @@ export default function Process() {
           Map
           </span>
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">فرایند همکاری</h2>
+            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">فرایند <span className="accent-gradient-text">همکاری</span></h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               از اولین جلسه‌ی رایگان تا پشتیبانی بعد از تحویل — شش قدم روشن که همیشه می‌دونید دقیقاً
               کجای مسیر ایستادید.

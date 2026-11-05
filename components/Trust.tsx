@@ -58,7 +58,7 @@ export default function Trust() {
           </span>
           <div>
             <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
-              چرا کسب‌وکارت رو به وب پیکاسو بسپاری؟
+              چرا کسب‌وکارت رو به <span className="accent-gradient-text">وب پیکاسو</span> بسپاری؟
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               یه تیم کوچیک و متخصصیم، نه یه آژانس بزرگ با هزار واسطه — یعنی هم سریع‌تر جواب می‌گیری،
