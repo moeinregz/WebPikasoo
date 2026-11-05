@@ -19,8 +19,9 @@ import a14 from "./a14";
 import a15 from "./a15";
 import a16 from "./a16";
 import a17 from "./a17";
+import a18 from "./a18";
 
-const modules: SeedArticle[][] = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17];
+const modules: SeedArticle[][] = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18];
 
 export const SEED_ARTICLES: SeedArticle[] = modules.flat();
 
