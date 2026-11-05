@@ -495,3 +495,77 @@ body { color: var(--on-bg); }
 @media (max-width: 760px) { .rail { padding-left: 16px; } }
 .rev-track { padding-bottom: 24px; padding-left: 12px; }
 .pgrid { padding-bottom: 12px; }
+
+/* =====================================================================
+   سیستم عمق نهایی: سایه‌ی لایه‌ای توپر (لبه‌ی تیره + لایه‌ی نسکافه‌ای)، لبه‌ی براق، عنوان‌های حک‌شده
+   ===================================================================== */
+:root {
+  --rim: #1a0f08;            /* لبه‌ی تیره‌ی زیر هر قطعه */
+  --drop: #8a6340;           /* لایه‌ی سایه روی پس‌زمینه */
+  --bevel-hi: #5a3c27;       /* نور لبه‌ی بالا */
+  --bevel-lo: #170d07;       /* تیرگی لبه‌ی پایین */
+  --bevel: inset 0 2px 0 var(--bevel-hi), inset 0 -3px 0 var(--bevel-lo);
+  --depth-1: 0 3px 0 var(--rim), 0 7px 0 var(--drop);
+  --depth-2: 0 4px 0 var(--rim), 0 11px 0 var(--drop);
+  --depth-3: 0 5px 0 var(--rim), 0 15px 0 var(--drop);
+  --depth-dark: 0 5px 0 #0a0503;
+  --gold-bevel: inset 0 2px 0 #fff0c4, inset 0 -3px 0 #a8772b;
+  --gold-depth: 0 3px 0 #5e3c0c, 0 7px 0 #3d2608;
+  --surface-grad: linear-gradient(180deg, #34221a 0%, #2a1a11 45%, #22150d 100%);
+}
+
+/* سطح‌ها با گرادیان عمودی + لبه‌ی براق */
+.pcard, .cat, .rev, .card, .stat { background: var(--surface-grad); }
+.trust, .about { background-image: linear-gradient(180deg, #34221a, #1f130b); }
+
+/* قطعه‌های روی پس‌زمینه */
+.pcard, .rev, .card, .stat { box-shadow: var(--depth-2), var(--bevel); }
+.cat { box-shadow: var(--depth-1), var(--bevel); }
+.hero, .trust, .club-banner, .about, .club-hero { box-shadow: var(--depth-3), var(--bevel); }
+.member-card { box-shadow: var(--depth-2), inset 0 2px 0 #ffffff55; }
+.rail-btn, .filters a { box-shadow: var(--depth-1), var(--bevel); }
+.rail-btn:disabled { box-shadow: 0 2px 0 var(--rim), 0 4px 0 var(--drop); }
+.filters a.on { box-shadow: var(--gold-depth), var(--gold-bevel); }
+
+/* حرکت: بالا اومدن موقع هاور، فرو رفتن موقع کلیک */
+.pcard:hover { transform: translateY(-5px); box-shadow: 0 4px 0 var(--rim), 0 16px 0 var(--drop), var(--bevel); }
+.cat:hover { transform: translateY(-4px); box-shadow: 0 3px 0 var(--rim), 0 11px 0 var(--drop), var(--bevel); }
+.cat:active, .filters a:active, .rail-btn:not(:disabled):active { transform: translateY(5px); box-shadow: 0 2px 0 var(--rim), 0 2px 0 var(--drop), var(--bevel); }
+.pcard:active { transform: translateY(3px); }
+
+/* دکمه‌های طلایی: براق و سه‌بعدی */
+.btn { box-shadow: var(--gold-depth), var(--gold-bevel); }
+.btn:active { transform: translateY(6px); box-shadow: 0 1px 0 #5e3c0c, var(--gold-bevel); }
+.btn.light { background: linear-gradient(180deg, #46301f, #2e1d12); box-shadow: 0 3px 0 var(--rim), 0 6px 0 #0a0503, var(--bevel); }
+.btn.light:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--rim), var(--bevel); }
+.btn.danger { box-shadow: 0 3px 0 #5a1c0f, 0 6px 0 #3a1008, inset 0 2px 0 #e0735a; }
+.btn.danger:active { transform: translateY(5px); box-shadow: 0 1px 0 #5a1c0f; }
+.btn.ghost { box-shadow: none; }
+.add-mini { box-shadow: 0 3px 0 #5e3c0c, 0 6px 0 #3d2608, var(--gold-bevel); }
+.add-mini:active { transform: translateY(5px); box-shadow: 0 1px 0 #5e3c0c, var(--gold-bevel); }
+
+/* قطعه‌های روی سطح تیره */
+.trust-item { background: linear-gradient(180deg, #3a271b, #2a1a11); box-shadow: var(--depth-dark), var(--bevel); }
+.icon-btn { background: linear-gradient(180deg, #46301f, #2e1d12); box-shadow: 0 4px 0 #0a0503, var(--bevel); }
+.icon-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0503, var(--bevel); }
+.cat .i { background: linear-gradient(180deg, #4a3121, #2e1d12); box-shadow: 0 4px 0 #0a0503, var(--bevel); }
+.rev .av, .thumb-sm, .qty, .opts button, .gw, .hero .arrow { box-shadow: 0 4px 0 #0a0503, inset 0 2px 0 #ffffff33; }
+.gw.on, .opts button.on { box-shadow: 0 4px 0 #5e3c0c, var(--gold-bevel); }
+.pcard .tag { box-shadow: 0 3px 0 #5e3c0c, inset 0 1px 0 #fff0c4; }
+.pcard .off { box-shadow: 0 3px 0 #5a1c0f, inset 0 1px 0 #e0735a; }
+.admin aside nav a.on { box-shadow: 0 4px 0 #5e3c0c, var(--gold-bevel); }
+.bottom-nav { box-shadow: 0 -4px 0 #0a0503; }
+
+/* بخش عکس کارت محصول کمی فرورفته */
+.pcard .media { box-shadow: inset 0 -4px 0 #170d07, inset 0 4px 0 #3e2a1d; border-bottom: 2px solid #120a05; }
+
+/* عنوان‌های حک‌شده روی پس‌زمینه */
+.section-head h2, .page-title, .pdp h1, .admin main h1 { filter: drop-shadow(0 2px 0 #e8cda7); }
+.trust-stats b, .club-banner h2, .hero .copy h2 { text-shadow: 0 3px 0 #0a0503; }
+.section-head h2 { padding-inline-start: 0; }
+.section-head h2::after { content: ""; display: block; width: 54px; height: 6px; margin-top: 6px; border-radius: 99px; background: linear-gradient(90deg, #f1cd7d, #a8772b); box-shadow: 0 2px 0 #5e3c0c; }
+
+/* فضای کافی برای دیده شدن سایه‌ها */
+.rail { padding-bottom: 30px; padding-left: 2px; }
+.rev-track { padding-bottom: 28px; padding-left: 2px; }
+.pgrid { padding-bottom: 16px; row-gap: 26px; }
