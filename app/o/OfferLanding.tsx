@@ -56,13 +56,13 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
 
   return (
     <div
-      className="relative min-h-screen overflow-x-clip bg-[#010102] font-fa text-[#e9eefc] selection:bg-[#C4B3F6]/40"
+      className="relative min-h-screen overflow-x-clip bg-[#02070A] font-fa text-[#e9eefc] selection:bg-[#5CC4FF]/40"
       style={{ ["--tc" as string]: trade.color }}
     >
       <Backdrop />
 
       {/* header */}
-      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#010102]/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#02070A]/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1180px] items-center gap-3 px-4 sm:px-6">
           <a href="/" className="flex items-center gap-2.5">
             <span className="relative h-9 w-9 overflow-hidden rounded-xl ring-1 ring-white/15">
@@ -75,7 +75,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
           </a>
           <button
             onClick={() => scrollTo("order")}
-            className="mr-auto rounded-full bg-white px-4 py-2 text-[13px] font-black text-[#010102] transition hover:scale-[1.04] sm:mr-0"
+            className="mr-auto rounded-full bg-white px-4 py-2 text-[13px] font-black text-[#02070A] transition hover:scale-[1.04] sm:mr-0"
           >
             ثبت سفارش
           </button>
@@ -109,7 +109,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className="font-display text-[36px] leading-[1.35] sm:text-[50px] lg:text-[58px]"
               >
-                <span className="bg-gradient-to-l from-white via-white to-[color-mix(in_srgb,var(--tc)_55%,#C4B3F6)] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-l from-white via-white to-[color-mix(in_srgb,var(--tc)_55%,#5CC4FF)] bg-clip-text text-transparent">
                   {copy.pain}
                 </span>
               </motion.h1>
@@ -122,7 +122,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
             <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
               <button
                 onClick={() => scrollTo("order")}
-                className="group relative overflow-hidden rounded-2xl bg-gradient-to-l from-[#AD96F1] to-[#C4B3F6] px-7 py-4 text-[15.5px] font-black text-on-accent shadow-[0_18px_50px_-12px_rgba(196, 179, 246,0.65)] transition hover:-translate-y-0.5"
+                className="group relative overflow-hidden rounded-2xl bg-gradient-to-l from-[#0297DE] to-[#5CC4FF] px-7 py-4 text-[15.5px] font-black text-on-accent shadow-[0_18px_50px_-12px_rgba(92, 196, 255,0.65)] transition hover:-translate-y-0.5"
               >
                 <span className="relative z-10">می‌خوام سایت خودم رو داشته باشم</span>
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-l from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
@@ -168,7 +168,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
                   key={t.id}
                   onClick={() => setTradeId(t.id)}
                   className={`shrink-0 rounded-full border px-4 py-2 text-[13px] font-bold transition ${
-                    t.id === trade.id ? "border-transparent bg-white text-[#010102]" : "border-white/10 text-white/70 hover:border-white/30 hover:text-white"
+                    t.id === trade.id ? "border-transparent bg-white text-[#02070A]" : "border-white/10 text-white/70 hover:border-white/30 hover:text-white"
                   }`}
                 >
                   {t.label}
@@ -182,7 +182,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
       {/* live demo */}
       <Section id="demo" className="scroll-mt-20 py-16">
         <motion.div variants={fadeUp} className="mb-8 text-center">
-          <span className="text-[13px] font-bold tracking-wide text-[#C4B3F6]">دموی زنده</span>
+          <span className="text-[13px] font-bold tracking-wide text-[#5CC4FF]">دموی زنده</span>
           <h2 className="mt-2 font-display text-[30px] leading-[1.45] sm:text-[42px]">
             سایت <span className="text-[color-mix(in_srgb,var(--tc)_45%,#ffffff)]">«{brand}»</span> این شکلی می‌شه
           </h2>
@@ -194,7 +194,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
               <button
                 key={d}
                 onClick={() => setDevice(d)}
-                className={`rounded-full px-5 py-2 text-[13px] font-bold transition ${device === d ? "bg-white text-[#010102]" : "text-white/60 hover:text-white"}`}
+                className={`rounded-full px-5 py-2 text-[13px] font-bold transition ${device === d ? "bg-white text-[#02070A]" : "text-white/60 hover:text-white"}`}
               >
                 {d === "phone" ? "📱 موبایل" : "💻 دسکتاپ"}
               </button>
@@ -209,7 +209,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
       {/* before / after */}
       <Section className="py-16">
         <motion.h2 variants={fadeUp} className="mb-10 text-center font-display text-[30px] sm:text-[40px]">
-          الان کجایی؟ <span className="text-[#C4B3F6]">کجا می‌تونی باشی؟</span>
+          الان کجایی؟ <span className="text-[#5CC4FF]">کجا می‌تونی باشی؟</span>
         </motion.h2>
         <div className="grid gap-5 md:grid-cols-2">
           <motion.div variants={fadeUp} className="rounded-3xl border border-white/[0.07] bg-white/[0.025] p-7">
@@ -228,7 +228,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
           </motion.div>
           <motion.div
             variants={fadeUp}
-            className="relative overflow-hidden rounded-3xl border border-[#C4B3F6]/30 bg-gradient-to-br from-[#AD96F1]/25 via-[#010102] to-[color-mix(in_srgb,var(--tc)_30%,#010102)] p-7 shadow-[0_30px_80px_-30px_rgba(196, 179, 246,0.5)]"
+            className="relative overflow-hidden rounded-3xl border border-[#5CC4FF]/30 bg-gradient-to-br from-[#0297DE]/25 via-[#02070A] to-[color-mix(in_srgb,var(--tc)_30%,#02070A)] p-7 shadow-[0_30px_80px_-30px_rgba(92, 196, 255,0.5)]"
           >
             <div className="mb-5 flex items-center gap-3">
               <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#3ddc97]/15 text-[20px]">🚀</span>
@@ -249,7 +249,7 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
       {/* features */}
       <Section className="py-16">
         <motion.div variants={fadeUp} className="mb-10 text-center">
-          <span className="text-[13px] font-bold text-[#C4B3F6]">همه‌چی که لازم داری</span>
+          <span className="text-[13px] font-bold text-[#5CC4FF]">همه‌چی که لازم داری</span>
           <h2 className="mt-2 font-display text-[30px] sm:text-[40px]">سایتی که کار می‌کنه، نه فقط قشنگه</h2>
         </motion.div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -273,10 +273,10 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
       {/* steps */}
       <Section className="py-16">
         <motion.h2 variants={fadeUp} className="mb-12 text-center font-display text-[30px] sm:text-[40px]">
-          از این صفحه تا سایت خودت، <span className="text-[#C4B3F6]">۴ قدم</span>
+          از این صفحه تا سایت خودت، <span className="text-[#5CC4FF]">۴ قدم</span>
         </motion.h2>
         <div className="relative grid gap-6 md:grid-cols-4">
-          <div className="absolute right-[12.5%] left-[12.5%] top-7 hidden h-px bg-gradient-to-l from-[#C4B3F6]/0 via-[#C4B3F6]/50 to-[#C4B3F6]/0 md:block" />
+          <div className="absolute right-[12.5%] left-[12.5%] top-7 hidden h-px bg-gradient-to-l from-[#5CC4FF]/0 via-[#5CC4FF]/50 to-[#5CC4FF]/0 md:block" />
           {[
             ["📝", "ثبت درخواست", "فرم پایین رو پر کن؛ کمتر از یه دقیقه."],
             ["📞", "مشاوره‌ی رایگان", "باهات تماس می‌گیریم و نیازت رو دقیق می‌پرسیم."],
@@ -284,9 +284,9 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
             ["🚀", "تحویل و آموزش", "سایت آنلاین می‌شه و پنلش رو یادت می‌دیم."],
           ].map(([icon, t, d], i) => (
             <motion.div key={t} variants={fadeUp} className="relative text-center">
-              <div className="relative mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-[#C4B3F6]/30 bg-[#0e0b1c] text-[24px] shadow-[0_0_30px_-6px_rgba(196, 179, 246,0.6)]">
+              <div className="relative mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-[#5CC4FF]/30 bg-[#07131B] text-[24px] shadow-[0_0_30px_-6px_rgba(92, 196, 255,0.6)]">
                 {icon}
-                <span className="absolute -top-2 -left-2 grid h-6 w-6 place-items-center rounded-full bg-[#C4B3F6] text-[12px] font-black text-[#010102]">
+                <span className="absolute -top-2 -left-2 grid h-6 w-6 place-items-center rounded-full bg-[#5CC4FF] text-[12px] font-black text-[#02070A]">
                   {(i + 1).toLocaleString("fa-IR")}
                 </span>
               </div>
@@ -331,8 +331,8 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
       </footer>
 
       {/* mobile sticky bar (covers the site-wide one, which points to the home page) */}
-      <div className="fixed inset-x-0 bottom-0 z-[100] flex gap-2 border-t border-white/10 bg-[#010102]/95 px-4 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 backdrop-blur sm:hidden">
-        <button onClick={() => scrollTo("order")} className="flex-1 rounded-xl bg-gradient-to-l from-[#AD96F1] to-[#C4B3F6] py-3 text-[14.5px] font-black text-on-accent">
+      <div className="fixed inset-x-0 bottom-0 z-[100] flex gap-2 border-t border-white/10 bg-[#02070A]/95 px-4 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 backdrop-blur sm:hidden">
+        <button onClick={() => scrollTo("order")} className="flex-1 rounded-xl bg-gradient-to-l from-[#0297DE] to-[#5CC4FF] py-3 text-[14.5px] font-black text-on-accent">
           ثبت سفارش سایت
         </button>
         <a href={WA} target="_blank" rel="noreferrer" aria-label="واتساپ" className="grid w-12 place-items-center rounded-xl bg-[#25D366] text-white">
@@ -350,9 +350,9 @@ export default function OfferLanding({ trades, initialTrade, name, code }: Props
 function Backdrop() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden">
-      <div className="absolute -right-40 -top-40 h-[560px] w-[560px] animate-[orb_18s_ease-in-out_infinite] rounded-full bg-[#AD96F1] opacity-[0.28] blur-[120px]" />
+      <div className="absolute -right-40 -top-40 h-[560px] w-[560px] animate-[orb_18s_ease-in-out_infinite] rounded-full bg-[#0297DE] opacity-[0.28] blur-[120px]" />
       <div className="absolute -left-40 top-1/3 h-[520px] w-[520px] animate-[orb_22s_ease-in-out_infinite_reverse] rounded-full bg-[var(--tc)] opacity-[0.22] blur-[130px] transition-colors duration-700" />
-      <div className="absolute bottom-[-200px] right-1/4 h-[480px] w-[480px] animate-[orb_26s_ease-in-out_infinite] rounded-full bg-[#C4B3F6] opacity-[0.15] blur-[120px]" />
+      <div className="absolute bottom-[-200px] right-1/4 h-[480px] w-[480px] animate-[orb_26s_ease-in-out_infinite] rounded-full bg-[#5CC4FF] opacity-[0.15] blur-[120px]" />
       <div
         className="absolute inset-0 opacity-[0.07]"
         style={{
@@ -373,7 +373,7 @@ function FloatTag({ className, icon, title, delay = 0 }: { className: string; ic
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
       transition={{ opacity: { delay: 0.8 + delay, duration: 0.5 }, scale: { delay: 0.8 + delay, duration: 0.5 }, y: { delay, duration: 4, repeat: Infinity, ease: "easeInOut" } }}
-      className={`absolute z-10 flex items-center gap-2 whitespace-nowrap rounded-2xl border border-white/10 bg-[#0e0b1c]/80 px-3.5 py-2.5 text-[13px] font-bold shadow-2xl backdrop-blur-xl ${className}`}
+      className={`absolute z-10 flex items-center gap-2 whitespace-nowrap rounded-2xl border border-white/10 bg-[#07131B]/80 px-3.5 py-2.5 text-[13px] font-bold shadow-2xl backdrop-blur-xl ${className}`}
     >
       <span className="text-[18px]">{icon}</span>
       {title}
@@ -390,8 +390,8 @@ function Frame({ src, title }: { src: string; title: string }) {
   return (
     <>
       {loadedSrc !== src && (
-        <div className="absolute inset-0 grid place-items-center bg-[#0e0b1c]">
-          <span className="h-8 w-8 animate-spin rounded-full border-2 border-white/15 border-t-[#C4B3F6]" />
+        <div className="absolute inset-0 grid place-items-center bg-[#07131B]">
+          <span className="h-8 w-8 animate-spin rounded-full border-2 border-white/15 border-t-[#5CC4FF]" />
         </div>
       )}
       {mounted && (
@@ -404,7 +404,7 @@ function Frame({ src, title }: { src: string; title: string }) {
 function Phone({ src, big = false }: { src: string; big?: boolean }) {
   return (
     <div
-      className={`relative rounded-[46px] border border-white/15 bg-gradient-to-b from-[#1b2236] to-[#0b0f1c] p-3 shadow-[0_50px_120px_-30px_rgba(173, 150, 241,0.55)] ${
+      className={`relative rounded-[46px] border border-white/15 bg-gradient-to-b from-[#1b2236] to-[#0b0f1c] p-3 shadow-[0_50px_120px_-30px_rgba(2, 151, 222,0.55)] ${
         big ? "h-[680px] w-[340px]" : "h-[600px] w-[300px]"
       }`}
     >
@@ -419,7 +419,7 @@ function Phone({ src, big = false }: { src: string; big?: boolean }) {
 function Laptop({ src }: { src: string }) {
   return (
     <div className="w-full max-w-[1000px]">
-      <div className="rounded-t-[22px] border border-b-0 border-white/15 bg-[#121828] p-2.5 pb-0 shadow-[0_50px_120px_-30px_rgba(173, 150, 241,0.55)]">
+      <div className="rounded-t-[22px] border border-b-0 border-white/15 bg-[#121828] p-2.5 pb-0 shadow-[0_50px_120px_-30px_rgba(2, 151, 222,0.55)]">
         <div className="mb-2 flex items-center gap-1.5 px-2">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
@@ -440,7 +440,7 @@ function Faq({ q, a }: { q: string; a: string }) {
     <motion.div variants={fadeUp} className="overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03]">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between gap-4 p-5 text-right text-[15.5px] font-bold">
         {q}
-        <motion.span animate={{ rotate: open ? 45 : 0 }} className="text-[22px] text-[#C4B3F6]">
+        <motion.span animate={{ rotate: open ? 45 : 0 }} className="text-[22px] text-[#5CC4FF]">
           +
         </motion.span>
       </button>
@@ -459,7 +459,7 @@ function OrderForm({ brand, tradeLabel, code }: { brand: string; tradeLabel: str
   const [state, setState] = useState<{ ok: boolean; message: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const field =
-    "w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3.5 text-[15px] text-white outline-none transition placeholder:text-white/35 focus:border-[#C4B3F6] focus:bg-white/[0.08]";
+    "w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3.5 text-[15px] text-white outline-none transition placeholder:text-white/35 focus:border-[#5CC4FF] focus:bg-white/[0.08]";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -481,9 +481,9 @@ function OrderForm({ brand, tradeLabel, code }: { brand: string; tradeLabel: str
   return (
     <motion.div
       variants={fadeUp}
-      className="relative mx-auto max-w-[880px] overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#16102e] via-[#0c0918] to-[#0a0716] p-6 shadow-[0_40px_120px_-40px_rgba(196, 179, 246,0.55)] sm:p-10"
+      className="relative mx-auto max-w-[880px] overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0A1C28] via-[#06111A] to-[#050E15] p-6 shadow-[0_40px_120px_-40px_rgba(92, 196, 255,0.55)] sm:p-10"
     >
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[70%] -translate-x-1/2 rounded-full bg-[#C4B3F6] opacity-20 blur-[90px]" />
+      <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[70%] -translate-x-1/2 rounded-full bg-[#5CC4FF] opacity-20 blur-[90px]" />
       <AnimatePresence mode="wait">
         {state?.ok ? (
           <motion.div key="done" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative py-10 text-center">
@@ -491,9 +491,9 @@ function OrderForm({ brand, tradeLabel, code }: { brand: string; tradeLabel: str
               initial={{ scale: 0, rotate: -90 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 220, damping: 14 }}
-              className="mx-auto mb-6 grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-[#3ddc97] to-[#C4B3F6] shadow-[0_0_60px_-10px_rgba(61,220,151,0.8)]"
+              className="mx-auto mb-6 grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-[#3ddc97] to-[#5CC4FF] shadow-[0_0_60px_-10px_rgba(61,220,151,0.8)]"
             >
-              <svg viewBox="0 0 24 24" className="h-12 w-12 text-[#010102]" fill="none" stroke="currentColor" strokeWidth={3}>
+              <svg viewBox="0 0 24 24" className="h-12 w-12 text-[#02070A]" fill="none" stroke="currentColor" strokeWidth={3}>
                 <motion.path d="M5 12l5 5L19 7" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.3, duration: 0.5 }} />
               </svg>
             </motion.div>
@@ -520,7 +520,7 @@ function OrderForm({ brand, tradeLabel, code }: { brand: string; tradeLabel: str
             {state && !state.ok && <p className="mt-4 rounded-xl bg-red-500/10 p-3 text-center text-[14px] text-red-300">{state.message}</p>}
             <button
               disabled={busy}
-              className="group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-l from-[#AD96F1] to-[#C4B3F6] py-[18px] text-[17px] font-black text-on-accent shadow-[0_20px_60px_-15px_rgba(196, 179, 246,0.8)] transition hover:-translate-y-0.5 disabled:opacity-60"
+              className="group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-l from-[#0297DE] to-[#5CC4FF] py-[18px] text-[17px] font-black text-on-accent shadow-[0_20px_60px_-15px_rgba(92, 196, 255,0.8)] transition hover:-translate-y-0.5 disabled:opacity-60"
             >
               <span className="relative z-10">{busy ? "در حال ثبت…" : "ثبت درخواست و مشاوره‌ی رایگان"}</span>
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-l from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />

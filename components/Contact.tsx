@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import BrandMark from "./BrandMark";
 import Reveal from "./Reveal";
 import ContactForm from "./ContactForm";
 import { getCurrentUser } from "@/lib/session";
@@ -64,53 +63,30 @@ export default async function Contact() {
     <section id="contact" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px] pt-[120px] text-center">
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        {/* CTA نهایی — همون آسمون لوندر و سکه‌ی مشکی هیرو، به‌عنوان «بسته‌شدن» داستان صفحه */}
-        <div data-gsap="zoom" className="theme-sky relative isolate overflow-hidden rounded-[36px] px-6 pb-16 pt-14 text-[#010102] shadow-[0_50px_120px_-50px_rgb(173_150_241/0.8)] sm:px-10">
-          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-            <div className="sky-hero__base absolute inset-0" />
-            <span className="sky-aurora left-[-10%] top-[20%] h-[70%] w-[45%] bg-[#ff8ad8]" />
-            <span className="sky-aurora right-[-8%] top-[5%] h-[60%] w-[40%] bg-[#7fe3ff] [animation-delay:-7s]" />
-            <div className="sky-cloud left-[-4%] top-[4%] h-[30%] w-[40%] opacity-80">
-              <span style={{ left: "0%", top: "30%", width: "34%", aspectRatio: "1" }} />
-              <span style={{ left: "20%", top: "10%", width: "38%", aspectRatio: "1" }} />
-              <span style={{ left: "46%", top: "28%", width: "32%", aspectRatio: "1" }} />
-            </div>
-            <div className="sky-cloud right-[-4%] bottom-[6%] h-[30%] w-[44%] opacity-70 [animation-delay:-12s]">
-              <span style={{ left: "4%", top: "30%", width: "32%", aspectRatio: "1" }} />
-              <span style={{ left: "28%", top: "12%", width: "38%", aspectRatio: "1" }} />
-              <span style={{ left: "56%", top: "30%", width: "30%", aspectRatio: "1" }} />
-            </div>
+        {/* CTA نهایی — یه پرده‌ی نور کوچیک، مثل هیرو: «بسته‌شدن» داستان صفحه */}
+        <div data-gsap="zoom" className="relative isolate overflow-hidden rounded-[36px] border border-white/10 px-6 pb-20 pt-16 text-white shadow-[0_60px_140px_-60px_rgb(2_151_222/0.7)] sm:px-10">
+          <div aria-hidden className="curtain -z-10">
+            <div className="curtain__glow" />
+            <div className="curtain__lines" />
+            <div className="curtain__vignette" />
+            <div className="curtain__grain" />
           </div>
-          <div className="sky-coin-stage mx-auto mb-12 !w-[120px]">
-            <span className="sky-coin__halo" />
-            <div className="sky-coin-wrap">
-              <div className="sky-coin">
-                <span className="sky-coin__edge" />
-                <span className="sky-coin__face">
-                  <BrandMark className="sky-coin__logo" idSuffix="cta" />
-                  <span className="sky-coin__shine" />
-                </span>
-              </div>
-              <span className="sky-coin__shadow" />
-            </div>
-          </div>
-          <span className="mb-[22px] inline-flex items-center gap-2 rounded-md border border-[#010102]/15 bg-white/55 px-3.5 py-1.5 text-[12.5px] font-bold text-[#010102]">
-            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-[#7C5CE6]" />
+          <span className="mono-label mb-7 rounded-full border border-white/15 bg-white/[0.05] px-4 py-1.5 !text-white/80 backdrop-blur">
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
-          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[34px] leading-[1.3] sm:text-[46px] lg:text-[60px]">
-            بیا یه چیز خفن با هم بسازیم.
+          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[36px] leading-[1.45] sm:text-[48px] lg:text-[62px]">
+            بیا یه چیز <span className="text-ember">خفن</span> با هم بسازیم<span className="font-serif italic text-[#fc734d]">.</span>
           </h2>
-          <p className="mx-auto mb-3 max-w-[48ch] text-base text-[#1A1033]/75">
+          <p className="mx-auto mb-3 max-w-[48ch] font-mono text-[14px] leading-8 text-white/70">
             برای پنل مدیریت، فروشگاه آنلاین، یا هر ایده‌ای که تو سرته، پیام بده — سریع جواب می‌دیم.
           </p>
-          <p className="mx-auto mb-10 text-[12.5px] text-white/85">بدون تعهد، بدون هزینه</p>
+          <p className="mx-auto mb-10 font-mono text-[12px] text-white/50">بدون تعهد، بدون هزینه</p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
               href="https://wa.me/989965745535"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-black text-[#010102] shadow-[0_14px_40px_-12px_rgba(26,16,51,0.55)] transition hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-black text-[#02070A] shadow-[0_14px_40px_-12px_rgba(252,115,77,0.6)] transition hover:-translate-y-0.5"
             >
               شروع گفتگو در واتساپ
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -119,7 +95,7 @@ export default async function Contact() {
             </a>
             <a
               href="tel:+989965745535"
-              className="inline-flex items-center gap-2 rounded-full bg-[#010102] px-8 py-4 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-[#1A1033]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/[0.06] px-8 py-4 text-base font-black text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15"
             >
               تماس مستقیم
             </a>

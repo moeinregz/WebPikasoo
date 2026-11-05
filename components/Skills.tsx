@@ -105,11 +105,11 @@ export default function Skills() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-dot-grid" />
       <span
         className="pointer-events-none absolute -right-[220px] -top-[260px] z-0 h-[640px] w-[640px] rounded-full opacity-45 blur-[130px]"
-        style={{ background: "rgba(173, 150, 241, .35)" }}
+        style={{ background: "rgba(2, 151, 222, .35)" }}
       />
       <span
         className="pointer-events-none absolute -left-[180px] -bottom-[240px] z-0 h-[520px] w-[520px] rounded-full opacity-35 blur-[130px]"
-        style={{ background: "rgba(124, 92, 230, .35)" }}
+        style={{ background: "rgba(252, 115, 77, .35)" }}
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">

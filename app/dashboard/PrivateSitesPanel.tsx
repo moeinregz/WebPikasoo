@@ -538,7 +538,7 @@ function SiteFeaturesEditor({ site }: { site: PrivateSite }) {
                 checked={checked}
                 disabled={locked}
                 onChange={() => toggle(d.id)}
-                className="mt-1 h-4 w-4 accent-[#AD96F1]"
+                className="mt-1 h-4 w-4 accent-[#0297DE]"
               />
               <span className="min-w-0">
                 <span className="block text-[13.5px] font-bold">
