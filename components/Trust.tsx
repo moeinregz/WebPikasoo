@@ -12,7 +12,7 @@ export default function Trust() {
     { n: `+${businessSites.length.toLocaleString("fa-IR")}`, t: "نمونه‌سایت" },
   ];
   return (
-    <section id="trust" className="section-invert relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
+    <section id="trust" className="section-light relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[480px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
