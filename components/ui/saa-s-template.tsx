@@ -153,9 +153,9 @@ export default function SaasHero() {
         <div id="work" data-hero-item className="relative w-full max-w-5xl scroll-mt-[90px]">
           <div aria-hidden className="pointer-events-none absolute left-1/2 top-[8%] z-0 h-[70%] w-[80%] -translate-x-1/2 rounded-full bg-ink/[0.10] blur-[90px]" />
           <div className="relative z-10 mx-auto flex items-center justify-center">
-            <PreviewCard {...PREVIEWS[0]} className="absolute right-0 top-[10%] hidden w-[34%] translate-x-[-4%] rotate-[7deg] opacity-80 sm:block" />
-            <PreviewCard {...PREVIEWS[2]} className="absolute left-0 top-[10%] hidden w-[34%] translate-x-[4%] -rotate-[7deg] opacity-80 sm:block" />
-            <PreviewCard {...PREVIEWS[1]} priority className="relative z-10 w-[88%] sm:w-[48%]" />
+            <PreviewCard {...PREVIEWS[0]} className="absolute right-0 top-[12%] w-[40%] rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[-4%] sm:rotate-[7deg]" />
+            <PreviewCard {...PREVIEWS[2]} className="absolute left-0 top-[12%] w-[40%] -rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[4%] sm:-rotate-[7deg]" />
+            <PreviewCard {...PREVIEWS[1]} priority className="relative z-10 w-[58%] sm:w-[48%]" />
           </div>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function SaasHero() {
 function PreviewCard({ src, alt, className = "", priority = false }: { src: string; alt: string; className?: string; priority?: boolean }) {
   return (
     <div className={`overflow-hidden rounded-2xl border border-ink/15 bg-surface p-1.5 shadow-2xl shadow-black/40 ${className}`}>
-      <Image src={src} alt={alt} width={1254} height={1254} priority={priority} sizes="(min-width: 640px) 48vw, 88vw" className="h-auto w-full rounded-xl" />
+      <Image src={src} alt={alt} width={1254} height={1254} priority={priority} sizes="(min-width: 640px) 48vw, 58vw" className="h-auto w-full rounded-xl" />
     </div>
   );
 }

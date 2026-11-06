@@ -21,12 +21,12 @@
        sections; accents use the same two colors (no hue). */
     --color-ink: 238 236 231;
     --color-dim: 155 152 146;
-    --color-canvas: 21 21 24;
-    --color-surface: 30 30 35;
+    --color-canvas: 10 10 12;
+    --color-surface: 20 20 24;
       --color-accent: 238 236 231;
     --color-accent2: 205 202 195;
     --color-accent3: 238 236 231;
-    --color-on-accent: 21 21 24;
+    --color-on-accent: 10 10 12;
 }
 
   html {
@@ -357,7 +357,7 @@
   }
   .dark {
     --matte-shadow: 88 87 94; /* حالت تاریک: خاکستری مات */
-    --matte-border: 58 57 64;
+    --matte-border: 44 44 50;
   }
 }
 
@@ -465,16 +465,16 @@
   .section-invert {
     --color-ink: 238 236 231;
     --color-dim: 155 152 146;
-    --color-canvas: 21 21 24;
-    --color-surface: 30 30 35;
+    --color-canvas: 10 10 12;
+    --color-surface: 20 20 24;
     --matte-shadow: 88 87 94;
-    --matte-border: 58 57 64;
+    --matte-border: 44 44 50;
     background-color: rgb(var(--color-canvas));
     color: rgb(var(--color-ink));
       --color-accent: 238 236 231;
     --color-accent2: 205 202 195;
     --color-accent3: 238 236 231;
-    --color-on-accent: 21 21 24;
+    --color-on-accent: 10 10 12;
 }
   .dark .section-invert {
     --color-ink: 22 22 26;
@@ -488,4 +488,18 @@
     --color-accent3: 22 22 26;
     --color-on-accent: 244 242 237;
 }
+}
+
+@layer components {
+  /* Sections that used to be off-white bands: they stay dark like the rest
+     of the page and get a soft white light from the top instead — white is
+     used as light, kept faint. */
+  .section-light {
+    background-image:
+      radial-gradient(ellipse 55% 45% at 50% 0%, rgb(255 255 255 / 0.07), transparent 70%),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.015), transparent 40%);
+  }
+  :root:not(.dark) .section-light {
+    background-image: radial-gradient(ellipse 55% 45% at 50% 0%, rgb(0 0 0 / 0.04), transparent 70%);
+  }
 }

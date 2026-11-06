@@ -56,7 +56,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="section-invert relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]"
+      className="section-light relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]"
     >
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[420px] bg-dot-grid" />
 

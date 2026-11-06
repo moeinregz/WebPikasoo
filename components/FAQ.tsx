@@ -43,7 +43,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="section-invert relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
+    <section id="faq" className="section-light relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
       <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-12">
           <div>
