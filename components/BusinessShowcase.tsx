@@ -200,10 +200,14 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
 
         {filtered.length > 0 ? (
           <Reveal>
+            {/* full-bleed: the carousel spans the whole viewport width, not
+                just the centered container, so side cards aren't cut early */}
+            <div className="mx-[calc(50%-50vw)] w-screen">
             <CarouselStacked
               key={`${activeCategory}|${query}`}
               slides={filtered.map((s) => ({ image: s.image, title: s.name, description: s.desc, badge: s.category, href: s.url }))}
             />
+            </div>
             <p className="mt-1 text-center text-[12.5px] text-dim">کارت‌ها رو بکش یا با فلش‌ها جابه‌جا کن؛ روی کارت جلویی بزن تا سایت باز بشه.</p>
           </Reveal>
         ) : (
