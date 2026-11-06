@@ -31,7 +31,7 @@ function Save({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-5 py-2 text-[13px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-5 py-2 text-[13px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "..." : label}
     </button>
@@ -289,7 +289,7 @@ export default function AdminAttendancePanel({
                 setAdding(true);
                 setEditingId(null);
               }}
-              className="rounded-full border border-accent/40 px-4 py-1.5 text-[12.5px] font-bold text-accent transition hover:bg-accent hover:text-black"
+              className="rounded-full border border-accent/40 px-4 py-1.5 text-[12.5px] font-bold text-accent transition hover:bg-accent hover:text-on-accent"
             >
               + افزودن دستی
             </button>

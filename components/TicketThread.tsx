@@ -29,7 +29,7 @@ function SendButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ارسال..." : label}
     </button>

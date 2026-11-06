@@ -55,7 +55,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال آپلود..." : "آپلود و ساخت لینک"}
     </button>
@@ -408,7 +408,7 @@ function SiteImagesEditor({ site }: { site: PrivateSite }) {
           <button
             type="button"
             onClick={() => bulkRef.current?.click()}
-            className="rounded-full bg-accent px-4 py-2 text-[12.5px] font-semibold text-black transition hover:-translate-y-0.5"
+            className="rounded-full bg-accent px-4 py-2 text-[12.5px] font-semibold text-on-accent transition hover:-translate-y-0.5"
           >
             آپلود چند عکس یکجا
           </button>
@@ -538,7 +538,7 @@ function SiteFeaturesEditor({ site }: { site: PrivateSite }) {
                 checked={checked}
                 disabled={locked}
                 onChange={() => toggle(d.id)}
-                className="mt-1 h-4 w-4 accent-[#8A4DFF]"
+                className="mt-1 h-4 w-4 accent-[#D9D7D1]"
               />
               <span className="min-w-0">
                 <span className="block text-[13.5px] font-bold">
@@ -557,7 +557,7 @@ function SiteFeaturesEditor({ site }: { site: PrivateSite }) {
           type="button"
           onClick={save}
           disabled={busy || !dirty}
-          className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-40"
+          className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-40"
         >
           {busy ? "در حال ذخیره..." : "ذخیره‌ی قابلیت‌ها"}
         </button>

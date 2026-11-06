@@ -63,7 +63,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ثبت..." : "افزودن پیج/کانال"}
     </button>
@@ -181,7 +181,7 @@ function ChannelStatusCell({ channel }: { channel: Channel }) {
             <button type="button" onClick={() => setConfirmOpen(false)} className="rounded-full border border-ink/[0.18] px-5 py-2.5 text-[13.5px] font-bold text-dim transition hover:border-accent hover:text-accent">
               انصراف
             </button>
-            <button type="button" onClick={confirmAccept} autoFocus className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5">
+            <button type="button" onClick={confirmAccept} autoFocus className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-on-accent transition hover:-translate-y-0.5">
               بله، ثبت کن
             </button>
           </div>
@@ -218,7 +218,7 @@ function Modal({ children, onClose }: { children: ReactNode; onClose: () => void
 function SaveInfoButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:opacity-60">
+    <button type="submit" disabled={pending} className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:opacity-60">
       {pending ? "در حال ذخیره..." : "ذخیره"}
     </button>
   );

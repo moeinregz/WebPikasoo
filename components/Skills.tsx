@@ -75,7 +75,7 @@ function GroupHead({
 }) {
   return (
     <div className="mb-6 flex items-center gap-3.5">
-      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-white">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-on-accent">
         {num}
       </span>
       <h3
@@ -105,11 +105,11 @@ export default function Skills() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-dot-grid" />
       <span
         className="pointer-events-none absolute -right-[220px] -top-[260px] z-0 h-[640px] w-[640px] rounded-full opacity-45 blur-[130px]"
-        style={{ background: "rgba(138, 77, 255, .35)" }}
+        style={{ background: "rgba(217, 215, 209, .35)" }}
       />
       <span
         className="pointer-events-none absolute -left-[180px] -bottom-[240px] z-0 h-[520px] w-[520px] rounded-full opacity-35 blur-[130px]"
-        style={{ background: "rgba(91, 33, 214, .35)" }}
+        style={{ background: "rgba(74, 74, 82, .35)" }}
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">

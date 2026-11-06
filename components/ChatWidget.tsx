@@ -292,7 +292,7 @@ export default function ChatWidget() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="گفتگو با دستیار وب پیکاسو"
-          className="fixed bottom-[calc(env(safe-area-inset-bottom)+16px)] right-4 z-[95] flex items-center gap-2 rounded-full bg-accent py-3 pl-5 pr-3.5 text-white shadow-lg ring-4 ring-accent/20 transition hover:bg-accent2 sm:bottom-6 sm:right-6"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+16px)] right-4 z-[95] flex items-center gap-2 rounded-full bg-accent py-3 pl-5 pr-3.5 text-on-accent shadow-lg ring-4 ring-accent/20 transition hover:bg-accent2 sm:bottom-6 sm:right-6"
         >
           <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-white/15">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">
@@ -311,7 +311,7 @@ export default function ChatWidget() {
           aria-label={inTeam ? "گفتگو با کارشناس وب پیکاسو" : "دستیار وب پیکاسو"}
           className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+12px)] top-[72px] z-[95] flex flex-col overflow-hidden rounded-card border border-ink/15 bg-canvas shadow-2xl sm:inset-x-auto sm:bottom-6 sm:right-6 sm:top-auto sm:h-[620px] sm:max-h-[calc(100vh-48px)] sm:w-[400px]"
         >
-          <div className="flex items-center justify-between border-b border-ink/10 bg-accent px-4 py-3 text-white">
+          <div className="flex items-center justify-between border-b border-ink/10 bg-accent px-4 py-3 text-on-accent">
             <div>
               <p className="text-[15px] font-bold">{inTeam ? "گفتگو با کارشناس" : "دستیار وب پیکاسو"}</p>
               <p className="text-[12px] opacity-85">
@@ -394,7 +394,7 @@ export default function ChatWidget() {
                     <input name="phone" required inputMode="tel" dir="ltr" maxLength={20} placeholder="09xxxxxxxxx" className="h-11 w-full rounded-xl border border-ink/15 bg-surface px-3 text-right text-[15px] text-ink outline-none focus:border-accent" />
                     <textarea name="message" rows={2} maxLength={2000} placeholder="موضوع یا سوالتون (اختیاری)" className="w-full resize-none rounded-xl border border-ink/15 bg-surface px-3 py-2 text-[15px] text-ink outline-none focus:border-accent" />
                     <div className="flex gap-2">
-                      <button type="submit" disabled={busy} className="h-10 flex-1 rounded-xl bg-accent text-[14px] font-bold text-white transition hover:bg-accent2 disabled:opacity-60">
+                      <button type="submit" disabled={busy} className="h-10 flex-1 rounded-xl bg-accent text-[14px] font-bold text-on-accent transition hover:bg-accent2 disabled:opacity-60">
                         وصل شدن به کارشناس
                       </button>
                       <button type="button" onClick={() => setHandoff(false)} className="h-10 rounded-xl border border-ink/20 px-3 text-[13px] text-ink">
@@ -410,7 +410,7 @@ export default function ChatWidget() {
 
           {closedTicket ? (
             <div className="border-t border-ink/10 p-3 text-center">
-              <button type="button" onClick={() => { write("local", TICKET_KEY, null); setTicket(null); setThread([]); }} className="h-11 w-full rounded-xl bg-accent text-[14px] font-bold text-white">
+              <button type="button" onClick={() => { write("local", TICKET_KEY, null); setTicket(null); setThread([]); }} className="h-11 w-full rounded-xl bg-accent text-[14px] font-bold text-on-accent">
                 شروع گفتگوی جدید
               </button>
             </div>
@@ -445,7 +445,7 @@ export default function ChatWidget() {
                 <button
                   type="submit"
                   disabled={!input.trim() || busy}
-                  className="h-11 shrink-0 rounded-xl bg-accent px-4 text-[14px] font-bold text-white transition hover:bg-accent2 disabled:opacity-50"
+                  className="h-11 shrink-0 rounded-xl bg-accent px-4 text-[14px] font-bold text-on-accent transition hover:bg-accent2 disabled:opacity-50"
                 >
                   ارسال
                 </button>
@@ -464,7 +464,7 @@ function Chip({ children, onClick, strong = false }: { children: React.ReactNode
       type="button"
       onClick={onClick}
       className={`rounded-full border px-3 py-1.5 text-[13px] transition ${
-        strong ? "border-accent bg-accent text-white hover:bg-accent2" : "border-accent/40 text-accent hover:bg-accent/10"
+        strong ? "border-accent bg-accent text-on-accent hover:bg-accent2" : "border-accent/40 text-accent hover:bg-accent/10"
       }`}
     >
       {children}
@@ -476,7 +476,7 @@ function Bubble({ role, content, label }: { role: "user" | "assistant"; content:
   if (role === "user") {
     return (
       <div className="flex justify-start">
-        <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-sm bg-accent px-3.5 py-2.5 text-[14.5px] leading-[1.8] text-white">{content}</p>
+        <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-sm bg-accent px-3.5 py-2.5 text-[14.5px] leading-[1.8] text-on-accent">{content}</p>
       </div>
     );
   }

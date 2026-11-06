@@ -15,7 +15,7 @@ type Filter = "all" | "new" | "read";
 function SaveButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-bold text-black transition hover:-translate-y-0.5 disabled:opacity-60">
+    <button type="submit" disabled={pending} className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:opacity-60">
       {pending ? "..." : "ذخیره‌ی بازخورد"}
     </button>
   );
@@ -82,7 +82,7 @@ export default function AdminReportsPanel({ reports, staff }: { reports: WorkRep
               type="button"
               onClick={() => setFilter(k)}
               className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
-                filter === k ? "border-accent bg-accent text-black" : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
+                filter === k ? "border-accent bg-accent text-on-accent" : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
               }`}
             >
               {label} · {fa(n)}

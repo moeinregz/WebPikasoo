@@ -21,11 +21,11 @@ export default function PageHero({
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
       <span
         className="pointer-events-none absolute -right-[180px] -top-[220px] z-0 h-[560px] w-[560px] rounded-full opacity-40 blur-[130px]"
-        style={{ background: "rgba(138, 77, 255, .35)" }}
+        style={{ background: "rgba(217, 215, 209, .35)" }}
       />
       <span
         className="pointer-events-none absolute -left-[200px] -bottom-[240px] z-0 h-[480px] w-[480px] rounded-full opacity-30 blur-[130px]"
-        style={{ background: "rgba(91, 33, 214, .35)" }}
+        style={{ background: "rgba(74, 74, 82, .35)" }}
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6 pt-14 text-center sm:pt-16">

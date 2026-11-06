@@ -10,7 +10,7 @@ function ReplyButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ارسال..." : "ارسال پاسخ و بستن تیکت"}
     </button>
@@ -50,7 +50,7 @@ export default function TicketActions({ ticketId, status }: { ticketId: number; 
         <button
           type="button"
           onClick={() => setReplying(true)}
-          className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-black transition hover:-translate-y-0.5"
+          className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-on-accent transition hover:-translate-y-0.5"
         >
           پاسخ به تیکت
         </button>

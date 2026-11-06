@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex w-full items-center justify-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[15px] font-black text-white disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
+      className="inline-flex w-full items-center justify-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[15px] font-black text-on-accent disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
     >
       {pending ? "در حال ارسال..." : "دریافت مشاوره رایگان"}
       {!pending && (

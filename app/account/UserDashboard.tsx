@@ -83,7 +83,7 @@ function ProjectsPanel({ projects }: { projects: ProjectItem[] }) {
         </p>
         <Link
           href="/#contact"
-          className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-black transition hover:-translate-y-0.5"
+          className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-on-accent transition hover:-translate-y-0.5"
         >
           رفتن به فرم تماس
         </Link>
@@ -211,11 +211,11 @@ export default function UserDashboard({
       <div className="relative mb-7 overflow-hidden rounded-card border border-ink/[0.1] bg-surface/40 p-7">
         <span
           className="pointer-events-none absolute -left-24 -top-24 h-56 w-56 rounded-full opacity-25 blur-[70px]"
-          style={{ background: "linear-gradient(135deg, #8A4DFF, #B794FF)" }}
+          style={{ background: "linear-gradient(135deg, #D9D7D1, #CFCDC7)" }}
         />
         <div className="relative flex flex-wrap items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-white shadow-[0_6px_18px_-4px_rgba(138, 77, 255,0.5)]">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent shadow-[0_6px_18px_-4px_rgba(217, 215, 209,0.5)]">
               <span className="font-display text-xl">{user.name.charAt(0)}</span>
             </div>
             <div>

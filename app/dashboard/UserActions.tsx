@@ -20,7 +20,7 @@ function SaveButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "..." : "ذخیره"}
     </button>

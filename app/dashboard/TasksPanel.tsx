@@ -31,7 +31,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ثبت..." : "محول کردن تسک"}
     </button>
@@ -154,7 +154,7 @@ function TaskCheckbox({ id, status }: { id: number; status: "open" | "done" }) {
       disabled={pending}
       aria-label={status === "done" ? "برگردوندن به حالت باز" : "علامت‌زدن به‌عنوان انجام‌شده"}
       className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition disabled:opacity-60 ${
-        status === "done" ? "border-accent bg-accent text-black" : "border-ink/[0.3] text-transparent hover:border-accent"
+        status === "done" ? "border-accent bg-accent text-on-accent" : "border-ink/[0.3] text-transparent hover:border-accent"
       }`}
     >
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} className="h-4 w-4">

@@ -6,18 +6,18 @@ import gsap from "gsap";
 // همون تکه‌های هندسیِ لوگوی کوبیستی (مثل PageLoader) — این‌جا با GSAP از
 // بیرون پرواز می‌کنن و یه «چهره» می‌سازن.
 const pieces = [
-  { points: "90,90 168,90 149.7,140.2", color: "#8A4DFF" },
-  { points: "90,90 149.7,140.2 96.8,167.7", color: "#B794FF" },
-  { points: "90,90 96.8,167.7 63.3,163.3", color: "#9D6BFF" },
-  { points: "90,90 63.3,163.3 16.7,116.7", color: "#C9B0FF" },
-  { points: "90,90 16.7,116.7 22.5,51", color: "#5B21D6" },
-  { points: "90,90 22.5,51 76.4,13.2", color: "#1E0B4B" },
-  { points: "90,90 76.4,13.2 129,22.5", color: "#DCCBFF" },
-  { points: "90,90 129,22.5 168,90", color: "#E6DAFF" },
+  { points: "90,90 168,90 149.7,140.2", color: "#D9D7D1" },
+  { points: "90,90 149.7,140.2 96.8,167.7", color: "#CFCDC7" },
+  { points: "90,90 96.8,167.7 63.3,163.3", color: "#BAB8B2" },
+  { points: "90,90 63.3,163.3 16.7,116.7", color: "#E4E2DC" },
+  { points: "90,90 16.7,116.7 22.5,51", color: "#4A4A52" },
+  { points: "90,90 22.5,51 76.4,13.2", color: "#1C1C20" },
+  { points: "90,90 76.4,13.2 129,22.5", color: "#ECEAE4" },
+  { points: "90,90 129,22.5 168,90", color: "#F0EEE9" },
 ];
 
 // ستون‌های پرده که آخر کار پله‌پله بالا می‌رن — رنگ‌ها از همون پالت سایت.
-const columns = ["#1E0B4B", "#5B21D6", "#8A4DFF", "#9D6BFF", "#B794FF"];
+const columns = ["#1C1C20", "#4A4A52", "#D9D7D1", "#BAB8B2", "#CFCDC7"];
 
 const BRAND = "WebPIKASO";
 const SEEN_KEY = "webpikaso-intro";

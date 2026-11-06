@@ -77,7 +77,7 @@ export function PanelLogin({ token, brand }: { token: string; brand: string }) {
           type="button"
           disabled={busy || !pw.trim()}
           onClick={() => void submit()}
-          className="mt-4 w-full rounded-full bg-accent px-6 py-3 text-[15px] font-bold text-black transition disabled:opacity-50"
+          className="mt-4 w-full rounded-full bg-accent px-6 py-3 text-[15px] font-bold text-on-accent transition disabled:opacity-50"
         >
           {busy ? "در حال ورود..." : "ورود"}
         </button>
@@ -239,7 +239,7 @@ function QrTab({ menuUrl, brand }: { menuUrl: string; brand: string }) {
         {menuUrl}
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
-        <button type="button" onClick={print} className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-black">
+        <button type="button" onClick={print} className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-on-accent">
           🖨️ چاپ
         </button>
         <button type="button" onClick={download} className="rounded-full border border-ink/[0.18] px-5 py-2.5 text-[13.5px] font-semibold text-dim hover:border-accent hover:text-accent">
@@ -417,7 +417,7 @@ export default function PanelClient({
               type="button"
               onClick={() => setTab(t)}
               className={`relative flex-none whitespace-nowrap rounded-full border px-4 py-2 text-[13.5px] font-bold transition ${
-                tab === t ? "border-accent bg-accent text-black" : "border-ink/[0.18] text-dim hover:border-accent"
+                tab === t ? "border-accent bg-accent text-on-accent" : "border-ink/[0.18] text-dim hover:border-accent"
               }`}
             >
               {TAB_META[t].icon} {TAB_META[t].label}
