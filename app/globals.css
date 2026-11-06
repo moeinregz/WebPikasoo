@@ -21,12 +21,12 @@
        sections; accents use the same two colors (no hue). */
     --color-ink: 238 236 231;
     --color-dim: 155 152 146;
-    --color-canvas: 10 10 12;
-    --color-surface: 20 20 24;
+    --color-canvas: 21 21 24;
+    --color-surface: 30 30 35;
       --color-accent: 238 236 231;
     --color-accent2: 205 202 195;
     --color-accent3: 238 236 231;
-    --color-on-accent: 10 10 12;
+    --color-on-accent: 21 21 24;
 }
 
   html {
@@ -357,7 +357,7 @@
   }
   .dark {
     --matte-shadow: 88 87 94; /* حالت تاریک: خاکستری مات */
-    --matte-border: 44 44 50;
+    --matte-border: 58 57 64;
   }
 }
 
@@ -465,16 +465,16 @@
   .section-invert {
     --color-ink: 238 236 231;
     --color-dim: 155 152 146;
-    --color-canvas: 10 10 12;
-    --color-surface: 20 20 24;
+    --color-canvas: 21 21 24;
+    --color-surface: 30 30 35;
     --matte-shadow: 88 87 94;
-    --matte-border: 44 44 50;
+    --matte-border: 58 57 64;
     background-color: rgb(var(--color-canvas));
     color: rgb(var(--color-ink));
       --color-accent: 238 236 231;
     --color-accent2: 205 202 195;
     --color-accent3: 238 236 231;
-    --color-on-accent: 10 10 12;
+    --color-on-accent: 21 21 24;
 }
   .dark .section-invert {
     --color-ink: 22 22 26;
