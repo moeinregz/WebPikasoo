@@ -11,9 +11,10 @@ import { Badge } from "@/components/ui/badge";
 // (21st.dev): same motion math (offset → x, y, rotate, scale, z-index,
 // wrap-around). Adaptations for the portfolio:
 // - slides come from props (the projects), not a hard-coded list;
-// - the project screenshots are landscape while cards are portrait, so a
-//   card shows the whole screenshot over a blurred, frosted copy of itself
-//   and puts the text on a frosted-glass panel at the bottom;
+// - the project screenshots are landscape, so the block's portrait
+//   cards are landscape (14:9, like the screenshots) so each screenshot
+//   fills its card edge to edge, with the text on a frosted-glass panel
+//   over the bottom of the image;
 // - a tap on the drag surface opens the front card's link; arrow buttons
 //   and the keyboard also move it;
 // - cards far from the front are not displayed, so a long list stays light;
@@ -39,12 +40,12 @@ interface CarouselConfig {
 
 const getCarouselConfig = (width: number): CarouselConfig => {
   if (width < 640) {
-    return { distanceDivisor: 120, velocityDivisor: 500, sensitivity: 180, xMultiplier: 110, yMultiplier: 20, rotationMultiplier: 8, scaleReduction: 0.07 };
+    return { distanceDivisor: 120, velocityDivisor: 500, sensitivity: 180, xMultiplier: 120, yMultiplier: 14, rotationMultiplier: 8, scaleReduction: 0.07 };
   }
   if (width < 1024) {
-    return { distanceDivisor: 160, velocityDivisor: 650, sensitivity: 220, xMultiplier: 170, yMultiplier: 30, rotationMultiplier: 10, scaleReduction: 0.09 };
+    return { distanceDivisor: 160, velocityDivisor: 650, sensitivity: 220, xMultiplier: 230, yMultiplier: 22, rotationMultiplier: 10, scaleReduction: 0.09 };
   }
-  return { distanceDivisor: 200, velocityDivisor: 800, sensitivity: 250, xMultiplier: 220, yMultiplier: 40, rotationMultiplier: 11, scaleReduction: 0.11 };
+  return { distanceDivisor: 200, velocityDivisor: 800, sensitivity: 250, xMultiplier: 300, yMultiplier: 28, rotationMultiplier: 11, scaleReduction: 0.11 };
 };
 
 const SPRING = { type: "spring" as const, stiffness: 200, damping: 30, mass: 1 };
@@ -106,7 +107,7 @@ export default function CarouselStacked({ slides, className }: { slides: Slide[]
         else if (e.key === "Enter") openActive();
       }}
     >
-      <div className="relative flex h-[22rem] w-full max-w-7xl items-center justify-center sm:h-[28rem] lg:h-[32rem]" dir="ltr">
+      <div className="relative flex h-[15rem] w-full max-w-7xl items-center justify-center sm:h-[22rem] lg:h-[27rem]" dir="ltr">
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
@@ -184,20 +185,14 @@ function Card({ slide, index, total, progress, config }: CardProps) {
   return (
     <motion.div
       style={{ x, rotate, y, scale, opacity, zIndex, display }}
-      className="pointer-events-none absolute h-80 w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#101013] shadow-2xl shadow-black/40 sm:h-[25rem] sm:w-72 lg:h-[28rem] lg:w-80"
+      className="pointer-events-none absolute aspect-[14/9] w-[78vw] max-w-[18rem] overflow-hidden rounded-2xl border border-white/10 bg-[#101013] shadow-2xl shadow-black/40 sm:max-w-none sm:w-[26rem] lg:w-[34rem]"
     >
       {slide.image ? (
-        <>
-          {/* frosted fill: the same screenshot, blurred, covering the card */}
-          <Image src={slide.image} alt="" fill sizes="96px" className="scale-125 object-cover opacity-70 blur-2xl" aria-hidden />
-          <div className="absolute inset-0 bg-black/30" />
-          {/* the whole screenshot, uncropped */}
-          <div className="absolute inset-x-3 top-3 overflow-hidden rounded-xl border border-white/15 shadow-lg sm:inset-x-4 sm:top-4">
-            <Image src={slide.image} alt={slide.title} width={1400} height={900} sizes="(min-width: 1024px) 320px, (min-width: 640px) 288px, 224px" className="h-auto w-full" />
-          </div>
-        </>
+        // Cards share the screenshots' 14:9 shape, so the image fills the
+        // card edge to edge without cropping its sides.
+        <Image src={slide.image} alt={slide.title} fill sizes="(min-width: 1024px) 544px, (min-width: 640px) 416px, 78vw" className="object-cover object-top" />
       ) : (
-        <div className="absolute inset-0 flex items-start justify-center bg-gradient-to-b from-white/10 to-transparent pt-16 font-display text-5xl text-white/30">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-white/10 to-transparent font-display text-5xl text-white/30">
           {slide.title.slice(0, 1)}
         </div>
       )}
@@ -205,12 +200,12 @@ function Card({ slide, index, total, progress, config }: CardProps) {
       <motion.div style={{ opacity: shade }} className="pointer-events-none absolute inset-0 bg-black" />
 
       {/* frosted-glass panel with the text */}
-      <div dir="rtl" className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-white/10 p-4 text-right text-white backdrop-blur-xl sm:p-5">
-        <Badge className="mb-2 border-white/20 bg-white/90 px-2.5 py-0.5 text-[11px] font-bold text-black">{slide.badge}</Badge>
-        <motion.p style={{ opacity: textOpacity }} className="mb-1 font-display text-lg leading-tight drop-shadow-md sm:text-xl">
+      <div dir="rtl" className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-black/25 px-3.5 py-2.5 text-right text-white backdrop-blur-md sm:px-5 sm:py-3.5">
+        <Badge className="mb-1.5 border-white/20 bg-white/90 px-2.5 py-0.5 text-[11px] font-bold text-black">{slide.badge}</Badge>
+        <motion.p style={{ opacity: textOpacity }} className="font-display text-base leading-tight drop-shadow-md sm:text-xl">
           {slide.title}
         </motion.p>
-        <motion.p style={{ opacity: textOpacity }} className="line-clamp-2 text-[12.5px] leading-6 text-white/75">
+        <motion.p style={{ opacity: textOpacity }} className="mt-0.5 hidden truncate text-[12.5px] leading-6 text-white/80 sm:block">
           {slide.description}
         </motion.p>
       </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Reveal from "./Reveal";
-import { Briefcase, Building2, CheckCircle2, Rocket } from "lucide-react";
+import { Briefcase, Building2, CheckCircle2, Rocket, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import * as PricingCard from "@/components/ui/pricing-card";
 import { submitPlanOrder } from "@/app/actions";
@@ -268,9 +268,16 @@ const categoryToProjectType: Record<string, string> = {
 
 type OrderStatus = "idle" | "sending" | "sent" | "error";
 
-// Icon per plan tier (first, middle, top) and what every plan includes.
+// Icon per plan tier (first, middle, top).
 const PLAN_ICONS = [Rocket, Briefcase, Building2];
-const INCLUDED = ["مشاوره‌ی رایگان قبل از شروع", "قیمت و زمان‌بندی مکتوب، بدون هزینه‌ی پنهان"];
+
+/** What the next plan up adds (shown with red marks under a plan). */
+function lockedFeatures(plans: Plan[], i: number): string[] {
+  const next = plans[i + 1];
+  if (!next) return [];
+  const own = new Set(plans[i].features);
+  return next.features.filter((f) => !own.has(f)).slice(0, 3);
+}
 
 /** یه سفارش پلن رو یکتا شناسایی می‌کنه — برای نگه‌داشتن وضعیت هر کارت
  *  جدا از بقیه و برای تشخیص «همین پلن، از روی URL، بعد از ورود/ثبت‌نام
@@ -432,23 +439,27 @@ export default function PricingPlans({
                     {p.features.map((f) => (
                       <PricingCard.ListItem key={f} className="text-ink/85">
                         <span className="mt-0.5">
-                          <CheckCircle2 className="h-4 w-4 text-ink" aria-hidden="true" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500" aria-hidden="true" />
                         </span>
                         <span>{f}</span>
                       </PricingCard.ListItem>
                     ))}
                   </PricingCard.List>
-                  <PricingCard.Separator>در همه‌ی پلن‌ها</PricingCard.Separator>
-                  <PricingCard.List>
-                    {INCLUDED.map((f) => (
-                      <PricingCard.ListItem key={f}>
-                        <span className="mt-0.5">
-                          <CheckCircle2 className="h-4 w-4 text-dim" aria-hidden="true" />
-                        </span>
-                        <span>{f}</span>
-                      </PricingCard.ListItem>
-                    ))}
-                  </PricingCard.List>
+                  {lockedFeatures(cat.plans, i).length > 0 && (
+                    <>
+                      <PricingCard.Separator>در پلن بالاتر</PricingCard.Separator>
+                      <PricingCard.List>
+                        {lockedFeatures(cat.plans, i).map((f) => (
+                          <PricingCard.ListItem key={f} className="opacity-75">
+                            <span className="mt-0.5">
+                              <XCircle className="h-4 w-4 text-red-500" aria-hidden="true" />
+                            </span>
+                            <span>{f}</span>
+                          </PricingCard.ListItem>
+                        ))}
+                      </PricingCard.List>
+                    </>
+                  )}
                 </PricingCard.Body>
               </PricingCard.Card>
             </Reveal>
