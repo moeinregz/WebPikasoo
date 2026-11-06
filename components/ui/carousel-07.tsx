@@ -107,7 +107,7 @@ export default function CarouselStacked({ slides, className }: { slides: Slide[]
         else if (e.key === "Enter") openActive();
       }}
     >
-      <div className="relative flex h-[15rem] w-full max-w-7xl items-center justify-center sm:h-[22rem] lg:h-[27rem]" dir="ltr">
+      <div className="relative flex h-[15rem] w-full items-center justify-center sm:h-[22rem] lg:h-[27rem]" dir="ltr">
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
@@ -176,8 +176,8 @@ function Card({ slide, index, total, progress, config }: CardProps) {
   const rotate = useTransform(offset, (o) => (Math.abs(o) < 0.05 ? 0 : o * config.rotationMultiplier));
   const y = useTransform(offset, (o) => (Math.abs(o) < 0.05 ? 0 : Math.abs(o) * config.yMultiplier));
   const scale = useTransform(offset, (o) => 1 - Math.abs(o) * config.scaleReduction);
-  const opacity = useTransform(offset, (o) => (Math.abs(o) > 3.2 ? 0 : Math.abs(o) > 2.6 ? (3.2 - Math.abs(o)) / 0.6 : 1));
-  const display = useTransform(offset, (o) => (Math.abs(o) > 3.3 ? "none" : "block"));
+  const opacity = useTransform(offset, (o) => (Math.abs(o) > 4.2 ? 0 : Math.abs(o) > 3.6 ? (4.2 - Math.abs(o)) / 0.6 : 1));
+  const display = useTransform(offset, (o) => (Math.abs(o) > 4.3 ? "none" : "block"));
   const zIndex = useTransform(offset, (o) => Math.round(100 - Math.abs(o) * 10));
   const shade = useTransform(offset, [-2, -0.5, 0, 0.5, 2], [0.55, 0.25, 0, 0.25, 0.55]);
   const textOpacity = useTransform(offset, [-0.6, 0, 0.6], [0, 1, 0]);
