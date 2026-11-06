@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Vazirmatn, Lalezar } from "next/font/google";
-import MobileStickyCta from "@/components/MobileStickyCta";
 import ChatWidget from "@/components/ChatWidget";
 import "./globals.css";
 
@@ -127,9 +126,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="pb-[68px] sm:pb-0">
+      <body>
         {children}
-        <MobileStickyCta />
         <ChatWidget />
       </body>
     </html>

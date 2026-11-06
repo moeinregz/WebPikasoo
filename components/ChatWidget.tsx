@@ -142,12 +142,16 @@ export default function ChatWidget() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="گفتگو با دستیار وب پیکاسو"
-          className="fixed bottom-[84px] left-4 z-[95] flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-lg transition hover:bg-accent2 sm:bottom-6 sm:left-6"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+16px)] right-4 z-[95] flex items-center gap-2 rounded-full bg-accent py-3 pl-5 pr-3.5 text-white shadow-lg ring-4 ring-accent/20 transition hover:bg-accent2 sm:bottom-6 sm:right-6"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-7 w-7">
-            <path d="M4 5h16v11H8l-4 4V5Z" strokeLinejoin="round" />
-            <path d="M8 9.5h8M8 12.5h5" strokeLinecap="round" />
-          </svg>
+          <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-white/15">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">
+              <path d="M4 5h16v11H8l-4 4V5Z" strokeLinejoin="round" />
+              <path d="M8 9.5h8M8 12.5h5" strokeLinecap="round" />
+            </svg>
+            <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-accent3 ring-2 ring-accent" />
+          </span>
+          <span className="text-[14.5px] font-black">سوالی داری؟ بپرس</span>
         </button>
       )}
 
@@ -155,7 +159,7 @@ export default function ChatWidget() {
         <div
           role="dialog"
           aria-label="دستیار وب پیکاسو"
-          className="fixed inset-x-4 bottom-[84px] top-20 z-[95] flex flex-col overflow-hidden rounded-card border border-ink/15 bg-canvas shadow-2xl sm:inset-x-auto sm:bottom-6 sm:left-6 sm:top-auto sm:h-[600px] sm:max-h-[calc(100vh-48px)] sm:w-[400px]"
+          className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+12px)] top-[72px] z-[95] flex flex-col overflow-hidden rounded-card border border-ink/15 bg-canvas shadow-2xl sm:inset-x-auto sm:bottom-6 sm:right-6 sm:top-auto sm:h-[600px] sm:max-h-[calc(100vh-48px)] sm:w-[400px]"
         >
           <div className="flex items-center justify-between border-b border-ink/10 bg-accent px-4 py-3 text-white">
             <div>
