@@ -211,11 +211,11 @@ export default function UserDashboard({
       <div className="relative mb-7 overflow-hidden rounded-card border border-ink/[0.1] bg-surface/40 p-7">
         <span
           className="pointer-events-none absolute -left-24 -top-24 h-56 w-56 rounded-full opacity-25 blur-[70px]"
-          style={{ background: "linear-gradient(135deg, #0077B6, #00B4D8)" }}
+          style={{ background: "linear-gradient(135deg, #8A4DFF, #B794FF)" }}
         />
         <div className="relative flex flex-wrap items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-white shadow-[0_6px_18px_-4px_rgba(0,119,182,0.5)]">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-white shadow-[0_6px_18px_-4px_rgba(138, 77, 255,0.5)]">
               <span className="font-display text-xl">{user.name.charAt(0)}</span>
             </div>
             <div>

@@ -25,7 +25,7 @@ const services: ServiceTab[] = [
       "اتصال به API‌های داخلی و خارجی",
       "معماری مقیاس‌پذیر و قابل نگهداری",
     ],
-    accent: "#0077B6",
+    accent: "#8A4DFF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 6l-4 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -42,7 +42,7 @@ const services: ServiceTab[] = [
       "طراحی اختصاصی هماهنگ با هویت برند",
       "سرعت بالا و تجربه‌ی کاربری روان روی موبایل",
     ],
-    accent: "#00B4D8",
+    accent: "#B794FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M3 6h18l-1.5 11a2 2 0 01-2 1.7H6.5a2 2 0 01-2-1.7L3 6Z" strokeLinecap="round" strokeLinejoin="round" />
@@ -60,7 +60,7 @@ const services: ServiceTab[] = [
       "اتوماسیون فرایندهای تکراری با AI",
       "تحلیل و پیش‌بینی داده‌های کسب‌وکار",
     ],
-    accent: "#023E8A",
+    accent: "#5B21D6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <circle cx="12" cy="12" r="3" />
@@ -81,7 +81,7 @@ function AdminPanelScreen() {
   ];
 
   return (
-    <div className="flex h-full bg-[#0a0a0c]">
+    <div className="flex h-full bg-[#101013]">
       {/* نوار کناری آیکون‌محور */}
       <div className="flex w-[42px] flex-shrink-0 flex-col items-center gap-4 border-l border-white/10 bg-white/[0.03] py-3.5 sm:w-[50px]">
         <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-accent text-white">
@@ -111,9 +111,9 @@ function AdminPanelScreen() {
           {/* کارت‌های آماری */}
           <div className="grid grid-cols-3 gap-2">
             {[
-              { l: "فروش امروز", v: "۴۲.۶M", c: "#48CAE4" },
-              { l: "سفارش‌ها", v: "۱۲۸", c: "#0077B6" },
-              { l: "کاربر فعال", v: "۹۶۴", c: "#023E8A" },
+              { l: "فروش امروز", v: "۴۲.۶M", c: "#C9B0FF" },
+              { l: "سفارش‌ها", v: "۱۲۸", c: "#8A4DFF" },
+              { l: "کاربر فعال", v: "۹۶۴", c: "#5B21D6" },
             ].map((s) => (
               <div key={s.l} className="rounded-md border border-white/10 bg-white/[0.03] p-2">
                 <div className="h-1.5 w-8 rounded-full" style={{ background: `${s.c}55` }} />
@@ -129,7 +129,7 @@ function AdminPanelScreen() {
               <span
                 key={i}
                 className="flex-1 rounded-t-sm"
-                style={{ height: `${h}%`, background: i === 5 ? "#48CAE4" : "rgba(0,119,182,.4)" }}
+                style={{ height: `${h}%`, background: i === 5 ? "#C9B0FF" : "rgba(138, 77, 255,.4)" }}
               />
             ))}
           </div>
@@ -160,7 +160,7 @@ function AdminPanelScreen() {
 
 function StoreScreen() {
   return (
-    <div className="flex h-full flex-col bg-[#0a0a0c]">
+    <div className="flex h-full flex-col bg-[#101013]">
       <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-2 sm:px-4">
         <span className="h-2 w-2 flex-shrink-0 rounded-full bg-[#ff5f56]" />
         <span className="h-2 w-2 flex-shrink-0 rounded-full bg-[#ffbd2e]" />
@@ -197,7 +197,7 @@ function StoreScreen() {
             <div key={i} className="rounded-md border border-white/10 bg-white/[0.03] p-1.5">
               <div
                 className="aspect-square rounded"
-                style={{ background: ["#0077B633", "#00B4D833", "#023E8A33"][i] }}
+                style={{ background: ["#8A4DFF33", "#B794FF33", "#5B21D633"][i] }}
               />
               <div className="mt-1.5 h-1.5 w-full rounded-full bg-white/25" />
               <div className="mt-1 h-1.5 w-7 rounded-full bg-accent3/80" />
@@ -211,17 +211,17 @@ function StoreScreen() {
 
 function AiScreen() {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden bg-[#0a0a0c]">
+    <div className="relative flex h-full flex-col overflow-hidden bg-[#101013]">
       <svg viewBox="0 0 320 200" className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.12]">
-        <circle cx="40" cy="40" r="3" fill="#48CAE4" />
-        <circle cx="40" cy="110" r="3" fill="#48CAE4" />
-        <circle cx="40" cy="170" r="3" fill="#48CAE4" />
-        <circle cx="150" cy="70" r="3" fill="#48CAE4" />
-        <circle cx="150" cy="140" r="3" fill="#48CAE4" />
-        <circle cx="270" cy="100" r="3" fill="#48CAE4" />
+        <circle cx="40" cy="40" r="3" fill="#C9B0FF" />
+        <circle cx="40" cy="110" r="3" fill="#C9B0FF" />
+        <circle cx="40" cy="170" r="3" fill="#C9B0FF" />
+        <circle cx="150" cy="70" r="3" fill="#C9B0FF" />
+        <circle cx="150" cy="140" r="3" fill="#C9B0FF" />
+        <circle cx="270" cy="100" r="3" fill="#C9B0FF" />
         <path
           d="M40 40 150 70M40 110 150 70M40 110 150 140M40 170 150 140M150 70 270 100M150 140 270 100"
-          stroke="#48CAE4"
+          stroke="#C9B0FF"
           strokeWidth="1"
         />
       </svg>
@@ -331,7 +331,7 @@ export default function LaptopShowcase() {
 
           <div className="relative z-[1] overflow-hidden rounded-t-[16px] border-[8px] border-b-0 border-[#1a1a1e] bg-black shadow-[0_40px_90px_-25px_rgba(0,0,0,0.75)] sm:border-[10px]">
             <span className="absolute left-1/2 top-0 z-10 h-[5px] w-[64px] -translate-x-1/2 rounded-b-lg bg-[#1a1a1e]" />
-            <div className="aspect-[16/10.5] w-full overflow-hidden bg-[#0a0a0c]">
+            <div className="aspect-[16/10.5] w-full overflow-hidden bg-[#101013]">
               <div key={active.id} className="h-full w-full animate-fade-in-up">
                 {screens[active.id]}
               </div>
@@ -341,7 +341,7 @@ export default function LaptopShowcase() {
           {/* Base — a shallow trapezoid under the screen frame, like the
               keyboard deck of a closed-screen laptop mockup. */}
           <div className="relative z-[1] mx-auto h-[13px] rounded-b-[8px] bg-gradient-to-b from-[#333338] to-[#131315] [clip-path:polygon(3%_0,97%_0,100%_100%,0%_100%)] sm:h-[16px]" />
-          <div className="relative z-[1] mx-auto h-[4px] w-[40%] rounded-b-full bg-gradient-to-b from-[#131315] to-[#0a0a0c]" />
+          <div className="relative z-[1] mx-auto h-[4px] w-[40%] rounded-b-full bg-gradient-to-b from-[#131315] to-[#101013]" />
         </div>
 
         <div className="relative z-[1] mt-9 grid grid-cols-1 gap-2.5 sm:grid-cols-3">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Reveal from "./Reveal";
 import StatCounter from "./StatCounter";
 import LaptopShowcase from "./LaptopShowcase";
+import EchoHeading from "@/components/EchoHeading";
 
 type SeoItem = { n: string; title: string; desc: string; color: string; icon: ReactNode };
 
@@ -11,7 +12,7 @@ const seoItems: SeoItem[] = [
     n: "۰۱",
     title: "سئوی داخلی",
     desc: "بهینه‌سازی محتوا، عنوان‌ها و ساختار صفحات برای رتبه بهتر در گوگل",
-    color: "#48CAE4",
+    color: "#C9B0FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <rect x="5" y="3.5" width="11" height="17" rx="2" />
@@ -25,7 +26,7 @@ const seoItems: SeoItem[] = [
     n: "۰۲",
     title: "سئوی خارجی",
     desc: "لینک‌سازی و افزایش اعتبار دامنه",
-    color: "#0077B6",
+    color: "#8A4DFF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M9.4 14.6 14.6 9.4" />
@@ -38,7 +39,7 @@ const seoItems: SeoItem[] = [
     n: "۰۳",
     title: "سئوی تکنیکال",
     desc: "سرعت، ایندکس‌شدن و ساختار فنی سایت",
-    color: "#023E8A",
+    color: "#5B21D6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M14.7 6.3a3 3 0 0 1-3.9 3.9L4.5 16.5l2 2 6.3-6.3a3 3 0 0 1 3.9-3.9L20.5 4.5l-2-2-3.8 3.8Z" />
@@ -49,7 +50,7 @@ const seoItems: SeoItem[] = [
     n: "۰۴",
     title: "سئوی محلی",
     desc: "دیده‌شدن کسب‌وکار در جستجوهای محلی و گوگل‌مپ",
-    color: "#03045E",
+    color: "#1E0B4B",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
@@ -104,12 +105,11 @@ export default function Services() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-14 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            Services
-          </span>
+        <Reveal className="mb-14">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">خدمات</h2>
+            <EchoHeading en="Services" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
+              خدمات
+            </EchoHeading>
             <p className="mt-2.5 max-w-[60ch] text-[15px] text-dim">
               توسعه نرم‌افزار، طراحی سایت فروشگاهی و شرکتی، هوش مصنوعی و سئو — چهار خدمتی که تیم وب
               پیکاسو زیر یه سقف ارائه می‌ده.
@@ -152,7 +152,7 @@ export default function Services() {
               against that gray. A solid dark color stays dark regardless
               of theme, matching the other "always dark" panels in this
               codebase (Contact's CTA, the laptop mockup, etc). */}
-          <div className="seo-hero relative mb-6 overflow-hidden matte rounded-card !bg-[#0a0a0c] p-6 sm:p-9">
+          <div className="seo-hero relative mb-6 overflow-hidden matte rounded-card !bg-[#101013] p-6 sm:p-9">
             <div className="relative z-[1] flex flex-col gap-9 lg:flex-row lg:items-center">
               <div className="flex-1">
                 <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
@@ -199,13 +199,13 @@ export default function Services() {
                 <svg viewBox="0 0 380 200" fill="none" className="w-full">
                   <defs>
                     <linearGradient id="seoAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0077B6" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#0077B6" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#8A4DFF" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#8A4DFF" stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="seoLineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#48CAE4" />
-                      <stop offset="55%" stopColor="#0077B6" />
-                      <stop offset="100%" stopColor="#023E8A" />
+                      <stop offset="0%" stopColor="#C9B0FF" />
+                      <stop offset="55%" stopColor="#8A4DFF" />
+                      <stop offset="100%" stopColor="#5B21D6" />
                     </linearGradient>
                   </defs>
 
@@ -225,7 +225,7 @@ export default function Services() {
                     strokeLinecap="round"
                   />
 
-                  <circle cx="355" cy="14" r="4" fill="#023E8A">
+                  <circle cx="355" cy="14" r="4" fill="#5B21D6">
                     <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="1;.35;1" dur="2s" repeatCount="indefinite" />
                   </circle>

@@ -4,21 +4,21 @@
 
 @layer base {
   :root {
-    /* Light mode — pure white canvas, GitHub-light-esque neutrals. This is
-       now the SECONDARY theme; dark is the default (see layout.tsx script). */
-    --color-ink: 12 12 15;
-    --color-dim: 107 114 128;
-    --color-canvas: 255 255 255;
-    --color-surface: 246 247 249;
+    /* Light mode (secondary theme): warm off-white canvas, matte-black text. */
+    --color-ink: 22 22 26;
+    --color-dim: 104 101 96;
+    --color-canvas: 244 242 237;
+    --color-surface: 235 232 225;
   }
 
   .dark {
-    /* Dark mode — pure black canvas, near-white text, near-black cards.
-       This is the default look: Vercel/GitHub dashboard style. */
-    --color-ink: 237 237 240;
-    --color-dim: 138 143 152;
-    --color-canvas: 0 0 0;
-    --color-surface: 14 14 16;
+    /* Default look, 60/30/10: matte soft black (not pure black, not
+       graphite) for the canvas, warm off-white for text and the inverted
+       sections, vivid violet (accent) for the last 10%. */
+    --color-ink: 238 236 231;
+    --color-dim: 155 152 146;
+    --color-canvas: 21 21 24;
+    --color-surface: 30 30 35;
   }
 
   html {
@@ -92,7 +92,7 @@
   /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
      همون آبی آسمانی اصلی برند. */
   .accent-gradient-text {
-    color: #0077B6;
+    color: #8A4DFF;
   }
 
   /* Skill card — each card tracks the cursor with --sx/--sy (set via JS on
@@ -123,7 +123,7 @@
     z-index: 2;
     padding: 1px;
     opacity: var(--glow-o, 0);
-    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 70%);
+    background: radial-gradient(240px circle at var(--sx) var(--sy), var(--skill-color, #8A4DFF) 0%, transparent 70%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -131,7 +131,7 @@
   .skill-card::after {
     z-index: 0;
     opacity: calc(var(--glow-o, 0) * 0.16);
-    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #0077B6) 0%, transparent 72%);
+    background: radial-gradient(280px circle at var(--sx) var(--sy), var(--skill-color, #8A4DFF) 0%, transparent 72%);
   }
   .skill-card > * {
     position: relative;
@@ -146,7 +146,7 @@
     transition: filter 0.35s ease, opacity 0.35s ease;
   }
   .skill-card:hover .skill-icon-logo {
-    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #0077B6));
+    filter: grayscale(0) drop-shadow(0 0 8px var(--skill-color, #8A4DFF));
     opacity: 1;
   }
 
@@ -157,7 +157,7 @@
     transition: text-shadow 0.35s ease;
   }
   .skill-card:hover .skill-title-glow {
-    text-shadow: 0 0 8px var(--skill-color, #0077B6), 0 0 26px var(--skill-color, #0077B6);
+    text-shadow: 0 0 8px var(--skill-color, #8A4DFF), 0 0 26px var(--skill-color, #8A4DFF);
   }
 
   /* رجیستر کردن --tool-angle به‌عنوان یه <angle> واقعی — بدون این، مرورگر
@@ -188,11 +188,11 @@
     padding: 1.4px;
     background: conic-gradient(
       from var(--tool-angle),
-      var(--tool-color, #0077B6) 0deg,
+      var(--tool-color, #8A4DFF) 0deg,
       transparent 90deg,
       transparent 230deg,
-      var(--tool-color, #0077B6) 320deg,
-      var(--tool-color, #0077B6) 360deg
+      var(--tool-color, #8A4DFF) 320deg,
+      var(--tool-color, #8A4DFF) 360deg
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
@@ -205,7 +205,7 @@
     opacity: 1;
   }
   .tool-chip:hover {
-    box-shadow: 0 10px 28px -14px var(--tool-color, #0077B6);
+    box-shadow: 0 10px 28px -14px var(--tool-color, #8A4DFF);
   }
   .tool-chip > * {
     position: relative;
@@ -232,14 +232,14 @@
     inset: -1px;
     z-index: -1;
     border-radius: inherit;
-    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #0077B6), transparent 70%);
+    background: radial-gradient(160px circle at 20% 0%, var(--group-color, #8A4DFF), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
   .tool-group-card:hover {
     transform: translateY(-3px);
     border-color: transparent;
-    box-shadow: 0 20px 40px -24px var(--group-color, #0077B6);
+    box-shadow: 0 20px 40px -24px var(--group-color, #8A4DFF);
   }
   .tool-group-card:hover::before {
     opacity: 0.16;
@@ -260,7 +260,7 @@
     width: 85%;
     height: 140%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 119, 182, .4);
+    background: rgba(138, 77, 255, .4);
     filter: blur(90px);
     animation: seoHeroPulse 6s ease-in-out infinite;
   }
@@ -276,10 +276,10 @@
 
   /* خط نمودار رشد — گلوی رنگی دورش که با گرادیان خودِ استروک هماهنگه. */
   .seo-chart-line {
-    filter: drop-shadow(0 0 5px rgba(0, 119, 182, 0.85)) drop-shadow(0 0 16px rgba(2, 62, 138, 0.45));
+    filter: drop-shadow(0 0 5px rgba(138, 77, 255, 0.85)) drop-shadow(0 0 16px rgba(91, 33, 214, 0.45));
   }
   .seo-chart-dot {
-    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #0077B6);
+    filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #8A4DFF);
   }
 
   /* کارت‌های ستون سئو — طرح ساده و کم‌رنگ: بک‌گراند تیره‌ی یکدست برای
@@ -298,8 +298,8 @@
   }
   .seo-card:hover .seo-card-arrow {
     transform: translateX(-3px);
-    border-color: var(--seo-color, #0077B6);
-    color: var(--seo-color, #0077B6);
+    border-color: var(--seo-color, #8A4DFF);
+    color: var(--seo-color, #8A4DFF);
   }
 
   /* Syntax-highlight classes injected via dangerouslySetInnerHTML by the
@@ -309,13 +309,13 @@
     color: #ededf0;
   }
   .terminal-body .str {
-    color: #0077B6;
+    color: #8A4DFF;
   }
   .terminal-body .punc {
     color: rgba(237, 237, 240, 0.45);
   }
   .terminal-body .kw {
-    color: #023E8A;
+    color: #5B21D6;
     font-weight: 600;
   }
 
@@ -344,12 +344,12 @@
    ========================================================================== */
 @layer base {
   :root {
-    --matte-shadow: 12 12 15; /* حالت روشن: سایه‌ی مشکی تخت */
-    --matte-border: 12 12 15;
+    --matte-shadow: 22 22 26; /* حالت روشن: سایه‌ی مشکی تخت */
+    --matte-border: 22 22 26;
   }
   .dark {
-    --matte-shadow: 2 62 138; /* حالت تاریک: آبی تیره‌ی برند (#023E8A) */
-    --matte-border: 60 64 72;
+    --matte-shadow: 91 33 214; /* حالت تاریک: بنفش تیره‌ی برند (#5B21D6) */
+    --matte-border: 58 57 64;
   }
 }
 
@@ -398,5 +398,78 @@
   }
   .intro-splash {
     display: none;
+  }
+}
+
+@layer components {
+  /* ── Echo headings (components/EchoHeading.tsx) ─────────────────────
+     Big English copy of a key heading in the Latin display face, fading
+     out toward the bottom; the Persian heading is pulled up over its
+     lower half. Top of the fade carries a touch of the brand violet. */
+  .echo {
+    --echo-size: 96px;
+    --echo-ink: var(--color-ink);
+    position: relative;
+  }
+  .echo-on-dark {
+    --echo-ink: 255 255 255;
+  }
+  .echo-en {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--font-latin), sans-serif;
+    font-weight: 800;
+    font-size: var(--echo-size);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    padding-bottom: 0.08em;
+    background-image: linear-gradient(
+      to bottom,
+      rgb(183 148 255 / 0.62) 0%,
+      rgb(var(--echo-ink) / 0.26) 34%,
+      rgb(var(--echo-ink) / 0.08) 62%,
+      rgb(var(--echo-ink) / 0) 88%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+    pointer-events: none;
+  }
+  /* Lets a hero echo run past its narrow column (into the image side). */
+  .echo-bleed {
+    width: max-content;
+    max-width: none;
+    overflow: visible;
+  }
+  .echo-fa {
+    position: relative;
+    z-index: 1;
+    margin-top: calc(var(--echo-size) * -0.52);
+  }
+
+  /* ── Inverted sections — the "30%" off-white bands ──────────────────
+     Flips the theme tokens inside the section: off-white in the dark
+     (default) theme, matte black in the light theme, so every token-based
+     child (text-ink, bg-surface, borders, matte shadows) repaints. */
+  .section-invert {
+    --color-ink: 238 236 231;
+    --color-dim: 155 152 146;
+    --color-canvas: 21 21 24;
+    --color-surface: 30 30 35;
+    --matte-shadow: 91 33 214;
+    --matte-border: 58 57 64;
+    background-color: rgb(var(--color-canvas));
+    color: rgb(var(--color-ink));
+  }
+  .dark .section-invert {
+    --color-ink: 22 22 26;
+    --color-dim: 98 95 90;
+    --color-canvas: 242 240 235;
+    --color-surface: 232 229 222;
+    --matte-shadow: 22 22 26;
+    --matte-border: 22 22 26;
   }
 }

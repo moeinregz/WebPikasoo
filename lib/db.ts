@@ -523,9 +523,42 @@ export type Ticket = {
   status: string;
   reply: string | null;
   replied_at: string | null;
+  /** Tickets opened from the site chat by a visitor without an account
+   *  (user_id 0): their name/phone, where it came from, and the SHA-256 of
+   *  the secret the visitor's browser keeps to read and answer the thread. */
+  guest_name?: string;
+  guest_phone?: string;
+  source?: string;
+  guest_token_hash?: string;
 };
 
 export type NewTicket = { userId: number; subject: string; message: string };
+
+export async function createGuestTicket(data: {
+  name: string;
+  phone: string;
+  subject: string;
+  message: string;
+  tokenHash: string;
+}): Promise<number> {
+  const database = await getDb();
+  const id = await nextId("tickets");
+  await database.collection<Ticket>("tickets").insertOne({
+    id,
+    user_id: 0,
+    created_at: nowStr(),
+    subject: data.subject,
+    message: data.message,
+    status: "open",
+    reply: null,
+    replied_at: null,
+    guest_name: data.name,
+    guest_phone: data.phone,
+    source: "chatbot",
+    guest_token_hash: data.tokenHash,
+  });
+  return id;
+}
 
 export async function createTicket(data: NewTicket): Promise<number> {
   const database = await getDb();
@@ -654,7 +687,7 @@ export async function getAllTickets(): Promise<TicketWithUser[]> {
   const database = await getDb();
   const tickets = await database
     .collection<Ticket>("tickets")
-    .find({}, { projection: { _id: 0 } })
+    .find({}, { projection: { _id: 0, guest_token_hash: 0 } })
     .sort({ created_at: -1, id: -1 })
     .toArray();
   const userIds = Array.from(new Set(tickets.map((t) => t.user_id)));
@@ -665,8 +698,8 @@ export async function getAllTickets(): Promise<TicketWithUser[]> {
   const userMap = new Map(users.map((u) => [u.id, u]));
   return tickets.map((t) => ({
     ...t,
-    user_name: userMap.get(t.user_id)?.name ?? "",
-    user_phone: userMap.get(t.user_id)?.phone ?? "",
+    user_name: userMap.get(t.user_id)?.name ?? (t.guest_name ? `${t.guest_name} (چت سایت)` : ""),
+    user_phone: userMap.get(t.user_id)?.phone ?? t.guest_phone ?? "",
   }));
 }
 

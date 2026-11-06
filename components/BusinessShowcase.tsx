@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { categories, type BusinessCategory } from "@/lib/businessSites";
+import EchoHeading from "@/components/EchoHeading";
 
 const PAGE_SIZE = 6;
 
@@ -100,7 +101,7 @@ function CategoryDropdown({
       {/* پنل مشکی/سفید — همیشه تم تیره، مستقل از حالت روشن/تاریک سایت،
           دقیقاً همون حس ترمینال هیرو. */}
       <div
-        className={`absolute right-0 z-30 mt-2.5 w-[270px] origin-top-right overflow-hidden rounded-[14px] border border-white/10 bg-[#0a0a0c] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)] transition-all duration-150 ${
+        className={`absolute right-0 z-30 mt-2.5 w-[270px] origin-top-right overflow-hidden rounded-[14px] border border-white/10 bg-[#101013] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)] transition-all duration-150 ${
           open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1.5 opacity-0"
         }`}
         onMouseEnter={openNow}
@@ -198,14 +199,11 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
           به اندازه‌ی ارتفاع کارت‌های تازه اضافه‌شده می‌ندازه پایین‌تر —
           دقیقاً همون پرش ناخواسته به ته گالری. */}
       <div className="relative z-[1] mx-auto max-w-container px-6" style={{ overflowAnchor: "none" }}>
-        <Reveal className="mb-10 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            Gallery
-          </span>
+        <Reveal className="mb-10">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+            <EchoHeading en="Work Like Yours" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
               نمونه‌کارهایی شبیه کسب‌وکار شما
-            </h2>
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               نمونه‌سایت‌هایی که برای انواع کسب‌وکارها ساخته شده — از دسته‌بندی‌ها انتخاب کن یا
               دنبال چیزی مشخص بگرد تا ببینی برای کسب‌وکار خودت چه سایتی مناسبه.
@@ -251,7 +249,7 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
                   key={s.id}
                   className="group relative overflow-hidden matte matte-hover rounded-card transition-all hover:-translate-y-1 hover:border-ink/20"
                 >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#101013]">
                     {s.image ? (
                       <Image
                         src={s.image}

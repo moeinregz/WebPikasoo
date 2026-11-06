@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import EchoHeading from "@/components/EchoHeading";
 
 type Testimonial = {
   name: string;
@@ -19,7 +20,7 @@ const testimonials: Testimonial[] = [
     quote:
       "راستش قبلش یه بار با یه فریلنسر دیگه سوخته بودیم، نصفه‌کاره ول کرد رفت. اینجا از همون اول قیمت و زمان تحویل رو دقیق نوشتن، و همون‌جوری هم پیش رفت؛ هیچ هزینه‌ی غافلگیرکننده‌ای وسط کار نیومد.",
     initials: "مر",
-    color: "#0077B6",
+    color: "#8A4DFF",
   },
   {
     name: "سارا نجفی",
@@ -27,7 +28,7 @@ const testimonials: Testimonial[] = [
     quote:
       "بعد از تحویل سایت، دو هفته بعدش یه باگ کوچیک تو صفحه‌ی پرداخت پیدا کردیم. نگران بودم بگن «کارمون تموم شده»، ولی همون روز جواب دادن و رفعش کردن. این خیالم رو راحت کرد که تنها نمی‌مونیم.",
     initials: "سن",
-    color: "#00B4D8",
+    color: "#B794FF",
   },
   {
     name: "دکتر امیر حسینی",
@@ -35,7 +36,7 @@ const testimonials: Testimonial[] = [
     quote:
       "فکر می‌کردم کلینیک کوچیک ما در حد این تیم نیست، ولی درست مثل یه پروژه‌ی بزرگ باهامون جلسه گذاشتن و همه‌چی رو ساده توضیح دادن. الان بیمارها از رو همون سایت وقت می‌گیرن و اعتماد بیشتری به مطب دارن.",
     initials: "اح",
-    color: "#023E8A",
+    color: "#5B21D6",
   },
 ];
 
@@ -55,19 +56,16 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]"
+      className="section-invert relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]"
     >
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[420px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            Comments
-          </span>
+        <Reveal className="mb-12">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+            <EchoHeading en="Believe Our Clients" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
               حرف مشتری‌هامون رو باور کن، نه حرف ما رو
-            </h2>
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               این‌ها آدم‌هایی‌ان که قبل از شروع همون نگرانی‌هایی رو داشتن که شاید الان تو داری —
               و بعد از تحویل پروژه، این چیزی بود که گفتن.

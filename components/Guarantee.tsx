@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import EchoHeading from "@/components/EchoHeading";
 
 /** ضمانت / کاهش ریسک خرید — دقیقاً همون گارانتی که تو Trust هم اشاره
  *  شده (۳۰ روز رفع باگ رایگان) اینجا با جزئیات بیشتر و به‌عنوان یه بخش
@@ -19,12 +20,9 @@ export default function Guarantee() {
               <path d="m8.5 12.3 2.4 2.4 4.6-4.9" />
             </svg>
           </span>
-          <span className="rounded-full border border-ink/10 bg-canvas px-3.5 py-1.5 font-mono text-[12px] font-bold text-dim">
-            Guarantee
-          </span>
-          <h2 className="font-display text-[26px] font-normal sm:text-[32px]">
+          <EchoHeading en="Bugs Fixed Free" align="center" max={88} fit={700} className="font-display text-[26px] font-normal sm:text-[32px]">
             اگه پروژه باگ فنی داشت، رایگان رفعش می‌کنیم
-          </h2>
+          </EchoHeading>
           <p className="max-w-[56ch] text-[14.5px] leading-relaxed text-dim">
             بعد از تحویل هر پروژه، ۳۰ روز گارانتی رفع باگ فنی داری — بدون هزینه‌ی اضافه و بدون
             بحث. اگه چیزی طبق چیزی که توافق کردیم کار نکنه، مسئولیتش با ماست، نه تو.

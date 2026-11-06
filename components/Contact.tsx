@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Reveal from "./Reveal";
 import ContactForm from "./ContactForm";
 import { getCurrentUser } from "@/lib/session";
+import EchoHeading from "@/components/EchoHeading";
 
 type SocialLink = {
   href: string;
@@ -63,14 +64,14 @@ export default async function Contact() {
     <section id="contact" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px] pt-[120px] text-center">
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <div data-gsap="zoom" className="matte relative isolate overflow-hidden rounded-[24px] !bg-[#0a0a0c] px-6 py-16 text-white ![box-shadow:-12px_12px_0_0_rgb(var(--matte-shadow))] sm:px-10">
+        <div data-gsap="zoom" className="matte relative isolate overflow-hidden rounded-[24px] !bg-[#101013] px-6 py-16 text-white ![box-shadow:-12px_12px_0_0_rgb(var(--matte-shadow))] sm:px-10">
           <span className="mb-[22px] inline-flex items-center gap-2 rounded-full border border-white/[0.14] px-3.5 py-1.5 font-mono text-[12.5px] text-white/70">
             <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
-          <h2 className="mx-auto mb-5 max-w-[16ch] font-display text-[32px] font-normal leading-[1.35] sm:text-[42px] lg:text-[58px]">
+          <EchoHeading en="Let's Build Something" align="center" onDark max={110} fit={720} className="mx-auto mb-5 max-w-[16ch] font-display text-[32px] font-normal leading-[1.35] sm:text-[42px] lg:text-[58px]">
             بیا یه چیز خفن با هم بسازیم.
-          </h2>
+          </EchoHeading>
           <p className="mx-auto mb-3 max-w-[48ch] text-base text-white/60">
             برای پنل مدیریت، فروشگاه آنلاین، یا هر ایده‌ای که تو سرته، پیام بده — سریع جواب می‌دیم.
           </p>
@@ -89,7 +90,7 @@ export default async function Contact() {
             </a>
             <a
               href="tel:+989965745535"
-              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-white px-[34px] py-[17px] text-base font-black text-[#0a0a0c]"
+              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-white px-[34px] py-[17px] text-base font-black text-[#101013]"
             >
               تماس مستقیم
             </a>
