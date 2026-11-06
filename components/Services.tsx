@@ -12,7 +12,7 @@ const seoItems: SeoItem[] = [
     n: "۰۱",
     title: "سئوی داخلی",
     desc: "بهینه‌سازی محتوا، عنوان‌ها و ساختار صفحات برای رتبه بهتر در گوگل",
-    color: "#C9B0FF",
+    color: "#E4E2DC",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <rect x="5" y="3.5" width="11" height="17" rx="2" />
@@ -26,7 +26,7 @@ const seoItems: SeoItem[] = [
     n: "۰۲",
     title: "سئوی خارجی",
     desc: "لینک‌سازی و افزایش اعتبار دامنه",
-    color: "#8A4DFF",
+    color: "#D9D7D1",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M9.4 14.6 14.6 9.4" />
@@ -39,7 +39,7 @@ const seoItems: SeoItem[] = [
     n: "۰۳",
     title: "سئوی تکنیکال",
     desc: "سرعت، ایندکس‌شدن و ساختار فنی سایت",
-    color: "#5B21D6",
+    color: "#4A4A52",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M14.7 6.3a3 3 0 0 1-3.9 3.9L4.5 16.5l2 2 6.3-6.3a3 3 0 0 1 3.9-3.9L20.5 4.5l-2-2-3.8 3.8Z" />
@@ -50,7 +50,7 @@ const seoItems: SeoItem[] = [
     n: "۰۴",
     title: "سئوی محلی",
     desc: "دیده‌شدن کسب‌وکار در جستجوهای محلی و گوگل‌مپ",
-    color: "#1E0B4B",
+    color: "#1C1C20",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
@@ -73,7 +73,7 @@ function GroupHead({
 }) {
   return (
     <div className="mb-6 flex items-center gap-3.5">
-      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-white">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-on-accent">
         {num}
       </span>
       <h3
@@ -199,13 +199,13 @@ export default function Services() {
                 <svg viewBox="0 0 380 200" fill="none" className="w-full">
                   <defs>
                     <linearGradient id="seoAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#8A4DFF" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#8A4DFF" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#D9D7D1" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#D9D7D1" stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="seoLineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#C9B0FF" />
-                      <stop offset="55%" stopColor="#8A4DFF" />
-                      <stop offset="100%" stopColor="#5B21D6" />
+                      <stop offset="0%" stopColor="#E4E2DC" />
+                      <stop offset="55%" stopColor="#D9D7D1" />
+                      <stop offset="100%" stopColor="#4A4A52" />
                     </linearGradient>
                   </defs>
 
@@ -225,7 +225,7 @@ export default function Services() {
                     strokeLinecap="round"
                   />
 
-                  <circle cx="355" cy="14" r="4" fill="#5B21D6">
+                  <circle cx="355" cy="14" r="4" fill="#4A4A52">
                     <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="1;.35;1" dur="2s" repeatCount="indefinite" />
                   </circle>

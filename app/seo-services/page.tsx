@@ -241,7 +241,7 @@ export default async function SeoServicesPage() {
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/order?category=seo"
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent shadow-glow transition hover:-translate-y-0.5"
           >
             مشاهده پکیج‌ها و ثبت سفارش
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
@@ -490,7 +490,7 @@ export default async function SeoServicesPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((s, i) => (
               <Reveal key={s.n} delay={i * 70} className="rounded-card border border-ink/10 bg-surface/50 p-5">
-                <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-white">
+                <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-on-accent">
                   {s.n}
                 </span>
                 <h3 className="mb-1.5 text-[14.5px] font-bold">{s.title}</h3>
@@ -703,7 +703,7 @@ export default async function SeoServicesPage() {
             <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/order?category=seo"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent shadow-glow transition hover:-translate-y-0.5"
               >
                 مشاهده‌ی پکیج‌ها و ثبت سفارش
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

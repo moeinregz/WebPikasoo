@@ -97,7 +97,7 @@ export default function SeoAutomationPanel({ settings, counts, keywords, runs, h
             type="button"
             onClick={runNow}
             disabled={busy || !hasApiKey}
-            className="rounded-full bg-accent px-5 py-2 text-[13.5px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            className="rounded-full bg-accent px-5 py-2 text-[13.5px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
           >
             {busy ? "در حال نوشتن…" : "الان یه مقاله بساز"}
           </button>

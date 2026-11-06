@@ -43,7 +43,7 @@ const input =
   "w-full rounded-[10px] border border-ink/[0.16] bg-surface/40 px-3 py-2.5 text-[14px] text-ink outline-none transition placeholder:text-dim/60 focus:border-accent";
 const chip = (on: boolean) =>
   `rounded-full border px-3 py-1 text-[12.5px] font-semibold transition ${
-    on ? "border-accent bg-accent text-black" : "border-ink/20 text-dim hover:border-ink/40 hover:text-ink"
+    on ? "border-accent bg-accent text-on-accent" : "border-ink/20 text-dim hover:border-ink/40 hover:text-ink"
   }`;
 
 function counts<T extends string>(list: Contact[], key: (c: Contact) => T): [T, number][] {
@@ -238,7 +238,7 @@ export default function SmsPanel({ contacts, campaigns, messages, provider }: Pr
           <button
             onClick={sendTest}
             disabled={testBusy}
-            className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-black transition hover:-translate-y-0.5 disabled:opacity-50"
+            className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:opacity-50"
           >
             {testBusy ? "در حال ارسال…" : "ارسال پیامک تست"}
           </button>
@@ -381,7 +381,7 @@ export default function SmsPanel({ contacts, campaigns, messages, provider }: Pr
           <button
             onClick={send}
             disabled={!selected.length || sending}
-            className="rounded-full bg-accent px-6 py-3 text-[14.5px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
+            className="rounded-full bg-accent px-6 py-3 text-[14.5px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-50"
           >
             {sending ? "در حال ارسال…" : `ارسال به ${fa(selected.length)} نفر`}
           </button>

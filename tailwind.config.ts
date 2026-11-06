@@ -18,11 +18,13 @@ const config: Config = {
         canvas: "rgb(var(--color-canvas) / <alpha-value>)", // page background
         surface: "rgb(var(--color-surface) / <alpha-value>)", // card/panel fill
 
-        // Fixed flat brand accents — same in both themes. بنفش زنده و
-        // امروزی؛ ۱۰٪ سهم رنگی سایت (دکمه‌ها، لینک‌ها، تأکیدها).
-        accent: "#8A4DFF", // بنفش اصلی — دکمه‌ها، لینک‌ها، فوکوس، برند
-        accent2: "#5B21D6", // بنفش تیره‌تر — حالت هاور، سایه‌ها، جزئیات ثانویه
-        accent3: "#B794FF", // یاسی روشن — نقطه‌ی وضعیت «آنلاین/آماده‌ی همکاری» و برجسته‌سازی‌های کوچک
+        // Brand accents — monochrome: the accent is the theme's own
+        // off-white (on matte black) or matte black (on off-white), set in
+        // globals.css, so the site stays strictly black and white.
+        accent: "rgb(var(--color-accent) / <alpha-value>)", // رنگ تأکید: سفید گرم روی مشکی مات (و برعکس در بخش‌های روشن)
+        accent2: "rgb(var(--color-accent2) / <alpha-value>)", // حالت هاور دکمه‌های تأکیدی
+        accent3: "rgb(var(--color-accent3) / <alpha-value>)", // نقطه‌های وضعیت و جزئیات کوچک
+        "on-accent": "rgb(var(--color-on-accent) / <alpha-value>)", // متن روی پس‌زمینه‌ی accent
 
         // پالت کامل آبی آسمانی، برای استفاده‌ی مستقیم هرجا لازم بود
         // (نمودارها، دسته‌بندی‌ها و جزئیات چندرنگ) — بدون گرادیان، فقط
@@ -68,7 +70,7 @@ const config: Config = {
       },
       boxShadow: {
         glow: "0 0 0 1px rgba(138, 77, 255, 0.35), 0 8px 40px -8px rgba(138, 77, 255, 0.45)",
-        "glow-violet": "0 0 0 1px rgba(91, 33, 214, 0.35), 0 8px 40px -8px rgba(91, 33, 214, 0.45)",
+        "glow-violet": "0 0 0 1px rgba(238, 236, 231, 0.18), 0 8px 40px -8px rgba(0, 0, 0, 0.45)",
         "glow-soft": "0 20px 60px -20px rgba(138, 77, 255, 0.35)",
       },
       keyframes: {

@@ -17,7 +17,7 @@ const items: ProblemSolution[] = [
   {
     problem: "سایت دارم ولی هیچ مشتری‌ای ازش نمیاد.",
     solution: "سایت رو بر اساس اصول تبدیل بازدیدکننده به مشتری بازطراحی می‌کنیم، نه فقط ظاهرش.",
-    color: "#8A4DFF",
+    color: "#D9D7D1",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <circle cx="11" cy="11" r="7" />
@@ -28,7 +28,7 @@ const items: ProblemSolution[] = [
   {
     problem: "قبلاً با یه فریلنسر/تیم دیگه سوخته‌ام.",
     solution: "از اول قیمت، زمان تحویل و امکانات رو مکتوب می‌دیم و مرحله‌به‌مرحله تاییدت رو می‌گیریم.",
-    color: "#B794FF",
+    color: "#CFCDC7",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 3 4.5 6.5v5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5v-5L12 3Z" />
@@ -39,7 +39,7 @@ const items: ProblemSolution[] = [
   {
     problem: "نمی‌دونم دقیقاً چه نوع سایت/سیستمی نیاز دارم.",
     solution: "تو یه گفتگوی کوتاه و رایگان نیازت رو تحلیل می‌کنیم و بهترین مسیر رو پیشنهاد می‌دیم.",
-    color: "#5B21D6",
+    color: "#4A4A52",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <circle cx="12" cy="12" r="9" />
@@ -51,7 +51,7 @@ const items: ProblemSolution[] = [
   {
     problem: "می‌ترسم بعد از تحویل تنها بمونم و کسی جواب نده.",
     solution: "بعد از تحویل هم مستقیم با همون تیمی که ساخته‌ت در ارتباطی؛ گارانتی رفع باگ هم داری.",
-    color: "#C9B0FF",
+    color: "#E4E2DC",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M21 11.5a8.5 8.5 0 0 1-11.9 7.8L3 21l1.7-6.1A8.5 8.5 0 1 1 21 11.5Z" />
@@ -121,7 +121,7 @@ export default function Problems() {
           </div>
           <a
             href="#lead-form"
-            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-accent px-5 py-3 text-[14px] font-black text-white"
+            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-accent px-5 py-3 text-[14px] font-black text-on-accent"
           >
             نمی‌دانم چه راهکاری نیاز دارم
           </a>

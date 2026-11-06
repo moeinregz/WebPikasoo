@@ -81,7 +81,7 @@ export default async function Contact() {
               href="https://wa.me/989965745535"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-accent px-[34px] py-[17px] text-base font-black text-white"
+              className="inline-flex items-center gap-2 matte-btn rounded-xl !border-white bg-accent px-[34px] py-[17px] text-base font-black text-on-accent"
             >
               شروع گفتگو در واتساپ
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

@@ -74,7 +74,7 @@ function PublishButtons({ currentlyPublished }: { currentlyPublished?: boolean }
         name="published"
         value="1"
         disabled={pending}
-        className="rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+        className="rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
       >
         {pending ? "در حال ذخیره..." : currentlyPublished ? "ذخیره‌ی تغییرات (منتشرشده)" : "انتشار مقاله"}
       </button>
@@ -419,7 +419,7 @@ function ContentEditorImpl({ defaultValue }: { defaultValue?: string }) {
             type="button"
             onClick={applyLink}
             disabled={!linkUrl.trim()}
-            className="rounded-md bg-accent px-3 py-1.5 text-[12.5px] font-bold text-black transition disabled:pointer-events-none disabled:opacity-50"
+            className="rounded-md bg-accent px-3 py-1.5 text-[12.5px] font-bold text-on-accent transition disabled:pointer-events-none disabled:opacity-50"
           >
             اعمال لینک
           </button>

@@ -6,7 +6,7 @@ import { EchoText, echoStyle } from "@/components/EchoHeading";
 // centered announcement pill, gradient headline, subtitle, a gradient CTA
 // and a large product preview with a glow behind it. Changes for this
 // site: Persian/RTL copy, the site's theme tokens (matte black, off-white,
-// violet) instead of fixed black/white, the site's own Nav instead of the
+// off-white) instead of fixed black/white, the site's own Nav instead of the
 // template's English navigation, no global Poppins override (it would
 // replace the Persian font everywhere), and the team's real project
 // mockups instead of the template's remote dashboard image. Elements keep
@@ -79,9 +79,9 @@ const POINTS = ["بدون هزینه‌ی پنهان", "سایت نتیجه‌م
 export default function SaasHero() {
   return (
     <section className="relative overflow-hidden px-6 pb-24 pt-14 sm:pt-20">
-      {/* background: dot grid + violet glow at the top */}
+      {/* background: dot grid + a faint light glow at the top */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 h-[720px] bg-dot-grid [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-220px] z-0 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2 rounded-full bg-accent/25 blur-[120px]" />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-220px] z-0 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2 rounded-full bg-ink/[0.07] blur-[120px]" />
 
       <div className="relative z-10 mx-auto flex max-w-container flex-col items-center text-center">
         <aside
@@ -112,11 +112,11 @@ export default function SaasHero() {
             ما نرم‌افزار نمی‌سازیم؛
             <br />
             <span
+              className="mx-1 inline-block -rotate-1 rounded-xl px-3 leading-[1.25]"
               style={{
-                backgroundImage: "linear-gradient(to bottom, #C9B0FF, #8A4DFF)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                background: "rgb(var(--color-ink))",
+                WebkitTextFillColor: "rgb(var(--color-canvas))",
+                color: "rgb(var(--color-canvas))",
               }}
             >
               ابزار پول‌سازی
@@ -151,7 +151,7 @@ export default function SaasHero() {
 
         {/* product preview: three real project mockups, the middle one in front */}
         <div id="work" data-hero-item className="relative w-full max-w-5xl scroll-mt-[90px]">
-          <div aria-hidden className="pointer-events-none absolute left-1/2 top-[8%] z-0 h-[70%] w-[80%] -translate-x-1/2 rounded-full bg-accent/35 blur-[90px]" />
+          <div aria-hidden className="pointer-events-none absolute left-1/2 top-[8%] z-0 h-[70%] w-[80%] -translate-x-1/2 rounded-full bg-ink/[0.10] blur-[90px]" />
           <div className="relative z-10 mx-auto flex items-center justify-center">
             <PreviewCard {...PREVIEWS[0]} className="absolute right-0 top-[10%] hidden w-[34%] translate-x-[-4%] rotate-[7deg] opacity-80 sm:block" />
             <PreviewCard {...PREVIEWS[2]} className="absolute left-0 top-[10%] hidden w-[34%] translate-x-[4%] -rotate-[7deg] opacity-80 sm:block" />
