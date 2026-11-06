@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { categories, type BusinessCategory } from "@/lib/businessSites";
 import EchoHeading from "@/components/EchoHeading";
-
-const PAGE_SIZE = 6;
+import CarouselStacked from "@/components/ui/carousel-07";
 
 export type ShowcaseSite = {
   id: number | string;
@@ -141,7 +139,6 @@ function CategoryDropdown({
 export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
   const [activeCategory, setActiveCategory] = useState<BusinessCategory | "همه">("همه");
   const [query, setQuery] = useState("");
-  const [showAll, setShowAll] = useState(false);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -153,52 +150,13 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
     });
   }, [activeCategory, query, sites]);
 
-  // با تغییر فیلتر یا جستجو، دوباره از حالت جمع‌شده (۶ تا) شروع کن.
-  useEffect(() => {
-    setShowAll(false);
-  }, [activeCategory, query]);
-
-  const visible = showAll ? filtered : filtered.slice(0, PAGE_SIZE);
-  const remaining = filtered.length - visible.length;
-
   const countOf = (cat: BusinessCategory | "همه") =>
     cat === "همه" ? sites.length : sites.filter((s) => s.category === cat).length;
-
-  // با کلیک روی «بیشتر»، کلی کارت جدید بالای اسکرول فعلی اضافه می‌شه. بدون
-  // این تصحیح، مرورگر (مستقل از کد ما) خودش موقعیت اسکرول رو جابه‌جا می‌کنه
-  // و کاربر ناخواسته پرت می‌شه ته گالری. این تابع دقیقاً همون‌جایی که کاربر
-  // بود رو بعد از رندر شدن کارت‌های جدید نگه می‌داره — یعنی فقط دکمه از
-  // «بیشتر» به «کمتر» عوض می‌شه و کارت‌های تازه، بدون هیچ پرشی، پایین‌تر از
-  // دید فعلی منتظر اسکرول طبیعی کاربر می‌مونن.
-  function handleShowAll() {
-    const beforeScrollY = window.scrollY;
-    setShowAll(true);
-
-    const deadline = performance.now() + 400;
-    function correct() {
-      if (Math.abs(window.scrollY - beforeScrollY) > 1) {
-        const html = document.documentElement;
-        const prevBehavior = html.style.scrollBehavior;
-        html.style.scrollBehavior = "auto";
-        window.scrollTo(0, beforeScrollY);
-        html.style.scrollBehavior = prevBehavior;
-      }
-      if (performance.now() < deadline) {
-        requestAnimationFrame(correct);
-      }
-    }
-    requestAnimationFrame(correct);
-  }
 
   return (
     <section id="showcase" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
 
-      {/* overflow-anchor: none روی این wrapper لازمه — وگرنه وقتی با دکمه‌ی
-          «بیشتر» چندین کارت جدید بالای دکمه اضافه می‌شن، رفتار پیش‌فرض
-          مرورگر (CSS Scroll Anchoring) برای «حفظ موقعیت دید» خودش اسکرول رو
-          به اندازه‌ی ارتفاع کارت‌های تازه اضافه‌شده می‌ندازه پایین‌تر —
-          دقیقاً همون پرش ناخواسته به ته گالری. */}
-      <div className="relative z-[1] mx-auto max-w-container px-6" style={{ overflowAnchor: "none" }}>
+      <div className="relative z-[1] mx-auto max-w-container px-6">
         <Reveal className="mb-10">
           <div>
             <EchoHeading en="Work Like Yours" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
@@ -241,85 +199,13 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
         </Reveal>
 
         {filtered.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {visible.map((s) => (
-                <Reveal
-                  as="article"
-                  key={s.id}
-                  className="group relative overflow-hidden matte matte-hover rounded-card transition-all hover:-translate-y-1 hover:border-ink/20"
-                >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#101013]">
-                    {s.image ? (
-                      <Image
-                        src={s.image}
-                        alt={s.name}
-                        fill
-                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center font-mono text-xs text-white/30">
-                        بدون تصویر
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <span className="mb-2 inline-flex items-center rounded-full border border-accent/25 bg-accent/10 px-3 py-1 font-mono text-[11px] font-bold text-accent">
-                      {s.category}
-                    </span>
-                    <h4 className="mb-1.5 flex items-center justify-between font-display text-lg font-normal">
-                      {s.name}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[14px] w-[14px] text-accent">
-                        <path d="M7 17L17 7M17 7H8M17 7v9" />
-                      </svg>
-                    </h4>
-                    <p className="text-[13.5px] text-dim">{s.desc}</p>
-                  </div>
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="absolute inset-0"
-                    aria-label={`مشاهده ${s.name}`}
-                  />
-                </Reveal>
-              ))}
-            </div>
-
-            {remaining > 0 && (
-              <Reveal className="mt-9 flex justify-center">
-                <button
-                  type="button"
-                  onClick={handleShowAll}
-                  className="group inline-flex items-center gap-2.5 matte-btn rounded-xl bg-canvas px-7 py-3.5 text-[14.5px] font-bold text-ink"
-                >
-                  نمایش {remaining} نمونه‌ی دیگر
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    className="h-[15px] w-[15px] transition-transform group-hover:translate-y-0.5"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </button>
-              </Reveal>
-            )}
-
-            {showAll && filtered.length > PAGE_SIZE && (
-              <Reveal className="mt-5 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => setShowAll(false)}
-                  className="font-mono text-[13px] font-semibold text-dim transition-colors hover:text-accent"
-                >
-                  نمایش کمتر ↑
-                </button>
-              </Reveal>
-            )}
-          </>
+          <Reveal>
+            <CarouselStacked
+              key={`${activeCategory}|${query}`}
+              slides={filtered.map((s) => ({ image: s.image, title: s.name, description: s.desc, badge: s.category, href: s.url }))}
+            />
+            <p className="mt-1 text-center text-[12.5px] text-dim">کارت‌ها رو بکش یا با فلش‌ها جابه‌جا کن؛ روی کارت جلویی بزن تا سایت باز بشه.</p>
+          </Reveal>
         ) : (
           <Reveal className="flex flex-col items-center gap-3 rounded-card border-2 border-dashed border-ink/15 py-16 text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent">
