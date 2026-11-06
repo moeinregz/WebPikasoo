@@ -21,7 +21,9 @@ export default function ScrollFx() {
   useEffect(() => {
     const mm = gsap.matchMedia();
 
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    // Heavy, scroll-linked effects (parallax, word-split headings, zoom,
+    // marquee skew) only on larger screens; phones keep the light ones.
+    mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
       gsap.utils.toArray<HTMLElement>("[data-speed]").forEach((el) => {
         const speed = parseFloat(el.dataset.speed || "0");
         gsap.to(el, {
@@ -59,6 +61,22 @@ export default function ScrollFx() {
         );
       });
 
+      const rows = gsap.utils.toArray<HTMLElement>("[data-marquee]");
+      if (rows.length) {
+        const skewTo = rows.map((r) => gsap.quickTo(r, "skewX", { duration: 0.5, ease: "power3" }));
+        ScrollTrigger.create({
+          onUpdate: (self) => {
+            const v = gsap.utils.clamp(-14, 14, self.getVelocity() / -140);
+            skewTo.forEach((fn) => fn(v));
+          },
+        });
+      }
+
+      return () => splits.forEach((s) => s.revert());
+    });
+
+    // بعد از لود عکس‌ها و فونت‌ها ارتفاع صفحه عوض می‌شه
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.utils.toArray<HTMLElement>('[data-gsap="draw"]').forEach((el) => {
         gsap.fromTo(
           el,
@@ -78,21 +96,8 @@ export default function ScrollFx() {
         });
       });
 
-      const rows = gsap.utils.toArray<HTMLElement>("[data-marquee]");
-      if (rows.length) {
-        const skewTo = rows.map((r) => gsap.quickTo(r, "skewX", { duration: 0.5, ease: "power3" }));
-        ScrollTrigger.create({
-          onUpdate: (self) => {
-            const v = gsap.utils.clamp(-14, 14, self.getVelocity() / -140);
-            skewTo.forEach((fn) => fn(v));
-          },
-        });
-      }
-
-      return () => splits.forEach((s) => s.revert());
     });
 
-    // بعد از لود عکس‌ها و فونت‌ها ارتفاع صفحه عوض می‌شه
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener("load", refresh);
     document.fonts?.ready.then(refresh);

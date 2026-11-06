@@ -325,8 +325,8 @@ export default function LaptopShowcase() {
       <div className="order-1 lg:order-2">
         <div className="relative mx-auto w-full max-w-[560px]">
           <span
-            className="pointer-events-none absolute inset-x-0 -top-6 mx-auto h-[260px] w-[85%] rounded-full opacity-40 blur-[100px] transition-colors duration-500"
-            style={{ background: active.accent }}
+            className="pointer-events-none absolute inset-x-0 -top-6 mx-auto h-[260px] w-[85%] rounded-full opacity-40 transition-colors duration-500"
+            style={{ background: `radial-gradient(closest-side, ${active.accent}, transparent)` }}
           />
 
           <div className="relative z-[1] overflow-hidden rounded-t-[16px] border-[8px] border-b-0 border-[#1a1a1e] bg-black shadow-[0_40px_90px_-25px_rgba(0,0,0,0.75)] sm:border-[10px]">

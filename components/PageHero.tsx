@@ -20,12 +20,12 @@ export default function PageHero({
     <section className="relative overflow-hidden border-b border-ink/10 pb-16 pt-[68px] sm:pb-20 sm:pt-[76px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
       <span
-        className="pointer-events-none absolute -right-[180px] -top-[220px] z-0 h-[560px] w-[560px] rounded-full opacity-40 blur-[130px]"
-        style={{ background: "rgba(217, 215, 209, .35)" }}
+        className="pointer-events-none absolute -right-[180px] -top-[220px] z-0 h-[560px] w-[560px] rounded-full opacity-40"
+        style={{ background: "radial-gradient(closest-side, rgba(217, 215, 209, .35), transparent)" }}
       />
       <span
-        className="pointer-events-none absolute -left-[200px] -bottom-[240px] z-0 h-[480px] w-[480px] rounded-full opacity-30 blur-[130px]"
-        style={{ background: "rgba(74, 74, 82, .35)" }}
+        className="pointer-events-none absolute -left-[200px] -bottom-[240px] z-0 h-[480px] w-[480px] rounded-full opacity-30"
+        style={{ background: "radial-gradient(closest-side, rgba(74, 74, 82, .35), transparent)" }}
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6 pt-14 text-center sm:pt-16">

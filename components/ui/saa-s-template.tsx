@@ -81,7 +81,7 @@ export default function SaasHero() {
     <section className="relative overflow-hidden px-6 pb-24 pt-14 sm:pt-20">
       {/* background: dot grid + a faint light glow at the top */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 h-[720px] bg-dot-grid [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-220px] z-0 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2 rounded-full bg-ink/[0.07] blur-[120px]" />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-220px] z-0 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--color-ink)/0.07),transparent)]" />
 
       <div className="relative z-10 mx-auto flex max-w-container flex-col items-center text-center">
         <aside
@@ -151,7 +151,7 @@ export default function SaasHero() {
 
         {/* product preview: three real project mockups, the middle one in front */}
         <div id="work" data-hero-item className="relative w-full max-w-5xl scroll-mt-[90px]">
-          <div aria-hidden className="pointer-events-none absolute left-1/2 top-[8%] z-0 h-[70%] w-[80%] -translate-x-1/2 rounded-full bg-ink/[0.10] blur-[90px]" />
+          <div aria-hidden className="pointer-events-none absolute left-1/2 top-[8%] z-0 h-[70%] w-[80%] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--color-ink)/0.10),transparent)]" />
           <div className="relative z-10 mx-auto flex items-center justify-center">
             <PreviewCard {...PREVIEWS[0]} className="absolute right-0 top-[12%] w-[40%] rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[-4%] sm:rotate-[7deg]" />
             <PreviewCard {...PREVIEWS[2]} className="absolute left-0 top-[12%] w-[40%] -rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[4%] sm:-rotate-[7deg]" />

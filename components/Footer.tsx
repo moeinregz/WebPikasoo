@@ -61,12 +61,12 @@ export default function Footer() {
       {/* بلوب‌های محو پس‌زمینه — هم‌خانواده با بقیه‌ی سکشن‌های سایت، تا فوتر
           هم مثل بقیه‌ی صفحه یه ذره جلوه داشته باشه و کاملاً تخت نباشه. */}
       <span
-        className="pointer-events-none absolute -top-24 right-[-120px] h-72 w-72 rounded-full opacity-[0.16] blur-[110px]"
-        style={{ background: "#D9D7D1" }}
+        className="pointer-events-none absolute -top-24 right-[-120px] h-72 w-72 rounded-full opacity-[0.16]"
+        style={{ background: "radial-gradient(closest-side, #D9D7D1, transparent)" }}
       />
       <span
-        className="pointer-events-none absolute bottom-[-160px] left-[-100px] h-80 w-80 rounded-full opacity-[0.14] blur-[130px]"
-        style={{ background: "#CFCDC7" }}
+        className="pointer-events-none absolute bottom-[-160px] left-[-100px] h-80 w-80 rounded-full opacity-[0.14]"
+        style={{ background: "radial-gradient(closest-side, #CFCDC7, transparent)" }}
       />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-accent/50 to-transparent" />
 
