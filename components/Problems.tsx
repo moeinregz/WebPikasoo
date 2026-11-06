@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
+import EchoHeading from "@/components/EchoHeading";
 
 type ProblemSolution = {
   problem: string;
@@ -16,7 +17,7 @@ const items: ProblemSolution[] = [
   {
     problem: "سایت دارم ولی هیچ مشتری‌ای ازش نمیاد.",
     solution: "سایت رو بر اساس اصول تبدیل بازدیدکننده به مشتری بازطراحی می‌کنیم، نه فقط ظاهرش.",
-    color: "#0077B6",
+    color: "#8A4DFF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <circle cx="11" cy="11" r="7" />
@@ -27,7 +28,7 @@ const items: ProblemSolution[] = [
   {
     problem: "قبلاً با یه فریلنسر/تیم دیگه سوخته‌ام.",
     solution: "از اول قیمت، زمان تحویل و امکانات رو مکتوب می‌دیم و مرحله‌به‌مرحله تاییدت رو می‌گیریم.",
-    color: "#00B4D8",
+    color: "#B794FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 3 4.5 6.5v5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5v-5L12 3Z" />
@@ -38,7 +39,7 @@ const items: ProblemSolution[] = [
   {
     problem: "نمی‌دونم دقیقاً چه نوع سایت/سیستمی نیاز دارم.",
     solution: "تو یه گفتگوی کوتاه و رایگان نیازت رو تحلیل می‌کنیم و بهترین مسیر رو پیشنهاد می‌دیم.",
-    color: "#023E8A",
+    color: "#5B21D6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <circle cx="12" cy="12" r="9" />
@@ -50,7 +51,7 @@ const items: ProblemSolution[] = [
   {
     problem: "می‌ترسم بعد از تحویل تنها بمونم و کسی جواب نده.",
     solution: "بعد از تحویل هم مستقیم با همون تیمی که ساخته‌ت در ارتباطی؛ گارانتی رفع باگ هم داری.",
-    color: "#48CAE4",
+    color: "#C9B0FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M21 11.5a8.5 8.5 0 0 1-11.9 7.8L3 21l1.7-6.1A8.5 8.5 0 1 1 21 11.5Z" />
@@ -68,14 +69,11 @@ export default function Problems() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            Problems
-          </span>
+        <Reveal className="mb-12">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+            <EchoHeading en="What's the Problem?" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
               چه مشکلی داری؟
-            </h2>
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               احتمالاً یکی از این‌هاست — و راه‌حلش هم دقیقاً روبه‌روشه.
             </p>

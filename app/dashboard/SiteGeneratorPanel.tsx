@@ -346,7 +346,7 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
                     checked={checked}
                     disabled={locked}
                     onChange={() => setFeats((cur) => (cur.includes(f.id) ? cur.filter((x) => x !== f.id) : [...cur, f.id]))}
-                    className="mt-1 h-4 w-4 accent-[#0077B6]"
+                    className="mt-1 h-4 w-4 accent-[#8A4DFF]"
                   />
                   <span>
                     <span className="block text-[13.5px] font-bold">{f.icon} {f.label}</span>

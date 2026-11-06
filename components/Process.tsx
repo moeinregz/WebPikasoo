@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
+import EchoHeading from "@/components/EchoHeading";
 
 type Step = {
   n: string;
@@ -24,7 +25,7 @@ const steps: Step[] = [
     title: "مشاوره‌ی رایگان",
     tag: "بدون تعهد، بدون هزینه",
     desc: "یه جلسه‌ی کوتاه که فقط نیاز واقعی کسب‌وکارتون رو می‌شنویم — نه فروش، فقط گوش دادن.",
-    color: "#0077B6",
+    color: "#8A4DFF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.8 8.8 0 0 1-3.9-.9L3 20l1.1-4.5A8.4 8.4 0 0 1 12.6 3a8.4 8.4 0 0 1 8.4 8.5Z" />
@@ -36,7 +37,7 @@ const steps: Step[] = [
     title: "تحلیل و پیشنهاد",
     tag: "قیمت و زمان‌بندی مکتوب",
     desc: "بررسی فنی نیازتون و ارائه‌ی یه پیشنهاد شفاف — دقیقاً چی می‌سازیم، کِی و با چه هزینه‌ای.",
-    color: "#00B4D8",
+    color: "#B794FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <rect x="5" y="3.5" width="14" height="17" rx="2" />
@@ -49,7 +50,7 @@ const steps: Step[] = [
     title: "طراحی و تایید شما",
     tag: "کنترل کامل با شماست",
     desc: "پیش‌نمایش طراحی رو می‌بینید و نظر می‌دید؛ کار جلو نمی‌ره مگر با تایید خودتون.",
-    color: "#0077B6",
+    color: "#8A4DFF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M4 20l3.3-1L18 8.3a1.9 1.9 0 0 0-2.7-2.7L4.6 16.3 4 20Z" />
@@ -62,7 +63,7 @@ const steps: Step[] = [
     title: "توسعه با گزارش هفتگی",
     tag: "شفافیت در طول مسیر",
     desc: "هر هفته دقیقاً می‌بینید چقدر پیش رفتیم — بدون سکوت طولانی و بی‌خبری.",
-    color: "#023E8A",
+    color: "#5B21D6",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M4 19V5M4 19h16" />
@@ -75,7 +76,7 @@ const steps: Step[] = [
     title: "تست کامل و تحویل",
     tag: "تضمین کیفیت",
     desc: "قبل از تحویل، همه‌چیز رو کامل تست می‌کنیم؛ چیزی که تحویل می‌گیرید بدون دردسر اجرا می‌شه.",
-    color: "#0077B6",
+    color: "#8A4DFF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M9 12.5l2.2 2.2L16 9.5" />
@@ -88,7 +89,7 @@ const steps: Step[] = [
     title: "پشتیبانی مستمر",
     tag: "همیشه در دسترس",
     desc: "تحویل پروژه پایان همکاری نیست؛ همیشه یه تیم پشت خط برای رفع مشکل و توسعه‌ی بعدی هست.",
-    color: "#48CAE4",
+    color: "#C9B0FF",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M4 12a8 8 0 0 1 16 0" />
@@ -108,12 +109,11 @@ export default function Process() {
     <section className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-16 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-          Map
-          </span>
+        <Reveal className="mb-16">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">فرایند همکاری</h2>
+            <EchoHeading en="How We Work" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
+              فرایند همکاری
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               از اولین جلسه‌ی رایگان تا پشتیبانی بعد از تحویل — شش قدم روشن که همیشه می‌دونید دقیقاً
               کجای مسیر ایستادید.

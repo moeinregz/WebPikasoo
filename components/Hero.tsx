@@ -1,4 +1,5 @@
 import HeroSlider from "./HeroSlider";
+import { EchoText, echoStyle } from "@/components/EchoHeading";
 
 const features = [
   { t: "بدون هزینه پنهان", d: "قیمت و امکانات از اول شفافه" },
@@ -23,7 +24,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto mt-14 grid max-w-container grid-cols-1 gap-14 px-6 md:grid-cols-[1.05fr_.95fr] md:items-center">
-        <div>
+        <div className="min-w-0">
           <span
             data-hero-item
             className="matte matte-sm mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-[12.5px] font-bold text-ink"
@@ -32,7 +33,9 @@ export default function Hero() {
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
 
-          <h1 className="mb-6 font-display text-[42px] font-normal leading-[1.28] sm:text-[56px] lg:text-[66px]">
+          <div className="echo text-right" style={echoStyle("We Build Money-Makers", 96, 1112)}>
+            <EchoText en="We Build Money-Makers" className="echo-bleed" />
+          <h1 className="echo-fa mb-6 font-display text-[42px] font-normal leading-[1.28] sm:text-[56px] lg:text-[66px]">
             <span data-hero-item className="block">
               ما نرم‌افزار نمی‌سازیم؛
             </span>
@@ -54,6 +57,7 @@ export default function Hero() {
               می‌سازیم.
             </span>
           </h1>
+          </div>
 
           <p data-hero-item className="mb-8 max-w-[52ch] text-[15.5px] text-dim sm:text-[18px]">
             برای کسب‌وکارت{" "}

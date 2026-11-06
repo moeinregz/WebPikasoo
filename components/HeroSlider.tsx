@@ -24,7 +24,7 @@ const slides: Slide[] = [
   },
   {
     title: "پنل مدیریت فروشگاه",
-    accent: "#0077B6",
+    accent: "#8A4DFF",
     image: "/work/site-novapanel.webp",
   },
 ];
@@ -57,7 +57,7 @@ export default function HeroSlider() {
     <div
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className="matte group relative overflow-hidden rounded-[20px] !bg-[#0a0a0c] ![box-shadow:-10px_10px_0_0_rgb(var(--matte-shadow))]"
+      className="matte group relative overflow-hidden rounded-[20px] !bg-[#101013] ![box-shadow:-10px_10px_0_0_rgb(var(--matte-shadow))]"
     >
       {/* بدنه‌ی اسلایدر — قاب مربعی ۱ در ۱ */}
       <div className="relative aspect-square w-full overflow-hidden">

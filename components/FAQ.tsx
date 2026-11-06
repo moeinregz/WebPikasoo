@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Reveal from "./Reveal";
+import EchoHeading from "@/components/EchoHeading";
 
 type FaqItem = { q: string; a: string };
 
@@ -42,16 +43,13 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
+    <section id="faq" className="section-invert relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            FAQ
-          </span>
+        <Reveal className="mb-12">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+            <EchoHeading en="Common Questions" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
               سوالات پرتکرار
-            </h2>
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               اگه سوال دیگه‌ای داشتی هم می‌تونی مستقیم تو واتساپ یا فرم پایین بپرسی.
             </p>

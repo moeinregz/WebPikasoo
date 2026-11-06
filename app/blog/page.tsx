@@ -53,7 +53,7 @@ export default async function BlogIndexPage() {
                 href={`/blog/${post.slug}`}
                 className="group flex flex-col overflow-hidden rounded-card border border-ink/[0.14] bg-surface/20 transition hover:-translate-y-1 hover:border-accent/40"
               >
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0a0a0c]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#101013]">
                   {post.cover_image ? (
                     <Image
                       src={post.cover_image}

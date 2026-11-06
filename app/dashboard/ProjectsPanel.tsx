@@ -227,7 +227,7 @@ export default function ProjectsPanel({ projects }: { projects: Project[] }) {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <article key={p.id} className="group relative overflow-hidden rounded-card border border-ink/[0.14] bg-surface/20">
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#101013]">
                 {p.image ? (
                   <Image
                     src={p.image}

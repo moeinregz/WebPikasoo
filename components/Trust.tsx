@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Reveal from "./Reveal";
 import StatCounter from "./StatCounter";
 import { businessSites, categories } from "@/lib/businessSites";
+import EchoHeading from "@/components/EchoHeading";
 
 type TrustPoint = { title: string; desc: string; icon: ReactNode };
 
@@ -48,18 +49,15 @@ const trustPoints: TrustPoint[] = [
 
 export default function Trust() {
   return (
-    <section id="trust" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
+    <section id="trust" className="section-invert relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[110px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[480px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            About
-          </span>
+        <Reveal className="mb-12">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+            <EchoHeading en="Why WebPikaso?" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
               چرا کسب‌وکارت رو به وب پیکاسو بسپاری؟
-            </h2>
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               یه تیم کوچیک و متخصصیم، نه یه آژانس بزرگ با هزار واسطه — یعنی هم سریع‌تر جواب می‌گیری،
               هم دقیقاً می‌دونی پروژه‌ت دست کیه.
@@ -68,12 +66,12 @@ export default function Trust() {
         </Reveal>
 
         {/* پنل تیره‌ی آماری — همون حس ترمینال هیرو و پنل سئوی بخش مهارت‌ها.
-            رنگ پس‌زمینه عمداً یه مقدار ثابت (bg-[#0a0a0c]) هست، نه
+            رنگ پس‌زمینه عمداً یه مقدار ثابت (bg-[#101013]) هست، نه
             bg-black/40 — چون شفافیت با پس‌زمینه‌ی خودِ صفحه ترکیب می‌شه؛
             تو حالت تاریک (canvas مشکی) فرقی نمی‌کرد، ولی تو حالت روشن
             (canvas سفید) نتیجه‌ش یه جعبه‌ی خاکستری کم‌رنگ بود که متن
             سفید/۴۵ تا سفید/۷۰ داخلش عملاً کم‌کنتراست و به‌سختی خونا می‌شد. */}
-        <Reveal className="mb-8 overflow-hidden matte rounded-card !bg-[#0a0a0c] p-6 sm:p-9">
+        <Reveal className="mb-8 overflow-hidden matte rounded-card !bg-[#101013] p-6 sm:p-9">
           <div data-gsap="pop" className="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4">
             <div>
               <div className="font-display text-[26px] font-normal text-white sm:text-[32px]">
