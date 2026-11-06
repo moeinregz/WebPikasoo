@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Reveal from "./Reveal";
+import { Briefcase, Building2, CheckCircle2, Rocket } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import * as PricingCard from "@/components/ui/pricing-card";
 import { submitPlanOrder } from "@/app/actions";
 
 type Plan = {
@@ -265,6 +268,10 @@ const categoryToProjectType: Record<string, string> = {
 
 type OrderStatus = "idle" | "sending" | "sent" | "error";
 
+// Icon per plan tier (first, middle, top) and what every plan includes.
+const PLAN_ICONS = [Rocket, Briefcase, Building2];
+const INCLUDED = ["مشاوره‌ی رایگان قبل از شروع", "قیمت و زمان‌بندی مکتوب، بدون هزینه‌ی پنهان"];
+
 /** یه سفارش پلن رو یکتا شناسایی می‌کنه — برای نگه‌داشتن وضعیت هر کارت
  *  جدا از بقیه و برای تشخیص «همین پلن، از روی URL، بعد از ورود/ثبت‌نام
  *  باید خودکار ثبت بشه» یا نه. */
@@ -363,10 +370,9 @@ export default function PricingPlans({
             onClick={() => setActive(c.slug)}
             className={`rounded-lg border px-5 py-2.5 text-[13.5px] font-bold transition ${
               active === c.slug
-                ? "matte-btn text-white"
+                ? "border-ink bg-ink text-canvas"
                 : "border-ink/15 bg-surface/40 text-dim hover:border-ink/25 hover:text-ink"
             }`}
-            style={active === c.slug ? { background: c.color } : undefined}
           >
             {c.shortLabel}
           </button>
@@ -382,80 +388,69 @@ export default function PricingPlans({
         {cat.plans.map((p, i) => {
           const key = planKey(cat.slug, p.name);
           const status = statuses[key] ?? "idle";
+          const PlanIcon = PLAN_ICONS[i] ?? Rocket;
 
           return (
-            <Reveal key={key} delay={i * 80}>
-              <div
-                className={`matte matte-hover relative flex h-full flex-col rounded-card p-7 ${
-                  p.highlight ? "md:-translate-y-3" : ""
-                }`}
-                style={
-                  p.highlight
-                    ? { boxShadow: `-10px 10px 0 0 ${cat.color}` }
-                    : undefined
-                }
-              >
-                {p.highlight && (
-                  <span
-                    className="absolute -top-3 right-7 rounded-full px-3 py-1 font-mono text-[11px] font-bold text-white"
-                    style={{ background: cat.color }}
-                  >
-                    پیشنهادی
-                  </span>
-                )}
-                <h4 className="mb-1.5 font-display text-lg font-normal">{p.name}</h4>
-                <div className="mb-6 mt-2">
-                  <span className="font-display text-[26px] font-normal text-ink">{p.price}</span>
-                  <span className="mr-1.5 text-[13px] text-dim">{p.unit}</span>
-                </div>
-                <ul className="mb-7 flex flex-1 flex-col gap-3">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-[13.5px] text-ink/85">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke={cat.color}
-                        strokeWidth={2.5}
-                        className="mt-0.5 h-4 w-4 flex-shrink-0"
-                      >
-                        <path d="M20 6 9 17l-5-5" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+            <Reveal key={key} delay={i * 80} className="h-full">
+              <PricingCard.Card className={`flex h-full flex-col ${p.highlight ? "border-ink/40 md:-translate-y-3" : ""}`}>
+                <PricingCard.Header>
+                  <PricingCard.Plan>
+                    <PricingCard.PlanName>
+                      <PlanIcon className="size-4" aria-hidden="true" />
+                      <span>{p.name}</span>
+                    </PricingCard.PlanName>
+                    <PricingCard.Badge className={p.highlight ? "border-ink bg-ink text-canvas" : ""}>
+                      {p.highlight ? "پیشنهادی" : cat.shortLabel}
+                    </PricingCard.Badge>
+                  </PricingCard.Plan>
+                  <PricingCard.Price>
+                    <PricingCard.MainPrice className="font-display font-normal">{p.price}</PricingCard.MainPrice>
+                    <PricingCard.Period>{p.unit}</PricingCard.Period>
+                  </PricingCard.Price>
 
-                {status === "sent" ? (
-                  <div className="flex items-center justify-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-5 py-3 text-[13.5px] font-bold text-emerald-600">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-4 w-4 flex-shrink-0">
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                    درخواستت ثبت شد
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    disabled={status === "sending" || isPending}
-                    onClick={() =>
-                      isLoggedIn ? placeOrder(cat, p) : setGuestPromptPlan({ cat, plan: p })
-                    }
-                    className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-bold transition disabled:pointer-events-none disabled:opacity-60 ${
-                      p.highlight
-                        ? "matte-btn text-white"
-                        : "border border-ink/15 bg-canvas text-ink hover:border-accent hover:text-accent"
-                    }`}
-                    style={p.highlight ? { background: cat.color } : undefined}
-                  >
-                    {status === "sending" ? "در حال ثبت..." : "درخواست مشاوره برای این پلن"}
-                  </button>
-                )}
+                  {status === "sent" ? (
+                    <div className="relative flex h-10 items-center justify-center gap-2 rounded-md border border-emerald-500/30 bg-emerald-500/10 text-[13.5px] font-bold text-emerald-600">
+                      <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                      درخواستت ثبت شد
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant={p.highlight ? "default" : "outline"}
+                      className={`relative w-full font-bold ${p.highlight ? "bg-gradient-to-b from-ink to-ink/80 shadow-[0_10px_25px_rgba(0,0,0,0.3)]" : ""}`}
+                      disabled={status === "sending" || isPending}
+                      onClick={() => (isLoggedIn ? placeOrder(cat, p) : setGuestPromptPlan({ cat, plan: p }))}
+                    >
+                      {status === "sending" ? "در حال ثبت..." : "درخواست مشاوره برای این پلن"}
+                    </Button>
+                  )}
+                  {status === "error" && <p className="relative mt-2.5 text-center text-[12.5px] text-red-500">{errorMessages[key] || "یه مشکلی پیش اومد."}</p>}
+                </PricingCard.Header>
 
-                {status === "error" && (
-                  <p className="mt-2.5 text-center text-[12.5px] text-red-500">
-                    {errorMessages[key] || "یه مشکلی پیش اومد."}
-                  </p>
-                )}
-              </div>
+                <PricingCard.Body className="flex-1">
+                  <PricingCard.List>
+                    {p.features.map((f) => (
+                      <PricingCard.ListItem key={f} className="text-ink/85">
+                        <span className="mt-0.5">
+                          <CheckCircle2 className="h-4 w-4 text-ink" aria-hidden="true" />
+                        </span>
+                        <span>{f}</span>
+                      </PricingCard.ListItem>
+                    ))}
+                  </PricingCard.List>
+                  <PricingCard.Separator>در همه‌ی پلن‌ها</PricingCard.Separator>
+                  <PricingCard.List>
+                    {INCLUDED.map((f) => (
+                      <PricingCard.ListItem key={f}>
+                        <span className="mt-0.5">
+                          <CheckCircle2 className="h-4 w-4 text-dim" aria-hidden="true" />
+                        </span>
+                        <span>{f}</span>
+                      </PricingCard.ListItem>
+                    ))}
+                  </PricingCard.List>
+                </PricingCard.Body>
+              </PricingCard.Card>
             </Reveal>
           );
         })}
