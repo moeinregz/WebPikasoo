@@ -181,6 +181,8 @@ function Card({ slide, index, total, progress, config }: CardProps) {
   const zIndex = useTransform(offset, (o) => Math.round(100 - Math.abs(o) * 10));
   const shade = useTransform(offset, [-2, -0.5, 0, 0.5, 2], [0.55, 0.25, 0, 0.25, 0.55]);
   const textOpacity = useTransform(offset, [-0.6, 0, 0.6], [0, 1, 0]);
+  // Backdrop blur is costly; only the front card's panel gets it.
+  const glass = useTransform(offset, (o) => (Math.abs(o) < 0.5 ? "blur(12px)" : "none"));
 
   return (
     <motion.div
@@ -200,7 +202,7 @@ function Card({ slide, index, total, progress, config }: CardProps) {
       <motion.div style={{ opacity: shade }} className="pointer-events-none absolute inset-0 bg-black" />
 
       {/* frosted-glass panel with the text */}
-      <div dir="rtl" className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-black/25 px-3.5 py-2.5 text-right text-white backdrop-blur-md sm:px-5 sm:py-3.5">
+      <motion.div dir="rtl" style={{ backdropFilter: glass, WebkitBackdropFilter: glass }} className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-black/35 px-3.5 py-2.5 text-right text-white sm:px-5 sm:py-3.5">
         <Badge className="mb-1.5 border-white/20 bg-white/90 px-2.5 py-0.5 text-[11px] font-bold text-black">{slide.badge}</Badge>
         <motion.p style={{ opacity: textOpacity }} className="font-display text-base leading-tight drop-shadow-md sm:text-xl">
           {slide.title}
@@ -208,7 +210,7 @@ function Card({ slide, index, total, progress, config }: CardProps) {
         <motion.p style={{ opacity: textOpacity }} className="mt-0.5 hidden truncate text-[12.5px] leading-6 text-white/80 sm:block">
           {slide.description}
         </motion.p>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

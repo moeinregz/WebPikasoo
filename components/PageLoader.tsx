@@ -24,12 +24,12 @@ export default function PageLoader() {
       {/* پس‌زمینه‌ی نقطه‌چین + دو هاله‌ی نرم، همون بافت هیروی خودِ سایت */}
       <div className="pointer-events-none absolute inset-0 z-0 bg-dot-grid" />
       <span
-        className="pointer-events-none absolute -right-[200px] -top-[200px] z-0 h-[480px] w-[480px] animate-float-glow rounded-full opacity-50 blur-[130px]"
-        style={{ background: "rgba(217, 215, 209, .4)" }}
+        className="pointer-events-none absolute -right-[200px] -top-[200px] z-0 h-[480px] w-[480px] animate-float-glow rounded-full opacity-50"
+        style={{ background: "radial-gradient(closest-side, rgba(217, 215, 209, .4), transparent)" }}
       />
       <span
-        className="pointer-events-none absolute -left-[220px] top-[80px] z-0 h-[440px] w-[440px] animate-float-glow-slow rounded-full opacity-40 blur-[130px]"
-        style={{ background: "rgba(74, 74, 82, .35)" }}
+        className="pointer-events-none absolute -left-[220px] top-[80px] z-0 h-[440px] w-[440px] animate-float-glow-slow rounded-full opacity-40"
+        style={{ background: "radial-gradient(closest-side, rgba(74, 74, 82, .35), transparent)" }}
       />
 
       <div className="relative z-[1] flex flex-col items-center gap-8">

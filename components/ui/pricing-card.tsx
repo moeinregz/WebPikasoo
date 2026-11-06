@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("relative w-full rounded-xl border border-ink/10 bg-surface/70 p-1.5 shadow-xl backdrop-blur-xl", className)}
+      className={cn("relative w-full rounded-xl border border-ink/10 bg-surface/90 p-1.5 shadow-xl", className)}
       {...props}
     />
   );
