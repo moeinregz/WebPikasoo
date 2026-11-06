@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Code, Palette, Search, ShieldCheck, Users } from "lucide-react";
+import { Code, Palette, Search, TrendingUp, Users } from "lucide-react";
 
 // Bento feature grid adapted from the "features-8" block (21st.dev /
 // shadcn): same five cards and SVG illustrations, with Persian copy about
@@ -13,7 +13,7 @@ export function FeaturesGrid() {
   return (
     <div className="relative">
       <div className="relative z-10 grid grid-cols-6 gap-3">
-        {/* ۱۰۰٪ شفاف */}
+        {/* ۱۰۰٪ فروش */}
         <Card className="relative col-span-full flex overflow-hidden lg:col-span-2">
           <CardContent className="relative m-auto size-fit pt-6 text-center">
             <div className="relative flex h-24 w-56 items-center">
@@ -25,12 +25,12 @@ export function FeaturesGrid() {
               </svg>
               <span className="mx-auto block w-fit font-display text-5xl">۱۰۰٪</span>
             </div>
-            <h3 className="mt-6 font-display text-3xl font-normal">شفاف از روز اول</h3>
-            <p className="mx-auto mt-2 max-w-[26ch] text-[14px] leading-7 text-dim">قیمت، امکانات و زمان تحویل قبل از شروع مکتوب می‌شه؛ بدون هزینه‌ی پنهان.</p>
+            <h3 className="mt-6 font-display text-3xl font-normal">فروش‌محور</h3>
+            <p className="mx-auto mt-2 max-w-[26ch] text-[14px] leading-7 text-dim">سایتت رو برای فروش می‌سازیم؛ هر صفحه طوری طراحی می‌شه که بازدیدکننده مشتری بشه و فروش داشته باشی.</p>
           </CardContent>
         </Card>
 
-        {/* اثرانگشت — سایت مال خودته */}
+        {/* اثرانگشت — امنیت */}
         <Card className="relative col-span-full overflow-hidden sm:col-span-3 lg:col-span-2">
           <CardContent className="pt-6">
             <div className="relative mx-auto flex aspect-square size-32 rounded-full border border-ink/10 before:absolute before:-inset-2 before:rounded-full before:border before:border-ink/[0.06]">
@@ -52,13 +52,13 @@ export function FeaturesGrid() {
               </svg>
             </div>
             <div className="relative z-10 mt-6 space-y-2 text-center">
-              <h3 className="text-lg font-bold">سایت واقعاً مال خودته</h3>
-              <p className="text-[14px] leading-7 text-dim">سورس کامل پروژه رو تحویل می‌گیری؛ بدون قفل، محدودیت یا وابستگی به ما.</p>
+              <h3 className="text-lg font-bold">امنیت به‌شدت بالا</h3>
+              <p className="text-[14px] leading-7 text-dim">اتصال امن HTTPS، تنظیمات امنیتی سرور، به‌روزرسانی منظم و پشتیبان‌گیری؛ اطلاعات تو و مشتری‌هات در امانه.</p>
             </div>
           </CardContent>
         </Card>
 
-        {/* سرعت و گوگل */}
+        {/* سرعت */}
         <Card className="relative col-span-full overflow-hidden sm:col-span-3 lg:col-span-2">
           <CardContent className="pt-6">
             <div className="pt-6 lg:px-6" dir="ltr">
@@ -85,22 +85,22 @@ export function FeaturesGrid() {
               </svg>
             </div>
             <div className="relative z-10 mt-14 space-y-2 text-center">
-              <h3 className="text-lg font-bold">سریع و آماده‌ی دیده شدن</h3>
-              <p className="text-[14px] leading-7 text-dim">سرعت بالا، نسخه‌ی موبایل بی‌نقص و ساختار سئوشده از روز اول.</p>
+              <h3 className="text-lg font-bold">سرعت بالا، حتی در قطعی اینترنت</h3>
+              <p className="text-[14px] leading-7 text-dim">با میزبانی داخل ایران و بدون وابستگی به سرویس‌های خارجی، سایتت حتی وقتی اینترنت بین‌الملل قطعه سریع و در دسترس می‌مونه.</p>
             </div>
           </CardContent>
         </Card>
 
-        {/* گارانتی و پشتیبانی */}
+        {/* افزایش بازدید */}
         <Card className="relative col-span-full overflow-hidden lg:col-span-3">
           <CardContent className="grid pt-6 sm:grid-cols-2">
             <div className="relative z-10 flex flex-col justify-between space-y-12 lg:space-y-6">
               <div className="relative flex aspect-square size-12 rounded-full border border-ink/10 before:absolute before:-inset-2 before:rounded-full before:border before:border-ink/[0.06]">
-                <ShieldCheck className="m-auto size-5" strokeWidth={1.4} />
+                <TrendingUp className="m-auto size-5" strokeWidth={1.4} />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-bold">۳ ماه پشتیبانی رایگان + ۳۰ روز گارانتی</h3>
-                <p className="text-[14px] leading-7 text-dim">بعد از تحویل تنها نیستی؛ هر باگ فنی رو بدون هزینه رفع می‌کنیم و همون تیم سازنده پشتیبانته.</p>
+                <h3 className="text-lg font-bold">افزایش ورودی و بازدید سایت</h3>
+                <p className="text-[14px] leading-7 text-dim">با سئوی اصولی و محتوای هدفمند، ورودی گوگل و بازدید سایتت ماه به ماه بیشتر می‌شه؛ یعنی مشتری بیشتر.</p>
               </div>
             </div>
             <div className="relative -mb-6 -ml-6 mt-6 h-fit rounded-tr-card border-r border-t border-ink/10 p-6 py-6 sm:mr-6">
