@@ -6,7 +6,7 @@ export default function Events() {
       <div className="wrap events">
         <img src="/images/hall-wide.webp" alt="سالن پذیرایی شاهکار" loading="lazy" />
         <div>
-          <h2 style={{ textAlign: "start" }}>جشن‌ها و میهمانی‌ها</h2>
+          <h2>جشن‌ها و میهمانی‌ها</h2>
           <ul className="chips">
             {EVENTS.map((e) => (
               <li key={e}>{e}</li>

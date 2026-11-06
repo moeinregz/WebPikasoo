@@ -6,4 +6,4 @@
 | --- | --- |
 | `milla-mode.html` | میلا مُد (Milla Mode) — خرید اورجینال برندهای جهانی از ترکیه؛ واتساپ ۰۹۳۰۵۸۹۳۷۰۷، بله @millamode |
 | `shahkar.html` | باغچه رستوران شاهکار — اسلام‌شهر، ورودی فیروزبهرام؛ تلفن/واتساپ ۰۹۳۵۳۰۳۰۵۱۹، اینستاگرام @sofrehkaneh.shahkar. نسخه‌ی تک‌فایلیِ سایت `sites/shahkar` (فرم رزرو → واتساپ). ساخت دوباره: `node sites/shahkar/scripts/export-html.mjs` |
-| `shahkar-lite.html` | نسخه‌ی اقتصادی شاهکار — همان تم مشکی/طلایی، بدون GSAP/Motion و بدون هیچ جاوااسکریپت؛ ۶ عکس، منوی ساده، دکمه‌های تماس/واتساپ. ساخت دوباره: `node sites/shahkar/scripts/build-lite.mjs` |
+| `shahkar-lite.html` | نسخه‌ی اقتصادی شاهکار — تم مشکی/طلایی با رنگ‌های فانوس‌ها، بدون GSAP/Motion و بدون جاوااسکریپت. از `sites/shahkar-lite` ساخته می‌شود: `npm run build && node scripts/build-html.mjs` |

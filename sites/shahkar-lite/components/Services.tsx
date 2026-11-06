@@ -1,7 +1,6 @@
 import { SERVICES } from "@/lib/site";
+import { SERVICE_ICONS } from "./Icons";
 import Section from "./Section";
-
-const FA = "۰۱۲۳۴۵۶۷۸۹";
 
 export default function Services() {
   return (
@@ -9,7 +8,7 @@ export default function Services() {
       <div className="features">
         {SERVICES.map(([title, text], i) => (
           <div className="feature" key={title}>
-            <i>{FA[i + 1]}</i>
+            <span className="ic">{SERVICE_ICONS[i]}</span>
             <b>{title}</b>
             <span>{text}</span>
           </div>

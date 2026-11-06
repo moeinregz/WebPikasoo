@@ -25,11 +25,11 @@ export default function Contact() {
             <span>تلفن</span>
             <b>{SITE.phone}</b>
           </a>
-          <a href={SITE.whatsappHref} target="_blank" rel="noopener">
+          <a className="wa" href={SITE.whatsappHref} target="_blank" rel="noopener">
             <span>واتساپ</span>
             <b>{SITE.phone}</b>
           </a>
-          <a href={SITE.instagramHref} target="_blank" rel="noopener">
+          <a className="ig" href={SITE.instagramHref} target="_blank" rel="noopener">
             <span>اینستاگرام</span>
             <b dir="ltr">@{SITE.instagram}</b>
           </a>

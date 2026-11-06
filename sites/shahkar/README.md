@@ -56,6 +56,4 @@ node scripts/export-html.mjs
 ```
 
 ## نسخه‌ی اقتصادی (lite)
-`private-sites/shahkar-lite.html` — نسخه‌ی ساده و ارزان‌تر: یک فایل حدود ۶۰۰ کیلوبایت، بدون GSAP/Motion و بدون جاوااسکریپت،
-بدون لودر، انیمیشن، فرم و پنل. فقط بخش‌های اصلی (خدمات، عکس‌ها، منو، مراسم، مسیر و تماس) با دکمه‌های تماس و واتساپ.
-قالبش در `scripts/lite/template.html` است؛ بعد از ویرایش: `node scripts/build-lite.mjs`
+پروژه‌ی جدا در `sites/shahkar-lite` (React/Next.js بدون GSAP/Motion). فایل تک‌صفحه‌ای `private-sites/shahkar-lite.html` از همان پروژه ساخته می‌شود.
