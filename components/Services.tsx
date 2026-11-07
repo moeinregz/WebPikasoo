@@ -1,64 +1,9 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Reveal from "./Reveal";
 import StatCounter from "./StatCounter";
 import LaptopShowcase from "./LaptopShowcase";
 import EchoHeading from "@/components/EchoHeading";
-
-type SeoItem = { n: string; title: string; desc: string; color: string; icon: ReactNode };
-
-const seoItems: SeoItem[] = [
-  {
-    n: "۰۱",
-    title: "سئوی داخلی",
-    desc: "بهینه‌سازی محتوا، عنوان‌ها و ساختار صفحات برای رتبه بهتر در گوگل",
-    color: "#38bdf8",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <rect x="5" y="3.5" width="11" height="17" rx="2" />
-        <path d="M8 8h5M8 11.5h5M8 15h3" />
-        <circle cx="17.3" cy="17.3" r="3" />
-        <path d="M19.6 19.6 21.2 21.2" />
-      </svg>
-    ),
-  },
-  {
-    n: "۰۲",
-    title: "سئوی خارجی",
-    desc: "لینک‌سازی و افزایش اعتبار دامنه",
-    color: "#f59e0b",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <path d="M9.4 14.6 14.6 9.4" />
-        <path d="M11 6.4 12.7 4.7a3.5 3.5 0 0 1 5 5L15.9 11.6" />
-        <path d="M13 17.6 11.3 19.3a3.5 3.5 0 0 1-5-5L8.1 12.4" />
-      </svg>
-    ),
-  },
-  {
-    n: "۰۳",
-    title: "سئوی تکنیکال",
-    desc: "سرعت، ایندکس‌شدن و ساختار فنی سایت",
-    color: "#34d399",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <path d="M14.7 6.3a3 3 0 0 1-3.9 3.9L4.5 16.5l2 2 6.3-6.3a3 3 0 0 1 3.9-3.9L20.5 4.5l-2-2-3.8 3.8Z" />
-      </svg>
-    ),
-  },
-  {
-    n: "۰۴",
-    title: "سئوی محلی",
-    desc: "دیده‌شدن کسب‌وکار در جستجوهای محلی و گوگل‌مپ",
-    color: "#f43f5e",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-        <circle cx="12" cy="9.8" r="2.4" />
-      </svg>
-    ),
-  },
-];
 
 function GroupHead({
   num,
@@ -152,11 +97,11 @@ export default function Services() {
               against that gray. A solid dark color stays dark regardless
               of theme, matching the other "always dark" panels in this
               codebase (Contact's CTA, the laptop mockup, etc). */}
-          <div className="seo-hero relative mb-6 overflow-hidden rounded-card border border-blood-hi/20 bg-[#0b0b0d] p-6 sm:p-9">
+          <div id="seo" className="seo-hero relative scroll-mt-[90px] overflow-hidden rounded-card border border-blood-hi/20 bg-[#0b0b0d] p-6 sm:p-9">
             <div className="relative z-[1] flex flex-col gap-9 lg:flex-row lg:items-center">
               <div className="flex-1">
                 <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
-                  <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+                  <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-blood-hi shadow-[0_0_8px_rgb(var(--color-blood-hi))]" />
                   رشد فعال و پیوسته
                 </span>
                 <h3 className="accent-gradient-text max-w-[16ch] font-display text-[30px] font-normal leading-[1.25] sm:text-[36px] lg:text-[40px]">
@@ -169,7 +114,7 @@ export default function Services() {
 
                 <div className="mt-8 grid grid-cols-3 gap-3 border-t border-white/10 pt-6 sm:gap-6">
                   <div>
-                    <div className="font-display text-[24px] font-normal text-emerald-400 sm:text-[30px]">
+                    <div className="font-display text-[24px] font-normal text-white sm:text-[30px]">
                       <StatCounter to={240} suffix="%+" />
                     </div>
                     <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
@@ -177,7 +122,7 @@ export default function Services() {
                     </div>
                   </div>
                   <div>
-                    <div className="font-display text-[24px] font-normal text-amber-400 sm:text-[30px]">
+                    <div className="font-display text-[24px] font-normal text-white sm:text-[30px]">
                       <StatCounter to={50} prefix="+" />
                     </div>
                     <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
@@ -185,7 +130,7 @@ export default function Services() {
                     </div>
                   </div>
                   <div>
-                    <div className="font-display text-[24px] font-normal text-blood-hi sm:text-[30px]">
+                    <div className="font-display text-[24px] font-normal text-white sm:text-[30px]">
                       <StatCounter to={6} suffix=" ماه" />
                     </div>
                     <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
@@ -204,9 +149,9 @@ export default function Services() {
                       <stop offset="100%" style={{ stopColor: "rgb(var(--color-blood))" }} stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="seoLineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#f59e0b" />
+                      <stop offset="0%" stopColor="#5e0612" />
                       <stop offset="55%" style={{ stopColor: "rgb(var(--color-blood-hi))" }} />
-                      <stop offset="100%" stopColor="#ff6b81" />
+                      <stop offset="100%" stopColor="#c8203a" />
                     </linearGradient>
                   </defs>
 
@@ -228,8 +173,8 @@ export default function Services() {
 
                   {/* milestones along the curve */}
                   {[
-                    [95, 130, "#f59e0b"],
-                    [165, 96, "#fb7185"],
+                    [95, 130, "rgb(var(--color-blood-hi))"],
+                    [165, 96, "rgb(var(--color-blood-hi))"],
                     [235, 55, "rgb(var(--color-blood-hi))"],
                   ].map(([cx, cy, c], i) => (
                     <g key={i}>
@@ -240,14 +185,14 @@ export default function Services() {
                     </g>
                   ))}
 
-                  <circle cx="355" cy="14" r="10" fill="#34d399" opacity="0.25">
+                  <circle cx="355" cy="14" r="10" opacity="0.3" style={{ fill: "rgb(var(--color-blood-hi))" }}>
                     <animate attributeName="r" values="6;14;6" dur="2s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values=".45;0;.45" dur="2s" repeatCount="indefinite" />
                   </circle>
-                  <circle cx="355" cy="14" r="5" fill="#34d399" />
+                  <circle cx="355" cy="14" r="5" fill="#fff" strokeWidth="3" style={{ stroke: "rgb(var(--color-blood-hi))" }} />
                   <g transform="translate(296 34)">
-                    <rect width="62" height="22" rx="11" fill="#34d399" fillOpacity="0.15" stroke="#34d399" strokeOpacity="0.5" />
-                    <text x="31" y="15" textAnchor="middle" fontSize="11" fontWeight="700" fill="#34d399" fontFamily="monospace">+240%</text>
+                    <rect width="62" height="22" rx="11" fillOpacity="0.9" style={{ fill: "rgb(var(--color-blood))" }} />
+                    <text x="31" y="15" textAnchor="middle" fontSize="11" fontWeight="700" fill="#fff" fontFamily="monospace">+240%</text>
                   </g>
 
                   <circle r="5" fill="#fff" className="seo-chart-dot">
@@ -262,36 +207,6 @@ export default function Services() {
             </div>
           </div>
 
-          <div id="seo" className="grid scroll-mt-[90px] grid-cols-1 gap-3 sm:grid-cols-2">
-            {seoItems.map((item) => (
-              <div
-                key={item.n}
-                style={{ "--seo-color": item.color } as CSSProperties}
-                className="seo-card group relative flex items-center gap-4 rounded-card border border-ink/10 bg-surface/70 p-5 sm:p-6"
-              >
-                <span
-                  className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] p-2.5 transition-transform duration-300 group-hover:scale-110"
-                  style={{ background: `${item.color}22`, color: item.color, boxShadow: `inset 0 0 0 1px ${item.color}40` }}
-                >
-                  {item.icon}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1.5 flex items-center gap-2">
-                    <h4 className="text-[15.5px] font-bold transition-colors group-hover:text-[var(--seo-color)]">
-                      {item.title}
-                    </h4>
-                    <span className="font-mono text-[11px] font-black" style={{ color: item.color }}>{item.n}</span>
-                  </div>
-                  <p className="text-[13.5px] text-dim">{item.desc}</p>
-                </div>
-                <span className="seo-card-arrow flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-ink/10 text-dim">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path d="M17 12H7M11 8l-4 4 4 4" />
-                  </svg>
-                </span>
-              </div>
-            ))}
-          </div>
         </Reveal>
 
         {/* Points to the dedicated skills page for the full technical list —

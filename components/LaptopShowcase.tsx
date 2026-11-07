@@ -61,7 +61,7 @@ const services: ServiceTab[] = [
       "اتوماسیون فرایندهای تکراری با AI",
       "تحلیل و پیش‌بینی داده‌های کسب‌وکار",
     ],
-    accent: "#f43f5e",
+    accent: "#b21024",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <circle cx="12" cy="12" r="3" />
@@ -104,7 +104,7 @@ function AdminPanelScreen() {
           <span className="font-mono text-[10.5px] font-bold text-white/80 sm:text-[11.5px]">پنل مدیریت</span>
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-emerald-400" />
-            <span className="h-5 w-5 flex-shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-rose-500" />
+            <span className="h-5 w-5 flex-shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-blood-hi" />
           </span>
         </div>
 
@@ -179,7 +179,7 @@ function StoreScreen() {
               <circle cx="10" cy="21" r="1.2" />
               <circle cx="17" cy="21" r="1.2" />
             </svg>
-            <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
+            <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blood-hi text-[8px] font-black text-white">
               ۳
             </span>
           </span>
@@ -214,21 +214,21 @@ function AiScreen() {
   return (
     <div className="relative flex h-full flex-col overflow-hidden bg-[#101013]">
       <svg viewBox="0 0 320 200" className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.22]">
-        <circle cx="40" cy="40" r="3" fill="#fb7185" />
-        <circle cx="40" cy="110" r="3" fill="#fb7185" />
-        <circle cx="40" cy="170" r="3" fill="#fb7185" />
-        <circle cx="150" cy="70" r="3" fill="#fb7185" />
-        <circle cx="150" cy="140" r="3" fill="#fb7185" />
-        <circle cx="270" cy="100" r="3" fill="#fb7185" />
+        <circle cx="40" cy="40" r="3" fill="#c8203a" />
+        <circle cx="40" cy="110" r="3" fill="#c8203a" />
+        <circle cx="40" cy="170" r="3" fill="#c8203a" />
+        <circle cx="150" cy="70" r="3" fill="#c8203a" />
+        <circle cx="150" cy="140" r="3" fill="#c8203a" />
+        <circle cx="270" cy="100" r="3" fill="#c8203a" />
         <path
           d="M40 40 150 70M40 110 150 70M40 110 150 140M40 170 150 140M150 70 270 100M150 140 270 100"
-          stroke="#fb7185"
+          stroke="#c8203a"
           strokeWidth="1"
         />
       </svg>
 
       <div className="relative z-[1] flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-2.5 sm:px-4">
-        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-rose-500/20 text-rose-400">
+        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blood-hi/20 text-blood-hi">
           <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
             <path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4L12 2Z" />
           </svg>
@@ -246,15 +246,15 @@ function AiScreen() {
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="max-w-[78%] rounded-xl rounded-tl-sm bg-gradient-to-l from-rose-500 to-rose-700 px-3 py-2 text-[10.5px] leading-relaxed text-white sm:text-[11.5px]">
+          <div className="max-w-[78%] rounded-xl rounded-tl-sm bg-gradient-to-l from-blood-hi to-blood px-3 py-2 text-[10.5px] leading-relaxed text-white sm:text-[11.5px]">
             گزارش فروش این هفته رو خلاصه کن
           </div>
         </div>
         <div className="flex justify-start">
           <div className="flex items-center gap-1 rounded-xl rounded-tr-sm bg-white/[0.07] px-3 py-2.5">
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-rose-400/80 [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-rose-400/80 [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-rose-400/80 [animation-delay:300ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blood-hi/80 [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blood-hi/80 [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blood-hi/80 [animation-delay:300ms]" />
           </div>
         </div>
       </div>

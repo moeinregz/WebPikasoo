@@ -95,8 +95,8 @@ export function FeaturesGrid() {
         <Card className="relative col-span-full overflow-hidden lg:col-span-3">
           <CardContent className="grid pt-6 sm:grid-cols-2">
             <div className="relative z-10 flex flex-col justify-between space-y-12 lg:space-y-6">
-              <div className="relative flex aspect-square size-12 rounded-full border border-amber-400/30 bg-amber-400/[0.07] before:absolute before:-inset-2 before:rounded-full before:border before:border-amber-400/15">
-                <TrendingUp className="m-auto size-5 text-amber-400" strokeWidth={1.6} />
+              <div className="relative flex aspect-square size-12 rounded-full border border-emerald-400/30 bg-emerald-400/[0.07] before:absolute before:-inset-2 before:rounded-full before:border before:border-emerald-400/15">
+                <TrendingUp className="m-auto size-5 text-emerald-400" strokeWidth={1.6} />
               </div>
               <div className="space-y-2">
                 <h3 className="text-lg font-bold">افزایش ورودی و بازدید سایت</h3>
@@ -111,12 +111,11 @@ export function FeaturesGrid() {
               </div>
               <svg className="w-full sm:w-[150%]" viewBox="0 0 366 231" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" clipRule="evenodd" d={UPTIME_AREA} fill="url(#wp_uptime_grad)" />
-                <path className="text-amber-400" d={UPTIME_LINE} stroke="currentColor" strokeWidth="2" />
+                <path className="text-emerald-400" d={UPTIME_LINE} stroke="currentColor" strokeWidth="2" />
                 <defs>
                   <linearGradient id="wp_uptime_grad" x1="0.85108" y1="0.947876" x2="0.85108" y2="230.114" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#f59e0b" stopOpacity="0.32" />
-                    <stop offset="0.6" style={{ stopColor: "rgb(var(--color-blood-hi))" }} stopOpacity="0.08" />
-                    <stop offset="1" style={{ stopColor: "rgb(var(--color-blood-hi))" }} stopOpacity="0" />
+                    <stop stopColor="#34d399" stopOpacity="0.3" />
+                    <stop offset="1" stopColor="#34d399" stopOpacity="0" />
                   </linearGradient>
                 </defs>
               </svg>
