@@ -74,6 +74,19 @@ const config: Config = {
         "glow-soft": "0 20px 60px -20px rgba(138, 77, 255, 0.35)",
       },
       keyframes: {
+        // shadcn/ui accordion open/close (Radix sets the content height var)
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        caretBlink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
         pulseDot: {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: ".35", transform: "scale(1.4)" },
@@ -179,6 +192,9 @@ const config: Config = {
         },
       },
       animation: {
+        "accordion-down": "accordion-down 0.25s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "caret-blink": "caretBlink 1s step-end infinite",
         "pulse-dot": "pulseDot 2.4s ease-in-out infinite",
         "blink-cursor": "blinkCursor 1s step-end infinite",
         "marquee-ltr": "marqueeLtr 85s linear infinite",
