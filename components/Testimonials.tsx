@@ -20,7 +20,7 @@ const testimonials: Testimonial[] = [
     quote:
       "راستش قبلش یه بار با یه فریلنسر دیگه سوخته بودیم، نصفه‌کاره ول کرد رفت. اینجا از همون اول قیمت و زمان تحویل رو دقیق نوشتن، و همون‌جوری هم پیش رفت؛ هیچ هزینه‌ی غافلگیرکننده‌ای وسط کار نیومد.",
     initials: "مر",
-    color: "#D9D7D1",
+    color: "linear-gradient(135deg, #e62e44, #7a0716)",
   },
   {
     name: "سارا نجفی",
@@ -28,7 +28,7 @@ const testimonials: Testimonial[] = [
     quote:
       "بعد از تحویل سایت، دو هفته بعدش یه باگ کوچیک تو صفحه‌ی پرداخت پیدا کردیم. نگران بودم بگن «کارمون تموم شده»، ولی همون روز جواب دادن و رفعش کردن. این خیالم رو راحت کرد که تنها نمی‌مونیم.",
     initials: "سن",
-    color: "#CFCDC7",
+    color: "linear-gradient(135deg, #ff6b81, #b31026)",
   },
   {
     name: "دکتر امیر حسینی",
@@ -36,13 +36,13 @@ const testimonials: Testimonial[] = [
     quote:
       "فکر می‌کردم کلینیک کوچیک ما در حد این تیم نیست، ولی درست مثل یه پروژه‌ی بزرگ باهامون جلسه گذاشتن و همه‌چی رو ساده توضیح دادن. الان بیمارها از رو همون سایت وقت می‌گیرن و اعتماد بیشتری به مطب دارن.",
     initials: "اح",
-    color: "#4A4A52",
+    color: "linear-gradient(135deg, #b31026, #3d030b)",
   },
 ];
 
 function StarRow() {
   return (
-    <div className="flex items-center gap-1 text-accent3" aria-label="۵ از ۵ ستاره">
+    <div className="flex items-center gap-1 text-blood-hi drop-shadow-[0_0_6px_rgb(var(--color-blood-hi)/0.5)]" aria-label="۵ از ۵ ستاره">
       {Array.from({ length: 5 }).map((_, i) => (
         <svg key={i} viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
           <path d="M10 1.5l2.6 5.4 5.9.7-4.3 4.1 1.1 5.9L10 14.8l-5.3 2.8 1.1-5.9L1.5 7.6l5.9-.7L10 1.5Z" />
@@ -79,12 +79,12 @@ export default function Testimonials() {
               key={t.name}
               delay={i * 80}
               className={[
-                "flex flex-col matte matte-hover rounded-card p-5 sm:p-6",
+                "flex flex-col rounded-card border border-ink/10 bg-surface/70 p-5 transition-colors duration-300 hover:border-blood-hi/40 sm:p-6",
                 i === 2 ? "col-span-2 sm:col-span-1" : "",
               ].join(" ")}
             >
               <div className="mb-3 flex items-center justify-between">
-                <svg viewBox="0 0 32 24" fill="none" className="h-5 w-7 flex-shrink-0 text-accent/25">
+                <svg viewBox="0 0 32 24" fill="none" className="h-5 w-7 flex-shrink-0 text-blood-hi/40">
                   <path
                     d="M13.6 0C6.4 3 2 8.9 2 15.8 2 20.6 5 24 9.3 24c3.5 0 6-2.7 6-6.1 0-3.2-2.3-5.6-5.4-5.6-.6 0-1.1.1-1.5.2.6-3.8 3.3-7 6.8-8.7L13.6 0Zm16.4 0c-7.2 3-11.6 8.9-11.6 15.8 0 4.8 3 8.2 7.3 8.2 3.5 0 6-2.7 6-6.1 0-3.2-2.3-5.6-5.4-5.6-.6 0-1.1.1-1.5.2.6-3.8 3.3-7 6.8-8.7L30 0Z"
                     fill="currentColor"
@@ -99,7 +99,7 @@ export default function Testimonials() {
 
               <div className="mt-auto flex items-center gap-3 border-t border-ink/10 pt-4">
                 <span
-                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white"
+                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white ring-2 ring-blood-hi/30"
                   style={{ background: t.color }}
                 >
                   {t.initials}

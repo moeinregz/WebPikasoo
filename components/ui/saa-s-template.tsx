@@ -86,13 +86,13 @@ export default function SaasHero() {
       <div className="relative z-10 mx-auto flex max-w-container flex-col items-center text-center">
         <aside
           data-hero-item
-          className="mb-8 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface/60 px-4 py-2 backdrop-blur-sm"
+          className="mb-8 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-blood-hi/50 bg-blood/[0.08] px-4 py-2 shadow-[0_0_24px_-8px_rgb(var(--color-blood-hi)/0.6)] backdrop-blur-sm"
         >
           <span className="flex items-center gap-2 whitespace-nowrap text-[12.5px] text-dim">
-            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent3" />
+            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-blood-hi shadow-[0_0_8px_rgb(var(--color-blood-hi))]" />
             آماده‌ی همکاری روی پروژه‌های جدید
           </span>
-          <a href="#showcase" className="flex items-center gap-1 whitespace-nowrap text-[12.5px] font-bold text-ink transition hover:text-accent active:scale-95">
+          <a href="#showcase" className="flex items-center gap-1 whitespace-nowrap text-[12.5px] font-bold text-ink transition hover:text-blood-hi active:scale-95">
             نمونه‌کارها رو ببین
             <ArrowLeft size={12} />
           </a>
@@ -143,7 +143,7 @@ export default function SaasHero() {
         <ul data-hero-item className="mb-16 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[13px] text-dim">
           {POINTS.map((p) => (
             <li key={p} className="flex items-center gap-1.5">
-              <Check className="h-4 w-4 text-accent" />
+              <Check className="h-4 w-4 text-blood-hi" />
               {p}
             </li>
           ))}
@@ -151,7 +151,11 @@ export default function SaasHero() {
 
         {/* product preview: three real project mockups, the middle one in front */}
         <div id="work" data-hero-item className="relative w-full max-w-5xl scroll-mt-[90px]">
-          <div aria-hidden className="pointer-events-none absolute left-1/2 top-[8%] z-0 h-[70%] w-[80%] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--color-ink)/0.10),transparent)]" />
+          {/* blood-red light from behind the cards: brightest right at the
+              cards' bottom and side edges, fading out as it rises */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-[-10%] bottom-[-15%] top-[40%] z-0 bg-[radial-gradient(closest-side,rgb(var(--color-blood-hi)/0.5),rgb(var(--color-blood)/0.2)_55%,transparent)]" />
+          <div aria-hidden className="pointer-events-none absolute left-[-8%] top-[25%] z-0 h-[70%] w-[40%] bg-[radial-gradient(closest-side,rgb(var(--color-blood-hi)/0.3),transparent)]" />
+          <div aria-hidden className="pointer-events-none absolute right-[-8%] top-[25%] z-0 h-[70%] w-[40%] bg-[radial-gradient(closest-side,rgb(var(--color-blood-hi)/0.3),transparent)]" />
           <div className="relative z-10 mx-auto flex items-center justify-center">
             <PreviewCard {...PREVIEWS[0]} className="absolute right-0 top-[12%] w-[40%] rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[-4%] sm:rotate-[7deg]" />
             <PreviewCard {...PREVIEWS[2]} className="absolute left-0 top-[12%] w-[40%] -rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[4%] sm:-rotate-[7deg]" />
@@ -165,7 +169,7 @@ export default function SaasHero() {
 
 function PreviewCard({ src, alt, className = "", priority = false }: { src: string; alt: string; className?: string; priority?: boolean }) {
   return (
-    <div className={`overflow-hidden rounded-2xl border border-ink/15 bg-surface p-1.5 shadow-2xl shadow-black/40 ${className}`}>
+    <div className={`overflow-hidden rounded-2xl border border-blood-hi/25 bg-surface p-1.5 shadow-2xl shadow-black/50 ${className}`}>
       <Image src={src} alt={alt} width={1254} height={1254} priority={priority} sizes="(min-width: 640px) 48vw, 58vw" className="h-auto w-full rounded-xl" />
     </div>
   );

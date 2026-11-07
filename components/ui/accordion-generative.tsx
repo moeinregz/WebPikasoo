@@ -28,7 +28,7 @@ export default function AccordionGenerative({
         <AccordionItem key={item.value} value={item.value}>
           <AccordionTrigger>
             <span className="flex items-center gap-2.5">
-              <Sparkles aria-hidden="true" className="size-4 shrink-0 text-ink/70" strokeWidth={2} />
+              <Sparkles aria-hidden="true" className="size-4 shrink-0 text-blood-hi drop-shadow-[0_0_6px_rgb(var(--color-blood-hi)/0.6)]" strokeWidth={2} />
               {item.question}
             </span>
           </AccordionTrigger>

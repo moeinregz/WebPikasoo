@@ -62,11 +62,11 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
           <span
             key={i}
             className={`flex items-center gap-6 whitespace-nowrap px-6 font-mono text-[20px] font-black tracking-tight sm:text-[28px] ${
-              reverse ? "text-ink" : "text-white"
+              reverse ? "text-ink/85" : "text-white"
             }`}
           >
             {t}
-            <svg viewBox="0 0 24 24" className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5" fill="currentColor" aria-hidden>
+            <svg viewBox="0 0 24 24" className={`h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 ${reverse ? "text-blood-hi" : "text-white/70"}`} fill="currentColor" aria-hidden>
               <path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" />
             </svg>
           </span>
@@ -81,10 +81,10 @@ export default function Marquee() {
     // دو نوار مات و ضربدری — مثل دو تکه چسب‌نواری روی هم. هر ردیف با
     // سرعت اسکرول کج می‌شه (ScrollFx، data-marquee).
     <section className="relative overflow-hidden py-14">
-      <div className="relative z-[2] -mx-6 -rotate-2 border-y-2 border-ink bg-accent py-4 shadow-[0_8px_0_0_rgb(var(--matte-shadow))]">
+      <div className="relative z-[2] -mx-6 -rotate-2 border-y border-blood-hi/60 bg-[linear-gradient(90deg,rgb(96_6_20),rgb(var(--color-blood))_30%,rgb(var(--color-blood-hi))_50%,rgb(var(--color-blood))_70%,rgb(96_6_20))] py-4 shadow-[0_10px_40px_-12px_rgb(var(--color-blood-hi)/0.6)]">
         <MarqueeRow items={stackItems} />
       </div>
-      <div className="relative z-[1] -mx-6 -mt-3 rotate-[1.5deg] border-y-2 border-ink bg-surface py-4">
+      <div className="relative z-[1] -mx-6 -mt-3 rotate-[1.5deg] border-y border-ink/10 bg-surface py-4">
         <MarqueeRow items={growthItems} reverse />
       </div>
     </section>
