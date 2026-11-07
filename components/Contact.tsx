@@ -13,11 +13,8 @@ export default async function Contact() {
         <CTA />
 
         {/* فرم مشاوره‌ی رایگان (هدف همه‌ی لینک‌های #lead-form) */}
-        <Reveal id="lead-form" className="mx-auto mt-6 max-w-5xl scroll-mt-[90px]">
-          <ContactCard
-            title="مشاوره‌ی رایگان پروژه‌ت رو رزرو کن"
-            description="بدون تعهد و بدون نیاز به ثبت‌نام؛ فقط اسمت، شماره‌ت و یه توضیح کوتاه. بقیه رو تو تماس می‌پرسیم."
-          >
+        <Reveal id="lead-form" className="mx-auto mt-6 max-w-xl scroll-mt-[90px]">
+          <ContactCard>
             <ContactForm defaultName={user?.name} defaultPhone={user?.phone} />
           </ContactCard>
         </Reveal>

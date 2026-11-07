@@ -31,10 +31,14 @@ export function ContactCard({
   children,
   ...props
 }: ContactCardProps) {
+  // With no heading, description or contact items the card is just the
+  // form in its bordered frame.
+  const hasInfo = Boolean(title || description || contactInfo?.length);
   return (
     <div
       className={cn(
-        "relative grid h-full w-full border border-ink/15 bg-surface/60 shadow md:grid-cols-2 lg:grid-cols-3",
+        "relative grid h-full w-full border border-ink/15 bg-surface/60 shadow",
+        hasInfo && "md:grid-cols-2 lg:grid-cols-3",
         className,
       )}
       {...props}
@@ -43,26 +47,30 @@ export function ContactCard({
       <PlusIcon className="absolute -right-3 -top-3 h-6 w-6 text-blood-hi" />
       <PlusIcon className="absolute -bottom-3 -left-3 h-6 w-6 text-blood-hi" />
       <PlusIcon className="absolute -bottom-3 -right-3 h-6 w-6 text-blood-hi" />
-      <div className="flex flex-col justify-between lg:col-span-2">
-        <div className="relative flex h-full flex-col justify-center space-y-4 px-4 py-8 md:p-8">
-          <h2 className="font-display text-3xl font-normal leading-[1.35] md:text-4xl lg:text-5xl">
-            {title}
-          </h2>
-          <p className="max-w-xl text-sm leading-7 text-dim md:text-base lg:text-lg">
-            {description}
-          </p>
-          {contactInfo && contactInfo.length > 0 && (
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1 sm:gap-4 lg:grid-cols-3">
-              {contactInfo?.map((info, index) => (
-                <ContactInfo key={index} {...info} />
-              ))}
-            </div>
-          )}
+      {hasInfo && (
+        <div className="flex flex-col justify-between lg:col-span-2">
+          <div className="relative flex h-full flex-col justify-center space-y-4 px-4 py-8 md:p-8">
+            <h2 className="font-display text-3xl font-normal leading-[1.35] md:text-4xl lg:text-5xl">
+              {title}
+            </h2>
+            <p className="max-w-xl text-sm leading-7 text-dim md:text-base lg:text-lg">
+              {description}
+            </p>
+            {contactInfo && contactInfo.length > 0 && (
+              <div className="grid grid-cols-2 gap-x-3 gap-y-1 sm:gap-4 lg:grid-cols-3">
+                {contactInfo?.map((info, index) => (
+                  <ContactInfo key={index} {...info} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <div
         className={cn(
-          "flex h-full w-full items-center border-t border-ink/15 bg-canvas/40 p-5 md:col-span-1 md:border-s md:border-t-0",
+          hasInfo
+            ? "flex h-full w-full items-center border-t border-ink/15 bg-canvas/40 p-5 md:col-span-1 md:border-s md:border-t-0"
+            : "flex w-full items-center bg-canvas/40 p-5 sm:p-8",
           formSectionClassName,
         )}
       >
