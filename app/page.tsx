@@ -2,13 +2,11 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Trust from "@/components/Trust";
-import Problems from "@/components/Problems";
 import BusinessShowcase from "@/components/BusinessShowcase";
 import Testimonials from "@/components/Testimonials";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import PricingPlans from "@/components/PricingPlans";
-import Guarantee from "@/components/Guarantee";
 import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
 import EchoHeading from "@/components/EchoHeading";
@@ -57,9 +55,9 @@ export default async function Home() {
 
   // ترتیب صفحه‌ی اصلی عمداً دنبال یه مسیر فروش/اعتمادسازی مشخصه:
   //
-  //   Hero → Trust (اعداد واقعی + چرا ما) → Problems (مشکل/راه‌حل)
+  //   Hero → Trust (اعداد واقعی + چرا ما)
   //   → نمونه‌کارها (Case Studies) → Services → Process
-  //   → Testimonials → Pricing/Offer → Guarantee → FAQ → Final CTA → Contact
+  //   → Testimonials → Pricing/Offer → FAQ → Final CTA → Contact
   //
   // یعنی اول نتیجه و اعتماد رو نشون می‌دیم، بعد مشکل بازدیدکننده رو تو
   // کلماتِ خودش می‌گیم، بعد نمونه‌کار و روش کار رو می‌بینه، بعد قیمت و
@@ -73,7 +71,6 @@ export default async function Home() {
       <Hero />
       <Marquee />
       <Trust />
-      <Problems />
       <BusinessShowcase sites={projects} />
       <Services />
       <Process />
@@ -101,7 +98,6 @@ export default async function Home() {
         </div>
       </section>
 
-      <Guarantee />
       <FAQ />
 
       <Contact />
