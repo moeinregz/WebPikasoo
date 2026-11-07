@@ -17,7 +17,7 @@ const items: ProblemSolution[] = [
   {
     problem: "سایت دارم ولی هیچ مشتری‌ای ازش نمیاد.",
     solution: "سایت رو بر اساس اصول تبدیل بازدیدکننده به مشتری بازطراحی می‌کنیم، نه فقط ظاهرش.",
-    color: "#D9D7D1",
+    color: "rgb(var(--color-blood-hi))",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <circle cx="11" cy="11" r="7" />
@@ -28,7 +28,7 @@ const items: ProblemSolution[] = [
   {
     problem: "قبلاً با یه فریلنسر/تیم دیگه سوخته‌ام.",
     solution: "از اول قیمت، زمان تحویل و امکانات رو مکتوب می‌دیم و مرحله‌به‌مرحله تاییدت رو می‌گیریم.",
-    color: "#CFCDC7",
+    color: "rgb(var(--color-blood-hi))",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 3 4.5 6.5v5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5v-5L12 3Z" />
@@ -39,7 +39,7 @@ const items: ProblemSolution[] = [
   {
     problem: "نمی‌دونم دقیقاً چه نوع سایت/سیستمی نیاز دارم.",
     solution: "تو یه گفتگوی کوتاه و رایگان نیازت رو تحلیل می‌کنیم و بهترین مسیر رو پیشنهاد می‌دیم.",
-    color: "#4A4A52",
+    color: "rgb(var(--color-blood-hi))",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <circle cx="12" cy="12" r="9" />
@@ -51,7 +51,7 @@ const items: ProblemSolution[] = [
   {
     problem: "می‌ترسم بعد از تحویل تنها بمونم و کسی جواب نده.",
     solution: "بعد از تحویل هم مستقیم با همون تیمی که ساخته‌ت در ارتباطی؛ گارانتی رفع باگ هم داری.",
-    color: "#E4E2DC",
+    color: "rgb(var(--color-blood-hi))",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M21 11.5a8.5 8.5 0 0 1-11.9 7.8L3 21l1.7-6.1A8.5 8.5 0 1 1 21 11.5Z" />
@@ -85,12 +85,12 @@ export default function Problems() {
             <Reveal
               key={it.problem}
               delay={i * 80}
-              className="flex flex-col gap-4 matte matte-hover rounded-card p-5 sm:p-6"
+              className="flex flex-col gap-4 rounded-card border border-ink/10 bg-surface/70 p-5 transition-colors duration-300 hover:border-blood-hi/40 hover:bg-blood/[0.05] sm:p-6"
             >
               <div className="flex items-start gap-4">
                 <span
                   className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] p-2.5"
-                  style={{ background: `${it.color}22`, color: it.color }}
+                  style={{ background: "rgb(var(--color-blood) / 0.14)", color: it.color, boxShadow: "inset 0 0 0 1px rgb(var(--color-blood-hi) / 0.3)" }}
                 >
                   {it.icon}
                 </span>
@@ -100,7 +100,7 @@ export default function Problems() {
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke={it.color}
+                  stroke="#34d399"
                   strokeWidth={2.5}
                   className="mt-0.5 h-4 w-4 flex-shrink-0"
                 >
@@ -114,14 +114,14 @@ export default function Problems() {
 
         {/* گزینه‌ی «نمی‌دانم چه راهکاری نیاز دارم» — دقیقاً روی همون فرم
             درخواست مشاوره باز می‌شه، با نوع پروژه از قبل انتخاب‌شده. */}
-        <Reveal className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-card border border-dashed border-ink/[0.2] bg-surface/40 p-6">
+        <Reveal className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-card border border-dashed border-blood-hi/30 bg-blood/[0.04] p-6">
           <div>
             <h4 className="text-[15.5px] font-bold">هیچ‌کدوم از این‌ها نبود، یا نمی‌دونی دقیقاً چی لازم داری؟</h4>
             <p className="mt-1.5 text-[13.5px] text-dim">اشکالی نداره — تو یه گفتگوی کوتاه با هم می‌فهمیم.</p>
           </div>
           <a
             href="#lead-form"
-            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-accent px-5 py-3 text-[14px] font-black text-on-accent"
+            className="btn-blood inline-flex flex-shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-black active:scale-95"
           >
             نمی‌دانم چه راهکاری نیاز دارم
           </a>

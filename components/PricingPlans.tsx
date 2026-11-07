@@ -377,7 +377,7 @@ export default function PricingPlans({
             onClick={() => setActive(c.slug)}
             className={`rounded-lg border px-5 py-2.5 text-[13.5px] font-bold transition ${
               active === c.slug
-                ? "border-ink bg-ink text-canvas"
+                ? "border-blood-hi/50 btn-blood"
                 : "border-ink/15 bg-surface/40 text-dim hover:border-ink/25 hover:text-ink"
             }`}
           >
@@ -406,7 +406,7 @@ export default function PricingPlans({
                       <PlanIcon className="size-4" aria-hidden="true" />
                       <span>{p.name}</span>
                     </PricingCard.PlanName>
-                    <PricingCard.Badge className={p.highlight ? "border-ink bg-ink text-canvas" : ""}>
+                    <PricingCard.Badge className={p.highlight ? "border-blood-hi/50 btn-blood" : ""}>
                       {p.highlight ? "پیشنهادی" : cat.shortLabel}
                     </PricingCard.Badge>
                   </PricingCard.Plan>
@@ -423,8 +423,7 @@ export default function PricingPlans({
                   ) : (
                     <Button
                       type="button"
-                      variant={p.highlight ? "default" : "outline"}
-                      className={`relative w-full font-bold ${p.highlight ? "bg-gradient-to-b from-ink to-ink/80 shadow-[0_10px_25px_rgba(0,0,0,0.3)]" : ""}`}
+                      className={`btn-blood relative w-full font-bold text-white ${p.highlight ? "" : "opacity-90 hover:opacity-100"}`}
                       disabled={status === "sending" || isPending}
                       onClick={() => (isLoggedIn ? placeOrder(cat, p) : setGuestPromptPlan({ cat, plan: p }))}
                     >

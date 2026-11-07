@@ -25,7 +25,7 @@ const steps: Step[] = [
     title: "مشاوره‌ی رایگان",
     tag: "بدون تعهد، بدون هزینه",
     desc: "یه جلسه‌ی کوتاه که فقط نیاز واقعی کسب‌وکارتون رو می‌شنویم — نه فروش، فقط گوش دادن.",
-    color: "#D9D7D1",
+    color: "#e62e44",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.8 8.8 0 0 1-3.9-.9L3 20l1.1-4.5A8.4 8.4 0 0 1 12.6 3a8.4 8.4 0 0 1 8.4 8.5Z" />
@@ -37,7 +37,7 @@ const steps: Step[] = [
     title: "تحلیل و پیشنهاد",
     tag: "قیمت و زمان‌بندی مکتوب",
     desc: "بررسی فنی نیازتون و ارائه‌ی یه پیشنهاد شفاف — دقیقاً چی می‌سازیم، کِی و با چه هزینه‌ای.",
-    color: "#CFCDC7",
+    color: "#e62e44",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <rect x="5" y="3.5" width="14" height="17" rx="2" />
@@ -50,7 +50,7 @@ const steps: Step[] = [
     title: "طراحی و تایید شما",
     tag: "کنترل کامل با شماست",
     desc: "پیش‌نمایش طراحی رو می‌بینید و نظر می‌دید؛ کار جلو نمی‌ره مگر با تایید خودتون.",
-    color: "#D9D7D1",
+    color: "#e62e44",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M4 20l3.3-1L18 8.3a1.9 1.9 0 0 0-2.7-2.7L4.6 16.3 4 20Z" />
@@ -63,7 +63,7 @@ const steps: Step[] = [
     title: "توسعه با گزارش هفتگی",
     tag: "شفافیت در طول مسیر",
     desc: "هر هفته دقیقاً می‌بینید چقدر پیش رفتیم — بدون سکوت طولانی و بی‌خبری.",
-    color: "#4A4A52",
+    color: "#e62e44",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M4 19V5M4 19h16" />
@@ -76,7 +76,7 @@ const steps: Step[] = [
     title: "تست کامل و تحویل",
     tag: "تضمین کیفیت",
     desc: "قبل از تحویل، همه‌چیز رو کامل تست می‌کنیم؛ چیزی که تحویل می‌گیرید بدون دردسر اجرا می‌شه.",
-    color: "#D9D7D1",
+    color: "#e62e44",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M9 12.5l2.2 2.2L16 9.5" />
@@ -89,7 +89,7 @@ const steps: Step[] = [
     title: "پشتیبانی مستمر",
     tag: "همیشه در دسترس",
     desc: "تحویل پروژه پایان همکاری نیست؛ همیشه یه تیم پشت خط برای رفع مشکل و توسعه‌ی بعدی هست.",
-    color: "#E4E2DC",
+    color: "#34d399",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M4 12a8 8 0 0 1 16 0" />
@@ -127,14 +127,14 @@ export default function Process() {
         <div className="hidden lg:block">
           {[row1, row2].map((row, rowIdx) => (
             <div key={rowIdx} className={rowIdx === 0 ? "relative mb-16" : "relative"}>
-              <span data-gsap="draw" className="pointer-events-none absolute inset-x-[16.6667%] top-7 h-[4px] rounded-full bg-gradient-to-r from-accent3 via-accent to-accent2" />
+              <span data-gsap="draw" className="pointer-events-none absolute inset-x-[16.6667%] top-7 h-[4px] rounded-full bg-gradient-to-r from-blood via-blood-hi to-blood" />
               <div className="relative grid grid-cols-3 gap-6">
                 {row.map((s, i) => {
                   const idx = rowIdx * 3 + i;
                   return (
                     <Reveal key={s.n} delay={idx * 120} className="flex flex-col items-center">
                       <span
-                        className="relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-canvas p-3.5 shadow-[-4px_4px_0_0_rgb(var(--matte-shadow))]"
+                        className="relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-canvas p-3.5 shadow-[0_0_24px_-6px_rgb(var(--color-blood-hi)/0.55)]"
                         style={{ borderColor: s.color, color: s.color }}
                       >
                         {s.icon}
@@ -146,7 +146,7 @@ export default function Process() {
                         </span>
                       </span>
 
-                      <div className="w-full matte matte-hover rounded-card p-4">
+                      <div className="w-full rounded-card border border-ink/10 bg-surface/70 p-4 transition-colors duration-300 hover:border-blood-hi/40">
                         <span
                           className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
                           style={{ background: `${s.color}1f`, color: s.color }}
@@ -166,7 +166,7 @@ export default function Process() {
 
         {/* نسخه‌ی موبایل/تبلت — تایم‌لاین عمودی ساده، همون ترتیب و همون تگ‌ها */}
         <div className="relative lg:hidden">
-          <span className="absolute right-[27px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-accent3 via-accent to-accent2/40" />
+          <span className="absolute right-[27px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-blood-hi via-blood to-emerald-400/60" />
           <div className="flex flex-col gap-8">
             {steps.map((s, i) => (
               <Reveal key={s.n} delay={i * 90} className="relative flex items-start gap-5 pr-0">
@@ -182,7 +182,7 @@ export default function Process() {
                     {i + 1}
                   </span>
                 </span>
-                <div className="min-w-0 flex-1 matte matte-hover rounded-card p-4">
+                <div className="min-w-0 flex-1 rounded-card border border-ink/10 bg-surface/70 p-4 transition-colors duration-300 hover:border-blood-hi/40">
                   <span
                     className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold"
                     style={{ background: `${s.color}1f`, color: s.color }}

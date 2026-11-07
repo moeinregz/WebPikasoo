@@ -25,6 +25,8 @@ const config: Config = {
         accent: "rgb(var(--color-accent) / <alpha-value>)", // رنگ تأکید: سفید گرم روی مشکی مات (و برعکس در بخش‌های روشن)
         accent2: "rgb(var(--color-accent2) / <alpha-value>)", // حالت هاور دکمه‌های تأکیدی
         accent3: "rgb(var(--color-accent3) / <alpha-value>)", // نقطه‌های وضعیت و جزئیات کوچک
+        blood: "rgb(var(--color-blood) / <alpha-value>)", // قرمز خونی — ۱۰٪ رنگ سایت
+        "blood-hi": "rgb(var(--color-blood-hi) / <alpha-value>)", // قرمز روشن‌تر برای نور و گرادیان
         "on-accent": "rgb(var(--color-on-accent) / <alpha-value>)", // متن روی پس‌زمینه‌ی accent
 
         // پالت کامل آبی آسمانی، برای استفاده‌ی مستقیم هرجا لازم بود

@@ -12,7 +12,7 @@ const seoItems: SeoItem[] = [
     n: "۰۱",
     title: "سئوی داخلی",
     desc: "بهینه‌سازی محتوا، عنوان‌ها و ساختار صفحات برای رتبه بهتر در گوگل",
-    color: "#E4E2DC",
+    color: "#38bdf8",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <rect x="5" y="3.5" width="11" height="17" rx="2" />
@@ -26,7 +26,7 @@ const seoItems: SeoItem[] = [
     n: "۰۲",
     title: "سئوی خارجی",
     desc: "لینک‌سازی و افزایش اعتبار دامنه",
-    color: "#D9D7D1",
+    color: "#f59e0b",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M9.4 14.6 14.6 9.4" />
@@ -39,7 +39,7 @@ const seoItems: SeoItem[] = [
     n: "۰۳",
     title: "سئوی تکنیکال",
     desc: "سرعت، ایندکس‌شدن و ساختار فنی سایت",
-    color: "#4A4A52",
+    color: "#34d399",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M14.7 6.3a3 3 0 0 1-3.9 3.9L4.5 16.5l2 2 6.3-6.3a3 3 0 0 1 3.9-3.9L20.5 4.5l-2-2-3.8 3.8Z" />
@@ -50,7 +50,7 @@ const seoItems: SeoItem[] = [
     n: "۰۴",
     title: "سئوی محلی",
     desc: "دیده‌شدن کسب‌وکار در جستجوهای محلی و گوگل‌مپ",
-    color: "#1C1C20",
+    color: "#f43f5e",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
         <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
@@ -73,7 +73,7 @@ function GroupHead({
 }) {
   return (
     <div className="mb-6 flex items-center gap-3.5">
-      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-on-accent">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center btn-blood rounded-md font-mono text-[13px] font-black">
         {num}
       </span>
       <h3
@@ -86,7 +86,7 @@ function GroupHead({
         {title}
       </h3>
       <span className="h-px flex-1 bg-ink/10" />
-      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-ink/10 bg-surface p-2 text-ink">
+      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-blood-hi/30 bg-blood/[0.08] p-2 text-blood-hi">
         {icon}
       </span>
     </div>
@@ -152,11 +152,11 @@ export default function Services() {
               against that gray. A solid dark color stays dark regardless
               of theme, matching the other "always dark" panels in this
               codebase (Contact's CTA, the laptop mockup, etc). */}
-          <div className="seo-hero relative mb-6 overflow-hidden matte rounded-card !bg-[#101013] p-6 sm:p-9">
+          <div className="seo-hero relative mb-6 overflow-hidden rounded-card border border-blood-hi/20 bg-[#0b0b0d] p-6 sm:p-9">
             <div className="relative z-[1] flex flex-col gap-9 lg:flex-row lg:items-center">
               <div className="flex-1">
                 <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
-                  <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-accent3" />
+                  <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
                   رشد فعال و پیوسته
                 </span>
                 <h3 className="accent-gradient-text max-w-[16ch] font-display text-[30px] font-normal leading-[1.25] sm:text-[36px] lg:text-[40px]">
@@ -169,7 +169,7 @@ export default function Services() {
 
                 <div className="mt-8 grid grid-cols-3 gap-3 border-t border-white/10 pt-6 sm:gap-6">
                   <div>
-                    <div className="font-display text-[24px] font-normal text-white sm:text-[30px]">
+                    <div className="font-display text-[24px] font-normal text-emerald-400 sm:text-[30px]">
                       <StatCounter to={240} suffix="%+" />
                     </div>
                     <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
@@ -177,7 +177,7 @@ export default function Services() {
                     </div>
                   </div>
                   <div>
-                    <div className="font-display text-[24px] font-normal text-white sm:text-[30px]">
+                    <div className="font-display text-[24px] font-normal text-amber-400 sm:text-[30px]">
                       <StatCounter to={50} prefix="+" />
                     </div>
                     <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
@@ -185,7 +185,7 @@ export default function Services() {
                     </div>
                   </div>
                   <div>
-                    <div className="font-display text-[24px] font-normal text-white sm:text-[30px]">
+                    <div className="font-display text-[24px] font-normal text-blood-hi sm:text-[30px]">
                       <StatCounter to={6} suffix=" ماه" />
                     </div>
                     <div className="mt-1 font-mono text-[10.5px] leading-relaxed text-white/45 sm:text-[11px]">
@@ -199,13 +199,14 @@ export default function Services() {
                 <svg viewBox="0 0 380 200" fill="none" className="w-full">
                   <defs>
                     <linearGradient id="seoAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#D9D7D1" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#D9D7D1" stopOpacity="0" />
+                      <stop offset="0%" style={{ stopColor: "rgb(var(--color-blood-hi))" }} stopOpacity="0.55" />
+                      <stop offset="60%" style={{ stopColor: "rgb(var(--color-blood))" }} stopOpacity="0.15" />
+                      <stop offset="100%" style={{ stopColor: "rgb(var(--color-blood))" }} stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="seoLineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#E4E2DC" />
-                      <stop offset="55%" stopColor="#D9D7D1" />
-                      <stop offset="100%" stopColor="#4A4A52" />
+                      <stop offset="0%" stopColor="#f59e0b" />
+                      <stop offset="55%" style={{ stopColor: "rgb(var(--color-blood-hi))" }} />
+                      <stop offset="100%" stopColor="#ff6b81" />
                     </linearGradient>
                   </defs>
 
@@ -225,10 +226,29 @@ export default function Services() {
                     strokeLinecap="round"
                   />
 
-                  <circle cx="355" cy="14" r="4" fill="#4A4A52">
-                    <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="1;.35;1" dur="2s" repeatCount="indefinite" />
+                  {/* milestones along the curve */}
+                  {[
+                    [95, 130, "#f59e0b"],
+                    [165, 96, "#fb7185"],
+                    [235, 55, "rgb(var(--color-blood-hi))"],
+                  ].map(([cx, cy, c], i) => (
+                    <g key={i}>
+                      <circle cx={cx} cy={cy} r="9" opacity="0.18" style={{ fill: c as string }}>
+                        <animate attributeName="r" values="6;11;6" dur="2.4s" begin={`${i * 0.4}s`} repeatCount="indefinite" />
+                      </circle>
+                      <circle cx={cx} cy={cy} r="4" fill="#0b0b0d" strokeWidth="2.5" style={{ stroke: c as string }} />
+                    </g>
+                  ))}
+
+                  <circle cx="355" cy="14" r="10" fill="#34d399" opacity="0.25">
+                    <animate attributeName="r" values="6;14;6" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values=".45;0;.45" dur="2s" repeatCount="indefinite" />
                   </circle>
+                  <circle cx="355" cy="14" r="5" fill="#34d399" />
+                  <g transform="translate(296 34)">
+                    <rect width="62" height="22" rx="11" fill="#34d399" fillOpacity="0.15" stroke="#34d399" strokeOpacity="0.5" />
+                    <text x="31" y="15" textAnchor="middle" fontSize="11" fontWeight="700" fill="#34d399" fontFamily="monospace">+240%</text>
+                  </g>
 
                   <circle r="5" fill="#fff" className="seo-chart-dot">
                     <animateMotion
@@ -247,11 +267,11 @@ export default function Services() {
               <div
                 key={item.n}
                 style={{ "--seo-color": item.color } as CSSProperties}
-                className="seo-card group relative flex items-center gap-4 matte matte-hover rounded-card p-5 sm:p-6"
+                className="seo-card group relative flex items-center gap-4 rounded-card border border-ink/10 bg-surface/70 p-5 sm:p-6"
               >
                 <span
                   className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] p-2.5 transition-transform duration-300 group-hover:scale-110"
-                  style={{ background: `${item.color}22`, color: item.color }}
+                  style={{ background: `${item.color}22`, color: item.color, boxShadow: `inset 0 0 0 1px ${item.color}40` }}
                 >
                   {item.icon}
                 </span>
@@ -260,7 +280,7 @@ export default function Services() {
                     <h4 className="text-[15.5px] font-bold transition-colors group-hover:text-[var(--seo-color)]">
                       {item.title}
                     </h4>
-                    <span className="font-mono text-[11px] font-black text-dim">{item.n}</span>
+                    <span className="font-mono text-[11px] font-black" style={{ color: item.color }}>{item.n}</span>
                   </div>
                   <p className="text-[13.5px] text-dim">{item.desc}</p>
                 </div>
@@ -277,7 +297,7 @@ export default function Services() {
         {/* Points to the dedicated skills page for the full technical list —
             the pretty per-technology cards that used to live in this
             section now live there instead. */}
-        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 matte matte-hover rounded-card p-6 sm:p-7">
+        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink/10 bg-surface/70 p-6 transition-colors hover:border-blood-hi/35 sm:p-7">
           <div>
             <h4 className="text-[16px] font-bold">کنجکاوید با چه تکنولوژی‌هایی کار می‌کنیم؟</h4>
             <p className="mt-1.5 text-[13.5px] text-dim">
@@ -286,7 +306,7 @@ export default function Services() {
           </div>
           <Link
             href="/skills"
-            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-canvas px-5 py-3 text-[14px] font-bold text-ink"
+            className="btn-blood inline-flex flex-shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-bold active:scale-95"
           >
             مشاهده مهارت‌های فنی
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

@@ -40,7 +40,7 @@ const AccordionItem = React.forwardRef<
       ref={ref}
       className={cn(
         variant === "card"
-          ? "overflow-hidden rounded-card border border-ink/10 bg-surface/60 transition-colors data-[state=open]:border-ink/25 data-[state=open]:bg-surface"
+          ? "overflow-hidden rounded-card border border-ink/10 bg-surface/60 transition-colors data-[state=open]:border-blood-hi/35 data-[state=open]:bg-surface"
           : "border-b border-ink/10",
         className
       )}
@@ -96,7 +96,7 @@ const AccordionStreamingContent = React.forwardRef<React.ElementRef<typeof Accor
           text={text}
           speed={speed}
           startDelay={startDelay}
-          className={cn(variant === "card" ? "px-5 pb-5 sm:px-6" : "pb-4", "text-[13.5px] leading-7 text-dim", className)}
+          className={cn(variant === "card" ? "px-5 pb-5 sm:px-6" : "pb-4", "text-[13.5px] leading-7 text-ink/80", className)}
         />
       </AccordionPrimitive.Content>
     );
@@ -138,8 +138,10 @@ function Streamer({ text, speed, startDelay, className }: { text: string; speed:
         <p className="opacity-0">{text}</p>
         {/* the visible, streaming copy, laid over it in the same box */}
         <p aria-hidden="true" className="absolute inset-0">
-          {text.slice(0, count)}
-          {!done && <span className="mr-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.18em] animate-caret-blink bg-ink" />}
+          {/* the newest characters glow red while they're being "written" */}
+          {done ? text : text.slice(0, Math.max(0, count - 14))}
+          {!done && <span className="text-blood-hi">{text.slice(Math.max(0, count - 14), count)}</span>}
+          {!done && <span className="mr-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.18em] animate-caret-blink bg-blood-hi" />}
         </p>
       </div>
     </div>
