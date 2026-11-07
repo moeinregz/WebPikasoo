@@ -13,8 +13,8 @@
     --color-accent2: 52 52 58;
     --color-accent3: 22 22 26;
     --color-on-accent: 244 242 237;
-    --color-blood: 158 14 34;
-    --color-blood-hi: 200 30 52;
+    --color-blood: 120 8 22;
+    --color-blood-hi: 160 14 32;
 }
 
   .dark {
@@ -29,8 +29,8 @@
     --color-accent2: 205 202 195;
     --color-accent3: 238 236 231;
     --color-on-accent: 5 5 6;
-    --color-blood: 178 16 38;
-    --color-blood-hi: 230 46 68;
+    --color-blood: 128 8 24;
+    --color-blood-hi: 178 16 36;
 }
 
   html {
@@ -104,7 +104,7 @@
   /* Flat sky-blue emphasis for headlines — یه رنگ ثابت (بدون گرادیان)،
      همون آبی آسمانی اصلی برند. */
   .accent-gradient-text {
-    background-image: linear-gradient(100deg, #fff 0%, #fff 45%, rgb(var(--color-blood-hi)) 100%);
+    background-image: linear-gradient(100deg, #fff 0%, #fff 40%, rgb(214 40 58) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -278,8 +278,8 @@
     /* a crimson light rising from under the chart (radial gradient, no
        blur filter: same look, far cheaper to paint) */
     background:
-      radial-gradient(45% 40% at 78% 62%, rgb(var(--color-blood-hi) / 0.32), transparent 70%),
-      radial-gradient(35% 30% at 20% 30%, rgb(245 158 11 / 0.10), transparent 70%);
+      radial-gradient(45% 40% at 78% 62%, rgb(var(--color-blood-hi) / 0.35), transparent 70%),
+      radial-gradient(35% 30% at 20% 30%, rgb(var(--color-blood) / 0.18), transparent 70%);
     animation: seoHeroPulse 6s ease-in-out infinite;
   }
   @keyframes seoHeroPulse {
@@ -294,31 +294,10 @@
 
   /* خط نمودار رشد — گلوی رنگی دورش که با گرادیان خودِ استروک هماهنگه. */
   .seo-chart-line {
-    filter: drop-shadow(0 0 6px rgb(var(--color-blood-hi) / 0.9)) drop-shadow(0 0 14px rgb(245 158 11 / 0.35));
+    filter: drop-shadow(0 0 6px rgb(var(--color-blood-hi) / 0.9)) drop-shadow(0 0 16px rgb(var(--color-blood) / 0.6));
   }
   .seo-chart-dot {
     filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px rgb(var(--color-blood-hi)));
-  }
-
-  /* کارت‌های ستون سئو — طرح ساده و کم‌رنگ: بک‌گراند تیره‌ی یکدست برای
-     همه‌ی کارت‌ها (نه یه گرادیان رنگی متفاوت برای هرکدوم)، رنگ هر آیتم
-     فقط روی آیکون، عدد و لبه‌ی ظریف هاور دیده می‌شه — نه کل پس‌زمینه. */
-  .seo-card {
-    isolation: isolate;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  .seo-card:hover {
-    transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--seo-color) 55%, transparent);
-    box-shadow: 0 18px 40px -24px var(--seo-color);
-  }
-  .seo-card-arrow {
-    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  }
-  .seo-card:hover .seo-card-arrow {
-    transform: translateX(-3px);
-    border-color: var(--seo-color, #D9D7D1);
-    color: var(--seo-color, #D9D7D1);
   }
 
   /* Syntax-highlight classes injected via dangerouslySetInnerHTML by the
@@ -440,7 +419,7 @@
      color shift is smooth instead of a jump. */
   .btn-blood {
     color: #fff;
-    background-image: linear-gradient(110deg, rgb(var(--color-blood-hi)) 0%, rgb(var(--color-blood)) 45%, rgb(96 6 20) 70%, rgb(var(--color-blood-hi)) 100%);
+    background-image: linear-gradient(110deg, rgb(var(--color-blood-hi)) 0%, rgb(var(--color-blood)) 45%, rgb(80 4 14) 70%, rgb(var(--color-blood-hi)) 100%);
     background-size: 220% 100%;
     background-position: 0% 50%;
     box-shadow: 0 8px 24px -10px rgb(var(--color-blood-hi) / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.18);
