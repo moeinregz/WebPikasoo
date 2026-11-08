@@ -179,6 +179,46 @@ export const MOTIFS = {
   bed: S(`<ellipse class="sh" cx="100" cy="180" rx="88" ry="8"/><rect class="s" x="14" y="56" width="22" height="120" rx="6"/><rect class="i" x="164" y="120" width="10" height="56" rx="3"/><rect class="p" x="30" y="112" width="148" height="44" rx="10"/>
 <rect class="c" x="34" y="94" width="144" height="28" rx="12"/><rect class="w" x="40" y="80" width="46" height="26" rx="12" style="opacity:.95"/><path class="sh" d="M30 140h148v6c0 6-4 10-10 10H40c-6 0-10-4-10-10z"/>
 <path class="a" d="M92 98h86v20c-30 4-58 2-86-6z" style="opacity:.75"/><g class="a"><path d="M146 30l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><circle cx="176" cy="60" r="3"/><circle cx="118" cy="46" r="2.5"/></g>`),
+  beans: S(`<ellipse class="sh" cx="100" cy="184" rx="84" ry="7"/>
+<path class="p" d="M44 60c-6-22 10-36 22-30 10-10 58-10 68 0 12-6 28 8 22 30 10 26 12 70 4 104-2 10-10 16-20 16H60c-10 0-18-6-20-16-8-34-6-78 4-104z"/><path class="sh" d="M112 30c10 0 18 2 22 0 12-6 28 8 22 30 10 26 12 70 4 104-2 10-10 16-20 16h-28z"/>
+<path class="ki" d="M52 58c30 8 66 8 96 0" style="stroke:var(--pr2);stroke-width:6"/><path d="M70 34c10 8 50 8 60 0" style="fill:none;stroke:#000;stroke-opacity:.18;stroke-width:3"/>
+<rect class="c" x="62" y="84" width="76" height="62" rx="8"/><g transform="translate(100 115) rotate(-30)"><ellipse class="s" rx="17" ry="24"/><path d="M0 -22c-8 10 8 34 0 44" style="fill:none;stroke:var(--card);stroke-width:3.5"/></g>
+<g class="s"><g transform="translate(30 172) rotate(40)"><ellipse rx="9" ry="12"/></g><g transform="translate(170 168) rotate(-25)"><ellipse rx="9" ry="12"/></g><g transform="translate(152 182) rotate(70)"><ellipse rx="7" ry="10"/></g></g>
+<path class="kw" d="M54 100c-4 20-2 44 2 60"/><path class="ka" d="M86 22c-6-8 6-12 0-20M114 22c-6-8 6-12 0-20" style="stroke-width:3;opacity:.7"/>`),
+  fridge: S(`<ellipse class="sh" cx="100" cy="184" rx="88" ry="7"/>
+<rect class="p" x="18" y="14" width="82" height="164" rx="12"/><rect class="sh" x="62" y="14" width="38" height="164" rx="12" style="opacity:.1"/><path d="M18 74h82" style="stroke:var(--card);stroke-width:4"/>
+<rect class="c" x="84" y="30" width="7" height="30" rx="3.5"/><rect class="c" x="84" y="88" width="7" height="48" rx="3.5"/><path class="kw" d="M30 28v34M30 88v70"/>
+<rect class="c" x="106" y="72" width="80" height="106" rx="10"/><rect class="sh" x="106" y="160" width="80" height="18" rx="9" style="opacity:.08"/><rect class="s" x="106" y="72" width="80" height="20" rx="10"/>
+<circle class="a" cx="122" cy="82" r="4"/><rect class="b" x="134" y="78" width="40" height="8" rx="4"/>
+<circle class="i" cx="146" cy="134" r="30"/><circle class="s" cx="146" cy="134" r="24"/><path class="hl" d="M128 124c4-10 14-16 24-16-12 4-20 12-24 22z"/><path d="M128 140c12 8 24 8 36 0" style="fill:none;stroke:#fff;stroke-width:3;opacity:.45"/>
+<g class="a"><circle cx="34" cy="190" r="0"/><path d="M178 20l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></g>`),
+  headphones: S(`<ellipse class="sh" cx="100" cy="184" rx="70" ry="7"/>
+<path class="ki" d="M40 112V96c0-36 26-64 60-64s60 28 60 64v16" style="stroke:var(--pr2);stroke-width:12"/><path class="ki" d="M48 100c0-30 22-56 52-56" style="stroke:#fff;stroke-width:3;opacity:.35"/>
+<rect class="p" x="22" y="100" width="40" height="66" rx="18"/><rect class="p" x="138" y="100" width="40" height="66" rx="18"/><rect class="sh" x="42" y="100" width="20" height="66" rx="10"/><rect class="sh" x="158" y="100" width="20" height="66" rx="10"/>
+<rect class="i" x="56" y="110" width="12" height="46" rx="6"/><rect class="i" x="132" y="110" width="12" height="46" rx="6"/><path class="kw" d="M32 114v36M148 114v36"/>
+<path class="ka" d="M86 120c6 6 6 16 0 22M98 112c10 10 10 30 0 40M110 104c14 14 14 42 0 56" style="stroke-width:4"/>
+<g class="a"><path d="M170 30l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle cx="28" cy="46" r="3"/><circle cx="182" cy="76" r="2.5"/></g>`),
+  devices: S(`<ellipse class="sh" cx="100" cy="182" rx="90" ry="7"/>
+<rect class="i" x="18" y="40" width="132" height="90" rx="8"/><rect class="s" x="25" y="47" width="118" height="76" rx="4"/><path class="hl" d="M25 47h60l-34 76H25z" style="opacity:.18"/>
+<g class="c" style="opacity:.8"><rect x="34" y="58" width="44" height="6" rx="3"/><rect x="34" y="70" width="70" height="4" rx="2" style="opacity:.6"/><rect x="34" y="96" width="30" height="18" rx="4"/><rect x="70" y="96" width="30" height="18" rx="4"/></g>
+<path class="c" d="M6 132h156l-10 14H16z"/><path class="sh" d="M6 132h156l-2 4H8z"/><rect class="b" x="70" y="134" width="28" height="4" rx="2"/>
+<rect class="p" x="128" y="64" width="58" height="112" rx="12"/><rect class="i" x="134" y="72" width="46" height="94" rx="7"/><rect class="p" x="134" y="72" width="46" height="94" rx="7" style="opacity:.35"/>
+<rect class="p" x="150" y="68" width="14" height="4" rx="2"/><circle class="c" cx="157" cy="118" r="12" style="opacity:.85"/><path d="M152 118l4 4 7-8" style="fill:none;stroke:var(--pr);stroke-width:3;stroke-linecap:round"/>
+<path class="kw" d="M140 82v30"/><g class="a"><path d="M172 22l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle cx="14" cy="24" r="3"/></g>`),
+  onesie: S(`<ellipse class="sh" cx="100" cy="184" rx="70" ry="7"/>
+<path class="p" d="M70 24c4 14 16 20 30 20s26-6 30-20l40 22-14 34-20-8v54c0 10-6 18-14 22l-6 30H84l-6-30c-8-4-14-12-14-22V72l-20 8-14-34z"/><path class="sh" d="M100 44c14 0 26-6 30-20l40 22-14 34-20-8v54c0 10-6 18-14 22l-6 30h-16z"/>
+<path d="M70 24c4 14 16 20 30 20s26-6 30-20" style="fill:none;stroke:var(--card);stroke-width:6;stroke-linecap:round"/><path d="M30 46l14 34M170 46l-14 34" style="fill:none;stroke:var(--ac);stroke-width:5;stroke-linecap:round"/>
+<g class="c"><circle cx="100" cy="74" r="4"/><circle cx="100" cy="92" r="4"/><circle cx="100" cy="110" r="4"/><circle cx="92" cy="170" r="3.5"/><circle cx="108" cy="170" r="3.5"/></g>
+<g transform="translate(124 120)"><path class="a" d="M0 -12l3.5 7 7.5 1.2-5.5 5.3 1.3 7.5L0 5.4l-6.8 3.6 1.3-7.5-5.5-5.3 7.5-1.2z"/></g><path class="kw" d="M74 82v40"/>
+<g transform="translate(36 150) rotate(-30)"><circle class="s" cx="0" cy="0" r="12"/><rect class="s" x="-3" y="10" width="6" height="22" rx="3"/><circle class="a" cx="0" cy="0" r="5"/></g>
+<g class="a"><path d="M170 120l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><circle cx="160" cy="160" r="3"/></g>`),
+  ferris: S(`<ellipse class="sh" cx="100" cy="186" rx="82" ry="7"/>
+<path class="ki" d="M100 86L58 180M100 86l42 94" style="stroke:var(--pr2);stroke-width:8"/><path class="ki" d="M70 160h60" style="stroke:var(--pr2);stroke-width:5"/>
+<circle cx="100" cy="86" r="66" style="fill:none;stroke:var(--pr);stroke-width:7"/><circle cx="100" cy="86" r="52" style="fill:none;stroke:var(--pr);stroke-width:2;opacity:.5"/>
+<g style="stroke:var(--pr);stroke-width:2.5;opacity:.7"><path d="M100 20v132M34 86h132M53 39l94 94M147 39l-94 94"/></g><circle class="a" cx="100" cy="86" r="12"/><circle class="i" cx="100" cy="86" r="4"/>
+<g><rect class="a" x="91" y="14" width="18" height="16" rx="5"/><rect class="s" x="157" y="78" width="18" height="16" rx="5"/><rect class="a" x="91" y="144" width="18" height="16" rx="5"/><rect class="s" x="25" y="78" width="18" height="16" rx="5"/>
+<rect class="p" x="138" y="32" width="18" height="16" rx="5"/><rect class="p" x="138" y="126" width="18" height="16" rx="5"/><rect class="p" x="44" y="126" width="18" height="16" rx="5"/><rect class="p" x="44" y="32" width="18" height="16" rx="5"/></g>
+<g class="a"><path d="M180 20l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle cx="16" cy="30" r="3"/><circle cx="186" cy="150" r="2.5"/></g>`),
 };
 
 /** Motif SVG wrapped for placement (hero, about, gallery, loader). */
