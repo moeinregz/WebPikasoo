@@ -24,7 +24,7 @@ type TicketMsg = { id: number; from: "me" | "team"; name: string; text: string; 
 const BOT_KEY = "wp-chat-bot-v2";
 const TICKET_KEY = "wp-chat-ticket-v1";
 const SEEN_KEY = "wp-chat-ticket-seen";
-const HIDDEN_PREFIXES = ["/dashboard", "/panel", "/preview", "/m/", "/account", "/uploads"];
+const HIDDEN_PREFIXES = ["/dashboard", "/panel", "/preview", "/m/", "/account", "/uploads", "/p/"];
 const SUGGESTIONS = ["قیمت طراحی سایت چقدره؟", "یه سایت فروشگاهی می‌خوام", "قیمت سئو", "ادمینی اینستاگرام", "پشتیبانی دارید؟", "صحبت با کارشناس"];
 const WELCOME =
   "سلام! من دستیار وب پیکاسو هستم. درباره‌ی طراحی سایت، قیمت‌ها، سئو، نرم‌افزار یا ادمینی اینستاگرام بپرس، یا با یکی از کارشناس‌ها صحبت کن.";
