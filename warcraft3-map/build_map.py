@@ -24,7 +24,7 @@ random.seed(1404)
 # --------------------------------------------------------------------------
 MAP_NAME = "Pikasoo Coast"
 AUTHOR = "WebPikasoo"
-DESCRIPTION = ("A tropical island for up to 12 players. Beaches, a shallow lagoon in the "
+DESCRIPTION = ("A huge tropical island for up to 12 players. Every base is a walled castle with towers. Humans are Blood Elves (Kunkka, Arthas, Uther, Kael), Orcs are randomly normal or red Fel Orcs. Beaches, a shallow lagoon in the "
                "middle, a tavern and goblin shops. Human players who pick Night Elf "
                "play as the Naga with Illidan, Medusa and a Royal Guard.")
 TILES = 256                     # total map size in tiles (256 x 256 = biggest size 1.26 allows)
@@ -164,6 +164,68 @@ def road_dist(x, y):
 
 
 # --------------------------------------------------------------------------
+# Castles: a square stone wall around every base with gates, plus towers & farms
+# --------------------------------------------------------------------------
+CASTLE_H = 1150.0          # half size of the wall square
+GATE_HALF = 260.0          # half width of a gate opening
+
+castle_walls = []          # (doodad id, x, y)
+castle_blockers = []       # invisible path blockers that make the walls solid
+castle_towers = []         # per player: list of (x, y)
+castle_farms = []          # per player: list of (x, y)
+
+
+def cheb(x, y, bx, by):
+    return max(abs(x - bx), abs(y - by))
+
+
+for pi, (sx, sy) in enumerate(starts):
+    H = CASTLE_H
+    # gates: the middle of every side, plus where the road to the centre leaves the castle
+    gaps = {'b': [0.0], 't': [0.0], 'l': [0.0], 'r': [0.0]}
+    dx, dy = -sx, -sy
+    k = H / max(abs(dx), abs(dy))
+    if abs(dx) >= abs(dy):
+        gaps['r' if dx > 0 else 'l'].append(dy * k)
+    else:
+        gaps['t' if dy > 0 else 'b'].append(dx * k)
+    edges = {'b': (lambda t: (sx + t, sy - H), b'ZTw0'), 't': (lambda t: (sx + t, sy + H), b'ZTw0'),
+             'l': (lambda t: (sx - H, sy + t), b'ZTw2'), 'r': (lambda t: (sx + H, sy + t), b'ZTw2')}
+    for e, (pos, did) in edges.items():
+        t = -H
+        while t <= H + 1:
+            if all(abs(t - g) >= GATE_HALF + 100 for g in gaps[e]):
+                castle_walls.append((did,) + pos(t))
+            t += 192.0
+        t = -H
+        while t <= H + 1:
+            if all(abs(t - g) >= GATE_HALF + 64 for g in gaps[e]):
+                castle_blockers.append(pos(t))
+            t += 128.0
+    # one tower beside every side gate (inside the wall)
+    towers = [(sx + H - 230, sy + 380), (sx - H + 230, sy - 380),
+              (sx - 380, sy + H - 230), (sx + 380, sy - H + 230)]
+    castle_towers.append([(snap(x), snap(y)) for x, y in towers])
+    # three farms behind the town hall (away from the gold mine)
+    mx, my = main_mines[pi]
+    back = math.degrees(math.atan2(sy - my, sx - mx))
+    farms = []
+    for da in (-55, 0, 55):
+        r = 720.0
+        while True:
+            fx, fy = sx + r * math.cos(math.radians(back + da)), sy + r * math.sin(math.radians(back + da))
+            if all(math.hypot(fx - tx, fy - ty) > 300 for tx, ty in towers) and cheb(fx, fy, sx, sy) < H - 200:
+                break
+            r -= 60
+        farms.append((snap(fx), snap(fy)))
+    castle_farms.append(farms)
+
+
+def in_castle(x, y, extra=0.0):
+    return any(cheb(x, y, bx, by) < CASTLE_H + extra for bx, by in starts)
+
+
+# --------------------------------------------------------------------------
 # Terrain (heights + textures)
 # --------------------------------------------------------------------------
 TEX = [b'Zgrs', b'Zvin', b'Zdrt', b'Zdtr', b'Zsan', b'Zbks']
@@ -186,10 +248,14 @@ def ground_z(x, y):
         return -12.0 + 12.0 * ((d - LAGOON_R) / 350.0)
     hz = noise(x, y, 0.8, 1) * 22.0
     # keep bases, expansions and the centre flat
-    for (bx, by) in starts + exp_mines:
+    for (bx, by) in exp_mines:
         dd = math.hypot(x - bx, y - by)
         if dd < 1500:
             hz *= max(0.0, (dd - 1000) / 500.0)
+    for (bx, by) in starts:                        # castles are completely flat
+        dd = cheb(x, y, bx, by)
+        if dd < CASTLE_H + 800:
+            hz *= max(0.0, (dd - CASTLE_H - 300) / 500.0)
     if d < C_R + 750:
         hz *= max(0.0, (d - C_R - 350) / 400.0)
     return max(hz, 0.0) + min(1.0, (s - 750) / 300.0) * 2.0
@@ -204,9 +270,10 @@ def ground_tex(x, y, z):
         return T_BRICK if (road_dist(x, y) < 260 or C_R - 250 < d < C_R + 250) else T_SAND
     if road_dist(x, y) < 190 + 40 * noise(x, y, 4, 7):
         return T_DIRT
-    for (bx, by) in starts:
-        if math.hypot(x - bx, y - by) < 520 + 60 * noise(x, y, 5, 2):
-            return T_DIRT
+    for i, (bx, by) in enumerate(starts):
+        if cheb(x, y, bx, by) < CASTLE_H + 60:     # paved castle courtyard
+            mx, my = main_mines[i]
+            return T_DIRT if math.hypot(x - mx, y - my) < 380 else T_BRICK
     n = noise(x, y, 1.6, 5)
     if n > 0.45:
         return T_LUSH
@@ -261,9 +328,8 @@ def tree_ok(x, y):
         return False
     if road_dist(x, y) < 330:
         return False
-    for (bx, by) in starts:
-        if math.hypot(x - bx, y - by) < 1150:
-            return False
+    if in_castle(x, y, 450):
+        return False
     for (mx, my) in main_mines:
         if math.hypot(x - mx, y - my) < 520:
             return False
@@ -312,10 +378,12 @@ def height_at(x, y):
 
 
 def build_doo():
-    out = bytearray(b'W3do' + struct.pack('<ii', 8, 11) + struct.pack('<i', len(trees)))
-    for n, (x, y) in enumerate(trees):
-        sc = random.uniform(0.9, 1.15)
-        out += b'ZTtw' + struct.pack('<i', random.randint(0, 9))
+    items = [(b'ZTtw', random.randint(0, 9), x, y, random.uniform(0.9, 1.15)) for x, y in trees]
+    items += [(did, random.randint(0, 4), x, y, 1.0) for did, x, y in castle_walls]
+    items += [(b'YTpc', 0, x, y, 1.0) for x, y in castle_blockers]
+    out = bytearray(b'W3do' + struct.pack('<ii', 8, 11) + struct.pack('<i', len(items)))
+    for n, (did, var, x, y, sc) in enumerate(items):
+        out += did + struct.pack('<i', var)
         out += struct.pack('<fff', x, y, height_at(x, y))
         out += struct.pack('<f', math.radians(270))
         out += struct.pack('<fff', sc, sc, sc)
@@ -398,16 +466,41 @@ ILLIDAN_SKILLS = "AEmb,AEim,AEev," + META_ID
 
 def build_w3u():
     """Unit changes: Naga Sea Witch -> Medusa, Illidan gets the toggle Metamorphosis"""
+    M = lambda m: m + '.mdl'
+    I = lambda i: 'ReplaceableTextures\\CommandButtons\\' + i + '.blp'
+    tower = [(b'umdl', M('buildings\\other\\ElvenGuardTower\\ElvenGuardTower')), (b'uico', I('BTNElvenGuardTower'))]
     mods = [
         (b'Nngs', [(b'unam', "Medusa"), (b'upro', "Medusa")]),
         (b'Eevi', [(b'uhab', ILLIDAN_SKILLS)]),     # Illidan (Naga era: horns + wings)
-        (b'Eevm', [(b'uhab', ILLIDAN_SKILLS)]),     # his demon form
+        (b'Eevm', [(b'uhab', ILLIDAN_SKILLS), (b'usca', 1.7), (b'ussc', 1.7)]),   # bigger demon form
+        # ---- Humans become Blood Elves (same unit types, so the computer AI still works) ----
+        (b'hpea', [(b'umdl', M('units\\critters\\HighElfPeasant\\HighElfPeasant')), (b'unam', "Blood Elf Worker"),
+                   (b'uico', I('BTNBloodElfPeasant'))]),
+        (b'hfoo', [(b'umdl', M('units\\human\\TheCaptain\\TheCaptain')), (b'usca', 0.9),
+                   (b'unam', "Blood Elf Swordsman"), (b'uico', I('BTNTheCaptain'))]),
+        (b'hrif', [(b'umdl', M('units\\creeps\\HighElfArcher\\HighElfArcher')), (b'unam', "Blood Elf Archer"),
+                   (b'uico', I('BTNHighElvenArcher')), (b'ua1m', 'Abilities\\Weapons\\Arrow\\ArrowMissile.mdl')]),
+        (b'hkni', [(b'umdl', M('units\\creeps\\LordGarithos\\LordGarithos')), (b'usca', 1.0),
+                   (b'unam', "Golden Knight"), (b'uico', I('BTNGarithos'))]),
+        (b'Hamg', [(b'umdl', M('units\\other\\Proudmoore\\Proudmoore')), (b'usca', 1.1),
+                   (b'unam', "Admiral"), (b'upro', "Kunkka")]),
+        (b'Hpal', [(b'umdl', M('units\\human\\Arthas\\Arthas')), (b'usca', 1.1),
+                   (b'upro', "Arthas"), (b'uico', I('BTNArthas'))]),
+        (b'Hmkg', [(b'umdl', M('units\\human\\Uther\\Uther')), (b'usca', 1.1),
+                   (b'unam', "Golden Paladin"), (b'upro', "Uther"), (b'uico', I('BTNHeroPaladin'))]),
+        (b'Hblm', [(b'umdl', M('units\\human\\Kael\\Kael')), (b'upro', "Kael'thas"), (b'uico', I('BTNBloodMage2'))]),
+        (b'hhou', [(b'umdl', M('buildings\\other\\ElvenFarm\\ElvenFarm')), (b'unam', "Elven Farm"),
+                   (b'uico', I('BTNElvenFarm'))]),
+        (b'hwtw', tower), (b'hgtw', tower), (b'hctw', tower), (b'hatw', tower),
     ]
     o = bytearray(struct.pack('<ii', 2, len(mods)))
     for uid, fields in mods:
         o += uid + b'\0\0\0\0' + struct.pack('<i', len(fields))
         for field, val in fields:
-            o += field + struct.pack('<i', 3) + cstr(val) + b'\0\0\0\0'
+            if isinstance(val, float):
+                o += field + struct.pack('<if', 1, val) + b'\0\0\0\0'
+            else:
+                o += field + struct.pack('<i', 3) + cstr(val) + b'\0\0\0\0'
     o += struct.pack('<i', 0)
     return bytes(o)
 
@@ -415,9 +508,11 @@ def build_w3u():
 def build_w3b():
     """Trees never fall: give the island tree a huge amount of life, so
     harvesting lumber (which takes life from the tree) never cuts it down."""
-    o = bytearray(struct.pack('<ii', 2, 1))
-    o += b'ZTtw' + b'\0\0\0\0' + struct.pack('<i', 1)
-    o += b'bhps' + struct.pack('<i', 2) + struct.pack('<f', 1000000.0) + b'\0\0\0\0'
+    ids = [b'ZTtw', b'ZTw0', b'ZTw2']              # trees and castle walls
+    o = bytearray(struct.pack('<ii', 2, len(ids)))
+    for did in ids:
+        o += did + b'\0\0\0\0' + struct.pack('<i', 1)
+        o += b'bhps' + struct.pack('<i', 2) + struct.pack('<f', 1000000.0) + b'\0\0\0\0'
     o += struct.pack('<i', 0)
     return bytes(o)
 
@@ -486,6 +581,7 @@ def build_j():
     a("// %s - generated by build_map.py" % MAP_NAME)
     a("//===========================================================================")
     a("globals")
+    a("    boolean array pikaRedOrc")
     a("endglobals")
     a("")
     a("function CreateNeutralPassiveBuildings takes nothing returns nothing")
@@ -555,6 +651,109 @@ def build_j():
     a("    call DisplayTimedTextToPlayer(whichPlayer, 0, 0, 15.00, \"|cff00ccffYou rule the Naga!|r Illidan, Medusa and the Royal Guard are at your command. At level 6 Illidan learns Metamorphosis: press F to become a demon, press F again to turn back.\")")
     a("endfunction")
     a("")
+    # ---- castle towers and farms ----
+    a("function PikaCastle takes player p, integer towerId, integer farmId returns nothing")
+    a("    local integer i = GetPlayerId(p)")
+    for pi in range(NPLAYERS):
+        a("    %s i == %d then" % ("if" if pi == 0 else "elseif", pi))
+        for x, y in castle_towers[pi]:
+            a("        call CreateUnit(p, towerId, %s, %s, 270.0)" % (f(x), f(y)))
+        for x, y in castle_farms[pi]:
+            a("        call CreateUnit(p, farmId, %s, %s, 270.0)" % (f(x), f(y)))
+    a("    endif")
+    a("endfunction")
+    a("")
+    # ---- Blood Elves: free Kunkka ----
+    a("function PikaGiveKunkka takes player p, location startLoc returns nothing")
+    a("    local real x = GetLocationX(startLoc)")
+    a("    local real y = GetLocationY(startLoc)")
+    a("    local real d = SquareRoot(x * x + y * y)")
+    a("    local unit h")
+    a("    if d < 1.0 then")
+    a("        set d = 1.0")
+    a("    endif")
+    a("    set h = CreateUnit(p, 'Hamg', x - x / d * 480.0, y - y / d * 480.0, bj_UNIT_FACING)")
+    a("    call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cffffcc00Blood Elves!|r Your main hero Kunkka is waiting at the gate of your castle.\")")
+    a("endfunction")
+    a("")
+    # ---- Orcs: random normal / red (fel) ----
+    a("function PikaFelType takes integer id returns integer")
+    for a_, b_ in [('opeo', 'ncpn'), ('ogru', 'nchg'), ('orai', 'nchr'), ('okod', 'nckb'), ('oshm', 'nchw'),
+                   ('Obla', 'Nbbc'), ('Ofar', 'Nplh'), ('Otch', 'Opgh'), ('Oshd', 'Nmag')]:
+        a("    if id == '%s' then" % a_)
+        a("        return '%s'" % b_)
+        a("    endif")
+    a("    return 0")
+    a("endfunction")
+    a("")
+    a("function PikaApplyRedOrc takes unit u returns nothing")
+    a("    local player p = GetOwningPlayer(u)")
+    a("    local integer i = GetPlayerId(p)")
+    a("    local integer newId = 0")
+    a("    local real x")
+    a("    local real y")
+    a("    local real face")
+    a("    if i >= bj_MAX_PLAYERS then")
+    a("        return")
+    a("    endif")
+    a("    if not pikaRedOrc[i] then")
+    a("        return")
+    a("    endif")
+    a("    // a human player gets real Fel Orc units and heroes; the computer keeps the normal")
+    a("    // unit types (so its AI keeps working) but they are painted red")
+    a("    if GetPlayerController(p) == MAP_CONTROL_USER then")
+    a("        set newId = PikaFelType(GetUnitTypeId(u))")
+    a("    endif")
+    a("    if newId != 0 then")
+    a("        set x = GetUnitX(u)")
+    a("        set y = GetUnitY(u)")
+    a("        set face = GetUnitFacing(u)")
+    a("        call RemoveUnit(u)")
+    a("        call CreateUnit(p, newId, x, y, face)")
+    a("    else")
+    a("        call SetUnitVertexColor(u, 255, 85, 85, 255)")
+    a("    endif")
+    a("endfunction")
+    a("")
+    a("function PikaOnEnter takes nothing returns nothing")
+    a("    call PikaApplyRedOrc(GetTriggerUnit())")
+    a("endfunction")
+    a("")
+    a("function PikaSetupOrcs takes nothing returns nothing")
+    a("    local integer i = 0")
+    a("    local player p")
+    a("    local trigger t = CreateTrigger()")
+    a("    loop")
+    a("        exitwhen i == bj_MAX_PLAYERS")
+    a("        set p = Player(i)")
+    a("        set pikaRedOrc[i] = false")
+    a("        if GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING and GetPlayerRace(p) == RACE_ORC then")
+    a("            if GetRandomInt(0, 1) == 1 then")
+    a("                set pikaRedOrc[i] = true")
+    a("                call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cffff3030Fel Orcs!|r The Blackrock clan answers your call: red orcs and their own heroes (Chaos Blademaster, Grom, Azgalor, Magtheridon).\")")
+    a("            else")
+    a("                call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cff40ff40Horde Orcs!|r You lead the normal orcs of the Horde.\")")
+    a("            endif")
+    a("        endif")
+    a("        set i = i + 1")
+    a("    endloop")
+    a("    call TriggerRegisterEnterRectSimple(t, GetWorldBounds())")
+    a("    call TriggerAddAction(t, function PikaOnEnter)")
+    a("endfunction")
+    a("")
+    a("function PikaRedOrcStartingUnits takes player p returns nothing")
+    a("    local group g = CreateGroup()")
+    a("    local unit u")
+    a("    call GroupEnumUnitsOfPlayer(g, p, null)")
+    a("    loop")
+    a("        set u = FirstOfGroup(g)")
+    a("        exitwhen u == null")
+    a("        call GroupRemoveUnit(g, u)")
+    a("        call PikaApplyRedOrc(u)")
+    a("    endloop")
+    a("    call DestroyGroup(g)")
+    a("endfunction")
+    a("")
     a("function PikaMeleeStartingUnits takes nothing returns nothing")
     a("    local integer index")
     a("    local player indexPlayer")
@@ -569,14 +768,22 @@ def build_j():
     a("            set indexRace = GetPlayerRace(indexPlayer)")
     a("            if PikaIsNagaPlayer(indexPlayer) then")
     a("                call PikaStartingUnitsNaga(indexPlayer, indexStartLoc)")
+    a("                call PikaCastle(indexPlayer, 'nntg', 'nnfm')")
     a("            elseif (indexRace == RACE_HUMAN) then")
     a("                call MeleeStartingUnitsHuman(indexPlayer, indexStartLoc, true, true, true)")
+    a("                call PikaGiveKunkka(indexPlayer, indexStartLoc)")
+    a("                call PikaCastle(indexPlayer, 'hgtw', 'hhou')")
     a("            elseif (indexRace == RACE_ORC) then")
     a("                call MeleeStartingUnitsOrc(indexPlayer, indexStartLoc, true, true, true)")
+    a("                call PikaCastle(indexPlayer, 'owtw', 'otrb')")
+    a("                call PikaRedOrcStartingUnits(indexPlayer)")
     a("            elseif (indexRace == RACE_UNDEAD) then")
     a("                call MeleeStartingUnitsUndead(indexPlayer, indexStartLoc, true, true, true)")
+    a("                call SetBlight(indexPlayer, GetLocationX(indexStartLoc), GetLocationY(indexStartLoc), %s, true)" % f(CASTLE_H + 200))
+    a("                call PikaCastle(indexPlayer, 'uzg1', 'uzig')")
     a("            elseif (indexRace == RACE_NIGHTELF) then")
     a("                call MeleeStartingUnitsNightElf(indexPlayer, indexStartLoc, true, true, true)")
+    a("                call PikaCastle(indexPlayer, 'etrp', 'emow')")
     a("            else")
     a("                call MeleeStartingUnitsUnknownRace(indexPlayer, indexStartLoc, true, true, true)")
     a("            endif")
@@ -592,6 +799,7 @@ def build_j():
     a("    call MeleeGrantHeroItems()")
     a("    call MeleeStartingResources()")
     a("    call MeleeClearExcessUnits()")
+    a("    call PikaSetupOrcs()")
     a("    call PikaMeleeStartingUnits()")
     a("    call MeleeStartingAI()")
     a("    call MeleeInitVictoryDefeat()")
@@ -658,6 +866,7 @@ PALETTE = [
     (24, 66, 130),     # 8 deep water
     (22, 72, 28),      # 9 trees
     (255, 215, 0),     # 10 gold
+    (58, 52, 48),      # 11 castle walls
 ]
 TEX_COLOR = {T_GRASS: 1, T_LUSH: 2, T_DIRT: 3, T_ROUGH: 4, T_SAND: 5, T_BRICK: 6}
 MM = 256
@@ -665,6 +874,7 @@ MM = 256
 
 def build_minimap():
     tree_cells = set((int((x - PMIN) / (PMAX - PMIN) * MM), int((y - PMIN) / (PMAX - PMIN) * MM)) for x, y in trees)
+    wall_cells = set((int((x - PMIN) / (PMAX - PMIN) * MM), int((y - PMIN) / (PMAX - PMIN) * MM)) for x, y in castle_blockers)
     img = bytearray(MM * MM)
     for py in range(MM):
         y = PMAX - (py + 0.5) / MM * (PMAX - PMIN)
@@ -673,6 +883,8 @@ def build_minimap():
             z = height_at(x, y)
             if z < WATER_Z:
                 c = 7 if WATER_Z - z <= SHALLOW_DEPTH else 8
+            elif (px, MM - 1 - py) in wall_cells:
+                c = 11
             elif any((px - dx, MM - 1 - py - dy) in tree_cells for dx in (0, 1) for dy in (0, 1)):
                 c = 9
             else:
