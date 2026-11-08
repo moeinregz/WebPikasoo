@@ -50,4 +50,20 @@ export const zarinpal: Gateway = {
       return { ok: false, error: "ارتباط با زرین‌پال برای تأیید برقرار نشد." };
     }
   },
+  async test(s, callbackUrl) {
+    // یک درخواست پرداخت ۱۰ هزار ریالی می‌سازه (پرداخت نمی‌شه، فقط کد مرچنت چک می‌شه)
+    try {
+      const { json } = await postJson(`${host(s)}/pg/v4/payment/request.json`, {
+        merchant_id: s.zarinpal_merchant,
+        amount: 10000,
+        currency: "IRR",
+        callback_url: callbackUrl,
+        description: "تست اتصال ممد قهوه",
+      });
+      if (json?.data?.code === 100) return { ok: true, message: `مرچنت کد معتبره${s.zarinpal_sandbox === "1" ? " (حالت تست)" : ""}.` };
+      return { ok: false, message: `زرین‌پال خطا داد: ${JSON.stringify(json?.errors || json)}` };
+    } catch {
+      return { ok: false, message: "ارتباط با زرین‌پال برقرار نشد." };
+    }
+  },
 };

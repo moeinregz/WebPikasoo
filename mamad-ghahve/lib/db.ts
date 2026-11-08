@@ -157,8 +157,15 @@ function open(): Database.Database {
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
   db.exec(SCHEMA);
+  migrate(db);
   seedIfEmpty(db);
   return db;
+}
+
+/** ستون‌هایی که بعداً اضافه شدن، برای دیتابیس‌های قدیمی */
+function migrate(db: Database.Database) {
+  const cols = (t: string) => (db.prepare(`PRAGMA table_info(${t})`).all() as { name: string }[]).map((c) => c.name);
+  if (!cols("products").includes("basalam_photo")) db.exec("ALTER TABLE products ADD COLUMN basalam_photo TEXT DEFAULT ''");
 }
 
 export function db(): Database.Database {
@@ -187,6 +194,7 @@ export type Product = {
   sales_count: number;
   rating: number;
   basalam_id: string;
+  basalam_photo: string;
   created_at: string;
   updated_at: string;
   category_name?: string;

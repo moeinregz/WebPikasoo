@@ -569,3 +569,4 @@ body { color: var(--on-bg); }
 .rail { padding-bottom: 30px; padding-left: 2px; }
 .rev-track { padding-bottom: 28px; padding-left: 2px; }
 .pgrid { padding-bottom: 16px; row-gap: 26px; }
+.alert { white-space: pre-line; }

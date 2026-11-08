@@ -4,6 +4,7 @@ import { db, type Order } from "@/lib/db";
 import { orderItems } from "@/lib/orders";
 import { ORDER_STATUS, faDateTime } from "@/lib/format";
 import { updateOrderAction } from "../../../actions";
+import { StateForm, Submit } from "../../../ui";
 
 export const metadata = { title: "جزئیات سفارش" };
 
@@ -46,7 +47,7 @@ export default function OrderDetail({ params }: { params: { id: string } }) {
           </div>
         </div>
         <div className="stack">
-          <form action={updateOrderAction} className="card stack">
+          <StateForm action={updateOrderAction} className="card stack">
             <input type="hidden" name="id" value={o.id} />
             <div className="field">
               <label>وضعیت سفارش</label>
@@ -56,8 +57,9 @@ export default function OrderDetail({ params }: { params: { id: string } }) {
               <small>«پرداخت شده» دستی (مثلاً کارت‌به‌کارت) موجودی رو کم و امتیاز مشتری رو اضافه می‌کنه.</small>
             </div>
             <div className="field"><label>کد رهگیری پست</label><input name="tracking_code" defaultValue={o.tracking_code} dir="ltr" /></div>
-            <button className="btn">ذخیره</button>
-          </form>
+            {o.payment_provider === "digipay" && <small className="muted">دیجی‌پی اعتباری/اقساطی: با زدن «ارسال شده»، تحویل خودکار به دیجی‌پی اعلام می‌شه.</small>}
+            <Submit>ذخیره</Submit>
+          </StateForm>
           <div className="card" style={{ fontSize: ".88rem" }}>
             <b>پرداخت</b>
             <p>درگاه: {o.payment_provider || "—"}</p>

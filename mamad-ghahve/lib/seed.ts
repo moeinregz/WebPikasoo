@@ -30,7 +30,7 @@ export function seedIfEmpty(db: Database.Database) {
     zarinpal_merchant: "",
     zarinpal_sandbox: "1",
     snappay_enabled: "0",
-    snappay_base_url: "" /* آدرس API که اسنپ‌پی بعد از قرارداد می‌ده */,
+    snappay_base_url: "https://api.snapppay.ir", // آدرس دقیق (تست یا اصلی) رو اسنپ‌پی بعد از قرارداد می‌ده
     snappay_client_id: "",
     snappay_client_secret: "",
     snappay_username: "",
@@ -46,7 +46,10 @@ export function seedIfEmpty(db: Database.Database) {
     basalam_token: "",
     basalam_vendor_id: "",
     basalam_category_id: "",
-    basalam_base_url: "https://core.basalam.com",
+    basalam_base_url: "https://openapi.basalam.com",
+    basalam_unit_type: "6304", // 6304 = عدد، 6306 = گرم، 6305 = کیلوگرم
+    basalam_preparation_days: "2",
+    basalam_price_unit: "rial", // rial | toman
   };
   const ins = db.prepare("INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)");
   for (const [k, v] of Object.entries(defaults)) ins.run(k, v);
@@ -54,6 +57,8 @@ export function seedIfEmpty(db: Database.Database) {
   const hasCats = db.prepare("SELECT COUNT(*) c FROM categories").get() as { c: number };
   if (hasCats.c) {
     // دیتابیس‌های قدیمی: به اسلایدهای پیش‌فرضِ بدون عکس، تصویرسازی بده (فقط یک بار)
+    // آدرس جدید API باسلام
+    db.prepare("UPDATE settings SET value = 'https://openapi.basalam.com' WHERE key = 'basalam_base_url' AND value IN ('https://core.basalam.com', '')").run();
     const done = db.prepare("SELECT value FROM settings WHERE key = 'hero_art_v1'").get();
     if (!done) {
       const art: Record<string, string> = { "☕": "/hero/roast.svg", "🎁": "/hero/club.svg", "⚗️": "/hero/gear.svg" };

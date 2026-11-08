@@ -7,9 +7,12 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { currentAdminId, loginAdmin, logoutAdmin } from "@/lib/auth";
 import { hashPassword, verifyPassword } from "@/lib/hash";
-import { setSettings } from "@/lib/settings";
+import { getSettings, setSettings, siteUrl } from "@/lib/settings";
+import type { Order } from "@/lib/db";
 import { toEnDigits } from "@/lib/format";
-import { pushAllToBasalam, pushProductToBasalam } from "@/lib/basalam";
+import { basalamCategories, basalamWhoAmI, pushAllToBasalam, pushProductToBasalam } from "@/lib/basalam";
+import { gateway } from "@/lib/payments";
+import { digipayDeliver } from "@/lib/payments/digipay";
 
 export type AState = { error?: string; ok?: string };
 
@@ -122,6 +125,10 @@ export async function saveProductAction(_: AState, fd: FormData): Promise<AState
     pid = Number(r.lastInsertRowid);
   }
   refreshStore();
+  if (id) {
+    revalidatePath(`/admin/products/${id}`);
+    return { ok: "ذخیره شد ✓" };
+  }
   redirect(`/admin/products/${pid}?saved=1`);
 }
 
@@ -215,11 +222,13 @@ export async function deleteCouponAction(fd: FormData) {
 /* ---------------- orders ---------------- */
 const STATUSES = ["pending", "paid", "processing", "shipped", "delivered", "cancelled", "failed"];
 
-export async function updateOrderAction(fd: FormData) {
+export async function updateOrderAction(_: AState, fd: FormData): Promise<AState> {
   requireAdmin();
   const id = int(fd, "id");
   const status = String(fd.get("status") || "");
-  if (STATUSES.includes(status)) {
+  const before = db().prepare("SELECT * FROM orders WHERE id = ?").get(id) as Order | undefined;
+  if (!before) return { error: "سفارش پیدا نشد." };
+  if (STATUSES.includes(status) && status !== before.status) {
     if (status === "paid") {
       // ثبت دستی پرداخت (مثلاً کارت‌به‌کارت) همون منطق امتیاز و موجودی رو اجرا می‌کنه
       const { markPaid } = await import("@/lib/orders");
@@ -229,8 +238,59 @@ export async function updateOrderAction(fd: FormData) {
     }
   }
   db().prepare("UPDATE orders SET tracking_code = ? WHERE id = ?").run(str(fd, "tracking_code", 60), id);
+
+  // دیجی‌پی اعتباری/اقساطی: بعد از ارسال، تحویل باید به دیجی‌پی اعلام بشه (یک بار)
+  let note = "";
+  let meta: Record<string, unknown> = {};
+  try {
+    meta = JSON.parse(before.payment_meta || "{}") || {};
+  } catch {}
+  if ((status === "shipped" || status === "delivered") && before.payment_provider === "digipay" && before.payment_ref && !meta.delivered) {
+    const { orderItems } = await import("@/lib/orders");
+    const r = await digipayDeliver(before, orderItems(id), getSettings());
+    if (r.ok && r.message) {
+      db().prepare("UPDATE orders SET payment_meta = ? WHERE id = ?").run(JSON.stringify({ ...meta, delivered: true }), id);
+      note = " " + r.message;
+    } else if (!r.ok) {
+      revalidatePath(`/admin/orders/${id}`);
+      return { error: "وضعیت ذخیره شد ولی " + r.message };
+    }
+  }
   revalidatePath(`/admin/orders/${id}`);
   revalidatePath("/admin/orders");
+  return { ok: "ذخیره شد ✓" + note };
+}
+
+/* ---------------- تست اتصال درگاه‌ها و باسلام ---------------- */
+export async function testGatewayAction(_: AState, fd: FormData): Promise<AState> {
+  requireAdmin();
+  const gw = gateway(String(fd.get("gateway") || ""));
+  if (!gw?.test) return { error: "این درگاه تست اتصال نداره." };
+  const r = await gw.test(getSettings(), `${siteUrl()}/api/payment/callback/${gw.id}`);
+  return r.ok ? { ok: "✅ " + r.message } : { error: "❌ " + r.message };
+}
+
+export async function basalamTestAction(_: AState, _fd: FormData): Promise<AState> {
+  requireAdmin();
+  const r = await basalamWhoAmI();
+  if (r.ok && r.vendorId) {
+    const s = getSettings();
+    if (!s.basalam_vendor_id) {
+      setSettings({ basalam_vendor_id: r.vendorId });
+      revalidatePath("/admin/settings");
+      return { ok: "✅ " + r.message + " شناسه‌ی غرفه خودکار ذخیره شد." };
+    }
+    if (s.basalam_vendor_id !== r.vendorId) return { error: `⚠️ ${r.message} ولی شناسه‌ی غرفه تو تنظیمات (${s.basalam_vendor_id}) با این فرق داره.` };
+  }
+  return r.ok ? { ok: "✅ " + r.message } : { error: "❌ " + r.message };
+}
+
+export async function basalamCategoryAction(_: AState, fd: FormData): Promise<AState> {
+  requireAdmin();
+  const q = str(fd, "q", 60);
+  const list = await basalamCategories(q);
+  if (!list.length) return { error: "دسته‌ای پیدا نشد (یا اتصال برقرار نیست)." };
+  return { ok: list.map((c) => `${c.id} — ${c.path}`).join("\n") };
 }
 
 /* ---------------- customers ---------------- */
@@ -250,7 +310,7 @@ const SETTING_KEYS = [
   "club_earn_per", "club_point_value", "club_welcome_points", "club_max_redeem_percent",
   "zarinpal_merchant", "snappay_base_url", "snappay_client_id", "snappay_client_secret", "snappay_username", "snappay_password",
   "digipay_base_url", "digipay_client_id", "digipay_client_secret", "digipay_username", "digipay_password", "digipay_ticket_type",
-  "basalam_token", "basalam_vendor_id", "basalam_category_id", "basalam_base_url",
+  "basalam_token", "basalam_vendor_id", "basalam_category_id", "basalam_base_url", "basalam_unit_type", "basalam_preparation_days", "basalam_price_unit",
 ];
 const SETTING_FLAGS = ["pay_mock_enabled", "zarinpal_enabled", "zarinpal_sandbox", "snappay_enabled", "digipay_enabled"];
 const NUMERIC = ["shipping_fee", "free_shipping_over", "club_earn_per", "club_point_value", "club_welcome_points", "club_max_redeem_percent"];

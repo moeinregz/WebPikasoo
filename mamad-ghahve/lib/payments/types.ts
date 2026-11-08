@@ -13,6 +13,8 @@ export interface Gateway {
   start(order: Order, items: OrderItem[], s: Settings, callbackUrl: string): Promise<StartResult>;
   /** بعد از برگشت مشتری از درگاه: تأیید نهایی پرداخت */
   verify(order: Order, items: OrderItem[], params: Record<string, string>, s: Settings): Promise<VerifyResult>;
+  /** تست اتصال از پنل مدیریت (بدون پرداخت واقعی) */
+  test?(s: Settings, callbackUrl: string): Promise<{ ok: boolean; message: string }>;
 }
 
 /** همه‌ی درگاه‌های ایرانی مبلغ رو به ریال می‌گیرن */
@@ -38,3 +40,6 @@ export function intlMobile(phone: string): string {
   // 0912xxxxxxx -> +98912xxxxxxx
   return phone.startsWith("0") ? "+98" + phone.slice(1) : phone;
 }
+
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+export const trimBase = (u: string) => (u || "").trim().replace(/\/+$/, "");
