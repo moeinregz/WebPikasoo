@@ -27,7 +27,8 @@ AUTHOR = "WebPikasoo"
 DESCRIPTION = ("A tropical island for up to 12 players. Beaches, a shallow lagoon in the "
                "middle, a tavern and goblin shops. Human players who pick Night Elf "
                "play as the Naga with Illidan, Medusa and a Royal Guard.")
-TILES = 192                     # total map size in tiles (192 x 192)
+TILES = 256                     # total map size in tiles (256 x 256 = biggest size 1.26 allows)
+S = TILES / 192.0               # layout scale (the layout was designed for 192)
 PTS = TILES + 1                 # terrain points per side
 X0 = Y0 = -TILES * 64.0         # world coordinate of the bottom-left point
 MARGIN = 6                      # boundary tiles on each side
@@ -69,7 +70,7 @@ _coast = [(random.randint(2, 9), random.uniform(0, 6.283), random.uniform(120, 3
 
 
 def coast_radius(theta):
-    r = 10350.0
+    r = 10350.0 * S
     for k, ph, amp in _coast:
         r += amp * math.sin(k * theta + ph)
     return min(r, PMAX - 500)
@@ -78,9 +79,10 @@ def coast_radius(theta):
 # --------------------------------------------------------------------------
 # Layout: bases, expansions, neutral buildings, creeps
 # --------------------------------------------------------------------------
-BASE_R = 7900.0
-EXP_R = 5300.0
-LAGOON_R = 1150.0
+BASE_R = 7900.0 * S
+EXP_R = 5300.0 * S
+LAGOON_R = 1150.0 * S
+C_R = 1950.0 * S                # ring of neutral buildings in the centre
 
 
 def polar(r, deg):
@@ -105,12 +107,12 @@ for i in range(NPLAYERS):
     exp_mines.append((snap(ex), snap(ey)))
 
 neutral_buildings = [
-    ('ntav', polar(1950, 90)),     # Tavern
-    ('ngme', polar(1950, 210)),    # Goblin Merchant
-    ('ngad', polar(1950, 330)),    # Goblin Laboratory
-    ('nfoh', polar(1950, 30)),     # Fountain of Health
-    ('nfoh', polar(1950, 150)),    # Fountain of Health
-    ('nmoo', polar(1950, 270)),    # Fountain of Mana
+    ('ntav', polar(C_R, 90)),     # Tavern
+    ('ngme', polar(C_R, 210)),    # Goblin Merchant
+    ('ngad', polar(C_R, 330)),    # Goblin Laboratory
+    ('nfoh', polar(C_R, 30)),     # Fountain of Health
+    ('nfoh', polar(C_R, 150)),    # Fountain of Health
+    ('nmoo', polar(C_R, 270)),    # Fountain of Mana
 ]
 neutral_buildings = [(u, (snap(x), snap(y))) for u, (x, y) in neutral_buildings]
 
@@ -138,7 +140,9 @@ for i, (ex, ey) in enumerate(exp_mines):
         creeps.append((uid, cx + ox, cy + oy, face % 360))
 for i in range(6):
     ang = 60.0 * i
-    cx, cy = polar(3400, ang)
+    cx, cy = polar(3400 * S, ang)
+    mx, my = polar(3400 * S + 520, ang)
+    exp_mines.append((snap(mx), snap(my)))
     for k, uid in enumerate(BIG_CAMPS[i % len(BIG_CAMPS)]):
         ox, oy = polar(130, k * 120)
         creeps.append((uid, cx + ox, cy + oy, (ang + 180) % 360))
@@ -186,8 +190,8 @@ def ground_z(x, y):
         dd = math.hypot(x - bx, y - by)
         if dd < 1500:
             hz *= max(0.0, (dd - 1000) / 500.0)
-    if d < 2700:
-        hz *= max(0.0, (d - 2300) / 400.0)
+    if d < C_R + 750:
+        hz *= max(0.0, (d - C_R - 350) / 400.0)
     return max(hz, 0.0) + min(1.0, (s - 750) / 300.0) * 2.0
 
 
@@ -196,8 +200,8 @@ def ground_tex(x, y, z):
     s = coast_radius(math.atan2(y, x)) - d
     if s < 750 or d < LAGOON_R + 380 or z < WATER_Z + 5:
         return T_SAND
-    if 1450 < d < 2450:
-        return T_BRICK if (road_dist(x, y) < 260 or 1700 < d < 2200) else T_SAND
+    if C_R - 500 < d < C_R + 500:
+        return T_BRICK if (road_dist(x, y) < 260 or C_R - 250 < d < C_R + 250) else T_SAND
     if road_dist(x, y) < 190 + 40 * noise(x, y, 4, 7):
         return T_DIRT
     for (bx, by) in starts:
@@ -253,7 +257,7 @@ def tree_ok(x, y):
         return False
     d = math.hypot(x, y)
     s = coast_radius(math.atan2(y, x)) - d
-    if s < 900 or d < 2700:
+    if s < 900 or d < C_R + 750:
         return False
     if road_dist(x, y) < 330:
         return False
@@ -286,7 +290,7 @@ while gy < PMAX - 192:
             p = 0.0
             if d > BASE_R + 700 and s > 900:          # forest belt behind the bases
                 p = 0.88
-            elif d > 6500 and near_mid < 5.5:         # walls between neighbours
+            elif d > 6500 * S and near_mid < 5.5:         # walls between neighbours
                 p = 0.8
             elif noise(gx, gy, 2.2, 11) > 0.5:        # random groves
                 p = 0.75
@@ -396,14 +400,24 @@ def build_w3u():
     """Unit changes: Naga Sea Witch -> Medusa, Illidan gets the toggle Metamorphosis"""
     mods = [
         (b'Nngs', [(b'unam', "Medusa"), (b'upro', "Medusa")]),
-        (b'Eill', [(b'uhab', ILLIDAN_SKILLS)]),     # normal form
-        (b'Eilm', [(b'uhab', ILLIDAN_SKILLS)]),     # demon form
+        (b'Eevi', [(b'uhab', ILLIDAN_SKILLS)]),     # Illidan (Naga era: horns + wings)
+        (b'Eevm', [(b'uhab', ILLIDAN_SKILLS)]),     # his demon form
     ]
     o = bytearray(struct.pack('<ii', 2, len(mods)))
     for uid, fields in mods:
         o += uid + b'\0\0\0\0' + struct.pack('<i', len(fields))
         for field, val in fields:
             o += field + struct.pack('<i', 3) + cstr(val) + b'\0\0\0\0'
+    o += struct.pack('<i', 0)
+    return bytes(o)
+
+
+def build_w3b():
+    """Trees never fall: give the island tree a huge amount of life, so
+    harvesting lumber (which takes life from the tree) never cuts it down."""
+    o = bytearray(struct.pack('<ii', 2, 1))
+    o += b'ZTtw' + b'\0\0\0\0' + struct.pack('<i', 1)
+    o += b'bhps' + struct.pack('<i', 2) + struct.pack('<f', 1000000.0) + b'\0\0\0\0'
     o += struct.pack('<i', 0)
     return bytes(o)
 
@@ -436,8 +450,8 @@ def build_w3a():
         (b'aub1', STR, 1, 0, "Transform into a demon. Lasts until you turn it off."),
         (b'aut1', STR, 1, 0, "Normal Form (" + hk + ")"),
         (b'auu1', STR, 1, 0, "Turn back into Illidan's normal form."),
-        (b'Eme1', STR, 1, 1, "Eill"),           # normal form unit
-        (b'Emeu', STR, 1, 0, "Eilm"),           # demon form unit
+        (b'Eme1', STR, 1, 1, "Eevi"),           # normal form unit
+        (b'Emeu', STR, 1, 0, "Eevm"),           # demon form unit
         (b'Eme2', INT, 1, 2, 1),                # morph flags (same as Illidan's original)
         (b'adur', UNREAL, 1, 0, 1.5),           # transformation animation time only
         (b'ahdu', UNREAL, 1, 0, 1.5),
@@ -529,7 +543,7 @@ def build_j():
     a("    call CreateUnit(whichPlayer, 'nmpe', peonX - 0.60 * unitSpacing, peonY - 1.00 * unitSpacing, bj_UNIT_FACING)")
     a("    set heroX = GetLocationX(heroLoc)")
     a("    set heroY = GetLocationY(heroLoc)")
-    a("    set hero = CreateUnit(whichPlayer, 'Eill', heroX, heroY, bj_UNIT_FACING)")
+    a("    set hero = CreateUnit(whichPlayer, 'Eevi', heroX, heroY, bj_UNIT_FACING)")
     a("    call CreateUnit(whichPlayer, 'Nngs', heroX + 110.00, heroY - 90.00, bj_UNIT_FACING)")
     a("    call CreateUnit(whichPlayer, 'nnrg', heroX - 110.00, heroY - 90.00, bj_UNIT_FACING)")
     a("    if (GetLocalPlayer() == whichPlayer) then")
@@ -659,7 +673,7 @@ def build_minimap():
             z = height_at(x, y)
             if z < WATER_Z:
                 c = 7 if WATER_Z - z <= SHALLOW_DEPTH else 8
-            elif (px, MM - 1 - py) in tree_cells or (px - 1, MM - 1 - py) in tree_cells:
+            elif any((px - dx, MM - 1 - py - dy) in tree_cells for dx in (0, 1) for dy in (0, 1)):
                 c = 9
             else:
                 c = TEX_COLOR[ground_tex(x, y, z)]
@@ -810,6 +824,7 @@ def main():
         'war3map.shd': build_shd(),
         'war3map.w3u': build_w3u(),
         'war3map.w3a': build_w3a(),
+        'war3map.w3b': build_w3b(),
         'war3mapMap.blp': blp,
         'war3map.mmp': mmp,
     }
