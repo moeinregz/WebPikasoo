@@ -1,7 +1,6 @@
-"use client";
-
-import { useState } from "react";
 import Reveal from "./Reveal";
+import EchoHeading from "@/components/EchoHeading";
+import AccordionGenerative from "@/components/ui/accordion-generative";
 
 type FaqItem = { q: string; a: string };
 
@@ -39,62 +38,27 @@ const faqs: FaqItem[] = [
 ];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
   return (
-    <section id="faq" className="relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
+    <section id="faq" className="section-light relative scroll-mt-[90px] overflow-hidden border-t border-ink/10 py-[100px]">
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-12 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            FAQ
-          </span>
+        <Reveal className="mb-12">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">
+            <EchoHeading en="Common Questions" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
               سوالات پرتکرار
-            </h2>
+            </EchoHeading>
             <p className="mt-2.5 max-w-[62ch] text-[15px] text-dim">
               اگه سوال دیگه‌ای داشتی هم می‌تونی مستقیم تو واتساپ یا فرم پایین بپرسی.
             </p>
           </div>
         </Reveal>
 
-        <div className="mx-auto flex max-w-[760px] flex-col gap-3">
-          {faqs.map((item, i) => {
-            const isOpen = openIndex === i;
-            return (
-              <Reveal key={item.q} delay={i * 60} className="overflow-hidden matte rounded-card">
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-right text-[14.5px] font-bold text-ink sm:px-6 sm:py-5"
-                >
-                  {item.q}
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2.2}
-                    className={`h-[16px] w-[16px] flex-shrink-0 text-accent transition-transform duration-200 ${
-                      isOpen ? "rotate-45" : ""
-                    }`}
-                  >
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </button>
-                <div
-                  className={`grid transition-all duration-200 ${
-                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-[13.5px] leading-relaxed text-dim sm:px-6">{item.a}</p>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+        <Reveal className="mx-auto max-w-[760px]">
+          <AccordionGenerative
+            className="w-full"
+            defaultValue="q0"
+            items={faqs.map((f, i) => ({ value: `q${i}`, question: f.q, answer: f.a }))}
+          />
+        </Reveal>
       </div>
     </section>
   );

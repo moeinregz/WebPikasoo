@@ -1,0 +1,64 @@
+import type { SeedArticle } from "./types";
+import { applySeedContentFixes, fillSeedArticlePhotos, seedArticlesIfMissing } from "@/lib/db";
+import { findPhoto, hasStockPhotoKey } from "@/lib/stockPhoto";
+import { PHOTO_QUERIES } from "./photoQueries";
+
+// Article modules are added to this list as they're written.
+import a01 from "./a01";
+import a02 from "./a02";
+import a03 from "./a03";
+import a04 from "./a04";
+import a05 from "./a05";
+import a06 from "./a06";
+import a07 from "./a07";
+import a08 from "./a08";
+import a09 from "./a09";
+import a10 from "./a10";
+import a11 from "./a11";
+import a12 from "./a12";
+import a13 from "./a13";
+import a14 from "./a14";
+import a15 from "./a15";
+import a16 from "./a16";
+import a17 from "./a17";
+import a18 from "./a18";
+import a19 from "./a19";
+import a20 from "./a20";
+import a21 from "./a21";
+import a22 from "./a22";
+import a23 from "./a23";
+import a24 from "./a24";
+import a25 from "./a25";
+import a26 from "./a26";
+import a27 from "./a27";
+import a28 from "./a28";
+import a29 from "./a29";
+import a30 from "./a30";
+
+const modules: SeedArticle[][] = [a01, a02, a03, a04, a05, a06, a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30];
+
+export const SEED_ARTICLES: SeedArticle[] = modules.flat();
+
+/** Called from /blog and the sitemap; cheap after the first run. */
+export async function ensureSeedArticles(): Promise<void> {
+  try {
+    await seedArticlesIfMissing(SEED_ARTICLES);
+    // Image alts made fully Persian after the first release.
+    await applySeedContentFixes("persian-alts-1", [
+      { slug: "منوی-دیجیتال", from: "![منوی دیجیتال رستوران با QR کد]", to: "![منوی دیجیتال رستوران با کیو آر کد روی میز]" },
+      { slug: "گواهی-ssl", from: "![گواهی SSL و اتصال امن HTTPS]", to: "![گواهی SSL و قفل اتصال امن در نوار آدرس مرورگر]" },
+      { slug: "طراحی-سایت-با-هوش-مصنوعی", from: "![طراحی سایت با هوش مصنوعی و ابزارهای AI]", to: "![طراحی سایت با هوش مصنوعی و ابزارهای هوشمند]" },
+    ]);
+  } catch (e) {
+    console.error("seedArticles failed:", e);
+  }
+  // Real photos instead of placeholders, a few articles per visit, once a
+  // Pexels key is configured. Never blocks the page on failure.
+  if (hasStockPhotoKey()) {
+    try {
+      await fillSeedArticlePhotos(PHOTO_QUERIES, findPhoto, 3);
+    } catch (e) {
+      console.error("seed article photos failed:", e);
+    }
+  }
+}

@@ -17,7 +17,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-6 py-2.5 text-[14px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-6 py-2.5 text-[14px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ارسال..." : label}
     </button>
@@ -196,7 +196,7 @@ export default function WorkReportPanel({ reports, statsByDay }: { reports: Work
               setCreating(true);
               setEditingId(null);
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-black transition hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-on-accent transition hover:-translate-y-0.5"
           >
             ✍️ گزارش جدید
           </button>

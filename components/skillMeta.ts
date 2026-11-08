@@ -48,4 +48,4 @@ export const SKILL_META: Record<string, SkillMeta> = {
   N8N: { slug: "n8n", color: "#EA4B71" },
 };
 
-export const DEFAULT_SKILL_COLOR = "#0077B6";
+export const DEFAULT_SKILL_COLOR = "#D9D7D1";

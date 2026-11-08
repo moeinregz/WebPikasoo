@@ -75,7 +75,7 @@ function GroupHead({
 }) {
   return (
     <div className="mb-6 flex items-center gap-3.5">
-      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-white">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-on-accent">
         {num}
       </span>
       <h3
@@ -104,12 +104,12 @@ export default function Skills() {
     <section className="relative scroll-mt-[90px] overflow-hidden py-[90px] sm:py-[110px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-dot-grid" />
       <span
-        className="pointer-events-none absolute -right-[220px] -top-[260px] z-0 h-[640px] w-[640px] rounded-full opacity-45 blur-[130px]"
-        style={{ background: "rgba(0, 119, 182, .35)" }}
+        className="pointer-events-none absolute -right-[220px] -top-[260px] z-0 h-[640px] w-[640px] rounded-full opacity-45"
+        style={{ background: "radial-gradient(closest-side, rgba(217, 215, 209, .35), transparent)" }}
       />
       <span
-        className="pointer-events-none absolute -left-[180px] -bottom-[240px] z-0 h-[520px] w-[520px] rounded-full opacity-35 blur-[130px]"
-        style={{ background: "rgba(2, 62, 138, .35)" }}
+        className="pointer-events-none absolute -left-[180px] -bottom-[240px] z-0 h-[520px] w-[520px] rounded-full opacity-35"
+        style={{ background: "radial-gradient(closest-side, rgba(74, 74, 82, .35), transparent)" }}
       />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">

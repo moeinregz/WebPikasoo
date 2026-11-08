@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 const config: Config = {
   darkMode: "class",
@@ -18,29 +19,33 @@ const config: Config = {
         canvas: "rgb(var(--color-canvas) / <alpha-value>)", // page background
         surface: "rgb(var(--color-surface) / <alpha-value>)", // card/panel fill
 
-        // Fixed flat brand accents — same in both themes. یه پالت آبی
-        // آسمانی/فیروزه‌ای ثابت، همه‌جا رنگ تخت (بدون گرادیان) استفاده می‌شه.
-        accent: "#0077B6", // آبی آسمانی اصلی — دکمه‌ها، لینک‌ها، فوکوس، برند
-        accent2: "#023E8A", // آبی تیره‌تر — حالت هاور، سایه‌ها، جزئیات ثانویه
-        accent3: "#00B4D8", // فیروزه‌ای روشن‌تر — نقطه‌ی وضعیت «آنلاین/آماده‌ی همکاری» و برجسته‌سازی‌های کوچک
+        // Brand accents — monochrome: the accent is the theme's own
+        // off-white (on matte black) or matte black (on off-white), set in
+        // globals.css, so the site stays strictly black and white.
+        accent: "rgb(var(--color-accent) / <alpha-value>)", // رنگ تأکید: سفید گرم روی مشکی مات (و برعکس در بخش‌های روشن)
+        accent2: "rgb(var(--color-accent2) / <alpha-value>)", // حالت هاور دکمه‌های تأکیدی
+        accent3: "rgb(var(--color-accent3) / <alpha-value>)", // نقطه‌های وضعیت و جزئیات کوچک
+        blood: "rgb(var(--color-blood) / <alpha-value>)", // قرمز خونی — ۱۰٪ رنگ سایت
+        "blood-hi": "rgb(var(--color-blood-hi) / <alpha-value>)", // قرمز روشن‌تر برای نور و گرادیان
+        "on-accent": "rgb(var(--color-on-accent) / <alpha-value>)", // متن روی پس‌زمینه‌ی accent
 
         // پالت کامل آبی آسمانی، برای استفاده‌ی مستقیم هرجا لازم بود
         // (نمودارها، دسته‌بندی‌ها و جزئیات چندرنگ) — بدون گرادیان، فقط
         // رنگ‌های تخت از تیره به روشن.
-        "deep-twilight": "#03045E",
-        "french-blue": "#023E8A",
-        "bright-teal-blue": "#0077B6",
-        "blue-green": "#0096C7",
-        "turquoise-surf": "#00B4D8",
-        "sky-aqua": "#48CAE4",
-        "frosted-blue": "#90E0EF",
-        "frosted-blue-2": "#ADE8F4",
-        "light-cyan": "#CAF0F8",
+        "deep-twilight": "#1E0B4B",
+        "french-blue": "#5B21D6",
+        "bright-teal-blue": "#8A4DFF",
+        "blue-green": "#9D6BFF",
+        "turquoise-surf": "#B794FF",
+        "sky-aqua": "#C9B0FF",
+        "frosted-blue": "#DCCBFF",
+        "frosted-blue-2": "#E6DAFF",
+        "light-cyan": "#F0E9FF",
 
         // Legacy aliases — kept so components outside the redesigned landing
         // page (account/dashboard) still render sensibly against the new
         // dark-first palette without needing a separate rewrite pass.
-        navy: "#0a0a0c",
+        navy: "#101013",
         alabaster: "#f5f5f7",
       },
       fontFamily: {
@@ -51,6 +56,7 @@ const config: Config = {
         // پیش‌فرض/محو مرورگر رندر بشن. حالا font-mono هم مستقیم همون
         // Vazirmatn هست، یعنی همه‌جای سایت یکدست و بدون فال‌بک ناهماهنگ.
         mono: ["var(--font-vazirmatn)", "sans-serif"],
+        latin: ["var(--font-latin)", "var(--font-vazirmatn)", "sans-serif"],
       },
       maxWidth: {
         container: "1160px",
@@ -66,11 +72,24 @@ const config: Config = {
         grid: "44px 44px",
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(0, 119, 182, 0.35), 0 8px 40px -8px rgba(0, 119, 182, 0.45)",
-        "glow-violet": "0 0 0 1px rgba(2, 62, 138, 0.35), 0 8px 40px -8px rgba(2, 62, 138, 0.45)",
-        "glow-soft": "0 20px 60px -20px rgba(0, 119, 182, 0.35)",
+        glow: "0 0 0 1px rgba(138, 77, 255, 0.35), 0 8px 40px -8px rgba(138, 77, 255, 0.45)",
+        "glow-violet": "0 0 0 1px rgba(238, 236, 231, 0.18), 0 8px 40px -8px rgba(0, 0, 0, 0.45)",
+        "glow-soft": "0 20px 60px -20px rgba(138, 77, 255, 0.35)",
       },
       keyframes: {
+        // shadcn/ui accordion open/close (Radix sets the content height var)
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        caretBlink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
         pulseDot: {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: ".35", transform: "scale(1.4)" },
@@ -176,6 +195,9 @@ const config: Config = {
         },
       },
       animation: {
+        "accordion-down": "accordion-down 0.25s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "caret-blink": "caretBlink 1s step-end infinite",
         "pulse-dot": "pulseDot 2.4s ease-in-out infinite",
         "blink-cursor": "blinkCursor 1s step-end infinite",
         "marquee-ltr": "marqueeLtr 85s linear infinite",
@@ -203,7 +225,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [animate],
 };
 
 export default config;

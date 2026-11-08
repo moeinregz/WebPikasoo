@@ -56,7 +56,7 @@ function SendButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       ارسال
     </button>
@@ -276,7 +276,7 @@ export default function TeamChat({
               <div key={m.id} className={`group flex ${isMe ? "justify-start" : "justify-end"}`}>
                 <div
                   className={`relative max-w-[88%] rounded-card px-4 py-2.5 sm:max-w-[75%] ${
-                    isMe ? "bg-accent text-black" : "border border-ink/[0.14] bg-canvas"
+                    isMe ? "bg-accent text-on-accent" : "border border-ink/[0.14] bg-canvas"
                   }`}
                 >
                   <div className="mb-1 flex items-center gap-2 font-mono text-[11px] opacity-70">

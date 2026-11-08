@@ -2,11 +2,12 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { submitInquiry, type InquiryFormState } from "@/app/actions";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const initialState: InquiryFormState = null;
 
-const inputClass =
-  "w-full rounded-[10px] border-2 border-ink/20 bg-canvas px-4 py-3 text-[14.5px] text-ink placeholder:text-dim/60 outline-none transition focus:border-accent focus:shadow-[-4px_4px_0_0_rgb(var(--matte-shadow))]";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -14,12 +15,12 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex w-full items-center justify-center gap-2 matte-btn rounded-xl bg-accent px-6 py-3.5 text-[15px] font-black text-white disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
+      className="btn-blood inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-[15px] font-bold disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ارسال..." : "دریافت مشاوره رایگان"}
       {!pending && (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">
-          <path d="M5 12h14M13 6l6 6-6 6" />
+          <path d="M19 12H5M11 6l-6 6 6 6" />
         </svg>
       )}
     </button>
@@ -58,8 +59,8 @@ export default function ContactForm({
   // habit or uncertainty about whether it went through.
   if (state?.ok) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-card border border-accent/30 bg-accent/[0.06] px-6 py-14 text-center">
-        <span className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-accent text-accent">
+      <div className="flex flex-col items-center gap-4 w-full rounded-card border border-emerald-500/30 bg-emerald-500/[0.06] px-6 py-14 text-center">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-emerald-400 text-emerald-400">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-6 w-6">
             <path d="M20 6 9 17l-5-5" />
           </svg>
@@ -73,7 +74,7 @@ export default function ContactForm({
   }
 
   return (
-    <form action={formAction} className="text-right">
+    <form action={formAction} className="w-full space-y-4 text-right">
       {/* Honeypot field — invisible to real users, catches simple bots. */}
       <input
         type="text"
@@ -84,62 +85,43 @@ export default function ContactForm({
         aria-hidden="true"
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <input name="name" required defaultValue={defaultName} placeholder="اسمت" className={inputClass} />
-        <input
-          name="phone"
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="lead_name">اسم</Label>
+        <Input id="lead_name" name="name" required defaultValue={defaultName} autoComplete="name" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="lead_phone">شماره موبایل</Label>
+        <Input id="lead_phone" name="phone" type="tel" inputMode="numeric" required defaultValue={defaultPhone} dir="ltr" className="text-left" autoComplete="tel" placeholder="09xxxxxxxxx" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="lead_type">نوع پروژه</Label>
+        <select
+          id="lead_type"
+          name="projectType"
           required
-          defaultValue={defaultPhone}
-          placeholder="شماره موبایل"
-          className={inputClass}
-          dir="ltr"
-        />
-      </div>
-
-      <select
-        name="projectType"
-        required
-        defaultValue={defaultProjectType || ""}
-        className={`${inputClass} mt-4`}
-      >
-        <option value="" disabled>
-          نوع پروژه
-        </option>
-        {projectTypeOptions.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
+          defaultValue={defaultProjectType || ""}
+          className="flex h-10 w-full rounded-md border border-ink/15 bg-canvas/60 px-3 py-2 text-sm text-ink transition-colors focus-visible:border-blood-hi/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blood-hi/40"
+        >
+          <option value="" disabled>
+            انتخاب کن
           </option>
-        ))}
-      </select>
-
-      <textarea
-        name="message"
-        required
-        rows={4}
-        defaultValue={defaultMessage}
-        placeholder="یه توضیح کوتاه از پروژه‌ت — همین کافیه، بقیه‌ش رو تو تماس می‌پرسیم."
-        className={`${inputClass} mt-4 resize-none`}
-      />
-
-      <p className="mt-3 text-[12.5px] text-dim">
-        بدون تعهد — فقط یه گفتگوی کوتاه برای شناخت نیازت.
-      </p>
-
-      <div className="mt-5 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-        <SubmitButton />
-        {/* Only failure messages ever reach here — a success state
-            (state.ok) returns the confirmation panel above instead. */}
-        {state && !state.ok && (
-          <p className="flex items-center gap-2 text-sm text-dim">
-            <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-dim text-dim">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-3 w-3">
-                <path d="M12 9v4M12 17h.01" />
-              </svg>
-            </span>
-            {state.message}
-          </p>
-        )}
+          {projectTypeOptions.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
       </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="lead_message">توضیح کوتاه</Label>
+        <Textarea id="lead_message" name="message" required rows={4} defaultValue={defaultMessage} placeholder="همین کافیه، بقیه‌ش رو تو تماس می‌پرسیم." className="resize-none" />
+      </div>
+
+      <SubmitButton />
+      {/* Only failure messages ever reach here — a success state
+          (state.ok) returns the confirmation panel above instead. */}
+      {state && !state.ok && <p className="text-center text-sm text-[rgb(240_110_125)]">{state.message}</p>}
+      <p className="text-center text-[12px] text-dim">بدون تعهد — فقط یه گفتگوی کوتاه برای شناخت نیازت.</p>
     </form>
   );
 }

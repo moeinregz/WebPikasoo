@@ -1,63 +1,9 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Reveal from "./Reveal";
 import StatCounter from "./StatCounter";
 import LaptopShowcase from "./LaptopShowcase";
-
-type SeoItem = { n: string; title: string; desc: string; color: string; icon: ReactNode };
-
-const seoItems: SeoItem[] = [
-  {
-    n: "۰۱",
-    title: "سئوی داخلی",
-    desc: "بهینه‌سازی محتوا، عنوان‌ها و ساختار صفحات برای رتبه بهتر در گوگل",
-    color: "#48CAE4",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <rect x="5" y="3.5" width="11" height="17" rx="2" />
-        <path d="M8 8h5M8 11.5h5M8 15h3" />
-        <circle cx="17.3" cy="17.3" r="3" />
-        <path d="M19.6 19.6 21.2 21.2" />
-      </svg>
-    ),
-  },
-  {
-    n: "۰۲",
-    title: "سئوی خارجی",
-    desc: "لینک‌سازی و افزایش اعتبار دامنه",
-    color: "#0077B6",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <path d="M9.4 14.6 14.6 9.4" />
-        <path d="M11 6.4 12.7 4.7a3.5 3.5 0 0 1 5 5L15.9 11.6" />
-        <path d="M13 17.6 11.3 19.3a3.5 3.5 0 0 1-5-5L8.1 12.4" />
-      </svg>
-    ),
-  },
-  {
-    n: "۰۳",
-    title: "سئوی تکنیکال",
-    desc: "سرعت، ایندکس‌شدن و ساختار فنی سایت",
-    color: "#023E8A",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <path d="M14.7 6.3a3 3 0 0 1-3.9 3.9L4.5 16.5l2 2 6.3-6.3a3 3 0 0 1 3.9-3.9L20.5 4.5l-2-2-3.8 3.8Z" />
-      </svg>
-    ),
-  },
-  {
-    n: "۰۴",
-    title: "سئوی محلی",
-    desc: "دیده‌شدن کسب‌وکار در جستجوهای محلی و گوگل‌مپ",
-    color: "#03045E",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-full w-full">
-        <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-        <circle cx="12" cy="9.8" r="2.4" />
-      </svg>
-    ),
-  },
-];
+import EchoHeading from "@/components/EchoHeading";
 
 function GroupHead({
   num,
@@ -72,7 +18,7 @@ function GroupHead({
 }) {
   return (
     <div className="mb-6 flex items-center gap-3.5">
-      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-accent font-mono text-[13px] font-black text-white">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center btn-blood rounded-md font-mono text-[13px] font-black">
         {num}
       </span>
       <h3
@@ -85,7 +31,7 @@ function GroupHead({
         {title}
       </h3>
       <span className="h-px flex-1 bg-ink/10" />
-      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-ink/10 bg-surface p-2 text-ink">
+      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-blood-hi/30 bg-blood/[0.08] p-2 text-blood-hi">
         {icon}
       </span>
     </div>
@@ -104,12 +50,11 @@ export default function Services() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-dot-grid" />
 
       <div className="relative z-[1] mx-auto max-w-container px-6">
-        <Reveal className="mb-14 flex items-baseline gap-4">
-          <span className="matte matte-sm flex h-8 items-center rounded-full px-3.5 font-mono text-sm font-bold text-ink">
-            Services
-          </span>
+        <Reveal className="mb-14">
           <div>
-            <h2 className="font-display text-[28px] font-normal sm:text-[34px] lg:text-[40px]">خدمات</h2>
+            <EchoHeading en="Services" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
+              خدمات
+            </EchoHeading>
             <p className="mt-2.5 max-w-[60ch] text-[15px] text-dim">
               توسعه نرم‌افزار، طراحی سایت فروشگاهی و شرکتی، هوش مصنوعی و سئو — چهار خدمتی که تیم وب
               پیکاسو زیر یه سقف ارائه می‌ده.
@@ -152,11 +97,11 @@ export default function Services() {
               against that gray. A solid dark color stays dark regardless
               of theme, matching the other "always dark" panels in this
               codebase (Contact's CTA, the laptop mockup, etc). */}
-          <div className="seo-hero relative mb-6 overflow-hidden matte rounded-card !bg-[#0a0a0c] p-6 sm:p-9">
+          <div id="seo" className="seo-hero relative scroll-mt-[90px] overflow-hidden rounded-card border border-blood-hi/20 bg-[#0b0b0d] p-6 sm:p-9">
             <div className="relative z-[1] flex flex-col gap-9 lg:flex-row lg:items-center">
               <div className="flex-1">
                 <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
-                  <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-accent3" />
+                  <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-blood-hi shadow-[0_0_8px_rgb(var(--color-blood-hi))]" />
                   رشد فعال و پیوسته
                 </span>
                 <h3 className="accent-gradient-text max-w-[16ch] font-display text-[30px] font-normal leading-[1.25] sm:text-[36px] lg:text-[40px]">
@@ -199,13 +144,14 @@ export default function Services() {
                 <svg viewBox="0 0 380 200" fill="none" className="w-full">
                   <defs>
                     <linearGradient id="seoAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0077B6" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#0077B6" stopOpacity="0" />
+                      <stop offset="0%" style={{ stopColor: "rgb(var(--color-blood-hi))" }} stopOpacity="0.55" />
+                      <stop offset="60%" style={{ stopColor: "rgb(var(--color-blood))" }} stopOpacity="0.15" />
+                      <stop offset="100%" style={{ stopColor: "rgb(var(--color-blood))" }} stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="seoLineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#48CAE4" />
-                      <stop offset="55%" stopColor="#0077B6" />
-                      <stop offset="100%" stopColor="#023E8A" />
+                      <stop offset="0%" stopColor="#5e0612" />
+                      <stop offset="55%" style={{ stopColor: "rgb(var(--color-blood-hi))" }} />
+                      <stop offset="100%" stopColor="#c8203a" />
                     </linearGradient>
                   </defs>
 
@@ -225,10 +171,29 @@ export default function Services() {
                     strokeLinecap="round"
                   />
 
-                  <circle cx="355" cy="14" r="4" fill="#023E8A">
-                    <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="1;.35;1" dur="2s" repeatCount="indefinite" />
+                  {/* milestones along the curve */}
+                  {[
+                    [95, 130, "rgb(var(--color-blood-hi))"],
+                    [165, 96, "rgb(var(--color-blood-hi))"],
+                    [235, 55, "rgb(var(--color-blood-hi))"],
+                  ].map(([cx, cy, c], i) => (
+                    <g key={i}>
+                      <circle cx={cx} cy={cy} r="9" opacity="0.18" style={{ fill: c as string }}>
+                        <animate attributeName="r" values="6;11;6" dur="2.4s" begin={`${i * 0.4}s`} repeatCount="indefinite" />
+                      </circle>
+                      <circle cx={cx} cy={cy} r="4" fill="#0b0b0d" strokeWidth="2.5" style={{ stroke: c as string }} />
+                    </g>
+                  ))}
+
+                  <circle cx="355" cy="14" r="10" opacity="0.3" style={{ fill: "rgb(var(--color-blood-hi))" }}>
+                    <animate attributeName="r" values="6;14;6" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values=".45;0;.45" dur="2s" repeatCount="indefinite" />
                   </circle>
+                  <circle cx="355" cy="14" r="5" fill="#fff" strokeWidth="3" style={{ stroke: "rgb(var(--color-blood-hi))" }} />
+                  <g transform="translate(296 34)">
+                    <rect width="62" height="22" rx="11" fillOpacity="0.9" style={{ fill: "rgb(var(--color-blood))" }} />
+                    <text x="31" y="15" textAnchor="middle" fontSize="11" fontWeight="700" fill="#fff" fontFamily="monospace">+240%</text>
+                  </g>
 
                   <circle r="5" fill="#fff" className="seo-chart-dot">
                     <animateMotion
@@ -242,42 +207,12 @@ export default function Services() {
             </div>
           </div>
 
-          <div id="seo" className="grid scroll-mt-[90px] grid-cols-1 gap-3 sm:grid-cols-2">
-            {seoItems.map((item) => (
-              <div
-                key={item.n}
-                style={{ "--seo-color": item.color } as CSSProperties}
-                className="seo-card group relative flex items-center gap-4 matte matte-hover rounded-card p-5 sm:p-6"
-              >
-                <span
-                  className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] p-2.5 transition-transform duration-300 group-hover:scale-110"
-                  style={{ background: `${item.color}22`, color: item.color }}
-                >
-                  {item.icon}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1.5 flex items-center gap-2">
-                    <h4 className="text-[15.5px] font-bold transition-colors group-hover:text-[var(--seo-color)]">
-                      {item.title}
-                    </h4>
-                    <span className="font-mono text-[11px] font-black text-dim">{item.n}</span>
-                  </div>
-                  <p className="text-[13.5px] text-dim">{item.desc}</p>
-                </div>
-                <span className="seo-card-arrow flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-ink/10 text-dim">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path d="M17 12H7M11 8l-4 4 4 4" />
-                  </svg>
-                </span>
-              </div>
-            ))}
-          </div>
         </Reveal>
 
         {/* Points to the dedicated skills page for the full technical list —
             the pretty per-technology cards that used to live in this
             section now live there instead. */}
-        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 matte matte-hover rounded-card p-6 sm:p-7">
+        <Reveal className="relative z-[1] flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink/10 bg-surface/70 p-6 transition-colors hover:border-blood-hi/35 sm:p-7">
           <div>
             <h4 className="text-[16px] font-bold">کنجکاوید با چه تکنولوژی‌هایی کار می‌کنیم؟</h4>
             <p className="mt-1.5 text-[13.5px] text-dim">
@@ -286,7 +221,7 @@ export default function Services() {
           </div>
           <Link
             href="/skills"
-            className="inline-flex flex-shrink-0 items-center gap-2 matte-btn rounded-xl bg-canvas px-5 py-3 text-[14px] font-bold text-ink"
+            className="btn-blood inline-flex flex-shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-bold active:scale-95"
           >
             مشاهده مهارت‌های فنی
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[15px] w-[15px]">

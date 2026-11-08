@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import gsap from "gsap";
 
 type ServiceId = "dev" | "store" | "ai";
 
@@ -25,7 +26,7 @@ const services: ServiceTab[] = [
       "اتصال به API‌های داخلی و خارجی",
       "معماری مقیاس‌پذیر و قابل نگهداری",
     ],
-    accent: "#0077B6",
+    accent: "#38bdf8",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 6l-4 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -42,7 +43,7 @@ const services: ServiceTab[] = [
       "طراحی اختصاصی هماهنگ با هویت برند",
       "سرعت بالا و تجربه‌ی کاربری روان روی موبایل",
     ],
-    accent: "#00B4D8",
+    accent: "#f59e0b",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <path d="M3 6h18l-1.5 11a2 2 0 01-2 1.7H6.5a2 2 0 01-2-1.7L3 6Z" strokeLinecap="round" strokeLinejoin="round" />
@@ -60,7 +61,7 @@ const services: ServiceTab[] = [
       "اتوماسیون فرایندهای تکراری با AI",
       "تحلیل و پیش‌بینی داده‌های کسب‌وکار",
     ],
-    accent: "#023E8A",
+    accent: "#b21024",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-full w-full">
         <circle cx="12" cy="12" r="3" />
@@ -81,10 +82,10 @@ function AdminPanelScreen() {
   ];
 
   return (
-    <div className="flex h-full bg-[#0a0a0c]">
+    <div className="flex h-full bg-[#101013]">
       {/* نوار کناری آیکون‌محور */}
       <div className="flex w-[42px] flex-shrink-0 flex-col items-center gap-4 border-l border-white/10 bg-white/[0.03] py-3.5 sm:w-[50px]">
-        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-accent text-white">
+        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-sky-500 text-white">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} className="h-3.5 w-3.5">
             <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" strokeLinejoin="round" />
           </svg>
@@ -92,7 +93,7 @@ function AdminPanelScreen() {
         {[0, 1, 2, 3].map((i) => (
           <span
             key={i}
-            className={`h-2 w-2 flex-shrink-0 rounded-[3px] ${i === 0 ? "bg-white/60" : "bg-white/15"}`}
+            className={`h-2 w-2 flex-shrink-0 rounded-[3px] ${i === 0 ? "bg-sky-400" : "bg-white/15"}`}
           />
         ))}
       </div>
@@ -103,7 +104,7 @@ function AdminPanelScreen() {
           <span className="font-mono text-[10.5px] font-bold text-white/80 sm:text-[11.5px]">پنل مدیریت</span>
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 flex-shrink-0 animate-pulse-dot rounded-full bg-emerald-400" />
-            <span className="h-5 w-5 flex-shrink-0 rounded-full bg-accent/30" />
+            <span className="h-5 w-5 flex-shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-blood-hi" />
           </span>
         </div>
 
@@ -111,12 +112,12 @@ function AdminPanelScreen() {
           {/* کارت‌های آماری */}
           <div className="grid grid-cols-3 gap-2">
             {[
-              { l: "فروش امروز", v: "۴۲.۶M", c: "#48CAE4" },
-              { l: "سفارش‌ها", v: "۱۲۸", c: "#0077B6" },
-              { l: "کاربر فعال", v: "۹۶۴", c: "#023E8A" },
+              { l: "فروش امروز", v: "۴۲.۶M", c: "#34d399" },
+              { l: "سفارش‌ها", v: "۱۲۸", c: "#38bdf8" },
+              { l: "کاربر فعال", v: "۹۶۴", c: "#f59e0b" },
             ].map((s) => (
               <div key={s.l} className="rounded-md border border-white/10 bg-white/[0.03] p-2">
-                <div className="h-1.5 w-8 rounded-full" style={{ background: `${s.c}55` }} />
+                <div className="h-1.5 w-8 rounded-full" style={{ background: s.c }} />
                 <div className="mt-2 font-mono text-[11px] font-bold text-white/85 sm:text-[12.5px]">{s.v}</div>
                 <div className="mt-0.5 truncate font-mono text-[8px] text-white/35 sm:text-[8.5px]">{s.l}</div>
               </div>
@@ -129,7 +130,7 @@ function AdminPanelScreen() {
               <span
                 key={i}
                 className="flex-1 rounded-t-sm"
-                style={{ height: `${h}%`, background: i === 5 ? "#48CAE4" : "rgba(0,119,182,.4)" }}
+                style={{ height: `${h}%`, background: i === 5 ? "linear-gradient(to top, #0ea5e9, #7dd3fc)" : "linear-gradient(to top, rgba(14,165,233,.15), rgba(56,189,248,.45))" }}
               />
             ))}
           </div>
@@ -144,7 +145,7 @@ function AdminPanelScreen() {
                 <span className="truncate font-mono text-[9px] text-white/60 sm:text-[10px]">{r.name}</span>
                 <span
                   className={`flex-shrink-0 rounded-full px-1.5 py-0.5 font-mono text-[8px] font-bold sm:text-[8.5px] ${
-                    r.ok ? "bg-emerald-400/15 text-emerald-400" : "bg-accent3/15 text-accent3"
+                    r.ok ? "bg-emerald-400/15 text-emerald-400" : "bg-amber-400/15 text-amber-400"
                   }`}
                 >
                   {r.status}
@@ -160,7 +161,7 @@ function AdminPanelScreen() {
 
 function StoreScreen() {
   return (
-    <div className="flex h-full flex-col bg-[#0a0a0c]">
+    <div className="flex h-full flex-col bg-[#101013]">
       <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-2 sm:px-4">
         <span className="h-2 w-2 flex-shrink-0 rounded-full bg-[#ff5f56]" />
         <span className="h-2 w-2 flex-shrink-0 rounded-full bg-[#ffbd2e]" />
@@ -178,13 +179,13 @@ function StoreScreen() {
               <circle cx="10" cy="21" r="1.2" />
               <circle cx="17" cy="21" r="1.2" />
             </svg>
-            <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] font-black text-white">
+            <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blood-hi text-[8px] font-black text-white">
               ۳
             </span>
           </span>
         </div>
 
-        <div className="mx-4 mt-3 rounded-lg bg-gradient-to-l from-accent/40 to-accent2/20 px-3.5 py-3.5">
+        <div className="mx-4 mt-3 rounded-lg bg-gradient-to-l from-amber-500/70 via-orange-500/50 to-rose-600/40 px-3.5 py-3.5">
           <div className="h-2 w-24 rounded-full bg-white/70" />
           <div className="mt-2 h-1.5 w-32 rounded-full bg-white/30" />
           <div className="mt-3 inline-flex h-5 items-center rounded-full bg-white/90 px-2.5 font-mono text-[8px] font-bold text-black">
@@ -197,10 +198,10 @@ function StoreScreen() {
             <div key={i} className="rounded-md border border-white/10 bg-white/[0.03] p-1.5">
               <div
                 className="aspect-square rounded"
-                style={{ background: ["#0077B633", "#00B4D833", "#023E8A33"][i] }}
+                style={{ background: ["linear-gradient(135deg,#fbbf24,#f97316)", "linear-gradient(135deg,#38bdf8,#6366f1)", "linear-gradient(135deg,#34d399,#0d9488)"][i], opacity: 0.85 }}
               />
               <div className="mt-1.5 h-1.5 w-full rounded-full bg-white/25" />
-              <div className="mt-1 h-1.5 w-7 rounded-full bg-accent3/80" />
+              <div className="mt-1 h-1.5 w-7 rounded-full bg-emerald-400/90" />
             </div>
           ))}
         </div>
@@ -211,23 +212,23 @@ function StoreScreen() {
 
 function AiScreen() {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden bg-[#0a0a0c]">
-      <svg viewBox="0 0 320 200" className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.12]">
-        <circle cx="40" cy="40" r="3" fill="#48CAE4" />
-        <circle cx="40" cy="110" r="3" fill="#48CAE4" />
-        <circle cx="40" cy="170" r="3" fill="#48CAE4" />
-        <circle cx="150" cy="70" r="3" fill="#48CAE4" />
-        <circle cx="150" cy="140" r="3" fill="#48CAE4" />
-        <circle cx="270" cy="100" r="3" fill="#48CAE4" />
+    <div className="relative flex h-full flex-col overflow-hidden bg-[#101013]">
+      <svg viewBox="0 0 320 200" className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.22]">
+        <circle cx="40" cy="40" r="3" fill="#c8203a" />
+        <circle cx="40" cy="110" r="3" fill="#c8203a" />
+        <circle cx="40" cy="170" r="3" fill="#c8203a" />
+        <circle cx="150" cy="70" r="3" fill="#c8203a" />
+        <circle cx="150" cy="140" r="3" fill="#c8203a" />
+        <circle cx="270" cy="100" r="3" fill="#c8203a" />
         <path
           d="M40 40 150 70M40 110 150 70M40 110 150 140M40 170 150 140M150 70 270 100M150 140 270 100"
-          stroke="#48CAE4"
+          stroke="#c8203a"
           strokeWidth="1"
         />
       </svg>
 
       <div className="relative z-[1] flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-2.5 sm:px-4">
-        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent3">
+        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blood-hi/20 text-blood-hi">
           <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
             <path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4L12 2Z" />
           </svg>
@@ -245,15 +246,15 @@ function AiScreen() {
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="max-w-[78%] rounded-xl rounded-tl-sm bg-accent px-3 py-2 text-[10.5px] leading-relaxed text-white sm:text-[11.5px]">
+          <div className="max-w-[78%] rounded-xl rounded-tl-sm bg-gradient-to-l from-blood-hi to-blood px-3 py-2 text-[10.5px] leading-relaxed text-white sm:text-[11.5px]">
             گزارش فروش این هفته رو خلاصه کن
           </div>
         </div>
         <div className="flex justify-start">
           <div className="flex items-center gap-1 rounded-xl rounded-tr-sm bg-white/[0.07] px-3 py-2.5">
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/50 [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/50 [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/50 [animation-delay:300ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blood-hi/80 [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blood-hi/80 [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blood-hi/80 [animation-delay:300ms]" />
           </div>
         </div>
       </div>
@@ -281,6 +282,64 @@ const screens: Record<ServiceId, ReactNode> = {
 export default function LaptopShowcase() {
   const [selected, setSelected] = useState<ServiceId>("dev");
   const active = services.find((s) => s.id === selected) ?? services[0];
+  const [guiding, setGuiding] = useState(true);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const pointerRef = useRef<HTMLDivElement>(null);
+  const stopGuide = () => setGuiding(false);
+
+  // GSAP click guide: while the tabs are on screen, a pointer glides to
+  // each tab in turn, presses it (ripple) and switches the laptop to that
+  // service — on a loop, until the visitor clicks a tab themselves.
+  useEffect(() => {
+    if (!guiding) return;
+    const wrap = tabsRef.current;
+    const ptr = pointerRef.current;
+    if (!wrap || !ptr) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ripple = ptr.querySelector<HTMLElement>("[data-ripple]");
+    const order: ServiceId[] = ["store", "ai", "dev"];
+    let tl: gsap.core.Timeline | null = null;
+
+    const build = () => {
+      tl?.kill();
+      const spot = (id: ServiceId) => {
+        const b = wrap.querySelector<HTMLElement>(`[data-tab="${id}"]`);
+        return b ? { x: b.offsetLeft + b.offsetWidth * 0.55, y: b.offsetTop + b.offsetHeight * 0.55 } : { x: 0, y: 0 };
+      };
+      const first = spot("dev");
+      gsap.set(ptr, { x: first.x + 40, y: first.y + 50, opacity: 0, scale: 1 });
+      tl = gsap.timeline({ repeat: -1, paused: true, delay: 0.4 });
+      tl.to(ptr, { opacity: 1, duration: 0.4 });
+      order.forEach((id) => {
+        const p = spot(id);
+        tl!
+          .to(ptr, { x: p.x, y: p.y, duration: 1, ease: "power2.inOut" })
+          .to(ptr, { scale: 0.8, duration: 0.12, ease: "power1.in" })
+          .call(() => setSelected(id))
+          .fromTo(ripple, { scale: 0.3, opacity: 0.9 }, { scale: 1.8, opacity: 0, duration: 0.55, ease: "power2.out" }, "<")
+          .to(ptr, { scale: 1, duration: 0.2 }, "<")
+          .to({}, { duration: 1.5 });
+      });
+      tl.to(ptr, { opacity: 0, duration: 0.3 });
+    };
+
+    build();
+    // only animate while the tabs are visible
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? tl?.play() : tl?.pause()), { threshold: 0.6 });
+    io.observe(wrap);
+    const onResize = () => {
+      const playing = tl && !tl.paused();
+      build();
+      if (playing) tl?.play();
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("resize", onResize);
+      tl?.kill();
+    };
+  }, [guiding]);
 
   return (
     <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
@@ -300,7 +359,7 @@ export default function LaptopShowcase() {
             <li key={b} className="flex items-start gap-2.5 text-[13.5px] text-ink/85">
               <span
                 className="mt-[3px] flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-500"
-                style={{ background: `${active.accent}26`, color: active.accent }}
+                style={{ background: "rgba(52, 211, 153, 0.16)", color: "#34d399" }}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} className="h-2.5 w-2.5">
                   <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -312,7 +371,7 @@ export default function LaptopShowcase() {
         </ul>
         <a
           href="#contact"
-          className="mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-[14px] font-bold text-canvas transition hover:-translate-y-0.5"
+          className="btn-blood mt-7 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-bold hover:-translate-y-0.5"
         >
           شروع این پروژه
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[14px] w-[14px]">
@@ -325,13 +384,13 @@ export default function LaptopShowcase() {
       <div className="order-1 lg:order-2">
         <div className="relative mx-auto w-full max-w-[560px]">
           <span
-            className="pointer-events-none absolute inset-x-0 -top-6 mx-auto h-[260px] w-[85%] rounded-full opacity-40 blur-[100px] transition-colors duration-500"
-            style={{ background: active.accent }}
+            className="pointer-events-none absolute inset-x-0 -top-6 mx-auto h-[260px] w-[85%] rounded-full opacity-30 transition-colors duration-500"
+            style={{ background: `radial-gradient(closest-side, ${active.accent}, transparent)` }}
           />
 
           <div className="relative z-[1] overflow-hidden rounded-t-[16px] border-[8px] border-b-0 border-[#1a1a1e] bg-black shadow-[0_40px_90px_-25px_rgba(0,0,0,0.75)] sm:border-[10px]">
             <span className="absolute left-1/2 top-0 z-10 h-[5px] w-[64px] -translate-x-1/2 rounded-b-lg bg-[#1a1a1e]" />
-            <div className="aspect-[16/10.5] w-full overflow-hidden bg-[#0a0a0c]">
+            <div className="aspect-[16/10.5] w-full overflow-hidden bg-[#101013]">
               <div key={active.id} className="h-full w-full animate-fade-in-up">
                 {screens[active.id]}
               </div>
@@ -341,31 +400,45 @@ export default function LaptopShowcase() {
           {/* Base — a shallow trapezoid under the screen frame, like the
               keyboard deck of a closed-screen laptop mockup. */}
           <div className="relative z-[1] mx-auto h-[13px] rounded-b-[8px] bg-gradient-to-b from-[#333338] to-[#131315] [clip-path:polygon(3%_0,97%_0,100%_100%,0%_100%)] sm:h-[16px]" />
-          <div className="relative z-[1] mx-auto h-[4px] w-[40%] rounded-b-full bg-gradient-to-b from-[#131315] to-[#0a0a0c]" />
+          <div className="relative z-[1] mx-auto h-[4px] w-[40%] rounded-b-full bg-gradient-to-b from-[#131315] to-[#101013]" />
         </div>
 
-        <div className="relative z-[1] mt-9 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+        <div ref={tabsRef} onPointerDown={stopGuide} className="relative z-[1] mt-9 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
           {services.map((s) => {
             const isActive = s.id === active.id;
             return (
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setSelected(s.id)}
-                style={isActive ? ({ "--tab-color": s.accent } as CSSProperties) : undefined}
+                data-tab={s.id}
+                onClick={() => {
+                  stopGuide();
+                  setSelected(s.id);
+                }}
                 className={`flex items-center gap-2.5 rounded-[12px] border px-4 py-3 text-right text-[13px] font-bold transition ${
                   isActive
-                    ? "border-transparent bg-[var(--tab-color)] text-white shadow-glow-soft"
-                    : "border-ink/[0.14] text-dim hover:border-ink/30 hover:text-ink"
+                    ? "btn-blood border-blood-hi/40"
+                    : "border-ink/[0.14] text-dim hover:border-blood-hi/40 hover:text-ink"
                 }`}
               >
-                <span className={`flex h-6 w-6 flex-shrink-0 items-center justify-center ${isActive ? "text-white" : "text-dim"}`}>
+                <span className={`flex h-6 w-6 flex-shrink-0 items-center justify-center ${isActive ? "text-white" : ""}`} style={isActive ? undefined : { color: s.accent }}>
                   {s.icon}
                 </span>
                 <span className="min-w-0 truncate">{s.label}</span>
               </button>
             );
           })}
+
+          {/* click guide: a pointer that walks over the tabs and "clicks"
+              each one, until the visitor clicks a tab themselves */}
+          {guiding && (
+            <div ref={pointerRef} aria-hidden className="pointer-events-none absolute left-0 top-0 z-10 opacity-0">
+              <span data-ripple className="absolute -left-4 -top-4 block h-8 w-8 rounded-full border-2 border-white/80 bg-blood-hi/40 opacity-0" />
+              <svg viewBox="0 0 24 24" className="relative h-7 w-7 drop-shadow-[0_3px_6px_rgba(0,0,0,0.6)]">
+                <path d="M5 2.5v17.2l4.6-4.3 2.9 6.6 3-1.3-2.9-6.5h6.3L5 2.5Z" fill="#fff" stroke="rgb(var(--color-blood))" strokeWidth="1.4" strokeLinejoin="round" />
+              </svg>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -186,7 +186,7 @@ export default function SiteMenuEditor({
             type="button"
             onClick={save}
             disabled={busy || !dirty}
-            className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-45"
+            className="rounded-full bg-accent px-5 py-2 text-[13px] font-bold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-45"
           >
             {busy ? "در حال ذخیره..." : "ذخیره‌ی منو"}
           </button>
@@ -292,7 +292,7 @@ export default function SiteMenuEditor({
                   <button
                     type="button"
                     onClick={() => setCat(c.key, { items: [...c.items, { key: uid(), name: "", desc: "", price: "", emoji: "", badge: "", image: "" }] })}
-                    className="rounded-full border border-accent/40 px-4 py-1.5 text-[12.5px] font-bold text-accent transition hover:bg-accent hover:text-black"
+                    className="rounded-full border border-accent/40 px-4 py-1.5 text-[12.5px] font-bold text-accent transition hover:bg-accent hover:text-on-accent"
                   >
                     + مورد جدید
                   </button>
@@ -314,7 +314,7 @@ export default function SiteMenuEditor({
                       placeholder={"اسپرسو | ۹۵,۰۰۰ تومان | یه شات غلیظ\nلاته | ۱۲۰,۰۰۰ تومان"}
                       className={`${inputClass} resize-y leading-relaxed`}
                     />
-                    <button type="button" onClick={() => addQuick(c.key)} className="mt-2 rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-bold text-black">
+                    <button type="button" onClick={() => addQuick(c.key)} className="mt-2 rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-bold text-on-accent">
                       افزودن به دسته
                     </button>
                   </div>
@@ -328,7 +328,7 @@ export default function SiteMenuEditor({
       <button
         type="button"
         onClick={() => setCats((cs) => [...cs.map((c) => ({ ...c, open: false })), { key: uid(), title: "", emoji: "", open: true, items: [] }])}
-        className="mt-3 rounded-full border border-accent/40 px-5 py-2 text-[13px] font-bold text-accent transition hover:bg-accent hover:text-black"
+        className="mt-3 rounded-full border border-accent/40 px-5 py-2 text-[13px] font-bold text-accent transition hover:bg-accent hover:text-on-accent"
       >
         + دسته‌ی جدید
       </button>

@@ -70,7 +70,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ثبت..." : "افزودن شماره"}
     </button>
@@ -302,7 +302,7 @@ function SaveEditButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-4 py-1.5 text-[12.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ذخیره..." : "ذخیره"}
     </button>
@@ -497,7 +497,7 @@ function LeadExtras({ lead }: { lead: Lead }) {
             className="w-full resize-y rounded-[8px] border border-ink/[0.16] bg-surface/40 px-3 py-2 text-[13px] leading-relaxed text-ink outline-none transition focus:border-accent"
           />
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <button type="submit" className="rounded-full bg-accent px-4 py-1.5 text-[12px] font-bold text-black">
+            <button type="submit" className="rounded-full bg-accent px-4 py-1.5 text-[12px] font-bold text-on-accent">
               ذخیره
             </button>
             <button type="button" onClick={() => setEditing(false)} className={small}>
@@ -566,7 +566,7 @@ function AcceptConfirmDialog({
             type="button"
             onClick={onConfirm}
             autoFocus
-            className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-black transition hover:-translate-y-0.5"
+            className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-semibold text-on-accent transition hover:-translate-y-0.5"
           >
             بله، ثبت کن
           </button>

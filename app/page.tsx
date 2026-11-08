@@ -2,15 +2,14 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Trust from "@/components/Trust";
-import Problems from "@/components/Problems";
 import BusinessShowcase from "@/components/BusinessShowcase";
 import Testimonials from "@/components/Testimonials";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import PricingPlans from "@/components/PricingPlans";
-import Guarantee from "@/components/Guarantee";
 import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
+import EchoHeading from "@/components/EchoHeading";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import IntroSplash from "@/components/fx/IntroSplash";
@@ -56,9 +55,9 @@ export default async function Home() {
 
   // ترتیب صفحه‌ی اصلی عمداً دنبال یه مسیر فروش/اعتمادسازی مشخصه:
   //
-  //   Hero → Trust (اعداد واقعی + چرا ما) → Problems (مشکل/راه‌حل)
+  //   Hero → Trust (اعداد واقعی + چرا ما)
   //   → نمونه‌کارها (Case Studies) → Services → Process
-  //   → Testimonials → Pricing/Offer → Guarantee → FAQ → Final CTA → Contact
+  //   → Testimonials → Pricing/Offer → FAQ → Final CTA → Contact
   //
   // یعنی اول نتیجه و اعتماد رو نشون می‌دیم، بعد مشکل بازدیدکننده رو تو
   // کلماتِ خودش می‌گیم، بعد نمونه‌کار و روش کار رو می‌بینه، بعد قیمت و
@@ -72,7 +71,6 @@ export default async function Home() {
       <Hero />
       <Marquee />
       <Trust />
-      <Problems />
       <BusinessShowcase sites={projects} />
       <Services />
       <Process />
@@ -88,7 +86,9 @@ export default async function Home() {
         <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[420px] bg-dot-grid" />
         <div className="relative z-[1] mx-auto max-w-container px-6">
           <Reveal className="mb-12 text-center">
-            <h2 className="font-display text-[26px] font-normal sm:text-[32px]">تعرفه‌ها و پلن‌ها</h2>
+            <EchoHeading en="Plans & Pricing" align="center" className="font-display text-[32px] font-normal leading-[1.3] sm:text-[40px] lg:text-[50px]">
+              تعرفه‌ها و پلن‌ها
+            </EchoHeading>
             <p className="mx-auto mt-2.5 max-w-[54ch] text-[14.5px] text-dim">
               یه دسته رو انتخاب کن و از بین ۳ پلن، اونی که به کارت میاد رو بردار — قیمت‌ها تقریبی و
               برای شروع مذاکره‌ن، بعد از شنیدن نیاز دقیقت یه پیشنهاد مکتوب و قطعی بهت می‌دیم.
@@ -98,7 +98,6 @@ export default async function Home() {
         </div>
       </section>
 
-      <Guarantee />
       <FAQ />
 
       <Contact />

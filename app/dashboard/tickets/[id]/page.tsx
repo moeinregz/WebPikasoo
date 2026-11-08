@@ -57,6 +57,20 @@ export default async function StaffTicketPage({ params }: { params: { id: string
             <div>
               <h1 className="font-display text-xl font-normal">{ticket.subject}</h1>
               <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[12.5px] text-dim">
+                {!requester && ticket.guest_name && (
+                  <>
+                    <span className="rounded-md border border-accent/30 bg-accent/10 px-2 py-0.5 text-accent">چت سایت (مهمان)</span>
+                    <span>{ticket.guest_name}</span>
+                    {ticket.guest_phone && (
+                      <>
+                        <span aria-hidden="true">·</span>
+                        <Link href={`tel:${ticket.guest_phone}`} className="hover:text-accent" dir="ltr">
+                          {toPersianDigits(ticket.guest_phone)}
+                        </Link>
+                      </>
+                    )}
+                  </>
+                )}
                 {requester && (
                   <>
                     <span>{requester.name}</span>

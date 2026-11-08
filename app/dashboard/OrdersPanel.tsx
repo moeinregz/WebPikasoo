@@ -39,7 +39,7 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-accent px-6 py-2.5 text-[14px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="rounded-full bg-accent px-6 py-2.5 text-[14px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? pendingLabel : label}
     </button>
@@ -265,7 +265,7 @@ export default function OrdersPanel({
               type="button"
               onClick={() => setFilter(k)}
               className={`rounded-full border px-4 py-1.5 text-[12.5px] font-bold transition ${
-                filter === k ? "border-accent bg-accent text-black" : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
+                filter === k ? "border-accent bg-accent text-on-accent" : "border-ink/[0.18] text-dim hover:border-accent hover:text-accent"
               }`}
             >
               {label} · {fa(n)}
@@ -279,7 +279,7 @@ export default function OrdersPanel({
               setCreating(true);
               setEditingId(null);
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-black transition hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-on-accent transition hover:-translate-y-0.5"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} className="h-4 w-4">
               <path d="M12 5v14M5 12h14" />

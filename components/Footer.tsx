@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUp, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { FooterBackgroundGradient, TextHoverEffect } from "@/components/ui/hover-footer";
 
 // همون لینک‌های هدر، برای بخش «دسترسی سریع» فوتر — یه‌جا نگه‌داشته می‌شن
 // که اگه صفحه‌ای اضافه/کم شد، هم هدر هم فوتر با هم آپدیت بشن.
@@ -55,163 +57,133 @@ const socials = [
   },
 ];
 
+// Layout from the "hover-footer" block (21st.dev): a rounded card with
+// four columns (brand, links, contact, address), a divider, socials and
+// copyright, then a large outlined wordmark that lights up under the
+// cursor (desktop only), over a soft blood-red gradient.
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-ink/10 bg-surface/30">
-      {/* بلوب‌های محو پس‌زمینه — هم‌خانواده با بقیه‌ی سکشن‌های سایت، تا فوتر
-          هم مثل بقیه‌ی صفحه یه ذره جلوه داشته باشه و کاملاً تخت نباشه. */}
-      <span
-        className="pointer-events-none absolute -top-24 right-[-120px] h-72 w-72 rounded-full opacity-[0.16] blur-[110px]"
-        style={{ background: "#0077B6" }}
-      />
-      <span
-        className="pointer-events-none absolute bottom-[-160px] left-[-100px] h-80 w-80 rounded-full opacity-[0.14] blur-[130px]"
-        style={{ background: "#00B4D8" }}
-      />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-accent/50 to-transparent" />
-
-      <div className="relative z-[1] mx-auto max-w-container px-6 pb-5 pt-9 sm:pb-8 sm:pt-16">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:gap-10 lg:grid-cols-[1.3fr_0.9fr_1fr_1.2fr]">
-          {/* برند + توضیح کوتاه + شبکه‌های اجتماعی */}
-          <div>
-            <Link href="/" className="inline-flex items-center gap-2 font-mono text-[16px] font-black text-ink sm:gap-2.5 sm:text-[18px]">
-              <span className="relative flex h-8 w-8 flex-shrink-0 overflow-hidden rounded-lg shadow-glow sm:h-10 sm:w-10">
+    <footer className="relative m-3 h-fit overflow-hidden rounded-3xl border border-ink/10 bg-surface/40 sm:m-6 lg:m-8">
+      <div className="relative z-40 mx-auto max-w-7xl px-6 pb-6 pt-10 sm:p-10 lg:p-14">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-9 pb-10 md:gap-8 lg:grid-cols-[1.3fr_0.9fr_1fr_1.2fr] lg:gap-14">
+          {/* برند + توضیح کوتاه */}
+          <div className="col-span-2 flex flex-col gap-4 lg:col-span-1">
+            <Link href="/" className="inline-flex items-center gap-2.5 font-mono text-[20px] font-black text-ink sm:text-[24px]">
+              <span className="relative flex h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-blood-hi/40">
                 <Image src="/logo.webp" alt="وب پیکاسو" fill sizes="40px" className="object-cover" />
               </span>
               <span className="leading-none">
-                WebPIKASO<span className="text-accent">.</span>
+                WebPIKASO<span className="text-blood-hi">.</span>
               </span>
             </Link>
-            <p className="mt-4 hidden max-w-[34ch] text-[14px] leading-relaxed text-dim sm:block">
+            <p className="max-w-[36ch] text-[14px] leading-relaxed text-dim">
               طراحی و توسعه‌ی وب‌سایت‌های حرفه‌ای، فروشگاهی و اختصاصی — از ایده تا اجرا، کنار کسب‌وکار شما.
             </p>
-            <div className="mt-3 flex items-center gap-2 sm:mt-5 sm:gap-2.5">
-              {socials.map((s) => (
-                <Link
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border border-ink/[0.14] text-dim transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent sm:h-9 sm:w-9"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3.5 w-3.5 sm:h-4 sm:w-4">
-                    {s.icon}
-                  </svg>
-                </Link>
-              ))}
-            </div>
           </div>
 
           {/* دسترسی سریع */}
           <div>
-            <h3 className="mb-2.5 text-[13.5px] font-bold text-ink sm:mb-4 sm:text-[15px]">دسترسی سریع</h3>
-            <ul className="flex flex-col gap-1.5 sm:gap-2.5">
+            <h4 className="mb-5 text-[16px] font-bold text-ink">دسترسی سریع</h4>
+            <ul className="space-y-3">
               {quickLinks.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-[13px] text-dim transition hover:text-accent sm:text-[14px]">
+                <li key={l.href} className="relative w-fit">
+                  <Link href={l.href} className="text-[14px] text-dim transition-colors hover:text-blood-hi">
                     {l.label}
                   </Link>
+                  {l.href === "/#lead-form" && (
+                    <span className="absolute -left-3 top-0 h-2 w-2 animate-pulse rounded-full bg-blood-hi" />
+                  )}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* اطلاعات شرکت */}
+          {/* تماس */}
           <div>
-            <h3 className="mb-2.5 text-[13.5px] font-bold text-ink sm:mb-4 sm:text-[15px]">اطلاعات شرکت</h3>
-            <ul className="flex flex-col gap-2 text-[13px] text-dim sm:gap-3 sm:text-[14px]">
-              <li className="flex items-center gap-2 sm:gap-2.5">
-                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-8 sm:w-8">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3 w-3 sm:h-4 sm:w-4">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z" />
-                  </svg>
-                </span>
-                <Link href={PHONE_HREF} dir="ltr" className="text-right transition hover:text-accent">
+            <h4 className="mb-5 text-[16px] font-bold text-ink">تماس با ما</h4>
+            <ul className="space-y-4 text-[14px] text-dim">
+              <li className="flex items-center gap-3">
+                <Phone size={18} className="flex-shrink-0 text-blood-hi" />
+                <Link href={PHONE_HREF} dir="ltr" className="transition-colors hover:text-blood-hi">
                   {PHONE_DISPLAY}
                 </Link>
               </li>
-              <li className="flex items-center gap-2 sm:gap-2.5">
-                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-8 sm:w-8">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3 w-3 sm:h-4 sm:w-4">
-                    <rect x="3" y="5" width="18" height="14" rx="2.5" />
-                    <path d="m4 6.5 8 6 8-6" />
-                  </svg>
-                </span>
-                <Link href={`mailto:${EMAIL}`} className="truncate transition hover:text-accent">
+              <li className="flex items-center gap-3">
+                <Mail size={18} className="flex-shrink-0 text-blood-hi" />
+                <Link href={`mailto:${EMAIL}`} className="truncate transition-colors hover:text-blood-hi">
                   {EMAIL}
                 </Link>
               </li>
-              <li className="hidden items-center gap-2.5 sm:flex">
-                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-4 w-4">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M12 8v4l2.5 2.5" />
-                  </svg>
-                </span>
+              <li className="flex items-center gap-3">
+                <Clock size={18} className="flex-shrink-0 text-blood-hi" />
                 <span>{WORK_HOURS}</span>
               </li>
             </ul>
           </div>
 
           {/* آدرس و نقشه */}
-          <div>
-            <h3 className="mb-2.5 text-[13.5px] font-bold text-ink sm:mb-4 sm:text-[15px]">آدرس و موقعیت</h3>
-            <p className="mb-3 flex items-start gap-2 text-[13px] leading-relaxed text-dim sm:mb-4 sm:gap-2.5 sm:text-[14px]">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.7}
-                className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-accent sm:h-4 sm:w-4"
-              >
-                <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-                <circle cx="12" cy="9.8" r="2.4" />
-              </svg>
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className="mb-5 text-[16px] font-bold text-ink">آدرس و موقعیت</h4>
+            <p className="mb-4 flex items-start gap-3 text-[14px] leading-relaxed text-dim">
+              <MapPin size={18} className="mt-0.5 flex-shrink-0 text-blood-hi" />
               <span>{SHORT_ADDRESS}</span>
             </p>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              <Link
-                href={NESHAN_MAP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-surface/60 px-3 py-1.5 text-[12px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent sm:px-4 sm:py-2 sm:text-[13px]"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3 w-3 sm:h-3.5 sm:w-3.5">
-                  <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-                  <circle cx="12" cy="9.8" r="2.4" />
-                </svg>
-                نشان
-              </Link>
-              <Link
-                href={BALAD_MAP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-surface/60 px-3 py-1.5 text-[12px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent sm:px-4 sm:py-2 sm:text-[13px]"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3 w-3 sm:h-3.5 sm:w-3.5">
-                  <path d="M12 21s-7-6.2-7-11.2a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" />
-                  <circle cx="12" cy="9.8" r="2.4" />
-                </svg>
-                بلد
-              </Link>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { href: NESHAN_MAP_LINK, label: "نشان" },
+                { href: BALAD_MAP_LINK, label: "بلد" },
+              ].map((m) => (
+                <Link
+                  key={m.label}
+                  href={m.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-ink/[0.14] bg-canvas/40 px-4 py-2 text-[13px] font-semibold text-ink transition hover:-translate-y-0.5 hover:border-blood-hi/50 hover:text-blood-hi"
+                >
+                  <MapPin size={14} />
+                  {m.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-2.5 border-t border-ink/10 pt-4 sm:mt-14 sm:gap-3 sm:pt-6">
-          <p className="font-mono text-[11.5px] text-dim sm:text-[13px]">© 2026 وب پیکاسو — تمامی حقوق محفوظ است.</p>
-          <button
-            className="flex items-center gap-2 font-mono text-[11.5px] text-dim transition-colors hover:text-accent sm:text-[13px]"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            بازگشت به بالا
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-3.5 w-3.5">
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-          </button>
+        <hr className="my-6 border-t border-ink/10 sm:my-8" />
+
+        <div className="flex flex-col items-center justify-between gap-4 text-[13px] text-dim md:flex-row">
+          <div className="flex items-center gap-5">
+            {socials.map((s) => (
+              <Link
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="text-dim transition-colors hover:text-blood-hi"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-5 w-5">
+                  {s.icon}
+                </svg>
+              </Link>
+            ))}
+            <button
+              className="flex items-center gap-1.5 font-mono text-[12.5px] transition-colors hover:text-blood-hi"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              بازگشت به بالا
+              <ArrowUp size={14} />
+            </button>
+          </div>
+          <p className="text-center">© {new Date().getFullYear().toLocaleString("fa-IR", { useGrouping: false })} وب پیکاسو — تمامی حقوق محفوظ است.</p>
         </div>
       </div>
+
+      {/* wordmark that lights up under the cursor */}
+      <div dir="ltr" className="-mb-20 -mt-24 hidden h-[24rem] lg:flex">
+        <TextHoverEffect text="WebPikaso" className="z-50" />
+      </div>
+
+      <FooterBackgroundGradient />
     </footer>
   );
 }

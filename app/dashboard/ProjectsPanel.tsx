@@ -28,7 +28,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="mt-1 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال افزودن..." : "افزودن نمونه‌کار"}
     </button>
@@ -227,7 +227,7 @@ export default function ProjectsPanel({ projects }: { projects: Project[] }) {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <article key={p.id} className="group relative overflow-hidden rounded-card border border-ink/[0.14] bg-surface/20">
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0c]">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#101013]">
                 {p.image ? (
                   <Image
                     src={p.image}

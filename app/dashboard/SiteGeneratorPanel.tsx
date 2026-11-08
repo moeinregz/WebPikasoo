@@ -29,7 +29,7 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
     <button
       type="submit"
       disabled={pending || disabled}
-      className="mt-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-black transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+      className="mt-2 rounded-full bg-accent px-6 py-3 text-[14.5px] font-semibold text-on-accent transition hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "در حال ساخت..." : "ساخت سایت و لینک"}
     </button>
@@ -346,7 +346,7 @@ export default function SiteGeneratorPanel({ templates }: { templates: TemplateO
                     checked={checked}
                     disabled={locked}
                     onChange={() => setFeats((cur) => (cur.includes(f.id) ? cur.filter((x) => x !== f.id) : [...cur, f.id]))}
-                    className="mt-1 h-4 w-4 accent-[#0077B6]"
+                    className="mt-1 h-4 w-4 accent-[#D9D7D1]"
                   />
                   <span>
                     <span className="block text-[13.5px] font-bold">{f.icon} {f.label}</span>

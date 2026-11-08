@@ -13,6 +13,7 @@ type Block =
   | { type: "heading"; level: 2 | 3 | 4 | 5 | 6; text: string }
   | { type: "list"; items: string[] }
   | { type: "image"; url: string; alt: string }
+  | { type: "cta"; text: string; button?: { label: string; href: string } }
   | { type: "paragraph"; lines: string[] };
 
 // "##" through "######" — H1 is reserved for the page/post title itself, so
@@ -20,6 +21,10 @@ type Block =
 const HEADING_RE = /^(#{2,6})\s+/;
 const LIST_ITEM_RE = /^[-*]\s+/;
 const STANDALONE_IMAGE_RE = /^!\[([^\]]*)\]\(([^)\s]+)\)$/;
+// ">> متن [برچسب دکمه](/order)" — a call-to-action box. A link at the very
+// end of the line becomes the box's button; any other links stay inline.
+const CTA_RE = /^>>\s+/;
+const CTA_BUTTON_RE = /\s*\[([^\]]+)\]\(([^)\s]+)\)\s*$/;
 
 function toBlocks(content: string): Block[] {
   const lines = content.replace(/\r\n/g, "\n").split("\n");
@@ -38,6 +43,19 @@ function toBlocks(content: string): Block[] {
     if (headingMatch) {
       const level = headingMatch[1].length as 2 | 3 | 4 | 5 | 6;
       blocks.push({ type: "heading", level, text: line.replace(HEADING_RE, "").trim() });
+      i++;
+      continue;
+    }
+
+    if (CTA_RE.test(line)) {
+      let text = line.replace(CTA_RE, "").trim();
+      const btn = text.match(CTA_BUTTON_RE);
+      let button: { label: string; href: string } | undefined;
+      if (btn) {
+        button = { label: btn[1], href: btn[2] };
+        text = text.slice(0, btn.index).trim();
+      }
+      blocks.push({ type: "cta", text, button });
       i++;
       continue;
     }
@@ -65,6 +83,7 @@ function toBlocks(content: string): Block[] {
       lines[i].trim() !== "" &&
       !HEADING_RE.test(lines[i]) &&
       !LIST_ITEM_RE.test(lines[i]) &&
+      !CTA_RE.test(lines[i]) &&
       !STANDALONE_IMAGE_RE.test(lines[i].trim())
     ) {
       paraLines.push(lines[i]);
@@ -86,9 +105,12 @@ function toBlocks(content: string): Block[] {
 // classes when it creates real <h2>..<h6> DOM nodes — the editor and the
 // published page must always render headings identically, from one source.
 export const HEADING_CLASS: Record<2 | 3 | 4 | 5 | 6, string> = {
-  2: "mb-4 mt-10 font-display text-[26px] font-semibold leading-snug text-ink sm:text-[30px]",
-  3: "mb-3.5 mt-8 font-display text-[22px] font-semibold leading-snug text-ink sm:text-[25px]",
-  4: "mb-3 mt-7 font-display text-[19px] font-semibold leading-snug text-ink sm:text-[21px]",
+  // h2: the big section title — accent bar on the start (right, RTL) side,
+  // Lalezar display face (single weight, so no synthetic bold).
+  2: "mb-5 mt-12 border-r-[5px] border-accent pr-4 font-display text-[27px] font-normal leading-[1.5] text-ink sm:text-[33px]",
+  // h3: accent-colored, a small square marker before it.
+  3: "relative mb-3.5 mt-9 pr-5 font-display text-[22px] font-normal leading-[1.5] text-accent2 dark:text-accent3 before:absolute before:right-0 before:top-[0.62em] before:h-2.5 before:w-2.5 before:rounded-[3px] before:bg-accent sm:text-[25px]",
+  4: "mb-3 mt-7 font-display text-[19px] font-normal leading-snug text-ink sm:text-[21px]",
   5: "mb-2.5 mt-6 text-[17px] font-bold leading-snug text-ink sm:text-[18px]",
   6: "mb-2 mt-5 text-[14px] font-bold uppercase tracking-wide leading-snug text-ink/65 sm:text-[14.5px]",
 };
@@ -100,6 +122,10 @@ export const BLOG_CLASSES = {
   link: "text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent",
   image: "my-6 w-full h-auto rounded-card border border-ink/[0.14]",
   paragraph: "my-5 text-[16px] leading-[1.9] text-ink/90",
+  cta: "my-8 rounded-card border border-accent/40 bg-accent/[0.07] p-5 sm:p-6",
+  ctaText: "text-[16px] font-semibold leading-[1.9] text-ink",
+  ctaButton:
+    "mt-4 inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-[15px] font-bold text-white no-underline shadow-sm transition hover:opacity-90",
 };
 
 // Custom inline text-size wrapper the editor's "بزرگ‌نمایی متن" tool inserts
@@ -122,12 +148,16 @@ function renderLinks(text: string, keyPrefix: string): ReactNode[] {
 
   while ((match = linkRe.exec(text))) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+    // Internal links (/blog/..., /website-design...) open in the same tab so
+    // link equity and the reader both stay on the site; external ones open
+    // a new tab as before.
+    const internal = match[2].startsWith("/");
     parts.push(
       <Link
         key={`${keyPrefix}-a-${i++}`}
         href={match[2]}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={internal ? undefined : "_blank"}
+        rel={internal ? undefined : "noopener noreferrer"}
         className="text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent"
       >
         {match[1]}
@@ -173,8 +203,11 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
  *  paragraphs. Server-safe (no client-only APIs), so it can be called
  *  straight from /blog/[slug] — and also from the BlogPanel editor's live
  *  preview, since it's a plain function with no server-only imports. */
-export function renderBlogContent(content: string): ReactNode {
-  const blocks = toBlocks(content);
+export function renderBlogContent(content: string, fallbackAlt?: string): ReactNode {
+  // Older posts can carry English (or empty) alts; with a fallback (the post
+  // title, which starts with the main keyword) those render in Persian.
+  const altOf = (alt: string) => (fallbackAlt && !/[\u0600-\u06FF]/.test(alt) ? fallbackAlt : alt);
+  const blocks = toBlocks(content).map((b) => (b.type === "image" ? { ...b, alt: altOf(b.alt) } : b));
 
   return (
     <>
@@ -194,6 +227,30 @@ export function renderBlogContent(content: string): ReactNode {
                 <li key={j}>{renderInline(item, `li-${i}-${j}`)}</li>
               ))}
             </ul>
+          );
+        }
+        if (block.type === "cta") {
+          // data-cta lets the dashboard editor turn this box back into
+          // ">> ..." when it re-serializes the DOM (see BlogPanel.tsx).
+          return (
+            <aside key={i} data-cta="1" className={BLOG_CLASSES.cta}>
+              <p className={BLOG_CLASSES.ctaText}>{renderInline(block.text, `cta-${i}`)}</p>
+              {block.button && (
+                <Link href={block.button.href} data-cta-button="1" className={BLOG_CLASSES.ctaButton}>
+                  {block.button.label}
+                </Link>
+              )}
+            </aside>
+          );
+        }
+        if (block.type === "image" && block.url === "/blog-placeholder.svg") {
+          // Spot reserved for a photo (the SEO automation adds 3–4 per article
+          // when it has no stock photo). Replace it from the blog editor.
+          return (
+            <figure key={i} className="my-8">
+              <img src={block.url} alt={block.alt} width={1200} height={675} loading="lazy" className="w-full rounded-card border border-accent/30" />
+              {block.alt && <figcaption className="mt-2 text-center text-[13px] text-dim">{block.alt}</figcaption>}
+            </figure>
           );
         }
         if (block.type === "image") {

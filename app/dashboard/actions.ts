@@ -1853,3 +1853,113 @@ export async function uploadBlogContentImageAction(
     return { ok: false, message: err instanceof Error ? err.message : "آپلود تصویر ناموفق بود." };
   }
 }
+
+// -----------------------------------------------------------------------
+// SEO content automation (tab «اتوماسیون سئو»)
+// -----------------------------------------------------------------------
+
+export async function saveSeoSettingsAction(formData: FormData) {
+  await requireAdmin();
+  const { updateSeoSettings } = await import("@/lib/db");
+  const days = Math.min(30, Math.max(1, parseInt(String(formData.get("interval_days") ?? "2"), 10) || 2));
+  await updateSeoSettings({ enabled: formData.get("enabled") === "on", interval_days: days });
+  revalidatePath("/dashboard");
+}
+
+export async function setSeoKeywordStatusAction(formData: FormData) {
+  await requireAdmin();
+  const { setSeoKeywordStatus, addSeoKeywords } = await import("@/lib/db");
+  const keyword = String(formData.get("keyword") ?? "").trim();
+  const status = String(formData.get("status") ?? "");
+  if (!keyword) return;
+  if (status === "add") {
+    await addSeoKeywords([{ keyword, seed: "manual" }]);
+  } else if (status === "skipped" || status === "new") {
+    await setSeoKeywordStatus(keyword, status);
+  }
+  revalidatePath("/dashboard");
+}
+
+// -----------------------------------------------------------------------
+// SMS panel (tab «پنل پیامک»)
+// -----------------------------------------------------------------------
+
+export type SmsRecipient = { phone: string; source: "crm" | "channel"; leadId: number; name: string; tradeId: string | null };
+export type SmsBatchResult = { phone: string; ok: boolean; error?: string }[];
+
+function offerLinkBase(): string {
+  const site = process.env.NEXT_PUBLIC_SITE_URL || "https://webpikaso.ir";
+  return site.replace(/^https?:\/\//, "").replace(/\/+$/, "");
+}
+
+export async function sendTestSmsAction(phone: string, text: string): Promise<{ ok: boolean; message: string }> {
+  await requireAdmin();
+  const { sendSms } = await import("@/lib/sms");
+  const { toMobile } = await import("@/lib/smsText");
+  const { insertSmsMessage } = await import("@/lib/db");
+  const mobile = toMobile(phone);
+  if (!mobile) return { ok: false, message: "شماره موبایل معتبر نیست (باید با ۰۹ شروع بشه)." };
+  if (!text.trim()) return { ok: false, message: "متن پیامک خالیه." };
+  const res = await sendSms(mobile, text.trim());
+  await insertSmsMessage({
+    campaign_id: null, phone: mobile, source: "test", lead_id: null, name: "تست", trade_id: null, code: null,
+    text: text.trim(), ok: res.ok, error: res.ok ? null : res.error,
+  });
+  revalidatePath("/dashboard");
+  return res.ok ? { ok: true, message: `پیامک تست به ${mobile} فرستاده شد${res.id ? ` (شناسه‌ی پنل: ${res.id})` : ""}.` } : { ok: false, message: res.error };
+}
+
+export async function createSmsCampaignAction(name: string, texts: Record<string, string>, total: number): Promise<number> {
+  const user = await requireAdmin();
+  const { createSmsCampaign } = await import("@/lib/db");
+  return createSmsCampaign({ name: name.trim() || "کمپین پیامکی", texts, total, createdBy: user.id });
+}
+
+/** Sends one batch (the panel calls this repeatedly, ~25 at a time, so no request runs long). */
+export async function sendSmsBatchAction(campaignId: number, recipients: SmsRecipient[]): Promise<SmsBatchResult> {
+  await requireAdmin();
+  const { sendSms } = await import("@/lib/sms");
+  const { toMobile, renderSms, defaultSmsFor } = await import("@/lib/smsText");
+  const db = await import("@/lib/db");
+  const campaign = await db.getSmsCampaign(campaignId);
+  if (!campaign) return recipients.map((r) => ({ phone: r.phone, ok: false, error: "کمپین پیدا نشد" }));
+  const opted = new Set(await db.getSmsOptOuts());
+  const base = offerLinkBase();
+
+  const results: SmsBatchResult = [];
+  let sent = 0;
+  let failed = 0;
+  const queue = recipients.slice(0, 50);
+  async function one(r: SmsRecipient) {
+    const phone = toMobile(r.phone);
+    if (!phone || opted.has(phone)) {
+      results.push({ phone: r.phone, ok: false, error: phone ? "لغو اشتراک کرده" : "شماره معتبر نیست" });
+      failed++;
+      return;
+    }
+    const template = (r.tradeId && campaign!.texts[r.tradeId]) || campaign!.texts["*"] || defaultSmsFor(r.tradeId);
+    const code = await db.createSmsRef({ campaign_id: campaignId, source: r.source, lead_id: r.leadId, name: r.name, phone, trade_id: r.tradeId });
+    const text = renderSms(template, { name: r.name, link: `${base}/o/${code}` });
+    const res = await sendSms(phone, text);
+    await db.insertSmsMessage({
+      campaign_id: campaignId, phone, source: r.source, lead_id: r.leadId, name: r.name, trade_id: r.tradeId, code,
+      text, ok: res.ok, error: res.ok ? null : res.error,
+    });
+    results.push(res.ok ? { phone, ok: true } : { phone, ok: false, error: res.error });
+    if (res.ok) sent++;
+    else failed++;
+  }
+  // a few at a time — polite to the provider's rate limit
+  for (let i = 0; i < queue.length; i += 5) await Promise.all(queue.slice(i, i + 5).map(one));
+  await db.addSmsCampaignCounts(campaignId, sent, failed);
+  return results;
+}
+
+export async function setSmsOptOutAction(phone: string, optedOut: boolean): Promise<void> {
+  await requireAdmin();
+  const { setSmsOptOut } = await import("@/lib/db");
+  const { toMobile } = await import("@/lib/smsText");
+  const mobile = toMobile(phone);
+  if (mobile) await setSmsOptOut(mobile, optedOut);
+  revalidatePath("/dashboard");
+}

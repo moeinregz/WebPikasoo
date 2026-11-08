@@ -1,13 +1,22 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Vazirmatn, Lalezar } from "next/font/google";
-import MobileStickyCta from "@/components/MobileStickyCta";
+import { Vazirmatn, Lalezar, Syne } from "next/font/google";
+import ChatWidget from "@/components/ChatWidget";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-vazirmatn",
+  display: "swap",
+});
+
+// Latin display face for the big faded English "echo" above key headings
+// (components/EchoHeading.tsx).
+const syne = Syne({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-latin",
   display: "swap",
 });
 
@@ -99,7 +108,7 @@ export default function RootLayout({
       suppressHydrationWarning
       lang="fa"
       dir="rtl"
-      className={`${vazirmatn.variable} ${lalezar.variable}`}
+      className={`${vazirmatn.variable} ${lalezar.variable} ${syne.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
@@ -126,9 +135,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="pb-[68px] sm:pb-0">
+      <body>
         {children}
-        <MobileStickyCta />
+        <ChatWidget />
       </body>
     </html>
   );
