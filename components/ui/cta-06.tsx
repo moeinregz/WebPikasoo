@@ -45,16 +45,19 @@ export default function CTA() {
   return (
     <div className="px-0 py-16 sm:px-6">
       <div ref={ref} className="relative mx-auto max-w-5xl overflow-hidden border-y border-ink/15 bg-surface/40 p-8 shadow-lg shadow-black/20 sm:rounded-xl sm:border-x sm:p-14">
+        {/* mobile: a soft red light rising from the bottom, under the shader */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_75%_at_50%_100%,rgb(var(--color-blood-hi)/0.35),transparent_70%)] sm:hidden" />
         <NeuroNoise
           aria-hidden
           brightness={0}
-          className="absolute inset-0 [mask-image:linear-gradient(to_right,black_30%,transparent)] sm:[mask-image:linear-gradient(to_right,black_10%,transparent)]"
+          className="absolute inset-0 [mask-image:linear-gradient(to_top,black_45%,transparent_100%)] sm:[mask-image:linear-gradient(to_right,black_10%,transparent)]"
           colorBack={dark ? "rgba(0, 0, 0, 0)" : "rgba(120, 8, 22, 0.06)"}
           colorFront={dark ? "rgba(255, 210, 215, 0.9)" : "rgba(120, 8, 22, 0.08)"}
           colorMid={dark ? "rgba(178, 16, 36, 0.95)" : "rgba(150, 10, 30, 0.55)"}
           contrast={1}
           height={720}
           scale={0.55}
+          minPixelRatio={1}
           speed={visible && !reduced ? 1 : 0}
           width={1280}
           maxPixelCount={1280 * 720}

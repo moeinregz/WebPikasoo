@@ -38,7 +38,7 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
   {
     id: "food",
     label: "کافه و رستوران",
-    tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream"],
+    tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "breakfast"],
     features: [
       {
         id: "order",
@@ -51,7 +51,7 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
         label: "رزرو میز",
         icon: "📅",
         desc: "فرم رزرو با تاریخ، ساعت و تعداد نفرات.",
-        trades: ["cafe", "restaurant", "garden", "kebab"],
+        trades: ["cafe", "restaurant", "garden", "kebab", "breakfast"],
       },
       {
         id: "qrmenu",

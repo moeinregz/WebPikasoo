@@ -15,7 +15,15 @@ export default async function Contact() {
         {/* فرم مشاوره‌ی رایگان (هدف همه‌ی لینک‌های #lead-form) */}
         <Reveal id="lead-form" className="mx-auto mt-6 max-w-xl scroll-mt-[90px]">
           <ContactCard>
-            <ContactForm defaultName={user?.name} defaultPhone={user?.phone} />
+            <div className="w-full">
+              <div className="mb-6 border-b border-ink/10 pb-5 text-center">
+                <h2 className="font-display text-[24px] font-normal leading-snug sm:text-[28px]">
+                  فرم درخواست <span className="text-blood-hi">مشاوره‌ی رایگان</span>
+                </h2>
+                <p className="mt-1.5 text-[13px] text-dim">فرم رو پر کن؛ کارشناس ما برای بررسی پروژه‌ت باهات تماس می‌گیره.</p>
+              </div>
+              <ContactForm defaultName={user?.name} defaultPhone={user?.phone} />
+            </div>
           </ContactCard>
         </Reveal>
       </div>

@@ -80,12 +80,12 @@ export const TextHoverEffect = ({ text, duration, className }: { text: string; d
           <rect x="0" y="0" width="100%" height="100%" fill={`url(#${revealId})`} />
         </mask>
       </defs>
-      <text {...textProps} className="fill-transparent stroke-ink/25" style={{ ...textProps.style, opacity: hovered ? 0.7 : 0 }}>
+      <text {...textProps} className="fill-transparent stroke-ink/25 [stroke-width:0.9px] sm:[stroke-width:0.5px] lg:[stroke-width:0.3px]" style={{ ...textProps.style, opacity: hovered ? 0.7 : 0 }}>
         {text}
       </text>
       <motion.text
         {...textProps}
-        className="fill-transparent stroke-blood-hi"
+        className="fill-transparent stroke-blood-hi [stroke-width:0.9px] sm:[stroke-width:0.5px] lg:[stroke-width:0.3px]"
         initial={{ strokeDashoffset: 1000, strokeDasharray: 1000 }}
         whileInView={{ strokeDashoffset: 0, strokeDasharray: 1000 }}
         viewport={{ once: true }}
@@ -93,7 +93,7 @@ export const TextHoverEffect = ({ text, duration, className }: { text: string; d
       >
         {text}
       </motion.text>
-      <text {...textProps} stroke={`url(#${gradId})`} mask={`url(#${maskId})`} className="fill-transparent">
+      <text {...textProps} stroke={`url(#${gradId})`} mask={`url(#${maskId})`} className="fill-transparent [stroke-width:0.9px] sm:[stroke-width:0.5px] lg:[stroke-width:0.3px]">
         {text}
       </text>
     </svg>

@@ -309,19 +309,19 @@ export default function LaptopShowcase() {
       };
       const first = spot("dev");
       gsap.set(ptr, { x: first.x + 40, y: first.y + 50, opacity: 0, scale: 1 });
-      tl = gsap.timeline({ repeat: -1, paused: true, delay: 0.4 });
-      tl.to(ptr, { opacity: 1, duration: 0.4 });
+      tl = gsap.timeline({ repeat: -1, paused: true, delay: 0.2 });
+      tl.to(ptr, { opacity: 1, duration: 0.25 });
       order.forEach((id) => {
         const p = spot(id);
         tl!
-          .to(ptr, { x: p.x, y: p.y, duration: 1, ease: "power2.inOut" })
-          .to(ptr, { scale: 0.8, duration: 0.12, ease: "power1.in" })
+          .to(ptr, { x: p.x, y: p.y, duration: 0.5, ease: "power2.inOut" })
+          .to(ptr, { scale: 0.8, duration: 0.08, ease: "power1.in" })
           .call(() => setSelected(id))
-          .fromTo(ripple, { scale: 0.3, opacity: 0.9 }, { scale: 1.8, opacity: 0, duration: 0.55, ease: "power2.out" }, "<")
-          .to(ptr, { scale: 1, duration: 0.2 }, "<")
-          .to({}, { duration: 1.5 });
+          .fromTo(ripple, { scale: 0.3, opacity: 0.9 }, { scale: 1.8, opacity: 0, duration: 0.4, ease: "power2.out" }, "<")
+          .to(ptr, { scale: 1, duration: 0.15 }, "<")
+          .to({}, { duration: 0.9 });
       });
-      tl.to(ptr, { opacity: 0, duration: 0.3 });
+      tl.to(ptr, { opacity: 0, duration: 0.2 });
     };
 
     build();
