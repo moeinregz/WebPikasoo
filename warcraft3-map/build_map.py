@@ -98,7 +98,8 @@ def seg_dist(px, py, ax, ay, bx, by):
 RING = 7000.0                  # square ring road (Chebyshev distance from the centre)
 BASE_D = 11500.0               # castles
 CASTLE_H = 1150.0              # half size of a castle
-CAPITAL_H = 1900.0             # half size of the capital walls
+CAPITAL_H = 2300.0             # half size of the capital walls
+MOAT_IN, MOAT_OUT = 190.0, 560.0   # water moat outside every wall (distance from the wall)
 TOWN_H = 1300.0                # half size of a corner town
 GATE_HALF = 260.0              # half width of a gate opening
 SEA_LINE = 23000.0             # x - y beyond this is sea (south east corner)
@@ -127,7 +128,7 @@ HARBOR = (10500.0, -10500.0)
 CAPITAL = (0.0, 0.0)
 
 # river: from the north edge down, east, then south into the sea
-river = [(3000.0, PMAX + 600), (3000.0, -3000.0), (14200.0, -3000.0), (14200.0, -14000.0)]
+river = [(3600.0, PMAX + 600), (3600.0, -3000.0), (14200.0, -3000.0), (14200.0, -14000.0)]
 
 # roads (straight segments)
 roads = [
@@ -169,10 +170,10 @@ def near_bridge(x, y, r=520.0):
 # expansions
 exp_mines = []
 for side in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-    for t in (-4800.0, 4800.0):
+    for t in (-4600.0, 4600.0):
         nx, ny = side
-        x = nx * 9300.0 + (t if nx == 0 else 0.0)
-        y = ny * 9300.0 + (t if ny == 0 else 0.0)
+        x = nx * 9000.0 + (t if nx == 0 else 0.0)
+        y = ny * 9000.0 + (t if ny == 0 else 0.0)
         exp_mines.append((snap(x), snap(y)))
 rich_mines = [(snap(4500.0), snap(4500.0)), (snap(-4500.0), snap(4500.0)), (snap(4500.0), snap(-4500.0))]
 
@@ -243,8 +244,8 @@ def build_wall(cx, cy, H, corner=None, wall_h=b'ZTw0', wall_v=b'ZTw2'):
 for pi, (sx, sy) in enumerate(starts):
     H = CASTLE_H
     build_wall(sx, sy, H)
-    towers = [(sx + H - 230, sy + 380), (sx - H + 230, sy - 380),
-              (sx - 380, sy + H - 230), (sx + 380, sy - H + 230)]
+    towers = [(sx + H - 220, sy + H - 220), (sx - H + 220, sy + H - 220),
+              (sx - H + 220, sy - H + 220), (sx + H - 220, sy - H + 220)]
     castle_towers.append([(snap(x), snap(y)) for x, y in towers])
     mx, my = main_mines[pi]
     back = math.degrees(math.atan2(sy - my, sx - mx))
@@ -261,6 +262,7 @@ for pi, (sx, sy) in enumerate(starts):
     castle_farms.append(farms)
 
 build_wall(CAPITAL[0], CAPITAL[1], CAPITAL_H)
+build_wall(CAPITAL[0], CAPITAL[1], 640.0)          # inner keep of the capital
 for tx, ty in towns:
     build_wall(tx, ty, TOWN_H, corner=(-math.copysign(1, tx), -math.copysign(1, ty)))   # open towards the road
 
@@ -276,21 +278,22 @@ def nb(uid, x, y):
     neutral_buildings.append((uid, (snap(x), snap(y))))
 
 
-def city_block(cx, cy, H, shops, n_houses, seed):
+def city_block(cx, cy, H, shops, n_houses, seed, shop_off=640.0, inner=1000.0):
     rnd = random.Random(seed)
     # shops on the four inner corners of the cross shaped streets
     for (uid, (qx, qy)) in zip(shops, [(1, 1), (-1, 1), (-1, -1), (1, -1), (0, 0)]):
         if qx == 0:
             nb(uid, cx, cy)
         else:
-            nb(uid, cx + qx * 640, cy + qy * 640)
+            nb(uid, cx + qx * shop_off, cy + qy * shop_off)
     # houses filling the rest of the city (keep the streets free)
     spots = []
     g = -H + 320
     while g <= H - 320:
         h = -H + 320
         while h <= H - 320:
-            if abs(g) > 380 and abs(h) > 380 and not (abs(g) < 1000 and abs(h) < 1000):
+            if abs(g) > 380 and abs(h) > 380 and not (abs(g) < inner and abs(h) < inner) \
+                    and min(math.hypot(abs(g) - shop_off, abs(h) - shop_off), 9e9) > 420:
                 spots.append((cx + g, cy + h))
             h += 300
         g += 300
@@ -304,7 +307,7 @@ def city_block(cx, cy, H, shops, n_houses, seed):
         nb(rnd.choice(['nvil', 'nvlw', 'nvl2']), x, y)
 
 
-city_block(0.0, 0.0, CAPITAL_H, ['nmrk', 'ngme', 'ngad', 'ntav', 'nfoh'], 26, 1)
+city_block(0.0, 0.0, CAPITAL_H, ['nmrk', 'ngme', 'ngad', 'ntav', 'nfoh'], 60, 1, shop_off=1150.0, inner=820.0)
 city_block(towns[0][0], towns[0][1], TOWN_H, ['ngme', 'ngwr', 'npgf', 'nfoh'], 12, 2)
 city_block(towns[1][0], towns[1][1], TOWN_H, ['nmrk', 'ngwr', 'npgf', 'nmoo'], 12, 3)
 city_block(towns[2][0], towns[2][1], TOWN_H, ['ngad', 'ngwr', 'npgf', 'nfoh'], 12, 4)
@@ -332,13 +335,61 @@ def in_town(x, y, extra=0.0):
 # --------------------------------------------------------------------------
 # Terrain (heights + textures)
 # --------------------------------------------------------------------------
-TEX = [b'Zgrs', b'Zvin', b'Zdrt', b'Zdtr', b'Zsan', b'Zbks']
-T_GRASS, T_LUSH, T_DIRT, T_ROUGH, T_SAND, T_BRICK = range(6)
+TEX = [b'Lgrs', b'Lgrd', b'Ldrt', b'Ldro', b'Zsan', b'Zbks', b'Nsnw', b'Ndrt',
+       b'Agrs', b'Alvd', b'Bdsr', b'Bgrr', b'Fgrs', b'Fgrd', b'Zvin', b'Ztil']
+(T_GRASS, T_LUSH, T_DIRT, T_ROUGH, T_SAND, T_BRICK, T_SNOW, T_SNOWDIRT,
+ T_AGRS, T_LEAVES, T_DESERT, T_DGRASS, T_FGRS, T_FGRD, T_VINES, T_TILES) = range(16)
+T_STONE = T_TILES
+
+# regions of the world: (main texture, second texture, rough texture, tree, tree density)
+BIOMES = {
+    'summer': (T_GRASS, T_LUSH, T_ROUGH, b'LTlt', 1.0),        # green heartland around the capital
+    'snow':   (T_SNOW, T_SNOWDIRT, T_SNOWDIRT, b'NTtw', 1.0),  # snowy north
+    'autumn': (T_AGRS, T_LEAVES, T_ROUGH, b'ATtr', 1.1),       # Ashenvale-like west
+    'desert': (T_DESERT, T_DGRASS, T_ROUGH, b'BTtw', 0.45),    # barren south
+    'fall':   (T_FGRS, T_FGRD, T_ROUGH, b'FTtw', 1.0),         # golden autumn east
+    'coast':  (T_SAND, T_VINES, T_SAND, b'ZTtw', 0.8),         # tropical south-east coast
+}
+TREE_VARS = {b'ATtr': 5}
 
 
 def sea_s(x, y):
     """>0 on land, distance (roughly) to the sea coast"""
     return (SEA_LINE + 500 * noise(x, y, 1.5, 21) - (x - y)) / 1.4142
+
+
+def biome(x, y):
+    if sea_s(x, y) < 2600 + 600 * noise(x, y, 2.0, 41):
+        return 'coast'
+    nx = x + 1600 * noise(x, y, 1.2, 31)
+    ny = y + 1600 * noise(x, y, 1.2, 37)
+    if max(abs(nx), abs(ny)) < 5200:
+        return 'summer'
+    if ny >= abs(nx):
+        return 'snow'
+    if ny <= -abs(nx):
+        return 'desert'
+    return 'autumn' if nx < 0 else 'fall'
+
+
+# every wall has a water moat around it (with land causeways at the gates)
+MOATS = [(sx, sy, CASTLE_H, None) for sx, sy in starts] + [(0.0, 0.0, CAPITAL_H, None)] + \
+        [(tx, ty, TOWN_H, (-math.copysign(1, tx), -math.copysign(1, ty))) for tx, ty in towns]
+
+
+def moat_t(x, y):
+    for cx, cy, H, corner in MOATS:
+        dx, dy = x - cx, y - cy
+        d = max(abs(dx), abs(dy))
+        if H + MOAT_IN < d < H + MOAT_OUT:
+            along = dy if abs(dx) >= abs(dy) else dx
+            if abs(along) < GATE_HALF + 90:
+                return None                            # causeway in front of a gate
+            if corner and math.copysign(1, dx) == corner[0] and math.copysign(1, dy) == corner[1] \
+                    and abs(dx) > H - 560 and abs(dy) > H - 560:
+                return None                            # open corner of a town
+            return (d - H - MOAT_IN) / (MOAT_OUT - MOAT_IN)
+    return None
 
 
 def ground_z(x, y):
@@ -355,16 +406,21 @@ def ground_z(x, y):
     ld = math.hypot(x - LAKE[0], y - LAKE[1]) - LAKE[2]
     if ld < 0:                                         # lake: deep in the middle
         return max(-12.0 + ld * 0.25, -200.0)
-    hz = noise(x, y, 0.7, 1) * 38.0
+    mt = moat_t(x, y)
+    if mt is not None:                                 # castle moat: deep water
+        return -160.0 if 0.15 < mt < 0.85 else -45.0
+    b = biome(x, y)
+    amp = {'snow': 70.0, 'autumn': 45.0, 'fall': 40.0, 'desert': 30.0}.get(b, 28.0)
+    hz = noise(x, y, 0.7, 1) * amp
     flat = 1.0
     for (bx, by) in starts:
         dd = cheb(x, y, bx, by)
-        if dd < CASTLE_H + 800:
-            flat = min(flat, max(0.0, (dd - CASTLE_H - 300) / 500.0))
+        if dd < CASTLE_H + 1000:
+            flat = min(flat, max(0.0, (dd - CASTLE_H - MOAT_OUT - 100) / 400.0))
     for (tx, ty, h) in TOWN_AREAS:
         dd = cheb(x, y, tx, ty)
-        if dd < h + 800:
-            flat = min(flat, max(0.0, (dd - h - 300) / 500.0))
+        if dd < h + 1000:
+            flat = min(flat, max(0.0, (dd - h - MOAT_OUT - 100) / 400.0))
     for (mx, my) in exp_mines:
         dd = math.hypot(x - mx, y - my)
         if dd < 1300:
@@ -381,26 +437,31 @@ def ground_tex(x, y, z):
     s = sea_s(x, y)
     rd = river_dist(x, y)
     ld = math.hypot(x - LAKE[0], y - LAKE[1]) - LAKE[2]
-    if z < WATER_Z + 5:
-        return T_SAND
+    b = biome(x, y)
+    main, alt, rough = BIOMES[b][:3]
+    if z < WATER_Z + 5 or moat_t(x, y) is not None:
+        return T_SAND if b != 'snow' else T_SNOWDIRT
     if s < 900 or rd < RIVER_HALF + 150 or ld < 200:
-        return T_SAND
+        return T_SAND if b != 'snow' else T_SNOWDIRT
     for i, (bx, by) in enumerate(starts):
-        if cheb(x, y, bx, by) < CASTLE_H + 60:         # paved castle courtyard
+        d = cheb(x, y, bx, by)
+        if d < CASTLE_H + 60:                          # paved castle courtyard
             mx, my = main_mines[i]
-            return T_DIRT if math.hypot(x - mx, y - my) < 380 else T_BRICK
+            if math.hypot(x - mx, y - my) < 380:
+                return T_DIRT
+            return T_TILES if d < 420 else T_BRICK
+    if cheb(x, y, 0, 0) < 700:
+        return T_TILES                                 # capital keep
     if in_town(x, y, 60):
-        return T_BRICK
+        return T_BRICK if (abs(x) % 900 > 120 and abs(y) % 900 > 120) else T_TILES
     if road_dist(x, y) < 210 + 40 * noise(x, y, 4, 7):
-        return T_DIRT
+        return T_DIRT if b != 'snow' else T_SNOWDIRT
     n = noise(x, y, 1.6, 5)
     if n > 0.45:
-        return T_LUSH
+        return alt
     if n < -0.55:
-        return T_ROUGH
-    if s < 1300:
-        return T_SAND if noise(x, y, 6, 9) > 0 else T_GRASS
-    return T_GRASS
+        return rough
+    return main
 
 
 heights = [[0.0] * PTS for _ in range(PTS)]
@@ -447,7 +508,7 @@ def tree_ok(x, y):
         return False
     if road_dist(x, y) < 340:
         return False
-    if in_castle(x, y, 450) or in_town(x, y, 450):
+    if in_castle(x, y, MOAT_OUT + 250) or in_town(x, y, MOAT_OUT + 250):
         return False
     for (mx, my) in main_mines + exp_mines:
         if math.hypot(x - mx, y - my) < 800:
@@ -473,8 +534,9 @@ while gy < PMAX - 192:
                 p = 0.8
             elif noise(gx, gy, 5.0, 13) > 0.85:          # small groves
                 p = 0.6
-            if random.random() < p:
-                trees.append((gx, gy))
+            bt = BIOMES[biome(gx, gy)]
+            if random.random() < p * bt[4]:
+                trees.append((bt[3], gx, gy))
         gx += step
     gy += step
 
@@ -491,7 +553,7 @@ def height_at(x, y):
 
 
 def build_doo():
-    items = [(b'ZTtw', random.randint(0, 9), x, y, random.uniform(0.9, 1.15)) for x, y in trees]
+    items = [(t, random.randint(0, TREE_VARS.get(t, 10) - 1), x, y, random.uniform(0.9, 1.15)) for t, x, y in trees]
     items += [(did, random.randint(0, 4), x, y, 1.0) for did, x, y in castle_walls]
     items += [(b'YTpc', 0, x, y, 1.0) for x, y in castle_blockers]
     items += [(did, 0, x, y, 1.0) for did, x, y in bridges]
@@ -577,6 +639,13 @@ def build_w3i():
 
 
 META_ID = 'A000'          # custom toggle Metamorphosis for Illidan
+KUNKKA_SKILLS = [
+    ('AOsh', 'A001', "Torrent", 3, "Kunkka calls a torrent of sea water that sweeps across the battlefield, damaging every enemy in its path."),
+    ('ANca', 'A002', "Tidebringer", 3, "Kunkka's sword is charged by the tide: every attack cleaves and hits all enemies around the target."),
+    ('AHtb', 'A003', "X Marks the Spot", 3, "Kunkka marks an enemy with an X, hitting and stunning it."),
+    ('ANto', 'A004', "Ghost Ship", 1, "Kunkka summons the storm that follows the Ghost Ship, tossing enemies and buildings around it."),
+]
+KUNKKA_IDS = ",".join(k[1] for k in KUNKKA_SKILLS)
 ILLIDAN_SKILLS = "AEmb,AEim,AEev," + META_ID
 
 
@@ -599,7 +668,7 @@ def build_w3u():
         (b'hkni', [(b'umdl', M('units\\creeps\\LordGarithos\\LordGarithos')), (b'usca', 1.0),
                    (b'unam', "Golden Knight"), (b'uico', I('BTNGarithos'))]),
         (b'Hamg', [(b'umdl', M('units\\other\\Proudmoore\\Proudmoore')), (b'usca', 1.1),
-                   (b'unam', "Admiral"), (b'upro', "Kunkka")]),
+                   (b'unam', "Admiral"), (b'upro', "Kunkka"), (b'uhab', KUNKKA_IDS)]),
         (b'Hpal', [(b'umdl', M('units\\human\\Arthas\\Arthas')), (b'usca', 1.1),
                    (b'upro', "Arthas"), (b'uico', I('BTNArthas'))]),
         (b'Hmkg', [(b'umdl', M('units\\human\\Uther\\Uther')), (b'usca', 1.1),
@@ -624,7 +693,7 @@ def build_w3u():
 def build_w3b():
     """Trees never fall: give the island tree a huge amount of life, so
     harvesting lumber (which takes life from the tree) never cuts it down."""
-    ids = [b'ZTtw', b'ZTw0', b'ZTw2']              # trees and castle walls
+    ids = sorted(set(b[3] for b in BIOMES.values())) + [b'ZTw0', b'ZTw2']   # trees and castle walls
     o = bytearray(struct.pack('<ii', 2, len(ids)))
     for did in ids:
         o += did + b'\0\0\0\0' + struct.pack('<i', 1)
@@ -669,17 +738,29 @@ def build_w3a():
         (b'acdn', UNREAL, 1, 0, 0.0),
         (b'amcs', INT, 1, 0, 0),
     ]
+    customs = [(b'Abrf', META_ID.encode(), fields)]
+    # Kunkka's own skills, built on the closest abilities 1.26 has
+    for base, new, name, levels, desc in KUNKKA_SKILLS:
+        kf = [(b'anam', STR, 0, 0, name),
+              (b'aret', STR, 0, 0, "Learn " + name + " - [|cffffcc00Level %d|r]"),
+              (b'arut', STR, 0, 0, desc)]
+        for lv in range(1, levels + 1):
+            kf.append((b'atp1', STR, lv, 0, name + " - [|cffffcc00Level %d|r]" % lv))
+            kf.append((b'aub1', STR, lv, 0, desc))
+        customs.append((base.encode(), new.encode(), kf))
     o = bytearray(struct.pack('<ii', 2, 0))          # no changed standard abilities
-    o += struct.pack('<i', 1) + b'Abrf' + META_ID.encode() + struct.pack('<i', len(fields))
-    for fid, t, lvl, dat, val in fields:
-        o += fid + struct.pack('<iii', t, lvl, dat)
-        if t == INT:
-            o += struct.pack('<i', val)
-        elif t in (REAL, UNREAL):
-            o += struct.pack('<f', val)
-        else:
-            o += cstr(val)
-        o += b'\0\0\0\0'
+    o += struct.pack('<i', len(customs))
+    for base, new, flds in customs:
+        o += base + new + struct.pack('<i', len(flds))
+        for fid, t, lvl, dat, val in flds:
+            o += fid + struct.pack('<iii', t, lvl, dat)
+            if t == INT:
+                o += struct.pack('<i', val)
+            elif t in (REAL, UNREAL):
+                o += struct.pack('<f', val)
+            else:
+                o += cstr(val)
+            o += b'\0\0\0\0'
     return bytes(o)
 
 
@@ -782,18 +863,6 @@ def build_j():
     a("endfunction")
     a("")
     # ---- Blood Elves: free Kunkka ----
-    a("function PikaGiveKunkka takes player p, location startLoc returns nothing")
-    a("    local real x = GetLocationX(startLoc)")
-    a("    local real y = GetLocationY(startLoc)")
-    a("    local real d = SquareRoot(x * x + y * y)")
-    a("    local unit h")
-    a("    if d < 1.0 then")
-    a("        set d = 1.0")
-    a("    endif")
-    a("    set h = CreateUnit(p, 'Hamg', x - x / d * 480.0, y - y / d * 480.0, bj_UNIT_FACING)")
-    a("    call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cffffcc00Blood Elves!|r Your main hero Kunkka is waiting at the gate of your castle.\")")
-    a("endfunction")
-    a("")
     # ---- Orcs: random normal / red (fel) ----
     a("function PikaFelType takes integer id returns integer")
     for a_, b_ in [('opeo', 'ncpn'), ('ogru', 'nchg'), ('orai', 'nchr'), ('okod', 'nckb'), ('oshm', 'nchw'),
@@ -814,6 +883,11 @@ def build_j():
     a("            call SelectHeroSkill(h, 'AOcr')")
     a("            call SelectHeroSkill(h, 'AOwk')")
     a("            call SelectHeroSkill(h, 'AOmi')")
+    a("        elseif id == 'Hamg' then")
+    a("            call SelectHeroSkill(h, 'A004')")
+    a("            call SelectHeroSkill(h, 'A002')")
+    a("            call SelectHeroSkill(h, 'A001')")
+    a("            call SelectHeroSkill(h, 'A003')")
     a("        elseif id == 'Nplh' or id == 'Nmag' then")
     a("            call SelectHeroSkill(h, 'ANdo')")
     a("            call SelectHeroSkill(h, 'ANrf')")
@@ -931,6 +1005,21 @@ def build_j():
     a("    call PikaApplyRedOrc(GetTriggerUnit())")
     a("endfunction")
     a("")
+    a("function PikaGiveKunkka takes player p, location startLoc returns nothing")
+    a("    local real x = GetLocationX(startLoc)")
+    a("    local real y = GetLocationY(startLoc)")
+    a("    local real d = SquareRoot(x * x + y * y)")
+    a("    local unit h")
+    a("    if d < 1.0 then")
+    a("        set d = 1.0")
+    a("    endif")
+    a("    set h = CreateUnit(p, 'Hamg', x - x / d * 480.0, y - y / d * 480.0, bj_UNIT_FACING)")
+    a("    if GetPlayerController(p) == MAP_CONTROL_COMPUTER then")
+    a("        call PikaLearnSkills(h)")
+    a("    endif")
+    a("    call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cffffcc00Blood Elves!|r Your main hero Kunkka is waiting at the gate of your castle.\")")
+    a("endfunction")
+    a("")
     a("function PikaSetupOrcs takes nothing returns nothing")
     a("    local integer i = 0")
     a("    local player p")
@@ -954,7 +1043,7 @@ def build_j():
     a("    set i = 0")
     a("    loop")
     a("        exitwhen i == bj_MAX_PLAYERS")
-    a("        if pikaRedOrc[i] and GetPlayerController(Player(i)) == MAP_CONTROL_COMPUTER then")
+    a("        if GetPlayerController(Player(i)) == MAP_CONTROL_COMPUTER then")
     a("            call TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_HERO_LEVEL, null)")
     a("        endif")
     a("        set i = i + 1")
@@ -1090,13 +1179,23 @@ PALETTE = [
     (22, 72, 28),      # 9 trees
     (255, 215, 0),     # 10 gold
     (58, 52, 48),      # 11 castle walls
+    (235, 240, 245),   # 12 snow
+    (150, 140, 130),   # 13 snowy dirt
+    (60, 110, 70),     # 14 ashenvale grass
+    (150, 90, 40),     # 15 leaves
+    (200, 160, 100),   # 16 desert
+    (150, 140, 70),    # 17 barrens grass
+    (170, 150, 50),    # 18 fall grass
+    (140, 110, 40),    # 19 fall dark grass
+    (185, 180, 170),   # 20 tiles
 ]
-TEX_COLOR = {T_GRASS: 1, T_LUSH: 2, T_DIRT: 3, T_ROUGH: 4, T_SAND: 5, T_BRICK: 6}
+TEX_COLOR = {T_GRASS: 1, T_LUSH: 2, T_DIRT: 3, T_ROUGH: 4, T_SAND: 5, T_BRICK: 6, T_SNOW: 12, T_SNOWDIRT: 13,
+             T_AGRS: 14, T_LEAVES: 15, T_DESERT: 16, T_DGRASS: 17, T_FGRS: 18, T_FGRD: 19, T_VINES: 2, T_TILES: 20}
 MM = 256
 
 
 def build_minimap():
-    tree_cells = set((int((x - PMIN) / (PMAX - PMIN) * MM), int((y - PMIN) / (PMAX - PMIN) * MM)) for x, y in trees)
+    tree_cells = set((int((x - PMIN) / (PMAX - PMIN) * MM), int((y - PMIN) / (PMAX - PMIN) * MM)) for _, x, y in trees)
     wall_cells = set((int((x - PMIN) / (PMAX - PMIN) * MM), int((y - PMIN) / (PMAX - PMIN) * MM)) for x, y in castle_blockers)
     img = bytearray(MM * MM)
     for py in range(MM):
