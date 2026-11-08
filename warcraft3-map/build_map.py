@@ -527,7 +527,7 @@ def build_w3a():
         (b'anam', STR, 0, 0, "Metamorphosis"),
         (b'aher', INT, 0, 0, 1),
         (b'alev', INT, 0, 0, 1),
-        (b'arlv', INT, 0, 0, 6),
+        (b'arlv', INT, 0, 0, 2),
         (b'achd', INT, 0, 0, 0),
         (b'areq', STR, 0, 0, ""),
         (b'arqa', STR, 0, 0, ""),
@@ -540,7 +540,7 @@ def build_w3a():
         (b'ahky', STR, 0, 0, "F"), (b'auhk', STR, 0, 0, "F"), (b'arhk', STR, 0, 0, "F"),
         (b'aret', STR, 0, 0, "Learn Metamorphosis (" + hk + ")"),
         (b'arut', STR, 0, 0, "Illidan transforms into a powerful demon with a ranged chaos attack and bonus hit points. "
-                             "The demon form has NO time limit - press the button again to turn back. Requires hero level 6."),
+                             "The demon form has NO time limit - press the button again to turn back. Free (no mana). Requires hero level 2."),
         (b'atp1', STR, 1, 0, "Metamorphosis (" + hk + ")"),
         (b'aub1', STR, 1, 0, "Transform into a demon. Lasts until you turn it off."),
         (b'aut1', STR, 1, 0, "Normal Form (" + hk + ")"),
@@ -548,8 +548,8 @@ def build_w3a():
         (b'Eme1', STR, 1, 1, "Eevi"),           # normal form unit
         (b'Emeu', STR, 1, 0, "Eevm"),           # demon form unit
         (b'Eme2', INT, 1, 2, 1),                # morph flags (same as Illidan's original)
-        (b'adur', UNREAL, 1, 0, 1.5),           # transformation animation time only
-        (b'ahdu', UNREAL, 1, 0, 1.5),
+        (b'adur', UNREAL, 1, 0, 0.0),           # transformation animation time only
+        (b'ahdu', UNREAL, 1, 0, 0.0),           # 0 = no time limit on heroes
         (b'acdn', UNREAL, 1, 0, 0.0),
         (b'amcs', INT, 1, 0, 0),
     ]
@@ -648,7 +648,7 @@ def build_j():
     a("    endif")
     a("    call SetCameraPositionForPlayer(whichPlayer, peonX, peonY)")
     a("    call SetCameraQuickPositionForPlayer(whichPlayer, peonX, peonY)")
-    a("    call DisplayTimedTextToPlayer(whichPlayer, 0, 0, 15.00, \"|cff00ccffYou rule the Naga!|r Illidan, Medusa and the Royal Guard are at your command. At level 6 Illidan learns Metamorphosis: press F to become a demon, press F again to turn back.\")")
+    a("    call DisplayTimedTextToPlayer(whichPlayer, 0, 0, 15.00, \"|cff00ccffYou rule the Naga!|r Illidan, Medusa and the Royal Guard are at your command. At level 2 Illidan learns Metamorphosis: press F to become a demon, press F again to turn back.\")")
     a("endfunction")
     a("")
     # ---- castle towers and farms ----
