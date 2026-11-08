@@ -388,13 +388,73 @@ def build_w3i():
     return bytes(o)
 
 
+META_ID = 'A000'          # custom toggle Metamorphosis for Illidan
+ILLIDAN_SKILLS = "AEmb,AEim,AEev," + META_ID
+
+
 def build_w3u():
-    # Rename the Naga Sea Witch hero to "Medusa"
-    o = bytearray(struct.pack('<ii', 2, 1))
-    o += b'Nngs' + b'\0\0\0\0' + struct.pack('<i', 2)
-    for field in (b'unam', b'upro'):
-        o += field + struct.pack('<i', 3) + cstr("Medusa") + b'\0\0\0\0'
+    """Unit changes: Naga Sea Witch -> Medusa, Illidan gets the toggle Metamorphosis"""
+    mods = [
+        (b'Nngs', [(b'unam', "Medusa"), (b'upro', "Medusa")]),
+        (b'Eill', [(b'uhab', ILLIDAN_SKILLS)]),     # normal form
+        (b'Eilm', [(b'uhab', ILLIDAN_SKILLS)]),     # demon form
+    ]
+    o = bytearray(struct.pack('<ii', 2, len(mods)))
+    for uid, fields in mods:
+        o += uid + b'\0\0\0\0' + struct.pack('<i', len(fields))
+        for field, val in fields:
+            o += field + struct.pack('<i', 3) + cstr(val) + b'\0\0\0\0'
     o += struct.pack('<i', 0)
+    return bytes(o)
+
+
+def build_w3a():
+    """Custom hero ability based on Bear Form: Illidan turns into the demon with
+    no time limit and turns back whenever the button is pressed again."""
+    INT, REAL, UNREAL, STR = 0, 1, 2, 3
+    hk = "|cffffcc00F|r"
+    fields = [
+        # id, type, level, data column, value
+        (b'anam', STR, 0, 0, "Metamorphosis"),
+        (b'aher', INT, 0, 0, 1),
+        (b'alev', INT, 0, 0, 1),
+        (b'arlv', INT, 0, 0, 6),
+        (b'achd', INT, 0, 0, 0),
+        (b'areq', STR, 0, 0, ""),
+        (b'arqa', STR, 0, 0, ""),
+        (b'aart', STR, 0, 0, "ReplaceableTextures\\CommandButtons\\BTNMetamorphosis.blp"),
+        (b'arar', STR, 0, 0, "ReplaceableTextures\\CommandButtons\\BTNMetamorphosis.blp"),
+        (b'auar', STR, 0, 0, "ReplaceableTextures\\CommandButtons\\BTNHeroDemonHunter.blp"),
+        (b'abpx', INT, 0, 0, 3), (b'abpy', INT, 0, 0, 2),
+        (b'aubx', INT, 0, 0, 3), (b'auby', INT, 0, 0, 2),
+        (b'arpx', INT, 0, 0, 3), (b'arpy', INT, 0, 0, 0),
+        (b'ahky', STR, 0, 0, "F"), (b'auhk', STR, 0, 0, "F"), (b'arhk', STR, 0, 0, "F"),
+        (b'aret', STR, 0, 0, "Learn Metamorphosis (" + hk + ")"),
+        (b'arut', STR, 0, 0, "Illidan transforms into a powerful demon with a ranged chaos attack and bonus hit points. "
+                             "The demon form has NO time limit - press the button again to turn back. Requires hero level 6."),
+        (b'atp1', STR, 1, 0, "Metamorphosis (" + hk + ")"),
+        (b'aub1', STR, 1, 0, "Transform into a demon. Lasts until you turn it off."),
+        (b'aut1', STR, 1, 0, "Normal Form (" + hk + ")"),
+        (b'auu1', STR, 1, 0, "Turn back into Illidan's normal form."),
+        (b'Eme1', STR, 1, 1, "Eill"),           # normal form unit
+        (b'Emeu', STR, 1, 0, "Eilm"),           # demon form unit
+        (b'Eme2', INT, 1, 2, 1),                # morph flags (same as Illidan's original)
+        (b'adur', UNREAL, 1, 0, 1.5),           # transformation animation time only
+        (b'ahdu', UNREAL, 1, 0, 1.5),
+        (b'acdn', UNREAL, 1, 0, 0.0),
+        (b'amcs', INT, 1, 0, 0),
+    ]
+    o = bytearray(struct.pack('<ii', 2, 0))          # no changed standard abilities
+    o += struct.pack('<i', 1) + b'Abrf' + META_ID.encode() + struct.pack('<i', len(fields))
+    for fid, t, lvl, dat, val in fields:
+        o += fid + struct.pack('<iii', t, lvl, dat)
+        if t == INT:
+            o += struct.pack('<i', val)
+        elif t in (REAL, UNREAL):
+            o += struct.pack('<f', val)
+        else:
+            o += cstr(val)
+        o += b'\0\0\0\0'
     return bytes(o)
 
 
@@ -478,7 +538,7 @@ def build_j():
     a("    endif")
     a("    call SetCameraPositionForPlayer(whichPlayer, peonX, peonY)")
     a("    call SetCameraQuickPositionForPlayer(whichPlayer, peonX, peonY)")
-    a("    call DisplayTimedTextToPlayer(whichPlayer, 0, 0, 15.00, \"|cff00ccffYou rule the Naga!|r Illidan, Medusa and the Royal Guard are at your command.\")")
+    a("    call DisplayTimedTextToPlayer(whichPlayer, 0, 0, 15.00, \"|cff00ccffYou rule the Naga!|r Illidan, Medusa and the Royal Guard are at your command. At level 6 Illidan learns Metamorphosis: press F to become a demon, press F again to turn back.\")")
     a("endfunction")
     a("")
     a("function PikaMeleeStartingUnits takes nothing returns nothing")
@@ -749,6 +809,7 @@ def main():
         'war3map.doo': build_doo(),
         'war3map.shd': build_shd(),
         'war3map.w3u': build_w3u(),
+        'war3map.w3a': build_w3a(),
         'war3mapMap.blp': blp,
         'war3map.mmp': mmp,
     }
