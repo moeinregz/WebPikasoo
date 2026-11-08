@@ -220,6 +220,13 @@ export const MOTIFS = {
 <path class="p" d="M110 118c0-10 8-16 18-16h14c10 0 18 6 18 16v8c0 4-2 6-6 6v18h-38v-18c-4 0-6-2-6-6z" transform="rotate(10 135 130)"/><path class="b" d="M118 126h30v18h-30z" transform="rotate(10 135 130)" style="opacity:.5"/>
 <path class="i" d="M30 92h24l-3 30c0 4-3 6-6 6h-6c-3 0-6-2-6-6z" style="opacity:.85"/><path class="p" d="M32 100h20l-2 21c0 3-2 4-4 4h-8c-2 0-4-1-4-4z"/><path class="kw" d="M36 102v16"/>
 <path class="ki" d="M38 86c-4-6 4-8 0-14M46 86c-4-6 4-8 0-14" style="stroke-width:2.5;opacity:.4"/>`),
+  fabric: S(`<ellipse class="sh" cx="100" cy="186" rx="88" ry="7"/>
+<path class="p" d="M40 150h120c10 0 16 8 16 16s-6 16-16 16H40z"/><path class="sh" d="M40 166h136c0 8-6 16-16 16H40z"/><ellipse class="s" cx="40" cy="166" rx="10" ry="16"/><ellipse class="b" cx="40" cy="166" rx="4" ry="7"/>
+<path class="a" d="M52 116h104c10 0 16 8 16 16s-6 16-16 16H52z"/><path class="sh" d="M52 132h120c0 8-6 16-16 16H52z"/><ellipse class="p" cx="52" cy="132" rx="10" ry="16"/><ellipse class="b" cx="52" cy="132" rx="4" ry="7"/>
+<path class="s" d="M64 82h84c10 0 16 8 16 16s-6 16-16 16H64z"/><path class="sh" d="M64 98h100c0 8-6 16-16 16H64z"/><ellipse class="a" cx="64" cy="98" rx="10" ry="16"/><ellipse class="b" cx="64" cy="98" rx="4" ry="7"/>
+<g style="fill:none;stroke:#fff;stroke-width:2;opacity:.35"><path d="M70 124h80M80 140h70M76 92h66M86 106h56M60 158h96M70 174h80"/></g>
+<path class="c" d="M100 22h70v58c-12-6-24 4-35-2s-24 4-35-2z"/><g class="p" style="opacity:.75"><circle cx="114" cy="36" r="4"/><circle cx="134" cy="36" r="4"/><circle cx="154" cy="36" r="4"/><circle cx="124" cy="52" r="4"/><circle cx="144" cy="52" r="4"/><circle cx="114" cy="66" r="3.5"/><circle cx="154" cy="66" r="3.5"/></g>
+<rect class="a" x="96" y="18" width="78" height="8" rx="4"/><path class="ka" d="M20 60c20-24 50-30 74-20" style="stroke-width:5"/><g style="stroke:var(--ink);stroke-width:1.5;opacity:.6"><path d="M30 50l3 4M40 44l3 4M50 40l2 5M60 37l2 5M70 36l1 5M80 37l1 5"/></g>`),
   ferris: S(`<ellipse class="sh" cx="100" cy="186" rx="82" ry="7"/>
 <path class="ki" d="M100 86L58 180M100 86l42 94" style="stroke:var(--pr2);stroke-width:8"/><path class="ki" d="M70 160h60" style="stroke:var(--pr2);stroke-width:5"/>
 <circle cx="100" cy="86" r="66" style="fill:none;stroke:var(--pr);stroke-width:7"/><circle cx="100" cy="86" r="52" style="fill:none;stroke:var(--pr);stroke-width:2;opacity:.5"/>

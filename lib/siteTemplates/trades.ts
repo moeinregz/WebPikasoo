@@ -28,6 +28,7 @@ export const TRADES: Trade[] = [
   { id: "watch", label: "ساعت‌فروشی", colors: { primary: "#C9A24B", secondary: "#7A2E3A", accent: "#E6C877", bg: "#0B0C0F", text: "#EFE9DB" } },
   { id: "carpet", label: "فرش‌فروشی", colors: { primary: "#6E1423", secondary: "#C39A4B", accent: "#E1B866", bg: "#F6EFE6", text: "#2A1418" } },
   { id: "cosmetics", label: "لوازم آرایشی", colors: { primary: "#C6455B", secondary: "#C9A15A", accent: "#9E2F44", bg: "#FFF9F5", text: "#2B0F14" } },
+  { id: "fabric", label: "پارچه‌فروشی", colors: { primary: "#1F5C5A", secondary: "#B5542F", accent: "#D9A53B", bg: "#F7F1E6", text: "#2A1F1A" } },
   { id: "womenswear", label: "مزون و پوشاک زنانه", colors: { primary: "#B76E79", secondary: "#7D3C47", accent: "#E8C4BD", bg: "#F6F0E8", text: "#1B1717" } },
   { id: "bags", label: "کیف‌فروشی", colors: { primary: "#7A4B2A", secondary: "#1F1B18", accent: "#E0B97A", bg: "#F6EFE7", text: "#1F1B18" } },
   { id: "footwear", label: "کفش‌فروشی", colors: { primary: "#E0A96D", secondary: "#6B2737", accent: "#F3D5A5", bg: "#15121A", text: "#F3ECE4" } },
