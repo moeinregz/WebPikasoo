@@ -1,16 +1,21 @@
-# Pikasoo Coast — Warcraft III melee map (12 players)
+# Pikasoo Kingdoms — Warcraft III melee map (12 players)
 
-- File: `(12)PikasooCoast.w3x` — for Warcraft III 1.26 / 1.27 (The Frozen Throne)
-- Size 256 x 256 (the biggest size 1.26 allows). Trees never fall: you can harvest lumber from them forever.
-- Tropical island: beaches, sea all around, a shallow lagoon in the middle,
-  tavern, goblin shops and fountains, 12 bases with a 12,500-gold mine each,
-  18 expansions guarded by coastal creeps (murlocs, makrura, sea turtles, ...).
-- **Naga rule:** a human player (not a computer) who picks **Night Elf** starts as **Naga**:
-  Temple of Tides, 5 Mur'gul Slaves, **Illidan** (the Naga-era Illidan with horns and wings; his Metamorphosis is a toggle with no time limit — learnable from level 2, costs no mana — press F to turn into the demon, F again to turn back), **Medusa** (renamed Naga Sea Witch) and a **Naga Royal Guard**.
+- File: `(12)PikasooKingdoms.w3x` — Warcraft III 1.26 / 1.27 (The Frozen Throne)
+- 256 x 256, the biggest size 1.26 allows. A whole mainland "world":
+  - 12 walled castles (stone walls, 4 gates, pre-built towers and farms for every race)
+  - a walled capital city in the middle (tavern, marketplace, goblin shops, fountain, houses, villagers)
+  - 3 walled towns in the corners and a harbour town with a goblin shipyard on the south-east coast
+  - a river from the north down to the sea with 3 stone bridges, a lake, forests, roads
+  - 11 expansions + 3 rich mines guarded by creeps; trees never fall
+- Humans are Blood Elves: Kunkka (free main hero), Arthas, Uther, Kael'thas, golden knights.
+- Orcs are randomly Horde (normal) or Fel Orcs (Chaos Grunt/Raider/Kodo/Warlock, heroes:
+  Chaos Blademaster, Grom, Azgalor, Magtheridon). Computer Fel Orcs keep normal peons and get a
+  small attack script so they still fight.
+- A human player who picks Night Elf becomes Naga: Illidan (horns + wings, toggle Metamorphosis
+  with F, no time limit, from level 2, no mana), Medusa and a Naga Royal Guard.
 
 ## Install
-Copy `(12)PikasooCoast.w3x` into `Warcraft III\Maps\Download\` (or any folder under `Maps`),
-then pick Single Player → Custom Game (or LAN) and set the other 11 slots to computers or players.
+Copy the `.w3x` into `Warcraft III\Maps\Download\`, then Single Player → Custom Game (or LAN).
 
 ## Rebuild
-`python3 build_map.py` regenerates the map (no dependencies).
+`python3 build_map.py` (no dependencies).

@@ -22,11 +22,12 @@ random.seed(1404)
 # --------------------------------------------------------------------------
 # Map geometry
 # --------------------------------------------------------------------------
-MAP_NAME = "Pikasoo Coast"
+MAP_NAME = "Pikasoo Kingdoms"
 AUTHOR = "WebPikasoo"
-DESCRIPTION = ("A huge tropical island for up to 12 players. Every base is a walled castle with towers. Humans are Blood Elves (Kunkka, Arthas, Uther, Kael), Orcs are randomly normal or red Fel Orcs. Beaches, a shallow lagoon in the "
-               "middle, a tavern and goblin shops. Human players who pick Night Elf "
-               "play as the Naga with Illidan, Medusa and a Royal Guard.")
+DESCRIPTION = ("A huge kingdom for up to 12 players: 12 walled castles with towers, a capital city, "
+               "three towns, a harbour, a river with stone bridges, a lake and forests. "
+               "Humans are Blood Elves (Kunkka, Arthas, Uther, Kael), Orcs are randomly Horde or red Fel Orcs, "
+               "human Night Elf players become Naga with Illidan.")
 TILES = 256                     # total map size in tiles (256 x 256 = biggest size 1.26 allows)
 S = TILES / 192.0               # layout scale (the layout was designed for 192)
 PTS = TILES + 1                 # terrain points per side
@@ -66,25 +67,6 @@ def noise(x, y, scale=1.0, seed=0):
     return s / 3.0
 
 
-_coast = [(random.randint(2, 9), random.uniform(0, 6.283), random.uniform(120, 330)) for _ in range(6)]
-
-
-def coast_radius(theta):
-    r = 10350.0 * S
-    for k, ph, amp in _coast:
-        r += amp * math.sin(k * theta + ph)
-    return min(r, PMAX - 500)
-
-
-# --------------------------------------------------------------------------
-# Layout: bases, expansions, neutral buildings, creeps
-# --------------------------------------------------------------------------
-BASE_R = 7900.0 * S
-EXP_R = 5300.0 * S
-LAGOON_R = 1150.0 * S
-C_R = 1950.0 * S                # ring of neutral buildings in the centre
-
-
 def polar(r, deg):
     a = math.radians(deg)
     return (r * math.cos(a), r * math.sin(a))
@@ -94,58 +76,8 @@ def snap(v, g=64.0):
     return round(v / g) * g
 
 
-starts, main_mines, exp_mines = [], [], []
-for i in range(NPLAYERS):
-    ang = 90.0 - i * 30.0
-    sx, sy = polar(BASE_R, ang)
-    sx, sy = snap(sx), snap(sy)
-    starts.append((sx, sy))
-    # gold mine: 660 units from the town hall, outward and a bit to the side
-    mx, my = polar(660.0, ang + 38.0)
-    main_mines.append((snap(sx + mx), snap(sy + my)))
-    ex, ey = polar(EXP_R, ang - 15.0)
-    exp_mines.append((snap(ex), snap(ey)))
-
-neutral_buildings = [
-    ('ntav', polar(C_R, 90)),     # Tavern
-    ('ngme', polar(C_R, 210)),    # Goblin Merchant
-    ('ngad', polar(C_R, 330)),    # Goblin Laboratory
-    ('nfoh', polar(C_R, 30)),     # Fountain of Health
-    ('nfoh', polar(C_R, 150)),    # Fountain of Health
-    ('nmoo', polar(C_R, 270)),    # Fountain of Mana
-]
-neutral_buildings = [(u, (snap(x), snap(y))) for u, (x, y) in neutral_buildings]
-
-CAMPS = [
-    ['nmrl', 'nmrl', 'nmrr'],          # murlocs
-    ['nlsn', 'nlsn', 'nltc'],          # makrura
-    ['ntrh', 'ntrs', 'ntrh'],          # sea turtles
-    ['ngno', 'ngno', 'ngnb'],          # gnolls
-    ['nmcf', 'nmcf', 'nmsn'],          # mur'gul
-    ['nfrl', 'nfrl', 'nfrs'],          # furbolgs
-]
-BIG_CAMPS = [
-    ['ntrt', 'ntrs', 'ntrs'],
-    ['nogm', 'nogr', 'nogr'],
-    ['nmrv', 'nmtw', 'nmsn'],
-]
-creeps = []
-for i, (ex, ey) in enumerate(exp_mines):
-    # camp sits between the expansion mine and the island centre
-    d = math.hypot(ex, ey)
-    cx, cy = ex - ex / d * 520, ey - ey / d * 520
-    face = math.degrees(math.atan2(ey - cy, ex - cx)) + 180
-    for k, uid in enumerate(CAMPS[i % len(CAMPS)]):
-        ox, oy = polar(110, k * 120 + 15)
-        creeps.append((uid, cx + ox, cy + oy, face % 360))
-for i in range(6):
-    ang = 60.0 * i
-    cx, cy = polar(3400 * S, ang)
-    mx, my = polar(3400 * S + 520, ang)
-    exp_mines.append((snap(mx), snap(my)))
-    for k, uid in enumerate(BIG_CAMPS[i % len(BIG_CAMPS)]):
-        ox, oy = polar(130, k * 120)
-        creeps.append((uid, cx + ox, cy + oy, (ang + 180) % 360))
+def cheb(x, y, bx, by):
+    return max(abs(x - bx), abs(y - by))
 
 
 def seg_dist(px, py, ax, ay, bx, by):
@@ -154,59 +86,166 @@ def seg_dist(px, py, ax, ay, bx, by):
     return math.hypot(px - ax - t * dx, py - ay - t * dy)
 
 
-roads = [(sx, sy, 0.0, 0.0) for sx, sy in starts]
+# ==========================================================================
+# THE WORLD
+#   * a walled capital city in the middle, crossed by two highways
+#   * a square ring road around it
+#   * 12 player castles (3 on every side) joined to the ring road
+#   * 3 walled towns in the corners, a harbour town by the sea in the south east
+#   * a river from the northern mountains to the sea, with stone bridges
+#   * a lake, forests, expansions and creep camps
+# ==========================================================================
+RING = 7000.0                  # square ring road (Chebyshev distance from the centre)
+BASE_D = 11500.0               # castles
+CASTLE_H = 1150.0              # half size of a castle
+CAPITAL_H = 1900.0             # half size of the capital walls
+TOWN_H = 1300.0                # half size of a corner town
+GATE_HALF = 260.0              # half width of a gate opening
+SEA_LINE = 23000.0             # x - y beyond this is sea (south east corner)
+RIVER_HALF = 400.0             # half width of the river
+LAKE = (-4500.0, -4500.0, 1150.0)
+
+# player castles: 3 per side, clockwise starting top-left
+starts, sides = [], []
+for t in (-7200.0, 0.0, 7200.0):
+    starts.append((t, BASE_D)); sides.append((0, 1))
+for t in (7200.0, 0.0, -7200.0):
+    starts.append((BASE_D, t)); sides.append((1, 0))
+for t in (7200.0, 0.0, -7200.0):
+    starts.append((t, -BASE_D)); sides.append((0, -1))
+for t in (-7200.0, 0.0, 7200.0):
+    starts.append((-BASE_D, t)); sides.append((-1, 0))
+
+main_mines = []
+for (sx, sy), (nx, ny) in zip(starts, sides):
+    ang = math.degrees(math.atan2(ny, nx)) + 38.0           # outward and a bit to the side
+    mx, my = polar(660.0, ang)
+    main_mines.append((snap(sx + mx), snap(sy + my)))
+
+towns = [(-13000.0, 13000.0), (13000.0, 13000.0), (-13000.0, -13000.0)]
+HARBOR = (10500.0, -10500.0)
+CAPITAL = (0.0, 0.0)
+
+# river: from the north edge down, east, then south into the sea
+river = [(3000.0, PMAX + 600), (3000.0, -3000.0), (14200.0, -3000.0), (14200.0, -14000.0)]
+
+# roads (straight segments)
+roads = [
+    (0.0, -RING, 0.0, RING), (-RING, 0.0, RING, 0.0),                        # highways through the capital
+    (-RING, -RING, RING, -RING), (RING, -RING, RING, RING),                   # ring road
+    (RING, RING, -RING, RING), (-RING, RING, -RING, -RING),
+]
+for (sx, sy), (nx, ny) in zip(starts, sides):                                # castle -> ring road
+    roads.append((sx, sy, sx - nx * (BASE_D - RING), sy - ny * (BASE_D - RING)))
+for tx, ty in towns + [HARBOR]:                                              # towns -> ring corners
+    roads.append((tx, ty, math.copysign(RING, tx), math.copysign(RING, ty)))
 
 
 def road_dist(x, y):
-    d = min(seg_dist(x, y, *r) for r in roads)
-    r = math.hypot(x, y)
-    return min(d, abs(r - EXP_R))     # ring road through the expansions
+    return min(seg_dist(x, y, *r) for r in roads)
 
+
+def river_dist(x, y):
+    return min(seg_dist(x, y, *river[k], *river[k + 1]) for k in range(len(river) - 1))
+
+
+# bridges = places where a road crosses the river
+bridges = []                   # (doodad id, x, y)
+for rx0, ry0, rx1, ry1 in roads:
+    for k in range(len(river) - 1):
+        ax, ay = river[k]
+        bx, by = river[k + 1]
+        # both are axis aligned -> intersect a vertical with a horizontal segment
+        if ax == bx and ry0 == ry1 and min(rx0, rx1) <= ax <= max(rx0, rx1) and min(ay, by) <= ry0 <= max(ay, by):
+            bridges.append((b'LT10', ax, ry0))           # road runs east-west
+        if ay == by and rx0 == rx1 and min(ry0, ry1) <= ay <= max(ry0, ry1) and min(ax, bx) <= rx0 <= max(ax, bx):
+            bridges.append((b'LT08', rx0, ay))           # road runs north-south
+
+
+def near_bridge(x, y, r=520.0):
+    return any(math.hypot(x - bx, y - by) < r for _, bx, by in bridges)
+
+
+# expansions
+exp_mines = []
+for side in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+    for t in (-4800.0, 4800.0):
+        nx, ny = side
+        x = nx * 9300.0 + (t if nx == 0 else 0.0)
+        y = ny * 9300.0 + (t if ny == 0 else 0.0)
+        exp_mines.append((snap(x), snap(y)))
+rich_mines = [(snap(4500.0), snap(4500.0)), (snap(-4500.0), snap(4500.0)), (snap(4500.0), snap(-4500.0))]
+
+CAMPS = [
+    ['nmrl', 'nmrl', 'nmrr'], ['nlsn', 'nlsn', 'nltc'], ['ngno', 'ngno', 'ngnb'],
+    ['nmcf', 'nmcf', 'nmsn'], ['nfrl', 'nfrl', 'nfrs'], ['nkob', 'nkob', 'nkog'],
+]
+BIG_CAMPS = [['ntrt', 'ntrs', 'ntrs'], ['nogm', 'nogr', 'nogr'], ['nmrv', 'nmtw', 'nmsn']]
+creeps = []
+
+
+def add_camp(cx, cy, units, face):
+    for k, uid in enumerate(units):
+        ox, oy = polar(120, k * 120 + 15)
+        creeps.append((uid, cx + ox, cy + oy, face % 360))
+
+
+for i, (ex, ey) in enumerate(exp_mines):
+    d = math.hypot(ex, ey)
+    cx, cy = ex - ex / d * 560, ey - ey / d * 560
+    add_camp(cx, cy, CAMPS[i % len(CAMPS)], math.degrees(math.atan2(-ey, -ex)) + 180)
+for i, (mx, my) in enumerate(rich_mines):
+    d = math.hypot(mx, my)
+    cx, cy = mx - mx / d * 600, my - my / d * 600
+    add_camp(cx, cy, BIG_CAMPS[i % len(BIG_CAMPS)], math.degrees(math.atan2(-my, -mx)) + 180)
+lx, ly, lr = LAKE
+add_camp(lx + lr + 450, ly + 300, ['nmrl', 'nmrr', 'nmrl'], 180)              # murlocs at the lake
+add_camp(lx - 300, ly + lr + 450, ['nmrl', 'nmrm', 'nmrl'], 270)
+exp_mines += rich_mines
 
 # --------------------------------------------------------------------------
-# Castles: a square stone wall around every base with gates, plus towers & farms
+# Walls (castles, capital, towns) -- generic square wall with 4 gates
 # --------------------------------------------------------------------------
-CASTLE_H = 1150.0          # half size of the wall square
-GATE_HALF = 260.0          # half width of a gate opening
-
 castle_walls = []          # (doodad id, x, y)
 castle_blockers = []       # invisible path blockers that make the walls solid
 castle_towers = []         # per player: list of (x, y)
 castle_farms = []          # per player: list of (x, y)
 
 
-def cheb(x, y, bx, by):
-    return max(abs(x - bx), abs(y - by))
+def build_wall(cx, cy, H, corner=None, wall_h=b'ZTw0', wall_v=b'ZTw2'):
+    """square wall with a gate in the middle of every side (and optionally an open corner)"""
+    def open_at(e, t):
+        if abs(t) < GATE_HALF + 100:
+            return True
+        if corner:
+            ex, ey = corner                      # signs of the open corner, e.g. (1, -1)
+            if e in 'bt' and (ey < 0) == (e == 'b') and abs(t - ex * H) < 520:
+                return True
+            if e in 'lr' and (ex < 0) == (e == 'l') and abs(t - ey * H) < 520:
+                return True
+        return False
 
-
-for pi, (sx, sy) in enumerate(starts):
-    H = CASTLE_H
-    # gates: the middle of every side, plus where the road to the centre leaves the castle
-    gaps = {'b': [0.0], 't': [0.0], 'l': [0.0], 'r': [0.0]}
-    dx, dy = -sx, -sy
-    k = H / max(abs(dx), abs(dy))
-    if abs(dx) >= abs(dy):
-        gaps['r' if dx > 0 else 'l'].append(dy * k)
-    else:
-        gaps['t' if dy > 0 else 'b'].append(dx * k)
-    edges = {'b': (lambda t: (sx + t, sy - H), b'ZTw0'), 't': (lambda t: (sx + t, sy + H), b'ZTw0'),
-             'l': (lambda t: (sx - H, sy + t), b'ZTw2'), 'r': (lambda t: (sx + H, sy + t), b'ZTw2')}
+    edges = {'b': (lambda t: (cx + t, cy - H), wall_h), 't': (lambda t: (cx + t, cy + H), wall_h),
+             'l': (lambda t: (cx - H, cy + t), wall_v), 'r': (lambda t: (cx + H, cy + t), wall_v)}
     for e, (pos, did) in edges.items():
         t = -H
         while t <= H + 1:
-            if all(abs(t - g) >= GATE_HALF + 100 for g in gaps[e]):
+            if not open_at(e, t):
                 castle_walls.append((did,) + pos(t))
             t += 192.0
         t = -H
         while t <= H + 1:
-            if all(abs(t - g) >= GATE_HALF + 64 for g in gaps[e]):
+            if not open_at(e, t - 36 if t > 0 else t + 36):
                 castle_blockers.append(pos(t))
             t += 128.0
-    # one tower beside every side gate (inside the wall)
+
+
+for pi, (sx, sy) in enumerate(starts):
+    H = CASTLE_H
+    build_wall(sx, sy, H)
     towers = [(sx + H - 230, sy + 380), (sx - H + 230, sy - 380),
               (sx - 380, sy + H - 230), (sx + 380, sy - H + 230)]
     castle_towers.append([(snap(x), snap(y)) for x, y in towers])
-    # three farms behind the town hall (away from the gold mine)
     mx, my = main_mines[pi]
     back = math.degrees(math.atan2(sy - my, sx - mx))
     farms = []
@@ -214,15 +253,80 @@ for pi, (sx, sy) in enumerate(starts):
         r = 720.0
         while True:
             fx, fy = sx + r * math.cos(math.radians(back + da)), sy + r * math.sin(math.radians(back + da))
-            if all(math.hypot(fx - tx, fy - ty) > 300 for tx, ty in towers) and cheb(fx, fy, sx, sy) < H - 200:
+            if all(math.hypot(fx - tx, fy - ty) > 300 for tx, ty in towers) and cheb(fx, fy, sx, sy) < H - 200 \
+                    and abs(fx - sx) > 180 and abs(fy - sy) > 180 or r < 400:
                 break
             r -= 60
         farms.append((snap(fx), snap(fy)))
     castle_farms.append(farms)
 
+build_wall(CAPITAL[0], CAPITAL[1], CAPITAL_H)
+for tx, ty in towns:
+    build_wall(tx, ty, TOWN_H, corner=(-math.copysign(1, tx), -math.copysign(1, ty)))   # open towards the road
+
+# --------------------------------------------------------------------------
+# Neutral buildings and villagers (cities)
+# --------------------------------------------------------------------------
+neutral_buildings = []
+CITY_BIG = ['ncbc', 'ncbd', 'ncbe', 'ncbf']
+CITY_SMALL = ['ncb0', 'ncb1', 'ncb2', 'ncb3', 'ncb4', 'ncb5', 'ncb6', 'ncb7', 'ncb8', 'ncb9', 'ncba', 'ncbb']
+
+
+def nb(uid, x, y):
+    neutral_buildings.append((uid, (snap(x), snap(y))))
+
+
+def city_block(cx, cy, H, shops, n_houses, seed):
+    rnd = random.Random(seed)
+    # shops on the four inner corners of the cross shaped streets
+    for (uid, (qx, qy)) in zip(shops, [(1, 1), (-1, 1), (-1, -1), (1, -1), (0, 0)]):
+        if qx == 0:
+            nb(uid, cx, cy)
+        else:
+            nb(uid, cx + qx * 640, cy + qy * 640)
+    # houses filling the rest of the city (keep the streets free)
+    spots = []
+    g = -H + 320
+    while g <= H - 320:
+        h = -H + 320
+        while h <= H - 320:
+            if abs(g) > 380 and abs(h) > 380 and not (abs(g) < 1000 and abs(h) < 1000):
+                spots.append((cx + g, cy + h))
+            h += 300
+        g += 300
+    rnd.shuffle(spots)
+    for x, y in spots[:n_houses]:
+        nb(rnd.choice(CITY_SMALL if rnd.random() < 0.7 else CITY_BIG), x, y)
+    for k in range(10):                     # villagers walking on the streets
+        u = rnd.uniform(-H + 250, H - 250)
+        v = rnd.choice([-1, 1]) * rnd.uniform(120, 220)
+        x, y = (cx + u, cy + v) if k % 2 else (cx + v, cy + u)
+        nb(rnd.choice(['nvil', 'nvlw', 'nvl2']), x, y)
+
+
+city_block(0.0, 0.0, CAPITAL_H, ['nmrk', 'ngme', 'ngad', 'ntav', 'nfoh'], 26, 1)
+city_block(towns[0][0], towns[0][1], TOWN_H, ['ngme', 'ngwr', 'npgf', 'nfoh'], 12, 2)
+city_block(towns[1][0], towns[1][1], TOWN_H, ['nmrk', 'ngwr', 'npgf', 'nmoo'], 12, 3)
+city_block(towns[2][0], towns[2][1], TOWN_H, ['ngad', 'ngwr', 'npgf', 'nfoh'], 12, 4)
+# harbour town: shipyard on the shore, fishing village houses, villagers
+hx, hy = HARBOR
+nb('nshp', hx + 1100, hy - 1100)
+for k, uid in enumerate(['nfv0', 'nfv1', 'nfv2', 'nfv3', 'nfv4', 'nfv1']):
+    a = 200 + k * 42
+    nb(uid, hx + 700 * math.cos(math.radians(a)), hy + 700 * math.sin(math.radians(a)))
+nb('nmoo', hx, hy)
+for k in range(5):
+    nb(['nvil', 'nvlw', 'nvl2'][k % 3], hx + 300 + k * 90, hy - 250 + k * 40)
+
+TOWN_AREAS = [(0.0, 0.0, CAPITAL_H)] + [(tx, ty, TOWN_H) for tx, ty in towns] + [(hx, hy, 1100.0)]
+
 
 def in_castle(x, y, extra=0.0):
     return any(cheb(x, y, bx, by) < CASTLE_H + extra for bx, by in starts)
+
+
+def in_town(x, y, extra=0.0):
+    return any(cheb(x, y, tx, ty) < h + extra for tx, ty, h in TOWN_AREAS)
 
 
 # --------------------------------------------------------------------------
@@ -232,54 +336,69 @@ TEX = [b'Zgrs', b'Zvin', b'Zdrt', b'Zdtr', b'Zsan', b'Zbks']
 T_GRASS, T_LUSH, T_DIRT, T_ROUGH, T_SAND, T_BRICK = range(6)
 
 
+def sea_s(x, y):
+    """>0 on land, distance (roughly) to the sea coast"""
+    return (SEA_LINE + 500 * noise(x, y, 1.5, 21) - (x - y)) / 1.4142
+
+
 def ground_z(x, y):
-    """height of the ground in world units"""
-    d = math.hypot(x, y)
-    theta = math.atan2(y, x)
-    s = coast_radius(theta) - d                    # >0 inland of the coastline
-    if s < 0:                                      # sea
-        z = -12.0 + s * 0.16
-        return max(z, -320.0)
-    if d < LAGOON_R:                               # shallow lagoon in the middle
-        return max(-12.0 - (LAGOON_R - d) * 0.06, WATER_Z - 40.0)   # always shallow
-    if s < 750:                                    # beach slope
-        return -12.0 + 12.0 * (s / 750.0) + max(0.0, noise(x, y, 2.0, 3)) * 6 * (s / 750.0)
-    if d < LAGOON_R + 350:
-        return -12.0 + 12.0 * ((d - LAGOON_R) / 350.0)
-    hz = noise(x, y, 0.8, 1) * 22.0
-    # keep bases, expansions and the centre flat
-    for (bx, by) in exp_mines:
-        dd = math.hypot(x - bx, y - by)
-        if dd < 1500:
-            hz *= max(0.0, (dd - 1000) / 500.0)
-    for (bx, by) in starts:                        # castles are completely flat
+    s = sea_s(x, y)
+    if s < 0:                                          # sea
+        return max(-12.0 + s * 0.16, -320.0)
+    rd = river_dist(x, y)
+    if rd < RIVER_HALF:                                # river
+        if near_bridge(x, y, 450):
+            return -50.0 + 30.0 * (rd / RIVER_HALF)    # shallow ford under the bridges
+        if rd < RIVER_HALF * 0.55:
+            return -150.0
+        return -12.0 - 138.0 * (1 - (rd - RIVER_HALF * 0.55) / (RIVER_HALF * 0.45))
+    ld = math.hypot(x - LAKE[0], y - LAKE[1]) - LAKE[2]
+    if ld < 0:                                         # lake: deep in the middle
+        return max(-12.0 + ld * 0.25, -200.0)
+    hz = noise(x, y, 0.7, 1) * 38.0
+    flat = 1.0
+    for (bx, by) in starts:
         dd = cheb(x, y, bx, by)
         if dd < CASTLE_H + 800:
-            hz *= max(0.0, (dd - CASTLE_H - 300) / 500.0)
-    if d < C_R + 750:
-        hz *= max(0.0, (d - C_R - 350) / 400.0)
-    return max(hz, 0.0) + min(1.0, (s - 750) / 300.0) * 2.0
+            flat = min(flat, max(0.0, (dd - CASTLE_H - 300) / 500.0))
+    for (tx, ty, h) in TOWN_AREAS:
+        dd = cheb(x, y, tx, ty)
+        if dd < h + 800:
+            flat = min(flat, max(0.0, (dd - h - 300) / 500.0))
+    for (mx, my) in exp_mines:
+        dd = math.hypot(x - mx, y - my)
+        if dd < 1300:
+            flat = min(flat, max(0.0, (dd - 800) / 500.0))
+    hz = max(hz, 0.0) * flat
+    # banks slope down into water
+    shore = min(s, rd - RIVER_HALF, ld)
+    if shore < 400:
+        return -12.0 + (hz + 12.0) * (shore / 400.0)
+    return hz
 
 
 def ground_tex(x, y, z):
-    d = math.hypot(x, y)
-    s = coast_radius(math.atan2(y, x)) - d
-    if s < 750 or d < LAGOON_R + 380 or z < WATER_Z + 5:
+    s = sea_s(x, y)
+    rd = river_dist(x, y)
+    ld = math.hypot(x - LAKE[0], y - LAKE[1]) - LAKE[2]
+    if z < WATER_Z + 5:
         return T_SAND
-    if C_R - 500 < d < C_R + 500:
-        return T_BRICK if (road_dist(x, y) < 260 or C_R - 250 < d < C_R + 250) else T_SAND
-    if road_dist(x, y) < 190 + 40 * noise(x, y, 4, 7):
-        return T_DIRT
+    if s < 900 or rd < RIVER_HALF + 150 or ld < 200:
+        return T_SAND
     for i, (bx, by) in enumerate(starts):
-        if cheb(x, y, bx, by) < CASTLE_H + 60:     # paved castle courtyard
+        if cheb(x, y, bx, by) < CASTLE_H + 60:         # paved castle courtyard
             mx, my = main_mines[i]
             return T_DIRT if math.hypot(x - mx, y - my) < 380 else T_BRICK
+    if in_town(x, y, 60):
+        return T_BRICK
+    if road_dist(x, y) < 210 + 40 * noise(x, y, 4, 7):
+        return T_DIRT
     n = noise(x, y, 1.6, 5)
     if n > 0.45:
         return T_LUSH
     if n < -0.55:
         return T_ROUGH
-    if s < 1000:
+    if s < 1300:
         return T_SAND if noise(x, y, 6, 9) > 0 else T_GRASS
     return T_GRASS
 
@@ -322,18 +441,15 @@ def build_w3e():
 def tree_ok(x, y):
     if not (PMIN + 256 < x < PMAX - 256 and PMIN + 256 < y < PMAX - 256):
         return False
-    d = math.hypot(x, y)
-    s = coast_radius(math.atan2(y, x)) - d
-    if s < 900 or d < C_R + 750:
+    if sea_s(x, y) < 900 or river_dist(x, y) < RIVER_HALF + 250:
         return False
-    if road_dist(x, y) < 330:
+    if math.hypot(x - LAKE[0], y - LAKE[1]) < LAKE[2] + 300:
         return False
-    if in_castle(x, y, 450):
+    if road_dist(x, y) < 340:
         return False
-    for (mx, my) in main_mines:
-        if math.hypot(x - mx, y - my) < 520:
-            return False
-    for (mx, my) in exp_mines:
+    if in_castle(x, y, 450) or in_town(x, y, 450):
+        return False
+    for (mx, my) in main_mines + exp_mines:
         if math.hypot(x - mx, y - my) < 800:
             return False
     for (_, cx, cy, _) in creeps:
@@ -349,17 +465,14 @@ while gy < PMAX - 192:
     gx = PMIN + 192
     while gx < PMAX - 192:
         if tree_ok(gx, gy):
-            d = math.hypot(gx, gy)
-            s = coast_radius(math.atan2(gy, gx)) - d
-            ang = math.degrees(math.atan2(gy, gx))
-            near_mid = min(abs(((ang - 90 + 15) % 30) - 15), 15)   # 0 = halfway between two bases
+            c = max(abs(gx), abs(gy))
             p = 0.0
-            if d > BASE_R + 700 and s > 900:          # forest belt behind the bases
-                p = 0.88
-            elif d > 6500 * S and near_mid < 5.5:         # walls between neighbours
+            if c > BASE_D + 1500:                       # deep forest along the edge of the world
+                p = 0.9
+            elif noise(gx, gy, 2.0, 11) > 0.42:          # woods
                 p = 0.8
-            elif noise(gx, gy, 2.2, 11) > 0.5:        # random groves
-                p = 0.75
+            elif noise(gx, gy, 5.0, 13) > 0.85:          # small groves
+                p = 0.6
             if random.random() < p:
                 trees.append((gx, gy))
         gx += step
@@ -381,10 +494,13 @@ def build_doo():
     items = [(b'ZTtw', random.randint(0, 9), x, y, random.uniform(0.9, 1.15)) for x, y in trees]
     items += [(did, random.randint(0, 4), x, y, 1.0) for did, x, y in castle_walls]
     items += [(b'YTpc', 0, x, y, 1.0) for x, y in castle_blockers]
+    items += [(did, 0, x, y, 1.0) for did, x, y in bridges]
+    bridge_set = set((x, y) for _, x, y in bridges)
     out = bytearray(b'W3do' + struct.pack('<ii', 8, 11) + struct.pack('<i', len(items)))
     for n, (did, var, x, y, sc) in enumerate(items):
         out += did + struct.pack('<i', var)
-        out += struct.pack('<fff', x, y, height_at(x, y))
+        z = 0.0 if (x, y) in bridge_set else height_at(x, y)      # bridges sit at bank level
+        out += struct.pack('<fff', x, y, z)
         out += struct.pack('<f', math.radians(270))
         out += struct.pack('<fff', sc, sc, sc)
         out += struct.pack('<BB', 2, 100)              # visible + solid, 100% life
@@ -582,6 +698,7 @@ def build_j():
     a("//===========================================================================")
     a("globals")
     a("    boolean array pikaRedOrc")
+    a("    integer pikaTicks = 0")
     a("endglobals")
     a("")
     a("function CreateNeutralPassiveBuildings takes nothing returns nothing")
@@ -686,33 +803,127 @@ def build_j():
     a("    return 0")
     a("endfunction")
     a("")
+    a("function PikaLearnSkills takes unit h returns nothing")
+    a("    local integer id = GetUnitTypeId(h)")
+    a("    local integer k = 0")
+    a("    loop")
+    a("        exitwhen k == 3")
+    a("        if id == 'Nbbc' or id == 'Opgh' then")
+    a("            call SelectHeroSkill(h, 'AOww')")
+    a("            call SelectHeroSkill(h, 'AOcr')")
+    a("            call SelectHeroSkill(h, 'AOwk')")
+    a("            call SelectHeroSkill(h, 'AOmi')")
+    a("        elseif id == 'Nplh' or id == 'Nmag' then")
+    a("            call SelectHeroSkill(h, 'ANdo')")
+    a("            call SelectHeroSkill(h, 'ANrf')")
+    a("            call SelectHeroSkill(h, 'ANca')")
+    a("            call SelectHeroSkill(h, 'ANht')")
+    a("        endif")
+    a("        set k = k + 1")
+    a("    endloop")
+    a("endfunction")
+    a("")
+    a("function PikaOnHeroLevel takes nothing returns nothing")
+    a("    call PikaLearnSkills(GetTriggerUnit())")
+    a("endfunction")
+    a("")
     a("function PikaApplyRedOrc takes unit u returns nothing")
     a("    local player p = GetOwningPlayer(u)")
     a("    local integer i = GetPlayerId(p)")
-    a("    local integer newId = 0")
+    a("    local integer newId")
     a("    local real x")
     a("    local real y")
     a("    local real face")
+    a("    local unit n")
     a("    if i >= bj_MAX_PLAYERS then")
     a("        return")
     a("    endif")
     a("    if not pikaRedOrc[i] then")
     a("        return")
     a("    endif")
-    a("    // a human player gets real Fel Orc units and heroes; the computer keeps the normal")
-    a("    // unit types (so its AI keeps working) but they are painted red")
-    a("    if GetPlayerController(p) == MAP_CONTROL_USER then")
-    a("        set newId = PikaFelType(GetUnitTypeId(u))")
+    a("    set newId = PikaFelType(GetUnitTypeId(u))")
+    a("    // the computer keeps normal peons, so its economy AI keeps working")
+    a("    if newId == 'ncpn' and GetPlayerController(p) != MAP_CONTROL_USER then")
+    a("        set newId = 0")
     a("    endif")
     a("    if newId != 0 then")
     a("        set x = GetUnitX(u)")
     a("        set y = GetUnitY(u)")
     a("        set face = GetUnitFacing(u)")
     a("        call RemoveUnit(u)")
-    a("        call CreateUnit(p, newId, x, y, face)")
-    a("    else")
-    a("        call SetUnitVertexColor(u, 255, 85, 85, 255)")
+    a("        set n = CreateUnit(p, newId, x, y, face)")
+    a("        if IsUnitType(n, UNIT_TYPE_HERO) and GetPlayerController(p) == MAP_CONTROL_COMPUTER then")
+    a("            call PikaLearnSkills(n)")
+    a("        endif")
     a("    endif")
+    a("endfunction")
+    a("")
+    a("function PikaIsFelArmy takes unit u returns boolean")
+    a("    local integer id = GetUnitTypeId(u)")
+    a("    if GetUnitState(u, UNIT_STATE_LIFE) <= 0.405 then")
+    a("        return false")
+    a("    endif")
+    a("    return id == 'nchg' or id == 'nchr' or id == 'nckb' or id == 'nchw' or id == 'Nbbc' or id == 'Opgh' or id == 'Nplh' or id == 'Nmag'")
+    a("endfunction")
+    a("")
+    a("// The computer's AI does not know the Fel Orc unit types, so this sends them to war")
+    a("function PikaRedOrcAttack takes nothing returns nothing")
+    a("    local integer i = 0")
+    a("    local integer j")
+    a("    local integer k")
+    a("    local integer count")
+    a("    local player p")
+    a("    local player e")
+    a("    local player target")
+    a("    local group g = CreateGroup()")
+    a("    local group army = CreateGroup()")
+    a("    local unit u")
+    a("    local location loc")
+    a("    set pikaTicks = pikaTicks + 1")
+    a("    loop")
+    a("        exitwhen i == bj_MAX_PLAYERS")
+    a("        set p = Player(i)")
+    a("        if pikaRedOrc[i] and GetPlayerController(p) == MAP_CONTROL_COMPUTER and GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING then")
+    a("            call GroupClear(army)")
+    a("            call GroupEnumUnitsOfPlayer(g, p, null)")
+    a("            set count = 0")
+    a("            loop")
+    a("                set u = FirstOfGroup(g)")
+    a("                exitwhen u == null")
+    a("                call GroupRemoveUnit(g, u)")
+    a("                if PikaIsFelArmy(u) then")
+    a("                    call GroupAddUnit(army, u)")
+    a("                    set count = count + 1")
+    a("                endif")
+    a("            endloop")
+    a("            if pikaTicks >= 8 and (count >= 10 or (pikaTicks >= 20 and count >= 5)) then")
+    a("                set target = null")
+    a("                set j = GetRandomInt(0, bj_MAX_PLAYERS - 1)")
+    a("                set k = 0")
+    a("                loop")
+    a("                    exitwhen k == bj_MAX_PLAYERS or target != null")
+    a("                    set e = Player(ModuloInteger(j + k, bj_MAX_PLAYERS))")
+    a("                    if e != p and GetPlayerSlotState(e) == PLAYER_SLOT_STATE_PLAYING and IsPlayerEnemy(p, e) then")
+    a("                        set target = e")
+    a("                    endif")
+    a("                    set k = k + 1")
+    a("                endloop")
+    a("                if target != null then")
+    a("                    set loc = GetStartLocationLoc(GetPlayerStartLocation(target))")
+    a("                    loop")
+    a("                        set u = FirstOfGroup(army)")
+    a("                        exitwhen u == null")
+    a("                        call GroupRemoveUnit(army, u)")
+    a("                        call IssuePointOrderLoc(u, \"attack\", loc)")
+    a("                    endloop")
+    a("                    call RemoveLocation(loc)")
+    a("                endif")
+    a("            endif")
+    a("        endif")
+    a("        set i = i + 1")
+    a("    endloop")
+    a("    call DestroyGroup(g)")
+    a("    call DestroyGroup(army)")
     a("endfunction")
     a("")
     a("function PikaOnEnter takes nothing returns nothing")
@@ -730,7 +941,7 @@ def build_j():
     a("        if GetPlayerSlotState(p) == PLAYER_SLOT_STATE_PLAYING and GetPlayerRace(p) == RACE_ORC then")
     a("            if GetRandomInt(0, 1) == 1 then")
     a("                set pikaRedOrc[i] = true")
-    a("                call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cffff3030Fel Orcs!|r The Blackrock clan answers your call: red orcs and their own heroes (Chaos Blademaster, Grom, Azgalor, Magtheridon).\")")
+    a("                call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cffff3030Fel Orcs!|r The Blackrock clan answers your call: Fel Orcs (Chaos Grunts, Raiders, Kodos, Warlocks) with their own heroes: Chaos Blademaster, Grom, Azgalor, Magtheridon.\")")
     a("            else")
     a("                call DisplayTimedTextToPlayer(p, 0, 0, 15.00, \"|cff40ff40Horde Orcs!|r You lead the normal orcs of the Horde.\")")
     a("            endif")
@@ -738,6 +949,17 @@ def build_j():
     a("        set i = i + 1")
     a("    endloop")
     a("    call TriggerRegisterEnterRectSimple(t, GetWorldBounds())")
+    a("    set t = CreateTrigger()")
+    a("    set i = 0")
+    a("    loop")
+    a("        exitwhen i == bj_MAX_PLAYERS")
+    a("        if pikaRedOrc[i] and GetPlayerController(Player(i)) == MAP_CONTROL_COMPUTER then")
+    a("            call TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_HERO_LEVEL, null)")
+    a("        endif")
+    a("        set i = i + 1")
+    a("    endloop")
+    a("    call TriggerAddAction(t, function PikaOnHeroLevel)")
+    a("    call TimerStart(CreateTimer(), 40.00, true, function PikaRedOrcAttack)")
     a("    call TriggerAddAction(t, function PikaOnEnter)")
     a("endfunction")
     a("")
@@ -1041,7 +1263,7 @@ def main():
         'war3map.mmp': mmp,
     }
     data = build_w3x(build_mpq(files))
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), '(12)PikasooCoast.w3x')
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), '(12)PikasooKingdoms.w3x')
     with open(out, 'wb') as fh:
         fh.write(data)
     print("wrote %s (%d bytes, %d trees, %d creeps)" % (out, len(data), len(trees), len(creeps)))
