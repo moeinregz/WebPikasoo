@@ -426,11 +426,87 @@ def ground_z(x, y):
         if dd < 1300:
             flat = min(flat, max(0.0, (dd - 800) / 500.0))
     hz = max(hz, 0.0) * flat
+    if city_at(x, y)[0] is not None:                  # city districts are nearly flat
+        hz *= 0.15
     # banks slope down into water
     shore = min(s, rd - RIVER_HALF, ld)
     if shore < 400:
         return -12.0 + (hz + 12.0) * (shore / 400.0)
     return hz
+
+
+# --------------------------------------------------------------------------
+# City districts: the whole land between the castles is built up with streets and
+# houses, in the style of the region it is in
+# --------------------------------------------------------------------------
+BLOCK = 1400.0
+CITY_DENSITY = {'summer': 0.9, 'fall': 0.8, 'snow': 0.7, 'autumn': 0.7, 'desert': 0.55, 'coast': 0.6}
+CITY_STYLE = {
+    'summer': (['ncb0', 'ncb3', 'ncb6', 'ncb9', 'ncb1', 'ncb4', 'ncb7', 'ncba'], ['ncbc', 'ncbd', 'ncbe', 'ncbf']),
+    'snow':   (['ncb2', 'ncb5', 'ncb8', 'ncbb', 'ncb0', 'ncb3'], ['ncbc', 'ncbe', 'ngwr']),
+    'autumn': (['nef0', 'nef1', 'nef2', 'nef3', 'nef4', 'nef5', 'nef6', 'nef7'], ['nefm', 'negt']),
+    'fall':   (['ncb1', 'ncb4', 'ncb7', 'ncba', 'npgf'], ['ngwr', 'npgf', 'ncbd']),
+    'desert': (['nvr0', 'nvr1', 'nvr2', 'ncb2', 'ncb8'], ['ngwr', 'ncbf']),
+    'coast':  (['nfv0', 'nfv1', 'nfv2', 'nfv3', 'nfv4'], ['nfv1', 'nfv3']),
+}
+
+
+def block_free(cx, cy):
+    """can a city block stand here without blocking a castle, mine, road or water?"""
+    if max(abs(cx), abs(cy)) > BASE_D + 1600:            # the forests at the edge of the world stay
+        return False
+    for bx, by in starts:
+        if cheb(cx, cy, bx, by) < CASTLE_H + MOAT_OUT + 950:
+            return False
+    for tx, ty, h in TOWN_AREAS:
+        if cheb(cx, cy, tx, ty) < h + MOAT_OUT + 650:
+            return False
+    for mx, my in main_mines + exp_mines:
+        if math.hypot(cx - mx, cy - my) < 1350:
+            return False
+    for _, x, y, _ in creeps:
+        if math.hypot(cx - x, cy - y) < 800:
+            return False
+    if road_dist(cx, cy) < 680:
+        return False
+    if sea_s(cx, cy) < 1300 or river_dist(cx, cy) < RIVER_HALF + 750:
+        return False
+    if math.hypot(cx - LAKE[0], cy - LAKE[1]) < LAKE[2] + 900:
+        return False
+    return True
+
+
+city_blocks = {}
+crnd = random.Random(77)
+n_cells = int(PMAX // BLOCK) + 1
+for bi in range(-n_cells, n_cells):
+    for bj in range(-n_cells, n_cells):
+        cx, cy = (bi + 0.5) * BLOCK, (bj + 0.5) * BLOCK
+        if block_free(cx, cy):
+            b = biome(cx, cy)
+            if crnd.random() < CITY_DENSITY[b]:
+                city_blocks[(bi, bj)] = b
+for (bi, bj), b in sorted(city_blocks.items()):
+    cx, cy = (bi + 0.5) * BLOCK, (bj + 0.5) * BLOCK
+    small, big = CITY_STYLE[b]
+    if crnd.random() < 0.3:
+        nb(crnd.choice(big), cx, cy)                        # one big building
+    else:
+        for ox, oy in ((-260, -230), (260, 230), (-260, 230), (260, -230)):
+            if crnd.random() < 0.8:
+                nb(crnd.choice(small), cx + ox, cy + oy)
+    if crnd.random() < 0.3:                                 # people on the streets
+        nb(crnd.choice(['nvil', 'nvlw', 'nvl2']), cx + BLOCK / 2 - 110, cy + crnd.uniform(-300, 300))
+
+
+def city_at(x, y):
+    bi, bj = math.floor(x / BLOCK), math.floor(y / BLOCK)
+    b = city_blocks.get((bi, bj))
+    if b is None:
+        return None, False
+    u, v = x - bi * BLOCK, y - bj * BLOCK
+    street = min(u, v, BLOCK - u, BLOCK - v) < 230
+    return b, street
 
 
 def ground_tex(x, y, z):
@@ -454,6 +530,11 @@ def ground_tex(x, y, z):
         return T_TILES                                 # capital keep
     if in_town(x, y, 60):
         return T_BRICK if (abs(x) % 900 > 120 and abs(y) % 900 > 120) else T_TILES
+    cb, street = city_at(x, y)
+    if cb is not None:
+        if street:
+            return T_BRICK
+        return T_TILES if cb in ('summer', 'fall') else main
     if road_dist(x, y) < 210 + 40 * noise(x, y, 4, 7):
         return T_DIRT if b != 'snow' else T_SNOWDIRT
     n = noise(x, y, 1.6, 5)
@@ -507,6 +588,9 @@ def tree_ok(x, y):
     if math.hypot(x - LAKE[0], y - LAKE[1]) < LAKE[2] + 300:
         return False
     if road_dist(x, y) < 340:
+        return False
+    if city_at(x, y)[0] is not None or city_at(x + 200, y)[0] is not None or city_at(x - 200, y)[0] is not None \
+            or city_at(x, y + 200)[0] is not None or city_at(x, y - 200)[0] is not None:
         return False
     if in_castle(x, y, MOAT_OUT + 250) or in_town(x, y, MOAT_OUT + 250):
         return False

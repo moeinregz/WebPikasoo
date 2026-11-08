@@ -1,7 +1,8 @@
 # Pikasoo Kingdoms — Warcraft III melee map (12 players)
 
 - File: `(12)PikasooKingdoms.w3x` — Warcraft III 1.26 / 1.27 (The Frozen Throne)
-- 256 x 256, the biggest size 1.26 allows. A whole mainland "world" with 6 regions, each with its own
+- 256 x 256, the biggest size 1.26 allows. The whole land between the castles is built up as city districts
+  (street grid + houses in the style of each region). 6 regions, each with its own
   ground and trees: green heartland (centre), snowy north, Ashenvale-like west, golden autumn east,
   barren desert south and a tropical coast in the south east.
   - 12 castles: stone walls, a water moat with causeways at the 4 gates, corner towers and farms
