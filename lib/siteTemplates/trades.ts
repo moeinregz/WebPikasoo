@@ -56,6 +56,12 @@ export const TRADES: Trade[] = [
   { id: "music", label: "آموزشگاه موسیقی", colors: { primary: "#742642", secondary: "#CF9C4F", accent: "#9C3A56", bg: "#FAF5E8", text: "#2A1710" } },
   { id: "travel", label: "آژانس مسافرتی و تور", colors: { primary: "#1B4A66", secondary: "#E3A857", accent: "#2C8DB8", bg: "#F3F7FA", text: "#12303F" } },
   { id: "hotel", label: "هتل و اقامتگاه", colors: { primary: "#14532D", secondary: "#C8B273", accent: "#A67C37", bg: "#FAF8F1", text: "#1B2A20" } },
+  { id: "coffeedist", label: "پخش قهوه", colors: { primary: "#C8873A", secondary: "#6F3B1F", accent: "#E8C07A", bg: "#140D09", text: "#F4E9DC" } },
+  { id: "appliances", label: "لوازم خانگی", colors: { primary: "#0E7C86", secondary: "#1D3557", accent: "#F4A259", bg: "#F4F8FB", text: "#132235" } },
+  { id: "digital", label: "کالای دیجیتال", colors: { primary: "#22D3EE", secondary: "#3B5BFD", accent: "#A3E635", bg: "#0A0D14", text: "#E9EEFB" } },
+  { id: "mobile", label: "گوشی، لپ‌تاپ و تبلت", colors: { primary: "#0A66FF", secondary: "#111114", accent: "#FF7A1A", bg: "#F5F5F7", text: "#111114" } },
+  { id: "kidswear", label: "پوشاک بچگانه", colors: { primary: "#F2777A", secondary: "#5AA9A3", accent: "#FFC95C", bg: "#FFF8F1", text: "#3A2F3B" } },
+  { id: "funcenter", label: "مرکز تفریحی", colors: { primary: "#FF4D5E", secondary: "#FFC23C", accent: "#3EE0C5", bg: "#101A3A", text: "#FFF7E8" } },
 ];
 
 export function getTrade(id: string): Trade | undefined {

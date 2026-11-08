@@ -1,23 +1,25 @@
 // Client-safe (no template HTML, no DB): decides which site-generator trades
 // fit a CRM lead.
 //
-// A lead's "نوع کسب‌وکار" is now one of the 23 trade labels (CRM_BUSINESS_TYPES),
+// A lead's "نوع کسب‌وکار" is now one of the trade labels (CRM_BUSINESS_TYPES),
 // which maps 1:1 to a generator trade. Leads saved before that still carry one
 // of the nine old broad categories (CRM_CATEGORY_TRADES); for those the lead's
 // NAME is checked for trade keywords first, then every trade of the old
 // category is a candidate and the template pick is random.
 import { TRADES } from "./trades";
 
-/** The type picker in the CRM, grouped so 23 choices stay easy to scan. */
+/** The type picker in the CRM, grouped so the choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
-  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "jigar"] },
-  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery"] },
+  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "jigar", "coffeedist"] },
+  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "kidswear", "bookstore", "stationery"] },
+  { label: "دیجیتال و موبایل", tradeIds: ["mobile", "digital"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
-  { label: "خانه و آشپزخانه", tradeIds: ["kitchenware", "melamine", "plastics", "bedding"] },
+  { label: "خانه و آشپزخانه", tradeIds: ["appliances", "kitchenware", "melamine", "plastics", "bedding"] },
   { label: "ابزار و خودرو", tradeIds: ["tools", "autoparts"] },
   { label: "خدمات و شرکتی", tradeIds: ["upholstery", "moving", "realestate", "law"] },
   { label: "آموزش", tradeIds: ["language", "music", "school"] },
   { label: "گردشگری و اقامت", tradeIds: ["travel", "hotel"] },
+  { label: "تفریح و سرگرمی", tradeIds: ["funcenter"] },
 ];
 
 const labelOf = (id: string) => TRADES.find((t) => t.id === id)?.label ?? id;
@@ -32,18 +34,24 @@ export const CRM_BUSINESS_TYPES: string[] = CRM_TYPE_GROUPS_LABELED.flatMap((g) 
 
 export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
   "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream", "jigar"],
-  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery", "tools", "autoparts", "kitchenware", "melamine", "plastics", "bedding"],
+  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery", "tools", "autoparts", "kitchenware", "melamine", "plastics", "bedding", "appliances", "digital", "mobile", "kidswear"],
   "لوازم آرایشی و بهداشتی": ["cosmetics", "perfume"],
   "پزشکی و کلینیک": ["clinic", "dental"],
   "املاک و مستغلات": ["realestate"],
   "آموزشی": ["language", "music", "school"],
-  "خدماتی": ["upholstery", "moving", "gym"],
-  "شرکتی و کسب‌وکار": ["law"],
-  "گردشگری و اقامتی": ["travel", "hotel"],
+  "خدماتی": ["upholstery", "moving", "gym", "funcenter"],
+  "شرکتی و کسب‌وکار": ["law", "coffeedist"],
+  "گردشگری و اقامتی": ["travel", "hotel", "funcenter"],
 };
 
 // Most specific first — the first trade with a matching keyword wins.
 const KEYWORDS: [string, string[]][] = [
+  ["coffeedist", ["پخش قهوه", "توزیع قهوه", "قهوه عمده", "عمده قهوه", "بنکداری قهوه", "رست قهوه", "رُست قهوه", "روستری", "رستری"]],
+  ["funcenter", ["مرکز تفریحی", "شهربازی", "شهر بازی", "سرزمین بازی", "خانه بازی", "خانه‌ی بازی", "پارک بازی", "پلی لند", "پلی‌لند", "بولینگ", "لیزرتگ", "اتاق فرار", "گیم نت", "گیم‌نت", "مجموعه تفریحی", "تفریحی"]],
+  ["kidswear", ["پوشاک بچگانه", "لباس بچگانه", "بچگانه", "لباس کودک", "پوشاک کودک", "لباس نوزاد", "نوزادی", "سیسمونی", "سیسمونی‌سرا"]],
+  ["mobile", ["موبایل", "گوشی", "لپ‌تاپ", "لپتاپ", "لپ تاپ", "تبلت", "آیفون", "ایفون", "سامسونگ", "شیائومی", "اپل"]],
+  ["digital", ["کالای دیجیتال", "دیجیتال", "ساعت هوشمند", "لوازم جانبی", "گجت", "هدفون", "اسپیکر", "کنسول", "پلی‌استیشن", "گیمینگ", "کامپیوتر", "رایانه"]],
+  ["appliances", ["لوازم خانگی", "لوازم برقی", "لوازم خانگی برقی", "یخچال", "لباسشویی", "ظرفشویی", "جاروبرقی", "تلویزیون", "اجاق گاز", "کولر", "بخاری"]],
   ["jigar", ["جگرکی", "جیگرکی", "جگرسرا", "جیگرسرا", "جگر", "جیگر", "دل و قلوه"]],
   ["lingerie", ["لباس زیر زنانه", "لانژری", "لباس خواب زنانه", "سوتین", "شورت زنانه"]],
   ["menunder", ["زیرپوش", "لباس زیر مردانه", "شورت مردانه"]],

@@ -63,6 +63,7 @@ import gardenGilas from "./templates/garden-gilas.template.html";
 
 // <lux-imports>
 import accessoriesLux from "./templates/accessories-lux.template.html";
+import appliancesLux from "./templates/appliances-lux.template.html";
 import autopartsLux from "./templates/autoparts-lux.template.html";
 import bagsLux from "./templates/bags-lux.template.html";
 import bakeryLux from "./templates/bakery-lux.template.html";
@@ -71,11 +72,14 @@ import bookstoreLux from "./templates/bookstore-lux.template.html";
 import cafeLux from "./templates/cafe-lux.template.html";
 import carpetLux from "./templates/carpet-lux.template.html";
 import clinicLux from "./templates/clinic-lux.template.html";
+import coffeedistLux from "./templates/coffeedist-lux.template.html";
 import cosmeticsLux from "./templates/cosmetics-lux.template.html";
 import dentalLux from "./templates/dental-lux.template.html";
+import digitalLux from "./templates/digital-lux.template.html";
 import fashionLux from "./templates/fashion-lux.template.html";
 import fastfoodLux from "./templates/fastfood-lux.template.html";
 import footwearLux from "./templates/footwear-lux.template.html";
+import funcenterLux from "./templates/funcenter-lux.template.html";
 import gardenLux from "./templates/garden-lux.template.html";
 import gymLux from "./templates/gym-lux.template.html";
 import hotelLux from "./templates/hotel-lux.template.html";
@@ -83,12 +87,14 @@ import icecreamLux from "./templates/icecream-lux.template.html";
 import jewelryLux from "./templates/jewelry-lux.template.html";
 import jigarLux from "./templates/jigar-lux.template.html";
 import kebabLux from "./templates/kebab-lux.template.html";
+import kidswearLux from "./templates/kidswear-lux.template.html";
 import kitchenwareLux from "./templates/kitchenware-lux.template.html";
 import languageLux from "./templates/language-lux.template.html";
 import lawLux from "./templates/law-lux.template.html";
 import lingerieLux from "./templates/lingerie-lux.template.html";
 import melamineLux from "./templates/melamine-lux.template.html";
 import menunderLux from "./templates/menunder-lux.template.html";
+import mobileLux from "./templates/mobile-lux.template.html";
 import movingLux from "./templates/moving-lux.template.html";
 import musicLux from "./templates/music-lux.template.html";
 import pastryLux from "./templates/pastry-lux.template.html";
@@ -120,6 +126,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — عینک‌ها", hint: "عینک‌ها", ratio: "4:5" },
       { key: "g3", label: "گالری — بدلیجات", hint: "بدلیجات", ratio: "4:5" },
       { key: "g4", label: "گالری — شال و روسری", hint: "شال و روسری", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "appliances-lux",
+    trade: "appliances",
+    label: "لوازم خانگی — روشن و تمیز (لوکس)",
+    html: appliancesLux,
+    palette: { primary: "#0e7c86", secondary: "#1d3557" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "یخچال یا لباسشویی شاخص", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "شوروم فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — یخچال‌ها", hint: "یخچال‌ها", ratio: "4:5" },
+      { key: "g2", label: "گالری — لباسشویی‌ها", hint: "لباسشویی‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — لوازم کوچک", hint: "لوازم کوچک", ratio: "4:5" },
+      { key: "g4", label: "گالری — ویترین", hint: "ویترین", ratio: "4:5" },
     ],
   },
   {
@@ -245,6 +266,21 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "coffeedist-lux",
+    trade: "coffeedist",
+    label: "پخش قهوه — رُست تیره و عمده (لوکس)",
+    html: coffeedistLux,
+    palette: { primary: "#c8873a", secondary: "#6f3b1f" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "دانه‌ی قهوه یا کیسه‌ی رُست", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "دستگاه رُست یا انبار", ratio: "4:5" },
+      { key: "g1", label: "گالری — دستگاه رُست", hint: "دستگاه رُست", ratio: "4:5" },
+      { key: "g2", label: "گالری — دانه‌ی سبز", hint: "دانه‌ی سبز", ratio: "4:5" },
+      { key: "g3", label: "گالری — بسته‌بندی", hint: "بسته‌بندی", ratio: "4:5" },
+      { key: "g4", label: "گالری — انبار", hint: "انبار", ratio: "4:5" },
+    ],
+  },
+  {
     id: "cosmetics-lux",
     trade: "cosmetics",
     label: "لوازم آرایشی — لطیف و شیک (لوکس)",
@@ -272,6 +308,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — اتاق درمان", hint: "اتاق درمان", ratio: "4:5" },
       { key: "g3", label: "گالری — تجهیزات", hint: "تجهیزات", ratio: "4:5" },
       { key: "g4", label: "گالری — فضای انتظار", hint: "فضای انتظار", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "digital-lux",
+    trade: "digital",
+    label: "کالای دیجیتال — نئونی و گیمینگ (لوکس)",
+    html: digitalLux,
+    palette: { primary: "#22d3ee", secondary: "#3b5bfd" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "هدفون یا گجت شاخص روی زمینه‌ی تیره", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — صوتی", hint: "صوتی", ratio: "4:5" },
+      { key: "g2", label: "گالری — گیمینگ", hint: "گیمینگ", ratio: "4:5" },
+      { key: "g3", label: "گالری — پوشیدنی", hint: "پوشیدنی", ratio: "4:5" },
+      { key: "g4", label: "گالری — ویترین", hint: "ویترین", ratio: "4:5" },
     ],
   },
   {
@@ -318,6 +369,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — رسمی", hint: "رسمی", ratio: "4:5" },
       { key: "g3", label: "گالری — اسپرت", hint: "اسپرت", ratio: "4:5" },
       { key: "g4", label: "گالری — بوت", hint: "بوت", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "funcenter-lux",
+    trade: "funcenter",
+    label: "مرکز تفریحی — شهربازی و پرانرژی (لوکس)",
+    html: funcenterLux,
+    palette: { primary: "#ff4d5e", secondary: "#ffc23c" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "شهربازی یا خانه‌ی بازی", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "فضای مجموعه", ratio: "4:5" },
+      { key: "g1", label: "گالری — خانه‌ی بازی", hint: "خانه‌ی بازی", ratio: "4:5" },
+      { key: "g2", label: "گالری — بولینگ", hint: "بولینگ", ratio: "4:5" },
+      { key: "g3", label: "گالری — اتاق فرار", hint: "اتاق فرار", ratio: "4:5" },
+      { key: "g4", label: "گالری — سالن تولد", hint: "سالن تولد", ratio: "4:5" },
     ],
   },
   {
@@ -430,6 +496,21 @@ export const TEMPLATES: SiteTemplate[] = [
     ],
   },
   {
+    id: "kidswear-lux",
+    trade: "kidswear",
+    label: "پوشاک بچگانه — پاستلی و شاد (لوکس)",
+    html: kidswearLux,
+    palette: { primary: "#f2777a", secondary: "#5aa9a3" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "لباس بچگانه یا نوزادی روی زمینه‌ی روشن", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — نوزادی", hint: "نوزادی", ratio: "4:5" },
+      { key: "g2", label: "گالری — دخترانه", hint: "دخترانه", ratio: "4:5" },
+      { key: "g3", label: "گالری — پسرانه", hint: "پسرانه", ratio: "4:5" },
+      { key: "g4", label: "گالری — مجلسی", hint: "مجلسی", ratio: "4:5" },
+    ],
+  },
+  {
     id: "kitchenware-lux",
     trade: "kitchenware",
     label: "ظروف و لوازم آشپزخانه — گرم و کاشی‌کاری (لوکس)",
@@ -517,6 +598,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — سرمه‌ای", hint: "سرمه‌ای", ratio: "4:5" },
       { key: "g3", label: "گالری — مشکی", hint: "مشکی", ratio: "4:5" },
       { key: "g4", label: "گالری — طوسی", hint: "طوسی", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "mobile-lux",
+    trade: "mobile",
+    label: "گوشی، لپ‌تاپ و تبلت — مینیمال و اپل‌طور (لوکس)",
+    html: mobileLux,
+    palette: { primary: "#0a66ff", secondary: "#111114" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "گوشی یا لپ‌تاپ روی زمینه‌ی روشن", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "ویترین فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — گوشی‌ها", hint: "گوشی‌ها", ratio: "4:5" },
+      { key: "g2", label: "گالری — لپ‌تاپ‌ها", hint: "لپ‌تاپ‌ها", ratio: "4:5" },
+      { key: "g3", label: "گالری — تبلت‌ها", hint: "تبلت‌ها", ratio: "4:5" },
+      { key: "g4", label: "گالری — لوازم جانبی", hint: "لوازم جانبی", ratio: "4:5" },
     ],
   },
   {
