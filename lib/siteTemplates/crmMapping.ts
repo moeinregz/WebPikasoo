@@ -11,7 +11,7 @@ import { TRADES } from "./trades";
 /** The type picker in the CRM, grouped so the choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
   { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "jigar", "breakfast", "coffeedist"] },
-  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "kidswear", "bookstore", "stationery"] },
+  { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "kidswear", "fabric", "bookstore", "stationery"] },
   { label: "دیجیتال و موبایل", tradeIds: ["mobile", "digital"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
   { label: "خانه و آشپزخانه", tradeIds: ["appliances", "kitchenware", "melamine", "plastics", "bedding"] },
@@ -34,7 +34,7 @@ export const CRM_BUSINESS_TYPES: string[] = CRM_TYPE_GROUPS_LABELED.flatMap((g) 
 
 export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
   "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream", "jigar", "breakfast"],
-  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery", "tools", "autoparts", "kitchenware", "melamine", "plastics", "bedding", "appliances", "digital", "mobile", "kidswear"],
+  "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery", "tools", "autoparts", "kitchenware", "melamine", "plastics", "bedding", "appliances", "digital", "mobile", "kidswear", "fabric"],
   "لوازم آرایشی و بهداشتی": ["cosmetics", "perfume"],
   "پزشکی و کلینیک": ["clinic", "dental"],
   "املاک و مستغلات": ["realestate"],
@@ -49,6 +49,7 @@ const KEYWORDS: [string, string[]][] = [
   ["coffeedist", ["پخش قهوه", "توزیع قهوه", "قهوه عمده", "عمده قهوه", "بنکداری قهوه", "رست قهوه", "رُست قهوه", "روستری", "رستری"]],
   ["breakfast", ["صبحانه", "صبحونه", "صبحانه‌سرا", "صبحانه سرا", "حلیم", "عدسی", "کله‌پاچه", "کله پاچه", "طباخی", "breakfast"]],
   ["funcenter", ["مرکز تفریحی", "شهربازی", "شهر بازی", "سرزمین بازی", "خانه بازی", "خانه‌ی بازی", "پارک بازی", "پلی لند", "پلی‌لند", "بولینگ", "لیزرتگ", "اتاق فرار", "گیم نت", "گیم‌نت", "مجموعه تفریحی", "تفریحی"]],
+  ["fabric", ["پارچه", "پارچه‌فروشی", "پارچه فروشی", "بزازی", "بزاز", "حریر", "مخمل", "پارچه چادری", "پارچه مانتویی", "پرده و پارچه"]],
   ["kidswear", ["پوشاک بچگانه", "لباس بچگانه", "بچگانه", "لباس کودک", "پوشاک کودک", "لباس نوزاد", "نوزادی", "سیسمونی", "سیسمونی‌سرا"]],
   ["mobile", ["موبایل", "گوشی", "لپ‌تاپ", "لپتاپ", "لپ تاپ", "تبلت", "آیفون", "ایفون", "سامسونگ", "شیائومی", "اپل"]],
   ["digital", ["کالای دیجیتال", "دیجیتال", "ساعت هوشمند", "لوازم جانبی", "گجت", "هدفون", "اسپیکر", "کنسول", "پلی‌استیشن", "گیمینگ", "کامپیوتر", "رایانه"]],

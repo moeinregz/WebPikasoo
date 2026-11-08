@@ -77,6 +77,7 @@ import coffeedistLux from "./templates/coffeedist-lux.template.html";
 import cosmeticsLux from "./templates/cosmetics-lux.template.html";
 import dentalLux from "./templates/dental-lux.template.html";
 import digitalLux from "./templates/digital-lux.template.html";
+import fabricLux from "./templates/fabric-lux.template.html";
 import fashionLux from "./templates/fashion-lux.template.html";
 import fastfoodLux from "./templates/fastfood-lux.template.html";
 import footwearLux from "./templates/footwear-lux.template.html";
@@ -340,6 +341,21 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — گیمینگ", hint: "گیمینگ", ratio: "4:5" },
       { key: "g3", label: "گالری — پوشیدنی", hint: "پوشیدنی", ratio: "4:5" },
       { key: "g4", label: "گالری — ویترین", hint: "ویترین", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "fabric-lux",
+    trade: "fabric",
+    label: "پارچه‌فروشی — طاقه‌های رنگی و گرم (لوکس)",
+    html: fabricLux,
+    palette: { primary: "#1f5c5a", secondary: "#b5542f" },
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "طاقه‌های پارچه‌ی رنگی", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "قفسه‌های فروشگاه", ratio: "4:5" },
+      { key: "g1", label: "گالری — طاقه‌های مانتویی", hint: "طاقه‌های مانتویی", ratio: "4:5" },
+      { key: "g2", label: "گالری — مجلسی و حریر", hint: "مجلسی و حریر", ratio: "4:5" },
+      { key: "g3", label: "گالری — پرده‌ای", hint: "پرده‌ای", ratio: "4:5" },
+      { key: "g4", label: "گالری — رومبلی", hint: "رومبلی", ratio: "4:5" },
     ],
   },
   {
