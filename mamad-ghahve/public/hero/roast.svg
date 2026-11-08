@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="55%" r="50%"><stop offset="0" stop-color="#f1cd7d" stop-opacity=".45"/><stop offset="1" stop-color="#f1cd7d" stop-opacity="0"/></radialGradient>
+    <linearGradient id="bag" x1="0" x2="1"><stop offset="0" stop-color="#7a4a2a"/><stop offset=".55" stop-color="#5a3420"/><stop offset="1" stop-color="#3d2214"/></linearGradient>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffe2a0"/><stop offset=".5" stop-color="#d6a650"/><stop offset="1" stop-color="#a8772b"/></linearGradient>
+    <linearGradient id="cup" x1="0" x2="1"><stop offset="0" stop-color="#fff6e4"/><stop offset="1" stop-color="#e6d2ae"/></linearGradient>
+    <symbol id="bean" viewBox="0 0 40 60"><ellipse cx="20" cy="30" rx="17" ry="27" fill="#4a2a18"/><ellipse cx="15" cy="22" rx="6" ry="10" fill="#6e4229" opacity=".7"/><path d="M20 5C7 22 33 38 20 55" fill="none" stroke="#1e110a" stroke-width="3.5" stroke-linecap="round"/></symbol>
+  </defs>
+  <circle cx="210" cy="215" r="190" fill="url(#glow)"/>
+  <ellipse cx="210" cy="352" rx="170" ry="20" fill="#140b06"/>
+  <!-- bag -->
+  <path d="M120 90 H270 L288 340 Q195 356 102 340 Z" fill="url(#bag)"/>
+  <path d="M120 90 H270 L274 116 H116 Z" fill="#000" opacity=".22"/>
+  <path d="M128 64 H262 L270 90 H120 Z" fill="#8a5530"/>
+  <path d="M150 64 v-10 a45 45 0 0 1 90 0 v10" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+  <rect x="140" y="150" width="110" height="132" rx="14" fill="#fbf1dc" stroke="url(#gold)" stroke-width="4"/>
+  <text x="195" y="190" text-anchor="middle" font-family="Lalezar, Vazirmatn, Tahoma, sans-serif" font-size="27" fill="#3b2416">ممد قهوه</text>
+  <use href="#bean" x="181" y="202" width="28" height="42"/>
+  <text x="195" y="268" text-anchor="middle" font-family="Vazirmatn, Tahoma, sans-serif" font-size="13" fill="#7a4a2a">تازه‌برشته</text>
+  <path d="M266 118 L278 330" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".08"/>
+  <!-- cup -->
+  <ellipse cx="320" cy="338" rx="66" ry="12" fill="#e6d2ae"/>
+  <path d="M276 270 H364 V298 C364 326 344 340 320 340 C296 340 276 326 276 298 Z" fill="url(#cup)"/>
+  <path d="M364 282 c22 0 22 34 -2 32" fill="none" stroke="#e6d2ae" stroke-width="8"/>
+  <ellipse cx="320" cy="270" rx="44" ry="9" fill="#5a3420"/>
+  <ellipse cx="314" cy="268" rx="18" ry="3.5" fill="#c9935a" opacity=".7"/>
+  <g fill="none" stroke="#f1cd7d" stroke-width="5" stroke-linecap="round" opacity=".75">
+    <path d="M304 250 c-12 -14 10 -22 -2 -40"><animate attributeName="opacity" values="0;.9;0" dur="3s" repeatCount="indefinite"/></path>
+    <path d="M330 250 c-12 -14 10 -22 -2 -40"><animate attributeName="opacity" values="0;.9;0" dur="3s" begin="1.2s" repeatCount="indefinite"/></path>
+  </g>
+  <!-- beans -->
+  <use href="#bean" x="40" y="300" width="34" height="50" transform="rotate(-30 57 325)"/>
+  <use href="#bean" x="72" y="318" width="30" height="44" transform="rotate(25 87 340)"/>
+  <use href="#bean" x="230" y="332" width="26" height="38" transform="rotate(60 243 351)"/>
+  <use href="#bean" x="58" y="120" width="24" height="36" transform="rotate(20 70 138)" opacity=".8"/>
+  <use href="#bean" x="330" y="120" width="28" height="42" transform="rotate(-40 344 141)" opacity=".85"/>
+  <g fill="#ffe2a0"><circle cx="96" cy="70" r="3"/><circle cx="350" cy="80" r="2.5"/><circle cx="380" cy="200" r="3"/><circle cx="40" cy="220" r="2.5"/></g>
+</svg>

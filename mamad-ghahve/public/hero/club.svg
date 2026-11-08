@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f1cd7d" stop-opacity=".45"/><stop offset="1" stop-color="#f1cd7d" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffe7ad"/><stop offset=".45" stop-color="#e0b25c"/><stop offset="1" stop-color="#9c6c24"/></linearGradient>
+    <linearGradient id="card2" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#4a2e1b"/><stop offset="1" stop-color="#22140c"/></linearGradient>
+    <linearGradient id="box" x1="0" x2="1"><stop offset="0" stop-color="#7a3a25"/><stop offset="1" stop-color="#4e2214"/></linearGradient>
+  </defs>
+  <circle cx="210" cy="200" r="190" fill="url(#glow)"/>
+  <ellipse cx="210" cy="352" rx="165" ry="18" fill="#140b06"/>
+  <!-- gift box -->
+  <rect x="226" y="222" width="140" height="120" rx="10" fill="url(#box)"/>
+  <rect x="216" y="196" width="160" height="38" rx="8" fill="#8a4630"/>
+  <rect x="284" y="196" width="24" height="146" fill="url(#gold)"/>
+  <path d="M296 196 c-30 -40 -64 -18 -40 0 z M296 196 c30 -40 64 -18 40 0 z" fill="url(#gold)"/>
+  <!-- back card -->
+  <g transform="rotate(-12 150 210)">
+    <rect x="40" y="140" width="230" height="140" rx="18" fill="url(#card2)" stroke="#d6a650" stroke-opacity=".5" stroke-width="2"/>
+  </g>
+  <!-- gold member card -->
+  <g transform="rotate(6 160 240)">
+    <rect x="50" y="170" width="240" height="148" rx="18" fill="url(#gold)"/>
+    <rect x="50" y="170" width="240" height="148" rx="18" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>
+    <rect x="72" y="212" width="36" height="28" rx="6" fill="#fbe3a6" stroke="#9c6c24" stroke-width="1.5"/>
+    <path d="M72 226 h36 M90 212 v28" stroke="#9c6c24" stroke-width="1.2"/>
+    <text x="270" y="204" direction="rtl" unicode-bidi="embed" text-anchor="start" font-family="Lalezar, Vazirmatn, Tahoma, sans-serif" font-size="22" fill="#3b2416">باشگاه ممد قهوه</text>
+    <text x="270" y="270" direction="rtl" unicode-bidi="embed" text-anchor="start" font-family="Lalezar, Vazirmatn, Tahoma, sans-serif" font-size="36" fill="#2a1709">۲۰۰ امتیاز</text>
+    <text x="270" y="298" direction="rtl" unicode-bidi="embed" text-anchor="start" font-family="Vazirmatn, Tahoma, sans-serif" font-size="13" fill="#4a2e1b">سطح طلایی ★</text>
+    <circle cx="96" cy="282" r="18" fill="#3b2416"/><text x="96" y="290" text-anchor="middle" font-size="20">☕</text>
+  </g>
+  <!-- sparkles -->
+  <g fill="#ffe7ad">
+    <path d="M70 90 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6z"><animate attributeName="opacity" values="1;.3;1" dur="2.4s" repeatCount="indefinite"/></path>
+    <path d="M350 110 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4z"><animate attributeName="opacity" values=".3;1;.3" dur="2s" repeatCount="indefinite"/></path>
+    <circle cx="380" cy="230" r="3"/><circle cx="30" cy="300" r="3"/><circle cx="200" cy="70" r="2.5"/>
+  </g>
+  <!-- coins -->
+  <g><ellipse cx="380" cy="330" rx="22" ry="7" fill="#9c6c24"/><ellipse cx="380" cy="322" rx="22" ry="7" fill="url(#gold)"/><ellipse cx="380" cy="314" rx="22" ry="7" fill="#e0b25c"/></g>
+</svg>
