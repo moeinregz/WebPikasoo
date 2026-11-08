@@ -60,7 +60,7 @@ const socials = [
 // Layout from the "hover-footer" block (21st.dev): a rounded card with
 // four columns (brand, links, contact, address), a divider, socials and
 // copyright, then a large outlined wordmark that lights up under the
-// cursor (desktop only), over a soft blood-red gradient.
+// cursor (on phones it just draws itself in), over a soft blood-red gradient.
 export default function Footer() {
   return (
     <footer className="relative m-3 h-fit overflow-hidden rounded-3xl border border-ink/10 bg-surface/40 sm:m-6 lg:m-8">
@@ -179,7 +179,7 @@ export default function Footer() {
       </div>
 
       {/* wordmark that lights up under the cursor */}
-      <div dir="ltr" className="-mb-20 -mt-24 hidden h-[24rem] lg:flex">
+      <div dir="ltr" className="-mb-6 -mt-10 flex h-36 px-3 sm:-mb-12 sm:-mt-16 sm:h-64 lg:-mb-20 lg:-mt-24 lg:h-[24rem] lg:px-0">
         <TextHoverEffect text="WebPikaso" className="z-50" />
       </div>
 

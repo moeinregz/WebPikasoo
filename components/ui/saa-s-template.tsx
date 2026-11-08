@@ -157,9 +157,9 @@ export default function SaasHero() {
           <div aria-hidden className="pointer-events-none absolute left-[-8%] top-[25%] z-0 h-[70%] w-[40%] bg-[radial-gradient(closest-side,rgb(var(--color-blood-hi)/0.3),transparent)]" />
           <div aria-hidden className="pointer-events-none absolute right-[-8%] top-[25%] z-0 h-[70%] w-[40%] bg-[radial-gradient(closest-side,rgb(var(--color-blood-hi)/0.3),transparent)]" />
           <div className="relative z-10 mx-auto flex items-center justify-center">
-            <PreviewCard {...PREVIEWS[0]} className="absolute right-0 top-[12%] w-[40%] rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[-4%] sm:rotate-[7deg]" />
-            <PreviewCard {...PREVIEWS[2]} className="absolute left-0 top-[12%] w-[40%] -rotate-[8deg] opacity-80 sm:top-[10%] sm:w-[34%] sm:translate-x-[4%] sm:-rotate-[7deg]" />
-            <PreviewCard {...PREVIEWS[1]} priority className="relative z-10 w-[58%] sm:w-[48%]" />
+            <PreviewCard {...PREVIEWS[0]} className="absolute right-[-12%] top-[10%] w-[52%] rotate-[8deg] opacity-80 sm:right-0 sm:top-[10%] sm:w-[34%] sm:translate-x-[-4%] sm:rotate-[7deg]" />
+            <PreviewCard {...PREVIEWS[2]} className="absolute left-[-12%] top-[10%] w-[52%] -rotate-[8deg] opacity-80 sm:left-0 sm:top-[10%] sm:w-[34%] sm:translate-x-[4%] sm:-rotate-[7deg]" />
+            <PreviewCard {...PREVIEWS[1]} priority className="relative z-10 w-[74%] sm:w-[48%]" />
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function SaasHero() {
 function PreviewCard({ src, alt, className = "", priority = false }: { src: string; alt: string; className?: string; priority?: boolean }) {
   return (
     <div className={`overflow-hidden rounded-2xl border border-blood-hi/25 bg-surface p-1.5 shadow-2xl shadow-black/50 ${className}`}>
-      <Image src={src} alt={alt} width={1254} height={1254} priority={priority} sizes="(min-width: 640px) 48vw, 58vw" className="h-auto w-full rounded-xl" />
+      <Image src={src} alt={alt} width={1254} height={1254} priority={priority} sizes="(min-width: 640px) 48vw, 74vw" className="h-auto w-full rounded-xl" />
     </div>
   );
 }

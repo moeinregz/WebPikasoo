@@ -413,6 +413,60 @@
     --echo-ink: var(--color-blood-hi);
   }
 
+  /* ── Portfolio auto slider (components/ui/image-auto-slider.tsx) ── */
+  .auto-slider {
+    -webkit-mask: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+  .auto-slider-track { animation: autoSlide 40s linear infinite; animation-play-state: paused; }
+  .auto-slider[data-run="true"] .auto-slider-track { animation-play-state: running; }
+  .auto-slider[data-run="true"]:hover .auto-slider-track, .auto-slider[data-run="true"]:focus-within .auto-slider-track { animation-play-state: paused; }
+  @keyframes autoSlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .auto-slider-item { transition: transform .3s ease, filter .3s ease; }
+  .auto-slider-item:hover { transform: scale(1.04); filter: brightness(1.08); }
+  @media (prefers-reduced-motion: reduce) {
+    .auto-slider { overflow-x: auto; }
+    .auto-slider-track { animation: none; }
+  }
+
+  /* ── Bento card animations (components/ui/features-8.tsx) ──────────
+     Each card's illustration sits in an element that gets data-in="true"
+     once it scrolls into view. */
+  .bento-scribble path {
+    fill-opacity: 0;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.6s cubic-bezier(.65, 0, .35, 1), fill-opacity .6s ease 1.3s;
+  }
+  .bento-scribble[data-in="true"] path { stroke-dashoffset: 0; fill-opacity: 1; }
+
+  .bento-scan .bento-scanline { transform: translateY(-66px); }
+  .bento-scan[data-in="true"] .bento-scanline { animation: bentoScan 2.6s ease-in-out infinite alternate; }
+  @keyframes bentoScan { from { transform: translateY(-66px); } to { transform: translateY(66px); } }
+
+  .bento-speed .bento-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.8s cubic-bezier(.33, 1, .68, 1); }
+  .bento-speed .bento-area { opacity: 0; transition: opacity .8s ease 1s; }
+  .bento-speed[data-in="true"] .bento-line { stroke-dashoffset: 0; }
+  .bento-speed[data-in="true"] .bento-area { opacity: 1; }
+
+  .bento-grow { clip-path: inset(0 100% 0 0); transition: clip-path 2.4s cubic-bezier(.45, 0, .2, 1); }
+  .bento-growbox[data-in="true"] .bento-grow { clip-path: inset(0 0 0 0); }
+
+  .bento-team::before { transform: scaleY(0); transform-origin: top; transition: transform 1.4s cubic-bezier(.33, 1, .68, 1); }
+  .bento-team > div > div { opacity: 0; transform: translateY(-14px); transition: opacity .5s ease, transform .5s cubic-bezier(.33, 1, .68, 1); }
+  .bento-team[data-in="true"]::before { transform: scaleY(1); }
+  .bento-team[data-in="true"] > div > div { opacity: 1; transform: none; }
+  .bento-team[data-in="true"] > div > div:nth-child(1) { transition-delay: .35s; }
+  .bento-team[data-in="true"] > div > div:nth-child(2) { transition-delay: .8s; }
+  .bento-team[data-in="true"] > div > div:nth-child(3) { transition-delay: 1.25s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bento-scribble path, .bento-speed .bento-line, .bento-speed .bento-area, .bento-grow, .bento-team::before, .bento-team > div > div {
+      transition: none !important; stroke-dashoffset: 0 !important; fill-opacity: 1 !important; opacity: 1 !important; clip-path: none !important; transform: none !important;
+    }
+    .bento-scan .bento-scanline { animation: none !important; transform: none; }
+  }
+
   /* ── Blood-red accent (the site's 10% color) ─────────────────────── */
   /* Gradient button: bright crimson melting into deep blood; the
      gradient is twice the button's width and slides on hover, so the

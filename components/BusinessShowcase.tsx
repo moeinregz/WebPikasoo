@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { categories, type BusinessCategory } from "@/lib/businessSites";
 import EchoHeading from "@/components/EchoHeading";
-import CarouselStacked from "@/components/ui/carousel-07";
+import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
 
 export type ShowcaseSite = {
   id: number | string;
@@ -200,15 +200,14 @@ export default function BusinessShowcase({ sites }: { sites: ShowcaseSite[] }) {
 
         {filtered.length > 0 ? (
           <Reveal>
-            {/* full-bleed: the carousel spans the whole viewport width, not
-                just the centered container, so side cards aren't cut early */}
+            {/* full-bleed: the strip spans the whole viewport width */}
             <div className="mx-[calc(50%-50vw)] w-screen">
-            <CarouselStacked
-              key={`${activeCategory}|${query}`}
-              slides={filtered.map((s) => ({ image: s.image, title: s.name, description: s.desc, badge: s.category, href: s.url }))}
-            />
+              <ImageAutoSlider
+                key={`${activeCategory}|${query}`}
+                items={filtered.map((s) => ({ image: s.image, title: s.name, badge: s.category, href: s.url }))}
+              />
             </div>
-            <p className="mt-1 text-center text-[12.5px] text-dim">کارت‌ها رو بکش یا با فلش‌ها جابه‌جا کن؛ روی کارت جلویی بزن تا سایت باز بشه.</p>
+            <p className="mt-2 text-center text-[12.5px] text-dim">روی هر نمونه بزن تا سایتش باز بشه.</p>
           </Reveal>
         ) : (
           <Reveal className="flex flex-col items-center gap-3 rounded-card border-2 border-dashed border-ink/15 py-16 text-center">
