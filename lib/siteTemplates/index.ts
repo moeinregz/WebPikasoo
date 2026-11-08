@@ -69,6 +69,7 @@ import bagsLux from "./templates/bags-lux.template.html";
 import bakeryLux from "./templates/bakery-lux.template.html";
 import beddingLux from "./templates/bedding-lux.template.html";
 import bookstoreLux from "./templates/bookstore-lux.template.html";
+import breakfastLux from "./templates/breakfast-lux.template.html";
 import cafeLux from "./templates/cafe-lux.template.html";
 import carpetLux from "./templates/carpet-lux.template.html";
 import clinicLux from "./templates/clinic-lux.template.html";
@@ -217,6 +218,22 @@ export const TEMPLATES: SiteTemplate[] = [
       { key: "g2", label: "گالری — گوشه‌ی مطالعه", hint: "گوشه‌ی مطالعه", ratio: "4:5" },
       { key: "g3", label: "گالری — کتاب کودک", hint: "کتاب کودک", ratio: "4:5" },
       { key: "g4", label: "گالری — تازه‌ها", hint: "تازه‌ها", ratio: "4:5" },
+    ],
+  },
+  {
+    id: "breakfast-lux",
+    trade: "breakfast",
+    label: "صبحانه‌سرا — آفتابی و صبحگاهی (لوکس)",
+    html: breakfastLux,
+    palette: { primary: "#e8762b", secondary: "#7a3e1d" },
+    menu: true,
+    images: [
+      { key: "hero", label: "عکس اصلی (دایره‌ی بالای صفحه)", hint: "سفره یا بشقاب صبحانه از بالا", ratio: "1:1" },
+      { key: "about", label: "درباره‌ی ما", hint: "فضای صبحانه‌سرا", ratio: "4:5" },
+      { key: "g1", label: "گالری — سفره‌ی صبحانه", hint: "سفره‌ی صبحانه", ratio: "4:5" },
+      { key: "g2", label: "گالری — آشپزخونه", hint: "آشپزخونه", ratio: "4:5" },
+      { key: "g3", label: "گالری — چای آتیشی", hint: "چای آتیشی", ratio: "4:5" },
+      { key: "g4", label: "گالری — فضای سالن", hint: "فضای سالن", ratio: "4:5" },
     ],
   },
   {

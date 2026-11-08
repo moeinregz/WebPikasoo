@@ -10,7 +10,7 @@ import { TRADES } from "./trades";
 
 /** The type picker in the CRM, grouped so the choices stay easy to scan. */
 export const CRM_TYPE_GROUPS: { label: string; tradeIds: string[] }[] = [
-  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "jigar", "coffeedist"] },
+  { label: "غذا و پذیرایی", tradeIds: ["cafe", "restaurant", "garden", "kebab", "fastfood", "bakery", "pastry", "icecream", "jigar", "breakfast", "coffeedist"] },
   { label: "فروشگاه‌ها", tradeIds: ["shop", "fashion", "jewelry", "watch", "carpet", "cosmetics", "perfume", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "kidswear", "bookstore", "stationery"] },
   { label: "دیجیتال و موبایل", tradeIds: ["mobile", "digital"] },
   { label: "سلامت و ورزش", tradeIds: ["dental", "clinic", "gym"] },
@@ -33,7 +33,7 @@ export const CRM_TYPE_GROUPS_LABELED: { label: string; types: string[] }[] = CRM
 export const CRM_BUSINESS_TYPES: string[] = CRM_TYPE_GROUPS_LABELED.flatMap((g) => g.types);
 
 export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
-  "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream", "jigar"],
+  "رستوران و کافه": ["cafe", "restaurant", "fastfood", "bakery", "pastry", "icecream", "jigar", "breakfast"],
   "فروشگاه و ای‌کامرس": ["shop", "carpet", "fashion", "jewelry", "watch", "womenswear", "accessories", "shoes", "bags", "footwear", "lingerie", "menunder", "bookstore", "stationery", "tools", "autoparts", "kitchenware", "melamine", "plastics", "bedding", "appliances", "digital", "mobile", "kidswear"],
   "لوازم آرایشی و بهداشتی": ["cosmetics", "perfume"],
   "پزشکی و کلینیک": ["clinic", "dental"],
@@ -47,6 +47,7 @@ export const CRM_CATEGORY_TRADES: Record<string, string[]> = {
 // Most specific first — the first trade with a matching keyword wins.
 const KEYWORDS: [string, string[]][] = [
   ["coffeedist", ["پخش قهوه", "توزیع قهوه", "قهوه عمده", "عمده قهوه", "بنکداری قهوه", "رست قهوه", "رُست قهوه", "روستری", "رستری"]],
+  ["breakfast", ["صبحانه", "صبحونه", "صبحانه‌سرا", "صبحانه سرا", "حلیم", "عدسی", "کله‌پاچه", "کله پاچه", "طباخی", "breakfast"]],
   ["funcenter", ["مرکز تفریحی", "شهربازی", "شهر بازی", "سرزمین بازی", "خانه بازی", "خانه‌ی بازی", "پارک بازی", "پلی لند", "پلی‌لند", "بولینگ", "لیزرتگ", "اتاق فرار", "گیم نت", "گیم‌نت", "مجموعه تفریحی", "تفریحی"]],
   ["kidswear", ["پوشاک بچگانه", "لباس بچگانه", "بچگانه", "لباس کودک", "پوشاک کودک", "لباس نوزاد", "نوزادی", "سیسمونی", "سیسمونی‌سرا"]],
   ["mobile", ["موبایل", "گوشی", "لپ‌تاپ", "لپتاپ", "لپ تاپ", "تبلت", "آیفون", "ایفون", "سامسونگ", "شیائومی", "اپل"]],

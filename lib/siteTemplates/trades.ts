@@ -19,6 +19,7 @@ export const TRADES: Trade[] = [
   { id: "garden", label: "باغ رستوران", colors: { primary: "#1F3D2B", secondary: "#F2A63B", accent: "#D8294B", bg: "#F6ECD6", text: "#2A1C10" } },
   { id: "fastfood", label: "فست‌فود", colors: { primary: "#E63B1F", secondary: "#FFC72C", accent: "#FF8A00", bg: "#FFF8EC", text: "#231A14" } },
   { id: "bakery", label: "نانوایی", colors: { primary: "#C17F2B", secondary: "#E8CD8A", accent: "#D6491C", bg: "#F6EFE0", text: "#2B1810" } },
+  { id: "breakfast", label: "صبحانه‌سرا و کافه صبحانه", colors: { primary: "#E8762B", secondary: "#7A3E1D", accent: "#FFC93C", bg: "#FFF8EC", text: "#3A2516" } },
   { id: "pastry", label: "شیرینی‌فروشی", colors: { primary: "#C6942F", secondary: "#4A2020", accent: "#77875A", bg: "#FBF2E3", text: "#3A2418" } },
   { id: "icecream", label: "بستنی و آبمیوه‌فروشی", colors: { primary: "#FF4D6D", secondary: "#FF8A3D", accent: "#FFCB3C", bg: "#FFF6E8", text: "#3A1730" } },
   { id: "shop", label: "فروشگاه", colors: { primary: "#2F4BD1", secondary: "#9AA9F0", accent: "#F2994A", bg: "#F7F8FD", text: "#171B33" } },

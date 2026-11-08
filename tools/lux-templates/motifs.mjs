@@ -212,6 +212,14 @@ export const MOTIFS = {
 <g transform="translate(124 120)"><path class="a" d="M0 -12l3.5 7 7.5 1.2-5.5 5.3 1.3 7.5L0 5.4l-6.8 3.6 1.3-7.5-5.5-5.3 7.5-1.2z"/></g><path class="kw" d="M74 82v40"/>
 <g transform="translate(36 150) rotate(-30)"><circle class="s" cx="0" cy="0" r="12"/><rect class="s" x="-3" y="10" width="6" height="22" rx="3"/><circle class="a" cx="0" cy="0" r="5"/></g>
 <g class="a"><path d="M170 120l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><circle cx="160" cy="160" r="3"/></g>`),
+  breakfast: S(`<ellipse class="sh" cx="100" cy="184" rx="88" ry="7"/>
+<circle class="a" cx="150" cy="40" r="22" style="opacity:.35"/><circle class="a" cx="150" cy="40" r="14"/>
+<g class="ka" style="stroke-width:3"><path d="M150 10v-6M178 40h6M170 20l5-5M130 20l-5-5"/></g>
+<ellipse class="s" cx="92" cy="146" rx="80" ry="30"/><ellipse class="c" cx="92" cy="140" rx="80" ry="30"/><ellipse cx="92" cy="140" rx="62" ry="22" style="fill:none;stroke:var(--pr);stroke-width:2;stroke-dasharray:2 6;opacity:.6"/>
+<path class="w" d="M56 136c-10-12 4-26 18-22 6-12 26-12 32 0 14-4 26 10 18 22 8 10-2 22-16 20-8 8-28 8-36 0-14 2-24-10-16-20z"/><circle class="a" cx="84" cy="136" r="13"/><path class="hl" d="M78 130c3-3 7-4 10-3" style="opacity:.6"/>
+<path class="p" d="M110 118c0-10 8-16 18-16h14c10 0 18 6 18 16v8c0 4-2 6-6 6v18h-38v-18c-4 0-6-2-6-6z" transform="rotate(10 135 130)"/><path class="b" d="M118 126h30v18h-30z" transform="rotate(10 135 130)" style="opacity:.5"/>
+<path class="i" d="M30 92h24l-3 30c0 4-3 6-6 6h-6c-3 0-6-2-6-6z" style="opacity:.85"/><path class="p" d="M32 100h20l-2 21c0 3-2 4-4 4h-8c-2 0-4-1-4-4z"/><path class="kw" d="M36 102v16"/>
+<path class="ki" d="M38 86c-4-6 4-8 0-14M46 86c-4-6 4-8 0-14" style="stroke-width:2.5;opacity:.4"/>`),
   ferris: S(`<ellipse class="sh" cx="100" cy="186" rx="82" ry="7"/>
 <path class="ki" d="M100 86L58 180M100 86l42 94" style="stroke:var(--pr2);stroke-width:8"/><path class="ki" d="M70 160h60" style="stroke:var(--pr2);stroke-width:5"/>
 <circle cx="100" cy="86" r="66" style="fill:none;stroke:var(--pr);stroke-width:7"/><circle cx="100" cy="86" r="52" style="fill:none;stroke:var(--pr);stroke-width:2;opacity:.5"/>
