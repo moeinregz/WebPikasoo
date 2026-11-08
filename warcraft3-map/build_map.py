@@ -770,7 +770,8 @@ def build_j():
     a("")
     # ---- castle towers and farms ----
     a("function PikaCastle takes player p, integer towerId, integer farmId returns nothing")
-    a("    local integer i = GetPlayerId(p)")
+    a("    // use the castle the player really starts in (the lobby can shuffle start positions)")
+    a("    local integer i = GetPlayerStartLocation(p)")
     for pi in range(NPLAYERS):
         a("    %s i == %d then" % ("if" if pi == 0 else "elseif", pi))
         for x, y in castle_towers[pi]:
