@@ -1892,6 +1892,13 @@ function offerLinkBase(): string {
   return site.replace(/^https?:\/\//, "").replace(/\/+$/, "");
 }
 
+/** Credit left on the SMS panel (read-only), for the SMS tab's header. */
+export async function smsCreditAction(): Promise<{ ok: true; credit: number } | { ok: false; error: string }> {
+  await requireAdmin();
+  const { smsCredit } = await import("@/lib/sms");
+  return smsCredit();
+}
+
 export async function sendTestSmsAction(phone: string, text: string): Promise<{ ok: boolean; message: string }> {
   await requireAdmin();
   const { sendSms } = await import("@/lib/sms");
