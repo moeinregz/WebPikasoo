@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   createSmsCampaignAction,
   sendSmsBatchAction,
   sendTestSmsAction,
+  smsCreditAction,
   setSmsOptOutAction,
   type SmsRecipient,
 } from "./actions";
@@ -64,6 +65,15 @@ function daysAgo(at: string): number {
 }
 
 export default function SmsPanel({ contacts, campaigns, messages, provider }: Props) {
+  // panel credit, fetched after the tab renders so a slow SMS API never
+  // holds up the dashboard
+  const [credit, setCredit] = useState<string | null>(null);
+  useEffect(() => {
+    if (!provider.ready) return;
+    smsCreditAction()
+      .then((r) => setCredit(r.ok ? `اعتبار پنل: ${Math.floor(r.credit).toLocaleString("fa-IR")}` : r.error))
+      .catch(() => setCredit(null));
+  }, [provider.ready]);
   const router = useRouter();
 
   // ---------- filters ----------
@@ -221,6 +231,7 @@ export default function SmsPanel({ contacts, campaigns, messages, provider }: Pr
           >
             {provider.ready ? `وصل به ${provider.name}` : "پنل پیامکی هنوز وصل نشده"}
           </span>
+          {credit && <span className="rounded-full bg-ink/[0.06] px-3 py-1 text-[12.5px] font-bold text-dim">{credit}</span>}
         </div>
         {!provider.ready && (
           <p className="mb-4 text-[13px] leading-7 text-dim">
