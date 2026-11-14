@@ -58,6 +58,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "WebPIKASO" }],
   robots: { index: true, follow: true },
+  // Google Search Console ownership (HTML tag method):
+  // <meta name="google-site-verification" content="…"> on every page.
+  verification: { google: "5ImUqjf1cLNnrM3bTzTk94ifZWBFMehnZnLz1Fmk97k" },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
