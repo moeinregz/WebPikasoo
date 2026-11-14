@@ -1,5 +1,5 @@
 import "server-only";
-import Database from "better-sqlite3";
+import { openDatabase, type Database } from "./sqlite";
 import fs from "fs";
 import path from "path";
 import { seedIfEmpty } from "./seed";
@@ -148,13 +148,14 @@ CREATE TABLE IF NOT EXISTS settings (
 
 declare global {
   // eslint-disable-next-line no-var
-  var __mgDb: Database.Database | undefined;
+  var __mgDb: Database | undefined;
 }
 
-function open(): Database.Database {
+function open(): Database {
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-  const db = new Database(DB_PATH);
+  const db = openDatabase(DB_PATH);
   db.pragma("journal_mode = WAL");
+  db.pragma("busy_timeout = 5000");
   db.pragma("foreign_keys = ON");
   db.exec(SCHEMA);
   migrate(db);
@@ -163,12 +164,12 @@ function open(): Database.Database {
 }
 
 /** ستون‌هایی که بعداً اضافه شدن، برای دیتابیس‌های قدیمی */
-function migrate(db: Database.Database) {
+function migrate(db: Database) {
   const cols = (t: string) => (db.prepare(`PRAGMA table_info(${t})`).all() as { name: string }[]).map((c) => c.name);
   if (!cols("products").includes("basalam_photo")) db.exec("ALTER TABLE products ADD COLUMN basalam_photo TEXT DEFAULT ''");
 }
 
-export function db(): Database.Database {
+export function db(): Database {
   if (!globalThis.__mgDb) globalThis.__mgDb = open();
   return globalThis.__mgDb;
 }

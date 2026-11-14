@@ -1,8 +1,8 @@
-import type Database from "better-sqlite3";
+import type { Database } from "./sqlite";
 import { hashPassword } from "./hash";
 
 /** اولین اجرا: دسته‌ها، محصولات نمونه، اسلایدها، تنظیمات و ادمین پیش‌فرض ساخته می‌شن. */
-export function seedIfEmpty(db: Database.Database) {
+export function seedIfEmpty(db: Database) {
   const hasAdmin = db.prepare("SELECT COUNT(*) c FROM admins").get() as { c: number };
   if (!hasAdmin.c) {
     db.prepare("INSERT INTO admins (username, password_hash) VALUES (?, ?)").run(
