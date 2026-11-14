@@ -1,6 +1,6 @@
 # ممد قهوه — فروشگاه آنلاین قهوه
 
-Next.js 14 (App Router) + React 18 + Node.js + SQLite (better-sqlite3)
+Next.js 14 (App Router) + React 18 + Node.js + SQLite (موتور داخلی Node.js: node:sqlite — بدون پکیج native)
 
 ## راه‌اندازی
 
