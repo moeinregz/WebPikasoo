@@ -5,6 +5,7 @@ import path from "path";
 import { seedIfEmpty } from "./seed";
 
 import { DB_PATH } from "./paths";
+export { DB_PATH };
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS categories (
@@ -152,15 +153,26 @@ declare global {
 }
 
 function open(): Database {
-  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-  const db = openDatabase(DB_PATH);
-  db.pragma("journal_mode = WAL");
-  db.pragma("busy_timeout = 5000");
-  db.pragma("foreign_keys = ON");
-  db.exec(SCHEMA);
-  migrate(db);
-  seedIfEmpty(db);
-  return db;
+  try {
+    fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+    const db = openDatabase(DB_PATH);
+    // WAL سریع‌تره؛ اگه فایل‌سیستم دیسک پشتیبانی نکرد، حالت معمولی
+    try {
+      db.pragma(`journal_mode = ${process.env.SQLITE_JOURNAL_MODE || "WAL"}`);
+    } catch (e) {
+      console.warn("[mamad-ghahve] WAL not available, falling back to DELETE journal:", (e as Error).message);
+      db.pragma("journal_mode = DELETE");
+    }
+    db.pragma("busy_timeout = 5000");
+    db.pragma("foreign_keys = ON");
+    db.exec(SCHEMA);
+    migrate(db);
+    seedIfEmpty(db);
+    return db;
+  } catch (e) {
+    console.error(`[mamad-ghahve] Database init failed (path: ${DB_PATH}, node: ${process.version}):`, e);
+    throw e;
+  }
 }
 
 /** ستون‌هایی که بعداً اضافه شدن، برای دیتابیس‌های قدیمی */
