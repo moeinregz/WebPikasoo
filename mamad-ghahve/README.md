@@ -4,6 +4,8 @@ Next.js 14 (App Router) + React 18 + Node.js + SQLite (better-sqlite3)
 
 ## راه‌اندازی
 
+> **استقرار روی لیارا:** راهنمای کامل در [`DEPLOY-LIARA.md`](DEPLOY-LIARA.md) — فایل `liara.json` آماده‌ست.
+
 ```bash
 cd mamad-ghahve
 npm install

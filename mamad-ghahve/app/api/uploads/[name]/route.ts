@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const DIR = path.resolve(process.cwd(), "data/uploads");
+import { UPLOAD_DIR as DIR } from "@/lib/paths";
 const TYPES: Record<string, string> = { ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".avif": "image/avif" };
 
 export async function GET(_req: Request, { params }: { params: { name: string } }) {

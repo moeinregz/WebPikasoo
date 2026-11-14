@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import { seedIfEmpty } from "./seed";
 
-const DB_PATH = path.resolve(process.cwd(), process.env.DATABASE_PATH || "./data/shop.db");
+import { DB_PATH } from "./paths";
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS categories (

@@ -19,7 +19,7 @@ export type BasalamResult = { ok: boolean; message: string; id?: string };
 
 const STATUS_PUBLISHED = 2976;
 const STATUS_UNPUBLISHED = 3790;
-const UPLOAD_DIR = path.resolve(process.cwd(), "data/uploads");
+import { UPLOAD_DIR } from "./paths";
 
 function cfg() {
   const s = getSettings();

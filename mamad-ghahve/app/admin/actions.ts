@@ -29,7 +29,7 @@ const int = (fd: FormData, k: string) => {
 };
 const bool = (fd: FormData, k: string) => (fd.get(k) ? 1 : 0);
 
-const UPLOAD_DIR = path.resolve(process.cwd(), "data/uploads");
+import { UPLOAD_DIR } from "@/lib/paths";
 const ALLOWED: Record<string, string> = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif", "image/avif": ".avif" };
 
 /** ذخیره‌ی عکس آپلودشده؛ اسم فایل رو برمی‌گردونه یا null */
